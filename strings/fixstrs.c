@@ -1,14 +1,21 @@
 /*
-This program will read in the language file and create two files:
+This program will read in the language file and create three files:
 
 strings.dat - contains all the strings. will be appended on the end
               of the exe file.
 
 strings.h - include file that contains all the defines.
 
+strings.log - contains all warnings of the local LNG file, the
+              which resources (strings) are missing from it and
+              which ones are not specified in the DEFAULT.LNG, thus,
+              are most likely unknown to FreeCOM
+              This file is present only, if there are such warnings,
+              but no message is printed onto screen!
+
 There are two input files:
 DEFAULT.LNG and the language file passed as argument to FIXSTRS.
-DEFAULT.LNG has two meanings, which make it fundamental file, which
+DEFAULT.LNG has two meanings making it a fundamental file, which
 ensures the integrity of the multi-language support of FreeCOM:
 
 1) The order of strings noted in DEFAULT.LNG will be kept the same in
@@ -55,6 +62,7 @@ chg: To use STRINGS.H to keep up the order becomes problematic, as this
 #include "../strings.typ"
 #include "../resource.h"
 
+#define logfile "STRINGS.LOG"
 #define fDAT "STRINGS.DAT"
 #define fTXT "DEFAULT.LNG"
 #define fH "STRINGS.H"
@@ -79,8 +87,11 @@ const char id[]="FreeDOS STRINGS v";
 
 */
 
+int in_file = 0;
 string_index_t string[MAXSTRINGS];
 struct {
+	int file;				/* bitfield: #0 -> DEFAULT, #1 -> special LNG file
+								meaning: present in particular file */
 	char *name;				/* name of string */
 	char *text;				/* text of this string */
 } strg[MAXSTRINGS];
@@ -166,6 +177,8 @@ int loadFile(char *fnam)
 					return 80;
 				}
 				strg[cnt].text = NULL;
+					/* Mark where this entry has been found */
+				strg[cnt].file |= in_file;
 			break;
 			default:
 				while(p >= temp && isspace(*p)) --p;
@@ -216,19 +229,23 @@ int main(int argc, char **argv)
 	string_size_t lsize;
 
 
+	unlink(logfile);
+
 	if(argc > 2) {
 		puts("FIXSTRS - Generate STRINGS.DAT and STRINGS.H for a language\n"
 			"Useage: FIXSTRS [language]\n"
-			"\tIf no language is specified, the default strings are read only.\n"
-			"\tThere must be <language>.LNG file in the current directory.\n"
+			"\tIf no language is specified, only the default strings are read.\n"
+			"\tThe <language>.LNG file must reside in the current directory.\n"
 			"Note: DEFAULT.LNG must be present in the current directory, too.");
 		return 127;
 	}
 
 
 
+	in_file = 1;
 	if((rc = loadFile(fTXT)) != 0)
 		return rc;
+	in_file = 2;
 	if(argc > 1 && (rc = loadFile(argv[1])) != 0)
 		return rc;
 
@@ -238,6 +255,42 @@ int main(int argc, char **argv)
 		fputs("No string definition found.\n", stderr);
 		return 43;
 	}
+
+	/* Create the LOG file */
+	if(argc > 1) {		/* Only if a local LNG file was specified */
+		dat = NULL;			/* No LOG entry til this time */
+		for(cnt = 0; cnt < maxCnt; ++cnt)
+			switch(strg[cnt].file & 3) {
+			case 0:		/* Er?? */
+				fputs("Internal error assigned string has no origin?!\n"
+				 , stderr);
+				return 99;
+			case 1:		/* DEFAULT.LNG only */
+				if(!dat && (dat = fopen(logfile, "wt")) == NULL) {
+					fprintf(stderr, "Cannot create logfile: '%s'\n"
+					 , logfile);
+					goto breakLogFile;
+				}
+				fprintf(dat, "%s: Missing from local LNG file\n"
+				 , strg[cnt].name);
+				break;
+			case 2:		/* local.LNG only */
+				if(!dat && (dat = fopen(logfile, "wt")) == NULL) {
+					fprintf(stderr, "Cannot create logfile: '%s'\n"
+					 , logfile);
+					goto breakLogFile;
+				}
+				fprintf(dat, "%s: No such string resource\n"
+				 , strg[cnt].name);
+				break;
+			case 3:		/* OK */
+				break;
+			}
+
+		if(dat)
+			fclose(dat);
+	}
+breakLogFile:
 
 	/* 1. Adjust the offset and generate the overall size */
 	for(size = string[0].size, cnt = 1; cnt < maxCnt; ++cnt) {

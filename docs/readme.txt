@@ -9,29 +9,14 @@ visit our web page at http://www.freedos.org/.
 
 The command.com web site is at
 
-   http://www.gcfl.net/FreeCom
+   http://freedos.sourceforge.net/freecom
 
 Please send any bug reports, comments or other info to:
 
    fd-command@topica.com  (command.com development mailing list)
 
-This software has been developed by the following people:
-(listed in approximate chronological order of contributions)
-
-   normat@rpi.edu (Tim Norman)
-   mrains@apanix.apana.org.au (Matt Rains)
-   ejeffrey@iastate.edu (Evan Jeffrey)
-   ska-src@gmx.net (Steffen Kaiser (ska))
-   Svante Frey (sfrey@kuai.se)
-   Oliver Mueller (ogmueller@t-online.de)
-   Aaron Kaufman (morgan@remarque.berkeley.edu)
-   Marc Desrochers (bitzero@hotmail.com)
-   Rob Lake (rlake@cs.mun.ca)
-   John P. Price <linux-guru@gcfl.net>
-   Hans B Pufal <hansp@digiweb.com>
-	D. Lucas Parker <fuerve@yahoo.com>
-	Henry Voigt <Henry.Voigt@gmx.de>
-	James Tabor <jimtabor@infohwy.com>
+This software has been developed by many people, which are enlisted
+within HISTORY.TXT now.
 
 Please note that this software is separate from the DOS-C kernel and
 may or may not work properly under it.  Of course I am making every
@@ -50,11 +35,12 @@ SHELL=C:\FREEDOS\COMMAND.COM /P
 
 Current Features
 ~~~~~~~~~~~~~~~~
-environment handling with prompt and path support.
-directory utilities.
-command-line history with doskey-like features.
-batch file processing
-input/output redirection and piping
-loadhigh support
-alias support
-filename completion (use TAB)
+- environment handling with prompt and path support
+- directory utilities
+- command-line history with doskey-like features + filename completion (TAB)
+- batch file processing
+- input/output redirection and piping
+- loadhigh support
+- alias support
+- flow control (IF, FOR, GOTO, labels)
+- non-complete multi language support

@@ -34,6 +34,10 @@
  *
  * 2000/06/07 Ron Cemer
  * fix: #include "datefunc.h" if _NO__DOS_DATE is enabled
+ *
+ * 2001/06/16 ska
+ * chg: use DOS NLS to display the time & date
+ * chg: using STRINGS resource
  */
 
 #include "config.h"
@@ -54,8 +58,10 @@
 
 #define PROMPTVAR "PROMPT"
 
+#if 0
 const char *day_strings[] =
 {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+#endif
 
 /*
  * print the command-line prompt
@@ -63,9 +69,6 @@ const char *day_strings[] =
  */
 void printprompt(void)
 {
-  struct time t;
-  struct dosdate_t d;
-
   static char default_pr[] = "$P$G";
   char *pr;
   char direc[128];
@@ -102,15 +105,21 @@ void printprompt(void)
           }
         case 'T':
           {
-            gettime(&t);
-            printf("%2d:%02d:%02d.%02d", t.ti_hour, t.ti_min, t.ti_sec, t.ti_hund);
+            char *p;
+
+            if((p = curTime()) != 0) {
+				fputs(p, stdout);
+				free(p);
+			}
+
             break;
           }
         case 'D':
-          {
-            _dos_getdate(&d);
-            printf("%s %02d-%02d-%04d", day_strings[d.dayofweek], d.month,
-                   d.day, d.year);
+          {	 char *p;
+          	 if((p = curDateLong()) != 0) {
+          	 	fputs(p, stdout);
+          	 	free(p);
+          	 }
             break;
           }
         case 'P':
@@ -134,7 +143,7 @@ void printprompt(void)
           }
         case 'V':
           {
-            printf("%s",shellname);
+            fputs(shellname, stdout);
             break;
           }
         case 'N':

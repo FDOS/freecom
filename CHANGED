@@ -1,2 +1,38 @@
-Sample implementation of resources [see DOCS\RESOURCE.TXT]
-Currently features: Critical Error handler and STRINGS
+bugfix: KSSF: restore parentPSP on exit
+v0.80b
+add: DIR /Y to display 4digit year
+fix: DIR displays "bytes free" at the very end, but if more than one
+	argument is specified, it only displays the free bytes of the
+	very last argument. The line is now printed after the display
+	of each argument.
+bugfix: When the "bytes free" are displayed the used drive letter
+	had been deallocated already.
+add: NLS-compatible input of date
+add: NLS-compatible display of date & time (incl DIR)
+fix: parse years 80..199 as century 1900 (by Arkady)
+chg: removed some static variables
+chg: made all global functions & variables static to LOADHIGH.C
+sub: LH.ASM/LOADHIGH.C: duplicate functions (memory API, farmemcmp)
+fix: doc of DATE, TIME, FreeCOM
+v0.80a
+chg: two-digit year -> 2000 if less than 80
+add: DATE /D and TIME /T
+v0.80:
+chg: canexit disabled by default, allowed within initialize() 
+chg: command table uppercased as Installable Commands use uppercased names
+add: installable COMMAND extensions FEATURE_EXTENSIONS
+add: F1, F3, F5, cur-right
+add: French Strings file
+add: German Strings file
+add: useage of %COPYCMD%
+v0.79dá2:
+bugfix: "CD." and analogeous commands
+v0.79dá1:
+add: FEATURE_ENHANCED_INPUT and it's non-defined variant
+bugfix: "%1" could writer behind end of string
+bugfix: check of length of external command line was considered too long
+chg: moved check for length of external command line in order to let
+	batch files use the internal length
+v0.79dá:
+bugfix: "line too long" error if last line of batch files has no newline
+bugfix: root path not recognized, e.g. in "C:\PATH> \program"

@@ -20,6 +20,12 @@
  * 2000/06/22 ska
  *	add: DIR_STACK_LEN, commands: DIRS, POPD, PUSHD, CDD
  *	add: FEATURE_LAST_DIR
+ *
+ * 2000/09/26 ska
+ *	add: FEATURE_ENHANCED_INPUT
+ *
+ * 2000/12/10 ska
+ *	add: FEATURE_INSTALLABLE_COMMANDS
  */
 
 /* define DEBUG to add debugging code */
@@ -30,17 +36,21 @@
 /* Define to enable the alias command, and aliases. */
 #define FEATURE_ALIASES
 
-/* Define to enable history (and the doskey command) */
+/* Define to enable enhanced input (prerequisite of History and Filename
+	completion */
+#define FEATURE_ENHANCED_INPUT
+
+/* Define to enable history (aka DOSKEY); requires: Enhanced Input */
 #define FEATURE_HISTORY
 
-/* Define to enable filename completion */
+/* Define to enable filename completion; requires: Enhanced Input */
 #define FEATURE_FILENAME_COMPLETION
 
 /* Define to enable to load messages into memory */
 #define FEATURE_LOAD_MESSAGES
 
 /* Define to enable DOS NLS */
-//#define FEATURE_NLS
+#define FEATURE_NLS
 
 /* Command line logging feature */
 //#define FEATURE_CALL_LOGGING
@@ -48,6 +58,10 @@
 /* Preserves last directory (CD, CHDIR, CDD, PUSHD, POPD);
 	"CD -" chdir's there */
 #define FEATURE_LAST_DIR
+
+/* Enable to support installable COMMAND extensions (MUX-AE)
+ */
+#define FEATURE_INSTALLABLE_COMMANDS
 
 /* Name of the executable */
 #define COM_NAME "COMMAND.COM"
@@ -77,6 +91,8 @@
 	/* TC++1 */
 #define _NO__DOS_DATE
 #define _NO__DOS_TIME
+#define _NO_FMEMCHR
+#define _NO_FMEMCMP
 #endif
 
 
@@ -134,8 +150,25 @@
 #define	INCLUDE_CMD_CDD
 #endif
 
-#if defined(FEATURE_KERNEL_SWAP_SHELL) && defined(FEATURE_SWAP_EXEC)
-#error "You must not define both FEATURE_KERNEL_SWAP_SHELL && FEATURE_SWAP_EXEC"
+/* Not available with TURBOC++ 1.0 or earlier: */
+#ifdef __TURBOC__
+
+#if __TURBOC__ > 0x297
+#define _TC_LATER_
+#else
+#define _TC_EARLY_
+#endif
+
+#endif
+
+	/* set by MKDIST.BAT */
+#ifdef IGNORE_ENHANCED_INPUT
+#undef FEATURE_ENHANCED_INPUT
+#endif
+
+#ifndef FEATURE_ENHANCED_INPUT
+#undef FEATURE_HISTORY
+#undef FEATURE_FILENAME_COMPLETION
 #endif
 
 #include "debug.h"

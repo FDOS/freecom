@@ -10,6 +10,7 @@
 #define MISC_H
 
 #include <stdio.h>
+#include <portable.h>
 
 enum OnOff {		/* ON/OFF tester */
 	OO_Empty = 0,		/* Empty line */
@@ -45,11 +46,25 @@ void dispCount(int cnt, const char * const zero, const char * const one
 int drvNum(int drive);
 char *cwd(int drive);
 int changeDrive(int drive);
+char *textlineEnd(const char * const buf, const size_t buflen);
 enum OnOff onoffStr(char *line);
 size_t farread(void far*buf, size_t length, FILE *f);
 unsigned allocSysBlk(const unsigned size, const unsigned mode);
 void freeSysBlk(const unsigned segm);
 
 char far *_fstpcpy(char far *dst, const char far *src);
+
+/************* Imported from LH.ASM        */
+
+int dosGetUMBLinkState(void);
+void dosSetUMBLinkState(int newState);
+int dosGetAllocStrategy(void);
+void dosSetAllocStrategy(int newState);
+word GetFirstMCB(void);
+
+
+
+char *curTime(void);
+char *curDateLong(void);
 
 #endif

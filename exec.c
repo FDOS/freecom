@@ -37,9 +37,6 @@
 
 #define CBREAK_ERRORLEVEL 3
 
-typedef unsigned char byte;
-typedef unsigned word;
-
 /* align one byte */
 #pragma option -a-
 struct ExecBlock

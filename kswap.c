@@ -22,24 +22,6 @@
 #include "command.h"
 #include "kswap.h"
 
-#if 0 		// Install part of loading Criter
-		if((segm = allocSysBlk(sizeof(kswap_t), 0x82)) != 0) {
-			kswapContext = segm;
-					/* invalidate segment */
-			_fmemset(MK_FP(segm, 0), 0, sizeof(kswap_t));
-
-			r.r_ax = 0x4bfd;	/* Set kswap argument structure segm */
-			r.r_bx = segm;			/* none set */
-			r.r_dx = 'FD';
-			intr(0x21, &r);
-			if((r.r_flags & 1) == 0)	/* success */
-				return FALSE;			/* but not re-invoked */
-
-			freeSysBlk(segm);
-		}
-#endif
-
-
 /* Lock kswap feature within kernel and invalidate a previous external prg
 	Return:  FALSE  no swap feature within kernel */
 int kswapInit(void)
@@ -50,7 +32,7 @@ int kswapInit(void)
 	intr(0x21, &r);
 
 	if((r.r_flags & 1) == 0) {
-		dprintf(("[KSWAP: using kernel swapping support]\n"));
+		dprintf(("[KSWAP: using kernel swapping support (KSSF eventually at %04x)]\n", r.r_ax));
 		if(r.r_bx)	 {			/* segment found */
 			kswapContext = (kswap_p)r.r_bx;
 				/* invalidate external program if this shell
@@ -59,14 +41,6 @@ int kswapInit(void)
 			dprintf(("[KSWAP: static context found at 0x%04x]\n", r.r_bx));
 			return TRUE;		/* re-invoked */
 		}
-#if 0
-		r.r_ax = 0x4bfd;
-		/* BX := 0; DX := 'FD' */
-		intr(0x21, &r);		/* by calling the "Set Context"
-								API function, it is locked if it gets
-								called by accident by a secondary instance
-								of FreeCOM */
-#endif
 		return FALSE;			/* not _re-_ invoked */
 	} else if(r.r_ax == 5) {	/* Access denied -> there exists a
 						static context with embedded Criter, but this
@@ -80,6 +54,17 @@ int kswapInit(void)
 	return FALSE;
 }
 
+static void kswapSetISR(void)
+{
+	*(void far* far*)MK_FP(_psp, 0xe) = kswapContext->cbreak_hdlr;
+	/* The ^Break handler has been set already in INIT.C
+		as it is an internal one (no part of the module) */
+	*(void far* far*)MK_FP(_psp, 0x12) =
+	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter);
+	setvect(0x24, (void interrupt(*)())
+	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter));
+}
+
 void kswapRegister(kswap_p ctxt)
 {	struct REGPACK r;
 
@@ -87,10 +72,11 @@ void kswapRegister(kswap_p ctxt)
 	assert(ctxt);
 	/* our own PSP gets patched in order to load the values of the
 		Criter and ^Break handlers of the context on termination
-		of this instance of FreeCOM */
-	*(void far* far*)MK_FP(_psp, 0xe) = kswapContext->cbreak_hdlr;
-	*(void far* far*)MK_FP(_psp, 0x12) =
-	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter);
+		of this instance of FreeCOM.
+		It is save, because this function is activated only, if
+		the KSS is present, which faker has the previous values
+		stored. */
+	kswapSetISR();
 
 	r.r_ax = 0x4bfd;	/* Set kswap argument structure segm */
 	r.r_bx = (word)ctxt;
@@ -217,6 +203,7 @@ int kswapLoadStruc(void)
 {
 	char far *p;
 
+	kswapSetISR();
 	if(swapOnExec == ERROR)	/* missing kernel support */
 		return FALSE;
 

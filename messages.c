@@ -64,6 +64,7 @@
 #include "strings.h"
 #include "suppl.h"
 #include "res.h"
+#include "fmemory.h"
 
 /* Default message settings:
   PATTERN: how the string is constructed for the ID (with \n)

@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include "command.h"
+#include "strings.h"
 
 #define FILE_SEARCH_MODE FA_RDONLY | FA_ARCH | FA_DIREC
 
@@ -216,7 +217,7 @@ int show_completion_matches(char *str, unsigned charcount)
       else
         strcpy(fname, file.ff_name);
 
-      printf("%-14s", fname);
+      displayString(TEXT_FILE_COMPLATION_DISPLAY, fname);
       if (++count == 5)
       {
         putchar('\n');

@@ -20,6 +20,11 @@
  *
  * 2000/07/05 Ron Cemer
  *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
+ *
+ * 2001/02/14 ska
+ *	chg: made all helper functions and variables 'static'
+ *	chg: clean up code to not implement some functions twice
+ *	chg: reduced some static variables
  */
 
 #include "config.h"
@@ -33,10 +38,64 @@
 #include <dos.h>                /* must have those MK_FP() macros */
 #include <dir.h>                /* for searchpath() */
 
+#include <mcb.h>
+#include <suppl.h>
+
 #include "command.h"            /* command shell interface functions */
-#include "loadhigh.h"           /* contains macros, global variables, etc */
 #include "strings.h"
 #include "cmdline.h"
+#include "misc.h"
+
+/* Macro to convert bytes to paragraphs */
+#define topara(x) (((x) + 0xf) >> 4)
+#define mcbAssign(mcb,wordValue)	(mcb = (struct MCB _seg *)(wordValue))
+	/* skip to next MCB in chain */
+#define mcbNext(mcb)	mcbAssign(mcb, nxtMCB((word)mcb))
+#define DosAlloc(value)	DOSalloc((value), 0xF)
+
+enum error_codes
+{
+  err_help = -1, OK,
+  err_silent = -2,
+
+  /* These error codes are more or less DOS-compatible */
+  err_file_not_found = 2, err_mcb_chain = 7,
+  err_out_of_memory = 8, err_invalid_parms = 87
+};
+
+/* error message strings */
+//#define REGION_WARNING  "LOADHIGH: Illegal memory region %d - ignored\n"
+//#define BADUSAGE        "invalid command line"
+//#define BADMCBCHAIN     "MCB chain corrupt, or MS-DOS incompatible system"
+
+static int lh_lf(char *c);
+static int loadhigh_prepare(void);
+static int loadfix_prepare(void);
+static int findUMBRegions(void);
+static int parseArgs(char *cmdline, char **fnam, char **rest);
+static void lh_error(int errcode);
+
+
+/* This array will contain the memory blocks that the new program can't use */
+int allocatedBlocks = 0;
+word *block;
+
+int loadfix_flag;         /* Flag: are we processing LOADFIX or LOADHIGH? */
+int upper_flag;           /* Flag: should the program be loaded high? */
+
+/* UMB region info */
+int umbRegions = 0;       /* How many UMB regions are there? */
+
+struct UMBREGION
+{
+  word start;             /* start of the region */
+  word end;               /* end of the region */
+  word minSize;           /* minimum free size, given by the L switch */
+  int access;             /* does the program have access to this region? */
+}
+ *umbRegion;
+
+
 
 /* This module takes care of both the LOADHIGH and the LOADFIX command,
  * since those two commands have much in common.
@@ -77,17 +136,43 @@ int cmd_loadfix(char *rest)
 static int optS;
 static char *optL;
 
+/* Helper functions */
+
+static int initialise(void)
+{
+  /* reset global variables */
+  allocatedBlocks = 0;
+  upper_flag = 1;
+
+  /* Save the UMB link state and the DOS malloc strategy, to restore them later */
+  /* Allocate dynamic memory for some arrays */
+  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == NULL)
+    return err_out_of_memory;
+
+  if ((block = malloc(256 * sizeof(*block))) == NULL)
+    return err_out_of_memory;
+
+  /* find the UMB regions */
+	return findUMBRegions();
+}
+
+
 /* This is the "real" handler of the two commands. The argument is
  * the original command line.
  */
 
-int lh_lf(char *args)
+static int lh_lf(char *args)
 {
   int rc = err_out_of_memory;
   char *fullname, *fnam;
+	int i;	
+
+  int old_link = dosGetUMBLinkState();
+  int old_strat = dosGetAllocStrategy();
+  dosSetUMBLinkState(1);
+  dosSetAllocStrategy(0);
 
   assert(args);
-
 
     if (initialise() == OK)
     {
@@ -116,48 +201,12 @@ int lh_lf(char *args)
 
       }
     }
-    cleanup();
 
-  /* if any error occurred, rc will hold the error code */
-  if (rc)
-    lh_error(rc);
 
-  return rc;
-}
-
-int initialise(void)
-{
-  int rc;
-
-  /* reset global variables */
-  allocatedBlocks = 0;
-  upper_flag = 1;
-
-  /* Save the UMB link state and the DOS malloc strategy, to restore them later */
-  old_link = DosSetUMBLink(1);
-  old_strat = DosSetStrategy(0);
-
-  /* Allocate dynamic memory for some arrays */
-  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == NULL)
-    return err_out_of_memory;
-
-  if ((block = malloc(256 * sizeof(*block))) == NULL)
-    return err_out_of_memory;
-
-  /* find the UMB regions */
-  if ((rc = findUMBRegions()) != 0)
-    return rc;
-
-  return OK;
-}
-
-void cleanup(void)
-{
-  int i;
-
+  	/** Clean Up **/
   /* free any memory that was allocated to prevent the program from using it */
   for (i = 0; i < allocatedBlocks; i++)
-    DosFree(block[i]);
+    DOSfree(block[i]);
 
   /* free dynamic arrays */
   free(umbRegion);
@@ -167,13 +216,21 @@ void cleanup(void)
   /* Restore UMB link state and DOS malloc strategy to their
    * original values. */
 
-  DosSetUMBLink(old_link);
-  DosSetStrategy(old_strat);
+  dosSetUMBLinkState(old_link);
+  dosSetAllocStrategy(old_strat);
+
+
+  /* if any error occurred, rc will hold the error code */
+  if (rc)
+    lh_error(rc);
+
+  return rc;
 }
+
 
 /* lh_error(): print error messages to stderr */
 
-void lh_error(int errcode)
+static void lh_error(int errcode)
 {
   switch (errcode)
   {
@@ -210,25 +267,26 @@ void lh_error(int errcode)
  * memory.
  */
 
-int findUMBRegions(void)
+static int findUMBRegions(void)
 {
   struct UMBREGION *region = umbRegion;
-  struct MCB far *mcb = MK_FP(GetFirstMCB(), 0);  /* get start of MCB chain */
+  struct MCB _seg *mcb;
   char sig;
   int i;
 
+	mcbAssign(mcb, GetFirstMCB());  /* get start of MCB chain */
   umbRegions = 0;
   region->start = FP_SEG(mcb);
 
   /* First, find the end of the conventional memory:
    * Turn UMB link off, and track the MCB chain to the end. */
 
-  DosSetUMBLink(0);
+  dosSetUMBLinkState(0);
 
-  while (mcb->sig == 'M')
-    FP_SEG(mcb) += mcb->size + 1;
+  while (mcb->mcb_type == 'M')
+    mcbNext(mcb);
 
-  if (mcb->sig != 'Z')
+  if (mcb->mcb_type != 'Z')
     return err_mcb_chain;
 
   /* If the last memory block in conventional memory is "reserved",
@@ -236,10 +294,10 @@ int findUMBRegions(void)
    * the last block is an ordinary one, conventional memory ends at
    * the last paragraph of the block. */
 
-  if (mcb->owner == 8 && !farmemcmp(mcb->name, "SC", 2))
+  if (mcb->mcb_ownerPSP == 8 && !_fmemcmp(mcb->mcb_name, "SC", 2))
     region->end = FP_SEG(mcb) - 1;
   else
-    region->end = FP_SEG(mcb) + mcb->size;
+    region->end = FP_SEG(mcb) + mcb->mcb_size;
 
   region++;
   region->start = 0;
@@ -247,20 +305,20 @@ int findUMBRegions(void)
   /* Turn UMB link on. If MS-DOS UMBs are available, the signature of
    * the last conventional memory block will change from 'Z' to 'M'. */
 
-  DosSetUMBLink(1);
+  dosSetUMBLinkState(1);
 
-  if (mcb->sig == 'M')
+  if (mcb->mcb_type == 'M')
   {                             /* UMBs are available */
-    FP_SEG(mcb) += mcb->size + 1; /* go to next block */
+    mcbNext(mcb); /* go to next block */
 
     /* This loop searches for the regions, by searching either for
      * special MCBs or 'reserved' memory regions. */
 
     do
     {
-      sig = mcb->sig;
+      sig = mcb->mcb_type;
 
-      if (mcb->owner == 8 && !farmemcmp(mcb->name, "SC", 2))
+      if (mcb->mcb_ownerPSP == 8 && !_fmemcmp(mcb->mcb_name, "SC", 2))
       {
         /* this is a 'hole' in memory */
         if (region->start)
@@ -276,22 +334,22 @@ int findUMBRegions(void)
          * that is outside the ordinary MCB chain. This mcb defines
          * the size of the whole region. */
 
-        struct MCB far *umb_mcb = mcb;
-        FP_SEG(umb_mcb)--;
+        struct MCB _seg *umb_mcb;
+        mcbAssign(umb_mcb, (word)mcb - 1);
 
-        if (umb_mcb->sig == 'Z' || umb_mcb->sig == 'M')
-          if (!farmemcmp(umb_mcb->name, "UMB     ", 8))
+        if (umb_mcb->mcb_type == 'Z' || umb_mcb->mcb_type == 'M')
+          if (!_fmemcmp(umb_mcb->mcb_name, "UMB     ", 8))
           {
             /* This is the signature of the special MS-DOS MCBs */
 
             mcb = umb_mcb;
-            region->start = mcb->owner;
-            region->end = mcb->owner + mcb->size - 1;
-            if ((sig = mcb->sig) == 'M')
+            region->start = mcb->mcb_ownerPSP;
+            region->end = mcb->mcb_ownerPSP + mcb->mcb_size - 1;
+            if ((sig = mcb->mcb_type) == 'M')
               region->end--;
             region++;
             region->start = 0;
-            FP_SEG(mcb) += mcb->size;
+            mcbAssign(mcb, (word)mcb + mcb->mcb_size);
             if (sig == 'Z')
               break;
             continue;
@@ -302,11 +360,11 @@ int findUMBRegions(void)
 
       if (sig == 'Z')
       {
-        region->end = FP_SEG(mcb) + mcb->size;
+        region->end = FP_SEG(mcb) + mcb->mcb_size;
         region++;
       }
 
-      FP_SEG(mcb) += mcb->size + 1;
+      mcbNext(mcb);
     }
     while (sig == 'M');
 
@@ -323,6 +381,7 @@ int findUMBRegions(void)
     umbRegion[i].access = 1;
     umbRegion[i].minSize = 0xffff;
   }
+
   return OK;
 }
 
@@ -333,16 +392,16 @@ int findUMBRegions(void)
  * while the program is running.
  */
 
-int loadhigh_prepare(void)
+static int loadhigh_prepare(void)
 {
   int i;
   struct UMBREGION far *region = umbRegion;
-  WORD *availBlock;
-  WORD availBlocks = 0;
+  word *availBlock;
+  word availBlocks = 0;
 
   /* Set the UMB link and malloc strategy */
-  DosSetUMBLink(1);
-  DosSetStrategy(0);
+  dosSetUMBLinkState(1);
+  dosSetAllocStrategy(0);
 
   if ((availBlock = malloc(256 * sizeof(*availBlock))) == NULL)
     return err_out_of_memory;
@@ -369,36 +428,47 @@ int loadhigh_prepare(void)
 
   for (i = 0; i < umbRegions; i++, region++)
   {
-    struct MCB far *mcb;
-    WORD startBlock = allocatedBlocks;
+    struct MCB _seg *mcb;
+    word startBlock = allocatedBlocks;
     int found_one = 0;
 
-    for (mcb = MK_FP(region->start, 0); FP_SEG(mcb) < region->end;
-         FP_SEG(mcb) += mcb->size + 1)
+    for (mcbAssign(mcb, region->start)
+     ; FP_SEG(mcb) < region->end && mcb->mcb_type == 'M'
+     ; mcbNext(mcb))
     {
-      if (!mcb->owner)
+      if (!mcb->mcb_ownerPSP)
       {
         /* Found a free memory block: allocate it */
-        WORD bl = DosAlloc(mcb->size);
+        word bl = DosAlloc(mcb->mcb_size);
 
         if (bl != FP_SEG(mcb) + 1)  /* Did we get the block we wanted? */
           return err_mcb_chain;
 
-        if (region->access)
+        if (region->access)		/* /L option allows access to this region */
         {
-          if (region->minSize == 0xffff ||
-              (!optS && found_one) ||
+          if (region->minSize == 0xffff ||		/* no minimum size set
+          											--> use it */
+              (!optS && found_one) ||	/* a found previous block means to
+              					make this region available regardless
+              					of the size of this block; with an active
+              					/S option only one block per region is
+              					allowed. */
               (!(optS && found_one) &&
-               mcb->size >= region->minSize))
+               mcb->mcb_size >= region->minSize))
           {
 
             availBlock[availBlocks++] = bl;
 
             if (optS)
-              DosResize(bl, region->minSize);
+              DOSresize(bl, region->minSize);
             else if (allocatedBlocks > startBlock)
             {
-              memcpy(availBlock + availBlocks, block + startBlock, (allocatedBlocks - startBlock) * sizeof(*block));
+              /* These _previously_ found blocks had been found
+              	too small, but must be made available now as this
+              	region is available */
+              memcpy(availBlock + availBlocks
+               , block + startBlock
+               , (allocatedBlocks - startBlock) * sizeof(*block));
               availBlocks += allocatedBlocks - startBlock;
               allocatedBlocks = startBlock;
             }
@@ -417,42 +487,44 @@ int loadhigh_prepare(void)
    * Those blocks will be released. */
 
   for (i = 0; i < availBlocks; i++)
-    DosFree(availBlock[i]);
+    DOSfree(availBlock[i]);
   free(availBlock);
 
   /* If the program is to be loaded in upper memory, set the malloc
    * strategy to 'first fit high', otherwise to 'first fit low'. */
 
-  DosSetStrategy(upper_flag ? 0x80 : 0);
+  dosSetAllocStrategy(upper_flag ? 0x80 : 0);
   return OK;
 }
 
 /* loadfix_prepare(): Allocates all memory up to 1000:0000. */
 
-int loadfix_prepare(void)
+static int loadfix_prepare(void)
 {
-  struct MCB far *mcb = MK_FP(umbRegion[0].start, 0);
+  struct MCB _seg *mcb;
 
-  DosSetStrategy(0);
+  mcbAssign(mcb, umbRegion[0].start);
+
+  dosSetAllocStrategy(0);
 
   while (FP_SEG(mcb) < 0x1000)
   {
-    if (mcb->sig != 'M' && mcb->sig != 'Z')
+    if (mcb->mcb_type != 'M' && mcb->mcb_type != 'Z')
       return err_mcb_chain;
 
-    if (!mcb->owner)
+    if (!mcb->mcb_ownerPSP)
     {
-      WORD bl = DosAlloc(mcb->size);
+      word bl = DosAlloc(mcb->mcb_size);
 
       if (bl != FP_SEG(mcb) + 1)  /* Did we get the block we wanted? */
         return err_mcb_chain;
 
       block[allocatedBlocks++] = bl;
 
-      if (bl + mcb->size > 0x1000)  /* Don't allocate more than necessary */
-        DosResize(bl, 0x1000 - bl);
+      if (bl + mcb->mcb_size > 0x1000)  /* Don't allocate more than necessary */
+        DOSresize(bl, 0x1000 - bl);
     }
-    FP_SEG(mcb) += mcb->size + 1;
+    mcbNext(mcb);
   }
   return OK;
 }
@@ -478,7 +550,7 @@ optScanFct(opt_lh)
  *  The LOADFIX command only accepts the '?' switch.
  */
 
-int parseArgs(char *cmdline, char **fnam, char **rest)
+static int parseArgs(char *cmdline, char **fnam, char **rest)
 {
   char *c;
 
@@ -503,7 +575,7 @@ int parseArgs(char *cmdline, char **fnam, char **rest)
 
     do
     {
-    DWORD region_minSize = 0xffff;  /* flag value, indicating no minsize was specified */
+    dword region_minSize = 0xffff;  /* flag value, indicating no minsize was specified */
 
     int region_number = (int)strtol(c, &c, 10);
 

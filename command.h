@@ -41,11 +41,30 @@
  * chg: Moved into MISC.H: OnOff, BREAK_* macros
  */
 
+#ifndef FREECOM_COMMAND_H
+#define FREECOM_COMMAND_H
+
 #include <dos.h>
+#include <stdio.h>
 #include "misc.h"
+#include "fmemory.h"
+
+/* transformed into constants
+	unsigned far *maxx = MK_FP(0x40, 0x4a);
+	unsigned char far *maxy = MK_FP(0x40, 0x84);
+*/
+#define MAX_X (*(unsigned int  far*)MK_FP(0x40, 0x4a))
+#define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84))
 
 #define MAX_INTERNAL_COMMAND_SIZE 256
-#define MAX_EXTERNAL_COMMAND_SIZE 128
+#define MAX_EXTERNAL_COMMAND_SIZE 125
+	/* The maximal external command line is:
+		  128: overall space for the command line)
+		- 1: Pascal string length byte
+		- 1: '\r' (at the end)
+		- 1: '\0' (at the very end)
+		= 125
+	*/
 
 #define CTL_C 3
 
@@ -55,6 +74,7 @@ enum InternalErrorCodes {
 	E_Other = 2,
 	E_CBreak = 3,
 	E_NoMem,
+	E_CorruptMemory,
 	E_NoOption,
 	E_Exit,
 	E_Ignore			/* Error that can be ignored */
@@ -85,6 +105,9 @@ enum
 
 /* prototypes for INIT.C */
 void grabComFilename(int warn, const char far * const fnam);
+extern void interrupt dummy_criter_handler();
+extern void interrupt cbreak_handler();
+extern void initCBreak(void);
 
 /* prototypes for COMMAND.C */
 extern int ctrlBreak;
@@ -176,15 +199,6 @@ void aliasexpand(char *, int);
 int aliasswapout(void);
 int aliasswapin(void);
 int cmd_alias(char *);
-
-/* Prototypes for ERR_HAND.C */
-#if 0
-void init_error_handler(void);
-void printstring(char *);
-char *get_err(unsigned);
-void interrupt far dos_critical_error(unsigned, unsigned, unsigned, unsigned,
-                       unsigned, unsigned, unsigned, unsigned, unsigned);
-#endif
 
 /* Prototypes for MISC.C */
 /* Moved to MISC.H */
@@ -298,3 +312,5 @@ int showcmds(char *);
 
 /* parse numbers */
 char *parsenum(char *s, int maxCnt, int *cnt, int nums[]);
+
+#endif

@@ -23,6 +23,7 @@ eb_fcb		RESD 2
 shellCmdLine	RESB 2
 context		RESW 1
 ctxt_owner	RESW 1
+origParent	RESW 1
 cmd_buf:
 
 SEGMENT .text
@@ -31,6 +32,12 @@ ORG 100h		; this is an executable program, but as small as possible
 
 start:
 jmp goon
+
+%ifdef DEBUG
+strExiting	DB 13, 10, 'Exiting KSSF'
+strNL		DB 13, 10, '$', 0
+strNotMe	DB 'The current PSP is not me!', 7, 13, 10, '$', 0
+%endif
 
 errString DB 13, 10, 'Failed to execute shell - '
 	DB 'Exiting Kernel Swap Support Faker.', 7, 13, 10
@@ -105,6 +112,23 @@ execShell:
 exit:						; exit kssf
 	mov ax, cs
 	mov ds, ax				; ensure DS == PSP
+%ifdef DEBUG
+	mov dx, strExiting
+	mov ah, 9
+	int 21h
+	mov ah, 62h
+	int 21h
+	mov ax, cs
+	cmp ax, bx
+	je dbg_1
+	mov dx, strNotMe
+	mov ah, 9
+	int 21h
+dbg_1:
+%endif
+	mov ax, WORD [origParent]	; restore parentPSP to original value
+	mov WORD [ds:16h], ax
+
 	mov ax, [context]		; let context be deallocated, too
 	or ax, ax
 	jz exit_noCtxt
@@ -171,6 +195,9 @@ isr21_getCtxt:
 	jne isr21_noAcc
 isr21_ok:
 	and BYTE [bp+8], 0feh		; clear Carry flag
+%ifdef DEBUG
+	mov ax, cs					; our PSP / PID
+%endif
 isr21_iret:
 	pop dx
 	pop bp
@@ -244,7 +271,10 @@ fcom_cpy:
 	mov WORD [eb_cmdline], si	; DWORD eb_cmdline := DS:SI
 	mov WORD [eb_cmdline+2], ds
 
-	mov WORD [ds:16h], cs	; set our owner to ourselves <-> shell hack
+	mov ax, cs
+;;	mov WORD [ds:16h], cs	; set our owner to ourselves <-> shell hack
+	xchg WORD [ds:16h], ax	; set our owner to ourselves <-> shell hack
+	mov WORD [origParent], ax
 
 	;; DS:DX == command name
 	;; execBlock is filled

@@ -86,6 +86,8 @@ Return:
 		BX := current segment
 
 Note:
+	If DEBUG was enabled during compilation of KSSF && Carry == 0,
+		AX := PID of KSSF
 	Only one process may use these functions, any other process gets the
 	  error 1 (invalid function). Therefore the primary shell MUST invoke
 	  DOS-4B-F? to lock this function for other processes.

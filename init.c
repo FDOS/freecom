@@ -86,6 +86,17 @@
  * 2000/07/05 Ron Cemer
  *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  *	fix: add typecase for local variables of _fmemcpy()
+ *
+ * 2000/07/24 Ron Cemer
+ *	bugfix: ensure environment segment is in limits 256..32767
+ *
+ * 2000/12/10 ska
+ *	chg: enable canexit within initialize() in order to catch abort-style
+ *		errors within main()
+ *
+ * 2001/02/16 ska
+ * chg: using STRINGS resource
+ * fix: if FEATURE_CALL_LOGGING cannot open file, don't terminate
  */
 
 #include "config.h"
@@ -155,7 +166,7 @@ int showcmds(char *rest)
   unsigned char y;
   extern struct CMD cmds[];     /* The internal command table */
 
-  puts("Internal commands available:");
+  displayString(TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS);
   y = 0;
   cmdptr = cmds;
   while (cmdptr->name)
@@ -172,28 +183,17 @@ int showcmds(char *rest)
   }
   if (y != 0)
     putchar('\n');
-  printf("\nFeatures available: ");
-#ifdef FEATURE_ALIASES
-  printf("[aliases] ");
-#endif
-#ifdef FEATURE_HISTORY
-  printf("[history] ");
-#endif
-#ifdef FEATURE_FILENAME_COMPLETION
-  printf("[filename completion] ");
-#endif
-#ifdef FEATURE_SWAP_EXEC
-  printf("[swapping] ");
-#endif
-#ifdef FEATURE_CALL_LOGGING
-  printf("[start logging] ");
-#endif
-#ifdef FEATURE_LAST_DIR
-  printf("[last dir] ");
-#endif
-#ifdef FEATURE_KERNEL_SWAP_SHELL
-	printf("[kernel swap] ");
-#endif
+  displayString(TEXT_MSG_SHOWCMD_FEATURES);
+	displayString(TEXT_SHOWCMD_FEATURE_ALIASES);
+	displayString(TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT);
+	displayString(TEXT_SHOWCMD_FEATURE_HISTORY);
+	displayString(TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION);
+	displayString(TEXT_SHOWCMD_FEATURE_SWAP_EXEC);
+	displayString(TEXT_SHOWCMD_FEATURE_CALL_LOGGING);
+	displayString(TEXT_SHOWCMD_FEATURE_LAST_DIR);
+	displayString(TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL);
+	displayString(TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS);
+	displayString(TEXT_SHOWCMD_FEATURE_NLS);
   putchar('\n');
 
   return 0;
@@ -254,7 +254,7 @@ int WaitForFkeys(void)
 
 int showhelp = 0, internalBufLen = 0, inputBufLen = 0;
 int spawnAndExit = E_None;
-int newEnvSize = 0;
+int newEnvSize = 0;          /* Min environment table size */
 char *user_autoexec = NULL;
 
 optScanFct(opt_init)
@@ -404,9 +404,10 @@ int initialize(void)
 
 /* Set up the host environment of COMMAND.COM */
 
-  /* Install the ^Break handler (see chkCBreak() for more details) */
-  extern void initCBreakCatcher(void);
-  initCBreakCatcher();
+	/* Install the dummy handlers for Criter and ^Break */
+	initCBreak();
+	setvect(0x23, cbreak_handler);
+	setvect(0x24, dummy_criter_handler);
 
   /* DOS shells patch the PPID to the own PID, how stupid this is, however,
     because then DOS won't terminate them, e.g. when a Critical Error
@@ -474,8 +475,7 @@ int initialize(void)
 #ifdef FEATURE_CALL_LOGGING
   if((f = fopen(logFilename, "at")) == NULL) {
     fprintf(stderr, "Cannot open logfile: \"%s\"\n", logFilename);
-    exit(125);
-  }
+  } else {
 
   putc('"', f);
   if(ComPath)   /* path to command.com already known */
@@ -486,8 +486,10 @@ int initialize(void)
   fputs(cmdline, f);
   putc('\n', f);
   fclose(f);
+  }
 #endif
 
+  canexit = 1;
   p = cmdline;    /* start of the command line */
   do {
   ec = leadOptions(&p, opt_init, NULL);
@@ -579,6 +581,7 @@ int initialize(void)
     env_setsize(0, newEnvSize);
 
   /* Otherwise the path is placed into the environment */
+    /* Set the COMSPEC variable. */
   if (chgEnv("COMSPEC", ComPath)) {
     /* Failed to add this variable, the most likely problem should be that
       the environment is too small --> it is increased and the
@@ -587,7 +590,6 @@ int initialize(void)
     if (chgEnv("COMSPEC", ComPath))
     error_env_var("COMSPEC");
   }
-
 
 	/* Install INT 24 Critical error handler */
 	/* Needs the ComPath variable, eventually */
@@ -636,7 +638,7 @@ int initialize(void)
      */
     if (exist(autoexec))
     {
-      printf("\nPress F8 for trace mode, or F5 to bypass %s... ", autoexec);
+      displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
       key = WaitForFkeys();
       putchar('\n');
 
@@ -647,7 +649,7 @@ int initialize(void)
 
       if (key == KEY_F5)
       {
-        printf("Bypassing %s\n", autoexec);
+		  displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
       }
       else
         process_input(1, autoexec);
@@ -655,7 +657,7 @@ int initialize(void)
     else
     {
       if(user_autoexec)
-        printf("%s not found.\n", autoexec);
+      	displayString(TEXT_ERROR_SFILE_NOT_FOUND, user_autoexec);
 #ifdef INCLUDE_CMD_DATE
       cmd_date(NULL);
 #endif

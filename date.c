@@ -26,6 +26,14 @@
  *    1 number --> only the day changes
  *    2 numbers --> month/day; year remains unchanged
  *    3 numbers --> month/day/year
+ *
+ * 2001/02/08 ska
+ * chg: two-digit year -> 2000 if less than 80
+ * add: DATE /D and TIME /T
+ *
+ * 2001/02/14 ska
+ * fix: years in range 80..199 are promoted to century 1900
+ *		allows to parse dates created with year100 bug (by Arkady)
  */
 
 #include "config.h"
@@ -42,6 +50,8 @@
 #include "command.h"
 #include "datefunc.h"
 #include "strings.h"
+#include "cmdline.h"
+#include "nls.h"
 
 static unsigned char months[2][13] =
 {
@@ -59,6 +69,22 @@ const char *day_strings[] =
 extern const char *day_strings[];
 #endif
 
+
+
+static int noPrompt = 0;
+
+#pragma argsused
+optScanFct(opt_date)
+{ switch(ch) {
+  case 'D':
+  case 'T': return optScanBool(noPrompt);
+  }
+  optErr();
+  return E_Useage;
+}
+
+
+
 int parsedate(char *s)
 {
   struct dosdate_t d;
@@ -75,26 +101,77 @@ int parsedate(char *s)
     return 0;
 
   _dos_getdate(&d);             /* fetch current info */
-  switch (items)
-  {
-    case 0:                    /* empty line --> always OK */
-      return 1;
+#ifdef FEATURE_NLS
+	refreshNLS();
+	switch(nlsBuf->datefmt) {
+	case 0:		/* mm/dd/yy */
+#endif
+		switch (items) {
+		case 0:                    /* empty line --> always OK */
+		  return 1;
 
-    case 1:                    /* single number --> day only */
-      d.day = nums[0];
-      break;
+		case 1:                    /* single number --> day only */
+		  d.day = nums[0];
+		  break;
 
-    case 3:                    /* three numbers --> year, month & day */
-      d.year = nums[2];
-      /* fall through */
+		case 3:                    /* three numbers --> year, month & day */
+		  d.year = nums[2];
+		  /* fall through */
 
-    case 2:                    /* two numbers --> month & day */
-      d.day = nums[1], d.month = nums[0];
-      break;
-  }
+		case 2:                    /* two numbers --> month & day */
+		  d.day = nums[1], d.month = nums[0];
+		  break;
+		}
+
+#ifdef FEATURE_NLS
+		break;
+	case 1:		/* dd/mm/yy */
+		switch (items) {
+		case 0:                    /* empty line --> always OK */
+		  return 1;
+
+		case 3:                    /* three numbers --> year, month & day */
+		  d.year = nums[2];
+		  /* fall through */
+
+		case 2:                    /* two numbers --> month & day */
+		  d.month = nums[1];
+		  /* fall through */
+
+		case 1:
+		  d.day = nums[0]; 
+		  break;
+		}
+		break;
+
+	case 2:		/* yy/mm/dd */
+		switch (items) {
+		case 0:                    /* empty line --> always OK */
+		  return 1;
+
+		case 3:                    /* three numbers --> year, month & day */
+		  d.year = nums[0];
+		  d.month = nums[1];
+		  d.day = nums[2]; 
+		  break;
+
+		case 2:                    /* two numbers --> month & day */
+		  d.month = nums[0];
+		  d.day = nums[1]; 
+		  break;
+
+		case 1:
+		  d.day = nums[0]; 
+		  break;
+		}
+		break;
+	}
+#endif
 
   /* if only entered two digits for year, assume 1900's */
-  if (d.year <= 99)
+  if (d.year < 80)
+    d.year += 2000;
+  else if (d.year < 200)
     d.year += 1900;
 
   leap = (!(d.year % 4) && (d.year % 100)) || !(d.year % 400);
@@ -104,6 +181,7 @@ int parsedate(char *s)
       (d.year >= 1980 && d.year <= 2099))
   {
     _dos_setdate(&d);
+    _dos_setdate(&d);		/* In WinNT the date is often one day +/- */
     return 1;
   }
 
@@ -114,15 +192,26 @@ int parsedate(char *s)
 int cmd_date(char *rest)
 {
   char s[40];
+  int ec;
 
-  if (!rest || !*rest)
+  noPrompt = 0;
+
+#ifdef FEATURE_NLS
+	refreshNLS();
+#endif
+
+  if((ec = leadOptions(&rest, opt_date, NULL)) != E_None)
+      return ec;
+
+  if (!*rest)
   {
-    struct dosdate_t d;
+    char *date;
 
-    _dos_getdate(&d);
+    if((date = curDateLong()) == 0)
+    	return 1;
 
-    displayString(TEXT_MSG_CURRENT_DATE,
-                   day_strings[d.dayofweek], d.month, d.day, d.year);
+    displayString(TEXT_MSG_CURRENT_DATE, date);
+	free(date);
 
     rest = NULL;
   }
@@ -132,11 +221,17 @@ int cmd_date(char *rest)
   {
     if (!rest)
     {
-      if ((rest = getMessage(TEXT_MSG_ENTER_DATE)) == NULL)
-        return 1;               /* failed, error message on screan already */
+		if(noPrompt) return 0;
 
-      fputs(rest, stdout);      /* put onto screen */
-      free(rest);
+		assert(0 <= nlsBuf->datefmt && nlsBuf->datefmt <= 2);
+		assert(nlsBuf->dateSep);
+		displayString(TEXT_MSG_ENTER_DATE_AMERICAN
+#ifdef FEATURE_NLS
+			+ nlsBuf->datefmt, nlsBuf->dateSep, nlsBuf->dateSep
+#else
+			, "-", "-"
+#endif
+		);
       fgets(s, sizeof(s), stdin);
       if (cbreak)
         return 1;

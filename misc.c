@@ -74,7 +74,7 @@
 #include "command.h"
 #include "batch.h"
 #include "misc.h"
-
+#include "nls.h"
 #include "strings.h"
 
 /*
@@ -369,4 +369,121 @@ char far *_fstpcpy(char far *dst, const char far *src)
 	while((*dst++ = *src++) != 0);
 
 	return dst - 1;
+}
+
+/*
+ *	Returns the position of the first '\n' or '\0' character;
+ *		or NULL if the line overflows the buffer.
+ *	"overflow" means that no '\n' character was found and the line
+ *	is completely full, so, if the very last line has no newline character,
+ *	it is still considered "not overflowed".
+ */
+char *textlineEnd(const char * const buf, const size_t buflen)
+{	const char *p, *end;
+
+	if(!buf)	return NULL;
+	end = buflen + (p = buf - 1);
+	do { if(++p == end)		/* The very last byte of the buffer is
+								hit ==> there ougth to be a '\0' there
+								==> no '\n' AND no place for further
+								character ==> overflow */
+		return NULL;
+	} while(*p && *p != '\n');
+
+	return (char *)p;
+}
+
+/****************
+ ************* Imported from LH.ASM
+ ************* Function names changed to enforce changed content.
+ ***************************************************/
+
+
+int dosGetUMBLinkState(void)
+{	USEREGS
+
+	_AX = 0x5802;			/* get UMB link */
+	geninterrupt(0x21);
+	return _FLAGS & 1 ? 0 : _AX;
+}
+
+void dosSetUMBLinkState(int newState)
+{	USEREGS
+
+	_BX = newState;
+	_AX = 0x5803;			/* set UMB link */
+	geninterrupt(0x21);		/* result ignored */
+}
+
+int dosGetAllocStrategy(void)
+{	USEREGS
+
+	_AX = 0x5800;			/* get allocation strategy */
+	geninterrupt(0x21);
+	return _FLAGS & 1 ? 0 : _AX;
+}
+
+void dosSetAllocStrategy(int newState)
+{	USEREGS
+
+	_BX = newState;
+	_AX = 0x5801;			/* set allocation strategy */
+	geninterrupt(0x21);		/* result ignored */
+}
+
+/* Get start of MCB chain, from word ptr SYSVARS[-2]
+ */
+word GetFirstMCB(void)
+{	USEREGS
+
+	_AH = 0x52;
+	geninterrupt(0x21);
+	return peekw(_ES, _BX - 2);
+}
+
+
+
+
+char *curTime(void)
+{	char *time;
+	struct dostime_t t;
+
+    _dos_gettime(&t);
+
+    time = nls_maketime(0, t.hour, t.minute, t.second, t.hsecond);
+    if(!time)
+    	error_out_of_memory();
+
+    return time;
+}
+
+char *curDateLong(void)
+{
+	struct dosdate_t d;
+	char *date, *h, *p;
+
+	_dos_getdate(&d);
+
+	if((date = nls_makedate(0, d.year, d.month, d.day)) == NULL) {
+		error_out_of_memory();
+		return 0;
+	}
+
+	if((h = fetchString(TEXT_WEEKDAY_SHORT_NAME_SUNDAY + d.dayofweek)) == 0) {
+		free(date);
+		error_out_of_memory();
+		return 0;
+	}
+
+	if((p = realloc(h, strlen(h) + strlen(date) + 2)) == 0) {
+		free(h);
+		free(date);
+		error_out_of_memory();
+		return 0;
+	}
+
+	strcpy(stpcat(p, " "), date);
+	free(date);
+
+	return p;
 }

@@ -1,6 +1,75 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+2001/02/14 ska
+~~~~~~~~~~~~~~~~~~~~~~
+fix: parse years 80..199 as century 1900 (by Arkady)
+chg: removed some static variables
+chg: made all global functions & variables static to LOADHIGH.C
+sub: LH.ASM/LOADHIGH.C: duplicate functions (memory API, farmemcmp)
+fix: doc of DATE, TIME, FreeCOM
+
+2001/02/08 ska
+~~~~~~~~~~~~~~~~~~~~~~
+chg: two-digit year -> 2000 if less than 80
+add: DATE /D and TIME /T
+
+2000/12/13 ska
+~~~~~~~~~~~~~~~~~~~~~~
+released v0.80
+
+2000/12/10 ska
+~~~~~~~~~~~~~~~~~~~~~~
+add: Installable Commands interface (MUX_AE.*) FEATURE_INSTALLABLE_COMMANDS
+chg: F3 == complete string
+add: cur-right at end of string == F1
+fix: F5 removes cursor sometimes
+
+2000/11/28 (Owen Rudge <orudge@freeuk.com>)
+~~~~~~~~~~~~~~~~~~~~~~
+- Added support for F1, F3 and F5, as in MS COMMAND.COM
+	F1 = Insert next character from last buffer
+	F3 = Complete string (NOTE: in this version, replaces string)
+	F5 = Places current string in buffer, moves to next line
+
+2002/10/09 Michael Kj”rling <michael@kjorling.com>
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: directory commands now support periods without leading space
+
+2000/09/26 ska <ska-src@gmx.net>
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: "%1" expansion could overwrite end of string
+bugfix: length of external command line was assumed too long
+chg: moved check of length of ext cmdline before exec() in order
+	to allow batch files use the internal length
+
+2000/08/15 ska <ska-src@gmx.net>
+~~~~~~~~~~~~~~~~~~~~~~
+chg: layout of CVS:
+	+ removed all pre-compiled files but COMMAND.COM for English
+	+ pre-compiled files can be downloaded from
+		ftp://freedos.sourceforge.net/pub/freedos/freecom/
+		See DOWNLOAD.TXT
+	+ created a "localizer" package
+add: FIXSTRS.EXE now creates a third file STRINGS.LOG to help
+	to localize the strings; see DOCS\LOCALIZE.TXT
+
+2000/08/15 Ron Cemer
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: Piping, when the tempfile is opened for read-only access for the
+	2nd command it's still opened for write-only for the 1st one.
+	This may fail, see DOCS\PIPING.TXT
+
+2000/07/24 Ron Cemer
+~~~~~~~~~~~~~~~~~~~~~~
+fix: COPY
+fix: environment handling
+
+2000/07/10 Ron Cemer
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: for DIR /S
+fix: COPY (started)
+
 2000/07/10 ska <ska-src@gmx.net>
 ~~~~~~~~~~~~~~~~~~~~~~
 chg: To support to change the STRINGS.DAT file without recompiling

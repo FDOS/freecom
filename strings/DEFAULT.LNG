@@ -360,20 +360,35 @@ BREAK is %s
 .
 
 :TEXT_MSG_CURRENT_DATE
-Current date is %s %02d-%02d-%d
+Current date is %s
 .
 
-:TEXT_MSG_ENTER_DATE
-Enter new date (mm-dd-[yy]yy):
-.
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN
+Enter new date (mm%sdd%s[cc]yy): 
+,
+:TEXT_MSG_ENTER_DATE_EUROPE
+Enter new date (dd%smm%s[cc]yy): 
+,
+:TEXT_MSG_ENTER_DATE_JAPANESE
+Enter new date ([cc]yy%smm%sdd): 
+,
 
 :TEXT_MSG_CURRENT_TIME
-Current time is %2d:%02d:%02d.%02d%c
+Current time is %s
 .
 
+:TEXT_STRING_PM
+ pm
+,
+
+:TEXT_STRING_AM
+ am
+,
+
 :TEXT_MSG_ENTER_TIME
-Enter new time:
-.
+Enter new time: 
+,
 
 :TEXT_MSG_COPYING
 %s %s %s
@@ -388,20 +403,156 @@ Are you sure (Y/N)?
 Directory stack empty.
 .
 
-:TEXT_MSG_VER_BASIC
-Copyright (C) 1994-2000 Tim Norman and others.
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME
+ Volume in drive %c 
+,
+:TEXT_DIR_HDR_VOLUME_STRING
+is %s
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+has no label
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER
+ Volume Serial Number is %04X-%04X
+.
+:TEXT_DIR_FTR_FILES
+%10s file(s)
+,
+:TEXT_DIR_FTR_BYTES
+   %12s bytes
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+Total files listed:
+.
+:TEXT_DIR_FTR_DIRS
+%10s dir(s)
+,
+:TEXT_DIR_FTR_BYTES_FREE
+ %15s bytes free
+.
+:TEXT_DIR_DIRECTORY
+Directory of %s
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE
+ Directory of %s
+.
+:TEXT_DIR_LINE_FILENAME_WIDE
+%-15s
+,
+:TEXT_DIR_LINE_FILENAME_BARE
+%-13s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE
+%-13s
+,
+:TEXT_DIR_LINE_FILENAME
+%-8s %-3s 
+,
+:TEXT_DIR_LINE_SIZE_DIR
+        <DIR> 
+,
+:TEXT_DIR_LINE_SIZE
+   %10s 
+,
 
-The FreeDOS Command Shell comes with ABSOLUTELY NO WARRANTY.
-For details type: "ver /w". This is free software, and you are
-welcome to redistribute it under certain conditions; type "ver /d"
-for details.  Type "ver /c" for a listing of credits.
+:TEXT_FILE_COMPLATION_DISPLAY
+%-14s
+,
 
-Send bug reports to fd-freecom@topica.com.
-Updates are available from http://www.gcfl.net/FreeCom
+:TEXT_MSG_PATH
+PATH=%s
 .
 
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY
+Sun
+,
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY
+Mon
+,
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY
+Tue
+,
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY
+Wed
+,
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY
+Thu
+,
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY
+Fri
+,
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY
+Sat
+,
+
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+Internal commands available:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+Features available:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES
+[aliases] 
+,
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT
+[enhanced input] 
+,
+:TEXT_SHOWCMD_FEATURE_HISTORY
+[history] 
+,
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION
+[filename completion] 
+,
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC
+[swapping] 
+,
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING
+[start logging] 
+,
+:TEXT_SHOWCMD_FEATURE_LAST_DIR
+[last dir] 
+,
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL
+[kernel swap] 
+,
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS
+[installable commands] 
+,
+:TEXT_SHOWCMD_FEATURE_NLS
+[DOS NLS] 
+,
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC
+
+Press F8 for trace mode, or F5 to bypass %s... 
+,
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC
+Bypassing %s.
+.
+
+:TEXT_MSG_VER_DOS_VERSION
+DOS version %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+FreeDOS kernel (build 1933 or prior)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS
+FreeDOS kernel version %d.%d.%d
+.
+
+
 :TEXT_MSG_VER_WARRANTY
-Copyright (C) 1994-2000 Tim Norman and others.
+Copyright (C) 1994-2001 Tim Norman and others.
 
 This program is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -409,11 +560,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details.
 
 Send bug reports to fd-freecom@topica.com.
-Updates are available from http://www.gcfl.net/FreeCom
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
-Copyright (C) 1994-2000 Tim Norman and others.
+Copyright (C) 1994-2001 Tim Norman and others.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -421,23 +572,18 @@ the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.
 
 Send bug reports to fd-freecom@topica.com.
-Updates are available from http://www.gcfl.net/FreeCom
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_DEVELOPERS
 
-The FreeDOS Command Shell developed by:
-		Tim Norman      Matt Rains
-		Evan Jeffrey    Steffen Kaiser
-		Svante Frey     Oliver Mueller
-		Aaron Kaufman   Marc Desrochers
-		Rob Lake        John P Price
-		Hans B Pufal
+The FreeDOS Command Shell developed by many developers, please refer
+to the enclose HISTORY.TXT file.
 
-Currently maintained by Steffen Kaiser.
+Currently maintained by Steffen Kaiser mailto:freecom@freedos.org
 
 Send bug reports to fd-freecom@topica.com.
-Updates are available from http://www.gcfl.net/FreeCom
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 
@@ -622,6 +768,7 @@ DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
  /B         Uses bare format (no heading information or summary).
  /L         Uses lowercase.
  /V         Verbose mode.
+ /Y         Display 4-digit year.
 
 Switches may be preset in the DIRCMD environment variable.  Override
 preset switches by prefixing any switch with - (hyphen)--for example, /-W.

@@ -27,6 +27,7 @@
 
 #include "command.h"
 #include "cmdline.h"
+#include "strings.h"
 
 #define PATHVAR    "PATH"
 
@@ -39,7 +40,7 @@ int cmd_path(char *rest)
 
   if (!rest || !*rest)
   {
-    printf("PATH=%s\n", getEnv(PATHVAR));
+    displayString(TEXT_MSG_PATH, getEnv(PATHVAR));
     return 0;
   }
 

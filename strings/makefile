@@ -3,11 +3,29 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.3.4.3  2001/02/18 17:59:37  skaus
+# bugfix: KSSF: restore parentPSP on exit
+# chg: Using STRINGS resource for all non-interactive messages
+# chg: moving all assembly files to NASM
+#
 # Revision 1.3.4.2  2001/01/28 21:23:55  skaus
 # add: Kernel Swap Support
 #
 # Revision 1.3.4.1  2000/07/19 20:28:30  skaus
 # Experimental Resources, Modules, Context
+#
+# Revision 1.5  2000/08/15 21:31:37  skaus
+# chg: binary packages on FTP\nbugfix: piping
+#
+# Revision 1.4  2000/07/24 23:00:20  skaus
+# fix: DIR & COPY, envSize, Makefiles
+#
+# Revision 1.3.2.1  2000/07/24 22:38:10  skaus
+# add: Spanish Strings
+# fix: Makefiles COMMAND.MAK for TC++ v1.01
+# fix: environment size between 256..32767
+# fix: COPY (to be tested)
+# bugfix: DIR /S; output formatting to match MS COMMAND.COM
 #
 # Revision 1.3  2000/07/10 22:26:56  skaus
 # Change internal strings without re-compiling FreeCOM
@@ -29,7 +47,7 @@
 INCDIR +=;$(FREEDOS)\SRC\INCLUDE
 LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
 #LDLIBS = suppl_$(_MODEL).lib
-LDFLAGS += /msl
+LDFLAGS += /m/s/l
 _MODEL !:= c
 ## Disable debugging
 #NDEBUG !:= Yes
@@ -78,7 +96,8 @@ clobber : clean
 	$(RM) $(RMFLAGS) *.exe *.com ..\strings.h ..\strings.dat ..\string.err
 
 clean :
-	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) strings.h strings.dat string.err
+	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) strings.h strings.dat
+	$(RM) $(RMFLAGS) *.log string.err
 
 
 .IF $(CFG) != $(NULL)

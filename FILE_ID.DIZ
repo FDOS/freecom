@@ -1,9 +1,7 @@
-This is an experimental branch of the
-FreeDOS Command Shell (command.com)
-called FreeCOM.
+This is the FreeDOS Command Shell (command.com).
 
+For the latest version and information, visit
 
-To check out the official release
-just do not specify any "-r" tag or
-use the ones named "comXXX?", e.g.
-com079a
+http://www.freedos.sourceforge.net/freedos/freecom
+
+See DOCS\LICENSE.TXT for license information.
