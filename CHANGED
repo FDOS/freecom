@@ -1,3 +1,5 @@
+add: pt/BR Strings {Max M. Velasques}
+
 v0.83 Beta 46:
 add: COPY: keep file time if not appending
 chg: upload.txt: update options of DIFF utility

@@ -1,0 +1,19 @@
+Você pode fazer o download de variantes pre-compiledas do FreeCOM de:
+
+http://freedos.sourceforge.net/freecom/packages/
+
+outros lugares para o download são mostrados em:
+
+binary.zip: o último FreeCOM, apenas Binários
+
+plainedt.zip: o último FreeCOM sem os melhoramentos de edição de linha
+	de comando (história, arquivo de reclamações)
+
+debug.zip: o último FreeCOM sem informações de debug ativadas
+
+localize.zip: Pacote para desenvolvedores para linguagens (para criar um novo ou
+	alterar arquivo *.LNG existentes), incluie o último FreeCOM
+
+suppl.zip: biblioteca pre-compilada suplementar para o TC++ v1.01
+	seu código fonte está disponível em:
+	http://www2.inf.fh-rhein-sieg.de/~skaise2a/ska/sources.html#suppl

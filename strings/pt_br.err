@@ -1,0 +1,78 @@
+# $Id$
+#
+# Critical error national customization file
+#
+#	Language: pt/BR
+#	Author:   Max Velasques
+
+# Traduzido em 19 de agosto 2002
+# Por Max Velasques
+# Site: www.maxfreewares.hpg.com.br
+
+## Strings primarias
+S2
+BLOCK_DEVICE: Erro %1 drive %A: %2 area: %3
+S3
+CHAR_DEVICE: Erro %1 periferico %A: %3
+
+## Tipos de operacoes
+S0
+READ: carregando de
+S1
+WRITE: gravando para
+
+## tipos de falhas da area de blocos de perifericos
+S4
+DOS: DOS
+S5
+FAT: FAT
+S6
+ROOT: root
+S7
+DATA: dados
+
+## Strings de acao
+S8
+IGNORE: (I)gnorar
+S9
+RETRY: (T)entar de novo
+S10
+ABORT: (A)bortar
+S11
+FAIL: (F)alha
+## teclas associadas com as acoes
+S14 (compacted)
+KEYS_IGNORE: iI
+KEYS_RETRY:  rT
+KEYS_ABORT:  aA
+KEYS_FAIL:   fF
+## Strings embutidas
+S12
+QUESTION:  ? %.
+S13
+DELIMITER: , %.
+
+## Strings de erro
+UNKNOWN: Codigo do erro desconhecido
+S15
+0: violacao de protecao-contra-grvacao
+1: unidade para driver desconhecida
+2: drive nao esta pronto
+3: comando desconhecido dado para o driver
+4: erro de dados (CRC invalido)
+5: tamanho da estrutura de requisicao de driver de periferico e invalido
+6: erro de busca
+7: tipo de midia desconhecida
+8: setor nao encontrado
+9: impressora sem papel
+10: erro de escrita
+11: erro de leitura
+12: falha geral
+13: violacao de compartilhamento
+14: violacao de trava
+15: mudanca de disco invalida
+16: FCB nao disponivel
+17: sobrecarregamento de buffer compartilhado
+18: codico de pagina nao combina
+19: falta de entrada
+20: espaco em disco insuficiente
