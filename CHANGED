@@ -1,3 +1,4 @@
+fix: set.c: warning missing prototype strchr()
 bugfix: /F (AutoFail) for the XMS_Swap variant
 bugfix: COPY * X: re-linked to correct SUPPL version
 fix: typos [#1694,#1696,#1695]
