@@ -214,14 +214,9 @@ static scanAttr(const char *p)
 
 	attrMust = attrMustNot = 0;	/* purge previous /A*** */
 
-	if(!p || !*p) {		/* no specifying arguments --> display all */
-		attrMay = ATTR_ALL;
-		return E_None;
-	}
-
 	attrMay = 0;
 
-	for(--p;;bool = *p) {
+	if(p && *p) for(--p;;bool = *p) {
 		switch(toupper(*++p)) {
 		case 'R': attr = FA_RDONLY; break;
 		case 'A': attr = FA_ARCH; break;
@@ -229,7 +224,7 @@ static scanAttr(const char *p)
 		case 'H': attr = FA_HIDDEN; break;
 		case 'S': attr = FA_SYSTEM; break;
 		case '+': case '-': continue;
-		case '\0': return E_None;
+		case '\0': goto done;
 		default:	/* error */
 			error_illformed_option(p);
 			return E_Useage;
@@ -244,6 +239,11 @@ static scanAttr(const char *p)
 									be ORed later anyway */
 		}
 	}
+	/* else  no specifying arguments --> display all */
+
+done:
+	attrMay = ATTR_ALL;		/* for use with /A-l */
+	return E_None;
 }
 
 #pragma argsused

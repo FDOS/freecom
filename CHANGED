@@ -1,3 +1,4 @@
+fix: DIR /A-S need to default to attrMay == any
 fix: DIR: bailing out if boolean switches found with /A
 fix: DIR /S: if not found a single item, display error
 add: SET /P {based on luojiuming}
