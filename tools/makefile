@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.2.4.1  2001/02/06 16:30:14  skaus
+# chg: FreeCOM no longer uses the shell hack if kswap is active
+# bugfix: aliases were read back incorrectly
+#
 # Revision 1.2  2000/07/09 21:57:25  skaus
 # + Support for international strings without recompiling
 # + Useage of TC++1
@@ -17,6 +21,7 @@ LDFLAGS += /msl
 MYCFLAGS_DBG = -DDEBUG=1
 MYCFLAGS_NDBG =
 MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
+MYASMFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 
 .SOURCE.h := . ..
 .SOURCE.lib := $(LIBDIR:s/;/ /:u)
@@ -25,7 +30,7 @@ MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 # Sources of this make target
 
 #	Default target
-all: ptchldrv.exe
+all: ptchldrv.exe kssf.com
 
 
 .INIT : $(CFG) __errl
@@ -37,6 +42,8 @@ __errl:
 
 ptchldrv.obj : ptchldrv.c
 
+kssf.com : kssf.asm
+	$(NASM) $(NASMFLAGS) -f bin -o $@ $(MYASMFLAGS) $<
 
 clobber : clean
 	$(RM) $(RMFLAGS) *.exe *.com

@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.4.4.3  2001/02/06 16:30:14  skaus
+# chg: FreeCOM no longer uses the shell hack if kswap is active
+# bugfix: aliases were read back incorrectly
+#
 # Revision 1.4.4.2  2001/01/28 21:23:55  skaus
 # add: Kernel Swap Support
 #
@@ -125,7 +129,7 @@ strings_clobber .SETDIR=strings :
 
 tools .SETDIR=tools :
 	@+echo ==Entering $(PWD)
-	$(MAKE) all
+	$(MAKE) LNG=$(LNG) NASM=$(NASM) all
 	@+echo ==Leaving $(PWD)
 
 tools_clean .SETDIR=tools :

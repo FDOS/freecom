@@ -419,8 +419,16 @@ int initialize(void)
 
 #ifdef FEATURE_KERNEL_SWAP_SHELL
 	if(kswapInit()) {		/* re-invoked */
-		if(kswapLoadStruc())
+		if(kswapLoadStruc()) {
+			/* OK, on success we need not really keep the shell trick
+				(pretend we are our own parent), which might cause
+				problems with beta-software-bugs ;-)
+				In fact, KSSF will catch up our crashes and re-invoke
+				FreeCOM, probably with the loss of any internal
+				settings. */
+			  OwnerPSP = oldPSP;
 			return E_None;
+		}
 	}
 #endif
 

@@ -61,6 +61,12 @@
 
 #ifdef FEATURE_ALIASES
 
+/*
+#ifdef DEBUG
+#define DEBUG_ALIASES
+#endif
+*/
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -372,8 +378,26 @@ void alias_streamfrom(char far *p)
 	unsigned cnt = 0;
 #endif
 
+#ifdef DEBUG_ALIASES
+	puts("[Alias dump]");
+	for(len = 0; len < 4; ++len) {
+		printf("%04x ", len * 8);
+		for(cnt = 0; cnt < 8; ++cnt)
+			printf("%02X ", (unsigned char)p[len * 8 + cnt]);
+		printf("     ");
+		for(cnt = 0; cnt < 8; ++cnt) {
+			unsigned char ch = (unsigned char)p[len * 8 + cnt];
+			if(isprint(ch))
+				putchar(ch);
+			else putchar('.');
+		}
+		putchar('\n');
+	}
+	cnt = 0;
+#endif
+
 	last = 0;
-	while (*p) {
+	while(*p) {
 		/* newly create the alias */
 		if((ptr = (TAlias *) malloc(sizeof(TAlias))) == NULL)
 			break;

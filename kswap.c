@@ -234,8 +234,10 @@ int kswapLoadStruc(void)
 			/* Skip prg name */
 		p = _fstrchr(MK_FP(kswapContext->dyn_ctxt, 0), 0);
 			/* Skip cmdline */
-		p = _fstrchr(p + 1, 0);
-		alias_streamfrom(p + 1);
+		p += 4 + (unsigned char)p[1];	/* p[1] == length of cmdline
+											+3 -> length byte && "\n"
+											+1 -> skip over current '\0' */
+		alias_streamfrom(p);
 #endif
 		freeSysBlk(kswapContext->dyn_ctxt);
 		dprintf(("[KSWAP: dynamic context deallocated at 0x%04x]\n", kswapContext->dyn_ctxt));
