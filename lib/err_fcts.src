@@ -32,7 +32,6 @@ error_read_file(const char * const fnam):=TEXT_ERROR_READ_FILE, fnam
 error_write_file(const char * const fnam):=TEXT_ERROR_WRITE_FILE, fnam
 error_copy:=TEXT_ERROR_COPY
 error_nothing_to_do:=TEXT_ERROR_NOTHING_TO_DO
-dispCopy(const char src[], const char dst[], int append):=TEXT_MSG_COPYING, src, append? "=>>": "=>", dst
 error_invalid_number(const char * const s):=TEXT_INVALID_NUMBER, s
 error_init_fully_qualified(const char * const s):=TEXT_INIT_FULLY_QUALIFIED, s
 error_corrupt_command_line:=TEXT_CORRUPT_COMMAND_LINE

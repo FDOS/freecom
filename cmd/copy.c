@@ -227,7 +227,8 @@ int copy(char *dst, char *pattern, struct CopySource *src
         if(getftime(fileno(fin) , &fileTime))
           keepFTime = 0; /* if error: turn it off */
 
-      dispCopy(rSrc, rDest, openMode == 'a' || h != src);
+      displayString(TEXT_MSG_COPYING, rSrc
+	   , (openMode == 'a' || h != src)? "=>>": "=>", rDest);
       if(cbreak) {
         fclose(fin);
         fclose(fout);
