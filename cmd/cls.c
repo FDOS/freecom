@@ -19,6 +19,9 @@
  *   screen.
  *
  * $Log$
+ * Revision 1.6  2004/08/19 19:10:49  skaus
+ * fix: CLS: cut debug message
+ *
  * Revision 1.5  2004/06/29 14:14:54  skaus
  * fix: help screen of internal commands causes "Unknown command error" {Bernd Blaauw}
  *
@@ -54,8 +57,6 @@ int cmd_cls(char *param)
 		intr(0x10, &r);
 		goxy(1, 1);			/* home the cursor */
 	}
-
-	fprintf(stderr, "[INFO: fdattr(1) == 0x%04x]\n", fdattr(1));
 
 	return 0;
 }
