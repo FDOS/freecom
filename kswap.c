@@ -109,6 +109,9 @@ void kswapRegister(kswap_p ctxt)
 		error_kswap_allocmem();
 		swapOnExec = ERROR;
 	}
+	else
+		dprintf(("[KSWAP: master environment allocated at 0x%04x]\n"
+		 , ctxt->envSegm));
 }
 void kswapDeRegister(kswap_p ctxt)
 {
@@ -146,8 +149,11 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 	/* preserve the environment */
 	assert(kswapContext->envSegm);
 	assert(kswapContext->envSize);
-	assert(mcb_length(env_glbSeg) <= kswapContext->envSize);
 	segm = kswapContext->envSegm;
+	dprintf(("[KSWAP: Updating master environment at 0x%04x]\n", segm));
+	assert(isMCB(SEG2MCB(segm)));
+	assert(isMCB(SEG2MCB(env_glbSeg)));
+	assert(mcb_length(env_glbSeg) <= mcb_length(segm));
 	_fmemcpy(MK_FP(segm, 0), MK_FP(env_glbSeg, 0), mcb_length(env_glbSeg));
 
 	/* Update the shell name as maybe %COMSPEC% was changed */
@@ -167,12 +173,13 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 
 	/* Update central settings of FreeCOM */
 	kswapContext->canexit = canexit;
+	kswapContext->debug = fddebug;
 
 	/* Create the dynamic portion of the context */
 	assert((unsigned long)strlen(prg) + (unsigned long)strlen(cmdline)
 	 < 32767);
 
-	size = strlen(prg) + strlen(cmdline) + 2;	/* two NUL terminators */
+	size = strlen(prg) + strlen(cmdline) + 4;	/* two NUL terms,& length */
 #ifdef FEATURE_ALIASES
 	if((al_size = alias_streamsize()) <= 0) {
 		error_kswap_alias_size();
@@ -191,7 +198,11 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 
 	kswapContext->dyn_ctxt = segm;
 	p = _fstpcpy(kswapContext->prg = MK_FP(segm, 0), prg);
-	p = _fstpcpy(kswapContext->cmdline = p + 1, cmdline);
+	kswapContext->cmdline = p + 1;
+	p[1] = strlen(cmdline);		/* cmdline is prefixed by the length */
+	p = _fstpcpy(p + 2, cmdline);
+	*p = '\r';		/* 	command line terminator */
+	*++p = '\0';	/* ASCIZ */
 #ifdef FEATURE_ALIASES
 	alias_streamto(p + 1);
 #else
@@ -216,6 +227,7 @@ int kswapLoadStruc(void)
 	perform_exec_result(decode_exec_result(kswapContext->execErr));
 
 	canexit = kswapContext->canexit;
+	fddebug = kswapContext->debug;
 	grabComFilename(1, kswapContext->shell);
 	if(kswapContext->dyn_ctxt) {
 #ifdef FEATURE_ALIASES
