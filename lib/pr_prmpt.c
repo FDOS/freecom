@@ -18,4 +18,3 @@ void printprompt(void)
 
 	displayPrompt(pr? pr: DEFAULT_PROMPT);
 }
-

@@ -1,1 +1,1 @@
-	FreeCom version 0.83 Beta 56 [Mar 05 2003 22:14:08]
+	FreeCom version 0.82 pl 1 [Mar 11 2003 21:58:45]

@@ -80,3 +80,5 @@ void error_for_no_command(void);
 void error_goto_label(void);
 void error_get_codepage(void);
 void error_set_codepage(void);
+void error_copy_plus_destination(void);
+void error_invalid_parameter(const char * const str);

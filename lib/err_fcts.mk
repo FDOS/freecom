@@ -79,7 +79,9 @@ SRC_ERR =  \
 	err78.c \
 	err79.c \
 	err80.c \
-	err81.c
+	err81.c \
+	err82.c \
+	err83.c
 
 OBJ_ERR =  \
 	err1.obj \
@@ -162,7 +164,9 @@ OBJ_ERR =  \
 	err78.obj \
 	err79.obj \
 	err80.obj \
-	err81.obj
+	err81.obj \
+	err82.obj \
+	err83.obj
 
 err1.obj : err1.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h
 err2.obj : err2.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h
@@ -245,3 +249,5 @@ err78.obj : err78.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h
 err79.obj : err79.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h
 err80.obj : err80.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h
 err81.obj : err81.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h
+err82.obj : err82.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h
+err83.obj : err83.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h

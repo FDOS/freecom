@@ -233,7 +233,9 @@ chunk1 :  \
 	err78.obj \
 	err79.obj \
 	err80.obj \
-	err81.obj
+	err81.obj \
+	err82.obj \
+	err83.obj
 
 
 freecom.lib : $(CFG) freecom_deps 
@@ -459,7 +461,9 @@ freecom.lib : $(CFG) freecom_deps
 +-err78.obj &
 +-err79.obj &
 +-err80.obj &
-+-err81.obj
++-err81.obj &
++-err82.obj &
++-err83.obj
 | , freecom.lst 
 	if not exist freecom.lib $(AR) freecom.lib /c @&&|
 +alprmblk.obj &
@@ -683,6 +687,8 @@ freecom.lib : $(CFG) freecom_deps
 +err78.obj &
 +err79.obj &
 +err80.obj &
-+err81.obj
++err81.obj &
++err82.obj &
++err83.obj
 | , freecom.lst 
 

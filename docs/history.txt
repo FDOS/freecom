@@ -1,5 +1,8 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2003/03/09 Tom Ehlert
+~~~~~~~~~~~~~~~~~~~~~~
+add: DIR /A** and /O***
 
 2002/10/16 Alain
 ~~~~~~~~~~~~~~~~~~~~~~
