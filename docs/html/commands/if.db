@@ -29,6 +29,14 @@ character devices, too.
 assigned to a number greater or equal than the specified <ARG>number</ARG>.
 Errorlevels are assigned when external commands terminates or via
 CANCEL or QUIT.
+<BR>Due to compatibly with other DOS shells FreeCOM does not check, if
+the specified errorlevel is a number, but silently accepts any string.
+This allows to use the so-called <EM>Benny levels</EM>, where you
+can specify <CMD>HA</CMD>, <CMD>HB</CMD>, ... , <CMD>HZ</CMD> or
+<CMD>xa</CMD>, <CMD>xb</CMD>, ... , <CMD>xz</CMD> instead of
+<CMD>1</CMD>, <CMD>2</CMD>, ... , <CMD>26</CMD>. Some malformed
+batch script use this syntax to make mapping of errorlevels to
+drive letters <EM>more visible</EM>. See example 5.
 
 <P>The third and four ones are true, when the left string is case-sensitively
 equal to the string on the right side of the double equal sign.
@@ -64,3 +72,28 @@ CMD: IF "%1"=="first name" ECHO First argument is "first name"
 is <ARG>"first name"</ARG> (without the quotes). <CMD>%1</CMD> may expand
 to any string, even with embedded whitespaces or an embedded double
 equal sign or metacharacters.
+
+EXAMPLE: 5
+EBNF: <<program>>
+CMD: SET drv=
+CMD: FOR %%Z IN (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) DO IF ERRORLEVEL H%%Z SET drv=%%Z
+CMD: IF ERRORLEVEL 27 SET drv=
+CMD: IF "%drv%"=="" goto error_no_drive_letter
+<BR>Assuming that
+EBNF!: <<program>>
+ is setting the exit code to 1..26 for the drive letter, e.g. when
+searching for RAMdisks, this code snippet assigns the drive letter to
+the environment variable <CMD>drv</CMD> or unsets the variable on error.
+
+<P><STRONG>Note:</STRONG> The following code is equal to the above one
+and fully compatible to all shells:
+EBNF: <<program>>
+CMD: SET drv=
+CMD: IF ERRORLEVEL 1 SET drv=A
+CMD: IF ERRORLEVEL 2 SET drv=B
+CMD: IF ERRORLEVEL 3 SET drv=C
+<BR>...  <BR>
+CMD: IF ERRORLEVEL 25 SET drv=Y
+CMD: IF ERRORLEVEL 26 SET drv=Z
+CMD: IF ERRORLEVEL 27 SET drv=
+CMD: IF "%drv%"=="" goto error_no_drive_letter
