@@ -47,9 +47,9 @@ sequence.
 <A HREF="!:redirection">I/O-redirections</A> may be used, for instance:
 <UL>
 <LI>
-CMD: ECHO This line appears on the screen &gt;CON
+CMD: ECHO This line appears on the screen >CON
 <LI>
-CMD: PAUSE &lt;CON
+CMD: PAUSE >CON
 This PAUSE command will get its input even within the
 &quot;<CMD>CTTY nul</CMD>&quot; environment.
 </UL>

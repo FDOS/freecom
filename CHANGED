@@ -1,3 +1,4 @@
+bugfix: Cleanup HTML docs to pass W3C validation
 fix: typo in HISTORY /? {Andrew Sly}
 chg: wilcard matching: COPY/REN *.TXT ???b.*: If length of source filename
 	is less than 3, the superflous question marks are ignored, as in MS

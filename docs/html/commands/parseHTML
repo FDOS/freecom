@@ -10,8 +10,10 @@ die "Cannot open TOC: $!\n"
 	unless open(TOC, "TOC");
 while(<TOC>) {
 	if(/FEATURE_/) {
-		s/#feature/cmd.html$1/;
-		$features .= $_;
+#		s/#feature/cmd.html$1/;
+#	Decorate string as it gets HTML'ed when included later
+		s:<.*?>::g;
+		$features .= '<LI>' . $_;
 	}
 }
 close TOC;

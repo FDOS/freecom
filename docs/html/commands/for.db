@@ -38,7 +38,7 @@ not be specified no redirection between the FOR and DO keywords), if
 it is found, the FOR command is executed <EM>without</EM> expanding
 any environment variables -- they get expanded each time the
 command is invoked.
-<LI><STRONG><FONT SIZE=+1>Known Bug</FONT></STRONG>: Otherwise any
+<LI><STRONG><FONT SIZE="+1">Known Bug</FONT></STRONG>: Otherwise any
 environment variables are expanded and, if it happens
 that a valid FOR command is found now, the environment variables within
 the command are expanded a second time.

@@ -33,7 +33,7 @@ CMD: *name arguments
 EXAMPLES:
 EXAMPLE: 1
 CMD: ALIAS dir=dir /w
-CMD: dir
+CMD: C> dir
 displays short directory listing from now on.
 
 EXAMPLE: 2

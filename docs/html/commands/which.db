@@ -29,8 +29,6 @@ Returns a file or nothing, because WHICH is an internal command.
 EXAMPLE: 2
 CMD: WHICH command
 Could display for instance:
-<CMD><PRE>
-command	C:\COMMAND.COM
-</PRE></TT>
+<PRE>command	C:\COMMAND.COM</PRE>
 <P>Please note that <CMD>command</CMD> is the string &quot;command&quot;
 and no placeholder.

@@ -239,7 +239,8 @@ sub htmlCloseTOC {
 sub htmlOpenHtml {
 	open(HTML, ">$file_html")
 		or die "Cannot create HTML: $file_html: $!\n";
-print HTML '<HTML>
+print HTML '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
 <META HTTP-EQUIV="Content-Language" CONTENT="en">

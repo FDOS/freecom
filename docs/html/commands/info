@@ -20,6 +20,7 @@ Body: The rest of the file is plain HTML text, except:
 + <HELL>...</HELL> encloses text to set "bright" (e.g. red colour)
 + <DIMM>...</DIMM> encloses text to set "dark" (e.g. dark gray colour)
 + CMD: prefixes a line that solemny consits of a command line
+	also quotes all HTML characters
 + EBNF: prefixes a line that solemny consists of a EBNF expression
 + EBNF!: prefixes a line that solemny consists of a EBNF expression, which
 is part of the surrounding HTML text.

@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
@@ -123,7 +124,7 @@ messages into memory.
 
 The options <OPT>/K</OPT> and <OPT>/C</OPT> are special cases and do not behave as normal
 options does. They are exclusive and all characters at the right side of 
-such option <FONT SIZE=-2>(except an optional argument sign)</FONT> specify a
+such option <FONT SIZE="-2">(except an optional argument sign)</FONT> specify a
 command to execute, e.g.: <CMD>/C DIR /s</CMD>, <CMD>/C=DIR /s</CMD>, and <CMD>/CDIR /s</CMD>
 do behave exactly the same and execuate the command <CMD>DIR /s</CMD>.
 <BR>If these options are used in conjunction with the <OPT>/P</OPT> option, the AUTOEXEC.BAT
@@ -291,7 +292,7 @@ lets FreeCOM start to interprete the entered line.
 <P>The <STRONG>standard input</STRONG> mode does neither support command line
 history, except the last command line in some circumstances, nor file completion.
 The following keys have a special meaning:
-<BR><TABLE WIDTH=100% BORDER>
+<BR><TABLE WIDTH="100%" BORDER=1>
 <TR>	<TH>Key</TH>
 		<TH>Meaning</TH>
 <TR>	<TD ALIGN=CENTER>F1</TD>
@@ -313,7 +314,7 @@ The following keys have a special meaning:
 
 <P>The <STRONG>enhanced input</STRONG> mode does support command line history and
 file completion.  The following keys have a special meaning:
-<BR><TABLE WIDTH=100% BORDER>
+<BR><TABLE WIDTH="100%" BORDER=1>
 <TR>	<TH>Key</TH>
 		<TH>Meaning</TH>
 <TR>	<TD ALIGN=CENTER>F1</TD>
@@ -346,7 +347,7 @@ file completion.  The following keys have a special meaning:
 <TR>	<TD ALIGN=CENTER>TAB</TD>
 		<TD>Take the current word for a file and try to complete it</TD>
 <TR>	<TD ALIGN=CENTER>^C</TD>
-		<TD>Clear current line and enable echo state. <FONT SIZE=-1>The echo state is
+		<TD>Clear current line and enable echo state. <FONT SIZE="-1">The echo state is
 			enabled to ensure the user gets to know he is on the command line of
 			FreeCOM rather than stuck in a non-interruptable program.</FONT></TD>
 </TABLE>
@@ -369,12 +370,12 @@ provide all functionality (features) of commonly known COMMAND.COMs at
 minimum, but probably at the cost of optimization and performance.
 
 <P>The To-Do list:
-<BR><TABLE BORDER WIDTH=100%>
+<BR><TABLE BORDER=1 WIDTH="100%">
 <TR>	<TH>Feature</TH>
 		<TH ALIGN=CENTER>Target</TH>
 </TR>
 <TR>	<TD>Swapping without any supporting secondary programs
-			(<CMD>KSSF.COM</CMD> and <CMD>VSPAWN.COM<CMD>)</TD>
+			(<CMD>KSSF.COM</CMD> and <CMD>VSPAWN.COM</CMD>)</TD>
 		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
 </TR>
 <TR>	<TD>INT-2E backdoor</TD>
@@ -448,10 +449,10 @@ minimum, but probably at the cost of optimization and performance.
 		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
 </TR>
 <TR>	<TD><CMD>IF ERRORLEVEL H<I>&lt;letter&gt;</I></CMD></TD>
-		<TD ALIGN=CENTER><DIMM>done (v0.83&beta;48)</DIMM></TD>
+		<TD ALIGN=CENTER><DIMM>done (v0.83&szlig;48)</DIMM></TD>
 </TR>
 </TABLE>
-<BR><FONT SIZE=-1>Footnotes:<BR>
+<BR><!-- FONT SIZE="-1" -->Footnotes:
 <UL>
 <LI><A NAME="-todo1">I/O replacement shallt preceed error reporting
 correction as some failures are impossible to detect without work-arounds
@@ -459,7 +460,7 @@ with the <TT>&lt;stdio.h&gt;</TT> functions.</A>
 <LI><A NAME="-todo2">If I get contributions after v0.90, those portion
 may be added earlier.</A>
 </UL>
-</FONT>
+<!-- /FONT -->
 
 <P><HR><P>
 <H1><A NAME="-appendix">Appendix</A></H1>
@@ -480,7 +481,7 @@ FreeCOM can be downloaded from SourceForge in several ways and packages:
 </OL>
 
 
-<H3><A NAME="-download-ftp">Resources accessable via anonymous FTP</A></H2>
+<H3><A NAME="-download-ftp">Resources accessable via anonymous FTP</A></H3>
 
 SourceForge closed the FTP - Services, therefore an alternate
 location had been created at:
@@ -489,7 +490,7 @@ ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/FreeCOM</A>.
 It contains the very same packages available at the HTTP location
 below.
 
-<H3><A NAME="-download-http">Resources accessable via HTTP</A></H2>
+<H3><A NAME="-download-http">Resources accessable via HTTP</A></H3>
 
 <A HREF="http://freedos.sourceforge.net/freecom/packages/">http://freedos.sourceforge.net/freecom/packages/</A>
 contains several variants of tarballs and pre-compiled packages of FreeCOM.
@@ -498,12 +499,12 @@ major release of FreeCOM, whereas the subdirectories include Beta releases
 of the upcoming release.
 
 <P>The packages themselves include:
-<TABLE BORDER>
+<TABLE BORDER=1>
 <TR>	<TH>file name</TH>
 		<TH>contents</TH>
 </TR>
 <TR>	<TD><TT>COM###.ZIP</TT> or <TT>Com###Beta##.ZIP</TT></TD>
-		<TD>tarball (<FONT SIZE=-1>the source code tree without CVS
+		<TD>tarball (<FONT SIZE="-1">the source code tree without CVS
 			information</FONT>)</TD>
 </TR>
 <TR>	<TD><TT>BINARY.ZIP</TT></TD>
@@ -538,7 +539,7 @@ of the upcoming release.
 </TR>
 </TABLE>
 
-<H3><A NAME="-download-filerelease">File Releases on SourceForge</A></H2>
+<H3><A NAME="-download-filerelease">File Releases on SourceForge</A></H3>
 
 On <A HREF="http://sourceforge.net/file/?group_id=5109">SourceForge</A>
 so-called <EM>File Releases</EM> can be created. The file release section of
@@ -578,7 +579,7 @@ where <TT>tag</TT> is the name of the branch you want to download.
 files for two different branches.
 
 <P>The FreeCOM module has the following <EM>active</EM> branches:
-<CENTER><TABLE BORDER WIDTH=100%>
+<CENTER><TABLE BORDER=1 WIDTH="100%">
 <TR>	<TH ALIGN=CENTER>Tag</TH>
 		<TH>Meaning</TH>
 <TR>	<TD ALIGN=CENTER>expExec</TD>
@@ -588,7 +589,7 @@ files for two different branches.
 </TABLE></CENTER>
 
 <P>The FreeCOM module has the following <EM>obsoleted</EM> branches:
-<CENTER><TABLE BORDER WIDTH=100%>
+<CENTER><TABLE BORDER=1 WIDTH="100%">
 <TR>	<TH ALIGN=CENTER>Tag</TH>
 		<TH>Meaning</TH>
 <TR>	<TD ALIGN=CENTER>expRes</TD>
@@ -606,7 +607,7 @@ EBNF (<B>E</B>xtended <B>B</B>ackus-<B>N</B>aur <B>F</B>ormula).
 
 Depending on different meanings characters are set into various shapes:
 
-<TABLE BORDER WIDTH=100%>
+<TABLE BORDER=1 WIDTH="100%">
 <TR>
 	<TH>Name
 	<TH>Meaning
@@ -614,30 +615,30 @@ Depending on different meanings characters are set into various shapes:
 <TR>
 	<TD ALIGN=CENTER><TT>terminal</TT>
 	<TD>characters to be enterred on command line or displayed by
-		the computer;EBNF: &quot;terminal symbols&quot;
+		the computer; EBNF: "terminal symbols"
 	<TD><TT>ECHO</TT>
 <TR>
 	<TD ALIGN=CENTER><TT>'string'</TT>
 	<TD>The quotes remove the metafunction of the enclosed characters
 		in order to specify EBNF operators as terminal symbols.
-		EBNF: &quot;terminal symbols&quot;
+		EBNF: "terminal symbols"
 	<TD><TT>'|'</TT>
 <TR>
 	<TD ALIGN=CENTER><B>bold</B>
 	<TD>operators that constructs portions together;
-		EBNF: &quot;operators&quot;
+		EBNF: "operators"
 	<TD><B>|</B>
 <TR>
 	<TD ALIGN=CENTER><I>italic</I>
 	<TD>placeholders for arguments, which are explained in the description;
-		EBNF: &quot;non-terminal symbols&quot;
+		EBNF: "non-terminal symbols"
 	<TD><I>varname</I>
 </TABLE>
 
 <H3>Operators</H3>
 
 The EBNF  uses the following operators:
-<TABLE BORDER WIDTH=100%>
+<TABLE BORDER=1 WIDTH="100%">
 <TR>
 	<TH>Symbol
 	<TH>Meaning
@@ -675,7 +676,7 @@ The EBNF  uses the following operators:
 	<LI>...
 	</UL>
 <TR>
-	<TD ALIGN=CENTER><B>&laquo;   &raquo;
+	<TD ALIGN=CENTER><B>&laquo;   &raquo;</B>
 	<TD>is a placeholder for an arbitary string of terminal symbols, which
 		further syntax is described by the enclosed text in English
 		natural language.
@@ -704,7 +705,7 @@ examples.
 <HR>
 
 
-<HR WIDTH=50%><HR WIDTH=25%><HR WIDTH=5%><P ALIGN=CENTER>
+<HR WIDTH="50%"><HR WIDTH="25%"><HR WIDTH="5%"><P ALIGN=CENTER>
 Copyright 2000-2001 &copy; Steffen Kaiser - current maintainer of FreeCOM
 <P>
 <FONT SIZE=1>

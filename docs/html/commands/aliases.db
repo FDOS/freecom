@@ -49,7 +49,7 @@ CMD: ALIAS dir=dir /w
 <BR>is allowed as well as:<BR>
 CMD: ALIAS ls=dir /w/o
 CMD: ALIAS dir=ls -l
-<BR><TABLE BORDER>
+<BR><TABLE BORDER=1>
 <TR>
   <TH>command</TH>
   <TH>results in</TH>

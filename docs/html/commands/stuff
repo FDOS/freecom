@@ -205,7 +205,7 @@ EBNF: target ::= file | device
 <BR>Although it is not relevant where the redirections are placed on the
 command line, it is common praxis to place them at the end of it.
 <P>The <ARG>operators</ARG> have the following meaning:
-<TABLE BORDER>
+<TABLE BORDER=1>
 <TR>	<TH>Operator</TH>
 		<TH>Redirection</TH>
 </TR>
@@ -234,24 +234,24 @@ command line, it is common praxis to place them at the end of it.
 
 EXAMPLES:
 EXAMPLE: 1
-CMD: cmd &lt;in1 &lt;in2
+CMD: cmd <in1 <in2
 <BR>Input stream is redirected to file <CMD>IN2</CMD>, because it is the rightmost
 one.
 
 EXAMPLE: 2
-CMD: cmd &lt;in &gt;&amp;out
+CMD: cmd <in >&out
 <BR>Input stream is redirected to file <CMD>IN</CMD>, output and error streams are
 joined together and redireced into file <CMD>OUT</CMD>.
 If the file <CMD>OUT</CMD> already exists, the old contents is discarded and
 replaced by the new one; otherwise, the <CMD>OUT</CMD> is created anew.
 
 EXAMPLE: 3
-CMD: cmd &lt;in &gt;&gt;&amp;out
+CMD: cmd <in >>&out
 <BR>As example 2, but instead of replacing the contents of <CMD>OUT</CMD>, if the
 file already exists, the new information is appended to the end of the file.
 
 EXAMPLE: 4
-CMD: FOR %a IN (*.*) DO ECHO %a &gt;out
+CMD: FOR %a IN (*.*) DO ECHO %a >out
 <BR>As mentioned earlier, FOR is an exception and passes forth the redirections
 to each invocation of the command specified right of the DO keyword. So this
 examples overwrites the output file each time the ECHO command is performed,
@@ -260,7 +260,7 @@ thus, instead of creating a file list, only the last found file is recorded into
 
 EXAMPLE: 5
 CMD: IF EXIST out DEL out
-CMD: FOR %a IN (*.*) DO ECHO %a &gt;&gt;out
+CMD: FOR %a IN (*.*) DO ECHO %a >>out
 <BR>This sequence eliminate the problem, the IF command is required to
 actually replace the file rather than appending the file list to the
 probably existent file.
@@ -281,10 +281,10 @@ CMD: cmd1 | cmd2 | cmd3
 
 <BR>Which is similiar to this sequence:
 <BR>
-CMD: cmd1 &gt;%TEMP%\t1
-CMD: cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2
+CMD: cmd1 >%TEMP%\t1
+CMD: cmd2 <%TEMP%\t1 >%TEMP%\t2
 CMD: DEL %TEMP%\t1
-CMD: cmd3 &lt;%TEMP%\t2
+CMD: cmd3 <%TEMP%\t2
 CMD: DEL %TEMP%\t2
 
 EXAMPLE: 2
@@ -293,15 +293,15 @@ The first and last command can have an input or output redirection
 respectively, like so:
 
 <BR>
-CMD: cmd1 | cmd2 | cmd3 &lt;in &gt;out
+CMD: cmd1 | cmd2 | cmd3 <in >out
 
 
 <BR>Which is similiar to this sequence:
 <BR>
-CMD: cmd1 &gt;%TEMP%\t1 &lt;in
-CMD: cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2
+CMD: cmd1 >%TEMP%\t1 <in
+CMD: cmd2 <%TEMP%\t1 >%TEMP%\t2
 CMD: DEL %TEMP%\t1
-CMD: cmd3 &lt;%TEMP%\t2 &gt;out
+CMD: cmd3 <%TEMP%\t2 >out
 CMD: DEL %TEMP%\t2
 
 EXAMPLE: 3
@@ -309,14 +309,14 @@ EXAMPLE: 3
 The error stream can be piped as well:
 
 <BR>
-CMD: cmd1 |&amp; cmd2 | cmd3
+CMD: cmd1 |& cmd2 | cmd3
 
 <BR>Which is similiar to this sequence:
 <BR>
-CMD: cmd1 &gt;&amp;%TEMP%\t1
-CMD: cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2
+CMD: cmd1 >&%TEMP%\t1
+CMD: cmd2 <%TEMP%\t1 >%TEMP%\t2
 CMD: DEL %TEMP%\t1
-CMD: cmd3 &lt;%TEMP%\t2
+CMD: cmd3 <%TEMP%\t2
 CMD: DEL %TEMP%\t2
 
 <BR>Here only the error messages of <CMD>cmd1</CMD> are passed
@@ -337,7 +337,7 @@ ECHO 3
 </PRE>
 which is invoked via:
 <BR>
-CMD: BATCH &gt;out_1
+CMD: BATCH >out_1
 
 <BR>When the script <CMD>BATCH</CMD> gets executed, the actual output stream
 is redirected to the file <CMD>OUT_1</CMD>. Therefore the output of the first

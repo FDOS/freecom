@@ -12,7 +12,8 @@ sub parseEBNF {
 		my($own_line) = 1;
 
 		if(/^CMD:/) {
-			$_ = "\n<CMD>$'</CMD><BR>";
+			my $l = $';
+			$_ = "\n<CMD>" . &htmlXLat($l) . "</CMD><BR>";
 		} elsif(/^(SYNOPSIS):/ || /^(OPTIONS):/ || /^(EXAMPLES):/
 		 || /^(ARGUMENTS):/) {
 			$_ = &htmlSection($1);
@@ -77,6 +78,7 @@ sub parseEBNF {
 		s:</HELL>:</FONT>:ig;
 		s:<DIMM>:<FONT COLOR="#999999">:ig;
 		s:</DIMM>:</FONT>:ig;
+		s:\&quot\;:\":g;
 
 		# Modify references
 		s:<A\s+NAME="([a-zA-Z].+?)"\s*>:<A NAME="${ref_na}_\1">:ig;
