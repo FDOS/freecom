@@ -6,6 +6,9 @@
 	This file bases on MUX_AE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2003/03/05 17:53:01  skaus
+	bugfix: cached NLS data not flushed
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -42,6 +45,7 @@
 #include "../include/command.h"
 #include "../include/crossjmp.h"
 #include "../include/mux_ae.h"
+#include "../include/nls.h"
 
 #if BUFFER_SIZE_MUX_AE > 255
 #error "BUFFER_SIZE_MUX_AE must not exceed 255"
@@ -98,6 +102,7 @@ int runExtension(char * const command, char * const line)
 	case 0xFF:		/* Is an extension -> execute the Installable Command */
 		r.r_ax = 0xae01;
 		intr(0x2f, &r);
+		invalidateNLSbuf();
 		if(command[-1] == 0)		/* The command had been processed */
 			return 1;				/* Stop interpreting the command */
 
