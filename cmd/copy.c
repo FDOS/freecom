@@ -47,6 +47,7 @@
 
 #define ASCII 1
 #define BINARY 2
+#define IS_DIRECTORY 5
 
 static struct CopySource {
   struct CopySource *nxt;   /* next source */
@@ -58,7 +59,7 @@ static struct CopySource {
 
 static int appendToFile; /* Append the next file rather than new source */
 static char *destFile;     /* destination file/directory/pattern */
-static int destIsDir;      /* destination is directory */
+// static int destIsDir;      /* destination is directory */
 
 static int optY, optV, optA, optB;
 
@@ -95,13 +96,13 @@ optScanFct(opt_copy1)
 }
 
 
-void initContext(void)
+static void initContext(void)
 {
   appendToFile = 0;
   last = lastApp = 0;
 }
 
-void killContext(void)
+static void killContext(void)
 {
   if(last) {
     assert(head);
@@ -116,7 +117,7 @@ void killContext(void)
   }
 }
 
-int copy(char *dst, char *pattern, struct CopySource *src
+static int copy(char *dst, char *pattern, struct CopySource *src
   , int openMode)
 { char mode[3], *p;
   struct ffblk ff;
@@ -305,10 +306,11 @@ int copy(char *dst, char *pattern, struct CopySource *src
   return 1;
 }
 
-int copyFiles(struct CopySource *h)
-{ char *fnam, *ext, *dst;
+static int copyFiles(struct CopySource *h)
+{ //char *fnam, *ext, *dst;
   int differ, rc;
 
+#if 0
   if(destIsDir) {
     if(!dfnsplit(h->fnam, 0, 0, &fnam, &ext)) {
       error_out_of_memory();
@@ -323,9 +325,11 @@ int copyFiles(struct CopySource *h)
     }
   } else
     dst = destFile;
+#endif
 
   rc = 0;
 
+#define dst destFile
   if((differ = samefile(h->fnam, dst)) < 0)
     error_out_of_memory();
   else if(!differ)
@@ -334,18 +338,36 @@ int copyFiles(struct CopySource *h)
     rc = copy(dst, h->fnam, h->app, 'a');
   else
     error_selfcopy(dst);
+#undef dst
 
+#if 0
   if(destIsDir)
     free(dst);
+#endif
   return rc;
 }
 
-int cpyFlags(void)
+static int cpyFlags(void)
 {
   return (optA? ASCII: 0) | (optB? BINARY: 0);
 }
 
-int addSource(char *p)
+static struct CopySource *srcItem(char *fnam)
+{	struct CopySource *h;
+
+    if((h = malloc(sizeof(struct CopySource))) == 0) {
+      error_out_of_memory();
+      return 0;
+    }
+
+    h->fnam = fnam;
+    h->nxt = h->app = 0;
+    h->flags = cpyFlags();
+
+    return h;
+}
+
+static int addSource(char *p)
 { struct CopySource *h;
   char *q;
 
@@ -360,18 +382,13 @@ int addSource(char *p)
       return 0;
     }
   } else {      /* New entry */
-    if((h = malloc(sizeof(struct CopySource))) == 0) {
-      error_out_of_memory();
+    if(0 == (h = srcItem(q)))
       return 0;
-    }
     if(!last)
       last = lastApp = head = h;
     else
       last = lastApp = last->nxt = h;
 
-    h->nxt = h->app = 0;
-    h->fnam = q;
-    h->flags = cpyFlags();
     if((q = strtok(0, "+")) == 0)   /* no to-append file */
       return 1;
   }
@@ -380,13 +397,8 @@ int addSource(char *p)
   assert(q);
   assert(lastApp);
   do {
-    if((h = malloc(sizeof(struct CopySource))) == 0) {
-      error_out_of_memory();
+    if(0 == (h = srcItem(q)))
       return 0;
-    }
-    h->fnam = q;
-    h->flags = cpyFlags();
-    h->app = 0;
     lastApp = lastApp->app = h;
   } while((q = strtok(0, "+")) != 0);
 
@@ -397,8 +409,9 @@ int addSource(char *p)
 int cmd_copy(char *rest)
 { char **argv, *p;
   int argc, opts, argi;
-  int freeDestFile = 0;
+//  int freeDestFile = 0;
   struct CopySource *h;
+  char **argBuffer = 0;
 
   /* Initialize options */
   optA = optB = optV = optY = 0;
@@ -467,6 +480,50 @@ int cmd_copy(char *rest)
 
   assert(head);
 
+  /* Check whether the source items are files or directories */
+  h = head;
+  argc = 0;		/* argBuffer entries */
+  do {
+	struct CopySource *p = h;
+  	do {
+  		char *s = strchr(p->fnam, '\0') - 1;
+  		if(*s == '/' || *s == '\\' || *s == ':'	/* forcedly be directory */
+  		 || 0 != (dfnstat(p->fnam) & DFN_DIRECTORY)) {
+			char **buf;
+			char *q;
+			if(*s == ':') 
+				q = dfnmerge(0, p->fnam, 0, "*", "*");
+			else
+				q = dfnmerge(0, 0, p->fnam, "*", "*");
+			if(0 == (buf = realloc(argBuffer, (argc + 1) * sizeof(char*)))
+			 || !q) {
+				free(q);
+				error_out_of_memory();
+				goto errRet1;
+			}
+			argBuffer = buf;
+			buf[argc] = p->fnam = q;
+			buf[++argc] = 0;
+//			p->flags |= IS_DIRECTORY;
+  		}
+  	} while(0 != (p = p->app));
+  } while(0 != (h = h->nxt));
+
+	if(last != head) {
+		/* The last argument is to be the destination */
+		if(last->app) {	/* last argument is a + b syntax -> no dst! */
+			error_copy_plus_destination();
+			goto errRet;
+		}
+		destFile = last->fnam;
+		h = head;         /* remove it from argument list */
+		while(h->nxt != last) {
+		  assert(h->nxt);
+		  h = h->nxt;
+		}
+		free(last);
+		(last = h)->nxt = 0;
+#if 0
   /* Now test if a destination was specified */
   if(head != last && !last->app) {  /* Yeah */
     destFile = dfnexpand(last->fnam, 0);
@@ -486,19 +543,24 @@ int cmd_copy(char *rest)
     if(*p == '\\' || *p == '/')		/* must be a directory */
     	destIsDir = 1;
     else destIsDir = dfnstat(destFile) & DFN_DIRECTORY;
+#endif
   } else {              /* Nay */
-    destFile = ".";
-    destIsDir = 1;
+    destFile = ".\\*.*";
+//    destIsDir = 1;
   }
 
   /* Now copy the files */
   h = head;
   while(copyFiles(h) && (h = h->nxt) != 0);
 
+errRet1:
+#if 0
   if(freeDestFile)
     free(destFile);
+#endif
 errRet:
   killContext();
   freep(argv);
+  freep(argBuffer);
   return 0;
 }
