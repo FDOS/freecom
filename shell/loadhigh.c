@@ -25,6 +25,9 @@
  *	chg: made all helper functions and variables 'static'
  *	chg: clean up code to not implement some functions twice
  *	chg: reduced some static variables
+ *
+ * 2002/02/14 ska
+ *	chg: to behave as documented in DOCS\LOADHIGH.TXT
  */
 
 #include "../config.h"
@@ -33,10 +36,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <fcntl.h>
-#include <dos.h>                /* must have those MK_FP() macros */
-#include <dir.h>                /* for searchpath() */
 
 #include <mcb.h>
 #include <suppl.h>
@@ -71,28 +70,6 @@ static int findUMBRegions(void);
 static int parseArgs(char *cmdline, char **fnam, char **rest);
 static void lh_error(int errcode);
 
-
-/* This array will contain the memory blocks that the new program can't use */
-int allocatedBlocks = 0;
-word *block;
-
-int loadfix_flag;         /* Flag: are we processing LOADFIX or LOADHIGH? */
-int upper_flag;           /* Flag: should the program be loaded high? */
-
-/* UMB region info */
-int umbRegions = 0;       /* How many UMB regions are there? */
-
-struct UMBREGION
-{
-  word start;             /* start of the region */
-  word end;               /* end of the region */
-  word minSize;           /* minimum free size, given by the L switch */
-  int access;             /* does the program have access to this region? */
-}
- *umbRegion;
-
-
-
 /* This module takes care of both the LOADHIGH and the LOADFIX command,
  * since those two commands have much in common.
  *
@@ -102,6 +79,10 @@ struct UMBREGION
  */
 
 #ifdef INCLUDE_CMD_LOADHIGH
+
+static int loadfix_flag;         /* Flag: LOADFIX instead of LOADHIGH? */
+#define INCLUDE_LOADHIGH_HANDLER
+
 /* This is the loadhigh handler */
 #pragma argsused
 int cmd_loadhigh(char *rest)
@@ -112,6 +93,12 @@ int cmd_loadhigh(char *rest)
 #endif
 
 #ifdef INCLUDE_CMD_LOADFIX
+
+#ifndef INCLUDE_LOADHIGH_HANDLER
+static int loadfix_flag;         /* Flag: LOADFIX instead of LOADHIGH? */
+#define INCLUDE_LOADHIGH_HANDLER
+#endif
+
 /* This is the loadfix handler */
 #pragma argsused
 int cmd_loadfix(char *rest)
@@ -121,16 +108,29 @@ int cmd_loadfix(char *rest)
 }
 #endif
 
-#if defined(INCLUDE_CMD_LOADHIGH)
-#define INCLUDE_LOADHIGH_HANDLER
-#elif defined(INCLUDE_CMD_LOADFIX)
-#define INCLUDE_LOADHIGH_HANDLER
-#endif
-
 #ifdef INCLUDE_LOADHIGH_HANDLER
 
+/* This array will contain the memory blocks that the new program can't use */
+static int allocatedBlocks = 0;
+static word *block = 0;
+
+static int upper_flag;           /* Flag: should the program be loaded high? */
+
+/* UMB region info */
+static int umbRegions = 0;       /* How many UMB regions are there? */
+
+static struct UMBREGION
+{
+  word start;             /* start of the region */
+  word end;               /* end of the region */
+  word minSize;           /* minimum free size, given by the L switch */
+  int access;             /* does the program have access to this region? */
+}
+ *umbRegion = 0;
+
+
 static int optS;
-static char *optL;
+static char *optL = 0;
 
 /* Helper functions */
 
@@ -139,8 +139,9 @@ static int initialise(void)
   /* reset global variables */
   allocatedBlocks = 0;
   upper_flag = 1;
+  /* initialize options */
+  optS = 0;
 
-  /* Save the UMB link state and the DOS malloc strategy, to restore them later */
   /* Allocate dynamic memory for some arrays */
   if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == 0)
     return err_out_of_memory;
@@ -159,18 +160,19 @@ static int initialise(void)
 
 static int lh_lf(char *args)
 {
-  int rc = err_out_of_memory;
+  int rc;
   char *fullname, *fnam;
 	int i;	
 
   int old_link = dosGetUMBLinkState();
   int old_strat = dosGetAllocStrategy();
-  dosSetUMBLinkState(1);
-  dosSetAllocStrategy(0);
 
   assert(args);
+  assert(umbRegion == 0);
+  assert(block == 0);
+  assert(optL == 0);
 
-    if (initialise() == OK)
+    if((rc = initialise()) == OK)
     {
       if ((rc = parseArgs(args, &fnam, &args)) == OK)
       {
@@ -188,11 +190,8 @@ static int lh_lf(char *args)
             rc = loadhigh_prepare();
 
           /* finally, execute the file */
-          if (!rc) {
-			if(swapOnExec != ERROR)		/* Must not swap */
-				swapOnExec = FALSE;
+          if (!rc)
             rc = exec(fullname, args, 0);
-          }
 
         }
         else
@@ -207,10 +206,13 @@ static int lh_lf(char *args)
   for (i = 0; i < allocatedBlocks; i++)
     DOSfree(block[i]);
 
-  /* free dynamic arrays */
-  free(umbRegion);
-  free(block);
-  free(optL);
+	/* free dynamic arrays */
+	free(umbRegion);
+	free(block);
+	free(optL);
+	optL = 0;
+	umbRegion = 0;
+	block = 0;
 
   /* Restore UMB link state and DOS malloc strategy to their
    * original values. */
@@ -336,19 +338,18 @@ static int findUMBRegions(void)
         struct MCB _seg *umb_mcb;
         mcbAssign(umb_mcb, (word)mcb - 1);
 
-        if (umb_mcb->mcb_type == 'Z' || umb_mcb->mcb_type == 'M')
-          if (!_fmemcmp(umb_mcb->mcb_name, "UMB     ", 8))
+        if((umb_mcb->mcb_type == 'Z' || umb_mcb->mcb_type == 'M')
+         && !_fmemcmp(umb_mcb->mcb_name, "UMB     ", 8))
           {
             /* This is the signature of the special MS-DOS MCBs */
 
-            mcb = umb_mcb;
-            region->start = mcb->mcb_ownerPSP;
-            region->end = mcb->mcb_ownerPSP + mcb->mcb_size - 1;
-            if ((sig = mcb->mcb_type) == 'M')
+            region->start = umb_mcb->mcb_ownerPSP;
+            region->end = umb_mcb->mcb_ownerPSP + umb_mcb->mcb_size - 1;
+            if ((sig = umb_mcb->mcb_type) == 'M')
               region->end--;
             region++;
             region->start = 0;
-            mcbAssign(mcb, (word)mcb + mcb->mcb_size);
+            mcbAssign(mcb, (word)umb_mcb + umb_mcb->mcb_size);
             if (sig == 'Z')
               break;
             continue;
@@ -361,6 +362,7 @@ static int findUMBRegions(void)
       {
         region->end = FP_SEG(mcb) + mcb->mcb_size;
         region++;
+        break;
       }
 
       mcbNext(mcb);
@@ -555,10 +557,6 @@ static int parseArgs(char *cmdline, char **fnam, char **rest)
 
   assert(fnam);
   assert(rest);
-
-  /* initialize options */
-  optS = 0;
-  optL = 0;
 
   if(leadOptions(&cmdline, loadfix_flag? 0: opt_lh, 0) != E_None)
       return err_silent;
