@@ -464,6 +464,7 @@ int initialize(void)
 	if(!canexit) {
 		char *autoexec;
 
+		spawnAndExit = E_None;
 		autoexec = user_autoexec? user_autoexec: AUTO_EXEC;
 
 		showinfo = 0;
