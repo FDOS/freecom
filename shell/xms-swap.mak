@@ -19,7 +19,8 @@ command.exe : $(CFG) cswapc.obj \
 	loadhigh.obj \
 	module.obj \
 	redir.obj \
-	ver.obj cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj
+	ver.obj cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj \
+	$(SUPPL_LIB_PATH)\suppl_s.lib ..\cmd\cmds.lib ..\lib\freecom.lib ..\strings\strings.lib
 	$(LD) /m/s/l /c /d @&&|
 $(LIBPATH)\c0s.obj+
 cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj+

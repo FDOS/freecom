@@ -1,4 +1,5 @@
-chg: init.c: Don#(#('t displays command on startup [Tom Ehlert] {common request}
+fix: xms-swap.mak: dependencies [Tom Ehlert]
+chg: init.c: Don't displays command on startup [Tom Ehlert] {common request}
 bugfix: init.c: invalid empty MSDOS environment [Tom Ehlert]
 fix: appendDisable(): should disable APPEND [Eduardo Casino]
 fix: /LOW option
