@@ -48,7 +48,7 @@
 #define ASCII 1
 #define BINARY 2
 
-struct CopySource {
+static struct CopySource {
   struct CopySource *nxt;   /* next source */
   struct CopySource *app;   /* list of files to append */
   int flags;          /* ASCII / Binary */
@@ -56,9 +56,9 @@ struct CopySource {
 } *head, *last, *lastApp;
 
 
-extern int FAR appFile; /* Append the next file rather than new source */
-char *destFile;     /* destination file/directory/pattern */
-int destIsDir;      /* destination is directory */
+static int appendToFile; /* Append the next file rather than new source */
+static char *destFile;     /* destination file/directory/pattern */
+static int destIsDir;      /* destination is directory */
 
 static int optY, optV, optA, optB;
 
@@ -97,7 +97,7 @@ optScanFct(opt_copy1)
 
 void initContext(void)
 {
-  appFile = 0;
+  appendToFile = 0;
   last = lastApp = 0;
 }
 
@@ -341,8 +341,8 @@ int addSource(char *p)
   q = strtok(p, "+");
   assert(q && *q);
 
-  if(appFile) {
-    appFile = 0;
+  if(appendToFile) {
+    appendToFile = 0;
     if(!lastApp) {
       error_leading_plus();
       return 0;
@@ -425,7 +425,7 @@ int cmd_copy(char *rest)
         lastApp->flags = cpyFlags();
     } else {            /* real argument */
       if(*p == '+') {       /* to previous argument */
-        appFile = 1;
+        appendToFile = 1;
         while(*++p == '+');
         if(!*p)
           continue;
@@ -439,7 +439,7 @@ int cmd_copy(char *rest)
 
     }
 
-  if(appFile) {
+  if(appendToFile) {
     error_trailing_plus();
     killContext();
     freep(argv);

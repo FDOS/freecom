@@ -1,3 +1,4 @@
+chg: COPY: appFile unneccessarily declared FAR (Tom Ehlert)
 bugfix: cmdinput.c: histGet(,str,maxlen) (Tom Ehlert)
 bugfix: mux_ae.h: #ifdef --> #if (Tom Ehlert)
 bugfix: day/month read from ff_time reversed (John Price)
