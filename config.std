@@ -1,5 +1,5 @@
 ## is the base path ("root") of Turbo C++ v1.01
-CC_BASE_PATH = D:\TC101
+CC_BASE_PATH = C:\TCPP101
 
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library

@@ -26,6 +26,7 @@
 <LI><A HREF="!!:status">Status of FreeCOM / To-do List</A>
 <LI><A HREF="!!:appendix">Appendix</A>
 	<OL>
+	<LI><A HREF="!!:compile">Compile FreeCOM - sample</A>
 	<LI><A HREF="!!:download">Download</A>
 	<LI><A HREF="!!:cvs-tags">CVS Resources</A>
 	<LI><A HREF="!!:ebnf">EBNF</A>
@@ -127,8 +128,9 @@ command to execute, e.g.: <CMD>/C DIR /s</CMD>, <CMD>/C=DIR /s</CMD>, and <CMD>/
 do behave exactly the same and execuate the command <CMD>DIR /s</CMD>.
 <BR>If these options are used in conjunction with the <OPT>/P</OPT> option, the AUTOEXEC.BAT
 script is executed prior executing the specified command.
-<BR>In opposite to <OPT>/C</OPT> the <OPT>/K</OPT> option enters the interactive shell
-prompt after executing the specified command.
+<BR>In opposite to <OPT>/K</OPT> the <OPT>/C</OPT> option does not enter
+the interactive shell prompt after executing the specified command unless
+the <OPT>/P</OPT> options is present, too.
 
 <P>Boolean options, which can only be <EM>enabled</EM> or <EM>disabled</EM>, may be
 prefixed by '<CODE>+</CODE>' to enable or '<CODE>-</CODE>' to disable it.
@@ -384,9 +386,6 @@ minimum, but probably at the cost of optimization and performance.
 <TR>	<TD><CMD>DIR /O</CMD> and <CMD>DIR /A</CMD></TD>
 		<TD ALIGN=CENTER><HELL>v0.93</HELL></TD>
 </TR>
-<TR>	<TD><CMD>IF ERRORLEVEL H<I>&lt;letter&gt;</I></CMD></TD>
-		<TD ALIGN=CENTER><HELL>v0.85</HELL></TD>
-</TR>
 <TR>	<TD><CMD>IF /I</CMD></TD>
 		<TD ALIGN=CENTER><HELL>v0.85</HELL></TD>
 </TR>
@@ -448,6 +447,9 @@ minimum, but probably at the cost of optimization and performance.
 <TR>	<TD>Critical Error handler</TD>
 		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
 </TR>
+<TR>	<TD><CMD>IF ERRORLEVEL H<I>&lt;letter&gt;</I></CMD></TD>
+		<TD ALIGN=CENTER><DIMM>done (v0.83&beta;48)</DIMM></TD>
+</TR>
 </TABLE>
 <BR><FONT SIZE=-1>Footnotes:<BR>
 <UL>
@@ -461,6 +463,10 @@ may be added earlier.</A>
 
 <P><HR><P>
 <H1><A NAME="-appendix">Appendix</A></H1>
+
+<H2><A NAME="-compile">Compile FreeCOM - sample</A></H2>
+Due to heavy request, there is a sample description
+<A HREF="build48.html">how to compile FreeCOM in ten steps</A>.
 
 <H2><A NAME="-download">Download</A></H2>
 

@@ -76,6 +76,7 @@ endiff
 tools\ptchsize.exe com.com +7KB
 if errorlevel 1 goto ende
 move com.com packages\xmsswap.std\command.com
+copy /b shell\com.exe +infores + criter\criter + criter\criter1 packages\localize.std\xmsswap.cln
 if exist com.com goto ende
 set XMS_SWAP=
 : pause

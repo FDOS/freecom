@@ -1,3 +1,16 @@
+v0.83 Beta 48:
+bugfix: XMS-Swap/LOADHIGH: wrongly calculated UMBs if loaded into UMB
+fix: expand environment variables within FOR ()'s 
+chg: do not strip control characters from command line
+bugfix: FOR: If a pattern fails to match, --> ignore {Tom Ehlert}
+bugfix: FOR and redirection [BugID #1050, #708, #1041]
+chg: documentary about new build process, build48.html
+add: DUTCH.LNG {Bernd Blaauw}
+chg: BUILD.BAT: To display %LNG% at XMS-Swap remark
+add: to use on a cdrom to create localized versions {Bernd Blaauw}
+fix: COMMAND.COM /P/C cmd: hangs in endless loop, should become interactive
+bugfix: CONFIG.MAK: default location of SUPPL
+fix: IF ERRORLEVEL non-numeric hack (H? / x?) {Tom Ehlert} [Bug #1066]
 add: pt/BR Strings {Max M. Velasques}
 
 v0.83 Beta 46:

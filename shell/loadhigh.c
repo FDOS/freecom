@@ -104,6 +104,9 @@ static int loadfix_flag;         /* Flag: LOADFIX instead of LOADHIGH? */
 #pragma argsused
 int cmd_loadfix(char *rest)
 {
+#ifdef FEATURE_XMS_SWAP
+#error "LOADFIX is not compatible with XMS-Swap!"
+#endif
   loadfix_flag = 1;
   return lh_lf(rest);
 }
