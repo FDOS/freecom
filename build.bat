@@ -7,7 +7,16 @@ if "%1"=="clean" goto ende
 set SWAP=
 if "%1"=="xms-swap" set SWAP=-DXMS_SWAP
 if "%1"=="xms-swap" shift
+if not "%1"=="-h" goto run
 
+echo Build FreeCOM
+echo Useage: %0 [-r] [clean] [xms-swap]
+echo -r: Rebuilt -- Clean before proceed
+echo clean: Remove *.OBJ, *.COM, *.LIB, etc. files, then exit
+echo xms-swap: Build FreeCOM with XMS-Only Swap support
+goto ende
+
+:run
 if not x%1==x set LNG=%1
 if "%lng%"=="" set LNG=english
 
@@ -87,5 +96,8 @@ tools\ptchsize.exe command.com +6KB
 echo.
 echo All done. COMMAND.COM is ready for useage!
 echo.
+if "%SWAP%"=="" echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
+if "%SWAP%"=="" echo %0 -r xms-swap
 
 :ende
+set SWAP=

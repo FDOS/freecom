@@ -4,9 +4,16 @@ Compile notes:
 Borland's museum site).
 2) Configure CONFIG.MAK (see below)
 3) Configure CONFIG.H   (see there)
-4) Run BUILD.BAT
+4) Run BUILD.BAT**
 (Some newer MAKE variants may require a space between the -f option
  and the makefile name. On trouble try to fix BUILD.BAT.)
+
+** BUILD.BAT accepts to following options:
+C> BUILD.BAT [-r] [clean] [xms-swap]
+-r		Rebuilt (clean previous files before proceed)
+clean	remove *.COM, *.OBJ, *.LIB etc. files, then exit
+xms-swap	create FreeCOM with XMS-Only Swap support
+
 
 You will find two executables in the FreeCOM directory:
 SHELL\COMMAND.EXE and COMMAND.COM.
