@@ -20,6 +20,7 @@ struct bcontext
   FILE *bfile;
   char *bfnam;                  /* name of batchfile */
   char *forproto;				/* command to execute */
+  char *forvar;					/* current FOR variable */
   char **params;				/* FOR/batch parameter list */
   char *blabel;                 /* label to search for */
   struct ffblk *ffind;			/* already started FOR wildcard expand loop */
@@ -34,7 +35,6 @@ struct bcontext
   int bclose;					/* close batch file on exit */
   int brewind;					/* rewind batch file next time */
   int numParams;				/* number of parameters */
-  char forvar;					/* current FOR variable */
 };
 
 /*  The stack of current batch contexts.

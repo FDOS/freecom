@@ -486,7 +486,9 @@ int process_input(int xflag, char *commandline)
   char *tp;
   char *ip;
   char *cp;
+#if 0
   char forvar;
+#endif
   int echothisline;
   int tracethisline;
 
@@ -544,6 +546,7 @@ int process_input(int xflag, char *commandline)
 		tracethisline = 1;
 	}
 
+#if 0
   /* The FOR hack
     If the line matches /^\s*for\s+\%[a-z]\s/, the FOR hack
     becomes active, because FOR requires the sequence "%<ch>"
@@ -556,6 +559,13 @@ int process_input(int xflag, char *commandline)
    && isargdelim(cp[2]))   /* activate FOR hack */
     forvar = toupper(cp[1]);
   else forvar = 0;
+
+#else
+	if(cmd_for_hackery(ip)) {
+		free(readline);
+		continue;
+	}
+#endif
 
   cp = parsedline;
     while (*ip)
@@ -611,10 +621,12 @@ int process_input(int xflag, char *commandline)
             break;
 
           default:
+#if 0
             if(forvar == toupper(*ip)) {    /* FOR hack */
               *cp++ = '%';			/* let the var be copied in next cycle */
               break;
             }
+#endif
             if ((tp = strchr(ip, '%')) != 0)
             {
               *tp = '\0';

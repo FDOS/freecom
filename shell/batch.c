@@ -151,6 +151,8 @@ void clearBatchContext(struct bcontext *b)
     free(b->ffind);
   if (b->forproto)
     free(b->forproto);
+  if (b->forvar)
+    free(b->forvar);
   if (b->params)
     freep(b->params);
 }
@@ -334,6 +336,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     if (bc->forvar)             /* If its a FOR context... */
     {
+      int forvarlen;
       char
        *fv1,
        *sp,      /* pointer to prototype command */
@@ -360,11 +363,12 @@ char *readbatchline(int *eflag, char *textline, int size)
 	} else
 	{
       if (strpbrk(fv, "?*") == 0) {      /* element is not wild file */
-        bc->shiftlevel++;       /* No use it and shift list */
+        bc->shiftlevel++;       /* No -> use it and shift list */
         fv1 = "";				/* No additional info */
       } else
         /* Wild file spec, find first (or next) file name */
       {
+
 	  /*  For first find, allocate a find first block */
           if ((bc->ffind = (struct ffblk *)malloc(sizeof(struct ffblk)))
            == 0)
@@ -394,11 +398,13 @@ char *readbatchline(int *eflag, char *textline, int size)
        dp = textline;          /* Place to expand protoype */
 
        assert(sp);
+       assert(bc->forvar);
 
+      forvarlen = strlen(bc->forvar);
       while (*sp)
       {
-        if (*sp == '%' && sp[1] == bc->forvar)  /* replace % var */
-          dp = stpcpy(stpcpy(dp, fv1), fv), sp += 2;
+        if (memcmp(sp, bc->forvar, forvarlen) == 0)
+          dp = stpcpy(stpcpy(dp, fv1), fv), sp += forvarlen;
         else
           *dp++ = *sp++;        /* Else just copy */
       }

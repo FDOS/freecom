@@ -13,11 +13,15 @@ from the <ARG>word</ARG>s and <ARG>pattern</ARG>s enclosed in
 parenthises; where <ARG>pattern</ARG>s are words containing
 wildcards and are replaced by all matching filenames.
 <P>Any occurence of a percent sign <TT>%</TT> and the specified letter
-is replaced by the current value of the FOR loop.
+is replaced by the current value of the FOR loop. <EM>Note:</EM> The
+letter is case-sensitively matched!
 
 <P><STRONG>Warning #1</STRONG>: Unlike most commands
 <A HREF="!:redirection">I/O-redirections</A> are passed forth to the
-command instead of to apply them to FOR itself.
+command instead of to apply them to FOR itself, e.g.:<BR>
+CMD: FOR %a IN (*.*) DO ECHO %a >q
+repeatedly executes the ECHO command with the redirection <CMD>>q</CMD>,
+hence, effectively overwriting the file each time.
 
 <BR><STRONG>Warning #2</STRONG>: Due the syntactical problem that the
 FOR variable is specified as 
@@ -43,6 +47,14 @@ passing them forth to the command.
 <LI>FOR commands as part of the command of CALL, IF, and FOR itself are
 never found before expanding the environment variables.
 </UL>
+
+<BR><STRONG>Warning #3</STRONG>: Due a bug in MS COMMAND (BugID #1050) the right
+parenthesis <STRONG>must</STRONG> be followed by at least one whitespace,
+this allows the "<EM>feature</EM>" to embed such characters within the
+words and patterns, e.g.:<BR>
+CMD: FOR %a in (a()a b()b) DO command
+executes the <CMD>command</CMD> two times, first replacing <CMD>%a</CMD>
+by <CMD>a()a</CMD>, second by <CMD>b()b</CMD>.
 
 EXAMPLES:
 EXAMPLE: 1
