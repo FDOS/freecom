@@ -23,6 +23,9 @@
  *
  * 2000/09/26 ska
  *	add: FEATURE_ENHANCED_INPUT
+ *
+ * 2000/12/10 ska
+ *	add: FEATURE_INSTALLABLE_COMMANDS
  */
 
 /* define DEBUG to add debugging code */
@@ -58,6 +61,10 @@
 /* Preserves last directory (CD, CHDIR, CDD, PUSHD, POPD);
 	"CD -" chdir's there */
 #define FEATURE_LAST_DIR
+
+/* Enable to support installable COMMAND extensions (MUX-AE)
+ */
+#define FEATURE_INSTALLABLE_COMMANDS
 
 /* Name of the executable */
 #define COM_NAME "COMMAND.COM"

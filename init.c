@@ -89,6 +89,10 @@
  *
  * 2000/07/24 Ron Cemer
  *	bugfix: ensure environment segment is in limits 256..32767
+ *
+ * 2000/12/10 ska
+ *	chg: enable canexit within initialize() in order to catch abort-style
+ *		errors within main()
  */
 
 #include "config.h"
@@ -188,6 +192,9 @@ int showcmds(char *rest)
 #endif
 #ifdef FEATURE_LAST_DIR
   printf("[last dir] ");
+#endif
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+	printf("[installable commands] ");
 #endif
   putchar('\n');
 
@@ -469,6 +476,7 @@ int initialize(void)
   fclose(f);
 #endif
 
+  canexit = 1;
   p = cmdline;    /* start of the command line */
   do {
   ec = leadOptions(&p, opt_init, NULL);

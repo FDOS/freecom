@@ -75,6 +75,8 @@ call mkpkgs.bat
 
 dmake clean || quit
 
+dmake command.mak || quit
+
 ren cmddebug.new cmddebug.exe
 
 rm -frd old

@@ -12,7 +12,7 @@ del strings.h
 goto ende
 
 :err1
-if "%1"=="tc101" make -f fixstrs.mak
+if "%1"=="tc101" make -ffixstrs.mak
 if "%1"=="dmake" dmake
 if exist fixstrs.com goto doit
 if exist fixstrs.exe goto doit

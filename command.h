@@ -40,6 +40,9 @@
  * 2000/09
  */
 
+#ifndef FREECOM_COMMAND_H
+#define FREECOM_COMMAND_H
+
 #include <dos.h>
 #include <stdio.h>
 
@@ -69,6 +72,7 @@ enum InternalErrorCodes {
 	E_Other = 2,
 	E_CBreak = 3,
 	E_NoMem,
+	E_CorruptMemory,
 	E_NoOption,
 	E_Exit,
 	E_Ignore			/* Error that can be ignored */
@@ -332,3 +336,5 @@ int showcmds(char *);
 
 /* parse numbers */
 char *parsenum(char *s, int maxCnt, int *cnt, int nums[]);
+
+#endif

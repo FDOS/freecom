@@ -183,6 +183,9 @@
  *
  * 2000/10/09 Michael Kj”rling <michael@kjorling.com>
  *      bugfix: directory commands now support periods without leading space
+ *
+ * 2000/12/10 ska
+ *	add: Installable COMMAND extensions
  */
 
 #include "config.h"
@@ -211,6 +214,11 @@
 #endif
 #include "openf.h"
 #include "session.h"
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+#include "mux_ae.h"
+#endif
+#include "crossjmp.h"
+
 
 #ifdef FEATURE_SWAP_EXEC
 #include "swapexec.h"
@@ -218,12 +226,15 @@
 extern struct CMD cmds[];       /* The internal command table */
 
 int exitflag = 0;               /* indicates EXIT was typed */
-int canexit = 1;                /* indicates if this shell is exitable */
+int canexit = 0;                /* indicates if this shell is exitable
+									enable within initialize() */
 int ctrlBreak = 0;              /* Ctrl-Break or Ctrl-C hit */
 int errorlevel = 0;             /* Errorlevel of last launched external prog */
 int forceLow = 0;               /* load resident copy into low memory */
 int oldinfd = -1;       /* original file descriptor #0 (stdin) */
 int oldoutfd = -1;        /* original file descriptor #1 (stdout) */
+
+jmp_buf jmp_beginning;
 
 void fatal_error(char *s)
 {
@@ -353,7 +364,25 @@ static void docommand(char *line)
    * line - the command line of the program to run
    */
 
-  char *com;                    /* the first word in the command */
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+	/* Duplicate the command line into such buffer in order to
+		allow Installable Commands to alter the command line.
+		*line cannot be modified as pipes would be destroyed. */
+	/* Place both buffers immediately following each other in
+		order to make sure the contents of args can be appended
+		to com without any buffer overflow checks.
+		*2 -> one buffer for com and one for args
+		+2 -> max length byte of com + cur length of com
+		+3 -> max length byte of args + cur length of args + additional '\0'
+	*/
+	char buf[2*BUFFER_SIZE_MUX_AE+3+1];
+#define com  (buf + 1)
+#define args (buf + 1 + BUFFER_SIZE_MUX_AE + 2)
+#define BUFFER_SIZE BUFFER_SIZE_MUX_AE
+#else
+	char com[MAX_INTERNAL_COMMAND_SIZE];
+#define BUFFER_SIZE MAX_INTERNAL_COMMAND_SIZE
+#endif
   char *cp;
   char *rest;            /* pointer to the rest of the command line */
 
@@ -362,34 +391,49 @@ static void docommand(char *line)
   assert(line);
 
   /* delete leading & trailing whitespaces */
-  line = rest = trim(line);
+  line = trim(line);
 
-  if (*rest)                    /* Anything to do ? */
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+#if BUFFER_SIZE < MAX_INTERNAL_COMMAND_SIZE
+	if(strlen(line) > BUFFER_SIZE) {
+		error_line_too_long();
+		return;
+	}
+#endif
+	line = strcpy(args, line);
+#endif
+
+  if (*(rest = line))                    /* Anything to do ? */
   {
-    if ((cp = com = malloc(strlen(line) + 1)) == NULL)
-    {
-    error_out_of_memory();
-    return;
-    }
+    cp = com;
 
   /* Copy over 1st word as lower case */
-  /* Internal commands are constructed out of alphabetic
+  /* Internal commands are constructed out of non-delimiter
   	characters; ? had been parsed already */
-    while (isalpha(*rest))
-      *cp++ = tolower(*rest++);
+    while(*rest && !is_delim(*rest) && !strchr(QUOTE_STR, *rest))
+      *cp++ = toupper(*rest++);
 
-    if(*rest && (!is_delim(*rest) || strchr(QUOTE_STR, *rest)))
+    if(*rest && strchr(QUOTE_STR, *rest))
       /* If the first word is quoted, it is no internal command */
       cp = com;   /* invalidate it */
     *cp = '\0';                 /* Terminate first word */
 
-  /* Scan internal command table */
-  if(*com)
-    for (cmdptr = cmds; cmdptr->name && strcmp(com, cmdptr->name) != 0
-     ; cmdptr++);
+	if(*com) {
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+		/* Check for installed COMMAND extension */
+		if(runExtension(com, args))
+			return;		/* OK, executed! */
+
+		dprintf( ("[Command on return of Installable Commands check: >%s<]\n", com) );
+#endif
+
+		/* Scan internal command table */
+		for (cmdptr = cmds; cmdptr->name && strcmp(com, cmdptr->name) != 0
+		; cmdptr++);
+
+	}
 
     if(*com && cmdptr->name) {    /* internal command found */
-    free(com);          /* free()'ed during call */
       switch(cmdptr->flags & (CMD_SPECIAL_ALL | CMD_SPECIAL_DIR)) {
       case CMD_SPECIAL_ALL: /* pass everything into command */
         break;
@@ -422,23 +466,41 @@ static void docommand(char *line)
           cmdptr->func(rest);
         }
       } else {
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+		if(*com) {		/* external command */
+			/* Installable Commands are allowed to change both:
+				"com" and "args". Therefore, we may need to
+				reconstruct the external command line */
+			/* Because com and *rest are located within the very same
+				buffer and rest is definitely terminated with '\0',
+				the followinf memmove() operation is fully robust
+				against buffer overflows */
+			memmove(com + strlen(com), rest, strlen(rest) + 1);
+			/* Unsave, but probably more efficient operation:
+				strcat(com, rest);
+					-- 2000/12/10 ska*/
+			line = com;
+		}
+#endif
         /* no internal command --> spawn an external one */
-        free(com);
-        com = unquote(line, rest = skip_word(line));
-        if(!com) {
+        cp = unquote(line, rest = skip_word(line));
+        if(!cp) {
           error_out_of_memory();
           return;
         }
-    execute(com, ltrim(rest));
-      free(com);
+		execute(cp, ltrim(rest));
+		free(cp);
       }
   }
+#undef line
+#undef com
+#undef args
+#undef BUFFER_SIZE
 }
 
 /*
  * process the command line and execute the appropriate functions
  * full input/output redirection and piping are supported
- *
  */
 void parsecommandline(char *s)
 {
@@ -451,12 +513,12 @@ void parsecommandline(char *s)
   int of_attrib = O_CREAT | O_TRUNC | O_TEXT | O_WRONLY;
   int num;
 
-  dprintf(("[parsecommandline (%s)]\n", s));
-
   /* first thing we do is alias expansion */
   assert(s);
   assert(oldinfd == -1);  /* if fails something is wrong; should NEVER */
   assert(oldoutfd == -1); /* happen! -- 2000/01/13 ska*/
+
+  dprintf(("[parsecommandline (%s)]\n", s));
 
 #ifdef FEATURE_ALIASES
   aliasexpand(s, MAX_INTERNAL_COMMAND_SIZE);
@@ -583,8 +645,8 @@ abort:
  */
 int process_input(int xflag, char *commandline)
 {
-    /* Dimensionate parsedline that no sprintf() can overflow the
-      buffer */
+    /* Dimensionate parsedline that no sprintf() can overflow the buffer
+     */
   char parsedline[MAX_INTERNAL_COMMAND_SIZE + sizeof(errorlevel) * 8]
     , *readline;
 /* Return the maximum pointer into parsedline to add 'numbytes' bytes */
@@ -816,7 +878,7 @@ int main(void)
    * * main function
    */
 
-  if(initialize() == E_None)
+  if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
     process_input(0, NULL);
 
   if(!canexit)

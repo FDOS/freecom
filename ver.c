@@ -22,6 +22,9 @@
  *
  * 2000/06/22 ska
  *	new version: v0.79b
+ *
+ * 2000/12/10 ska
+ *	new minor version: v0.80
  */
 
 #include "config.h"
@@ -36,7 +39,7 @@
 #include "strings.h"
 #include "cmdline.h"
 
-const char shellver[] = "version 0.79dá pl2 [" __DATE__ "]";
+const char shellver[] = "version 0.80 [" __DATE__ "]";
 const char shellname[] = "FreeCom";
 
 void short_version(void)

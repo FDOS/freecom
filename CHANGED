@@ -1,3 +1,12 @@
+v0.80:
+chg: canexit disabled by default, allowed within initialize() 
+chg: command table uppercased as Installable Commands use uppercased names
+add: installable COMMAND extensions FEATURE_EXTENSIONS
+add: F1, F3, F5, cur-right
+add: French Strings file
+add: German Strings file
+add: useage of %COPYCMD%
+v0.79dá2:
 bugfix: "CD." and analogeous commands
 v0.79dá1:
 add: FEATURE_ENHANCED_INPUT and it's non-defined variant

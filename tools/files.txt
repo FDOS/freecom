@@ -1,2 +1,7 @@
 PTCHLDRV	tool to change the drive the FEATURE_CALL_LOGGING
 		creates the logfile on.
+
+LOAD_ICD	tool to load samples of Installable Commands
+ICMD_*.NAS	NASM sources of samples of Installable Commands
+ICMD_TPL.NAS	template of samples of Installable Commands
+ICMD_INC.INC	command code shared by all samples of Installable Commands

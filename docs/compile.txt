@@ -3,7 +3,10 @@ Compile notes:
 1) Setup TC++ v1.01 (see www.freedos.org, Links page for a reference to
 Borland's museum site).
 2) Configure CONFIG.MAK (see below)
-3) Run MAKE -f command.mak
+3) Configure CONFIG.H   (see there)
+4) Run MAKE -fcommand.mak
+(Some newer MAKE variants may require a space between the -f option
+ and the makefile name.)
 
 You will find two executables in the FreeCOM directory:
 COMMAND.EXE and COMMAND.COM.

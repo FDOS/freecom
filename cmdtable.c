@@ -22,6 +22,9 @@
  * 2000/06/22 ska
  *	add: DIRS/PUSHD/POPD patch D. Lucas Parker
  *	add: CDD
+ *
+ * 2000/12/10 ska
+ *	chg: Uppercased command names (support for Installable Commands)
  */
 
 #include <stdlib.h>
@@ -44,162 +47,162 @@
 struct CMD cmds[] =
 {
 #ifdef FEATURE_ALIASES
-        {"alias", 0, cmd_alias, TEXT_CMDHELP_ALIAS},
+        {"ALIAS", 0, cmd_alias, TEXT_CMDHELP_ALIAS},
 #endif
 
 #ifdef INCLUDE_CMD_BEEP
-        {"beep", 0, cmd_beep, TEXT_CMDHELP_BEEP},
+        {"BEEP", 0, cmd_beep, TEXT_CMDHELP_BEEP},
 #endif
 
 #ifdef INCLUDE_CMD_BREAK
-        {"break",    0,             cmd_break     , TEXT_CMDHELP_BREAK},
+        {"BREAK",    0,             cmd_break     , TEXT_CMDHELP_BREAK},
 #endif
 
-        {"call", CMD_SPECIAL_DIR | CMD_BATCHONLY, cmd_call, TEXT_CMDHELP_CALL},
+        {"CALL", CMD_SPECIAL_DIR | CMD_BATCHONLY, cmd_call, TEXT_CMDHELP_CALL},
 
 #ifdef INCLUDE_CMD_CHDIR
-  {"cd", CMD_SPECIAL_DIR, cmd_chdir, TEXT_CMDHELP_CD},
-  {"chdir", CMD_SPECIAL_DIR, cmd_chdir, TEXT_CMDHELP_CD},
+  {"CD", CMD_SPECIAL_DIR, cmd_chdir, TEXT_CMDHELP_CD},
+  {"CHDIR", CMD_SPECIAL_DIR, cmd_chdir, TEXT_CMDHELP_CD},
 #endif
 
 #ifdef INCLUDE_CMD_CDD
-	{"cdd", CMD_SPECIAL_DIR, cmd_cdd, TEXT_CMDHELP_CDD},
+	{"CDD", CMD_SPECIAL_DIR, cmd_cdd, TEXT_CMDHELP_CDD},
 #endif
 
-/*    { "chcp",     0,             cmd_chcp, TEXT_CMDHELP_CHCP},    !!    */
+/*    { "CHCP",     0,             cmd_chcp, TEXT_CMDHELP_CHCP},    !!    */
 
 #ifdef INCLUDE_CMD_CLS
-  {"cls", 0, cmd_cls, TEXT_CMDHELP_CLS},
+  {"CLS", 0, cmd_cls, TEXT_CMDHELP_CLS},
 #endif
 
 #ifdef INCLUDE_CMD_COPY
-        { "copy", CMD_SPECIAL_DIR,      cmd_copy, TEXT_CMDHELP_COPY },
+        { "COPY", CMD_SPECIAL_DIR,      cmd_copy, TEXT_CMDHELP_COPY },
 #endif
 
 #ifdef INCLUDE_CMD_CTTY
-        { "ctty",     0,             cmd_ctty      , TEXT_CMDHELP_CTTY},
+        { "CTTY",     0,             cmd_ctty      , TEXT_CMDHELP_CTTY},
 #endif
 
 #ifdef INCLUDE_CMD_DATE
-  {"date", 0, cmd_date, TEXT_CMDHELP_DATE},
+  {"DATE", 0, cmd_date, TEXT_CMDHELP_DATE},
 #endif
 
 #ifdef INCLUDE_CMD_DEL
-  {"del", CMD_SPECIAL_DIR, cmd_del, TEXT_CMDHELP_DEL},
+  {"DEL", CMD_SPECIAL_DIR, cmd_del, TEXT_CMDHELP_DEL},
 #endif
 
 #ifdef INCLUDE_CMD_DIR
-  {"dir", CMD_SPECIAL_DIR, cmd_dir, TEXT_CMDHELP_DIR},
+  {"DIR", CMD_SPECIAL_DIR, cmd_dir, TEXT_CMDHELP_DIR},
 #endif
 
 #ifdef INCLUDE_CMD_DIRS
-  {"dirs", 0, cmd_dirs, TEXT_CMDHELP_DIRS},
+  {"DIRS", 0, cmd_dirs, TEXT_CMDHELP_DIRS},
 #endif
 
 #ifdef FEATURE_HISTORY
-  {"doskey", 0, cmd_doskey, TEXT_CMDHELP_DOSKEY},
+  {"DOSKEY", 0, cmd_doskey, TEXT_CMDHELP_DOSKEY},
 #endif
 
-  {"echo", CMD_SPECIAL_ALL, cmd_echo, TEXT_CMDHELP_ECHO},
+  {"ECHO", CMD_SPECIAL_ALL, cmd_echo, TEXT_CMDHELP_ECHO},
 
 #ifdef INCLUDE_CMD_DEL
-  {"erase", CMD_SPECIAL_DIR, cmd_del, TEXT_CMDHELP_DEL},
+  {"ERASE", CMD_SPECIAL_DIR, cmd_del, TEXT_CMDHELP_DEL},
 #endif
 
-  {"exit", 0, internal_exit, TEXT_CMDHELP_EXIT},
+  {"EXIT", 0, internal_exit, TEXT_CMDHELP_EXIT},
 
-  {"for", 0, cmd_for, TEXT_CMDHELP_FOR},
+  {"FOR", 0, cmd_for, TEXT_CMDHELP_FOR},
 
-  {"goto", CMD_BATCHONLY, cmd_goto, TEXT_CMDHELP_GOTO},
+  {"GOTO", CMD_BATCHONLY, cmd_goto, TEXT_CMDHELP_GOTO},
 
 #ifdef FEATURE_HISTORY
-  {"history", 0, cmd_history, TEXT_CMDHELP_HISTORY},
+  {"HISTORY", 0, cmd_history, TEXT_CMDHELP_HISTORY},
 #endif
 
-  {"if", 0, cmd_if, TEXT_CMDHELP_IF},
+  {"IF", 0, cmd_if, TEXT_CMDHELP_IF},
 
 #ifdef INCLUDE_CMD_LOADHIGH
-  {"lh", CMD_SPECIAL_DIR, cmd_loadhigh, TEXT_CMDHELP_LH},
+  {"LH", CMD_SPECIAL_DIR, cmd_loadhigh, TEXT_CMDHELP_LH},
 #endif
 
 #ifdef INCLUDE_CMD_LOADFIX
-  {"loadfix", CMD_SPECIAL_DIR, cmd_loadfix, TEXT_CMDHELP_LOADFIX},
+  {"LOADFIX", CMD_SPECIAL_DIR, cmd_loadfix, TEXT_CMDHELP_LOADFIX},
 #endif
 
 #ifdef INCLUDE_CMD_LOADHIGH
-  {"loadhigh", CMD_SPECIAL_DIR, cmd_loadhigh, TEXT_CMDHELP_LH},
+  {"LOADHIGH", CMD_SPECIAL_DIR, cmd_loadhigh, TEXT_CMDHELP_LH},
 #endif
 
 #ifdef INCLUDE_CMD_MKDIR
-  {"md", CMD_SPECIAL_DIR, cmd_mkdir, TEXT_CMDHELP_MD},
-  {"mkdir", CMD_SPECIAL_DIR, cmd_mkdir, TEXT_CMDHELP_MD},
+  {"MD", CMD_SPECIAL_DIR, cmd_mkdir, TEXT_CMDHELP_MD},
+  {"MKDIR", CMD_SPECIAL_DIR, cmd_mkdir, TEXT_CMDHELP_MD},
 #endif
 
 #ifdef INCLUDE_CMD_PATH
-  {"path", 0, cmd_path, TEXT_CMDHELP_PATH},
+  {"PATH", 0, cmd_path, TEXT_CMDHELP_PATH},
 #endif
 
 #ifdef INCLUDE_CMD_PAUSE
-  {"pause", 0, cmd_pause, TEXT_CMDHELP_PAUSE},
+  {"PAUSE", 0, cmd_pause, TEXT_CMDHELP_PAUSE},
 #endif
 
 #ifdef INCLUDE_CMD_PROMPT
-  {"prompt", 0, cmd_prompt, TEXT_CMDHELP_PROMPT},
+  {"PROMPT", 0, cmd_prompt, TEXT_CMDHELP_PROMPT},
 #endif
 
 #ifdef INCLUDE_CMD_PUSHD
-  {"pushd", CMD_SPECIAL_DIR, cmd_pushd, TEXT_CMDHELP_PUSHD},
+  {"PUSHD", CMD_SPECIAL_DIR, cmd_pushd, TEXT_CMDHELP_PUSHD},
 #endif
 
 #ifdef INCLUDE_CMD_POPD
-  {"popd", 0, cmd_popd, TEXT_CMDHELP_POPD},
+  {"POPD", 0, cmd_popd, TEXT_CMDHELP_POPD},
 #endif
 
 #ifdef INCLUDE_CMD_RMDIR
-  {"rd", CMD_SPECIAL_DIR, cmd_rmdir, TEXT_CMDHELP_RD},
+  {"RD", CMD_SPECIAL_DIR, cmd_rmdir, TEXT_CMDHELP_RD},
 #endif
 
 #ifdef INCLUDE_CMD_REM
-  {"rem", 0, cmd_rem, TEXT_CMDHELP_REM},
+  {"REM", 0, cmd_rem, TEXT_CMDHELP_REM},
 #endif
 
 #ifdef INCLUDE_CMD_RENAME
-  {"ren", CMD_SPECIAL_DIR, cmd_rename, TEXT_CMDHELP_REN},
-  {"rename", CMD_SPECIAL_DIR, cmd_rename, TEXT_CMDHELP_REN},
+  {"REN", CMD_SPECIAL_DIR, cmd_rename, TEXT_CMDHELP_REN},
+  {"RENAME", CMD_SPECIAL_DIR, cmd_rename, TEXT_CMDHELP_REN},
 #endif
 
 #ifdef INCLUDE_CMD_RMDIR
-  {"rmdir", CMD_SPECIAL_DIR, cmd_rmdir, TEXT_CMDHELP_RD},
+  {"RMDIR", CMD_SPECIAL_DIR, cmd_rmdir, TEXT_CMDHELP_RD},
 #endif
 
 #ifdef INCLUDE_CMD_SET
-  {"set", 0, cmd_set, TEXT_CMDHELP_SET},
+  {"SET", 0, cmd_set, TEXT_CMDHELP_SET},
 #endif
 
-  {"shift", CMD_BATCHONLY, cmd_shift, TEXT_CMDHELP_SHIFT},
+  {"SHIFT", CMD_BATCHONLY, cmd_shift, TEXT_CMDHELP_SHIFT},
 
 #ifdef INCLUDE_CMD_TIME
-  {"time", 0, cmd_time, TEXT_CMDHELP_TIME},
+  {"TIME", 0, cmd_time, TEXT_CMDHELP_TIME},
 #endif
 
 #ifdef INCLUDE_CMD_TRUENAME
-  {"truename", CMD_SPECIAL_DIR, cmd_truename, TEXT_CMDHELP_TRUENAME},
+  {"TRUENAME", CMD_SPECIAL_DIR, cmd_truename, TEXT_CMDHELP_TRUENAME},
 #endif
 
 #ifdef INCLUDE_CMD_TYPE
-  {"type", CMD_SPECIAL_DIR, cmd_type, TEXT_CMDHELP_TYPE},
+  {"TYPE", CMD_SPECIAL_DIR, cmd_type, TEXT_CMDHELP_TYPE},
 #endif
 
 #ifdef INCLUDE_CMD_VER
-  {"ver", 0, cmd_ver, TEXT_CMDHELP_VER},
+  {"VER", 0, cmd_ver, TEXT_CMDHELP_VER},
 #endif
 
 #ifdef INCLUDE_CMD_VERIFY
-  {"verify", 0, cmd_verify, TEXT_CMDHELP_VERIFY},
+  {"VERIFY", 0, cmd_verify, TEXT_CMDHELP_VERIFY},
 #endif
 
 #ifdef INCLUDE_CMD_VOL
-        {"vol", 0, cmd_vol, TEXT_CMDHELP_VOL},
+        {"VOL", 0, cmd_vol, TEXT_CMDHELP_VOL},
 #endif
 
 #ifdef INCLUDE_CMD_QUESTION
@@ -207,7 +210,7 @@ struct CMD cmds[] =
 #endif
 
 #ifdef DEBUG
-  {"fddebug", 0, cmd_fddebug, TEXT_CMDHELP_FDDEBUG},
+  {"FDDEBUG", 0, cmd_fddebug, TEXT_CMDHELP_FDDEBUG},
 #endif
 
         {NULL, 0, NULL, 0}

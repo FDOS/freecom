@@ -20,11 +20,11 @@ EXE_dependencies =  \
 
 #		*Explicit Rules*
 fixstrs.exe: $(CFG) $(EXE_dependencies)
-  $(TLINK) /s/c/d/L$(LIBPATH) @&&|
-c0$(MMODEL).obj+
+  $(TLINK) /s/c/d @&&|
+$(LIBPATH)\c0$(MMODEL).obj+
 fixstrs.obj
 fixstrs,fixstrs
-c$(MMODEL).lib
+$(LIBPATH)\c$(MMODEL).lib
 |
 
 

@@ -477,6 +477,12 @@ int cmd_copy(char *rest)
   /* Initialize options */
   optA = optB = optV = optY = 0;
 
+  /* read the parameters from env */
+  if ((argv = scanCmdline(getEnv("COPYCMD"), opt_copy, NULL, &argc, &opts))
+   == NULL)
+    return 1;
+  freep(argv);    /* ignore any parameter from env var */
+
   if((argv = scanCmdline(rest, opt_copy, NULL, &argc, &opts)) == NULL)
     return 1;
 

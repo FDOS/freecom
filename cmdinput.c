@@ -85,6 +85,17 @@
  *
  * 2000/09/26 ska
  *	add: FEATURE_ENHANCED_INPUT (actually the non-defined variant of it)
+ *
+ * 2000/11/28 (Owen Rudge <orudge@freeuk.com>)
+ * - Added support for F1, F3 and F5, as in MS COMMAND.COM
+ *   F1 = Insert next character from last buffer
+ *   F3 = Complete string (NOTE: in this version, replaces string)
+ *   F5 = Places current string in buffer, moves to next line
+ *
+ * 2000/12/10 ska
+ *	chg: F3 == complete string
+ *	add: cur-right at end of string == F1
+ *	fix: F5 removes cursor sometimes
  */
 
 #include "config.h"
@@ -152,6 +163,13 @@ void readcommand(char *str, int maxlen)
 #define D_ENTER   13
 #define D_ESC     27
 #define D_CTL_C   3
+#define D_CTL_R		0x12
+#define D_CTL_L		0x0c
+
+/* OCR - MS-DOS compatible history keystrokes */
+#define D_F1      256+59
+#define D_F3      256+61
+#define D_F5      256+63
 
 #ifdef FEATURE_HISTORY
 void history(int, char *);      /* prototype for the command-line history */
@@ -171,6 +189,8 @@ int show_completion_matches(char *str, unsigned charcount);
 unsigned far *maxx = MK_FP(0x40, 0x4a);
 unsigned char far *maxy = MK_FP(0x40, 0x84);
 #endif
+
+unsigned orgx, orgy;		/* start of current line */
 
 /*
  * goxy
@@ -210,6 +230,35 @@ void clrcmdline(char *str, int maxlen, unsigned orgx, unsigned orgy)
   goxy(orgx, orgy);
 }
 
+/* Print a character to current cursor position
+	Updates cursor postion
+ */
+void outc(char c)
+{
+	putchar(c);
+}
+/* Print a blank to current cursor postion
+	Updates cursor position
+ */
+void outblank(void)
+{	outc(' ');
+}
+
+/* Print string to current cursor position
+	Updates cursor position
+ */
+void outs(const char * const s)
+{	assert(s);
+	fputs(s, stdout);
+}
+/* Print string to cursor position and append one blank
+	Updates cursor postion
+ */
+void outsblank(const char * const s)
+{	outs(s);
+	outblank();
+}
+
 /* read in a command line */
 void readcommand(char *str, int maxlen)
 {
@@ -218,13 +267,13 @@ void readcommand(char *str, int maxlen)
 #ifdef FEATURE_FILENAME_COMPLETION
   unsigned lastch = 0;
 #endif
-  unsigned orgx;                /* origin x/y */
-  unsigned orgy;
   unsigned curx;
   unsigned cury;
   int count;
   unsigned current = 0;
   unsigned charcount = 0;
+
+  char tmpstr[MAX_INTERNAL_COMMAND_SIZE];
 
   /* if echo off, don't print prompt */
   if (echo)
@@ -258,11 +307,11 @@ void readcommand(char *str, int maxlen)
           {
             str[current - 1] = 0;
             if (wherex() != 1)
-              printf("\b \b");
+              outs("\b \b");
             else
             {
               goxy(MAX_X, wherey() - 1);
-              putchar(' ');
+              outblank();
               goxy(MAX_X, wherey() - 1);
             }
           }
@@ -276,7 +325,7 @@ void readcommand(char *str, int maxlen)
               goxy(MAX_X, wherey() - 1);
             curx = wherex();
             cury = wherey();
-            printf("%s ", &str[current - 1]);
+            outsblank(&str[current - 1]);
             goxy(curx, cury);
           }
           charcount--;
@@ -301,7 +350,7 @@ void readcommand(char *str, int maxlen)
           charcount--;
           curx = wherex();
           cury = wherey();
-          printf("%s ", &str[current]);
+          outsblank(&str[current]);
           goxy(curx, cury);
         }
         break;
@@ -320,7 +369,7 @@ void readcommand(char *str, int maxlen)
         if (current != charcount)
         {
           goxy(orgx, orgy);
-          printf("%s", str);
+          outs(str);
           current = charcount;
         }
         break;
@@ -339,7 +388,7 @@ void readcommand(char *str, int maxlen)
             current = charcount;
 
             goxy(orgx, orgy);
-            printf("%s", str);
+            outs(str);
             if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
               orgy--;
           }
@@ -351,7 +400,7 @@ void readcommand(char *str, int maxlen)
               printprompt();
               orgx = wherex();
               orgy = wherey();
-              printf("%s", str);
+              outs(str);
             }
           }
         }
@@ -367,7 +416,7 @@ void readcommand(char *str, int maxlen)
           history(0, str);      // add to the history
 #endif
 
-        putchar('\n');
+        outc('\n');
         break;
 
       case D_CTL_C:       // ^C
@@ -384,13 +433,44 @@ void readcommand(char *str, int maxlen)
         }
         break;
 
+      case D_RIGHT:            // move cursor right
+
+        if (current != charcount)
+        {
+          current++;
+          if (wherex() == MAX_X)
+            goxy(1, wherey() + 1);
+          else
+            goxy(wherex() + 1, wherey());
+			break;
+        }
+        /* cursor-right at end of string grabs the next character
+        	from the previous line */
+        /* FALL THROUGH */
+
 #ifdef FEATURE_HISTORY
+      case D_F1:               // OCR: get character from last command buffer
+			history(-1, tmpstr);
+          if (current < strlen(tmpstr)) {
+			 outc(str[current] = tmpstr[current]);
+             charcount = ++current;
+          }
+          break;
+          
+      case D_F3:               // OCR: get previous command from buffer
+		history(-1, tmpstr);
+		if(charcount < strlen(tmpstr)) {
+			outs(strcpy(&str[charcount], &tmpstr[charcount]));
+		   current = charcount = strlen(str);
+	   }
+	   break;
+
       case D_UP:               // get previous command from buffer
 
         clrcmdline(str, maxlen, orgx, orgy);
         history(-1, str);
         current = charcount = strlen(str);
-        printf("%s", str);
+        outs(str);
         break;
 
       case D_DOWN:             // get next command from buffer
@@ -398,7 +478,7 @@ void readcommand(char *str, int maxlen)
         clrcmdline(str, maxlen, orgx, orgy);
         history(1, str);
         current = charcount = strlen(str);
-        printf("%s", str);
+        outs(str);
         break;
 #endif
 
@@ -418,16 +498,20 @@ void readcommand(char *str, int maxlen)
 #endif
         break;
 
-      case D_RIGHT:            // move cursor right
+	case D_F5:              // OCR: keep cmdline in F3/UP buffer and move to next line
 
-        if (current != charcount)
-        {
-          current++;
-          if (wherex() == MAX_X)
-            goxy(1, wherey() + 1);
-          else
-            goxy(wherex() + 1, wherey());
-        }
+		history(0, str);
+        clrcmdline(str, maxlen, orgx, orgy);
+        outc('@');
+		if(orgy >= MAX_Y) {
+			outc('\n');			/* Force scroll */
+			orgy = MAX_Y;
+		} else {
+			++orgy;
+		}
+		goxy(orgx, orgy);
+        current = charcount = 0;
+
         break;
 
       default:                 // insert character into string...
@@ -441,7 +525,7 @@ void readcommand(char *str, int maxlen)
             str[current++] = ch;
             curx = wherex() + 1;
             cury = wherey();
-            printf("%s", &str[current - 1]);
+            outs(&str[current - 1]);
             if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
               cury--;
             goxy(curx, cury);
@@ -452,7 +536,7 @@ void readcommand(char *str, int maxlen)
             if (current == charcount)
               charcount++;
             str[current++] = ch;
-            putchar(ch);
+            outc(ch);
           }
           if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
             orgy--;

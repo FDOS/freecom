@@ -3,6 +3,11 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.8  2000/12/10 04:16:07  skaus
+# add: Installable Commands FEATURE_INSTALLABLE_COMMANDS
+# add: F1, F3, F5, cur-right command line editing
+# relased version 0.80
+#
 # Revision 1.7  2000/09/11 20:34:10  skaus
 # bugfix: "line too long" error if last line of batch files has no newline
 # bugfix: root path not recognized, e.g. in "C:\PATH> \program"
@@ -60,23 +65,23 @@ SRC = alias.c batch.c beep.c break.c call.c cb_catch.asm cls.c cmdinput.c \
 	cmdline.c cmdtable.c command.c copy.c ctty.c date.c datefunc.c debug.c \
 	del.c dir.c dstack.c echo.c environ.c err_hand.c error.c exec.c \
 	fddebug.c filecomp.c for.c goto.c history.c if.c init.c internal.c \
-	lh.asm loadhigh.c lowexec.asm messages.c misc.c nls.c openf.c parsenum.c \
-	path.c pause.c prompt.c redir.c ren.c session.c set.c shift.c spawn.asm \
-	swapexec.c tempfile.c time.c timefunc.c tmpnam.c truename.c type.c ver.c \
-	verify.c where.c
+	lh.asm loadhigh.c lowexec.asm messages.c misc.c mux_ae.c nls.c openf.c \
+	parsenum.c path.c pause.c prompt.c redir.c ren.c session.c set.c shift.c \
+	spawn.asm swapexec.c tempfile.c time.c timefunc.c tmpnam.c truename.c \
+	type.c ver.c verify.c where.c
 OBJ = alias.obj batch.obj beep.obj break.obj call.obj cb_catch.obj cls.obj \
 	cmdinput.obj cmdline.obj cmdtable.obj command.obj copy.obj ctty.obj \
 	date.obj datefunc.obj debug.obj del.obj dir.obj dstack.obj echo.obj \
 	environ.obj err_hand.obj error.obj exec.obj fddebug.obj filecomp.obj \
 	for.obj goto.obj history.obj if.obj init.obj internal.obj lh.obj \
-	loadhigh.obj lowexec.obj messages.obj misc.obj nls.obj openf.obj \
-	parsenum.obj path.obj pause.obj prompt.obj redir.obj ren.obj session.obj \
-	set.obj shift.obj spawn.obj swapexec.obj tempfile.obj time.obj \
-	timefunc.obj tmpnam.obj truename.obj type.obj ver.obj verify.obj \
-	where.obj
-HDR = alias.h batch.h cmdline.h command.h compat.h config.h datefunc.h \
-	debug.h err_hand.h loadhigh.h model.def nls.h openf.h session.h \
-	strings.h strings.typ swapexec.h tempfile.h timefunc.h
+	loadhigh.obj lowexec.obj messages.obj misc.obj mux_ae.obj nls.obj \
+	openf.obj parsenum.obj path.obj pause.obj prompt.obj redir.obj ren.obj \
+	session.obj set.obj shift.obj spawn.obj swapexec.obj tempfile.obj \
+	time.obj timefunc.obj tmpnam.obj truename.obj type.obj ver.obj \
+	verify.obj where.obj
+HDR = alias.h batch.h cmdline.h command.h compat.h config.h crossjmp.h \
+	datefunc.h debug.h err_hand.h loadhigh.h model.def nls.h openf.h \
+	session.h strings.h strings.typ swapexec.h tempfile.h timefunc.h
 
 
 
@@ -174,8 +179,8 @@ date.obj : date.c \
 dir.obj : dir.c \
 	 cmdline.h command.h config.h debug.h strings.h
 command.obj : command.c \
-	 batch.h cmdline.h command.h config.h debug.h nls.h openf.h session.h \
-	strings.h swapexec.h
+	 batch.h cmdline.h command.h config.h crossjmp.h debug.h nls.h openf.h \
+	session.h strings.h swapexec.h
 swapexec.obj : swapexec.c \
 	 command.h compat.h config.h debug.h swapexec.h
 truename.obj : truename.c \
@@ -231,6 +236,8 @@ call.obj : call.c \
 	 batch.h command.h config.h debug.h
 beep.obj : beep.c \
 	 batch.h command.h config.h debug.h
+mux_ae.obj : mux_ae.c \
+	 command.h config.h crossjmp.h debug.h
 echo.obj : echo.c \
 	 batch.h cmdline.h command.h config.h debug.h strings.h
 loadhigh.obj : loadhigh.c \
@@ -320,7 +327,8 @@ CONF_NDBG =	$(MYCFLAGS_NDBG)
 #-wpre	\
 #-w-pro	\
 
-
+command.mak : makefile command.m1 command.m2
+	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(TLINK) /x /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@
 
 
 # Generate TDUMP files from OBJ files

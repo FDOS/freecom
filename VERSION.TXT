@@ -1,2 +1,2 @@
 
-FreeCom version 0.79dá pl2 [Oct 10 2000]
+FreeCom version 0.80 [Dec 13 2000]

@@ -1,6 +1,24 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-2000/10/09 Michael Kj”rling <michael@kjorling.com>
+2000/12/13 ska
+~~~~~~~~~~~~~~~~~~~~~~
+released v0.80
+
+2000/12/10 ska
+~~~~~~~~~~~~~~~~~~~~~~
+add: Installable Commands interface (MUX_AE.*) FEATURE_INSTALLABLE_COMMANDS
+chg: F3 == complete string
+add: cur-right at end of string == F1
+fix: F5 removes cursor sometimes
+
+2000/11/28 (Owen Rudge <orudge@freeuk.com>)
+~~~~~~~~~~~~~~~~~~~~~~
+- Added support for F1, F3 and F5, as in MS COMMAND.COM
+	F1 = Insert next character from last buffer
+	F3 = Complete string (NOTE: in this version, replaces string)
+	F5 = Places current string in buffer, moves to next line
+
+2002/10/09 Michael Kj”rling <michael@kjorling.com>
 ~~~~~~~~~~~~~~~~~~~~~~
 bugfix: directory commands now support periods without leading space
 
