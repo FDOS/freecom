@@ -791,7 +791,7 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details.
 
-Send bug reports to fd-freecom@topica.com.
+Send bug reports to freedos-freecom@lists.sourceforge.net.
 Updates are available from http://freedos.sourceforge.net/freecom
 .
 
@@ -803,18 +803,18 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.
 
-Send bug reports to fd-freecom@topica.com.
+Send bug reports to freedos-freecom@lists.sourceforge.net.
 Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_DEVELOPERS
 
 The FreeDOS Command Shell developed by many developers, please refer
-to the enclose HISTORY.TXT file.
+to the enclosed HISTORY.TXT file.
 
 Currently maintained by Steffen Kaiser mailto:freecom@freedos.org
 
-Send bug reports to fd-freecom@topica.com.
+Send bug reports to freedos-freecom@lists.sourceforge.net.
 Updates are available from http://freedos.sourceforge.net/freecom
 .
 
@@ -1467,4 +1467,8 @@ pointed to in %COMSPEC% seems to be invalid. Please specify another
 location of FreeCOM to try to load the strings from, e.g.:
 C:\\COMMAND.COM
 or just hit enter to cancel to load the strings.
+.
+
+:TEXT_TERMINATING
+Terminating now.
 .
