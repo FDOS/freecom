@@ -531,7 +531,24 @@ static int print_total
 static int dir_print_free(unsigned long dirs)
 {
   char buffer[32];
-  union REGS r;
+/*  union REGS r;
+  struct SREGS sr; */
+	struct REGPACK r;
+  struct {
+  	unsigned short whatever;
+  	unsigned short version;
+  	unsigned long  sectors_per_cluster; 
+  	unsigned long  bytes_per_sector;
+  	unsigned long  free_clusters;
+  	unsigned long  total_clusters;
+  	unsigned long  available_physical_sectors;
+  	unsigned long  total_physical_sectors;
+  	unsigned long  free_allocation_units; 
+  	unsigned long  total_allocation_units; 
+  	unsigned char  reserved[8];
+  	} FAT32_Free_Space;
+  static char rootname[] = "C:\\";	
+  unsigned long clustersize;
 
   if(optB)
     return 0;
@@ -541,10 +558,32 @@ static int dir_print_free(unsigned long dirs)
   convert(dirs, buffer);
   displayString(TEXT_DIR_FTR_DIRS, buffer);
 
-  r.h.ah = 0x36;
-  r.h.dl = toupper(*path) - 'A' + 1;
-  int86(0x21, &r, &r);
-  convert((unsigned long)r.x.ax * r.x.bx * r.x.cx, buffer);
+  rootname[0] = toupper(*path);
+  r.r_ax = 0x7303;
+  r.r_ds = FP_SEG(rootname);
+  r.r_dx = FP_OFF(rootname);
+  r.r_es = FP_SEG(&FAT32_Free_Space);
+  r.r_di = FP_OFF(&FAT32_Free_Space);
+  r.r_cx = sizeof(FAT32_Free_Space);
+  intr(0x21, &r);
+  
+  if(!(r.r_flags & 1)) {
+	dprintf(("[DIR: Using FAT32 info]\n"));
+	clustersize = FAT32_Free_Space.sectors_per_cluster
+	 * FAT32_Free_Space.bytes_per_sector;
+	
+	if(FAT32_Free_Space.free_clusters >= 0x8000000l / clustersize) {
+		convert(FAT32_Free_Space.free_clusters / 
+				  ((1024l*1024) / clustersize), buffer);
+		strcat(buffer, " Mega");
+		goto output;
+	}
+  }  
+  r.r_ax = 0x3600;
+  r.r_dx = toupper(*path) - 'A' + 1;
+  intr(0x21, &r);
+  convert((unsigned long)r.r_ax * r.r_bx * r.r_cx, buffer);
+output:
   displayString(TEXT_DIR_FTR_BYTES_FREE, buffer);
 
   return incline();
