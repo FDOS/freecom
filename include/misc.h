@@ -45,7 +45,7 @@ typedef enum {
 
 extern FILE *errStream;
 #define outStream stdout
-extern int swapOnExec, defaultToSwap;
+extern int swapOnExec, defaultToSwap, swapContext;
 
 int cgetchar(void);
 int vcgetchar(void);

@@ -76,7 +76,7 @@ int defaultToSwap = FALSE;
 	/* if != 0, pointer to static context
 		NOT allowed to alter if swapOnExec == ERROR !!
 	*/
-
+int swapContext = TRUE;					/* may destroy external context */
 
 void perform_exec_result(int result)
 {

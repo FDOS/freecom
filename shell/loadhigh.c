@@ -186,6 +186,7 @@ static int lh_lf(char *args)
 
   int old_link = dosGetUMBLinkState();
   int old_strat = dosGetAllocStrategy();
+  int oldSwapContext = swapContext;
 
   assert(args);
   assert(umbRegion == 0);
@@ -239,6 +240,7 @@ static int lh_lf(char *args)
 
   dosSetUMBLinkState(old_link);
   dosSetAllocStrategy(old_strat);
+  swapContext = oldSwapContext;
 
 
   /* if any error occurred, rc will hold the error code */
@@ -613,6 +615,10 @@ static int parseArgs(char *cmdline, char **fnam, char **rest)
 
   if((c = optL) != 0) {
     int i, r;
+
+    /* If the /L option is present, we must not deallocate the
+    	context */
+	swapContext = FALSE;
 
     /* Disable access to all UMB regions not listed here */
     for (i = 1; i < umbRegions; i++)
