@@ -9,14 +9,18 @@
 	fillComp():
 	replaces the wildcards ? and * of a filename pattern with characters
 	from a source filename (useful in COPY a*.* b?1.*).
-
-	Embedded ? at a position less than the length of the source filename
-	remain within the result and will, most probably, cause an error
-	later. In example above the file A.* will trigger this behaviour.
+	If a question mark appears bejond the end of the file name, it
+	is silently ignored, e.g. in above example if copy'ing A.TXT)
 
 	This file bases on COPY.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2003/04/08 13:37:57  skaus
+	chg: wilcard matching: COPY/REN *.TXT ???b.*: If length of source filename
+		is less than 3, the superflous question marks are ignored, as in MS
+		COMMAND v6.22 COPY, but INCOMPATIBLE to same version's REN, which
+		embeds spaces
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -40,7 +44,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -74,7 +78,9 @@ static void fillComp(char * const dst
     case '\0':
       goto ende;
     case '?':
-      if(*src)
+    	if(!*src)
+    		continue;
+/*      if(*src) do not keep ? bejond end-of-filename */
         *s = *src;
     default:
       ++s;
@@ -88,10 +94,15 @@ static void fillComp(char * const dst
       ++src;
   }
 ende:
+#if 0		/* don't keep ? bejond end-of-filename */
   /* The pattern may have less characters than the source, because
   	trailing '?'s do match "nothing" in DOS. */
   while(--s >= dst && *s == '?');
   s[1] = '\0';
+#else
+  *s = '\0';
+  assert(strchr(dst, '?') == 0);
+#endif
 }
 
 char *fillFnam(const char * const pattern

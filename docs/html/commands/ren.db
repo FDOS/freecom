@@ -50,3 +50,22 @@ Renames all files located within the current directory with extension
 <CMD>.DAT</CMD> into files by replacing the very first character of
 the filename by the letter <CMD>A</CMD>, all other characters, the
 file extension and path are remain unchanged.
+
+EXAMPLE: 5
+
+CMD: REN *.TXT ??b*.bak
+
+Renames all files located within the current directory with extension
+<CMD>.TXT</CMD> into files by replacing the <EM>third</EM> character of
+the filename by the letter <CMD>B</CMD> and the file extension to
+<CMD>.BAK</CMD>, all other characters and the
+file path are remain unchanged.
+
+<P><STRONG>Warning:</STRONG> If the source file name consists of one
+character only, the second question mark in the destination pattern
+is ignored, hence, e.g. the file <CMD>A.TXT</CMD> is renamed into
+<CMD>AB.BAK</CMD> by this example, what is <EM>incompatible</EM> to
+MS COMMAND v6.22 <FONT SIZE=-1>(maybe others, too)</FONT>, which
+embedds a space as second character making the file inaccessable,
+but what is exactly the same behaviour of the same MS COMMAND's COPY
+command.

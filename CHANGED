@@ -1,3 +1,7 @@
+chg: wilcard matching: COPY/REN *.TXT ???b.*: If length of source filename
+	is less than 3, the superflous question marks are ignored, as in MS
+	COMMAND v6.22 COPY, but INCOMPATIBLE to same version's REN, which
+	embeds spaces
 bugfix: CRITSTRS: hexa-decimal (%&??) interpretation {Strbac Dejan}
 upd: STRINGS\DUTCH.LNG {Bernd Blaauw}
 bugfix: CVS problem regarding strings\dutch.lng
