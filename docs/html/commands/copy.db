@@ -12,6 +12,9 @@ EBNF: COPY [{ option }]  source [{ option }]  target [{ option }]
 
 Copies the source file into the target file. See also: \REF{wildcards}
 
+<P>Before parsing its command line COPY parses any <EM>option</EM> specified
+by the environment variable <OPT>COPYCMD</OPT>.
+
 STD_OPTIONS:
 <UL>
 <LI><OPT>/A</OPT> see below

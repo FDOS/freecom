@@ -1039,7 +1039,7 @@ ERASE [drive:][path]filename [/P]
   /P		Prompts for confirmation before deleting each file.
 .
 
-:TEXT_CMDHELP_DIR#2
+:TEXT_CMDHELP_DIR#3
 Displays a list of files and subdirectories in a directory.
 
 DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
@@ -1053,12 +1053,12 @@ DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
  /A         Displays files with specified attributes.
  attributes  D  Directories                R  Read-only files
              H  Hidden files               A  Files ready for archiving
-             S  System files               -  Prefix meaning not, + may
- /O         List by files in sorted order. [NOT IMPLEMENTED, YET]
+             S  System files               -  Prefix meaning not
+ /O         List by files in sorted order. [NO COMBINATIONS IMPLEMENTED, YET]
  sortorder   N  By name (alphabetic)       S  By size (smallest first)
              E  By extension (alphabetic)  D  By date & time (earliest first)
              G  Group directories first    -  Prefix to reverse order
-             A  By Last Access Date (earliest first)
+             U  Unsorted
  /S         Displays files in specified directory and all subdirectories.
  /B         Uses bare format (no heading information or summary).
  /L         Uses lowercase.
