@@ -258,7 +258,7 @@
 Должно быть ON или OFF.
 .
 
-:TEXT_ERROR_BAD_FOR_VAR
+:TEXT_ERROR_BAD_VARIABLE
 Неверно указана переменная.
 .
 

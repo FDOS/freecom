@@ -201,7 +201,7 @@ A regiao %d da memoria e ilegal - ignorado.
 E preciso especificar ON ou OFF.
 .
 
-:TEXT_ERROR_BAD_FOR_VAR
+:TEXT_ERROR_BAD_VARIABLE
 Especificacao de variavel invalida.
 .
 

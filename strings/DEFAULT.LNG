@@ -258,7 +258,7 @@ Illegal memory region %d - ignored.
 Must specify ON or OFF.
 .
 
-:TEXT_ERROR_BAD_FOR_VAR
+:TEXT_ERROR_BAD_VARIABLE
 Bad variable specification.
 .
 

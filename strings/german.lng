@@ -173,7 +173,7 @@ UngÅltiger Speicherblock %d. Wird ignoriert.
 Bitte verwenden Sie /ON oder /OFF.
 .
 
-:TEXT_ERROR_BAD_FOR_VAR
+:TEXT_ERROR_BAD_VARIABLE
 UngÅltige Variablenangaben.
 .
 

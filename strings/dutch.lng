@@ -257,7 +257,7 @@ Illegaal geheugenmemorybereik %d - achterwege gelaten.
 U dient ON of OFF op te geven.
 .
 
-:TEXT_ERROR_BAD_FOR_VAR
+:TEXT_ERROR_BAD_VARIABLE
 Slechte variabele definitie.
 .
 
