@@ -26,6 +26,10 @@ CFLAGS =
 ## Memory model of FreeCOM
 SHELL_MMODEL=s
 
+!if $(XMS_SWAP)
+__XMS_SWAP = -DXMS_SWAP=1
+!endif
+
 # Default configuration
 # added strings.h here because $(CFG) is included everywhere already
 ## Add -D_NO__DOS_DATE if your compiler does not have no dosdate_t (*)
@@ -38,6 +42,7 @@ SHELL_MMODEL=s
 ##
 $(CFG): $(CFG_DEPENDENCIES)
   copy &&|
+-1-
 -a
 -f-
 -ff-
@@ -49,6 +54,9 @@ $(CFG): $(CFG_DEPENDENCIES)
 -I$(INCLUDEPATH)
 -L$(LIBPATH)
 -m$(SHELL_MMODEL)
+-DNDEBUG
+-UDEBUG
+$(__XMS_SWAP)
 | $(CFG)
 
 

@@ -8,7 +8,8 @@ all: $(CFG) command.exe
 ##>> Modify this file with your local settings
 !include "..\config.mak"
 
-command.exe : $(CFG) batch.obj \
+command.exe : $(CFG) cswapc.obj \
+	batch.obj \
 	cmdtable.obj \
 	command.obj \
 	dummies.obj \
@@ -18,11 +19,11 @@ command.exe : $(CFG) batch.obj \
 	loadhigh.obj \
 	module.obj \
 	redir.obj \
-	ver.obj \
-	cb_catch.obj cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj
+	ver.obj cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj
 	$(LD) /m/s/l /c /d @&&|
 $(LIBPATH)\c0s.obj+
 cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj+
+cswapc.obj+
 batch.obj+
 cmdtable.obj+
 command.obj+
@@ -33,8 +34,7 @@ kswap.obj+
 loadhigh.obj+
 module.obj+
 redir.obj+
-ver.obj+
-cb_catch.obj
+ver.obj
 command
 		# no map file
 $(SUPPL_LIB_PATH)\suppl_s.lib +

@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.10  2002/05/11 22:50:32  skaus
+# v0.83 Beta 40:
+# bugfix: ^Break detection after XMS-Swapping
+#
 # Revision 1.9  2002/05/11 22:10:40  skaus
 # v0.83 Beta 40:
 # bugfix: ^Break detection after XMS-Swapping
@@ -174,8 +178,13 @@ clobber : clean
 clean :
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com tags errlist
 
+.IF $(XMS_SWAP) == $(NULL)
+
 command.mak : makefile command.m1 command.m2
 	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(LD) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@
 
+ALL_OBJ = $(XMS_SWAP_ADD_OBJ) $(OBJ:s/cb_catch.obj//)
 xms-swap.mak : makefile command.m1 command.m2
-	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") $(XMS_SWAP_PRE_OBJ)\n\t\44(LD) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(XMS_SWAP_PRE_OBJ)+\n$(OBJ:t"+\\n")\n) + command.m2 $@
+	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(ALL_OBJ:t" \\\\\\n\\t") $(XMS_SWAP_PRE_OBJ)\n\t\44(LD) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(XMS_SWAP_PRE_OBJ)+\n$(ALL_OBJ:t"+\\n")\n) + command.m2 $@
+
+.ENDIF
