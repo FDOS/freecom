@@ -1,3 +1,4 @@
+fix: typo
 upd: documentation: batch processing, Bugzilla
 bugfix: documentation of wildcards [#1727]
 fix: get_redirection(): double comment mark /* {Arkady V.Belousov}
