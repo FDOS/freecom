@@ -4,7 +4,7 @@ set DBG=Yes
 set DBG=
 
 : don't forget to pass on the default rather than mine
-copy config.mak.default config.mak
+copy config.dflt config.mak
 
 for %pkg in (binary debug plainedt) for %fnam in (ptchldrv.exe ptchsize.exe kssf.com vspawn.com command.com) (set fn=packages\%pkg.std\%fnam %+ if exist %fn del /q %fn)
 
@@ -15,7 +15,7 @@ if NOT "%DBG%"=="" set _DBG=
 %_DBG setdos /y1 %+ %_DBG echo on
 
 set compiler=tc101
-: set compiler=bc5
+set compiler=bc5
 set lng=english
 
 iff exist config.h.backup then
@@ -44,7 +44,7 @@ set ndebug=
 set debug=1
 
 %_DBG setdos /y0 %+ %_DBG echo off
-dmake || quit
+dmake MODEL!:=l || quit
 %_DBG setdos /y1 %+ %_DBG echo on
 : pause
 
@@ -58,6 +58,7 @@ for %file in (tools\kssf.com tools\vspawn.com tools\ptchldrv.exe tools\ptchsize.
 : Disable all debug stuff
 set ndebug=Yes
 set debug=
+set compiler=tc101
 
 ren /q config.h config.h.backup || cancel 20
 echo #define IGNORE_ENHANCED_INPUT >config.h
@@ -79,6 +80,7 @@ if exist com.com goto ende
 : pause
 
 
+touch config.h
 %_DBG setdos /y0 %+ %_DBG echo off
 dmake -W config.h || quit
 %_DBG setdos /y1 %+ %_DBG echo on
@@ -86,7 +88,7 @@ dmake -W config.h || quit
 for %file in (tools\kssf.com tools\vspawn.com tools\ptchldrv.exe tools\ptchsize.exe) (if exist %file copy %file packages\plainedt.std\ %+ if exist %file move %file packages\binary.std\ %+ if exist %file goto ende)
 
 if not exist com.com goto ende
-copy /b com.exe + criter.mod\criter + criter.mod\criter1 command.cln
+copy /b shell\com.exe +infores + criter\criter + criter\criter1 command.cln
 ren com.com command.com
 if exist com.com goto ende
 
@@ -103,12 +105,11 @@ perl db2html
 perl parseHTML
 popd
 
+: %_DBG echo on %+ setdos /y1
 call mkpkgs.bat
 
 %_DBG setdos /y0 %+ %_DBG echo off
-dmake clean || quit
-
-dmake command.mak || quit
+dmake clean dist || quit
 %_DBG setdos /y1 %+ %_DBG echo on
 
 rm -frd old

@@ -75,7 +75,9 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 	_setcursortype(_NORMALCURSOR);
 
+#ifdef FEATURE_HISTORY
 	histGet(histLevel - 1, prvLine, sizeof(prvLine));
+#endif
 
 	do {
 		ch = cgetchar();

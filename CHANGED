@@ -1,3 +1,5 @@
+fix: cmdinput.c: first histGet() is not #if'ed
+chg: new directory structure
 chg: If DEBUG enabled, no available commands are displayed on startup
 fix: PTCHSIZE also patches min extra size to force to have this amount
    of memory available on start
