@@ -1,5 +1,6 @@
+bugfix: PROMPT $T: hour: space padded; fraction zero padded [#1481]
 bugfix: command line scanner: must accept ' and ` as filename characters
-	hence dropping them as quote character
+	hence dropping them as quote character [#1244]
 bugfix: DIR: /4 synonym for /Y [#937]
 bugfix: COPY: remove created files on error [#756]
 fix: COPY: broken wildcarded source pattern

@@ -7,9 +7,12 @@
 	This file bases on NLS.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2003/03/11 20:01:14  skaus
+	bugfix: PROMPT $T: hour: space padded; fraction zero padded [#1481]
+
 	Revision 1.3  2001/06/12 22:56:59  skaus
 	bugfix: nls_maketime(): 12hour display does not free AM/PM id
-
+	
 	Revision 1.2  2001/04/29 11:33:51  skaus
 	chg: default heap size (tools\ptchsize) set to 6KB
 	chg: error displaying functions centralized into lib\err_fcts.src
@@ -87,7 +90,7 @@ char *nls_maketime(int mode, int hour, int minute, int second, int fraction)
 		i = sprintf(p = buf, "%2u%s%02u", hour, sep, minute);
 	} else {
 		/** Warning: unreachable code -- if !defined(NLS) **/
-		i = sprintf(p = buf, "%02u%s%02u", hour, sep, minute);
+		i = sprintf(p = buf, "%2u%s%02u", hour, sep, minute);
 	}
 
 	assert(strlen(buf) < sizeof(buf));
@@ -97,8 +100,12 @@ char *nls_maketime(int mode, int hour, int minute, int second, int fraction)
 		i = sprintf(p += i, "%s%02u", sep, second);
 		if(i == EOF) return 0;
 		if(fraction) {
-			i = sprintf(p += i, "%s%u", dsep, fraction);
+			i = sprintf(p += i, "%s%-2u", dsep, fraction);
 			if(i == EOF) return 0;
+			{	char *q = p + i;
+				while(*--q == ' ')
+					*q = '0';
+			}
 		}
 	}
 
