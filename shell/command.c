@@ -276,13 +276,11 @@ static void docommand(char *line)
         return;
       }
 
+        currCmdHelpScreen = cmdptr->help_id;
         /* JPP this will print help for any command */
-        if (strstr(rest, "/?"))
-        {
-          displayString(cmdptr->help_id);
-        }
-        else
-        {
+        if(memcmp(ltrimcl(rest), "/?", 2) == 0)  {
+          displayString(currCmdHelpScreen);
+        } else {
           dprintf(("CMD '%s' : '%s'\n", com, rest));
           cmdptr->func(rest);
         }
@@ -641,6 +639,9 @@ int process_input(int xflag, char *commandline)
       tracemode = 0;          /* reset trace mode */
       }
     }
+
+    	/* Make sure there is no left-over from last run */
+    currCmdHelpScreen = 0;
 
     /* 
      * The question mark '?' has a double meaning:

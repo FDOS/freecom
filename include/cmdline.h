@@ -22,6 +22,9 @@
 /* Test if an argument is an option */
 #define isoption(string)  isoptch(*(string))
 
+/* String ID of helpscreen of current internal command */
+extern unsigned currCmdHelpScreen;
+
 /* Trimming command line (arguments) basing on isargdelim() */
 char *trimcl(char *str);
 char *ltrimcl(const char *str);

@@ -7,6 +7,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2002/11/06 20:36:37  skaus
+	bugfix: /?: found on all the command line
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -30,7 +33,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -42,6 +45,8 @@
 #include "../include/command.h"
 #include "../include/cmdline.h"
 #include "../err_fcts.h"
+
+unsigned currCmdHelpScreen = 0;
 
 int scanOption(optScanner fct, void * const ag, char *rest)
 {
@@ -63,6 +68,11 @@ int scanOption(optScanner fct, void * const ag, char *rest)
   if(!isprint(ch = toupper(*line)) || strchr("-+=:", ch)) {
     error_illformed_option(rest);
     return E_Useage;
+  }
+
+  if(ch == '?' && currCmdHelpScreen) {
+  	displayString(currCmdHelpScreen);
+  	return E_Help;
   }
 
   if((optend = strpbrk(line, "=:")) != 0) {  /* option has argument */
