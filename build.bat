@@ -36,6 +36,23 @@ if "%lng%"=="" set LNG=english
 echo Building FreeCOM for lanaguage %LNG%
 
 echo.
+echo Checking SUPPL library
+cd suppl
+if exist skip goto endSuppl
+echo Building SUPPL library
+if exist compile.me del compile.me >NUL
+make -fsuppl.mak all
+if errorlevel 1 goto ende
+if exist compile.me call do_suppl.bat
+if errorlevel 1 goto ende
+if not exist all_done goto ende
+if exist compile.bat del compile.bat >NUL
+if exist linkme.bat del linkme.bat >NUL
+if exist suppl.bat del suppl.bat >NUL
+:endSuppl
+cd ..
+
+echo.
 echo Making basic utilities for build process
 echo.
 cd utils

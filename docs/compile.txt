@@ -26,6 +26,9 @@ The .COM file is the stand-alone application, which includes the
 strings etc, whereas COMMAND.EXE is the pure executable without the
 strings table for instance.
 
+NOTE: A message like "Fatal: command line too long" was always caused
+during my tests by an invalid settings in CONFIG.MAK, esp. CC_BASE_PATH
+and NAMS!
 
 CONFIG.MAK
 
@@ -42,12 +45,12 @@ STRINGS.MAK respectively.
 SUPPL_INC_PATH / SUPPL_LIB_PATH
 To compile this version of command.com, you have to add the SUPPL library.
 SUPPL_INC_PATH points to the directory with all the header files, whereas
-SUPPL_LIB_PATH contains the pre-compiled library (SUPPL_S.LIB). If you
-have downloaded SUPPL.ZIP from:
-http://freedos.sourceforge.net/freecom/packages/suppl.zip
+SUPPL_LIB_PATH contains the pre-compiled library (SUPPL_S.LIB). Due to
+popular demand, a variant of SUPPL is integrated into the FreeCOM release
+and both settings are pre-configured so that the BUILD.BAT script will
+pick up the library automatically. Note: See the SUPPL\README.TXT file,
+if you wish to NOT use the integrated SUPPL variant.
 
-and if you have extracted the contents into the FreeCOM directory,
-the default values (.\SUPPL) are OK.
 
 Update NASM and NASMFLAGS as needed.
 
@@ -69,13 +72,15 @@ To compile the SUPPL library as well do this:
 + download the source code from where SUPPL\README.TXT points to
 + use one of the COMPILER\* preparations -or-
   : DEL cfg*.*
+  : DEL STRBOOL*.*
   : DEL t.c
+  : CALL MKDYNSRC.BAT
   : compile all remaining *.c files
   : check if it is necessary to meddle with any of the assembly files
     and compile them if needed
   : archive all created object files -- usually named .OBJ or .O --
     into a library named SUPPL_#, where # is S for Small memory
     model or L for Large.
-+ copy all the *.H files and the library from the SUPPL release into 
-  FREECOM\SUPPL -or-
++ copy all the INCLUDE\*.H files and the library from the SUPPL release
+  into FREECOM\SUPPL -or-
   update CONFIG.MAK to let SUPPL_???_PATH point to the SUPPL directory

@@ -1,4 +1,7 @@
 @echo off
+cd suppl
+call clnsuppl.bat
+cd ..
 del lastmake.mk
 del CONTEXT.H_C
 del CONTEXT.INC

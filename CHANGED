@@ -1,3 +1,4 @@
+chg: SUPPL: integrate a stripoped down variant of SUPPL into CVS {Tom Ehlert} [#1794]
 add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
 fix: CLS: cut debug message
 add: DIR: display LFNs if enabled with /lfn [Tom Ehlert]

@@ -5,8 +5,8 @@ ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/ALPHA
 -or-
 http://www2.inf.fh-rhein-sieg.de/~skaise2a/ska/sources.html#suppl
 
-A version pre-compiled for Turbo-C++ v1.01 can be downloaded
-from http://freedos.sourceforge.net/freecom/packages/suppl.zip
-
-The last revision of SUPPL linked to FreeCOM was created on
-Time stamp: GMT Mon Jul 29 20:42:20 2002
+A stripped down variant of SUPPL has been included into the FreeCOM
+release, because of several complains about the wicked process of
+compilation. You can bypass the FreeCOM-build.bat sense of SUPPL
+by creating a file called "SKIP" in this directory (<<FreeCOM-Root>>\SUPPL).
+That way, you can use your own SUPPL, e.g. a newer release of it.
