@@ -1,3 +1,4 @@
+fix: DIR: /O default sort order
 add: DEL: /V option [#1587]
 chg: tracemode: print prompt prior command [#1487]
 add: CALL /Y: To enable tracemode during command

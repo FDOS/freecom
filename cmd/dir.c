@@ -195,6 +195,7 @@
 #define ORDER_DIRS_FIRST 0x20
 #define ORDER_DIRS_LAST 0x40
 #define ORDER_BY_MASK 0x1e    
+#define DEFAULT_SORT_ORDER "NG"
 
 unsigned char optOdir = 0;
 char optOorderby[5];	/* Array: One byte longer than order methods,
@@ -272,6 +273,9 @@ done:
     
 static scanOrder(const char *p)
 {
+	if(!p || !*p)
+		p = DEFAULT_SORT_ORDER;
+
 restart:	
 	memset(optOorderby, 0, sizeof(optOorderby));
 	optOdir = 0;

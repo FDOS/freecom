@@ -51,7 +51,8 @@ the serial number, totals etc. are suppressed. In combination with
 <OPT>/S</OPT> the absolute path of the files is displayed.
 <LI><OPT>/L</OPT>: (Lower-case) Filenames are displayed in lower-case
 letters rather than capitol ones.
-<LI><OPT>/O</OPT>: (Order) Sort the entries displayed in a specific order.
+<LI><OPT>/O</OPT>: (Order default) is a synonym of <OPT>/ONG</OPT>.
+<LI><OPT>/O**</OPT>: (Order) Sort the entries displayed in a specific order.
 	The following sort orders are supported:
 	<UL>
 	<LI><OPT>D</OPT> sort by last modification <B>d</B>ate (earliest first)

@@ -1041,7 +1041,7 @@ ERASE [drive:][path]filename [/P] [/V]
   /V	Displays all deleted files.
 .
 
-:TEXT_CMDHELP_DIR#3
+:TEXT_CMDHELP_DIR#4
 Displays a list of files and subdirectories in a directory.
 
 DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
@@ -1052,19 +1052,19 @@ DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
             (Could be enhanced file specification or multiple filespecs.)
  /P         Pauses after each screenful of information.
  /W         Uses wide list format.
- /A         Displays files with specified attributes.
+ /A         Displays files with specified attributes. (Defaults to /ADHSRA)
  attributes  D  Directories                R  Read-only files
              H  Hidden files               A  Files ready for archiving
              S  System files               -  Prefix meaning not
- /O         List by files in sorted order. [NO COMBINATIONS IMPLEMENTED, YET]
+ /O         List by files in sorted order.
  sortorder   N  By name (alphabetic)       S  By size (smallest first)
              E  By extension (alphabetic)  D  By date & time (earliest first)
              G  Group directories first    -  Prefix to reverse order
-             U  Unsorted
+             U  Unsorted		   Defaults to /ONG
  /S         Displays files in specified directory and all subdirectories.
  /B         Uses bare format (no heading information or summary).
  /L         Uses lowercase.
- /Y         Display 4-digit year.
+ /Y or /4   Display 4-digit year.
 
 Switches may be preset in the DIRCMD environment variable.  Override
 preset switches by prefixing any switch with - (hyphen)--for example, /-W.
