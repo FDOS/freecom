@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_quoted_c_k
-void error_quoted_c_k(void)
-{	displayError(TEXT_QUOTED_C_OR_K);
+#undef error_init_fully_qualified
+void error_init_fully_qualified(const char * const s)
+{	displayError(TEXT_INIT_FULLY_QUALIFIED, s);
 }

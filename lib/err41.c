@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_l_notimplemented
-void error_l_notimplemented(void)
-{	displayError(TEXT_ERROR_L_NOTIMPLEMENTED);
+#undef error_quoted_c_k
+void error_quoted_c_k(void)
+{	displayError(TEXT_QUOTED_C_OR_K);
 }

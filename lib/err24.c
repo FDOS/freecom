@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_close_quote
-void error_close_quote(int quote)
-{	displayError(TEXT_ERROR_CLOSE_QUOTE, quote);
+#undef error_long_mux_line
+void error_long_mux_line(void)
+{	displayError(TEXT_ERROR_MUX_TOO_LONG);
 }

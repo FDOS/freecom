@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_for_no_command
-void error_for_no_command(void)
-{	displayError(TEXT_ERROR_NO_COMMAND_AFTER_DO);
+#undef error_for_do
+void error_for_do(void)
+{	displayError(TEXT_ERROR_DO_MISSING);
 }

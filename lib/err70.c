@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_unknown
-void error_unknown(int err)
-{	displayError(TEXT_ERROR_UNDEFINED_ERROR, err);
+#undef error_bad_mcb_chain
+void error_bad_mcb_chain(void)
+{	displayError(TEXT_ERROR_BAD_MCB_CHAIN);
 }

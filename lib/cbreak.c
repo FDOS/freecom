@@ -6,6 +6,9 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
+	Update #1
+
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -40,9 +43,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "../include/batch.h"
 #include "../include/misc.h"
 #include "../include/command.h"
+#include "../include/context.h"
 #include "../strings.h"
 
 int chkCBreak(int mode)
@@ -56,7 +59,7 @@ int chkCBreak(int mode)
       return 0;
 
     case 0:
-      if (!bc)
+      if (!ctxtFlags.f_batchlevel)
         goto justCheck;
 
     case BREAK_BATCHFILE:
@@ -69,21 +72,22 @@ int chkCBreak(int mode)
       	Therefore userprompt() is not we need. */
       {	char *fmt, *chars;
       	int ch;
+      	ctxtEC_Batch_t far *bc = ecLastF();
 
       	if(!getPromptString(PROMPT_CANCEL_BATCH, &chars, &fmt)) {
       			/* Fatal error <-> Terminate all batches */
       		leaveAll = 1;
       		break;
       	}
-      	if(bc && bc->bfnam)
-			cprintf(fmt, bc->bfnam);
+      	if(bc)
+			cprintf(fmt, bc->ec_fname);
       	else {
       		char *fnam;
 
       		if((fnam = getString(TEXT_UNKNOWN_FILENAME)) == 0)
-      			cprintf(fmt, "<<unknown>>");
+      			cprintf(fmt, (char far*)"<<unknown>>");
       		else {
-				cprintf(fmt, fnam);
+				cprintf(fmt, (char far*)fnam);
 				free(fnam);
 			}
 		}

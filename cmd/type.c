@@ -1,22 +1,6 @@
 /*
  *  TYPE.C - type internal command
  *
- *  Comments:
- *
- *  07/08/1998 (John P. Price)
- *    started.
- *
- * 07/12/98 (Rob Lake)
- *    - Changed error messages
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 10-Aug-1998 ska
- * - added ^Break checking
- *
- * 1999/01/24 ska
- * add: support for CP/M style device names (openf.h)
  */
 
 #include "../config.h"

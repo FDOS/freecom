@@ -1,28 +1,6 @@
 /*
  *  TIME.C - time internal command
  *
- *  Comments:
- *
- *  07/08/1998 (John P. Price)
- *    started.
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 1999/03/17 ska
- * bugfix: Detection of invalid time strings
- *  One can specify:
- *    ^\s*\d+.\d+(.(\d+(.\d*)?)?)?\s*([aApP]([mM]|\.[mM]\.)?\s*$
- *  If one specifies:
- *    1 number --> error
- *    2 numbers --> hour:minute, seconds & hundreds default to zero
- *    3 numbers --> hour:minute:seconds, hundreds defaults to zero
- *    4 numbers --> hour:minute:seconds.hundreds
- *  The numbers may be delimited by any character from the 7-bit ASCII set,
- *  which is printable, but not alphanumerical.
- *
- * 2001/02/08 ska
- * add: DATE /D and TIME /T
  */
 
 #include "../config.h"

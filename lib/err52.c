@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_if_errorlevel_number
-void error_if_errorlevel_number(void)
-{	displayError(TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER);
+#undef error_if_errorlevel
+void error_if_errorlevel(void)
+{	displayError(TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER);
 }

@@ -1,153 +1,6 @@
 /*
  *  DIR.C - dir internal command
  *
- *  Comments:
- *
- *  01/29/97 (Tim Norman)
- *    started.
- *
- *  06/13/97 (Tim Norman)
- *    Fixed code.
- *
- *  07/12/97 (Tim Norman)
- *    Fixed bug that caused the root directory to be unlistable
- *
- *  07/12/97 (Marc Desrochers)
- *    Changed to use maxx, maxy instead of findxy()
- *
- *  06/08/98 (Rob Lake)
- *    Added compatibility for /w in dir
- *
- * Compatibility for dir/s started 06/09/98 -- Rob Lake
- * 06/09/98 (Rob Lake)
- * -Tested that program finds directories off root fine
- *
- *
- * 06/10/98 (Rob Lake)
- *      -do_recurse saves the cwd and also stores it in Root
- *      -build_tree adds the cwd to the beginning of
- *   its' entries
- *      -Program runs fine, added print_tree -- works fine.. as EXE,
- *   program won't work properly as COM.
- *
- * 06/11/98 (Rob Lake)
- * -Found problem that caused COM not to work
- *
- * 06/12/98 (Rob Lake)
- *      -debugged...
- *      -added free mem routine
- *
- * 06/13/98 (Rob Lake)
- *      -debugged the free mem routine
- *      -debugged whole thing some more
- *      Notes:
- *      -ReadDir stores Root name and _Read_Dir does the hard work
- *      -PrintDir prints Root and _Print_Dir does the hard work
- *      -KillDir kills Root _after_ _Kill_Dir does the hard work
- *      -Integrated program into DIR.C(this file) and made some same
- *       changes throughout
- *
- * 06/14/98 (Rob Lake)
- *      -Cleaned up code a bit, added comments
- *
- * 06/16/98 (Rob Lake)
- * - Added error checking to my previously added routines
- *
- * 06/17/98 (Rob Lake)
- *      - Rewrote recursive functions, again! Most other recursive
- *      functions are now obsolete -- ReadDir, PrintDir, _Print_Dir,
- *      KillDir and _Kill_Dir.  do_recurse does what PrintDir did
- *      and _Read_Dir did what it did before along with what _Print_Dir
- *      did.  Makes /s a lot faster!
- *  - Reports 2 more files/dirs that DOS actually reports
- *      when used in root directory(is this because dir defaults
- *      to look for read only files?)
- *      - Added support for /b, /a and /l
- *      - Made error message similar to DOS error messages
- * - Added help screen
- *
- * 06/20/98 (Rob Lake)
- * - Added check for /-(switch) to turn off previously defined
- * switches
- * - Added ability to check for DIRCMD in environment and
- * process it
- *
- * 06/21/98 (Rob Lake)
- * - Fixed up /B
- * - Now can dir *.ext/X, no spaces!
- *
- * 06/29/98 (Rob Lake)
- *      - error message now found in command.h
- *
- * 07/08/1998 (John P. Price)
- * - removed extra returns; closer to MSDOS
- * - fixed wide display so that an extra return is not displayed when
- *   there is five filenames in the last line.
- *
- * 07/12/98 (Rob Lake)
- * - Changed error messages
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 09-Aug-1998 (Rob Lake <rlake@cs.mun.ca>)
- * - fixed bug that caused blank lines to be printed
- * - renamed _Read_Dir to Read_Dir
- *
- * 10-Aug-1998 ska
- * - added checks for ^break
- *
- * 03-Dec-1998 John P Price
- * - Rewrote DIR command.  fixed problem with "DIR .COM" and other bugs
- *   Recursive switch does not work now, but it will be added soon.
- *
- * 31-Jan-1999 (John P. Price)
- * - Changed dir_print_header to use function INT21,AH=69 instead of the
- *   function it was using.  I'm not sure if this will fix anything or not.
- *   Also fixed bug with changing and restoring the current drive.
- *
- * 1999/04/23 ska
- * bugfix: cmd_dir(): dircmd can be NULL
- *
- * 25-Apr-1999 (John P. Price)
- * - changed dir so it always shows the bytes free.
- *
- * 29-Apr-1999 (John P. Price)
- * - Changed so that "dir command" with no extension will do as
- *   "dir command.*" (as it should).  Also made the display of the directory
- *   not include the whole filespec, but only the directory
- *
- * 2000/01/05 ska (Reported by Jeremy Greiner 2000/01/03)
- * bugfix: Last modification time displays year 2000 as 100
- *    --> Should be revised to allow 4-digit year
- *    Note: This fix differs from Jeremy Greiner's by that it does
- *    still display a 2-digit year rather than a 4-digit one.
- *    A four-digit year would break all batch files scanning the
- *    output of DIR.
- *
- * 2000/07/07 Ron Cemer
- * Added code to detect a pattern of "." or "" and convert to ".\*.*",
- * to prevent "file not found" errors from command.com when executed
- * from the root of drive C: and "DIR" is typed without any arguments,
- * or if you type "DIR C:" and the current directory on drive C: is \.
- * Also added code to convert \.\ in paths to \ (eliminate the .\ when
- * not needed).  Hopefully this will help to bypass any findfirst/findnext
- * bugs which may exist in the kernel.
- *
- * 2000/07/16 Ron Cemer
- * Fixed "DIR .." or "DIR C:\FREEDOS\COM079\..".
- * Fixed "DIR /S".
- * No longer reallocate the "path" variable in dir_list().  This would break
- * "DIR /S" because dir_list() is recursive and simply tacks on additional
- * subdirectories to the end of the "path" variable.  So the "path" variable
- * must NOT be moving around in memory, so I pre-allocate it to 270 characters
- * to allow plenty of room to tack on subdirectories while recursing.
- * Changed formatting to exactly match DOS's formatting as much as possible,
- * except that the "bytes free" count is still printed in bytes instead of
- * KB or MB.
- *
- * 2001/02/16 ska
- * chg: using STRINGS resource
  */
 
 #include "../config.h"
@@ -165,7 +18,7 @@
 #include <sys/types.h>
 
 /* Not available with TURBOC++ 1.0 or earlier: */
-#if ( (!defined(__TURBOC__)) || (__TURBOC__ > 0x297) )
+#ifdef _TC_LATER_
 #include <dirent.h>
 #endif
 
@@ -640,9 +493,8 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		error_out_of_memory();
 		return E_NoMem;
 	}
-	if((path = realloc(p, 270*sizeof(char))) == 0) {
+	if((path = erealloc(p, 270*sizeof(char))) == 0) {
 		free(p);
-		error_out_of_memory();
 		return E_NoMem;
 	}
 

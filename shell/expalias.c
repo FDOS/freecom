@@ -19,21 +19,22 @@
 #include "../include/misc.h"
 #include "../err_fcts.h"
 
-void aliasexpand(char * const cmd, const int maxlen)
-{	char *hbuf;				/* work buffer */
-	char *cp, *p;
+char *aliasexpand(const char * const Xcmd)
+{	char *cmd;				/* work buffer */
+	char *cp, *p, *name;
 	unsigned ofs, *expanded, *he;
-	int i, numExpanded;
+	int i, numExpanded, newlen;
 
-	assert(cmd);
-	assert(strlen(cmd) < maxlen);
+	assert(Xcmd);
 
-	if((hbuf = malloc(maxlen)) == 0) {
+	if((cmd = strdup(Xcmd)) == 0) {
 		error_out_of_memory();
-		goto errRet;
+		return Xcmd;
 	}
+
 	numExpanded = 0;
 	expanded = 0;
+	name = 0;
 
 redo:						/* iteration to expand all aliases */
 	cp = ltrimcl(cmd);		/* skip leading whitespaces */
@@ -45,16 +46,13 @@ redo:						/* iteration to expand all aliases */
 		goto errRet;
 	}
 
+	free(name);
 	/* Get the name of this command */
-	for(p = hbuf; is_fnchar(*cp) || *cp == '.';)
-		*p++ = *cp++;
-	if(p == hbuf || is_pathdelim(*cp) || is_quote(*cp))
-		/* no name || part of path -> no alias */
+	if((name = getCmdName(&cp)) == 0 || is_pathdelim(*cp))
 		goto errRet;
 
-	*p = 0;
-	StrFUpr(hbuf);			/* all aliases are uppercased */
-	if((ofs = env_findVar(ctxtAlias, hbuf)) == (unsigned)-1)
+	StrFUpr(name);			/* all aliases are uppercased */
+	if((ofs = env_findVar(ctxtAlias, name)) == (unsigned)-1)
 		/* not found -> no alias */
 		goto errRet;
 
@@ -72,18 +70,39 @@ redo:						/* iteration to expand all aliases */
 
 	/************ Expand the command line "cp" with the alias at
 						MK_FP(ctxtAlias, ofs)  ***********************/
-	ofs += strlen(hbuf) + 1;		/* advance to value */
-	if(_fstrlen(MK_FP(ctxtAlias, ofs)) < maxlen - strlen(cp)) {
+	ofs += strlen(name) + 1;		/* advance to value */
+		/* Check that the total command line won't overflow MAX_INT */
+	if((newlen = _fstrlen(MK_FP(ctxtAlias, ofs))) >= 0
+	 && (len = strlen(cp)) >= 0 && ++len > 0 && newlen + len > 0) {
+	 	int dst = cp - cmd;		/* destination index within cmd[] */
+	 	if(newlen > dst) {
+	 		/* need to increase the buffer */
+	 		char *p;
+
+	 		if((p = realloc(cmd, newlen + len)) == 0)
+	 			goto errRet1;
+
+	 		cmd = p;
+	 	}
+	 	/* else ignore to shrink the buffer; it will be done
+	 		automatically with the next ALIAS expansion or when
+	 		this function returns */
+	 	assert(len);
+	 	if(newlen != dst)
+	 		/* need to move the command tail */
+	 		memmove(&cmd[newlen], &cmd[dst], len);
+
 		/* prepend alias value to remaining command line */
-		_fstrcpy(TO_FP(hbuf), MK_FP(ctxtAlias, ofs));
-		strcat(hbuf, cp);
-		strcpy(cmd, hbuf);
+		_fmemcpy(TO_FP(cmd), MK_FP(ctxtAlias, ofs), newlen);
 		goto redo;				/* next expansion */
 	}
 
+errRet1:
 	error_command_too_long();
 
 errRet:							/* return to caller */
 	free(expanded);
-	free(hbuf);
+	free(name);
+
+	return StrTrim(cmd);
 }

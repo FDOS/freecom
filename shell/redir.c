@@ -1,23 +1,30 @@
 /*
  * REDIR.C
  *
- * Comments:
+ * Gets the redirection info from the command line and copies the
+ * file names into ifn and ofn removing them from the command line.
+ * The names are allocated here and passed back to the caller, on
+ * malloc() failure, -1 is returned. These names are trimmed,
+ * meaning they do not contain any leading or trailing whitespaces.
  *
- * 12/15/95 (Tim Norman)
- * started.
+ * The input filenames are prefixed by one '<'.
+ * The output filenames are prefixed by: ((out[]))
+	cmdline	out[]	meaning
+	>		>\2		overwrite, stdout
+	>>		>\3		append, stdout
+	>&		>\6		overwrite, stdout & stderr -- 4dos compatibly
+	>>&		>\7		append, stdout & stderr -- 4dos compatibly
+	>&>		>\4		overwrite, stderr -- 4dos compatibly
+	>>&>	>\5		append, stderr -- 4dos compatibly
  *
- * 12 Jul 98 (Hans B Pufal)
- * - Rewrote to make more efficient and to conform to new command.c and
- *   batch.c processing.
+ * Converts remaining command line into a series of null terminated
+ * strings defined by the pipe char '|'. Each string corresponds
+ * to a single executable command. The pipe array contains a list
+ * of indexes into the string s[]. If a command ends in '|',
+ * both stdout and stderr is to be redirected.
  *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
+ * Return number of command strings found, -1 on failure.
  *
- * 1998/10/27 ska
- * - bugfix: get_redirection() failed for non-paired quotes
- * - changed: joined to loop for checking for pipes & redirections
- * - changed: allocate the filename of redirection here to make the
- *      allocated space fit tightly
  */
 
 #include "../config.h"
@@ -33,107 +40,142 @@
 #include "../include/command.h"
 #include "../err_fcts.h"
 
-static int is_redir(char c)
-{
-  return (c == '<') || (c == '>') || (c == '|');
+/* The order of the strings MUST match the ones of the enum's below */
+static char ** redir[] = {
+	">>&>"
+	, ">>&"
+	, ">&>"
+	, ">&"
+	, ">>"
+	, ">"
+	, "<"
+	, "|&"
+	, "|"
+	, (char*)0
+};
+enum {
+	appErr, appBoth, 
+	ovrErr, ovrBoth,
+	appOut, ovrOut,
+	inIn,
+	pipBoth, pipOut,
+	noRedir
+};
+static char outCode[] = {
+	5, 7,
+	4, 6,
+	3, 2
+};
+
+static prefixOut[] = ">?";
+static prefixIn[] = "<";
+
+static int appEntry(const char * const prefix
+	, char *** const items
+	, int * const numItems
+	, char ** const s)
+{	char **h;
+	char *p, *q, *l;
+	int len;
+
+	assert(items);
+	assert(numItems);
+	assert(s);
+
+	q = skippath(p = ltrimcl(*s));
+	if(q == p) {
+		error_empty_redirection();
+		return 0;
+	}
+	*s = ltrimcl(q);
+
+	if((h = realloc(*items, (*numItems + 1) * sizeof(char*))) == 0) {
+		error_out_of_memory();
+		return 0;
+	}
+	*items = h;
+	if((h[*numItems++] = l
+	 = malloc(Strlen(prefix) + (len = q - p) + 1)) == 0) {
+		error_out_of_memory();
+		return 0;
+	}
+	assert(l);
+	memcpy(Stpcpy(l, prefix), p, len)[len] = 0;
+	h[*numItems] = 0;
 }
 
-int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
-{
-  /*
-   * Gets the redirection info from the command line and copies the
-   * file names into ifn and ofn removing them from the command line.
-   * The names are allocated here and passed back to the caller, on
-   * malloc() failure, -1 is returned. These names are trimmed,
-   * meaning they do not contain any leading or trailing whitespaces.
-   *
-   * Converts remaining command line into a series of null terminated
-   * strings defined by the pipe char '|'. Each string corresponds
-   * to a single executable command. A double null terminates the
-   * command strings.
-   *
-   * Check for, but do not implement, output append redirect.
-   *
-   * Return number of command strings found.
-   *
-   */
+int get_redirection(char * const s
+	, char *** const in
+	, char *** const out
+	, char *** const pipe)
+{	int ch, i, len;
+	int numIn, numOut, num;
+	char *src = s;	/* The command line is compacted by copying */
+	char *dst = s;	/* it byte-wise, skipping redirections */
 
-  int num = 1;
-  int ch;
+	assert(s);
+	assert(in);
+	assert(on);
+	assert(pipe);
 
-  char *dp = s;
-  char *sp = s;
+	num = numIn = numOut = 0;
+	*in = *out = *pipe = 0;
 
-  assert(s);
-  assert(ifn);
-  assert(ofn);
-  assert(ofatt);
+	for(;;) {
+		char *p = skipQuotedWord(src, (char*)0, "<>|");
 
-  /* find and remove all the redirections first */
+		if(dst != src && p != src) {
+			memmove(dst, src, p - src);
+			dst += p - src;
+			src = p;
+		}
 
-  while ((ch = *dp++ = *sp++) != 0)
-    switch (ch)
-    {
-      case '"':
-      case '\'':               /* No redirects inside quotes */
-        {
-          char *p;
-          int len;
+		i = -1;
+		while(redir[++i]
+		 && memcmp(src, redir[i], len = strlen(redir[i])) != 0);
 
-          /* If there is no closing quote, then go to end of line. */
-          if ((p = strchr(sp, ch)) == 0)
-          {
-            p = sp + strlen(sp) - 1;
-          }
+		src += len;
+		switch(i) {
+		case appErr: case appBoth: 
+		case ovrErr: case ovrBoth:
+		case appOut: case ovrOut:
+			prefixOut[1] = outCode[i];
+			if(!appEntry(prefixOut, out, &numOut, &src))
+				goto errRet;
+			break;
 
-          /* closing quote found, move that area */
-          /* need memmove() because both areas overlap each other */
-          memmove(dp, sp, len = p - sp + 1);
-          dp += len;
-          sp += len;
+		case inIn:
+			if(!appEntry(prefixIn, in, &numIn, &src))
+				goto errRet;
+			break;
 
-        }
-        break;
+		case pipBoth:
+			*dst++ = #('|#(';		/* stdout & stderr marker */
+			/**FALL THROUGH**/
+		case pipOut:
+			{	char **p;
 
-      case '<':
-      case '>':
-        {
-          /* MS-DOS ignores multiple redirection symbols and uses the last */
-          /* redirection, so we'll emulate that and not check */
+				*dst++ = 0;				/* Terminate previous command */
+				if((p = realloc(*pipe, (num + 2) * sizeof(char*))) == 0) {
+					error_out_of_memory();
+					goto errRet;
+				}
+				*pipe = p;
+				p[num++] = dst;
+				p[num] = 0;
+			}
+			break;
+		default:
+			assert(i == noRedir);
+			assert(src[-len] == 0);
+			return num;
+		}                           /* end switch */
+	}
 
-          char **op = (ch == '<') ? ifn : ofn;
-          char *p;
+errRet:
+	freep(in);		*in = 0;
+	freep(out);		*out = 0;
+	StrFree_(pipe);
 
-          if ((ch == '>') && (*sp == '>'))      /* Append request ? */
-          {
-            *ofatt = O_CREAT | O_APPEND | O_TEXT | O_WRONLY;
-            sp++;
-          }
-
-          p = sp = ltrimcl(sp);
-
-          while (*sp && !is_redir(*sp) && !isargdelim(*sp)) ++sp;
-          free(*op);            /* ignore any previous one */
-          ch = *sp;
-          *sp = '\0';
-          if ((*op = strdup(p)) == 0)
-          {                     /* out of mem */
-            error_out_of_memory();
-            return -1;
-          }
-
-          *sp = ch;
-          --dp;                 /* ignore the already copied '<' or '>' */
-        }
-        break;
-
-      case '|':
-
-        dp[-1] = '\0';          /* overwrite the already copied '|' */
-        ++num;
-        break;
-
-    }                           /* end switch */
-
-  return num;
+	return -1;
 }

@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_loading_context
-void error_loading_context(void)
-{	displayError(TEXT_ERROR_LOADING_CONTEXT);
+#undef error_alias_no_such
+void error_alias_no_such(const char * const name)
+{	displayError(TEXT_ERROR_ALIAS_NO_SUCH, name);
 }

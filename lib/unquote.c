@@ -9,6 +9,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
+	Update #1
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -40,6 +43,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <dynstr.h>
 
 #include "../include/cmdline.h"
 
@@ -72,13 +77,5 @@ char *unquote(const char *str, const char * const end)
   /* copy the remaining unquoted portion */
   memcpy(h, str, len = end - str);
   h[len] = '\0';
-  /* to not waste one byte per deleted quote use this:
-    h = realloc(newStr, strlen(newStr) + 1);
-    assert(h);
-    return h;
-      -or- if you assume that to shrink can fail
-    return (h = realloc(newStr, strlen(newStr) + 1)) != 0
-      ? h: newStr;
-  */
-  return newStr;
+  return StrTrim(newStr);
 }

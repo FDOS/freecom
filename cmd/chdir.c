@@ -8,5 +8,5 @@
 
 int cmd_chdir(char *param)
 {
-  return cd_dir(param, 0, "CHDIR");
+	return cd_dir(param, 0, "CHDIR");
 }

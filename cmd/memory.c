@@ -42,7 +42,7 @@ int cmd_memory(char *param)
 	displayString(TEXT_MEMORY_ENVIRONMENT
 		, mcb_length(env_glbSeg), env_freeCount(env_glbSeg));
 	displayString(TEXT_MEMORY_CONTEXT
-		, mcb_length(ctxt), env_freeCount(ctxt));
+		, mcb_length(ctxtMain), env_freeCount(ctxtSegm));
 	displayTag(TEXT_MEMORY_CTXT_ALIAS, CTXT_TAG_ALIAS);
 	displayTag(TEXT_MEMORY_CTXT_HISTORY, CTXT_TAG_HISTORY);
 	displayTag(TEXT_MEMORY_CTXT_DIRSTACK, CTXT_TAG_DIRSTACK);

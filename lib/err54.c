@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_alias_out_of_memory
-void error_alias_out_of_memory(void)
-{	displayError(TEXT_ERROR_ALIAS_OUT_OF_MEM);
+#undef error_missing_command
+void error_missing_command(const char * const cmdname)
+{	displayError(TEXT_ERROR_MISSING_COMMAND, cmdname);
 }

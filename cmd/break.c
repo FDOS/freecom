@@ -1,11 +1,6 @@
 /*
  *  BREAK.C - break command.
  *
- *  Comments:
- *
- * 14-Aug-1998 (John P Price)
- *   started.
- *
  */
 
 #include "../config.h"

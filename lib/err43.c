@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_restore_session
-void error_restore_session(void)
-{	displayError(TEXT_ERROR_RESTORE_SESSION);
+#undef error_l_notimplemented
+void error_l_notimplemented(void)
+{	displayError(TEXT_ERROR_L_NOTIMPLEMENTED);
 }

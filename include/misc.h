@@ -13,6 +13,7 @@
 
 #include "../include/datefunc.h"
 #include "../include/timefunc.h"
+#include "../include/message.h"
 
 enum OnOff {		/* ON/OFF tester */
 	OO_Empty = 0,		/* Empty line */
@@ -62,6 +63,12 @@ unsigned allocPermBlk(const unsigned size, const unsigned mode);
 unsigned allocSysBlk(const unsigned size, const unsigned mode);
 void freeSysBlk(const unsigned segm);
 
+/* as their counterpart, the "error_out_of_memory()"
+	had been displayed on error */
+void *emalloc(const size_t len);
+void *erealloc(void *const p, const size_t len);
+void *ecalloc(const size_t num, const size_t len);
+
 char far *_fstpcpy(char far *dst, const char far *src);
 void partstrlower(char *str);
 void readcommandDOS(char * const str, int maxlen);
@@ -85,6 +92,8 @@ int is_empty(const char *s);
 // int is_quote(const int c);
 #define is_quote(c)	((c) == '"')
 char *skipfnam(const char * const fnam);
+char *skippath(const char * const path);
+char *getCmdName(const char ** const cp);
 
 FILE *tempfile(void);
 void rmtmpfile(void);
@@ -97,7 +106,9 @@ void dosSetUMBLinkState(int newState);
 int dosGetAllocStrategy(void);
 void dosSetAllocStrategy(int newState);
 word GetFirstMCB(void);
-
+byte far*getJFTp(void);
+#define getJFTp() (*(byte far* far*)MK_FP(_psp, 0x34))
+#define getJFTlen() (*(word far*)MK_FP(_psp, 0x32))
 
 
 char *curTime(void);
@@ -109,18 +120,6 @@ void displayPrompt(const char *pr);
 void printprompt(void);
 int showcmds(char *rest);
 void grabComFilename(const int warn, const char far * const fnam);
-
-void displayString(unsigned id,...);
-void displayError(unsigned id,...);
-int userprompt(unsigned id,...);
-int getPromptString(unsigned id, char ** const chars, char ** const fmt);
-#define freePromptString(chars,fmt)	free(chars)
-int mapMetakey(const char * const chars, int ch);
-char *getMessage(unsigned id);
-char *defaultMessage(unsigned id);
-char *getString(unsigned id);
-void unloadMsgs(void);
-unsigned msgSegment(void);
 
 char *tmpfn(void);
 char *mktempfile(const char * const path, const char *ext);

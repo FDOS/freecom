@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_illformed_option
-void error_illformed_option(const char * const s)
-{	displayError(TEXT_ERROR_ILLFORMED_OPTION, s);
+#undef error_tempfile
+void error_tempfile(void)
+{	displayError(TEXT_ERROR_TEMPFILE);
 }

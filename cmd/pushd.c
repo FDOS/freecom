@@ -15,23 +15,27 @@
 
 #include "../include/context.h"
 #include "../include/command.h"
+#include "../err_fcts.h"
 #include "../include/misc.h"
 
 int cmd_pushd(char *param)
 {	char *curdir;
+	int rc;
 
-	if((curdir = cwd(0)) != 0) {
-		int rc;
-
-		rc = ctxtPush(CTXT_TAG_DIRSTACK, curdir);
-		free(curdir);
-
-		if(rc == E_None) {
-			/* Change to directory specified on command line */
-			if(param && *param)
-				return cmd_cdd(param);
-			return 0;
-		}
+	if((curdir = cwd(0)) == 0) {
+		error_out_of_memory();
+		return 1;
 	}
+
+	rc = ctxtPush(CTXT_TAG_DIRSTACK, curdir);
+	free(curdir);
+
+	if(rc == E_None) {
+		/* Change to directory specified on command line */
+		if(param && *param)
+			return cmd_cdd(param);
+		return 0;
+	}
+
 	return 1;
 }

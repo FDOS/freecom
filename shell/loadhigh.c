@@ -1,30 +1,5 @@
 /*
  * LOADHIGH.C - command that loads a DOS executable into upper memory.
- *
- *   Comments
- *
- * ??/??/96 (Svante Frey)
- *   began.
- *
- * 01/17/96 (Tim Norman)
- *   plugged into COMMAND.COM
- *
- * 02/05/96 (Tim Norman)
- *   converted to new first/rest calling scheme
- *
- * 08/27/96 (Tim Norman)
- *   removed support for - as a switch character
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 2000/07/05 Ron Cemer
- *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
- *
- * 2001/02/14 ska
- *	chg: made all helper functions and variables 'static'
- *	chg: clean up code to not implement some functions twice
- *	chg: reduced some static variables
  */
 
 #include "../config.h"

@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_command_too_long
-void error_command_too_long(void)
-{	displayError(TEXT_ERROR_COMMAND_TOO_LONG);
+#undef error_long_alias_line
+void error_long_alias_line(void)
+{	displayError(TEXT_ERROR_ALIAS_LINE_TOO_LONG);
 }

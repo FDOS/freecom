@@ -392,7 +392,31 @@ int initialize(void)
     displayString(TEXT_CMDHELP_COMMAND);
 
   if ((showhelp || exitflag) && canexit)
-    return E_None;
+    return E_Exit;
+
+	/* Check if FreeCOM keeps interactively */
+	if(canexit) {
+		/* the primary context is TERMINATE rather than KEEP_RUNNING */
+		ctxtEC_t far*ec;
+		assert(ctxtMain);
+		ec = ctxtExecContext;
+		assert(ec);
+		assert(ec->ctxt_type == EC_TAG_KEEP_RUNNING);
+		ec->ctxt_type = EC_TAG_TERMINATE;
+		if(spawnAndExit == E_None) {
+			/* keep FreeCOM active --> push the I context */
+			if(ecMkI())
+				return E_NoMem;
+		}
+	}
+	/* else: the KEEP_RUNNING context will add the I context */
+
+  /* Now push the /C or /K option onto the exec stack */
+  if(p) {
+    showinfo = 0;
+    if(ecMkSC(p, (char*)0))
+		return E_NoMem;
+  }
 
   /* Now the /P option can be processed */
 	if(!canexit) {
@@ -404,7 +428,6 @@ int initialize(void)
 		short_version();
 
 		if(skipAUTOEXEC) {		/* /D option */
-			showinfo = 0;
 			displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
 		} else {
 			if(exist(autoexec)) {
@@ -424,16 +447,18 @@ int initialize(void)
 
 				if(key == KEY_F5)
 					displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
-				else
-					process_input(1, autoexec);
+				else if(ecMkSC(autoexec, (char*)0))
+					return E_NoMem;
 			} else {
 				if(user_autoexec)
 					error_sfile_not_found(user_autoexec);
-#ifdef INCLUDE_CMD_DATE
-					cmd_date(0);
-#endif
 #ifdef INCLUDE_CMD_TIME
-					cmd_time(0);
+					if(ecMkHC("TIME", (char*)0))
+						return E_NoMem;
+#endif
+#ifdef INCLUDE_CMD_DATE
+					if(ecMkHC("DATE", (char*)0))
+						return E_NoMem;
 #endif
 			}
 		}
@@ -443,18 +468,11 @@ int initialize(void)
 		assert(user_autoexec == 0);
 	}
 
-  /* Now the /C or /K option can be processed */
-  if (p)
-  {
-    process_input(1, p);
-    return spawnAndExit;
-  }
 
   /* Don't place something here that must be executed after a /K or /C */
 
-  if (showinfo)
-  {
-    short_version();
+  if (showinfo) {	
+  	/* in case of /C | /K | /P showinfo is equal to zero */
 #ifndef DEBUG
     putchar('\n');
     showcmds(0);

@@ -1,8 +1,6 @@
 /*
  *  CTTY.C - ctty command.
  *
- *  Comments:
- *
  *  Current possible problems: -- 2000/01/14 ska
  *
  *  Problem: Only the first three handles are changed to the passed device.
@@ -20,16 +18,6 @@
  *  FreeDOS kernel 2017f passes the DOS1-compatible IO functions to
  *  the handle based ones, so maybe most simply programs will work?!
  *
- * 14 Aug 1998 (John P Price)
- * - Created dummy command.
- *
- * 2000/01/14 ska
- * + Added to change the first three handles to the given device name
- * + Supports only redirection of stdin and stdout, e.g.:
- *    C:\> CTTY COM1 >file
- *  -or-
- *    C:\> echo Hallo | CTTY COM1 | echo du
- *  The CTTY command effects the commands on the _next_ line.
  */
 
 #include "../config.h"
@@ -50,11 +38,9 @@
 static void devAttr(int fd)
 { int attr;
 
-  if((attr = fdattr(fd)) == 0)
-	{
-    dprintf(("[Failed to read attributes of fd #%d]\n", fd));
-	}
-  else {
+  if((attr = fdattr(fd)) == 0) {
+	dprintf(("[Failed to read attributes of fd #%d]\n", fd));
+  } else {
     dbg_print("[fd #%d is", fd);
     if(attr & 0x80) {
       if(attr & 7) {

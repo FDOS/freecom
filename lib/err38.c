@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_corrupt_command_line
-void error_corrupt_command_line(void)
-{	displayError(TEXT_CORRUPT_COMMAND_LINE);
+#undef error_invalid_number
+void error_invalid_number(const char * const s)
+{	displayError(TEXT_INVALID_NUMBER, s);
 }

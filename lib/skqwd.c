@@ -7,6 +7,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.4.1  2001/06/19 20:42:23  skaus
+	Update #1
+
 	Revision 1.2  2001/04/29 11:33:51  skaus
 	chg: default heap size (tools\ptchsize) set to 6KB
 	chg: error displaying functions centralized into lib\err_fcts.src
@@ -18,7 +21,7 @@
 	bugfix: error message on empty redirection
 	bugfix: comma and semicolon ';' are recognized as argument seperators
 		of internal commands
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -55,10 +58,15 @@
 #include "../include/cmdline.h"
 
 char *skipqword(const char *pp, const char * const stop)
+{	return skipQuotedWord(pp, stop, (char*)0);
+}
+char *skipQuotedWord(const char *pp
+	, const char * const stopStr
+	, const char * const stopChr)
 {	size_t len;
 	int quote = 0;
 
-	len = stop? strlen(stop): 0;
+	len = stopStr? strlen(stopStr): 0;
 
 	if(*pp) do {
 		if(quote) {
@@ -66,7 +74,9 @@ char *skipqword(const char *pp, const char * const stop)
 				quote = 0;
 		} else if(strchr(QUOTE_STR, *pp))
 			quote = *pp;
-		else if(len? (memcmp(pp, stop, len) == 0): isargdelim(*pp))
+		else if(len? (memcmp(pp, stopStr, len) == 0)
+		           : stopChr? strchr(stopChr, *pp) != 0
+		                    : isargdelim(*pp))
 			break;
 	} while(*++pp);
 

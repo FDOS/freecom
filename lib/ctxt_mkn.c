@@ -15,6 +15,7 @@ void ctxtMkItemName(char * const name
 	, const unsigned num)
 {	assert(name);
 
+	ctxtCheckInfoTag(tag);
 	if(num)
 		sprintf(name, "%c%04x", (unsigned char)tag, num);
 	else {

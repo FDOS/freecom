@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_leading_plus
-void error_leading_plus(void)
-{	displayError(TEXT_ERROR_LEADING_PLUS);
+#undef error_opt_arg
+void error_opt_arg(const char * const  str)
+{	displayError(TEXT_ERROR_OPT_ARG, str);
 }

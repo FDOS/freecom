@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_no_cwd
-void error_no_cwd(int drive)
-{	displayError(TEXT_ERROR_CWD_FAILED, drvNum(drive) + 'A');
+#undef error_no_rw_device
+void error_no_rw_device(const char * const devname)
+{	displayError(TEXT_ERROR_NORW_DEVICE, devname);
 }

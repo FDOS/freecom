@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_kswap_alias_size
-void error_kswap_alias_size(void)
-{	displayError(TEXT_ERROR_KSWAP_ALIAS_SIZE);
+#undef error_ctty_dup
+void error_ctty_dup(const char * const devname)
+{	displayError(TEXT_ERROR_CTTY_DUP, devname);
 }

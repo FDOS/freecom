@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_goto_label
-void error_goto_label(void)
-{	displayError(TEXT_ERROR_NO_GOTO_LABEL);
+#undef error_for_no_command
+void error_for_no_command(void)
+{	displayError(TEXT_ERROR_NO_COMMAND_AFTER_DO);
 }

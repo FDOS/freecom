@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_alias_insert
-void error_alias_insert(void)
-{	displayError(TEXT_ERROR_ALIAS_INSERT);
+#undef error_alias_out_of_memory
+void error_alias_out_of_memory(void)
+{	displayError(TEXT_ERROR_ALIAS_OUT_OF_MEM);
 }

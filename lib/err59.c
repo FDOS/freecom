@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_no_alias_name
-void error_no_alias_name(const char name[])
-{	displayError(TEXT_ALIAS_INVALID_NAME, name);
+#undef error_dirfct_failed
+void error_dirfct_failed(const char * const fctname, const char * const dirname)
+{	displayError(TEXT_ERROR_DIRFCT_FAILED, fctname, dirname);
 }

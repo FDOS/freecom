@@ -79,6 +79,9 @@ typedef int (* const optScanner)(const char * const chstr, int ch, int bool, con
 
 
 char *skipqword(const char *str, const char * const stop);
+char *skipQuotedWord(const char *pp
+	, const char * const stopStr
+	, const char * const stopChr);
 
 /* Use matchtok() to compare string constants */
 #define match(line,word,len) match_(&(line), (word), (len))

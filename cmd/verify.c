@@ -1,12 +1,6 @@
 /*
  *  VERIFY.C - verify command.
  *
- *  Comments:
- *
- * 31 Jul 1998 (John P Price)
- *   started.
- *
- *
  */
 
 #include "../config.h"

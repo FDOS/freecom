@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_out_of_dos_memory
-void error_out_of_dos_memory(void)
-{	displayError(TEXT_ERROR_OUT_OF_DOS_MEMORY);
+#undef error_no_context_after_swap
+void error_no_context_after_swap(void)
+{	displayError(TEXT_ERROR_CONTEXT_AFTER_SWAP);
 }

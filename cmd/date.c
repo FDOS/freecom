@@ -1,39 +1,6 @@
 /*
  *  DATE.C - date internal command
  *
- *  Comments:
- *
- *  08 Jul 1998 (John P. Price)
- *    started.
- *
- *  20 Jul 1998 (John P. Price)
- *  - corrected number of days for December from 30 to 31.
- *    (Thanx to Steffen Kaiser for bug report)
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 29-Jul-1998 (Rob Lake)
- * - fixed stand-alone mode.  Added Pacific C compatible dos_getdate functions
- *
- * 1999/03/17 ska
- * bugfix: detection for invalid date strings.
- *  Now the whole string must match: ^\s*\d+(.(\d+(.\d*)?)?)?\s*$
- *  The numbers can be delimited by any character from the 7-bit ASCII set,
- *  which is printable, but not alphanumerical.
- *  One need not specify all three parts (in which case the delimiter
- *  may be omitted, too). If one specify;
- *    1 number --> only the day changes
- *    2 numbers --> month/day; year remains unchanged
- *    3 numbers --> month/day/year
- *
- * 2001/02/08 ska
- * chg: two-digit year -> 2000 if less than 80
- * add: DATE /D and TIME /T
- *
- * 2001/02/14 ska
- * fix: years in range 80..199 are promoted to century 1900
- *		allows to parse dates created with year100 bug (by Arkady)
  */
 
 #include "../config.h"

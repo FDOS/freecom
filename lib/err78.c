@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_for_do
-void error_for_do(void)
-{	displayError(TEXT_ERROR_DO_MISSING);
+#undef error_for_parens
+void error_for_parens(void)
+{	displayError(TEXT_ERROR_MISSING_PARENTHESES);
 }

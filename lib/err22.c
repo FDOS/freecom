@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_line_too_long
-void error_line_too_long(void)
-{	displayError(TEXT_ERROR_LINE_TOO_LONG);
+#undef error_long_internal_line
+void error_long_internal_line(void)
+{	displayError(TEXT_ERROR_ILINE_TOO_LONG);
 }

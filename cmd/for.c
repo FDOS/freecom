@@ -1,25 +1,12 @@
 /*
  *  FOR.C - for command.
  *
- *  Comments:
- *
- * 16 Jul 1998 (Hans B Pufal)
- *   started.
- *
- * 16 Jul 1998 (John P Price)
- *   Seperated commands into individual files.
- *
- * 19 Jul 1998 (Hans B Pufal) [HBP_001]
- *   Implementation of FOR
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 10-Aug-1998 ska
- * - added malloc() checking
- *
- * 1999/04/23 ska
- * bugfix: cmd_for(): missing out-of-memory check with batch_params()
+ *	Synopsises:
+ *		a) FOR { '%' } v  IN (...) DO ...
+ *		b) FOR [{ '%' }] name [ '%' ] IN (...) DO ...
+ *	v ::= a single alphabetic character
+ *	name ::= a name; at least two characters that may be used in
+ *		filenames as well; name != "IN"
  */
 
 #include "../config.h"
@@ -30,98 +17,197 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/batch.h"
 #include "../include/cmdline.h"
 #include "../include/command.h"
+#include "../include/context.h"
 #include "../err_fcts.h"
 #include "../strings.h"
+
+	/* If set --> toupper(varE[-1]) */
+#define FLAG_HACKERY_FOR 1
+
+typedef enum {
+	OK, badVar, noIN, noParens, noDO, noCMD
+} forErrors;
+
+static forErrors checkFOR(char * param
+	, char ** varS, char ** varE
+	, char ** paramS, char ** paramE
+	, char ** cmd, int *flags)
+{
+	assert(param);
+
+	assert(varS);
+	assert(varE);
+	assert(paramS);
+	assert(paramE);
+	assert(cmd);
+	assert(flags);
+
+	*flags = 0;
+	/* Check that first element is % then an alpha char followed by space */
+
+	*varS = param;
+	if(*param == '%') { 	/* Check for FOR %%%%v IN syntax */
+		while(*++param == '%');
+		if(isalpha(*param) && isargdelim(param[1])) {
+			/* hackery FOR variable */
+			*flags |= FLAG_HACKERY_FOR;
+			*varE = ++param;
+			goto varfound;
+		}
+	}
+
+	/* Use a normal variable; strip leading %'s */
+	param = skipfnam(*varS = param);
+	if(*param == '%')		/* ignore _one_ trailing percent sign */
+		*varE = param++;
+	if(!*param || !isargdelim(*param) || memicmp(*varS, "IN", 3) == 0
+	 || varE - varS < 2) {
+		return badVar;
+	}
+
+varfound:
+	param = ltrimcl(param + 1);   /* skip whitespaces */
+
+	/* Check next element is 'IN' */
+	if(!matchtok(param, "in")) {
+		return noIN;
+	}
+
+	/* Followed by a '(', find also matching ')' */
+	if(*param != '(' || 0 == (*paramE = strchr(param, ')')))
+		return noParens;
+
+	*paramS = param + 1;
+	param = ltrimcl(*paramE + 1);
+
+	/* Check if DO follows */
+	if(!matchtok(param, "do"))
+		return noDO;
+
+	/* Check that command tail is not empty */
+	if(!*param)
+		return noCMD;
+
+	*cmd = param;
+	return OK;
+}
+
+static int doFOR(char *var, char *varE, char *param, char *paramE
+	, char *cmd, int flags)
+{	char *oldContents;
+	int rv;
+
+	assert(var);
+	assert(varE);
+	assert(param);
+	assert(paramE);
+	assert(cmd);
+
+	*varE-- = 0;
+	*paramE = 0;
+	if(flags & FLAG_HACKERY_FOR)
+		*varE = toupper(*varE);
+
+	rv = E_None;
+
+/* OK all is correct, build the exec contexts */
+	/* 1st: C/FORVAR|SET hidden context */
+	if(*var == '%') {	/* special FOR variable */
+		var[-1] = CTXT_TAG_IVAR;
+		switch(ctxtGetS(1, CTXT_TAG_IVAR, var - 1, &oldContents)) {
+#ifdef DEBUG
+		default:
+			dprintf(("[FOR: Invalid return value from ctxtGetS]\n"));
+			rv = E_None;
+			break;
+		case 1:		/* no such item */
+#else
+		default:
+#endif
+			rv = ecMkHC("IVAR ", var, (char*)0);	/* kill the variable */
+			break;
+		case 0:		/* Got it */
+			rv = ecMkHC("IVAR ", var, "=", oldContents, (char*)0);
+			free(oldContents);
+			break;
+		case 2:	/* Out of memory */
+			error_out_of_memory();
+			return 1;
+		}
+	} else {			/* normal variable */
+		oldContents = getEnv(var);
+			/* getEnv() will also update the var array with the current
+				case of the particular characters */
+		rv = ecMkHC("SET /C ", var, "=", oldContents, (char*)0);
+	}
+
+	if(rv != E_None)
+		return rv;
+
+	/* Make the F context */
+	return ecMkF(param, var, cmd);
+}
+
 
 int cmd_for(char *param)
 {
 	/*
-	 * Perform FOR command.
-	 *
 	 * First check syntax is correct : FOR %v IN ( <list> ) DO <command>
 	 *   v must be alphabetic, <command> must not be empty.
 	 *
-	 * If all is correct build a new bcontext structure which preserves
-	 *   the necessary information so that readbatchline can expand
-	 *   each the command prototype for each list element.
+	 * If all is correct build a new F exec context.
+	 * If also preserves the old contents of the FOR variable
 	 *
-	 * You might look on a FOR as being a called batch file with one line
-	 *   per list element.
+	 *	var := name of FOR variable
+	 *	param := parameters within '(...)'
+	 *	cmd := command
 	 */
 
-	char *pp;
-	char var;
+	char *var, *varE, *cmd, *paramE;
+	int flags;
 
-	assert(param);
-
-	/* Check that first element is % then an alpha char followed by space */
-
-	if(*param != '%' || !isalpha(param[1]) || !isargdelim(param[2])) {
+	switch(checkFOR(param, &var, &varE, &param, &paramE, &cmd, &flags)) {
+	case badVar:
 		error_for_bad_var();
 		return 1;
-	}
-
-	var = param[1];               /* Save FOR var name */
-	param = ltrimcl(param + 2);   /* skip whitespaces */
-
-	/* Check next element is 'IN' */
-
-	if(!matchtok(param, "in")) {
+	case noIN:
 		error_for_in();
 		return 1;
-	}
-
-	/* Folowed by a '(', find also matching ')' */
-
-	if(*param != '(' || 0 == (pp = strchr(param, ')'))) {
+	case noParens:
 		error_for_parens();
 		return 1;
-	}
-
-	*pp = '\0';
-	param++;                      /* param now points at null terminated list */
-
-	pp = ltrimcl(pp + 1);
-
-	/* Check DO follows */
-
-	if(!matchtok(pp, "do")) {
+	case noDO:
 		error_for_do();
 		return 1;
-	}
-
-	/* Check that command tail is not empty */
-
-	if(*pp == '\0') {
-		error_for_no_command();
+	case noCMD:
+		error_missing_command("FOR");
 		return 1;
+#ifdef DEBUG
+	case OK:
+		break;
+	default:
+		dprintf(("FOR: Invalid return value from checkFOR()]\n"));
+		return 1;
+#endif
 	}
 
-	/* OK all is correct, build a bcontext.... */
+	return doFOR(var, varE, param, paramE, cmd, flags);
+}
 
-	{
-		struct bcontext *new = newBatchContext();
+int cmd_for_hackery(const char *Xparam)
+{	char *param;
+	char *var, *varE, *cmd, *paramE;
+	int flags;
 
-		if(!new)
-			return 1;
+	if(checkFOR((char*)Xparam, &var, &varE, &param, &paramE, &cmd, &flags)
+	 != OK)
+		return 0;
 
-		if((bc->forproto = strdup(pp)) == 0) {
-			error_out_of_memory();
-			exit_batch();   /* remove the newly created batch context */
-			return 1;
-		}
+		/* Ignore the return value as this is a FOR cmd now, but if it
+			fails here, some other error caused it */
+	doFOR(var, varE, param, paramE, cmd, flags);
 
-		if(!setBatchParams(param)) { /* Split out list */
-			exit_batch();
-			return 1;
-		}
-
-		bc->forvar = var;
-		bc->shiftlevel = 1;     /* skip %0 <=> filename */
-	}
-
-	return 0;
+	return 1;
 }

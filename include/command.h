@@ -79,8 +79,9 @@ extern int interactive_command;
 extern int persistentMSGs;
 extern int ctrlBreak;
 extern int exitflag;
-extern unsigned int echo;       /* The echo flag */
-extern int tracemode;                   /* debug script? */
+//extern unsigned int echo;       /* The echo flag */
+//extern int tracemode;                   /* debug script? */
+extern FLAG swap, called, echo, trace;
 extern int autofail;
 extern int canexit, inInit;
 extern int errorlevel;
@@ -97,7 +98,7 @@ void execute(char *, char *);
 void command(char *);
 void parsecommandline(char *);
 int initialize(void);
-void short_version(void);
+void short_version(char *);
 int process_input(int xflg, char *cmdline);
 void perform_exec_result(int rc);
 
@@ -130,10 +131,10 @@ int cmd_type(char *);
 int cmd_ver(char *);
 int cmd_verify(char *);
 int cmd_vol(char *);
-int internal_exit(char *);
-int cmd_pushd(char *);          /*DLP 06/01/2000 */
-int cmd_popd(char *);           /*DLP 06/01/2000 */
-int cmd_dirs(char *);           /*DLP 06/01/2000 */
+int cmd_exit(char *);
+int cmd_pushd(char *);
+int cmd_popd(char *);
+int cmd_dirs(char *);
 int cmd_which(char *);
 void history(int, char *);      /* prototype for the command-line history */
 void complete_filename(char *str, unsigned charcount);
@@ -144,9 +145,7 @@ int show_completion_matches(char *str, unsigned charcount);
 void printprompt(void);
 
 /* prototypes for ALIAS.C */
-void aliasexpand(char *, int);
-int aliasswapout(void);
-int aliasswapin(void);
+char *aliasexpand(char *);
 int cmd_alias(char *);
 
 #define D_ON         "on"
@@ -160,18 +159,32 @@ int cmd_alias(char *);
 	DIR --> passed: "\\/", ignored: ",;="
 	without --> passed: "/", ignored: ",;="
 */
-#define CMD_SPECIAL_ALL 1		/* pass unmodified line into cmd */
-#define CMD_SPECIAL_DIR	2		/* pass directory specific chars into cmd */
-#define CMD_BATCHONLY   4
+#define CMD_SPECIAL_ALL 0x80	/* pass unmodified line into cmd */
+#define CMD_SPECIAL_DIR	0x40	/* pass directory specific chars into cmd */
+#define CMD_BATCHONLY   0x20
 
-struct CMD
-{
+#define CMD_HIDDEN		0x01	/* is command hidden? */
+#define CMD_HIDDEN_DEFAULT	(CMD_HIDDEN << 1)	/* is cmd hidden by dflt? */
+
+struct CMD {
   char *name;
   int flags;
   int (*func) (char *);
   unsigned help_id;
 };
 extern struct CMD internalCommands[];
+
+struct CMD *is_icmd(const char * const);
+
+struct IFCT {
+	char *name;
+	char *(*func)(const char*);
+};
+extern struct IFCT internalFunctions[];
+
+struct IFCT *is_ifct(const char *);
+
+int is_ivar(const char * const, char ** const);
 
 /* New procs in BATCH.C */
 
@@ -182,6 +195,7 @@ char *find_arg(int);
 int cmd_call(char *);
 int cmd_echo(char *);
 int cmd_for(char *);
+int cmd_for_hackery(const char *);
 int cmd_goto(char *);
 int cmd_if(char *);
 int cmd_pause(char *);
@@ -189,7 +203,8 @@ int cmd_shift(char *);
 
 int cmd_beep(char *);
 
-int get_redirection(char *, char **, char **, int *);
+int get_redirection(char *, char *** const, char *** const, char *** const);
+char *expEnvVars(char * const param);
 
 int batch(char *, char *, char *);
 

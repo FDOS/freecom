@@ -1,0 +1,350 @@
+$Id$
+
+Description of the special internal commands
+	-- 2001/06/06 ska
+
+=== Preface
+
+FreeCOM uses execution contexts to keep track of when to continue execution
+in what way. Instead of to create one context for each possible situation,
+complex execution contexts may be splitted into smaller, simplier ones
+using the generic 'C' (aka Command) contexts and this special command.
+
+The special internal commands allow the user to modify internal settings, though, due to its nature
+it is aimed to be used by FreeCOM itself rather than an human and provides
+some "micro-script" capabilities as described below.
+
+They are rather strict in their command line syntax and prompt errors with
+a generic "syntax error" message.
+
+=== Special Internal Commands
+
+The following special internal commands are available:
+
+ICMDS - enable/disable internal commands
+IVAR - set/remove an internal variable
+FD - replace a file descriptor with a saved one
+ARG - set the %1-style arguments currently in effect
+
+Although these commands behave like every other internal command, their
+useage is mostly of internal nature and shouldn't be enabled by the
+user.
+
+
+=== ICMDS
+
+Synopsis:
+	ICMDS { [ '+' | '-' ] cmd }
+
+Enables '+' or disables '-' the internal command 'cmd'.
+It does not effect aliases.
+
+Example:
+C> ICMDS +icmds
+
+Enables the ICMDS command itself. because it is disabled by default,
+it is most probably to be called with:
+
+C> ::=ICMDS +icmds
+
+(see CMT3.TXT)
+
+C> ICMDS -ECHO
+disables the internal ECHO command.
+
+=== IVAR
+
+Synopsis:
+	IVAR name [ '=' [ value ] 
+
+As SET name=value, but the variable is storred in the current dynamic
+context of the FreeCOM instance and is used by the command processor
+in the execution contexts. The value can be retrieved with the variable
+function %@IVAR[name].
+If the equal sign is omitted, the variable is removed.
+
+Special FOR variables are a hack that:
+C> set adam=eva
+C> FOR %a IN (*.*) DO echo %adam%
+let the "%a" be interpreted as the current value FOR has aquired from
+globbing *.*. Unlike normal variables, those FOR variables are not suffixed
+by a precent sign.
+
+In order to support to expand environment variables on interactive
+command lines, too, special actions must be taken to ensure FOR
+variables are expanded; therefore:
+
+C> FOR %%%%%%%%%%%a IN (...) DO cmd
+
+will accepted as valid, but requires that _exactly_ the same number of
+percent signs are used within "cmd" to let the FOR hack kick in.
+
+Multi-letter FOR variables are NOT effected by this hack, as they behave
+exactly as normal environment variables.
+
+Example:
+If the command line parser hits the sequence:
+
+%%%%adam
+
+it tries to find a special FOR variable "%%%%a".
+On success, all fice characters are replaced by the value.
+On failure, the first two percent signs are substituted by a single
+percent sign, as normal; then the parser tries to locate "%%a" a.s.o.
+
+=== FD
+
+Synopsis:
+	FD num_JFT num_SFT
+
+Closes the file descriptor "num_JFT", then assigns "num_SFT" to the
+entry. Note: This is no dup() call!
+
+This command is used to terminate redirections after an execution state
+is popped.
+
+=== ARG
+
+Synopsis:
+	ARG [ shift_level arg0 { arg } ]
+
+
+Resets the %1-style arguments currently in effect. If no argument
+is specified, all arguments are cleared and the shift level is reset to
+zero. Otherwise the arguments are assigned in sequence, the arg0 (%0)
+is required.
+
+=== Example of how the special internal commands are used
+
+1) Calling a batch script
+
+C> CALL batch.bat arg1 arg2
+
+process:
+i) Because the batch file is invoked from command line, the current
+ECHO status must be preserved, because an "ECHO OFF" does not effect
+the command line, but subsequent scripts only.
+Therefore a 'C' (aka Command) context is created to execute:
+@::=ECHO ON
+-or-
+@::=ECHO OFF
+respectively.
+
+ii) CALL forces to create a new execution context that includes that,
+when BATCH.BAT terminates, the currently effective arguments are to be
+re-activated. Therefore, a new 'C' (aka Command) context is created to
+execute the command:
+@::=ARG
+(because there are no arguments when a batch file is called from command
+ line).
+
+iii) then the command line is broken into its components, meaning into
+argv[0] == batch.bat
+argv[1] == arg1
+argv[2] == arg2
+The shift level is reset to zero as these are new arguments.
+These stuff is installed as "argument currently in effect" within the
+dynamic context tag \6.
+
+iv) a 'B' (aka Batch) context is created, with the absolute filename and
+the zeroed file position and line number.
+
+v) the first line is read from the file and the postion and line number
+are updated accordingly.
+
+When the script terminates eventually, the B-context gets popped and
+the next C-context gets current. It will execute the ARG command to
+kill clear the %1-style arguments; then the next C-context is invoked,
+which will reset the ECHO state to whatever the state was before.
+
+If the script had been invoked from another script, the ECHO state is
+not save, because it is to be persistent until the execution reaches
+the interactive command line again; but the "@::=ARG" command will
+have at least two arguments, the current shift level and the current
+%0.
+
+2) Executing pipes
+
+A pipe is a compound command that associates two or more commands together
+like this:
+
+C> cmd1 <in | cmd2 | cmd3 | cmd4 ... >out
+
+The input and output redirections are optional and may be located anywhere
+on the command line; the listed postion above specifies where the redirection
+is applied.
+
+Because DOS is no multitasking system, the commands are not executed
+simultaneously, but the pipes are simulated by files.
+
+A simple pipe cmd1 | cmd2 can be simulated as:
+
+cmd1 > tempfile
+cmd2 < tempfile
+DEL tempfile
+
+And exactly this is done by the parser; then all commands are pushed
+onto the stack in, of course, reversed order:
+
+most current context
+	C @::=IVAR 1=%@TEMPFILE
+	C cmd1 <in >%@IVAR[1]
+	C @::=IVAR 2=%@TEMPFILE
+	C cmd2 <%@IVAR[1] >%@IVAR[2]
+	C @::=DEL %@IVAR[1]
+	C @::=IVAR 1
+	C @::=IVAR 3=%@TEMPFILE
+	C cmd3 <%@IVAR[2] >%@IVAR[3]
+	C @::=DEL %@IVAR[2]
+	C @::=IVAR 2
+	C cmd4 <%@IVAR[3] >out
+	C @::=DEL %@IVAR[3]
+	C @::=IVAR 3
+least current context
+
+After creating all those contexts the executioner pops the most current
+context, which is the C-context to assign the name of a temporary file
+to the internal variable "1"; the next context is another C-context,
+which then executes the -- probably external -- command "cmd1" with the
+input redirection "in" and output redirection into the just generated
+temporary file. a.s.o.
+
+Because the commands themselves contain redirections, their execution
+will temporarily create further execution contexts on the stack, see below.
+
+
+3) Implementing redirections
+
+A redirection is associates the in- or output of a command with a file
+or device; once the command terminates, the original assocations must be
+restored.
+
+E.g.:
+
+C> cmd <in >>out
+
+associates the standard input stream (stdin, fd#0) with the file "in" and
+the standard output stream (stdout, fd#1) with the file "out".
+
+When such command is called from a batch file, e.g.:
+
+C> batch.bat >out1
+
+==BATCH.BAT
+cmd <in2 >out2
+echo Hallo
+==
+
+The output of "cmd" must be written into the file "out2", but ECHO is to
+write into "out1".
+
+The script is started as described in subsection "1)' above, by creating
+a C-context with the current ECHO status, because the script is called from
+the command line.
+
+But instead of to create the next C-context with the @::=ARG command, 
+the redirection ">out1" is applied as follows:
+i) The output redirection changes file descriptor #2; therefore its
+current association must be preserved. A new C-context is created with:
+@::=FD 1 <#>
+Where "1" is effected file descriptor and "<#>" is to represent whatever
+SFT number is currently located at the entry #1 of the JFT.
+
+ii) entry #1 of the JFT is overwritten with 255, indicating a closed (unused)
+file descriptor. Note: The descriptor is _not_ closed via close(), so that
+the currently opened file is kept open and in exactly the current state.
+
+iii) File "out1" is opened in the requested mode (create if it does not
+exist, truncate if it does). If the resulting file descriptor is different
+that 1 (stdout), it is dupto()'ed there and the received one is closed.
+
+Now the redirection is applied and all subsequent output operations will
+write into this file.
+
+current context stack:
+top
+	B abs_path_of_batch.bat,0,0
+	C @::=ARG
+	C @::=FD 1 old_SFT_item
+	C @::=ECHO ON|OFF
+lower end
+
+Now the first line of the batch file is read and interpreted.
+As it contains redirections as well, they are pushed onto the execution
+stack:
+top
+	C @::=FD 1 old_SFT_item_from_fd1
+	C @::=FD 0 old_SFT_item_from_fd0
+	B abs_path_of_batch.bat,15,1
+	C @::=ARG
+	C @::=FD 1 old_SFT_item_from_fd1
+	C @::=ECHO ON|OFF
+lower end
+
+Actually the topmost "old_SFT_item_from_fd1" is the value assoicated with
+file "out1".
+Note: The B-context now says: next line to be read from file position 15,
+which is line number #2 ("1" == one line already read --> line #2 is next).
+
+Once the external (or internal, doesn't actually matter) terminates,
+the topmost C-context restores the output redirection back to "out1" a.s.o.
+
+=== Internal Functions
+
+The general syntax of internal functions is (EBNF-style):
+	'%@' name [ '[' argument ']' | '(' argument ')' ]
+There must be no whitespace between '%', '@', the name and the optional
+argument.
+The difference between the brackets and paranthesises is that the end of the
+argument enclosed in parenthesises is always calcualted _before_ the
+argument is expanded itself, e.g.:
+	%@tempfile(%TEMP%)
+will evaluate to the argument list:
+	argv[0] == "@tempfile"
+	argv[1] == current value of environment variable TEMP
+	argv[2] == ""		(aka empty string)
+
+Bracketed arguments do behave the same currently, but in the future the
+variables are expanded before (or while) the right bracket is searched
+for, e.g. the real argument list of:
+	%@tempfile[%TEMP%]
+varies with the acutal contents of the environment variable TEMP, e.g.:
+	SET TEMP=arg] ahoi
+It evaluates to:
+	%@tempfile[arg] ahoi
+which means:
+	argv[0] == "@tempfile"
+	argv[1] == "arg"
+	argv[2] == ""		(aka empty string)
+and the additional " ahoi" on the command line.
+
+If no argument is specified, the internal function is called with
+an arguments empty.
+If an internal function uses sub-arguments, such as @tempfile, they
+are delimited by the NLS list separator character, usually a comma ','
+or semi-colon ';'.
+
+=== @tempfile[ext,path]
+
+Creates a temporary file in the directory <path> with the extension <ext>.
+If no <path> is specified, %TEMP% is used. If no <ext> is specified, a
+file with no extension is created. The file is created as a zero-length
+file with the hidden-, system- and read-only attribute cleared.
+
+The function returns the absolute filename.
+
+=== @verbatim[string]....string
+
+Ignores any percent characters between the @verbatim function and the
+string or, if not found, the end of the command line. This function
+prevents double expansion of the command line, e.g. when using the
+FOR statement.
+
+If <string> is empty, all the remaining line is effected.
+
+=== @ivar[name]
+
+Returns the contents of the internal variable <name>. An empty <name>
+returns an empty string.
+
+

@@ -1,25 +1,6 @@
 /*
  *  IF.C - if command.
  *
- *  Comments:
- *
- * 16 Jul 1998 (Hans B Pufal)
- *   started.
- *
- * 16 Jul 1998 (John P Price)
- *   Seperated commands into individual files.
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 1999/11/04 ska
- * + bugfix: if: case-insensitive compare  in "==" format
- * + bugfix: if: added support for quoted operands of "==" format
- * + add: if: detailed error messages
- * + bugfix: if: keyword "EXIST" misspelled
- *
- * 2000/07/05 Ron Cemer
- *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  */
 
 #include "../config.h"
@@ -32,7 +13,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/batch.h"
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
@@ -127,7 +107,7 @@ int cmd_if(char *param)
 
 	if(x_flag ^ negate)		/* perform the command */
 		if(!*(pp = ltrimcl(pp)))
-			error_if_command();
+			error_missing_command("IF");
 		else
 			parsecommandline(pp);
 

@@ -17,6 +17,9 @@
 	This file bases on ENVIRON.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
+	Update #1
+
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -40,7 +43,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -53,21 +56,6 @@
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../err_fcts.h"
-
-/* Weight two context items which one uses more memory than
-	acutally is allowed to do so */
-static unsigned long weight(ctxt_info_t *info)
-{	unsigned long n;
-
-	n = (unsigned long)info->c_sizecur << 16;
-	n /= (unsigned)info->c_sizemax;
-	return n;
-}
-/*
-#define weight(info)	\
-	(((unsigned)info->c_sizecur << 16) / (unsigned)info->c_sizemax)
-
-*/
 
 int chgCtxt(const Context_Tag tag, const char * const name, const char * const value)
 {	word segm, ofs;
@@ -85,8 +73,6 @@ int chgCtxt(const Context_Tag tag, const char * const name, const char * const v
 
 	/* Make sure the context has enough room to add the value to */
 	if(newlen > 0) {	/* contents size will grow */
-		ctxt_info_t *hinfo, *dinfo;
-
 		/* aliases may not exceed sizemax */
 		if(tag == CTXT_TAG_ALIAS) {
 			if(CTXT_INFO(CTXT_TAG_ALIAS, sizemax)
@@ -96,41 +82,11 @@ int chgCtxt(const Context_Tag tag, const char * const name, const char * const v
 			}
 		}
 
-		/* Otherwise a removeable entry is removed;
-			those are:
-				oldest item of history
-				oldest item of dirstack */
-		hinfo = segm == ctxtFromTag(CTXT_TAG_HISTORY)
-			? &CTXT_INFO_STRUCT(CTXT_TAG_HISTORY): 0;
-		dinfo = segm == ctxtFromTag(CTXT_TAG_DIRSTACK)
-			? &CTXT_INFO_STRUCT(CTXT_TAG_DIRSTACK): 0;
-		while(env_freeCount(segm) < newlen) {
-			/* There are two structures that can shrink:
-				history & dirstack */
-			if(hinfo && (hinfo->c_sizecur <= hinfo->c_sizemax
-							/* inconsitency of redundant info */
-						|| hinfo->c_nummin >= hinfo->c_nummax))
-				/* in range -> ignore */
-				hinfo = 0;
-			if(dinfo && (dinfo->c_sizecur <= dinfo->c_sizemax
-							/* inconsitency of redundant info */
-						|| dinfo->c_nummin >= dinfo->c_nummax))
-				/* in range -> ignore */
-				dinfo = 0;
-			if(hinfo && dinfo) {		/* Choose one */
-				if(weight(hinfo) < weight(dinfo))
-					ctxtGet(1, CTXT_TAG_DIRSTACK, ++dinfo->c_nummin, 0);
-				else
-					ctxtGet(1, CTXT_TAG_HISTORY, ++hinfo->c_nummin, 0);
-			} else if(dinfo)
-				ctxtGet(1, CTXT_TAG_DIRSTACK, ++dinfo->c_nummin, 0);
-			else if(hinfo)
-				ctxtGet(1, CTXT_TAG_HISTORY, ++hinfo->c_nummin, 0);
-			else { /* no space left */
+		while(newlen > env_freeCount(ctxtSegm))
+			if(ctxtSinglePurge() != E_None) {
 				error_context_out_of_memory();
 				return E_NoMem;
 			}
-		}
 	}
 
 	/* return values 1 and 3 are OK */

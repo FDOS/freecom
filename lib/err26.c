@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_opt_arg
-void error_opt_arg(const char * const  str)
-{	displayError(TEXT_ERROR_OPT_ARG, str);
+#undef error_close_quote
+void error_close_quote(int quote)
+{	displayError(TEXT_ERROR_CLOSE_QUOTE, quote);
 }

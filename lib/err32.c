@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_write_file
-void error_write_file(const char * const fnam)
-{	displayError(TEXT_ERROR_WRITE_FILE, fnam);
+#undef error_open_file
+void error_open_file(const char * const fnam)
+{	displayError(TEXT_ERROR_OPEN_FILE, fnam);
 }

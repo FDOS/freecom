@@ -73,7 +73,7 @@ if($src) {
 
 #include \"../config.h\"
 
-#include \"../include/misc.h\"
+#include \"../include/message.h\"
 #include \"../err_fcts.h\"
 #include \"../strings.h\"
 
@@ -94,7 +94,7 @@ void $header
 	}
 	print MK "\n\n";
 	foreach $i (1..$cnt) {
-		print MK "err$i.obj : err$i.c ../config.h ../strings.h ../err_fcts.h ../include/misc.h\n"
+		print MK "err$i.obj : err$i.c ../config.h ../strings.h ../err_fcts.h ../include/message.h\n"
 	}
 	close MK;
 }

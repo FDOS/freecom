@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_opt_noarg
-void error_opt_noarg(const char * const  str)
-{	displayError(TEXT_ERROR_OPT_NOARG, str);
+#undef error_illformed_option
+void error_illformed_option(const char * const s)
+{	displayError(TEXT_ERROR_ILLFORMED_OPTION, s);
 }

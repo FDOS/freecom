@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_read_file
-void error_read_file(const char * const fnam)
-{	displayError(TEXT_ERROR_READ_FILE, fnam);
+#undef error_trailing_plus
+void error_trailing_plus(void)
+{	displayError(TEXT_ERROR_TRAILING_PLUS);
 }

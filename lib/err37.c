@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_init_fully_qualified
-void error_init_fully_qualified(const char * const s)
-{	displayError(TEXT_INIT_FULLY_QUALIFIED, s);
+#undef dispCopy
+void dispCopy(const char src[], const char dst[], int append)
+{	displayError(TEXT_MSG_COPYING, src, append? "=>>": "=>", dst);
 }

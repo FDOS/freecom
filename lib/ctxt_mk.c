@@ -19,12 +19,12 @@
 #include "../err_fcts.h"
 
 void ctxtCreate(void)
-{	unsigned long length;
+{	unsigned long length;		/* prevent overflow */
 
 	length =
 		MAX_FNAME			/* filename of shell */
 		+ MAX_FNAME			/* filename of external program */
-		+ CTXT_INFO(CTXT_TAG_BATCH, sizemax) * (MAX_FNAME + 10)
+		+ EXEC_CONTEXT_MINIMUM_SIZE
 #ifdef FEATURE_LAST_DIR
 		+ MAX_FNAME
 #endif
@@ -43,14 +43,11 @@ void ctxtCreate(void)
 		error_context_length(length, CONTEXT_MAX_SIZE);
 		length = CONTEXT_MAX_SIZE;
 	}
-	env_resizeCtrl = ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
-	if((ctxt = env_create((unsigned)length)) == 0) {
-		error_out_of_dos_memory();
+
+	if(ctxtChgSize((unsigned)length) != E_None)
 		jmp_fatal(E_NoMem);
-	}
 
-
-	if(ctxtAddStatus(CTXT_TAG_BATCH)
+	if(0
 #ifdef FEATURE_ALIASES
 	 || ctxtAddStatus(CTXT_TAG_ALIAS)
 #endif

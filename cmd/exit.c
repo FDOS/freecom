@@ -6,12 +6,12 @@
 
 #include "../config.h"
 
-#include "../include/command.h"
+#include "../include/context.h"
 
 #pragma argsused
-int internal_exit(char *rest)
+int cmd_exit(char *param)
 {
-  exitflag = 1;
+	ctxtFlags.f_exit = 1;
 
-  return 0;
+	return 0;
 }

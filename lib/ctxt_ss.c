@@ -62,7 +62,7 @@ redo:
 
 void ctxtScanStatus(void)
 {
-	assert(ctxt);
+	assert(ctxtMain);
 
-	env_forAll(ctxt, scan, 0);
+	env_forAll(ctxtSegm, scan, 0);
 }

@@ -1,34 +1,5 @@
 /*
  * VER.C
- *
- *  06/30/98 (Rob Lake)
- *      rewrote ver command to accept switches, now ver alone prints
- *      copyright notice only.
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 30-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added text about where to send bug reports and get updates.
- *
- * 13-Sep-1998 (John P Price <linux-guru@gcfl.net>)
- * - change /r to print info. /d shows redistribution info now.
- *
- * 30-Jan-1999 (John P Price <linux-guru@gcfl.net>)
- * - changed /r to show FreeDOS kernel version
- *
- * 1-Apr-2000 0.79 Henry Voigt <Henry.Voigt@gmx.de>
- * bugfix: ver.c : options uninitilized
- *
- * 2000/06/22 ska
- *	new version: v0.79b
- *
- * 2000/12/10 ska
- *	new minor version: v0.80
- *
- * 2001/02/16 ska
- * bugfix: VER (without option) displays too much information
- * chg: using strings (except FreeCOM's own name)
  */
 
 #include "../config.h"
@@ -44,10 +15,11 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "version 0.83 Beta 14 [" __DATE__ "]";
+const char shellver[] = "version 0.83 Beta 17 expExec branch [" __DATE__ "]";
 const char shellname[] = "FreeCom";
 
-void short_version(void)
+#pragma argsused
+void short_version(char *param)
 {
   printf("\n%s %s\n", shellname, shellver);
 }

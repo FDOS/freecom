@@ -2,12 +2,7 @@
  *  FDDEBUG.C - verify command.
  *
  *  Comments: Turn on/off the debug flag
- *
- * 30-Mar-2000 (John P Price <linux-guru@gcfl.net>)
- *   started.
- *
- * 2001/02/16 ska
- * add: redirect output into file
+ *		& set the logfile
  */
 
 #include "../config.h"

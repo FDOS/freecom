@@ -20,9 +20,14 @@
 #include <io.h>
 #include <sys\stat.h>
 
+#include <dynstr.h>
+#include <mcb.h>
+#include <nls_f.h>
+
 #include "../include/command.h"
-#include "../include/batch.h"
+#include "../include/context.h"
 #include "../include/cmdline.h"
+#include "../include/misc.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 #ifdef FEATURE_NLS
@@ -40,15 +45,13 @@
   /* Shall the message block remain in memory when an external
     program is executed */
 int persistentMSGs = 0;
-int interactive_command = 0;	/* command directly entered by user */
+int interactive = 0;	/* command directly entered by user */
 int exitflag = 0;               /* indicates EXIT was typed */
 int canexit = 0;                /* indicates if this shell is exitable
 									enable within initialize() */
 int ctrlBreak = 0;              /* Ctrl-Break or Ctrl-C hit */
 int errorlevel = 0;             /* Errorlevel of last launched external prog */
 int forceLow = 0;               /* load resident copy into low memory */
-int oldinfd = -1;       /* original file descriptor #0 (stdin) */
-int oldoutfd = -1;        /* original file descriptor #1 (stdout) */
 int autofail = 0;				/* Autofail <-> /F on command line */
 int inInit = 1;
 int isSwapFile = 0;
@@ -80,12 +83,10 @@ void perform_exec_result(int result)
 static void execute(char *first, char *rest)
 {
   /*
-   * This command (in first) was not found in the command table
-   *
+   * Execute an external command or X:.
    *
    * first - first word on command line
    * rest  - rest of command line
-   *
    */
 
   char *fullname;
@@ -94,8 +95,7 @@ static void execute(char *first, char *rest)
   assert(rest);
 
   /* check for a drive change */
-  if ((strcmp(first + 1, ":") == 0) && isalpha(*first))
-  {
+  if((strcmp(first + 1, ":") == 0) && isalpha(*first)) {
   	changeDrive(*first);
     return;
   }
@@ -134,7 +134,7 @@ static void execute(char *first, char *rest)
 
 	if (strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE)
 	{
-		error_line_too_long();
+		error_long_external_line();
 		return;
 	}
 
@@ -158,7 +158,7 @@ static void execute(char *first, char *rest)
 		dprintf(("KSWAP: failed to save context, proceed without swapping\n"));
 #endif
 #endif
-		/* Install the dummy (always abort) handler */
+		/* Install the dummy (always abort) ^Break handler */
 	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
     result = exec(fullname, rest, 0);
 	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
@@ -169,281 +169,515 @@ static void execute(char *first, char *rest)
 
 static void docommand(char *line)
 {
-  /*
-   * look through the internal commands and determine whether or not this
-   * command is one of them.  If it is, call the command.  If not, call
-   * execute to run it as an external program.
-   *
-   * line - the command line of the program to run
-   */
+	/*
+	 * check for forced internal commands, execute the MUX-AE chain, if not;
+	 * look through the internal commands and determine whether or not this
+	 * command is one of them. If it is, call the command. If not, call
+	 * execute() to run it as an external program.
+	 *
+	 * line - the command line of the program to run
+	 */
+
+	FLAG forceInternalCommand;
+	char *name, *rest, *p;
+	struct CMD *cmdptr;
 
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-	/* Duplicate the command line into such buffer in order to
-		allow Installable Commands to alter the command line.
-		*line cannot be modified as pipes would be destroyed. */
-	/* Place both buffers immediately following each other in
-		order to make sure the contents of args can be appended
-		to com without any buffer overflow checks.
-		*2 -> one buffer for com and one for args
-		+2 -> max length byte of com + cur length of com
-		+3 -> max length byte of args + cur length of args + additional '\0'
-	*/
-	char buf[2+2*BUFFER_SIZE_MUX_AE+2+1];
-#define com  (buf + 2)
-#define args (buf + 2 + BUFFER_SIZE_MUX_AE + 2)
-#define BUFFER_SIZE BUFFER_SIZE_MUX_AE
-#else
-	char com[MAX_INTERNAL_COMMAND_SIZE];
-#define BUFFER_SIZE MAX_INTERNAL_COMMAND_SIZE
+	char *newargs;		/* runExtension returns a new command line
+							here, if a MUX-AE client had changed it */
 #endif
-  char *cp;
-  char *rest;            /* pointer to the rest of the command line */
-
-  struct CMD *cmdptr;
 
   assert(line);
 
-  /* delete leading spaces, but keep trailing whitespaces */
-  line = ltrimcl(line);
-
-#ifdef FEATURE_INSTALLABLE_COMMANDS
-#if BUFFER_SIZE < MAX_INTERNAL_COMMAND_SIZE
-	if(strlen(line) > BUFFER_SIZE) {
-		error_line_too_long();
-		return;
+	/* delete leading spaces, but keep trailing whitespaces */
+	line = ltrimcl(line);
+  	forceInternalCommand = 0;
+	if(memcmp(line, "::=", 3) == 0) {
+		forceInternalCommand = 1;
+		line = ltrimcl(line + 3);
+		dprintf(("[Force execution of internal command]\n"));
 	}
-#endif
-	line = strcpy(args, line);
-#endif
 
-  if (*(rest = line))                    /* Anything to do ? */
-  {
-    cp = com;
+	if(*(rest = line) == 0)
+		return;		/* nothing to do */
 
-  /* Copy over 1st word as lower case */
-  /* Internal commands are constructed out of non-delimiter
-  	characters; ? had been parsed already */
-    while(*rest && is_fnchar(*rest) && !strchr(QUOTE_STR, *rest))
-      *cp++ = toupper(*rest++);
+	if((name = getCmdName(&(const char*)rest)) != 0) {
+		if(*rest && strchr(QUOTE_STR, *rest)) {
+			/* If the first word is quoted, it is no internal command */
+			StrFree(name);
+			rest = line;
+		}
+	}
 
-    if(*rest && strchr(QUOTE_STR, *rest))
-      /* If the first word is quoted, it is no internal command */
-      cp = com;   /* invalidate it */
-    *cp = '\0';                 /* Terminate first word */
+	if(!name && !strchr(QUOTE_STR, *rest)) {
+		/* maybe it's a special internal command */
+		if((name = StrChar(*rest)) != 0)
+			++rest;
+	}
+	StrFUpr(name);		/* Pass a mangled name to MUX-AE */
 
-	if(*com) {
 #ifdef FEATURE_INSTALLABLE_COMMANDS
+	newargs = 0;
+	if(!forceInternalCommand && name) {
 		/* Check for installed COMMAND extension */
-		if(runExtension(com, args))
+		if(runExtension(&name, rest, &newargs))
 			return;		/* OK, executed! */
-
-		dprintf( ("[Command on return of Installable Commands check: >%s<]\n", com) );
+		dprintf( ("[Command on return of Installable Commands check: >%s<]\n"
+		 , name) );
+		if(newargs) {
+			rest = newargs;
+			dprintf(("[New arguments: %s]\n", rest));
+		}
+	}
 #endif
 
-		/* Scan internal command table */
-		for (cmdptr = internalCommands
-		 ; cmdptr->name && strcmp(com, cmdptr->name) != 0
-		 ; cmdptr++);
-
-	}
-
-    if(*com && cmdptr->name) {    /* internal command found */
-      switch(cmdptr->flags & (CMD_SPECIAL_ALL | CMD_SPECIAL_DIR)) {
-      case CMD_SPECIAL_ALL: /* pass everything into command */
-        break;
-      case CMD_SPECIAL_DIR: /* pass '\\' & '.' too */
-        if(*rest == '\\' || *rest == '.' || *rest == ':') break;
-      default:        /* pass '/', ignore ',', ';' & '=' */
-        if(!*rest || *rest == '/') break;
-        if(isargdelim(*rest)) {
-			rest = ltrimcl(rest);
+	/* Scan internal command table */
+	if((cmdptr = is_icmd(name)) != 0) {
+		switch(cmdptr->flags & (CMD_SPECIAL_ALL | CMD_SPECIAL_DIR)) {
+		case CMD_SPECIAL_ALL: /* pass everything into command */
 			break;
+		case CMD_SPECIAL_DIR: /* pass '\\' & '.' too */
+			if(*rest == '\\' || *rest == '.' || *rest == ':')
+				break;
+			/**FALL THORUGH**/
+		default:        /* pass '/', ignore ',', ';' & '=' */
+			if(!*rest || *rest == '/')
+				break;
+			if(isargdelim(*rest)) {
+				rest = ltrimcl(rest);
+				break;
+			}
+
+			/* else syntax error */
+			error_syntax(0);
+			goto errRet;
 		}
 
-        /* else syntax error */
-        error_syntax(0);
-        return;
-      }
-
-        /* JPP this will print help for any command */
-        if (strstr(rest, "/?"))
-        {
-          displayString(cmdptr->help_id);
-        }
-        else
-        {
-          dprintf(("CMD '%s' : '%s'\n", com, rest));
-          cmdptr->func(rest);
-        }
-      } else {
+		if(memcmp(ltrimcl(rest), "/?", 2))
+			displayString(cmdptr->help_id);
+		else {
+			dprintf(("[ICMD %s: %s]\n", name, rest));
+			cmdptr->func(rest);
+		}
+	} else		/* external command */
+		if(forceInternalCommand) {
+			error_no_such_forced_internal_command(name);
+	} else {
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-		if(*com) {		/* external command */
+		if(name) {	/* MUX-AE had been invoked */
 			/* Installable Commands are allowed to change both:
 				"com" and "args". Therefore, we may need to
 				reconstruct the external command line */
-			/* Because com and *rest are located within the very same
-				buffer and rest is definitely terminated with '\0',
-				the followinf memmove() operation is fully robust
-				against buffer overflows */
-			memmove(com + strlen(com), rest, strlen(rest) + 1);
-			/* Unsave, but probably more efficient operation:
-				strcat(com, rest);
-					-- 2000/12/10 ska*/
-			line = com;
+			if((p = erealloc(name, strlen(name) + strlen(rest) + 1)) == 0)
+				goto errRet;
+			line = strcat(name, rest);
+			StrFree(newargs);		/* conserve memory */
 		}
 #endif
         /* no internal command --> spawn an external one */
-        cp = unquote(line, rest = skip_word(line));
-        if(!cp) {
-          error_out_of_memory();
-          return;
+        if((p = unquote(line, rest = skip_word(line))) == 0) {
+			error_out_of_memory();
+			goto errRet;
         }
-		execute(cp, ltrimsp(rest));
-		free(cp);
-      }
-  }
-#undef line
-#undef com
-#undef args
-#undef BUFFER_SIZE
+		execute(p, rest);
+		free(p);
+	}
+
+errRet:
+	free(name);
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+	free(newargs);
+#endif
+}
+
+static int redirectJFTentry(int i
+	, char ** const jftUsed
+	, char * const fnam
+	, int openmode
+	, int createmode
+	, void (*err_fct)(const char * const))
+{	int j;
+	byte far *jft;		/* pointer to FreeCOM's JFT */
+
+	jft = getJFTp();
+
+	if(ecMkFD(i, jft[i]))
+		return 0;
+
+	jft[i] = 255;		/* Mark the file descriptor as unused */
+	if((j = devopen(fnam, openmode, createmode)) < 0) {
+		err_fct(fnam);
+		return 0;
+	}
+	if(j != i) {
+		if(dup2(j, i) != 0) {
+			err_fct(fnam);
+			return 0;
+		}
+		close(j);
+	}
+
+	/* Apply the other entries of this redirection */
+	for(j = i; j--;) if(jftUsed[i] == jftUsed[j]) {
+		if(ecMkFD(j, jft[j]))
+			return 0;
+		/* is the same --> duplicate the fd here, too */
+		if(dup2(i, j) != 0) {
+			err_fct(fnam);
+			return 0;
+		}
+	}
+	return 1;
+}
+
+static char *makePipeDelTemp(void)
+{	char *ivar;
+
+	if((ivar = ecMkIVar()) == 0) {	
+		error_out_of_memory();
+		return 0;
+	}
+	if(!ecMkHC("IVAR ", ivar)					/* remove the IVar */
+	 || !ecMkHC("DEL %@IVAR(", ivar, ")")) {	/* remove tempfile */
+	 	ecFreeIVar(ivar);
+	 	return 0;
+	}
+
+	return ivar;
+}
+
+static int makePipeContext(char *** const Xout
+	, char * const * const pipe
+	, const int num)
+{	int i, rv;
+	char *ivarIn, *ivarOut;
+	char *p, **out, *q;
+
+	assert(Xout);
+	assert(*Xout);
+	assert(pipe);
+	assert(num >= 2);
+
+	out = *Xout;
+	rv = 0;				/* error */
+
+/* The commands must be pushed from the last to the top one */
+	p = ivarOut = 0;
+	if((ivarIn = ecMkIVar()) == 0)
+		goto errRet;
+	assert(pipe[num - 1]);
+	if(out) {
+		int len;
+
+		/* The last command gets the optional output redirection */
+		len = 0;
+		/* Add all the output redirections */
+		for(i = 0; out[i]; ++i) {
+			assert(out[i][0] == '>');
+			assert(out[i][1] != 0);
+
+			if((q = erealloc(p, len + strlen(&out[i][2]) + 10)) == 0)
+				goto errRet;
+			p = q;
+			q += len;
+			*q++ = '>';
+			if(out[i][1] & 1)			/* append */
+				*q++ = '>';
+			if(out[i][1] & 4)			/* redirect stderr */
+				*q++ = '&';
+			if((out[i][1] & 2) == 0)	/* redirect stderr only */
+				*q++ = '>';
+			*q++ = '"';					/* have the filename quoted */
+			q = stpcpy(q, &out[i][2]);
+			*q++ = '"';
+			len = q - p;
+		}
+		p[len] = 0;
+		if(!ecMkV1C(pipe[num - 1], p, "<%@IVAR(", ivarIn, ")"))
+			goto errRet;
+		StrFree(p);
+		freep(out);
+		*Xout = 0;
+	} else
+		if(!ecMkV1C(pipe[num - 1], "<%@IVAR(", ivarIn, ")"))
+			goto errRet;
+
+	/* Process the middle commands */
+	for(i = num - 1; --i; ) {
+		assert(pipe[i]);
+		assert(*pipe[i]);
+		if((q = strchr(pipe[i], 0))[-1] == '|') {
+			*q = 0;
+			q = 0;			/* q == 0 <-> redirect stderr, too */
+		}
+		free(ivarOut);
+		ivarOut = ivarIn;
+		if((ivarIn = ecMkIVar()) == 0
+		 || !ecMkV1C(pipe[i], ">", q? "": "&", "%@IVAR(", ivarOut, ")"
+		     , "<%@IVAR(", ivarIn, ")")
+		 || !ecMkHC("IVAR ", ivarOut, "=%@TEMPFILE"))
+			goto errRet;
+	}
+
+/* The first command of the pipe may be executed now */
+	/* perform the ::=IVAR <ivarIn>=%@TEMPFILE  command */
+	assert(!p);
+	if((p = fct_tempfile("")) == 0		/* make the tempfile */
+	 || (q = erealloc(p, strlen(p) + 3)) == 0	/* needed below */
+	 || !ivarSet(ivarIn, p = q))		/* in 'p', if Set() fails */
+		goto errRet;
+
+	/* Setup the *Xout array to contain the previous ivarIn */
+	StrFree(ivarIn);		/* the name is no longer needed */
+	if((out = ecalloc(2, sizeof(char*))) == 0)
+		goto errRet;
+	out[0] = p;
+	/* out[1] = 0;		done by calloc() */
+	memmove(&p[2], p, strlen(p));
+	p[0] = '>';		/* output redirection ID */
+	p[1] = 2;			/* overwrite, stdout */
+	assert(pipe[0]);
+	assert(*pipe[0]);
+	if((q = strchr(pipe[0], 0))[-1] == '|') {
+		*q = 0;
+		p[1] = 6;			/* overwrite, stdout & stderr */
+	}
+	*Xout = out;
+	p = 0;
+
+	rv = 0;						/* OK */
+
+errRet:
+	free(ivarIn);
+	free(ivarOut);
+	free(p);
+
+	return rv;
+}
+
+void parseExpandedCommand(char *s)
+{
+	char ** in, ** out, ** pipe;	/* list of all input, output redirections
+  										in sequence of appearence and the
+  										pipe components.
+  									*/
+	int num;
+	char **jftUsed;		/* which entries are redir'ed to which file */
+	int i;
+
+	num = get_redirection(s, &in, &out, &pipe);
+
+	if(num) {
+		if(num > 1) {			/* pipe */
+			/* Break up the pipe into individual commands as explained
+				in DOCS\ICMDS.TXT */
+			if(!makePipeContext(&out, pipe, num))
+				goto errRet1;
+		}
+
+	/* Execute a single command with possible redirections */
+		/* Setup the redirection contexts */
+		if((jftUsed = ecalloc(getJFTlen(), sizeof(char*))) == 0)
+			goto errRet;
+
+		if(in) {
+			for(i = 0; in[i]; ++i) {
+				/* There is currently only one kind of input redirection:
+					the one redirecting stdin */
+				assert(in[i][0] == '<');
+				jftUsed[0] = in[i];
+			}
+		}
+		if(out) {
+			int error = 0;
+			for(i = 0; out[i]; ++i) {
+				/* Supported output redirections:
+					cmdline	out[]	meaning
+					>		>\2	overwrite, stdout
+					>>		>\3	append, stdout
+					>&		>\6	overwrite, stdout & stderr -- 4dos compatibly
+					>>&		>\7	append, stdout & stderr -- 4dos compatibly
+					>&>		>\4	overwrite, stderr -- 4dos compatibly
+					>>&>	>\5	append, stderr -- 4dos compatibly
+				*/
+				assert(out[i][0] == '>');
+				assert(out[i][1] >= 2 && out[i][1] <= 5);
+				if(out[i][1] & 2) {	/* redirect fd#1 == stdout */
+					if(jftUsed[1] && jftUsed[1][0] != '>') {
+						error_intermixed_redirection(1);
+						error = 1;
+					}
+					jftUsed[1] = out[i];
+				}
+				if(out[i][1] & 4) {	/* redirect fd#2 == stderr */
+					if(jftUsed[2] && jftUsed[2][0] != '>') {
+						error_intermixed_redirection(2);
+						error = 1;
+					}
+					jftUsed[2] = out[i];
+				}
+			}
+			if(error)
+				goto errRet;
+		}
+
+		/* apply the redirections */
+		for(i = getJFTlen(); --i;) if(jftUsed[i]) {
+			switch(jftUsed[i][0]) {
+			case '<':
+				jftUsed[i][0] = 'I';	/* prevent the same action
+											with secondary redirs */
+				if(!redirectJFTentry(i, jftUsed, &jftUsed[i][1]
+				 , O_TEXT | O_RDONLY, S_IREAD | S_IWRITE
+				 , error_redirect_from_file))
+				 	goto errRet;
+				break;
+
+			case '>':		/* output redirection */
+				jftUsed[i][0] = 'O';	/* prevent the same action
+											with secondary redirs */
+				if(!redirectJFTentry(i, jftUsed, &jftUsed[i][2]
+				 , (jftUsed[i][1] & 1)
+				  ? O_TEXT | O_WRONLY | O_CREAT | O_TRUNC	/* overwrite */
+				  : O_TEXT | O_WRONLY | O_CREAT | O_APPEND	/* append */
+				 , S_IREAD | S_IWRITE
+				 , error_redirect_to_file))
+				 	goto errRet;
+				break;
+
+#ifdef DEBUG
+			case 'I':
+			case 'O':	/* already processed entries */
+				break;
+			default:
+				dprintf(("Unkown redirection code: %u]\n", jftUsed[i][0]));
+#endif
+			}
+		}
+
+		docommand(pipe[0]);		/* execute the command */
+errRet:
+		free(jftUsed);
+	}
+	/* else an empty command line is happily ignored */
+
+errRet1:
+	freep(in);
+	freep(out);
+	free(pipe);		/* pointers into s[] */
 }
 
 /*
  * process the command line and execute the appropriate functions
  * full input/output redirection and piping are supported
  */
-void parsecommandline(char *s)
-{
-  char *in = 0;
-  char *out = 0;
-  char *fname0 = 0;
-  char *fname1 = 0;
-  char *nextcmd;
+void parsecommandline(char *Xs)
+{	char *s;
 
-  int of_attrib = O_CREAT | O_TRUNC | O_TEXT | O_WRONLY;
-  int num;
+	s = Xs;
+	assert(s);
 
-  assert(s);
-  assert(oldinfd == -1);  /* if fails something is wrong; should NEVER */
-  assert(oldoutfd == -1); /* happen! -- 2000/01/13 ska*/
-
-  dprintf(("[parsecommandline (%s)]\n", s));
+	dprintf(("[parsecommandline (%s)]\n", s));
 
 #ifdef FEATURE_ALIASES
-  aliasexpand(s, MAX_INTERNAL_COMMAND_SIZE);
-  dprintf(("[alias expanded to (%s)]\n", s));
+	s = aliasexpand(s);
+	dprintf(("[alias expanded to (%s)]\n", s));
 #endif
 
-  if (tracemode)
-  {                             /* Question after the variables expansion
+	if(trace) {		/* Question after the variables expansion
                                    and make sure _all_ executed commands will
-                                   honor the trace mode */
-    fputs(s, stdout);
-    /* If the user hits ^Break, it has the same effect as
-       usually: If he is in a batch file, he is asked if
-       to abort all the batchfiles or just the current one */
-	if(userprompt(PROMPT_YES_NO) != 1)
-      /* Pressed either "No" or ^Break */
-      return;
-  }
+                                   honor the mode */
+		fputs(s, stdout);
+		/* If the user hits ^Break, it has the same effect as
+			usually: If he is in a batch file, he is asked if
+			to abort all the batchfiles or just the current one */
+		if(userprompt(PROMPT_YES_NO) != 1)
+			/* Pressed either "No" or ^Break */
+			goto errRet;
+	}
 
-  num = get_redirection(s, &in, &out, &of_attrib);
-  if (num < 0)                  /* error */
-    goto abort;
+	parseExpandedCommand(s);
 
-  /* Set up the initial conditions ... */
-
-  if (in || (num > 1))          /* Need to preserve stdin */
-    oldinfd = dup(0);
-
-  if (in)                       /* redirect input from this file name */
-  {
-    close(0);
-    if (0 != devopen(in, O_TEXT | O_RDONLY, S_IREAD))
-    {
-		error_redirect_from_file(in);
-      goto abort;
-    }
-  }
-
-  if (out || (num > 1))         /* Need to preserve stdout */
-    oldoutfd = dup(1);
-
-  /* Now do all but the last pipe command */
-  while (num-- > 1)
-  {
-    close(1);                   /* Close current output file */
-    if ((fname0 = tmpfn()) == 0)
-      goto abort;
-    open(fname0, O_CREAT | O_TRUNC | O_TEXT | O_WRONLY, S_IREAD | S_IWRITE);
-
-    nextcmd = s + strlen(s) + 1;
-    docommand(s);
-
-    close(1);
-    dup2(oldoutfd, 1);
-
-    close(0);
-    killtmpfn(fname1);          /* fname1 can by NULL */
-    fname1 = fname0;
-    fname0 = 0;
-    open(fname1, O_TEXT | O_RDONLY, S_IREAD);
-
-    s = nextcmd;
-  }
-
-  /* Now set up the end conditions... */
-
-  if (out)                      /* Final output to here */
-  {
-    close(1);
-    if (1 != devopen(out, of_attrib, S_IREAD | S_IWRITE))
-    {
-		error_redirect_to_file(out);
-      goto abort;
-    }
-
-    if (of_attrib & O_APPEND)
-      lseek(1, 0, SEEK_END);
-
-  }
-  else if (oldoutfd != -1)      /* Restore original stdout */
-  {
-    close(1);
-    dup2(oldoutfd, 1);
-    close(oldoutfd);
-    oldoutfd = -1;
-  }
-
-  docommand(s);                 /* process final command */
-
-abort:
-  if (oldinfd != -1)            /* Restore original STDIN */
-  {
-    close(0);
-    dup2(oldinfd, 0);
-    close(oldinfd);
-    oldinfd = -1;
-  }
-
-  if (oldoutfd != -1)           /* Restore original STDOUT */
-  {
-    close(1);
-    dup2(oldoutfd, 1);
-    close(oldoutfd);
-    oldoutfd = -1;
-  }
-
-  killtmpfn(fname1);
-  killtmpfn(fname0);
-
-  if (out)
-    free(out);
-
-  if (in)
-    free(in);
+errRet:
+	if(s != Xs)
+		free(s);
 }
 
+/*
+ *	Fetches the next context; executes it to retreive the line
+ *	and parses and executes the line.
+ *	It returns if the very last context finishes
+ */
+void run_exec_context(void)
+{	ctxtEC_t far *ec;
+
+	assert(ctxtMain);
+	ec = ctxtExecContext;
+	assert(ec);
+
+	while(ec->ctxt_type != EC_TAG_TERMINATE) {
+		if(FP_SEG(ec) + (FP_OFF(ec) + ec->ctxt_length + sizeof(*ec) - 1) / 16
+		  >= nxtMCB(FP_SEG(ctxtMCB))) {
+		  	error_context_corrupted();
+		  	return;
+		}
+
+		if(ec->ctxt_type >= EC_TAG_TERMINATE) {
+			dprintf(("[EXEC: Skipping unknown exec context: %u]\n"
+			 , ec->ctxt_type));
+			ecPop();			/* remove this context */
+		} else {
+			char *cmdline;
+
+			assert(ecFunction[ec->ctxt_type]);
+
+			/* as we are about to aquire a new command line, some
+				options are resetted to their defaults */
+			echo = ctxtFlags.f_echo;
+			trace = ctxtFlags.f_trace;
+			swap = ctxtFlags.f_swap;
+			called = ctxtFlags.f_call;
+			interactive = 0;
+
+			if((cmdline = (ecFunction[ec->ctxt_type])(ec)) != 0) {
+				/* process this command line */
+				char *p, *q;
+
+				/* 
+				 * The question mark '?' has a double meaning:
+				 *	C:\> ?
+				 *		==> Display short help
+				 *
+				 *	C:\> ? command arguments
+				 *		==> enable tracemode for just this line
+				 */
+				if(*(p = ltrimcl(cmdline)) == '?' && *(q = ltrimcl(p + 1))) {
+					/* something follows --> tracemode */
+					trace = 1;
+					p = q;			/* skip the prefix */
+				}
+
+#ifdef CMD_INCLUDE_FOR
+				/* Placed here FOR even preceeds any checks for 
+					redirections, pipes etc. */
+				if(cmd_for_hackery(p)) {
+					free(cmdline);
+					continue;
+				}
+#endif
+				p = expEnvVars(p);
+				free(cmdline);
+				if(p != 0) {
+					parsecommandline(p);
+					free(p);
+				}
+			}
+			/* else ignore this call */
+		}
+	}
+}
+
+#if 0
 void readcommand(char * const str, int maxlen)
 {
 #ifdef FEATURE_ENHANCED_INPUT
@@ -487,11 +721,8 @@ int process_input(int xflag, char *commandline)
       ip = commandline;
       readline = commandline = 0;
     } else {
-    if ((readline = malloc(MAX_INTERNAL_COMMAND_SIZE + 1)) == 0)
-    {
-      error_out_of_memory();
+    if((readline = emalloc(MAX_INTERNAL_COMMAND_SIZE + 1)) == 0)
       return 1;
-    }
 
       if (0 == (ip = readbatchline(&echothisline, readline,
                       MAX_INTERNAL_COMMAND_SIZE)))
@@ -662,6 +893,7 @@ intBufOver:
 
   return 0;
 }
+#endif
 
 static void hangForever(void)
 {
@@ -702,12 +934,8 @@ static void hangForever(void)
 
 int main(void)
 {
-  /*
-   * * main function
-   */
-
   if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
-    process_input(0, 0);
+    run_exec_context();
 
   if(!canexit)
     hangForever();

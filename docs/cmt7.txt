@@ -89,14 +89,14 @@ The slightly modified format of the dynamic context looks like this:
 stored in this line.
 
 <tag> has been choosen like this:
+\1 -> execution context
 \2 -> entries of the command line history  (A)
 \3 -> entries of the directory stack (A)
 \4 -> last directory (B)
 \5 -> swapinfo
 \6 -> arguments %0..%9..%# currently in effect
-\7 -> FOR variables currently in effect
 \8 -> internal variables
-\6 .. ' ' -> reserved for future use
+\9 .. ' ' -> reserved for future use
 '!' .. -> alias
 
 To let the aliases allocate all the remaining tags has the slight
@@ -259,6 +259,9 @@ If the repetition is omited, "1" is assumed.
 
 The context ID describes, what kind of information is storred there; there are:
 
+'I' Interactive input:
+<no arguments>
+
 'B' Batch contexts:
 DWORD	position within file to read the next line from
 DWORD	number of lines already read from file
@@ -272,8 +275,8 @@ empty lines.
 
 
 'F' FOR context #1:
-ASCIIZ	variable name
 ASCIIZ	remaining patterns
+ASCIIZ	variable name
 ASCIIZ	command
 
 If the variable name is specified without any leading percent sign, it is
@@ -293,5 +296,12 @@ ASCIIZ	command
 
 This context contains a command that is to be executed when popped.
 NOTE: This context is particularily useful in conjunction with the
-internal commands "::=" and "!SET" (see CMT3.TXT).
+internal commands and "::=" (see CMT3.TXT and ICMDS.TXT).
 
+'E' Exit context:
+Demands to terminate FreeCOM. Though, if FreeCOM was started with /P,
+it will hang infinitely.
+
+'e' no-Exit context (aka Keep-Running context):
+If stdin != EOF, an I context will be pushed; otherwise this context
+behaves as an E context.

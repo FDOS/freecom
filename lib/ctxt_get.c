@@ -19,21 +19,19 @@
 #include "../include/context.h"
 #include "../include/misc.h"
 
-int ctxtGet(int remove
+int ctxtGetS(int remove
 	, const Context_Tag tag
-	, const unsigned num
+	, const char * const name
 	, char ** const buf)
 {
 	word ofs;
 	word segm;
-	char name[CTXT_ITEMNAME_LENGTH];
 
 	ctxtCheckInfoTag(tag);
 	assert(ctxtFromTag(tag) != CTXT_INVALID);
 
 	segm = (word)ctxtFromTag(tag);
 	assert(segm);
-	ctxtMkItemName(name, tag, num);
 	if((ofs = env_findVar(segm, name)) != (word)-1) {
 		assert(peekb(segm, ofs + strlen(name)) == '=');
 		if(buf) {		/* Retreive the contents */
@@ -52,4 +50,15 @@ int ctxtGet(int remove
 	}
 
 	return 1;		/* No such item */
+}
+
+int ctxtGet(int remove
+	, const Context_Tag tag
+	, const unsigned num
+	, char ** const buf)
+{
+	char name[CTXT_ITEMNAME_LENGTH];
+
+	ctxtMkItemName(name, tag, num);
+	return ctxtGetS(remove, tag, name, buf);
 }

@@ -1,20 +1,6 @@
 /*
  * TRUENAME.C -- Truename Command (undocumented DOS?)
  *
- * 07/14/98 (Rob Lake)
- *  - started and tested fine
- *  - added stand alone debugging
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 28-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - changed _truename function so it does not return a pointer to a local
- *   variable.
- *
- * 09-Aug-1998 (Rob Lake <rlake@cs.mun.ca>)
- * - _truename now sets errno
- *
  */
 
 #include "../config.h"

@@ -142,6 +142,10 @@ Out of memory error.
 Allocation of DOS memory failed.
 .
 
+:TEXT_ERROR_UNKNOWN_IFUNCTION#1
+Unknown internal function: '%s'.
+.
+
 :TEXT_ERROR_CANNOTPIPE
 Cannot pipe!  Cannot open temporary file!
 .
@@ -192,6 +196,14 @@ Syntax error. - '%s'
 Syntax error.
 .
 
+:TEXT_ERROR_FAILED_FORCED_ICMD_STR#1
+Unkown forced internal command: '%s'.
+.
+
+:TEXT_ERROR_FAILED_FORCED_ICMD#1
+Unkown or malformed forced internal command.
+.
+
 :TEXT_ERROR_FILENAME_TOO_LONG
 Filename too long. - '%s'
 .
@@ -200,12 +212,20 @@ Filename too long. - '%s'
 Cannot copy '%s' to itself
 .
 
-:TEXT_ERROR_COMMAND_TOO_LONG
+:TEXT_ERROR_ALIAS_LINE_TOO_LONG#1
 Command line too long after alias expansion!
 .
 
-:TEXT_ERROR_LINE_TOO_LONG
-Line too long.  Can not execute command.
+:TEXT_ERROR_ILINE_TOO_LONG#1
+Internal command line too long after variable expansion!
+.
+
+:TEXT_ERROR_ELINE_TOO_LONG#1
+Line too long.  Can not execute external command.
+.
+
+:TEXT_ERROR_MUX_TOO_LONG#1
+Line too long.  Can not execute installable commands extension.
 .
 
 :TEXT_ERROR_HISTORY_SIZE#1
@@ -329,6 +349,10 @@ The concatenation character '+' cannot trail the arguments.
 Nothing to do.
 .
 
+:TEXT_ERROR_MISSING_COMMAND#1
+%s: Missing command
+.
+
 :TEXT_ERROR_COPY
 COPY failed
 .
@@ -448,6 +472,14 @@ The context is missing after swap. The context is re-created,
 but all aliases etc. are lost.
 .
 
+:TEXT_ERROR_CONTEXT_CORRUPTED#1
+The execution context has been corrupted. Cannot proceed.
+.
+
+:TEXT_ERROR_INTERMIXED_REDIRECTION#1
+Used both input and output redirection for file descriptor #%u.
+.
+
 #
 # Informational messages
 #
@@ -550,7 +582,7 @@ aabb   a   a       b    b
 YyNnAaQq{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
 Control-Break pressed.\r
-Terminate batch file '%s' (Yes/No/All) ? \
+Terminate batch file '%Fs' (Yes/No/All) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -1379,5 +1411,11 @@ WHICH {command}
 Displays the internal memory used by FreeCOM internally
 
 MEMORY
+
+.
+
+:TEXT_CMDHELP_INTERNAL_COMMAND#1
+This is an internal command for which no built-in help is
+available. Please refer to some external manual of FreeCOM.
 
 .

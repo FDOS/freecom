@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_ctty_dup
-void error_ctty_dup(const char * const devname)
-{	displayError(TEXT_ERROR_CTTY_DUP, devname);
+#undef error_save_session
+void error_save_session(void)
+{	displayError(TEXT_ERROR_SAVE_SESSION);
 }

@@ -1,18 +1,6 @@
 /*
  *  PATH.C - path command.
  *
- *  Comments:
- *
- * 17 Jul 1998 (John P Price)
- *   Seperated commands into individual files.
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 12-Aug-1998 ska
- * - added: SUPPL environment handling
- *   currently "PATH=" will delete the environment variable PATH;
- *   if an empty one shall be created, replace chgEnv1() by chgEnv()
  */
 
 #include "../config.h"

@@ -7,11 +7,11 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include "../include/message.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef dispCopy
-void dispCopy(const char src[], const char dst[], int append)
-{	displayError(TEXT_MSG_COPYING, src, append? "=>>": "=>", dst);
+#undef error_copy
+void error_copy(void)
+{	displayError(TEXT_ERROR_COPY);
 }

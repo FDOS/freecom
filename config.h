@@ -53,7 +53,15 @@
 #define FEATURE_AUTO_REDIRECT_TO_CON 5
 
 /* How many batch files should be nestable minimally */
-#define BATCH_NESTLEVEL_MIN 5
+/* OBSOLETED -- DON'T USE!
+	see EXEC_CONTEXT_MINIMUM_SIZE instead */
+/*** obsolted #define BATCH_NESTLEVEL_MIN 5 ***/
+
+/* How many bytes may be used at minimum by batch file nesting,
+	FOR loops, redirection state recordings,& buffer for batch script
+	arguments, previous contents of FOR variables and internal
+	variables */
+#define EXEC_CONTEXT_MINIMUM_SIZE 512
 
 /* Define to support kernel-supported swapout of FreeCOM
 	see DOCS\K-SWAP.TXT

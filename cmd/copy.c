@@ -1,25 +1,6 @@
 /*
  * COPY.C -- Internal Copy Command
  *
- * 1999/05/10 ska
- * rewritten, based upon previous COPY.C of FreeCom v0.76b
- *
- * Known bugs:
- *  + Multiple '+' plus signs are scanned as a single one.
- *
- * 1999/07/08 ska
- * bugfix: destination is a drive letter only
- *
- * 2000/07/17 Ron Cemer
- * bugfix: destination ending in "\\" must be a directory, but fails
- *	within dfnstat()
- *
- * 2000/07/24 Ron Cemer
- * bugfix: Suppress "Overwrite..." prompt if destination is device
- *
- * 2001/02/17 ska
- * add: interactive command flag
- * bugfix: copy 1 + 2 + 3 <-> only first and last file is stored
  */
 
 #include "../config.h"
@@ -348,10 +329,8 @@ int addSource(char *p)
       return 0;
     }
   } else {      /* New entry */
-    if((h = malloc(sizeof(struct CopySource))) == 0) {
-      error_out_of_memory();
+    if((h = emalloc(sizeof(struct CopySource))) == 0)
       return 0;
-    }
     if(!last)
       last = lastApp = head = h;
     else
@@ -368,10 +347,8 @@ int addSource(char *p)
   assert(q);
   assert(lastApp);
   do {
-    if((h = malloc(sizeof(struct CopySource))) == 0) {
-      error_out_of_memory();
+    if((h = emalloc(sizeof(struct CopySource))) == 0)
       return 0;
-    }
     h->fnam = q;
     h->flags = cpyFlags();
     h->app = 0;

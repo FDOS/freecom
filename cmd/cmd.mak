@@ -10,6 +10,7 @@ all: $(CFG) cmds.lib
 
 
 cmds.lib : $(CFG) alias.obj \
+	arg.obj \
 	beep.obj \
 	break.obj \
 	call.obj \
@@ -25,11 +26,14 @@ cmds.lib : $(CFG) alias.obj \
 	doskey.obj \
 	echo.obj \
 	exit.obj \
+	fd.obj \
 	fddebug.obj \
 	for.obj \
 	goto.obj \
 	history.obj \
+	icmds.obj \
 	if.obj \
+	ivar.obj \
 	memory.obj \
 	mkdir.obj \
 	path.obj \
@@ -49,6 +53,7 @@ cmds.lib : $(CFG) alias.obj \
 	which.obj 
 	if exist cmds.lib $(AR) cmds.lib /c @&&|
 +-alias.obj &
++-arg.obj &
 +-beep.obj &
 +-break.obj &
 +-call.obj &
@@ -64,11 +69,14 @@ cmds.lib : $(CFG) alias.obj \
 +-doskey.obj &
 +-echo.obj &
 +-exit.obj &
++-fd.obj &
 +-fddebug.obj &
 +-for.obj &
 +-goto.obj &
 +-history.obj &
++-icmds.obj &
 +-if.obj &
++-ivar.obj &
 +-memory.obj &
 +-mkdir.obj &
 +-path.obj &
@@ -89,6 +97,7 @@ cmds.lib : $(CFG) alias.obj \
 | , cmds.lst 
 	if not exist cmds.lib $(AR) cmds.lib /c @&&|
 +alias.obj &
++arg.obj &
 +beep.obj &
 +break.obj &
 +call.obj &
@@ -104,11 +113,14 @@ cmds.lib : $(CFG) alias.obj \
 +doskey.obj &
 +echo.obj &
 +exit.obj &
++fd.obj &
 +fddebug.obj &
 +for.obj &
 +goto.obj &
 +history.obj &
++icmds.obj &
 +if.obj &
++ivar.obj &
 +memory.obj &
 +mkdir.obj &
 +path.obj &

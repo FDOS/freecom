@@ -23,6 +23,7 @@
 /* Also: The contents of both buffers is monitored in order to
 	check if they got overflowed during the MUX call. If so,
 	the executation is aborted. */
-int runExtension(char * const command, char * const line);
+int runExtension(char ** const command
+	, const char * const line, char ** const newargs);
 
 #endif

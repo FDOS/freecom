@@ -1,39 +1,6 @@
 /*
  *  DEL.C - del command.
  *
- *  Comments:
- *
- *  06/29/98 (Rob Lake rlake@cs.mun.ca)
- *      rewrote del to support wildcards
- *      added my name to the contributors
- *
- * 07/13/98 (Rob Lake)
- *  - fixed bug that caused del not to delete file with out attribute.
- *  - moved set, del, ren, and ver to there own files
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 09-Aug-1998 (Rob Lake <rlake@cs.mun.ca>)
- * - changed check for ^C
- * - alloced mem for char **arg
- *
- * 10-Aug-1998 ska
- * - fixed allocation of char **arg incl. out-of-memory check
- *
- * 1998/12/04 ska
- * - chg: vcgetchar() displays a space rather beep()s for no-printable
- *  characters. the caller can beep()
- * - chg: moved vcgetchar() to misc.c as it is multiply used now
- * - chg: use vcgetcstr() instead of vcgetchar() loop
- *
- * 1999/04/27 ska
- * chg: uniform command line parser
- * add: allow multiple patterns on command line
- * add: delete count
- *
- * 1999/07/02 ska
- * chg: replaced stat() by dfnstat() [reduces size of image]
  */
 
 #include "../config.h"
