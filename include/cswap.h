@@ -2,6 +2,8 @@
 	CSWAP.H
 */
 
+#ifdef FEATURE_XMS_SWAP
+
 #ifndef __XMS_SWAP_H
 #define __XMS_SWAP_H
 
@@ -66,5 +68,7 @@ word XMSswapmessagesIn(loadStatus *status);
 void XMSinit(void);
 int XMSisactive(void);
 void XMSexit(void);
+
+#endif
 
 #endif

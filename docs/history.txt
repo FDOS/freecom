@@ -1,6 +1,57 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+2002/04/02 Tom Ehlert
+~~~~~~~~~~~~~~~~~~~~~~
+add: XMS-Only Swap feature (FEATURE_XMS_SWAP)
+
+2002/03/31 ska
+~~~~~~~~~~~~~~~~~~~~~~
+chg: COPY: appFile unneccessarily declared FAR (Tom Ehlert)
+bugfix: cmdinput.c: histGet(,str,maxlen) (Tom Ehlert)
+bugfix: mux_ae.h: #ifdef --> #if (Tom Ehlert)
+bugfix: day/month read from ff_time reversed (John Price)
+bugfix: IF lower==LOWER bug; MS COMMAND compares case-sensitively
+fix: Several typos in documentation
+
+v0.83 Beta 32:
+bugfix: if FREECOM.COM /P without AUTOEXEC.BAT --> assert() failure.
+add: if DEBUG enabled: internal command EXIT!! that ignores /P
+chg: FEATURE_BOOT_KEYS: mandory boot keys (F5/F8) turned into
+	optional compile-time option; disabled by default now as the
+	kernel provides F5/F8 checking
+chg: some document updates
+
+v0.83 Beta 30:
+add: SET /I: To display the size and unused area in env segm
+	(about 700 bytes increase of image; WILL BE REMOVED WITH NEXT
+	 STABLE RELEASE)
+bugfix: INIT.C/COMMAND.C: in MS DOS environment no program
+	expects that the string area of an environment is used and is
+	therefore killed. FreeCOM now zeroes the string counter
+	in order to let SUPPL work correctly.
+	Warning: Known Bug: Now test is made, if the two bytes for the
+	counter is not available, thus, the env_nullStrings() function
+	fails.
+bugfix: INIT.C: negated test for FreeDOS's build >= 2025
+
+v0.83 Beta 28:
+bugfix: scancmd.c: /B and /A let COPY fail (ec == E_Ignore) (bug 829)
+upd: HTML section
+
+v0.83 Beta 25:
+bugfix: pre-compiled package BINARY.ZIP without command-line editing
+chg: FreeCOM archive (== executable) is opened read-only.
+
+v0.83 Beta 21:
+bugfix: process_input(): iscntrl() does not advance ip
+possible bugfix: force to default to _unsigned_ char as built-in
+	<ctype.h> macros do not work with signed char > 127
+
+v0.83 Beta 15:
+bugfix: expalias: if malloc() fails, random expanded is free'ed
+bugfix: nls_maketime(): 12hour display does not free AM/PM id
+
 2001/06/11 ska
 ~~~~~~~~~~~~~~~~~~~~~~
 fix: dbg_printmem() if compiled in Large memory model, near is invalid

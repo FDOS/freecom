@@ -63,8 +63,8 @@ void exitfct(void)
 {
 	unloadMsgs();        /* free the message strings segment */
 	OwnerPSP = oldPSP;
-	pspTermAddr = termAddr;
 #ifdef FEATURE_XMS_SWAP
+	pspTermAddr = termAddr;
 	XMSexit();
 #endif
 }
@@ -163,10 +163,12 @@ int initialize(void)
 /* Set up the host environment of COMMAND.COM */
 
 	/* Give us shell privileges */
+#ifdef FEATURE_XMS_SWAP
 	myPID = _psp;
 	residentCS = _CS;
 	termAddr = pspTermAddr;
 	pspTermAddr = terminateFreeCOMHook;
+#endif
 	oldPSP = OwnerPSP;
 	atexit(exitfct);
 	OwnerPSP = _psp;

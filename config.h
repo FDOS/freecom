@@ -62,12 +62,12 @@
 /* Define to support kernel-supported swapout of FreeCOM
 	see DOCS\K-SWAP.TXT
 */
-/* #define FEATURE_KERNEL_SWAP_SHELL */
+#define FEATURE_KERNEL_SWAP_SHELL
 
 /* Define to support XMS-only swap support of FreeCOM
 	This setting is incompatible with the above one!
 */
-#define FEATURE_XMS_SWAP
+/* #define FEATURE_XMS_SWAP */
 
 /* Define the size of the buffer used to store old paths for PUSHD/POPD */
 #define DIRSTACK_DEFAULT_SIZE 256

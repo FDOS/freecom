@@ -15,9 +15,10 @@
 #include "../include/debug.h"
 #include "../include/module.h"
 #include "../include/res.h"
+#include "../include/kswap.h"
 #include "../include/misc.h"
 
-#ifdef FREECOM_NEED_MODULE
+#ifdef FREECOM_NEED_MODULES
 
 #pragma argsused
 static int loadModule(res_majorid_t major
