@@ -22,8 +22,8 @@ static int optN = 0;		/* force to NOT swap (superceeds optS) */
 #pragma argsused
 optScanFct(opt_call)
 { switch(ch) {
-  case 'S': return optScanBool(optS);
-  case 'N': return optScanBool(optN);
+  case 'S': return optScanBoolI(optS);
+  case 'N': return optScanBoolI(optN);
   }
   optErr();
   return E_Useage;

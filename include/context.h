@@ -9,6 +9,7 @@
 
 #include <portable.h>
 #include <mcb.h>
+#include "../context.h_c"
 
 #define MAX_FNAME	89		/* max size of string for one filename */
 
@@ -156,6 +157,7 @@ enum ExecContext_Tags {
 	/* >= tags that may be considered end of the stack */
 #define EC_FINAL_TAGS EC_TAG_KEEP_RUNNING
 
+#if 0
 typedef struct {
 	FLAG f_dispPrompt;		/* display prompt on interactive cmdline */
 	FLAG f_echo;			/* batch script echo mode */
@@ -173,6 +175,7 @@ typedef struct {
 	unsigned f_shiftlevel;	/* argument shift level */
 	unsigned f_batchlevel;	/* how many batch nesting levels */
 } ctxt_flags_t;
+#endif
 extern ctxt_flags_t far*ctxtFlagsP;
 extern ctxt_flags_t ctxtInitialFlags;
 #define ctxtFlags	(*ctxtFlagsP)

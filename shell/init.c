@@ -70,10 +70,10 @@ optScanFct(opt_init)
 
   switch(ch) {
   case '?': showhelp = 1; return E_None;
-  case '!': return optScanBool(F(debug));
-  case 'Y': return optScanBool(F(trace));
-  case 'F': return optScanBool(autofail);
-  case 'D': return optScanBool(skipAUTOEXEC);
+  case '!': return optScanBoolB(F(debug));
+  case 'Y': return optScanBoolB(F(trace));
+  case 'F': return optScanBoolI(autofail);
+  case 'D': return optScanBoolI(skipAUTOEXEC);
   case 'P':
     if(arg)     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
@@ -94,15 +94,15 @@ optScanFct(opt_init)
       return E_NoOption;    /* don't tread as option */
     case 'L':
       if(optLong("LOW"))
-        return optScanBool(forceLow);
+        return optScanBoolI(forceLow);
       break;
     case 'M':
       if(optLong("MSG"))
-        return optScanBool(F(persistentMSGs));
+        return optScanBoolB(F(persistentMSGs));
       break;
     case 'S':
     	if(optLong("SWAP"))
-    		return optScanBool(F(swap));
+    		return optScanBoolB(F(swap));
       break;
     }
     break;
@@ -359,6 +359,11 @@ int initialize(void)
 			kswapRegister(kswapContext);
 #endif
 	}
+
+	/* Copy the temporary flags into the static context */
+	assert(ctxtFlagsP == &ctxtInitialFlags);
+	_fmemcpy(&kswapContext->flags, ctxtFlagsP, sizeof(kswapContext->flags));
+	ctxtFlagsP = &kswapContext->flags;
 
     /* If a new valid size is specified, use that */
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;

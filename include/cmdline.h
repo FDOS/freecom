@@ -5,6 +5,8 @@
 #ifndef __CMDLINE_H
 #define __CMDLINE_H
 
+#include <portable.h>
+
 /* What quotes COMMAND shell honor (only paired quotes) */
 /* Note: at least the double quotes MUST be included */
 #define QUOTE_STR "\"'`"
@@ -97,13 +99,16 @@ void freep(char **p);
 
 /* int isoption(char *str)  Return: 0: if str is no option */
 int optScanString_(const char * const optstr, int bool, const char *arg, char **value);
-int optScanBool_(const char * const optstr, int bool, const char *arg, int *value);
+int optScanBoolI_(const char * const optstr, int bool, const char *arg, int *value);
+int optScanBoolB_(const char * const optstr, int bool, const char *arg, byte *value);
 int optScanInteger_(const char * const optstr, int bool, const char *arg, int *value);
 
 #define optScanString(var)    \
   optScanString_(optstr, bool, strarg, &(var))
-#define optScanBool(var)    \
-  optScanBool_(optstr, bool, strarg, &(var))
+#define optScanBoolI(var)    \
+  optScanBoolI_(optstr, bool, strarg, &(var))
+#define optScanBoolB(var)    \
+  optScanBoolB_(optstr, bool, strarg, &(var))
 #define optScanInteger(var)   \
   optScanInteger_(optstr, bool, strarg, &(var))
 

@@ -25,7 +25,7 @@ static int noPrompt = 0;
 optScanFct(opt_date)
 { switch(ch) {
   case 'D':
-  case 'T': return optScanBool(noPrompt);
+  case 'T': return optScanBoolI(noPrompt);
   }
   optErr();
   return E_Useage;

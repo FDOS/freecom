@@ -6,6 +6,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/02 21:04:07  skaus
+	Update #4
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -42,7 +45,17 @@
 #include "../include/cmdline.h"
 #include "../err_fcts.h"
 
-int optScanBool_(const char * const optstr, int bool, const char *arg, int *value)
+int optScanBoolB_(const char * const optstr, int bool, const char *arg, byte *value)
+{	int rv, v;
+
+	assert(value);
+
+	v = *value;
+	rv = optScanBoolI_(optstr, bool, arg, &v);
+	*value = (byte)v;
+	return rv;
+}
+int optScanBoolI_(const char * const optstr, int bool, const char *arg, int *value)
 {
   assert(optstr);
   assert(value);

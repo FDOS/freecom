@@ -19,7 +19,7 @@ static int optC;
 #pragma argsused
 optScanFct(opt_set)
 { switch(ch) {
-  case 'C': return optScanBool(optC);
+  case 'C': return optScanBoolI(optC);
   }
   optErr();
   return E_Useage;

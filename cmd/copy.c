@@ -48,8 +48,8 @@ static int optY, optV, optA, optB;
 optScanFct(opt_copy)
 {
   switch(ch) {
-  case 'Y': return optScanBool(optY);
-  case 'V': return optScanBool(optV);
+  case 'Y': return optScanBoolI(optY);
+  case 'V': return optScanBoolI(optV);
   case 'A': case 'B': return E_Ignore;
   }
   optErr();
@@ -69,7 +69,7 @@ optScanFct(opt_copy1)
   case 'A': opt = &optA; optReset = &optB; break;
   case 'B': opt = &optB; optReset = &optA; break;
   }
-  if((ec = optScanBool(*opt)) == E_None
+  if((ec = optScanBoolI(*opt)) == E_None
    && *opt)
     *optReset = 0;
 

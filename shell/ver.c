@@ -31,10 +31,10 @@ static int optR, optW, optD, optC;
 #pragma argsused
 optScanFct(opt_ver)
 { switch(ch) {
-  case 'R': return optScanBool(optR);
-  case 'W': return optScanBool(optW);
-  case 'D': return optScanBool(optD);
-  case 'C': return optScanBool(optC);
+  case 'R': return optScanBoolI(optR);
+  case 'W': return optScanBoolI(optW);
+  case 'D': return optScanBoolI(optD);
+  case 'C': return optScanBoolI(optC);
   }
   optErr();
   return E_Useage;

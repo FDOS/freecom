@@ -18,7 +18,7 @@
 
 int cmd_echo(char *param)
 {	int nostatus;
-	FLAG *echo;
+	byte far *echo;
 
 	if(param && *param) {
 		nostatus = !isspace(*param);

@@ -30,7 +30,7 @@ static int optP;
 optScanFct(opt_del)
 {
   switch(ch) {
-  case 'P': return optScanBool(optP);
+  case 'P': return optScanBoolI(optP);
   }
   optErr();
   return E_Useage;

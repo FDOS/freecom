@@ -48,6 +48,20 @@ static void outsblank(const char * const s)
 {	outs(s);
 	outblank();
 }
+static void recalcOrgXY(unsigned charcount)
+{	int lines;
+
+	assert(orgx > 0);
+	lines = (charcount + orgx - 1) / MAX_X;
+	while(orgy > 1 && orgy + lines - 1 > MAX_Y)
+		--orgy;
+}
+static void gochar(unsigned char current)
+{	div_t x;
+
+	x = div(current + orgx - 1, MAX_X);
+	goxy(x.rem + 1, orgy + x.quot);
+}
 
 /* read in a command line */
 #pragma argsused
@@ -62,8 +76,6 @@ char *readcommandEnhanced(void)
 	int histLevel = 0;
 	char *prvLine = 0;
 #endif
-	unsigned curx;
-	unsigned cury;
 	unsigned current = 0;
 	unsigned charcount = 0;
 	char *str = 0;
@@ -85,6 +97,7 @@ char *readcommandEnhanced(void)
 		return 0;
 
 	do {
+		gochar(current);
 		ch = cgetchar();
 		assert(current <= charcount);
 		assert(charcount == 0 || str != 0);
@@ -115,21 +128,27 @@ char *readcommandEnhanced(void)
 				memmove(&str[current], &str[current + 1]
 				 , charcount - current + 1);
 				charcount--;
-				curx = wherex();
-				cury = wherey();
 				outsblank(&str[current]);
-				goxy(curx, cury);
+				gochar(current);
 			}
 			break;
 
 		case KEY_HOME:             /* goto beginning of string */
 
 			if(current != 0) {
-				goxy(orgx, orgy);
 				current = 0;
 			}
 			break;
 
+#ifdef DEBUG
+		case KEY_CTL_T:
+			if(!StrCat(str, "1234567890")) {
+				error_out_of_memory();
+				break;
+			}
+			charcount += 10;
+			/** FALL THROUGH **/
+#endif
 		case KEY_END:              /* goto end of string */
 
 			if(current != charcount) {
@@ -189,8 +208,7 @@ char *readcommandEnhanced(void)
 
 				goxy(orgx, orgy);
 				outs(str);
-				if((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
-				  orgy--;
+				recalcOrgXY(charcount);
 			}
 			break;
 #endif
@@ -223,10 +241,6 @@ char *readcommandEnhanced(void)
 
 			if(current != charcount) {
 				current++;
-				if(wherex() == MAX_X)
-					goxy(1, wherey() + 1);
-				else
-					goxy(wherex() + 1, wherey());
 				break;
 			}
 			/* cursor-right at end of string grabs the next character
@@ -260,6 +274,7 @@ char *readcommandEnhanced(void)
 				else {
 					outs(&str[current]);
 					current = charcount = strlen(str);
+					recalcOrgXY(charcount);
 				}
 			}
 			break;
@@ -273,6 +288,7 @@ char *readcommandEnhanced(void)
 				prvLine = 0;
 				current = charcount = Strlen(str);
 				outs(str);
+				recalcOrgXY(charcount);
 				histGet(histLevel - 1, &prvLine);
 			}
 			break;
@@ -285,6 +301,7 @@ char *readcommandEnhanced(void)
 				histGet(++histLevel, &str);
 				current = charcount = Strlen(str);
 				outs(str);
+				recalcOrgXY(charcount);
 			}
 			break;
 
@@ -292,6 +309,7 @@ char *readcommandEnhanced(void)
 			clrcmdline(str, orgx, orgy);
 			StrRepl(prvLine, str);
 			str = 0;
+			current = charcount = 0;
 			outc('@');
 			if(orgy >= MAX_Y) {
 				outc('\n');			/* Force scroll */
@@ -299,8 +317,6 @@ char *readcommandEnhanced(void)
 			} else {
 				++orgy;
 			}
-			goxy(orgx, orgy);
-			current = charcount = 0;
 
 			break;
 
@@ -310,10 +326,6 @@ char *readcommandEnhanced(void)
 
 			if(current > 0) {
 			  current--;
-			  if(wherex() == 1)
-				goxy(MAX_X, wherey() - 1);
-			  else
-				goxy(wherex() - 1, wherey());
 			}
 #if 0
 			else
@@ -332,13 +344,9 @@ char *readcommandEnhanced(void)
 						 , &str[current], charcount - current);
 						str[current] = ch;
 					}
-					curx = wherex() + 1;
-					cury = wherey();
-					outs(&str[current++]);
-					if((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
-						cury--;
-					goxy(curx, cury);
-					charcount++;
+					outs(&str[current]);
+					recalcOrgXY(++charcount);
+					++current;
 				}
 			} else
 				beep();

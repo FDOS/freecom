@@ -504,7 +504,7 @@ static int loadfix_prepare(void)
 #pragma argsused
 optScanFct(opt_lh)
 { switch(ch) {
-  case 'S': return optScanBool(optS);
+  case 'S': return optScanBoolI(optS);
   case 'L': return optScanString(optL);
   }
   optErr();

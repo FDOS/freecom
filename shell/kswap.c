@@ -185,6 +185,7 @@ int kswapLoadStruc(void)
 		return FALSE;
 
 	assert(kswapContext);
+	ctxtFlagsP = &kswapContext->flags;
 
 	/* kswapContext->prg had been disabled in kswapInit() */
 	assert(!kswapContext->prg);

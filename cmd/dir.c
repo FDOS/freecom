@@ -44,13 +44,13 @@ int need_nl;
 #pragma argsused
 optScanFct(opt_dir)
 { switch(ch) {
-  case 'S': return optScanBool(optS);
-  case 'P': return optScanBool(optP);
-  case 'W': return optScanBool(optW);
-  case 'B': return optScanBool(optB);
-  case 'A': return optScanBool(optA);
-  case 'L': return optScanBool(optL);
-  case 'Y': return optScanBool(longyear);
+  case 'S': return optScanBoolI(optS);
+  case 'P': return optScanBoolI(optP);
+  case 'W': return optScanBoolI(optW);
+  case 'B': return optScanBoolI(optB);
+  case 'A': return optScanBoolI(optA);
+  case 'L': return optScanBoolI(optL);
+  case 'Y': return optScanBoolI(longyear);
   }
   optErr();
   return E_Useage;
