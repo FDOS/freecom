@@ -16,6 +16,10 @@
  *
  * 2000/07/24 Ron Cemer
  * bugfix: Suppress "Overwrite..." prompt if destination is device
+ *
+ * 2001/02/17 ska
+ * add: interactive command flag
+ * bugfix: copy 1 + 2 + 3 <-> only first and last file is stored
  */
 
 #include <assert.h>
@@ -459,10 +463,10 @@ int addSource(char *p)
       error_out_of_memory();
       return 0;
     }
-    lastApp->app = h;
     h->fnam = q;
     h->flags = cpyFlags();
     h->app = NULL;
+    lastApp = lastApp->app = h;
   } while((q = strtok(NULL, "+")) != NULL);
 
   return 1;
