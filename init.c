@@ -86,6 +86,9 @@
  * 2000/07/05 Ron Cemer
  *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  *	fix: add typecase for local variables of _fmemcpy()
+ *
+ * 2000/07/24 Ron Cemer
+ *	bugfix: ensure environment segment is in limits 256..32767
  */
 
 #include "config.h"
@@ -104,7 +107,6 @@
 #include "mcb.h"
 #include "environ.h"
 #include "dfn.h"
-#define _TC_EARLY
 #include "fmemory.h"
 
 #include "err_hand.h"
@@ -244,7 +246,7 @@ int WaitForFkeys(void)
 
 int showhelp = 0, internalBufLen = 0, inputBufLen = 0;
 int spawnAndExit = E_None;
-int newEnvSize = 0;
+int envSize = 256;          /* Min environment table size */
 char *user_autoexec = NULL;
 
 optScanFct(opt_init)
@@ -259,7 +261,7 @@ optScanFct(opt_init)
       ec = optScanString(user_autoexec);
     canexit = 0;
     return ec;
-  case 'E': return optScanInteger(newEnvSize);
+  case 'E': return optScanInteger(envSize);
   case 'L': return optScanInteger(internalBufLen);
   case 'U': return optScanInteger(inputBufLen);
   case 'C': /* spawn command, then exit */
@@ -549,13 +551,17 @@ int initialize(void)
   }
 
   /* First of all, set up the environment */
-    /* If a new valid size is specified, use that */
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE;
-  if(newEnvSize > 16 && newEnvSize < 32767)
-    env_setsize(0, newEnvSize); // SUPPL27+
-    //env_newsize(0, newEnvSize);   // SUPPL26-
-
-  /* Otherwise the path is placed into the environment */
+  if (envSize < 0)
+    envSize = 32767;        /* Numeric overflow (number > 32767 specified) */
+  else if (envSize < 256)
+    envSize = 256;          /* Minimum size of 256. */
+	if(envSize > env_resize(0, 0))	/* Test if to enlarge environment */
+		env_setsize(0, envSize);
+    /* Set the COMSPEC variable. */
+#if 0
+  if (chgEnv("COMSPEC", ComPath)) error_env_var("COMSPEC");
+#else
   if (chgEnv("COMSPEC", ComPath)) {
     /* Failed to add this variable, the most likely problem should be that
       the environment is too small --> it is increased and the
@@ -564,6 +570,7 @@ int initialize(void)
     if (chgEnv("COMSPEC", ComPath))
     error_env_var("COMSPEC");
   }
+#endif
 
   if(internalBufLen)
     error_l_notimplemented();

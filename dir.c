@@ -125,7 +125,7 @@
  *    A four-digit year would break all batch files scanning the
  *    output of DIR.
  *
- * 2000/07/07 Ron Cemer ///
+ * 2000/07/07 Ron Cemer
  * Added code to detect a pattern of "." or "" and convert to ".\*.*",
  * to prevent "file not found" errors from command.com when executed
  * from the root of drive C: and "DIR" is typed without any arguments,
@@ -134,7 +134,7 @@
  * not needed).  Hopefully this will help to bypass any findfirst/findnext
  * bugs which may exist in the kernel.
  *
- * 2000/07/16 Ron Cemer ///
+ * 2000/07/16 Ron Cemer
  * Fixed "DIR .." or "DIR C:\FREEDOS\COM079\..".
  * Fixed "DIR /S".
  * No longer reallocate the "path" variable in dir_list().  This would break
@@ -275,7 +275,7 @@ int dir_print_header(int drive)
     return 0;
 
   currDisk = getdisk();
-  if(changeDrive(drive) != 0) {
+  if(changeDrive(drive+1) != 0) {
     setdisk(currDisk);
     return 1;
   }
@@ -302,9 +302,8 @@ int dir_print_header(int drive)
 
   if (FINDFIRST("\\*.*", &f, FA_LABEL) == 0)
   {
-        /* /// Added to remove "." from labels which are longer than
-               8 characters (as DOS does).
-               - Ron Cemer */
+        /* Added to remove "." from labels which are longer than
+               8 characters (as DOS does). */
     char *dotptr = strchr(f.ff_name, '.');
     if (dotptr != NULL)
     	if(strlen(dotptr + 1))
@@ -329,7 +328,7 @@ int dir_print_header(int drive)
   }
   }
 
-        /* /// Added to exactly match DOS's formatting.  - Ron Cemer */
+        /* Added to exactly match DOS's formatting. */
   if ( (optS) && (rv == 0) ) {
       printf("\n");
       rv = incline();
@@ -375,10 +374,6 @@ int convert(unsigned long num, char *des)
 /*
  * print_summary: prints dir summary
  */
-/* /// Removed unused "dirs" parameter and moved it to dir_print_free().
-       - Ron Cemer */
-/* /// Changed formatting to exactly match DOS's formatting.
-       - Ron Cemer */
 int print_summary(unsigned long files
   , unsigned long bytes)
 {
@@ -395,10 +390,6 @@ int print_summary(unsigned long files
   return incline();
 }
 
-/* /// Removed unused "dirs" parameter and moved it to dir_print_free().
-       - Ron Cemer */
-/* /// Changed formatting to exactly match DOS's formatting.
-       - Ron Cemer */
 int print_total
     (unsigned long files,
      unsigned long bytes)
@@ -417,12 +408,6 @@ int print_total
   return rv;
 }
 
-/* /// Moved "dirs" parameter from print_summary() and print_total().
-       - Ron Cemer */
-/* /// Changed formatting to exactly match DOS's formatting,
-       EXCEPT THAT FREE BYTES ARE ALWAYS PRINTED AS BYTES, NOT
-       KB OR MB.
-       - Ron Cemer */
 int dir_print_free(unsigned long dirs)
 {
   char buffer[32];
@@ -440,7 +425,6 @@ int dir_print_free(unsigned long dirs)
   r.h.dl = toupper(*path) - 'A' + 1;
   int86(0x21, &r, &r);
   convert((unsigned long)r.x.ax * r.x.bx * r.x.cx, buffer);
-    /* /// Changed to match DOS's formatting.  - Ron Cemer */
   printf(" %15s bytes free\n", buffer);
 
   return incline();
@@ -451,16 +435,12 @@ int dir_print_free(unsigned long dirs)
  *
  * list the files in the directory
  */
-/* /// Changed formatting to exactly match DOS's formatting.  - Ron Cemer */
 int dir_list(int pathlen
   , char *pattern
   , unsigned long *dcnt
   , unsigned long *fcnt
   , unsigned long *bcnt
-#if 0
-  , int recursion
-#endif
-  )          /* /// Added for "DIR /S" - Ron Cemer */
+  )
 {
   struct ffblk file;
   unsigned long bytecount = 0;
@@ -475,72 +455,13 @@ int dir_list(int pathlen
   assert(pattern);
   assert(pathlen >= 2);   /* at least root */
 
-#if 0
-	/* Introduction of dfnfullpath() should eliminate the need for
-		this code -- 2000/07/17 ska*/
-
-    /* /// For some reason, "DIR /S" can actually cause pathlen to be set
-       to a length greater than the actual length of path.  This hack will
-       correct that problem.
-       - Ron Cemer */
-  if (pathlen > strlen(path)) pathlen = strlen(path);
-
-    /* /// Added special handling for paths which end in "\.".
-           - Ron Cemer */
-  if (pathlen >= 2)
-    if (   (path[pathlen-1] == '.')
-        && ( (path[pathlen-2] == '\\') || (path[pathlen-2] == '/') )   )
-        pathlen--;
-
-    /* /// Added special handling here for when pattern is "..",
-       because "DIR .." was failing.  Basically, we add a "\" onto
-       the end of path, bump up pathlen to include the trailing
-       "..\", and set pattern to "*.*".
-       - Ron Cemer */
-  if (strcmp(pattern,"..") == 0) {
-    if (   (path[pathlen] == '.')
-        && (path[pathlen+1] == '.')
-        && (path[pathlen+2] == '\0')   ) {
-        pathlen += 2;
-        path[pathlen++] = '\\';
-        path[pathlen] = '\0';
-        pattern = "*.*";
-    }
-  }
-
-    /* /// Added code to detect a pattern of "." or "" and convert
-       to "*.*", to prevent "file not found" errors from command.com when
-       executed from the root of drive C: and "DIR" is typed without any
-       arguments, or if you type "DIR C:" and the current directory on drive
-       C: is "\".
-       - Ron Cemer */
-  if (   (strlen(pattern) == 0)
-      || (strcmp(pattern,".") == 0)   )
-    pattern = "*.*";
-#endif
-
-  /* if the user wants all files listed RL 06/17/98 */
+  /* if the user wants all files listed */
   if (optA)
     mode |= FA_HIDDEN | FA_SYSTEM;
 
   /* Search for matching entries */
   path[pathlen - 1] = '\\';
   strcpy(&path[pathlen], pattern);
-
-#if 0			/* done by dfnfullpath() */
-    /* /// Added code to remove "\.\" and replace with "\".
-       This should help to prevent confusing the kernel until we get
-       the findfirst/findnext kernel bugs fixed.  - Ron Cemer */
-  {
-    char *p = path;
-    while (*p != '\0') {
-        if ( (p[0] == '\\') && (p[1] == '.') && (p[2] == '\\') )
-            strcpy(&p[1], &p[3]);
-        else
-            p++;
-    }
-  }
-#endif
 
   if (FINDFIRST(path, &file, mode) == 0) {
   /* moved down here because if we are recursively searching and
@@ -553,33 +474,12 @@ int dir_list(int pathlen
   {
     rv = flush_nl();
     if(rv == E_None) {
-#if 0		/* pathlen remains constant --> no asterisk because of
-				pruning the '\\' below */
-            /* /// This is the first part of a hack to eliminate spurious
-                   "\*" from the end of the path that is being printed.
-                   The rest of this hack is after the printf() below.
-                   - Ron Cemer */
-        int pl = strlen(path);
-        int pp = pl;
-        char pcs;
-        if (pl >= 2) {
-            if (   (path[pl-1] == '*')
-                && ( (path[pl-2] == '\\') || (path[pl-2] == '/') )   ) {
-                pp = pl-2;
-                pcs = path[pp];
-                path[pp] = '\0';
-            }
-        }
-#endif
 	   	/* path without superflous '\' at its end */
 	   if(pathlen == 3)     /* root directory */
 		 path[pathlen] = '\0';    /* path := path w/o filename */
 	   else path[pathlen - 1] = '\0';
             /* /// Changed to exactly match DOS's formatting.  - Ron Cemer */
         printf("%sDirectory of %s\n", (optS ? "" : " "), path);
-#if 0
-        if (pp != pl) path[pp] = pcs;   /* /// Put old char back - Ron Cemer */
-#endif
         if((rv = incline()) == E_None) {
         putchar('\n');
         rv = incline();
@@ -661,7 +561,6 @@ int dir_list(int pathlen
 
       if (file.ff_attrib & FA_DIREC)
       {
-        /* /// Added to exactly match DOS's formatting.  - Ron Cemer */
         printf("%-14s", "  <DIR>");
         dircount++;
       }
@@ -673,7 +572,6 @@ int dir_list(int pathlen
         filecount++;
       }
 
-        /* /// Changed to exactly match DOS's formatting.  - Ron Cemer */
       printf(" %.2d-%.2d-%02d", ((file.ff_fdate >> 5) & 0x000f),
              (file.ff_fdate & 0x001f), ((file.ff_fdate >> 9) + 80) % 100);
       time = file.ff_ftime >> 5 >> 6;
@@ -689,7 +587,6 @@ int dir_list(int pathlen
   while (rv == E_None && FINDNEXT(&file) == 0);
   }
 
-/* Rob Lake, need to make clean output */
   if (rv == E_None && optW && (count != 0))
   {
     putchar('\n');
@@ -708,19 +605,10 @@ int dir_list(int pathlen
     rv = E_Other;
     }
 
-#if 0
- /// This was causing "DIR /S" to fail.  - Ron Cemer
-  if(rv == E_None        /* no error */
-   && optS             /* do recursively */
-   && (pathlen == 3      /*  root directory */
-    || dircount > 2)) {}  /*    at least dir except . & .. */
-#endif
-/* corrected here:
-*/
   if(rv == E_None       /* no error */
    && optS) {            /* do recursively */
       /* already set for optB && optS before do {} while above 
-      path[pathlen - 1] = '\\';		*/
+		  path[pathlen - 1] = '\\';		*/
       strcpy(&path[pathlen], "*.*");
       if (FINDFIRST(path, &file, mode) == 0) do {
         if((file.ff_attrib & FA_DIREC) != 0 /* is directory */
@@ -729,37 +617,11 @@ int dir_list(int pathlen
         if (optL)
           strlwr(file.ff_name);
           strcpy(&path[pathlen], file.ff_name);
-#if 0			/* pathlen remains unchanged, '\\' placed in next
-					recursion level */
-/* ///  We needed a trailing backslash here.  - Ron Cemer */
-          strcpy(&path[pathlen+strlen(file.ff_name)], "\\");
-#endif
           rv = dir_list(pathlen + strlen(file.ff_name) + 1, pattern
            , &dircount, &filecount, &bytecount
-#if 0
-           , 1
-#endif
-           );  /* /// Added for "DIR /S" - Ron Cemer */
+           );
         }
       } while (rv == E_None && FINDNEXT(&file) == 0);
-
-#if 0				/* Nothing to do */
-    if(rv == E_None) {
-#if 0			/* is not needed in recursion level below */
-       if(pathlen == 3)     /* root directory */
-         path[pathlen] = '\0';    /* path := path w/o filename */
-       else path[pathlen - 1] = '\0';
-#endif
-#if 0			/* if printed at the end of one argument -->
-					move it into print_body() as this is the wrapper */
-        /* /// Only call print_total() when the topmost instance of
-           dir_list() finishes (all subdirectories have been traversed).
-           - Ron Cemer */
-      if (!recursion)
-        rv = print_total(filecount, bytecount);
-#endif
-     }
-#endif
   }
 
     *dcnt += dircount;
@@ -769,21 +631,18 @@ int dir_list(int pathlen
   return rv;
 }
 
-    /* /// Added dcnt parameter so we can get the dir count for totals.
-       - Ron Cemer */
 int dir_print_body(char *arg, unsigned long *dircount)
 {	int rv;
 	unsigned long filecount, bytecount;
 	char *pattern, *cachedPattern;
 	char *p;
 
-		/* /// Modified to pre-allocate path to 270 bytes so that
+		/* Modified to pre-allocate path to 270 bytes so that
 		   we don't have to realloc() it later.  That was causing
 		   "DIR /S" not to work properly.  The path variable cannot
 		   be reallocated once dir_list() is called, because dir_list()
 		   is recursive.  This will also help to reduce memory
-		   fragmentation.
-		   - Ron Cemer */
+		   fragmentation. */
 	if((p = dfnfullpath(arg)) == NULL) {
 		error_out_of_memory();
 		return E_NoMem;
@@ -808,10 +667,7 @@ int dir_print_body(char *arg, unsigned long *dircount)
 				++pattern;
 			rv = dir_list(pattern - path, "*.*", dircount, &filecount
 			 , &bytecount
-#if 0
-			 , 0
-#endif
-			 );    /* /// Added for "DIR /S" - Ron Cemer */
+			 );
 		} else {
 			if((cachedPattern = strdup(pattern)) == NULL) {
 				error_out_of_memory();
@@ -819,10 +675,7 @@ int dir_print_body(char *arg, unsigned long *dircount)
 			} else {
 				rv = dir_list(pattern - path, cachedPattern, dircount
 				 , &filecount, &bytecount
-#if 0
-				 , 0
-#endif
-				 ); /* /// Added for "DIR /S" - Ron Cemer */
+				 );
 				free(cachedPattern);
 			}
 		}
@@ -840,18 +693,12 @@ int dir_print_body(char *arg, unsigned long *dircount)
  */
 #pragma argsused
 
-    /* /// Added dircount variable and passed its address to all
-           dir_print_body() calls, and passed its value to dir_print_free()
-           call.  This will allow the directory count to be printed on
-           the same line as the number of free bytes, as DOS does.
-           - Ron Cemer */
 int cmd_dir(char *rest)
 {
   char **argv;
   int argc, opts;
   int rv;                       /* return value */
-  unsigned long dircount;       /* /// Added to get dircount for totals
-                                       - Ron Cemer */
+  unsigned long dircount;
 
   /* initialize options */
   optS = optP = optW = optB = optA = optL = 0;

@@ -129,4 +129,15 @@
 #define	INCLUDE_CMD_CDD
 #endif
 
- #include "debug.h"
+/* Not available with TURBOC++ 1.0 or earlier: */
+#ifdef __TURBOC__
+
+#if __TURBOC__ > 0x297
+#define _TC_LATER_
+#else
+#define _TC_EARLY_
+#endif
+
+#endif
+
+#include "debug.h"
