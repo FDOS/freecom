@@ -3,10 +3,10 @@ Piping -- 2000/08/16 ska
 
 Piping, e.g. "cmd1 | cmd2", is actually spawned as:
 
-	SET some_internal_variable=%TEMP%\non-existant-file
-	cmd1 >%some_internal_variable%
-	cmd2 <%some_internal_variable%
-	DEL %some_internal_variable%
+1	SET some_internal_variable=%TEMP%\non-existant-file
+2	cmd1 >%some_internal_variable%
+3	cmd2 <%some_internal_variable%
+4	DEL %some_internal_variable%
 
 The original implementation failed because the file was left open
 for writing in statement 2 before the temporary file was tried to
