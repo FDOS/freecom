@@ -1,0 +1,160 @@
+$Id$
+The Three Portions of FreeCOM
+	-- 2001/08/21 ska
+
+FreeCOM consists of three main portions:
+
+1- the modules -- which are partially described in CMT9.TXT;
+2- the Initialization Unit, and
+3- the Work unit.
+
+=== Design
+
+The modules are out-sourced code and data intended to be shareb among
+various instances of FreeCOM, the most important ones are the static
+context and the ^Break and Critial Error handlers.
+
+The current implementation (v0.82) is one single program that includes
+code to initialize the FreeCOM run-time environment, such as to load
+the modules into memory, parse the command line etc., and code, that
+performs to prompt the user, parses and interpretes the input and
+executes batch scripts etc. pp.
+
+After initialization an huge part of the code is no longer required to
+perform the functionality of FreeCOM, furthermore when FreeCOM runs
+in non-Swapping mode the memory is certainly wasted; also, although
+not so important, resources are wasted in Swapping mode, too, as this
+code must be loaded into memory with each swap and, if swapped to
+XMS, EMS or something like that, memory is wasted therein as well.
+
+Therefore FreeCOM gets broken into three components:
+
+1- The modules (that are more or less free-standing pieces of code anyway)
+2- The Initialization unit
+3- The Work unit
+
+=== The Initialization Unit
+
+The duty of this portion is to "make the bed" (aka setup the environment)
+the Work unit requires to run, this includes:
+
+a) parse and interprete the command line passed into FreeCOM,
+b) search for and attach to or load the particularily required modules,
+c) create the static context (aka Stub module) and setup the global
+	flags, values therein,
+d) create the dynamic context inheriting default values from parent
+	FreeCOM instances, and, finally,
+e) setup and configure the modules so that the Work unit can be loaded
+	into memory.
+
+After that the Initialization unit is going to pass control to the
+Work unit. There are two possible ways however:
+
+Way #1: Swapping enabled
+
+The static context (aka Stub module) already contains all necessary
+code to load the Work unit into memory and pass control to it.
+All the initialization unit has to do is to pass the control to
+the particular piece of code.
+
+Way #2: Swapping disabled
+
+When swapping is disabled, the Work unit remains in memory persistently,
+hence the Stub module contains no code to load it. In this case, the
+Intialization unit loads and activates the Work unit itself.
+
+=== The Work Unit
+
+When the Work unit gets activated, it assumes to run in its required
+environment, the only check is made for the static context and, from
+its information, the dynamic context and the current execution state
+is determined. The Work unit assumes that all modules are in-place
+and well configured otherwise.
+
+If the static context is absent, the Work unit dies with a fatal error.
+
+If the dynamic context is absent, corrupted or otherwise not useable,
+a new one is created with default values, the primary state is
+assumed by the "canexit" global flag:
+
++ If canexit == false --> entering KEEP_RUNNING state;
++ otherwise --> pushing TERMINATE, then entering INTERACTIVE status.
+
+No values or settings are inherited.
+
+The parent process of the Work unit is the static context always,
+depending on the Swap mode the particular code varies:
+
++ In non-Swapping mode, if the Work unit terminates, a very rudimentary
+Respawner module gets activated that checks the return value for
+"TERMINATE SESSION" and verifies that the session may be terminated,
+e.g. by checking that the global flag "canexit" is true.
+
+If so, the session terminates by terminating the static context
+via DOS-4C -- where it is assumed that the Work unit dis-attached
+all modules and, if they are not used (shared) by other FreeCOM
+instances, had been mark to be owned by the static context in order
+those memory blocks are de-allocated as well.
+
+Otherwise, which would occure when the /P switch was enabled most
+probably, the static context enters an infinite requesting the user
+to reboot the system. It would be helpful in such case to respawn
+FreeCOM, but in order to spare as much memory as possible and the
+chances are very low -- only on fatal failures of FreeCOM's Work
+unit -- that this happens, the code is removed.
+
++ In Swapping mode, the exit code of the Work unit causes the
+Respawner module to:
+
+- invoke an external program,
+- initiate an user negotionation about which FreeCOM to load,
+- reload the Work unit of FreeCOM, or
+- terminate the FreeCOM session.
+
+If the session is about to be terminated, but this option is forbidden,
+e.g. the global flag "canexit" is false, a warning message is issued
+and the Work unit is respawned.
+
+If to respawn the Work unit fails, the Respawner module skips to
+the negotionation; if this fails, too, the session is terminated;
+if terimation is forbidden, the session hangs infinitely.
+
+=== Projected Layout of the FreeCOM Executable
+
+The Initialization unit forms the firstmost part of the FreeCOM
+executable. It is an EXE type program, which allows to attach as many
+arbitary information to the program; .COM type programs may have
+problems, when instead of loading the very first 64KB of the program
+image only as done by MS DOS all of the executable is to be loaded into
+memory. At one hand, this is not necessary and on the other hand this
+might cause unnecessary out-of-memory conditions.
+
+Doing so implicitly forces the correct behaviour in all circumstances,
+e.g. when FreeCOM is invoked directly from a FreeCOM's command line.
+
+Doing so may run into the problem that using LH or SHELLHIGH loads the
+Initialization unit into upper memory, although, it is an intermediate
+piece of code only that will not remain resident.
+
+At the end of the EXE-type file of the Initialization unit of FreeCOM a
+number of data blocks -- the resources -- are attached, among them are
+the modules, the String resource and the Work unit.
+
+If the Work unit is just a plain .COM-like program image, no further
+preprocessing is required, otherwise, the .EXE-type program format
+is broken up into pieces and re-ordered so that all relevant information
+may be read in sequence; usually that would mean:
+- lowest address
+	+ header information
+		++ length of program image
+		++ length of additional information
+		++ minimal/maximal memory block to load the program to (*)
+	+ program image (excluding the PSP)
+	+ additional information
+		++ number of relocation positions
+		++ relocaton positions
+		++ initial values of registers, incl. CS:IP and SS:SP.
+- highest address
+(*) Regardless of the "maximum" value the allocated memory block
+	will be large enough to hold both the program image and the
+	additional information initially.

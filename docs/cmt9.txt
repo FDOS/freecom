@@ -1,0 +1,81 @@
+$Id$
+Respawner and Loader Module
+	-- 2001/08/20 ska
+
+The Respawner module provides shared code to:
+1. execute an external program,
+2. spawn FreeCOM, and
+3. some error catching and reporting functionality.
+
+It is completed by the FreeCOM Loader module (see below).
+
+=== Design
+
+A FreeCOM instance does not execute external program directly, but
+handles this request via the Respawner module. Hereby, FreeCOM is
+preparing all information and ensures syntacical and semantical
+correctness of the request; those preparations are storred in the
+context of the FreeCOM instance.
+
+Per design the Work unit of FreeCOM is the child process of its own
+context, which is a process (e.g. with its own PSP), too.
+After preparations the Work unit terminates with a certain exit code.
+Upon termination the parent process -- aka the context, and thereby
+the Respawner module -- gets active.
+
+First, the Respawner module checks the exit code of the last FreeCOM
+instance, it can be one of:
+a) TERMINATE SESSION
+	to terminate the currently active FreeCOM session.
+	If the global flag "can_exit" is false, this request is denied and
+	either FreeCOM is restarted or the Respawner module hangs forever.
+b) CALL EXTERNAL PROGRAM
+	to execute an external program.
+	see below
+c) RESPAWN FREECOM
+	to directly respawn the Work unit of FreeCOM.
+	see below
+d) else
+	it is assumed that the Work unit of FreeCOM aborted upon failure.
+	After displaying an appropriate error message FreeCOM is
+	respawned as in variant c).
+
+When CALL EXTERNAL PROGRAM had been returned, the Respawner module
+aquires the already prepared information for API function DOS-4B-00
+from the context and performs the call.
+Upon its return, the return value and/or the program's exit code is
+saved into the context and FreeCOM is respawned.
+
+To RESPAWN FREECOM, firstly all available memory is claimed and a new
+child process is prepared there.
+Secondly, the Respawner module aquires from the context which
+Loader module is capable of loading the Work unit of FreeCOM into memory;
+this module is called.
+Thirdly, the invoked Loader module loads a COM-type program image into
+the newly prepared memory from whatever storage location. This process
+might return one of following return codes:
+a) TERMINATE SESSION (as above),
+b) RESPAWN FREECOM (as above), or
+c) Proceed (to advance to step four below).
+Fourly, the Respawner module passes control to the child process.
+
+The newly created and filled child process may contain:
+a) the Work unit of FreeCOM, in which case FreeCOM is now active
+	again and can perform its work.
+
+b) another loader.
+	If the process to load the Work unit of FreeCOM becomes pretty
+	complex, a second loader can be placed between the Respawner
+	module and the Work unit of FreeCOM in order to reduce the complexity
+	and, mainly, to reduce the size of the Loader module.
+
+	This loader might include an EXE relocator or provide functionality
+	to load programs larger than 64KB.
+
+	The loader must return the same exit code as the Work unit, which
+	had been loaded and executed by it.
+
+
+When the Work unit of FreeCOM terminates, the process may start over and
+over again, until the FreeCOM session is terminated or some fatal error
+occurs.

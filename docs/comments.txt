@@ -1,9 +1,11 @@
 $Id$
-cmt1.txt - Redesign of command line parser for internal commands
-cmt2.txt - Batchfile processing
-cmt3.txt - Command line parser
-cmt4.txt - How the COPY command works
-cmt5.txt - option parser
-cmt6.txt - MUX-AE handler
-cmt7.txt - Permanent data storage within external memory block
-cmt8.txt - Internal representation of command lines
+cmt1.txt - Redesign of Command Line Parser for Internal Commands
+cmt2.txt - Batchfile Processing
+cmt3.txt - Command Line Parser
+cmt4.txt - How the COPY Command Works
+cmt5.txt - Option Parser
+cmt6.txt - MUX-AE Handler
+cmt7.txt - Permanent Data Storage Within External Memory Block
+cmt8.txt - Internal Representation of Command lines
+cmt9.txt - Respawner and Loader Module
+cmt10.txt - The Three Portions of FreeCOM
