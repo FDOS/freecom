@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.6  2002/04/02 20:58:13  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.5  2002/04/02 18:09:31  skaus
 # add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 #
@@ -99,12 +102,12 @@ OBJ = alprmblk.obj alsysblk.obj beep_l.obj beep_n.obj brk_get.obj \
 	trimsp.obj txtlend.obj unquote.obj vcgetch.obj vcgetstr.obj where.obj
 HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\include/batch.h \
 	..\include/cmdline.h ..\include/command.h ..\include/context.h \
-	..\include/crossjmp.h ..\include/datefunc.h ..\include/debug.h \
-	..\include/keys.h ..\include/kswap.h ..\include/misc.h \
-	..\include/mux_ae.h ..\include/nls.h ..\include/openf.h ..\include/res.h \
-	..\include/resource.h ..\include/strings.typ ..\include/timefunc.h \
-	..\include\large.inc ..\include\model.inc ..\include\small.inc \
-	..\include\stuff.inc
+	..\include/crossjmp.h ..\include/cswap.h ..\include/datefunc.h \
+	..\include/debug.h ..\include/keys.h ..\include/kswap.h \
+	..\include/misc.h ..\include/mux_ae.h ..\include/nls.h \
+	..\include/openf.h ..\include/res.h ..\include/resource.h \
+	..\include/strings.typ ..\include/timefunc.h ..\include\large.inc \
+	..\include\model.inc ..\include\small.inc ..\include\stuff.inc
 
 
 #	Default target
@@ -267,9 +270,10 @@ scanopt.obj : scanopt.c \
 openf.obj : openf.c \
 	 ../config.h ../include/debug.h ../include/openf.h
 messages.obj : messages.c \
-	 ../config.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/res.h ../include/resource.h \
-	../include/strings.typ ../include/timefunc.h ../strings.h
+	 ../config.h ../include/cswap.h ../include/datefunc.h \
+	../include/debug.h ../include/misc.h ../include/res.h \
+	../include/resource.h ../include/strings.typ ../include/timefunc.h \
+	../strings.h
 scancmd.obj : scancmd.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
@@ -300,8 +304,9 @@ cmdinput.obj : cmdinput.c \
 	../include/debug.h ../include/keys.h ../include/misc.h \
 	../include/timefunc.h
 exec.obj : exec.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../include/command.h ../include/cswap.h \
+	../include/datefunc.h ../include/debug.h ../include/misc.h \
+	../include/timefunc.h
 fdattr.obj : fdattr.c
 goxy.obj : goxy.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \

@@ -20,8 +20,7 @@ struct ParamDosExec {
 /* default alignment */
 #pragma option -a.
 
-/*extern char far dosFCB1[128];*/			/* must be setup correctly */
-#define dosFCB1 ((char far*)MK_FP(_psp, 0x5c))
+extern char far dosFCB1[128];			/* must be setup correctly */
 extern char far dosFCB2[128];		
 
 extern struct ParamDosExec far dosParamDosExec;

@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.4  2002/04/02 20:58:13  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.3  2002/04/02 18:09:31  skaus
 # add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 #
@@ -45,11 +48,12 @@ OBJ = batch.obj cb_catch.obj cmdtable.obj command.obj dummies.obj \
 	ver.obj
 HDR = ..\config.h ..\include/batch.h ..\include/cmdline.h \
 	..\include/command.h ..\include/context.h ..\include/crossjmp.h \
-	..\include/datefunc.h ..\include/debug.h ..\include/keys.h \
-	..\include/kswap.h ..\include/misc.h ..\include/module.h \
-	..\include/mux_ae.h ..\include/nls.h ..\include/openf.h ..\include/res.h \
-	..\include/resource.h ..\include/timefunc.h ..\include\large.inc \
-	..\include\model.inc ..\include\small.inc ..\include\stuff.inc
+	..\include/cswap.h ..\include/datefunc.h ..\include/debug.h \
+	..\include/keys.h ..\include/kswap.h ..\include/misc.h \
+	..\include/module.h ..\include/mux_ae.h ..\include/nls.h \
+	..\include/openf.h ..\include/res.h ..\include/resource.h \
+	..\include/timefunc.h ..\include\large.inc ..\include\model.inc \
+	..\include\small.inc ..\include\stuff.inc
 
 .IF $(XMS_SWAP) == yes
 SRC += cswap.asm cswapc.c xms_crit.asm xms_brk.asm
@@ -98,11 +102,11 @@ expalias.obj : expalias.c \
 command.obj : command.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/batch.h \
 	../include/cmdline.h ../include/command.h ../include/crossjmp.h \
-	../include/datefunc.h ../include/debug.h ../include/kswap.h \
-	../include/misc.h ../include/mux_ae.h ../include/nls.h \
-	../include/openf.h ../include/timefunc.h ../strings.h
+	../include/cswap.h ../include/datefunc.h ../include/debug.h \
+	../include/kswap.h ../include/misc.h ../include/mux_ae.h \
+	../include/nls.h ../include/openf.h ../include/timefunc.h ../strings.h
 module.obj : module.c \
-	 ../context.h_c ../include/command.h ../include/datefunc.h \
+	 ../config.h ../context.h_c ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/kswap.h ../include/misc.h \
 	../include/module.h ../include/res.h ../include/resource.h \
 	../include/timefunc.h
@@ -119,9 +123,10 @@ ver.obj : ver.c \
 	../include/timefunc.h ../strings.h
 init.obj : init.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
-	../include/command.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/keys.h ../include/kswap.h \
-	../include/misc.h ../include/module.h ../include/timefunc.h ../strings.h
+	../include/command.h ../include/context.h ../include/cswap.h \
+	../include/datefunc.h ../include/debug.h ../include/keys.h \
+	../include/kswap.h ../include/misc.h ../include/module.h \
+	../include/timefunc.h ../strings.h
 cmdtable.obj : cmdtable.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h

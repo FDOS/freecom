@@ -30,10 +30,8 @@
 
 segment _TEXT class=CODE
 
-;;	global _dosFCB1,_dosFCB2	use 1st FCB from within PSP
-	global _dosFCB2
-
-;;_dosFCB1 times 37 db 0		just keep FCB2 it would overwrite command line
+	global _dosFCB1,_dosFCB2
+_dosFCB1 times 37 db 0
 _dosFCB2 times 37 db 0
 
 ;;	global _dosCMDTAIL, _dosCMDNAME		use command line from within PSP
