@@ -11,9 +11,8 @@ EBNF: POPD
 EBNF: POPD '*'
 </OL>
 
+<P>The first variant changes the current directory back to the one,
+in which the last PUSHD command was executed.
 
-STD_OPTIONS:
-
-EXAMPLES:
-EXAMPLE: 1
-
+<P>The second one clears all entries of the directory stack, but does
+not change the current directory.

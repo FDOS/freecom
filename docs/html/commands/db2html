@@ -145,22 +145,22 @@ sub dumpAppendix {
 sub dumpHeaderEntry {
 	if($#se >= 0) {
 		print HTML "See also: "
-		 , join(', ', (map { &htmlCommandRef($_) } @se))
+		 , join(', ', (map { &htmlRefWord($_) } @se))
 		 , "<BR>\n";
 	}
 	if($#re >= 0) {
 		print HTML "Requirements: "
-		 , join(',', @re)
+		 , join(', ', (map { &htmlRefWord($_) } @re))
 		 , "<BR>\n";
 	}
 	if($#op >= 0) {
 		print HTML "Optional requirements: "
-		 , join(',', @op)
+		 , join(', ', (map { &htmlRefWord($_) } @op))
 		 , "<BR>\n";
 	}
 	if($#co >= 0) {
 		print HTML "Conflicts with: "
-		 , join(',', @co)
+		 , join(', ', (map { &htmlRefWord($_) } @co))
 		 , "<BR>\n";
 	}
 }
@@ -183,7 +183,12 @@ sub htmlCommandRef {
 
 	return '<A HREF="#' . lc($cmd) . "\">$cmd</A>";
 }
+sub htmlRefWord {
+	my($cmd) = @_;
 
+	return $cmd unless defined($cmdlist{uc($cmd)});
+	return &htmlCommandRef($cmd);
+}
 
 sub htmlSection {
 	my($name) = @_;

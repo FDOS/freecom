@@ -1,0 +1,19 @@
+name: FEATURE_DIRSTACK
+de: Directory stack
+see: PUSHD POPD DIRS
+req: 
+
+DESCRIPTION:
+
+This feature is automatically enabled, if PUSHD is enabled.
+
+<P>The directory stack pushes and pops directories on demand via the
+commands PUSHD and POPD. DIRS displays all pushed directories.
+<P>Please see the documentation of the mentioned commands.
+
+OPTIONS:
+Compile-time options:
+<UL>
+<LI><TT>DIRSTACK_DEFAULT_SIZE</TT>: The amount of bytes reserved to store
+items of the directory stack. Default: 256
+</UL>

@@ -1,0 +1,35 @@
+name: FEATURE_HISTORY
+de: Command line history
+see: HISTORY
+req: FEATURE_ENHANCED_INPUT
+
+DESCRIPTION:
+
+If enabled on compilation of FreeCOM and the enhanced command line
+editing is acivated as well, the command line history becomes available.
+
+<P>When commands are enterred manually on the command line prompt
+of FreeCOM, old command lines are storred in the history and can
+be retrieved later using the key bindings of <TT>F3</TT>, <TT>F1</TT>
+and the cursor Up and Down keys.
+<BR>Without the command line history at most one line is cached.
+
+<P>The command:<BR>
+CMD: HISTORY
+<BR>displays all cached command lines.
+
+<P>The command:<BR>
+EBNF: HISTORY number
+<BR>resizes the amount of bytes reserved to cache command lines to
+<ARG>number</ARG> bytes. Doing so all cached command lines are deleted.
+
+<P>Each instance of FreeCOM maintains its own command line history,
+which is initially inherited from the particular parent instance,
+if any.
+
+OPTIONS:
+Compile-time options:
+<UL>
+<LI><TT>HISTORY_DEFAULT_SIZE<TT>: The amount of bytes reserved initially.
+Default: 256
+</UL>

@@ -1,0 +1,16 @@
+name: FEATURE_ENHANCED_INPUT
+de: Enhanced command line editing
+see: FEATURE_HISTORY FEATURE_FILENAME_COMPLETION
+req: 
+
+DESCRIPTION:
+
+If enabled on compilation of FreeCOM, enhanced command line editing
+features are activated. Otherwise, FreeCOM uses the default
+buffered input DOS API function #0A.
+
+<P>If this feature is disabled, neither command line history
+nor filename completion is available.
+
+<P>Besides the other features various key bindings recognized, which are
+listed in the general FreeCOM documentation.

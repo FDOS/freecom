@@ -1,0 +1,17 @@
+name: FEATURE_CALL_LOGGING
+de: Startup logging
+see: 
+req: 
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM, all startups of a FreeCOM instance
+is logged into a file.
+<P>The drive the logfile is created on can be changed at run-time
+with the external tool <CMD>PTCHLDRV</CMD>.
+
+OPTIONS:
+Compile-time options:
+<UL>
+<LI><TT>LOG_FILE</TT>: The name of the logfile. Default: <CMD>C:\FreeCom.log</CMD>
+</UL>

@@ -1,0 +1,77 @@
+name: FEATURE_ALIASES
+de: Command aliases
+see: ALIAS
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM, command aliases are supported.
+
+<P>New aliases are <U>defined</U> using the command:<BR>
+EBNF: ALIAS name '=' <<string>>
+<P>Aliases are <U>removed</U> using the command:<BR>
+EBNF: ALIAS name '='
+<P>When FreeCOM is interpreting a command line, the command -- the very
+first word -- is matched against all defined aliases. This word is
+separated from its arguments by whitespaces and cannot contain any
+path delimiters, such as backslashes or colons.
+<BR>If the command matches an alias, the name is <U>substituted</U> by the
+EBNF!: <<string>>
+associated to the aliases, e.g. by defining the alias <CMD>ls</CMD> by:<BR>
+CMD: ALIAS ls=dir /w/o
+<BR>let FreeCOM interprete the command line:<BR>
+CMD: C> ls /a
+<BR>exactly as if one had typed in:<BR>
+CMD: C> dir /w/o /a
+
+<P>To <U>prevent</U> the alias expansion an asterisk is prefixed before the
+command, e.g.:<BR>
+CMD: C> *ls /a
+<BR>really tries to execute the command:<BR>
+CMD: ls /a
+<BR>which usually is an external command.
+
+<P>Aliases may be used to <U>hide or re-place internal commands</U>, e.g.:<BR>
+CMD: ALIAS dir=xdir
+<BR>effectively hides the internal command <CMD>DIR</CMD> and will always
+execute the -- usually -- external command <CMD>XDIR</CMD>.
+
+<P>Aliases <U>may be nested</U>, so if both alias definitions mentioned
+above are in place, the command:<BR>
+CMD: C> ls /a
+<BR>is really executed as:<BR>
+CMD: xdir /w/o /a
+<BR>where the <CMD>ls</CMD> command is substituted by the command
+<CMD>dir /w/o</CMD>, then <CMD>dir</CMD> is detected as alias, too, and
+hence replaced by <CMD>xdir</CMD>.
+<BR>The same alias is <U>never substituted twice</U>, neither directly nor
+transitively, so:<BR>
+CMD: ALIAS dir=dir /w
+<BR>is allowed as well as:<BR>
+CMD: ALIAS ls=dir /w/o
+CMD: ALIAS dir=ls -l
+<BR><TABLE BORDER>
+<TR>
+  <TH>command</TH>
+  <TH>results in</TH>
+</TR>
+<TR>
+  <TD><CMD>ls</CMD></TD>
+  <TD><CMD>ls -l /w/o</CMD></TD>
+</TR>
+<TR>
+  <TD><CMD>dir</CMD></TD>
+  <TD><CMD>dir /w/o -l</CMD></TD>
+</TR>
+</TABLE>
+<P>As implied above, aliases are expanded when needed and <EM>not</EM>
+when they are defined.
+
+<P>Aliases are storred <U>for each instance of FreeCOM individually</U>
+and are inherited by secondary instances from the parent.
+
+OPTIONS:
+Compile-time options:
+<UL>
+<LI><TT>ALIAS_DEFAULT_SIZE</TT>: The size reserved for all aliases
+per FreeCOM instance. Default: 1024
+</UL>

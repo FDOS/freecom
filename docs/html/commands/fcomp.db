@@ -1,0 +1,57 @@
+name: FEATURE_FILENAME_COMPLETION
+de: Filename completion
+see: 
+req: FEATURE_ENHANCED_INPUT
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM and if the enhanced command line
+editing is activated as well, the tabulatur key binding becomes available.
+
+<P>When the tabulator key is pressed, the word the cursor is located
+on actually or is immediately preceeding is separated and tried to
+match against files, like a DIR command would do, e.g. when hitting tab
+at the command line:<BR>
+CMD: bar\f_ some arguments
+<BR>-- where the underscore <TT>_</TT> is to mark the location of the cursor and
+is <EM>no</EM> actual character -- causes FreeCOM to try to locate any
+files or directories matching the filename pattern <CMD>bar\f*.*</CMD>.
+<BR>If none is found, a beep is issued to indicate that error and the
+command line remains unchanged.
+<BR>Otherwise as many characters are appended to the filename as are
+the same for all found matches, e.g.:
+<BR><OL>
+<LI>if exactly one match was found, its name is appened.
+<LI>if, for example, the files or directories: <TT>FOO</TT>, <TT>FUU.TXT</TT>
+or <TT>FUU</TT> are present in the directory <TT>BAR</TT>, no character
+is appened, because there are no equal characters following the already
+present <TT>f</TT> character.
+<LI>if, for example, the files or directories: <TT>FOO</TT>, <TT>FOO.TXT</TT>
+or <TT>FOO1.TXT</TT> are present in the directory <TT>BAR</TT>, the
+two characters <TT>OO</TT> are appened, because all found matches
+share these two characters immediately following the already present
+characers. Hence, the command line is expanded to:<BR>
+CMD: bar\FOO_ some arguments
+<BR>Please note that the case of all characters will match the case
+of the retrieved filenames.
+</OL>
+In addition, because in the cases 2 and 3 the file completion was not
+complete because more than one match was found, a beep is issued.
+In this situation to hit the tabulator key a second time, without
+an intervueing other key press, causes to display all available matches,
+but keeps the command line unchanged otherwise.
+<BR>If exactly one filename match was found, hence the file completion
+was complete, and if the found match is a directory, a backslash is
+appended to. This allows to walk into deep levels of directories speededly.
+
+<P>If the cursor had been placed, for instance, under the backslash
+in above mentioned command line, the full string <TT>bar\f</TT> had
+been tried to be completed as well. This behaviour differs from other
+implementations.
+
+OPTIONS:
+Compile-time options:
+<UL>
+<LI><TT>FILE_SEARCH_MODE</TT>: Filemode passed to the DOS API to aquire
+matching directory entries. Default: Read-Only, Archive, Directory
+</UL>

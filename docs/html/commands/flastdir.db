@@ -1,0 +1,19 @@
+name: FEATURE_LAST_DIR
+de: Change back to last directory
+see: CD CHDIR CDD PUSHD POPD
+req:
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM, every change of the current
+directory using an internal command records the previous directory
+and enables the <ARG>-</ARG> shortcut for CD, CDD and CHDIR.
+
+EXAMPLE:
+CMD: C> CD \
+CMD: C> CD freedos\bin
+CMD: C> CD -
+CMD: C> CD -
+<BR>The first CD command changes into the root direcotry, the second into
+the directory <TT>\FREEDOS\BIN</TT>, any subsequent <CMD>CD -</CMD> commands
+will change between the root directory and <TT>\FREEDOS\BIN</TT>.

@@ -4,18 +4,63 @@ de: Conditional execution of a command
 SYNOPSIS:
 <OL>
 <LI>
-EBNF: IF EXIST file command
+EBNF: IF [ NOT ] EXIST file <<command>>
 <LI>
-EBNF: IF ERRORLEVEL number command
+EBNF: IF [ NOT ] ERRORLEVEL number <<command>>
 <LI>
-EBNF: IF string '==' word command
+EBNF: IF [ NOT ] string '==' word <<command>>
 <LI>
-EBNF: IF quoted-string '==' quoted-string command
+EBNF: IF [ NOT ] quoted-string '==' quoted-string <<command>>
 </OL>
 
+Conditionally executes the specified
+EBNF!: <<command>>
+. If the keyword
+EBNF!: NOT
+ is specified, the condition is negated, meaning, the
+EBNF!: <<command>>
+ is executed, if the condition evaluates to false.
 
-STD_OPTIONS:
+<P>The first condition evaluates to true, if the specified <ARG>file</ARG>
+exists. Wildcards are supported. On local file systems one can test for
+character devices, too.
+
+<P>The second variant evaluates to true, if the errorlevel is currently
+assigned to a number greater or equal than the specified <ARG>number</ARG>.
+Errorlevels are assigned when external commands terminates or via
+CANCEL or QUIT.
+
+<P>The third and four ones are true, when the left string is case-sensitively
+equal to the string on the right side of the double equal sign.
+Either side may be quoted by double quotes, though, if the right side
+is <EM>not</EM> quoted, the first word is tested only.
 
 EXAMPLES:
 EXAMPLE: 1
+CMD: IF NOT EXIST c:\command.com ECHO There is no COMMAND.COM in C:\
+<BR>Executes the ECHO command, if a file <CMD>C:\COMMAND.COM</CMD>
+does <EM>not</EM> exist.
 
+EXAMPLE: 2
+CMD: IF EXIST c:\fdos\nul GOTO have_fdos_directory
+<BR>Branch the interpretation of the batch script to the label, if
+the file <CMD>C:\FDOS\NUL</CMD> exists. Because the filename <CMD>NUL</CMD>
+corresponds to the character device <CMD>NUL:</CMD>, which always exists,
+this test may be used to probe for the existance of the path
+<CMD>C:\FDOS</CMD>, because all character devices are virtually present in
+every directory of local filesystems.
+
+EXAMPLE: 3
+CMD: IF %1==name ECHO First argument is "name"
+<BR>ECHO is executed, if the first argument of the current batch script
+is <ARG>"name"</ARG> (without the quotes). <CMD>%1</CMD> may expand to
+any string, even with embedded whitespaces, but without an embedded
+double equal sign. Also, metacharacters included within the argument
+are evaluated.
+
+EXAMPLE: 4
+CMD: IF "%1"=="first name" ECHO First argument is "first name"
+<BR>ECHO is executed, if the first argument of the current batch script
+is <ARG>"first name"</ARG> (without the quotes). <CMD>%1</CMD> may expand
+to any string, even with embedded whitespaces or an embedded double
+equal sign or metacharacters.

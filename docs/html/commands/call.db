@@ -8,7 +8,7 @@ SYNOPSIS:
 <LI>
 EBNF: CALL program [ <<arguments>> ]
 <LI>
-EBNF: CALL /S program [ <<arguments>> ]
+EBNF: CALL [ /S | /N ] program [ <<arguments>> ]
 </OL>
 
 DESCRIPTION:
@@ -31,6 +31,10 @@ some internal settings are lost, e.g. command line history, but it will
 free as much memory as possible for the external program.
 <P>This option and, thereby, this function is available only, if FreeCOM
 had been compiled with some support for swapping.
+
+<LI><OPT>/N</OPT>: If <ARG>program</ARG> is not a batch script, the external
+program is executed directly, with swapping disabled. <OPT>/N</OPT> superceeds
+<OPT>/S</OPT>.
 </UL>
 
 <P>Note: In the future to swap FreeCOM out of memory during the execution

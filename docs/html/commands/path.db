@@ -3,11 +3,42 @@ de: Display or set the search path
 req: CMD_PATH
 
 SYNOPSIS:
-EBNF: PATH [ '=' ] { path : ';' }
+<OL>
+<LI>
 EBNF: PATH
+<LI>
+EBNF: PATH [ '=' ] { path : ';' }
+<LI>
+EBNF: PATH;
+</OL>
 
-STD_OPTIONS:
+Displays or assigns a new search path.
+
+<P>The first variant displays the currently active search path.
+
+<P>The second one assigns the specified paths to the search path.
+The leading equal sign, if present, is ignored.
+
+<P>The third variant empties the search path.
+
+<P>When FreeCOM searches for an external command or a batch script, which
+has no path specified, it is search for in all the directories specified
+in the search path. If the current directory <CMD>.</CMD> is not mentioned
+in the search path, it is searched through first.
 
 EXAMPLES:
 EXAMPLE: 1
-
+CMD: PATH c:\fdos\bin;c:\tools;d:\others\bin;bin
+<BR>If FreeCOM is to execute an external program, e.g. <CMD>XCOPY</CMD>,
+FreeCOM will search for the program in the following directories in the
+specified order, the first program file found is executed:
+<OL>
+<LI>the current directory
+<LI><CMD>C:\FDOS\BIN</CMD>
+<LI><CMD>C:\TOOLS</CMD>
+<LI><CMD>D:\OTHERS\BIN</CMD>
+<LI><CMD>BIN</CMD>
+</OL>
+<BR>Note: Because the last directory specification is a relative one,
+rather than an absolute one, the program is searched for in the
+sub-directory <CMD>BIN</CMD> of the current directory.

@@ -1,0 +1,13 @@
+name: FEATURE_INSTALLABLE_COMMANDS
+de: Installable Commands interface (MUX-AE)
+see: 
+req: 
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM, calls to the Installable Commands
+API are made before executing any command. The API is situated at MUX-AE,
+the Multiplexer interrupt 0x2F function 0xAE.
+
+<P>The interface is documented elsewhere, for instance RBIL (Ralph
+Brown's interrupt list).

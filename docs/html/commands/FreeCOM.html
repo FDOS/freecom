@@ -21,6 +21,7 @@
 	<LI><A HREF="#-cmdline-syntax">Command Line Syntax</A>
 	<LI><A HREF="#-cmdline-editing">Command Line Editing</A>
 	</OL>
+<LI><A HREF="#-features">Features of FreeCOM</A>
 <LI><A HREF="#-status">Status of FreeCOM / To-do List</A>
 <LI><A HREF="#-appendix">Appendix</A>
 	<OL>
@@ -223,7 +224,7 @@ interpreted, parsed and, finally, either rejected because of an error or execute
 <H2><A NAME="-cmdline-syntax">Command Line Syntax</A></H2>
 
 FreeCOM accepts the following command line:<BR>
-EBNF: [ ':' ] [ '?' ] [ '@' ] { command [{ argument | redirection }] : '|' }
+EBNF: [ ':' ] [ '?' ] [ '@' ] [ '*' ] { command [{ argument | redirection }] : '|' }
 EBNF: redirection ::= ( '<' | '>' | '>>' ) filename
 
 <P>The first optional <CMD>?</CMD> must not be mixed up with the command <CMD>?</CMD>!
@@ -236,6 +237,8 @@ created.
 FreeCOM prompts the user wether to execute the resulting command.
 <P>The optional <CMD>@</CMD> disables the echo status for this line. If the echo status
 is enabled, the line is displayed right before it is executed; see ECHO for more details.
+<P>The asterisk <CMD>*</CMD> is available only, if aliases are compiled into
+FreeCOM; if present, the <A HREF="#-aliases">alias expansion</A> is skipped.
 <P>If commands are chained with the <CMD>|</CMD> symbols, those commands are to be executed
 as a <EM>pipe</EM>. For instance the command line:<BR>
 CMD: cmd1 | cmd2 | cmd3
@@ -337,6 +340,14 @@ file completion.  The following keys have a special meaning:
 </TABLE>
 
 <P><HR><P>
+<H1><A NAME="#-features">Features of FreeCOM</A></H1>
+
+FreeCOM implements the following features:
+<UL>
+<LI>
+</UL>
+
+<P><HR><P>
 <H1><A NAME="-status">Status of FreeCOM</A></H1>
 
 FreeCOM's development currently targets the v1.0 version, which is to
@@ -348,14 +359,17 @@ minimum, but probably at the cost of optimization and performance.
 <TR>	<TH>Feature</TH>
 		<TH ALIGN=CENTER>Target</TH>
 </TR>
-<TR>	<TD>Swapping with supporting secondary programs (<CMD>KSSF.COM</CMD>
-			and <CMD>VSPAWN.COM<CMD>)</TD>
+<TR>	<TD>Swapping without any supporting secondary programs
+			(<CMD>KSSF.COM</CMD> and <CMD>VSPAWN.COM<CMD>)</TD>
 		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
 </TR>
 <TR>	<TD>INT-2E backdoor</TD>
 		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
 <TR>	<TD>Wildcards for <CMD>REN</CMD>, same filename pattern matching code
 			for <CMD>REN</CMD>, <CMD>COPY</CMD> and <CMD>DIR</CMD></TD>
+		<TD ALIGN=CENTER><HELL>v0.93</HELL></TD>
+</TR>
+<TR>	<TD><CMD>DIR /O</CMD> and <CMD>DIR /A</CMD></TD>
 		<TD ALIGN=CENTER><HELL>v0.93</HELL></TD>
 </TR>
 <TR>	<TD>Input/output functions to replace <TT>&lt;stdio.h&gt;</TT> by
@@ -437,15 +451,20 @@ FreeCOM can be downloaded from SourceForge in several ways and packages:
 <OL>
 <LI><A HREF="#-cvs-tags">source code files from the CVS repository</A>
 <LI><A HREF="#-download-ftp">tarball and pre-compiled packages from anonymous FTP</A>
+<LI><A HREF="#-download-http">tarball and pre-compiled packages via HTTP</A>
 <LI><A HREF="#-download-filerelease">tarball and one pre-compiled package as file release</A>
 </OL>
 
 
 <H3><A NAME="-download-ftp">Resources accessable via anonymous FTP</A></H2>
 
-<A HREF="ftp://freedos.sourceforge.net/pub/freedos/freecom/">ftp://freedos.sourceforge.net/pub/freedos/freecom/</A>
+SourceForge closed the FTP - Services. Please use the HTTP services below.
+
+<H3><A NAME="-download-http">Resources accessable via HTTP</A></H2>
+
+<A HREF="http://freedos.sourceforge.net/freecom/packages/">http://freedos.sourceforge.net/freecom/packages/</A>
 contains several variants of tarballs and pre-compiled packages of FreeCOM.
-The file immediately located in the directory contain the most current
+The files immediately located in the directory contain the most current
 major release of FreeCOM, whereas the subdirectories include Beta releases
 of the upcoming release.
 

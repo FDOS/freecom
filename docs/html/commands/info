@@ -17,6 +17,8 @@ Body: The rest of the file is plain HTML text, except:
 + <OPT>...</OPT> encloses names of options
 + <ARG>...</ARG> encloses names of arguments
 + <CMD>...</CMD> encloses a command line embedded into HTML text
++ <HELL>...</HELL> encloses text to set "bright" (e.g. red colour)
++ <DIMM>...</DIMM> encloses text to set "dark" (e.g. dark gray colour)
 + CMD: prefixes a line that solemny consits of a command line
 + EBNF: prefixes a line that solemny consists of a EBNF expression
 + EBNF!: prefixes a line that solemny consists of a EBNF expression, which
@@ -33,6 +35,11 @@ The special object "!" refers to a central explanation location:
 	!:wildcards	Explains how wildcards are matched and their syntax
 	!:options	Explains how options are parsed standardly
 	!:path		Explains how path specification is formatted, abs/rel path
+
+HREF's with a leading "ftp/http/about" are considered "absolute"
+hyperlinks and are not mangled.
+Hyperlinks local to a certain HTML file should beginn with a dash. And
+their HREF's should be complete (beginning with the hash mark '#').
 
 + SYNOPSIS: is substituted by a "Synopsis" section header line.
 + ARGUMENTS: is substituted by a "Arguments" section header line.

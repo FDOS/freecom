@@ -64,7 +64,7 @@ CMD: CD \FREEDOS\HELP
 CMD: CD ..
 CMD: CD -
 
-changes first into the directory <CMD>\FREEDOS\HTLP</CMD>, then into
+changes first into the directory <CMD>\FREEDOS\HELP</CMD>, then into
 its parent directory, which is <CMD>\FREECOM</CMD>. And finally
 <CMD>CD -</CMD> changes back to <CMD>\FREEDOS\HELP</CMD>, because this
 was the previous directory before previous <CMD>CD</CMD>-like command.

@@ -1,0 +1,18 @@
+name: FEATURE_NLS
+de: use DOS NLS
+see: 
+req: 
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM, FreeCOM uses the information
+retrievable by the currently active DOS NLS using the API functions #65.
+
+<P>These information influence:
+<UL>
+<LI>the format displaying time and date information,
+<LI>the characters to delimit items in lists,
+<LI>the currency string and display format,
+<LI>how to up- (and supported by some NLS only) to lower-case characters,
+<LI>how to sort characters.
+</UL>

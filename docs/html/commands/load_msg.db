@@ -1,0 +1,16 @@
+name: FEATURE_LOAD_MESSAGES
+de: Load messages permanently
+see: 
+req: 
+
+DESCRIPTION:
+
+If enabled on compilation of FreeCOM, the <OPT>/MSG</OPT> becomes
+available.
+
+<P>If this option is present, when an instance of FreeCOM is created,
+the FreeCOM messages are loaded into memory permanently. Otherwise,
+the messages are loaded on demand and are removed from memory when an
+external command is executed, in order to conserve memory.
+
+<P>This feature may help to run FreeCOM on disk- and floppyless boxes.

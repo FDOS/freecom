@@ -7,7 +7,7 @@ EBNF: CTTY device
 
 With this command the console device can be changed. A console device performs
 all basic input and output operations. This change is more complete
-than <A HREF="!:redirection">IO-redirections</A>, because they might
+than <A HREF="!:redirection">IO-redirections</A>, because latter one might
 not catch all output, for instance the error messages. See example 3 below.
 <BR>Because the console is a bidirectional virtual device, meaning it
 is to perform input <STRONG>and</STRONG> output, the specified

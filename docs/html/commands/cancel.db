@@ -1,0 +1,10 @@
+name: CANCEL
+de: Terminate all scripts
+
+SYNOPSIS:
+EBNF: CANCEL [ n ]
+
+Terminates all currently active batch scripts and, if present, assigns
+the specified number <ARG>n</ARG> to the errorlevel.
+
+<P><EM>Note</EM>: This command is a <A HREF="!:hicmd">hidden internal command</A>.

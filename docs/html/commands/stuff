@@ -347,3 +347,27 @@ output is redirected into the file <CMD>OUT_2</CMD>. On completion of ECHO
 the redirection is closed and the former one is restored.
 <BR>What causes that the output of the third ECHO command is redirected
 into <CMD>OUT_1</CMD> again.
+
+
+<H3><A NAME="hicmd">Hidden Internal Commands</A></H3>
+
+There are some special internal commands, that are not directly visible
+nor accessable. They are hidden because of two main purposes:
+<OL>
+<LI>Many of them are of internal nature and should not used by the user.
+<LI>They are extensions to the normal batch language and may, therefore,
+clash with a particular installation. To prevent this clash those
+commands are hidden by default and can be made directly accessable
+via the ICMD command.
+</OL>
+
+<P>Hidden internal commands can be access by prefixing the command
+with <CMD>::=</CMD>. This token usually specifies a label within the
+batch language, given the nature of the labels, they may be comments
+as well. Due to the latter variant, most non-FreeCOM shells won't see
+the <CMD>::=</CMD>, hence, ignore those commands.
+
+<P>For example:
+CMD: C> ::=CANCEL 30
+<BR>cancels (terminates) all currently active batch files and assigns
+<ARG>30</ARG> to the current errorlevel.

@@ -1,6 +1,6 @@
 name: ALIAS
 de: Display or change an alias
-req: FEATURE_ALIAS
+req: FEATURE_ALIASES
 
 SYNOPSIS:
 <OL>

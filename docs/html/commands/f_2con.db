@@ -1,0 +1,18 @@
+name: FEATURE_AUTO_REDIRECT_TO_CON
+de: Autoswitch CON: to monitor
+see: 
+req: 
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM and if FreeCOM is to terminate
+although it is forbidden -- e.g. by passing the <OPT>/P</OPT> option
+when executing FreeCOM --, the console is changed to the keyboard/monitor
+pair automatically after some insuccessful prompts to reboot the system.
+
+OPTIONS:
+Compile-time options:
+<UL>
+<LI><TT>FEATURE_AUTO_REDIRECT_TO_CON</TT>: How many loops may pass before
+switching the console CON: to the monitor. Default: 5.
+</UL>

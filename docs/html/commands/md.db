@@ -6,9 +6,17 @@ req: CMD_MKDIR
 SYNOPSIS:
 EBNF: MD path
 
-
-STD_OPTIONS:
+Creates a directory of the specified name <ARG>path</ARG>. Any parent
+directories must already exist.
 
 EXAMPLES:
 EXAMPLE: 1
+CMD: MD C:\1
+<BR>Creates the directory <CMD>1</CMD> in the root directory of drive
+<CMD>C:</CMD>.
 
+EXAMPLE: 2
+CMD: MKDIR C:\1\2\3
+<BR>Creates the directory <CMD>3</CMD> in the directory <CMD>\1\2</CMD> of
+drive <CMD>C:</CMD>. If the directory <CMD>C:\1\2</CMD> does not exist, yet,
+the command fails.

@@ -1,0 +1,15 @@
+name: FEATURE_BATCH
+de: Batch script processing
+see: 
+req: implicit
+
+DESCRIPTION:
+
+The batch script processing is always enabled.
+
+OPTIONS:
+Compile-time options:
+<UL>
+<LI><TT>BATCH_NESTLEVEL_MIN</TT>: Minimal supported batch nesting level.
+Default: 5
+</UL>
