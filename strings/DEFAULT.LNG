@@ -2,7 +2,8 @@
 #
 # FreeCOM national customization file
 #
-#	Language: 7bit ASCII English
+#	Language: English
+#	Codepage: ASCII (7bit) / any codepage
 #	Author:   FreeCOM maintainer
 # 
 # This file is used to generate all the messages that command.com
@@ -1156,7 +1157,7 @@ History command.
 
 HISTORY [size]
 
-Without "size" the current contents of the command line histoty
+Without "size" the current contents of the command line history
 buffer is displayed.
 With the size, the size of the history buffer is changed.
 .
