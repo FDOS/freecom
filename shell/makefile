@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.8  2002/05/11 20:10:59  skaus
+# bugfix: ^Break detection after XMS-Swapping
+#
 # Revision 1.7  2002/04/23 16:34:51  skaus
 # chg: BUILD.BAT to handle XMS-Swap better
 #
@@ -50,9 +53,9 @@
 .INCLUDE : ../_config.mk
 
 # Sources of this make target
-SRC = batch.c cb_catch.asm cmdtable.c command.c dummies.asm expalias.c \
+SRC = batch.c cmdtable.c command.c dummies.asm expalias.c \
 	init.c kswap.c loadhigh.c module.c redir.c ver.c
-OBJ = batch.obj cb_catch.obj cmdtable.obj command.obj dummies.obj \
+OBJ = batch.obj cmdtable.obj command.obj dummies.obj \
 	expalias.obj init.obj kswap.obj loadhigh.obj module.obj redir.obj \
 	ver.obj
 HDR = ..\config.h ..\include/batch.h ..\include/cmdline.h \
@@ -64,7 +67,7 @@ HDR = ..\config.h ..\include/batch.h ..\include/cmdline.h \
 	..\include/timefunc.h ..\include\large.inc ..\include\model.inc \
 	..\include\small.inc ..\include\stuff.inc
 
-XMS_SWAP_PRE_OBJ = xms_crit.obj xms_brk.obj cswap.obj
+XMS_SWAP_PRE_OBJ = cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj
 XMS_SWAP_ADD_OBJ = cswapc.obj
 
 .IF $(XMS_SWAP) == yes

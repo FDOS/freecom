@@ -9,7 +9,6 @@ all: $(CFG) command.exe
 !include "..\config.mak"
 
 command.exe : $(CFG) batch.obj \
-	cb_catch.obj \
 	cmdtable.obj \
 	command.obj \
 	dummies.obj \
@@ -20,12 +19,11 @@ command.exe : $(CFG) batch.obj \
 	module.obj \
 	redir.obj \
 	ver.obj \
-	cswapc.obj xms_crit.obj xms_brk.obj cswap.obj
+	cswapc.obj cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj
 	$(LD) /m/s/l /c /d @&&|
 $(LIBPATH)\c0s.obj+
-xms_crit.obj xms_brk.obj cswap.obj+
+cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj+
 batch.obj+
-cb_catch.obj+
 cmdtable.obj+
 command.obj+
 dummies.obj+
