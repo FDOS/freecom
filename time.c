@@ -20,6 +20,9 @@
  *    4 numbers --> hour:minute:seconds.hundreds
  *  The numbers may be delimited by any character from the 7-bit ASCII set,
  *  which is printable, but not alphanumerical.
+ *
+ * 2001/02/08 ska
+ * add: DATE /D and TIME /T
  */
 
 #include "config.h"
@@ -37,6 +40,7 @@
 #include "timefunc.h"
 #include "strings.h"
 #include "cmdline.h"
+#include "nls.h"
 
 static int noPrompt = 0;
 
@@ -111,7 +115,7 @@ int parsetime(char *s)
   switch (pm)
   {
     case 2:                    /* post meridian */
-      t.hour += 12;
+      if(t.hour != 12) t.hour += 12;
       break;
     case 1:                    /* antes meridian */
       if (t.hour == 12)
@@ -141,23 +145,16 @@ int cmd_time(char *rest)
 
   if (!*rest)
   {
-	char ampm;
+	char *time;
     _dos_gettime(&t);
 
-    if (t.hour > 12)
-    {
-      ampm = 'p';
-      t.hour -= 12;
+    time = nls_maketime(0, t.hour, t.minute, t.second, t.hsecond);
+    if(!time) {	
+    	error_out_of_memory();
+    	return 1;
     }
-    else
-    {
-      ampm = 'a';
-      if (t.hour == 0)
-        t.hour += 12;
-    }
-
-    displayString(TEXT_MSG_CURRENT_TIME, t.hour, t.minute,
-                   t.second, t.hsecond, ampm);
+    displayString(TEXT_MSG_CURRENT_TIME, time);
+    free(time);
     rest = NULL;
   }
 

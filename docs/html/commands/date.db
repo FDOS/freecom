@@ -43,15 +43,13 @@ it makes sorting of literal dates a lot easier. If FreeCOM will or will not
 support it, will depend on the NLS used by DOS.
 </UL>
 
-<P><STRONG>Limitation</STRONG>: Currently DATE does not honor the NLS
-and handles American dates only.
 <BR>Symbolical names of monthes are not support (yet).
 
 OPTIONS:
 
 All options must precced any argument.
 
-<P><OPT>/S</OPT> prevents from prompting the user.
+<P><OPT>/D</OPT> prevents from prompting the user.
 <OL>
 <LI>In variant 1, the date is displayed only.
 <LI>In variant 2, the date is tried to be changed, but the loop is not

@@ -26,6 +26,14 @@
  *    1 number --> only the day changes
  *    2 numbers --> month/day; year remains unchanged
  *    3 numbers --> month/day/year
+ *
+ * 2001/02/08 ska
+ * chg: two-digit year -> 2000 if less than 80
+ * add: DATE /D and TIME /T
+ *
+ * 2001/02/14 ska
+ * fix: years in range 80..199 are promoted to century 1900
+ *		allows to parse dates created with year100 bug (by Arkady)
  */
 
 #include "config.h"
@@ -43,7 +51,7 @@
 #include "datefunc.h"
 #include "strings.h"
 #include "cmdline.h"
-
+#include "nls.h"
 
 static unsigned char months[2][13] =
 {
@@ -60,6 +68,7 @@ const char *day_strings[] =
 #else
 extern const char *day_strings[];
 #endif
+
 
 
 static int noPrompt = 0;
@@ -92,28 +101,77 @@ int parsedate(char *s)
     return 0;
 
   _dos_getdate(&d);             /* fetch current info */
-  switch (items)
-  {
-    case 0:                    /* empty line --> always OK */
-      return 1;
+#ifdef FEATURE_NLS
+	refreshNLS();
+	switch(nlsBuf->datefmt) {
+	case 0:		/* mm/dd/yy */
+#endif
+		switch (items) {
+		case 0:                    /* empty line --> always OK */
+		  return 1;
 
-    case 1:                    /* single number --> day only */
-      d.day = nums[0];
-      break;
+		case 1:                    /* single number --> day only */
+		  d.day = nums[0];
+		  break;
 
-    case 3:                    /* three numbers --> year, month & day */
-      d.year = nums[2];
-      /* fall through */
+		case 3:                    /* three numbers --> year, month & day */
+		  d.year = nums[2];
+		  /* fall through */
 
-    case 2:                    /* two numbers --> month & day */
-      d.day = nums[1], d.month = nums[0];
-      break;
-  }
+		case 2:                    /* two numbers --> month & day */
+		  d.day = nums[1], d.month = nums[0];
+		  break;
+		}
+
+#ifdef FEATURE_NLS
+		break;
+	case 1:		/* dd/mm/yy */
+		switch (items) {
+		case 0:                    /* empty line --> always OK */
+		  return 1;
+
+		case 3:                    /* three numbers --> year, month & day */
+		  d.year = nums[2];
+		  /* fall through */
+
+		case 2:                    /* two numbers --> month & day */
+		  d.month = nums[1];
+		  /* fall through */
+
+		case 1:
+		  d.day = nums[0]; 
+		  break;
+		}
+		break;
+
+	case 2:		/* yy/mm/dd */
+		switch (items) {
+		case 0:                    /* empty line --> always OK */
+		  return 1;
+
+		case 3:                    /* three numbers --> year, month & day */
+		  d.year = nums[0];
+		  d.month = nums[1];
+		  d.day = nums[2]; 
+		  break;
+
+		case 2:                    /* two numbers --> month & day */
+		  d.month = nums[0];
+		  d.day = nums[1]; 
+		  break;
+
+		case 1:
+		  d.day = nums[0]; 
+		  break;
+		}
+		break;
+	}
+#endif
 
   /* if only entered two digits for year, assume 1900's */
   if (d.year < 80)
     d.year += 2000;
-  else if (d.year < 100)
+  else if (d.year < 200)
     d.year += 1900;
 
   leap = (!(d.year % 4) && (d.year % 100)) || !(d.year % 400);
@@ -123,6 +181,7 @@ int parsedate(char *s)
       (d.year >= 1980 && d.year <= 2099))
   {
     _dos_setdate(&d);
+    _dos_setdate(&d);		/* In WinNT the date is often one day +/- */
     return 1;
   }
 
@@ -143,11 +202,17 @@ int cmd_date(char *rest)
   if (!*rest)
   {
     struct dosdate_t d;
+    char *date;
 
     _dos_getdate(&d);
 
-    displayString(TEXT_MSG_CURRENT_DATE,
-                   day_strings[d.dayofweek], d.month, d.day, d.year);
+    if((date = nls_makedate(0, d.year, d.month, d.day)) == NULL) {
+    	error_out_of_memory();
+    	return 1;
+    }
+
+    displayString(TEXT_MSG_CURRENT_DATE, day_strings[d.dayofweek], date);
+	free(date);
 
     rest = NULL;
   }

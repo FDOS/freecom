@@ -45,6 +45,7 @@
 
 #include <dos.h>
 #include <stdio.h>
+#include "fmemory.h"
 
 /* transformed into constants
 	unsigned far *maxx = MK_FP(0x40, 0x4a);
@@ -114,6 +115,14 @@ enum
 
 /* prototypes for INIT.C */
 extern unsigned char fddebug;
+
+/* prototypes for COMPAT.H */
+#ifdef _NO_FMEMCHR
+//char far *_fmemchr(const char far * p, int ch, size_t length);
+#endif
+#ifdef _NO_FMEMCMP
+//int _fmemcmp(const char far *s1, const char far *s2, size_t length);
+#endif
 
 /* prototypes for COMMAND.C */
 extern int ctrlBreak;

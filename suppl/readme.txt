@@ -9,4 +9,4 @@ A version pre-compiled for Turbo-C++ v1.01 can be downloaded
 from ftp://freedos.sourceforge.net/pub/freedos/freecom/suppl.zip
 
 The last revision of SUPPL linked to FreeCOM was created on
-Time stamp: GMT Tue Oct 10 00:44:01 2000
+Time stamp: GMT Wed Feb 14 23:45:42 2001

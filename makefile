@@ -3,6 +3,22 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.9  2001/02/14 23:50:05  skaus
+# add: DIR /Y to display 4digit year
+# fix: DIR displays "bytes free" at the very end, but if more than one
+# 	argument is specified, it only displays the free bytes of the
+# 	very last argument. The line is now printed after the display
+# 	of each argument.
+# bugfix: When the "bytes free" are displayed the used drive letter
+# 	had been deallocated already.
+# add: NLS-compatible input of date
+# add: NLS-compatible display of date & time (incl DIR)
+# fix: parse years 80..199 as century 1900 (by Arkady)
+# chg: removed some static variables
+# chg: made all global functions & variables static to LOADHIGH.C
+# sub: LH.ASM/LOADHIGH.C: duplicate functions (memory API, farmemcmp)
+# fix: doc of DATE, TIME, FreeCOM
+#
 # Revision 1.8  2000/12/10 04:16:07  skaus
 # add: Installable Commands FEATURE_INSTALLABLE_COMMANDS
 # add: F1, F3, F5, cur-right command line editing
@@ -53,6 +69,8 @@ LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
 LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib
 LDFLAGS += /m/s/l
 
+##LD_TLINK != D:\BC5\BIN\TLINK.EXE
+
 # Project specific C compiler flags
 MYCFLAGS_DBG = -DDEBUG=1
 MYCFLAGS_NDBG =
@@ -80,8 +98,8 @@ OBJ = alias.obj batch.obj beep.obj break.obj call.obj cb_catch.obj cls.obj \
 	time.obj timefunc.obj tmpnam.obj truename.obj type.obj ver.obj \
 	verify.obj where.obj
 HDR = alias.h batch.h cmdline.h command.h compat.h config.h crossjmp.h \
-	datefunc.h debug.h err_hand.h loadhigh.h model.def nls.h openf.h \
-	session.h strings.h strings.typ swapexec.h tempfile.h timefunc.h
+	datefunc.h debug.h err_hand.h model.def mux_ae.h nls.h openf.h session.h \
+	strings.h strings.typ swapexec.h tempfile.h timefunc.h
 
 
 
@@ -175,12 +193,12 @@ shift.obj : shift.c \
 pause.obj : pause.c \
 	 batch.h command.h config.h debug.h strings.h
 date.obj : date.c \
-	 command.h config.h datefunc.h debug.h strings.h
+	 cmdline.h command.h config.h datefunc.h debug.h nls.h strings.h
 dir.obj : dir.c \
-	 cmdline.h command.h config.h debug.h strings.h
+	 cmdline.h command.h config.h debug.h nls.h strings.h
 command.obj : command.c \
-	 batch.h cmdline.h command.h config.h crossjmp.h debug.h nls.h openf.h \
-	session.h strings.h swapexec.h
+	 batch.h cmdline.h command.h config.h crossjmp.h debug.h mux_ae.h \
+	nls.h openf.h session.h strings.h swapexec.h
 swapexec.obj : swapexec.c \
 	 command.h compat.h config.h debug.h swapexec.h
 truename.obj : truename.c \
@@ -237,11 +255,11 @@ call.obj : call.c \
 beep.obj : beep.c \
 	 batch.h command.h config.h debug.h
 mux_ae.obj : mux_ae.c \
-	 command.h config.h crossjmp.h debug.h
+	 command.h config.h crossjmp.h debug.h mux_ae.h
 echo.obj : echo.c \
 	 batch.h cmdline.h command.h config.h debug.h strings.h
 loadhigh.obj : loadhigh.c \
-	 cmdline.h command.h config.h debug.h loadhigh.h strings.h
+	 cmdline.h command.h config.h debug.h strings.h
 environ.obj : environ.c \
 	 command.h config.h debug.h
 type.obj : type.c \
@@ -260,9 +278,9 @@ error.obj : error.c \
 datefunc.obj : datefunc.c \
 	 config.h datefunc.h debug.h
 nls.obj : nls.c \
-	 config.h debug.h nls.h
+	 cmdline.h command.h config.h debug.h nls.h strings.h
 time.obj : time.c \
-	 command.h config.h debug.h strings.h timefunc.h
+	 cmdline.h command.h config.h debug.h nls.h strings.h timefunc.h
 filecomp.obj : filecomp.c \
 	 command.h config.h debug.h
 fddebug.obj : fddebug.c \

@@ -196,6 +196,9 @@ int showcmds(char *rest)
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 	printf("[installable commands] ");
 #endif
+#ifdef FEATURE_NLS
+	printf("[DOS NLS] ");
+#endif
   putchar('\n');
 
   return 0;

@@ -34,6 +34,8 @@ letters rather than capitol ones.
 <LI><OPT>/S</OPT>: (Subdirectories) Recursively display directories.
 <LI><OPT>/W</OPT>: (Wide) Displays five filenames per line and suppress
 the information about the file size, date etc.
+<LI><OPT>/Y</OPT>: (Year) Displays a 4-digit year, rather than just two
+	digits.
 </UL>
 
 EXAMPLES:

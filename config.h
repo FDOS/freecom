@@ -50,7 +50,7 @@
 #define FEATURE_LOAD_MESSAGES
 
 /* Define to enable DOS NLS */
-//#define FEATURE_NLS
+#define FEATURE_NLS
 
 /* Define to enable swapping to XMS/EMS/disk */
 //#define FEATURE_SWAP_EXEC
@@ -86,6 +86,8 @@
 	/* TC++1 */
 #define _NO__DOS_DATE
 #define _NO__DOS_TIME
+#define _NO_FMEMCHR
+#define _NO_FMEMCMP
 #endif
 
 

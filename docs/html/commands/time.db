@@ -34,14 +34,8 @@ Separated by no, one or more whitespaces the am/pm modifiers may follow
 optionally. If present they alter the given time as follows:
 <UL>
 <LI>AM: if hour is equal to 12, it becomes 0 (midnight).
-<LI>PM: hour is incremented by 12.
-<LI>There is no 12:00 PM.
+<LI>PM: f hour is greater than 12, it is incremented by 12.
 </UL>
-
-<P><STRONG>Limitation</STRONG>: Currently DATE does not honor the NLS
-and handles American dates only, which means that the time is displayed
-in 12-hour style; the input silently accepts 24-hour style, but applies
-AM/PM modifiers to 12-hour style.
 
 OPTIONS:
 

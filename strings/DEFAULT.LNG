@@ -351,7 +351,7 @@ BREAK is %s
 .
 
 :TEXT_MSG_CURRENT_DATE
-Current date is %s %02d-%02d-%d
+Current date is %s %s
 .
 
 :TEXT_MSG_ENTER_DATE
@@ -359,8 +359,16 @@ Enter new date (mm-dd-[yy]yy):
 .
 
 :TEXT_MSG_CURRENT_TIME
-Current time is %2d:%02d:%02d.%02d %cm
+Current time is %s
 .
+
+:TEXT_STRING_PM
+ pm
+,
+
+:TEXT_STRING_AM
+ am
+,
 
 :TEXT_MSG_ENTER_TIME
 Enter new time:
@@ -380,7 +388,7 @@ Directory stack empty.
 .
 
 :TEXT_MSG_VER_BASIC
-Copyright (C) 1994-2000 Tim Norman and others.
+Copyright (C) 1994-2001 Tim Norman and others.
 
 The FreeDOS Command Shell comes with ABSOLUTELY NO WARRANTY.
 For details type: "ver /w". This is free software, and you are
@@ -392,7 +400,7 @@ Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_WARRANTY
-Copyright (C) 1994-2000 Tim Norman and others.
+Copyright (C) 1994-2001 Tim Norman and others.
 
 This program is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -404,7 +412,7 @@ Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
-Copyright (C) 1994-2000 Tim Norman and others.
+Copyright (C) 1994-2001 Tim Norman and others.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -417,15 +425,10 @@ Updates are available from http://freedos.sourceforge.net/freecom
 
 :TEXT_MSG_VER_DEVELOPERS
 
-The FreeDOS Command Shell developed by:
-		Tim Norman      Matt Rains
-		Evan Jeffrey    Steffen Kaiser
-		Svante Frey     Oliver Mueller
-		Aaron Kaufman   Marc Desrochers
-		Rob Lake        John P Price
-		Hans B Pufal
+The FreeDOS Command Shell developed by many developers, please refer
+to the enclose HISTORY.TXT file.
 
-Currently maintained by Steffen Kaiser.
+Currently maintained by Steffen Kaiser mailto:freecom@freedos.org
 
 Send bug reports to fd-freecom@topica.com.
 Updates are available from http://freedos.sourceforge.net/freecom
@@ -613,6 +616,7 @@ DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
  /B         Uses bare format (no heading information or summary).
  /L         Uses lowercase.
  /V         Verbose mode.
+ /Y         Display 4-digit year.
 
 Switches may be preset in the DIRCMD environment variable.  Override
 preset switches by prefixing any switch with - (hyphen)--for example, /-W.

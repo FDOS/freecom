@@ -175,13 +175,14 @@
 #include "command.h"
 #include "cmdline.h"
 #include "strings.h"
+#include "nls.h"
 
 /* useful macros */
 #define MEM_ERR error_out_of_memory(); return 1;
 
 #define WIDE_COLUMNS 5
 
-static int optS, optP, optW, optB, optA, optL;
+static int optS, optP, optW, optB, optA, optL, longyear;
 
 char *path;
 unsigned line;
@@ -196,6 +197,7 @@ optScanFct(opt_dir)
   case 'B': return optScanBool(optB);
   case 'A': return optScanBool(optA);
   case 'L': return optScanBool(optL);
+  case 'Y': return optScanBool(longyear);
   }
   optErr();
   return E_Useage;
@@ -446,7 +448,6 @@ int dir_list(int pathlen
   unsigned long bytecount = 0;
   unsigned long filecount = 0;
   unsigned long dircount = 0;
-  int time;
   int count;
   unsigned mode = FA_RDONLY | FA_ARCH | FA_DIREC;
   int rv = E_None;
@@ -572,13 +573,37 @@ int dir_list(int pathlen
         filecount++;
       }
 
-      printf(" %.2d-%.2d-%02d", ((file.ff_fdate >> 5) & 0x000f),
-             (file.ff_fdate & 0x001f), ((file.ff_fdate >> 9) + 80) % 100);
-      time = file.ff_ftime >> 5 >> 6;
-      printf(" %2d:%.2u%c\n",
-             (time == 0 ? 12 : (time <= 12 ? time : time - 12)),
-             ((file.ff_ftime >> 5) & 0x003f),
-             (time <= 11 ? 'a' : 'p'));
+	{ char *p;
+		int year, month, day;
+		int hour, minute;
+
+		year = (file.ff_fdate >> 9) + 80;
+		if(longyear)
+			year += 1900;
+		else	year %= 100;
+		month = file.ff_fdate & 0x001f;
+		day = (file.ff_fdate >> 5) & 0x000f;
+		hour = file.ff_ftime >> 5 >> 6;
+		minute = (file.ff_ftime >> 5) & 0x003f;
+
+		p = nls_makedate(0, year, month, day);
+		if(!p) {
+			error_out_of_memory();
+			return E_NoMem;
+		}
+		putchar(' ');
+		fputs(p, stdout);
+		free(p);
+		p = nls_maketime(NLS_MAKE_SHORT_AMPM, hour, minute, -1, 0);
+		if(!p) {
+			error_out_of_memory();
+			return E_NoMem;
+		}
+		putchar(' ');
+		fputs(p, stdout);
+		free(p);
+		putchar('\n');
+	 }
 
       rv = incline();
     }
@@ -681,8 +706,13 @@ int dir_print_body(char *arg, unsigned long *dircount)
 		}
 	}
 
+  if(optS)
+  	rv = print_total(filecount, bytecount);
+  if(!rv)
+    rv = dir_print_free(*dircount);
+
 	free(path);
-	return rv || (optS? print_total(filecount, bytecount): 0);
+	return rv;
 }
 
 
@@ -701,7 +731,7 @@ int cmd_dir(char *rest)
   unsigned long dircount;
 
   /* initialize options */
-  optS = optP = optW = optB = optA = optL = 0;
+  longyear = optS = optP = optW = optB = optA = optL = 0;
 
   /* read the parameters from env */
   if ((argv = scanCmdline(getEnv("DIRCMD"), opt_dir, NULL, &argc, &opts))
@@ -722,9 +752,6 @@ int cmd_dir(char *rest)
       ;
   else
     rv = dir_print_body(".", &dircount);
-
-  if(!rv)
-    rv = dir_print_free(dircount);
 
   freep(argv);
   return rv;

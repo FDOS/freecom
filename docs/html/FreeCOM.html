@@ -11,7 +11,19 @@
 </HEAD>
 
 <BODY>
-<H1>Introduction</H1>
+<OL>
+<LI><A HREF="#intro">Introduction</A>
+<LI><A HREF="#cmdline">Command Line Syntax</A>
+<LI><A HREF="#envvars">Environment Variables</A>
+<LI><A HREF="#icmds">Internal Commands</A>
+<LI><A HREF="#appendix">Appendix</A>
+	<OL>
+	<LI><A HREF="#ebnf">EBNF</A>
+	</OL>
+</OL>
+
+<P><HR><P>
+<H1><A NAME="intro">Introduction</A></H1>
 
 FreeCOM is a:
 <UL>
@@ -37,6 +49,143 @@ because FreeCOM will search for files equally named as typed-in.
 <P>Besides to implement certain commands FreeCOM offers some
 <A HREF="#features">features</A>.
 
+<H1><A NAME="cmdline">Command Line Syntax</A></H1>
+
+<P><TT>COMMAND.COM <B>[</B> <I>path</I> <B>[</B> <I>console</I> <B>] ] [{</B> <I>option</I> <B>}]</B> <B>[</B> / <B>(</B> K <B>|</B> C <B>)</B> &laquo;commandline&raquo; <B>]</B></TT>
+
+<P>If present, the first non-option argument specifies the location in which
+FreeCOM resides. This location is later stored in the environment variable
+COMSPEC. Since DOS3+ this option is no longer necessary to find the shell
+invoked during the boot process, but it may be used to let the system boot
+a primary shell from one location, but use a shell of the same version from
+a different location later on.
+<BR>One shallt not point to a RAMdisk at this, because FreeCOM needs to reload
+certain information relatively early during execution, before AUTOEXEC.BAT had
+been executed, in which, normally, FreeCOM is copied into the RAMdisk.
+<BR>For convinience FreeCOM checks, if at the given location a FreeCOM exists
+<STRONG>and</STRONG> is accessable, if not, the given location is ignored.
+Also, the standard requires to specify a path only, but FreeCOM accepts
+an absolute filename, so accepting that FreeCOM is not necessarily named
+<TT>COMMAND.COM</TT>.
+
+<P>The second non-option argument, if present, specifies the console FreeCOM
+shall enable. This setting is system-wide and is not limited to FreeCOM or
+just this particular process tree. In its result, this argument is identical
+to the <TT><A HREF="cmd.html#ctty">CTTY</A></TT> command.
+
+<P>FreeCOM knows the following options:
+<UL>
+<LI><TT>/?</TT>: Issues a help screen, then exists.
+<LI><TT>/Y</TT>: Enables trace/single step mode. This mode is deaktivated
+when the user prompt has been reached.
+<LI><TT>/F</TT>: Enables autofail of Critical Errors; then instead of displaying
+the Abort/Retry/Ignore/Fail dialog, Critical Errors are automatically answered
+with Fail.
+<LI><TT>/P</TT>: Installs a primary copy of FreeCOM. Such instance:
+	<OL>
+	<LI>cannot be terminated with the <TT><A HREF="cmd.html#exit">EXIT</A></TT> command.
+	<LI>executes the <TT>AUTOEXEC.BAT</TT> script before any other command.
+	</OL>
+The <TT>/P</TT> option may have an argument to specify an alternate name for the
+AUTOEXEC script, e.g.: <TT>/P:FDAUTO.BAT</TT>.
+<LI><TT>/E</TT>: Sets another size of the environment segment, in which all the
+environment variables are stored, e.g.: <TT>/E:1024</TT>.
+<LI><TT>/L</TT>: Sets the size of the internal command buffer. <EM>Note</EM>:
+This option is ignored currently, the internal buffer always defaults to 512 bytes.
+<LI><TT>/U</TT> Sets the size of the internal user input buffer. <EM>Note</EM>:
+This option is ignored currently. The input buffer always defaults to 255 bytes,
+which is the maximum.
+<LI><TT>/LOW</TT>: Forces to load FreeCOM low. <EM>Note</EM>: Currently this option
+has no effect, because no part of FreeCOM is loaded high.
+<LI><TT>/MSG</TT>: Installs the message server. <EM>Note</EM>: Because the message
+server is not used nowadays, this option forces to permanently load FreeCOM's
+messages into memory.
+</UL>
+
+The options <TT>/K</TT> and <TT>/C</TT> are special cases and do not behave as normal
+options does. They are exclusive and all characters at the right side of 
+such option <FONT SIZE=-2>(except an optional argument sign)</FONT> specify a
+command to execute, e.g.: <TT>/C DIR /s</TT>, <TT>/C=DIR /s</TT>, and <TT>/CDIR /s</TT>
+do behave exactly the same and execuate the command <TT>DIR /s</TT>.
+<BR>If these options are used in conjunction with the <TT>/P</TT> option, the AUTOEXEC.BAT
+script is executed prior executing the specified command.
+<BR>In opposite to <TT>/C</TT> the <TT>/K</TT> option enters the interactive shell
+prompt after executing the specified command.
+
+<H1><A NAME="envvars">Environment Variables</A></H1>
+
+Environment variables can be freely assigned using the <TT><A HREF="cmd.html#set">SET</A></TT> command,
+e.g. executing: <TT>SET var1=tecxsgk;jsdgsdflfsjdflkasjf"lasjflas</TT>
+<BR>assigns this nonsense to the variable <TT>var1</TT>. Later on, the
+value of the variable can be used by writing: <TT>%var1%</TT>, thus, writing
+the name of the variable enclosed without whitespace by two percent
+signs.
+<STRONG>Warning</STRONG>: Environment variables are expanded fully into plain
+text before the command line is furtherly parsed. If a variable contains
+an odd number of quotes, the remaining command line must contain the closing quote
+in order to operate properly. Also see this:
+<BR><TT>SET var=text del
+<BR>IF text==%var% GOTO label</TT>
+<BR>The second line looks uninteresting, but once the environment variable
+has been expanded the line has morphed into:
+<BR><TT>IF text==text del GOTO label</TT>
+<BR>not that funny anymore, because the <TT><A HREF="cmd.html#if">IF</A><TT> command
+interpretes only the string <TT>text==text</TT> as condition, but <TT>del GOTO label</TT>
+is executed as command.
+
+<P>FreeCOM uses a number of environment variables for its own purpose.
+
+<UL>
+<LI><B>COMSPEC</B>: FreeCOM loads some information on demand, these data
+are stored in the FreeCOM executable. The value of this environment variable
+contains the filename FreeCOM shall use. The contents can be changed with the
+<TT><A HREF="cmd.html#set">SET</A></TT> command.
+<LI><B>DIRCMD</B>: The user may define default values for the <TT><A HREF="cmd.html#dir">
+DIR</A></TT> command. Any options specified within <TT>DIRCMD</TT> are prefixing any
+entered ones, so to say FreeCOM behaves as if the user always types:
+<TT>DIR %DIRCMD% &laquo;other arguments&raquo;</TT>
+<BR>This variable must be changed using the <TT><A HREF="cmd.html#set">SET</A></TT> command.
+<LI><B>COPYCMD</B>: This variable contains default options for the <TT><A HREF="cmd.html#copy">
+COPY</A></TT> command.
+<LI><B>PROMPT</B>: FreeCOM prompts the user to enter commands to run, the prompt can be
+customized by changing the contents of this variable.
+<BR>This variable can be changed using the <TT><A HREF="cmd.html#set">SET</A></TT> or the
+<TT><A HREF="cmd.html#prompt">PROMPT</A></TT> commands. Latter one includes a detailed
+description of the format of the prompt string.
+<LI><B>PATH</B>: When FreeCOM is to execute an external command and this one does not
+contain no path, FreeCOM searched for the command in a number of paths. These ones
+are enumerated by the PATH environment variable.
+<BR>This variable can be changed using the <TT><A HREF="cmd.html#set">SET</A></TT> or the
+<TT><A HREF="cmd.html#path">PATH</A></TT> commands. Latter one includes a detailed
+description of the format of the search path.
+</UL>
+
+
+<P>There are a number of automatic variables that do not follow the above mentioned
+syntax and which contents is automatically generated. Unlike the normal
+variables these automatic variables are constructed of exactly two characters,
+the first one is a single percent sign and the second one the variable identifier:
+<UL>
+<LI><B>%?</B>: expands to the current errorlevel, which is the exit code of
+the previously executed external command.
+<LI><B>%0</B>: in batch scripts only: is the name of the script currently
+executed.
+<LI><B>%1</B> through <B>%9</B>: in batch scripts only: are the first through nineth
+argument passed to the currently executed batch script. If less than nine arguments
+had been passed to the script, they return an empty string. To access the
+tenth argument please refer to the <TT><A HREF="cmd.html#shift">SHIFT</A></TT>
+command.
+<LI><TT>FOR <B>%v</B> IN (...) DO &laquo;any command&raquo;</TT>: <B>%v</B> may use
+any letter, the <TT><A HREF="cmd.html#for">FOR</A></TT> command creates a new
+variable, which is valid in the &laquo;any command&raquo; following the <TT>DO</TT>
+keyword.
+<LI><B>%%</B>: Is no real variable, but expands to a single percent sign.
+</UL>
+<P>Because automatic variables have one percent sign only, it sometimes lead to
+confusion within the <TT>FOR</TT> command, e.g.:
+<BR><TT>SET adam=eva
+<BR>FOR %a in (*.*) DO echo %adam% %a</TT>
+
 <H1><A NAME="icmds">Internal Commands</A></H1>
 Internal commands will be processed by FreeCOM directly, they are available
 to the user without presence of any external files, in fact they hide
@@ -47,9 +196,9 @@ are described in a style derived from <A HREF="#ebnf">EBNF</A>.
 
 
 <P><HR><P>
-<H1>Appendix</H1>
+<H1><A NAME="appendix">Appendix</A></H1>
 
-<H2><A NAME="#ebnf">EBNF</A></H2>
+<H2><A NAME="ebnf">EBNF</A></H2>
 
 Documents encode the synopsis of the commands with operators derived from
 EBNF (<B>E</B>xtended <B>B</B>ackus-<B>N</B>aur <B>F</B>ormula).

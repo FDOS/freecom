@@ -1,5 +1,19 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+2001/02/14 ska
+~~~~~~~~~~~~~~~~~~~~~~
+fix: parse years 80..199 as century 1900 (by Arkady)
+chg: removed some static variables
+chg: made all global functions & variables static to LOADHIGH.C
+sub: LH.ASM/LOADHIGH.C: duplicate functions (memory API, farmemcmp)
+fix: doc of DATE, TIME, FreeCOM
+
+2001/02/08 ska
+~~~~~~~~~~~~~~~~~~~~~~
+chg: two-digit year -> 2000 if less than 80
+add: DATE /D and TIME /T
+
 2000/12/13 ska
 ~~~~~~~~~~~~~~~~~~~~~~
 released v0.80
