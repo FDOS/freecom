@@ -83,6 +83,10 @@ the information about the file size, date etc.
 <LI><OPT>/Y</OPT>: (Year) Displays a 4-digit year, rather than just two
 	digits.
 <LI><OPT>/4</OPT>: (4digit Year) is a synonym of <OPT>/Y</OPT>.
+<LI><OPT>/LFN</OPT>: Enables to display long filenames at the end of a
+	line in non-wide mode (<OPT>/W</OPT> not present), if available.
+	<BR>This option is temporarily enabling a <STRONG>TESTING</STRONG>
+	feature and may vanish in a future release of FreeCOM.
 </UL>
 
 EXAMPLES:

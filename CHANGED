@@ -1,3 +1,4 @@
+add: DIR: display LFNs if enabled with /lfn [Tom Ehlert]
 add: DIR: display FAT32 free space on drive [Tom Ehlert]
 chg: res_r.c: don't use relative seek; fails under NTFSdos [Tom Ehlert]
 chg: doc DIR: note about how many entries can be sorted with /O [Eric Auer]

@@ -210,7 +210,8 @@ struct currDir {
 	unsigned linecount; /* for /B */
 	};          
 	
-static int optS, optP, optW, optB, optL, longyear, optO;
+static int optS, optP, optW, optB, optL, longyear, optO, dispLFN
+	, lfnAvailable;
 static struct ffblk _seg *orderArray;
 
 static unsigned attrMay, attrMask, attrMatch;
@@ -227,6 +228,66 @@ static unsigned attrMay, attrMask, attrMatch;
 char *path;
 unsigned line;
 int need_nl;
+
+struct LFNFindData {
+  unsigned long attributes;
+  unsigned long CreationTime[2];
+  unsigned long AccesstionTime[2];
+  unsigned long ModificationTime[2];
+  unsigned long FileSize;
+  unsigned long FileSizeHigh;
+  unsigned char reserved[8];
+  unsigned char FullName[260]; 
+  unsigned char ShortName[14]; 
+  } ;                     
+struct { char x[sizeof(struct LFNFindData) == 0x13e ? 1 : -1]; } verify_size = {""};
+
+void printLFNname(char *shortName, char *ext)
+{
+    char pathbuffer[128];
+	struct REGPACK r;
+	struct LFNFindData LFNEntry;
+	int pathlen;
+	
+	/* Only few people disable this, right? */
+	if (strchr(shortName,'~') == NULL)	/* ask for LFN only if necessary */
+		return;
+										/* reconstruct the path+filename */
+	pathlen = strrchr(path,'\\') - path;
+
+	sprintf(pathbuffer,"%*.*s\\%s%c%s"
+	 , pathlen
+	 , pathlen
+	 , path
+	 , shortName
+	 , *ext ? '.' : 0x0
+	 , ext);
+
+/*	dprintf(("[LFN: path %s\n",pathbuffer)); */
+	
+	r.r_ax = 0x714e;
+	r.r_cx = 0xff;
+	r.r_si = 1;
+	r.r_ds = FP_SEG(pathbuffer);
+	r.r_dx = FP_OFF(pathbuffer);
+	r.r_es = FP_SEG(&LFNEntry);
+	r.r_di = FP_OFF(&LFNEntry);
+	
+	intr(0x21, &r);
+	
+	if(r.r_flags & 1) {
+/*		dprintf(("[LFN: not supported %x]\n",r.r_ax)); */
+		lfnAvailable = 0;
+		return;
+	}
+	
+	printf(" %.30s ", LFNEntry.FullName);
+
+	r.r_bx = r.r_ax;	// close handle
+	r.r_ax = 0x71a1;
+	intr(0x21,&r);
+}
+
 
 /* The DIR command accepts more than one /A options, the later ones
 	replaces former ones */
@@ -347,6 +408,10 @@ optScanFct(opt_dir)
   		if(!bool && !optHasArg())
 			return scanOrder(optstr + 1);
 		break;
+    case 'L': case 'l':		/* enable to display LFNs? */
+      if(optLong("LFN"))
+        return optScanBool(dispLFN);
+      break;
 	}
   }
   optErr();
@@ -685,6 +750,8 @@ int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 		putchar(' ');
 		fputs(p, stdout);
 		free(p);
+		if(lfnAvailable)
+			printLFNname(file->ff_name, ext);
 		putchar('\n');
 	 }
 
@@ -953,6 +1020,8 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 	}
 
 	filecount = bytecount = 0;
+	lfnAvailable = dispLFN;	/* reset the LFN display flag for this
+		argument, maybe the drive is changed */
 
 	/* print the header */
 	if((rv = dir_print_header(toupper(path[0]) - 'A')) == 0) {
@@ -1011,7 +1080,7 @@ int cmd_dir(char *rest)
   int appState;					/* DOS/APPEND state */
 
   /* initialize options */
-  attrMask = attrMatch = optO
+  attrMask = attrMatch = optO = dispLFN
    = longyear = optS = optP = optW = optB = optL = 0;
   attrMay = ATTR_DEFAULT;
 
