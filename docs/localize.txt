@@ -1,0 +1,164 @@
+How to localize FreeCOM -- 2000/08/16 ska
+
+Currently FreeCOM contains only one point, where it can be "localized"
+aka made ready for national languages other than English, --> the
+strings.
+
+The strings can be prepared for each language separately, prepared for
+FreeCOM, added to FreeCOM and at an instant FreeCOM speaks the new
+language to its user.
+
+== The basics
+
+FreeCOM references all strings by a number (see the "Current
+implementation" section), however, because it's hard to remember plenty
+of numbers even for programmers, in FreeCOM these numbers are hidden by
+C-macros. The association between the numbers and their names is
+#include'ed from the file STRINGS.H.
+
+So when FreeCOM wants to display a certain string, it uses for instance:
+	display_string(TEXT_ERROR_LONG_LINE_BATCHFILE, linenr, filename);
+
+The "TEXT_ERROR_LONG_LINE_BATCHFILE" is a C-macro defined in the header
+file "STRINGS.H", whereas "linenr" and "filename" are some normal C
+variables. This particular call should display something like this:
+
+Line #%ld in batchfile '%s' too long.\n
+
+So, FreeCOM knows how to reference to a particular string by its
+symbolical name, FreeCOM also needs to know how to retreive the actual
+string.
+
+The file STRINGS.DAT contains all these strings and a little control
+area that allows to easily map a string's number into its data, thus
+in the example above, to map TEXT_ERROR_LONG_LINE_BATCHFILE into
+"Line #%ld in batchfile '%s' too long.\n"
+Once this line has been retreived and loaded into memory, it is
+displayed like with a printf()-style function, so above display_string()
+call is at the end equal to:
+	printf("Line #%ld in batchfile '%s' too long.\n", linenr, filename);
+
+Both files STRINGS.H and STRINGS.DAT are created by the utility named
+FIXSTRS included in the FreeCOM distribution in subdirectory STRINGS.
+
+Because FreeCOM is a COMMAND.COM replacement it must come as a single
+file. Therefore the FreeCOM executable and STRINGS.DAT are merged
+together in such way that wherever FreeCOM is located, STRINGS.DAT is
+present, too, but it does not add to the size of FreeCOM, when loaded
+into memory.
+
+== The generation of STRINGS.H and STRINGS.DAT
+
+The following interesting files are located in the subdirectory STRINGS:
+
+FIXSTRS.C   - The source of FIXSTRS.EXE
+FIXSTRS.EXE - The utility to create STRINGS.H and STRINGS.DAT
+
+DEFAULT.LNG - A very important source file for FIXSTRS.EXE
+*.LNG       - Local language definition files (see below)
+
+To create both files one must invoke:
+
+C> FIXSTRS.EXE language
+
+where "language" is to be replaced by the actual language to create the
+files for, e.g.:
+
+	FIXSTRS SPANISH
+
+will create the Spanish strings for FreeCOM.
+
+The syntax of all *.LNG files, including DEFAULT.LNG, is identical and
+is described in DEFAULT.LNG. These files actually define what strings
+FIXSTRS shall include into STRINGS.DAT associated with a particular
+name, e.g.i the following 4 (four) lines:
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE
+Line #%ld in batchfile '%s' too long.
+.
+
+define above mentioned error message string.
+The single dot in line #4 specify that there is a final newline
+character at the string, thus, it's "Line #%ld in batchfile '%s' too
+long.\n" rather than just "Line #%ld in batchfile '%s' too long." as
+when the last line contains a single comma.
+
+Because the localization process shall NOT include to re-compile or
+re-link FreeCOM, the numbers (hidden by the C-macro names) FreeCOM uses
+internally and the numbers the strings have within a STRINGS.DAT file
+_must_ be the same. And here is where the "very important" part of
+DEFAULT.LNG comes in:
+
+FIXSTRS does not only read the local LNG file for the particular
+language, but first DEFAULT.LNG, too!
+
+In the first step DEFAULT.LNG is imported. Doing so all strings defined
+in there are associated with continueous numbers. Then in a second step
+the local LNG file is imported, although overwriting strings already
+defined within DEFAULT.LNG, but the original order of the strings is
+retained.
+
+Because _all_ LNG files will first read DEFAULT.LNG, all strings defined
+in DEFAULT.LNG will be associated with the same number independed on the
+order these strings have in the local LNG file or whether or not they
+are defined there at all.
+
+As a sideeffect, all strings not defined in the local LNG file are
+copied from DEFAULT.LNG. Doing so will help to keep up with the
+development process of FreeCOM, although it will not cleanly speak the
+same language.
+
+== Short description to create a local LNG file anew
+
+Copy DEFAULT.LNG to language.LNG, where "language" is the best
+8-character string describing the target language, and translate.
+
+Then proceed to section "Short description to maintain a present LNG
+file".
+
+== Short description to maintain a present LNG file
+
+Run:
+
+C> FIXSTRS language
+
+On success _three_ files have been created:
+
+STRINGS.H - the #include file for FreeCOM
+STRINGS.DAT - the binary strings data file
+STRINGS.LOG - the error/mismatch log file
+
+The latter one STRINGS.LOG will contain mismatches found between the LNG
+file and DEFAULT.LNG, there are listed the string's name and if 1) the
+string is missing from the LNG file or 2) is no real resource (aka is
+not present in DEFAULT.LNG).
+When no STRINGS.LOG file has been created by FIXSTRS, there either was a
+fatal error or no mismatch was found.
+
+In case #1 copy over the string from DEFAULT.LNG into the local LNG file
+and translate it.
+In case #2 you can savely remove the string, or you might leave it in
+there, if you think it will be used in future, though, it will add to
+the overall size of FreeCOM.
+
+Once you are happy with your strings run:
+
+C> COPY /B COMMAND.CLN + STRINGS.DAT COMMAND.COM
+
+On success run FreeCOM by invoking:
+
+C> COMMAND.COM
+
+and test it.
+
+When you are completely happy with your local LNG file, mail it to the
+current maintainer of FreeCOM (see UPLOAD.TXT).
+
+== Current implementation
+
+There are still plenty of strings hardcoded within FreeCOM, especially
+the response keys.
+So:
+1) do not translate the response keys, or
+2) help to find all these hardcoded strings and replace them with
+dynamically loadable strings.

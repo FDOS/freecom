@@ -1,0 +1,13 @@
+name: PATH
+de: Display or set the search path
+req: CMD_PATH
+
+SYNOPSIS:
+EBNF: PATH [ '=' ] { path : ';' }
+EBNF: PATH
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

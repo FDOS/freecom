@@ -1,0 +1,14 @@
+name: TYPE
+de: Display the contents of files
+see: ECHO DIR
+req: CMD_TYPE
+
+SYNOPSIS:
+EBNF: TYPE { pattern }
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

@@ -1,0 +1,21 @@
+name: IF
+de: Conditional execution of a command
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: IF EXIST file command
+<LI>
+EBNF: IF ERRORLEVEL number command
+<LI>
+EBNF: IF string '==' word command
+<LI>
+EBNF: IF quoted-string '==' quoted-string command
+</OL>
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

@@ -1,0 +1,29 @@
+name: PAUSE
+de: Pauses batch file execution
+req: CMD_PAUSE
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: PAUSE
+<LI>
+EBNF: PAUSE <<string>>
+</OL>
+
+
+<P>Pauses the batch file execution until a key is pressed.
+<P><CMD>PAUSE</CMD> prompts the user with the specified string or,
+if none is specifed, &quot;<TT>Press any key to proceed</TT>&quot;
+
+EXAMPLES:
+EXAMPLE: 1
+CMD: PAUSE
+Just pauses the execution.
+
+EXAMPLE: 2
+CMD: PAUSE Execution paused, press any key to proceed ...
+Pauses execution displaying this string.
+
+EXAMPLE: 3
+CMD: PAUSE >nul
+Pauses execution, but does not display any prompt.

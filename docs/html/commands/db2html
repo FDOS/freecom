@@ -1,0 +1,376 @@
+#!perl
+
+## Formats the command DB files into HTML.
+## See INFO
+
+## if the TOC exists, it is inserted right at the start of the
+## HTML file
+
+#na)me: of object described herein; should match the filename
+#de)scription: one line description
+#eq)ual to: name of object 100% equal to this one, no further entries
+#	allowed
+#se)e also: references
+#re)quirements: which other objects this object depends on
+#op)tional: optional requirements for certain features
+#co)nflicts: which other objects this object conflicts with
+
+$file_toc = "TOC";
+$file_html = "../cmd.html";
+$file_cmd = "CMDLIST";	# List of commands to be automatically linked
+
+%headers = (
+	'na', 'name',
+	'de', 'description',
+	'eq', 'equal to',
+	'se', 'see also',
+	're', 'requirements',
+	'op', 'optional requirements',
+	'co', 'conflicts with'
+);
+my($na, $de, $eq, $se, $re, $op, $co);
+my(               @se, @re, @op, @co);
+
+%toc = ();
+
+
+$htmlHowToFormatOptions = '
+Unless stated otherwise all options of this command do follow the
+<A HREF="!:options">standard rules for options</A>.
+';
+
+&openCmdList;
+
+&htmlOpenHtml;
+&htmlOpenTOC;
+
+@ARGV = glob("*.db") unless $#ARGV >= 0;
+
+for (@ARGV) {
+	&handle($_);
+}
+
+&dumpAppendix;
+&htmlCloseTOC;
+&htmlCloseHtml;
+
+&closeCmdList;
+
+exit 0;
+
+sub handle {
+	my($file) = @_;
+
+	## Read header of file
+	if(!open(IN, $file)) {
+		&log("Cannot open file \"$file\": $!");
+	} else {
+		($na, $de, $eq, $se, $re, $op, $co) = ();
+
+		while(<IN>) {
+			chomp;
+			last if /^\s*$/;
+			if(/^(.+?):\s*/) {
+				my($key) = $1;
+				my($value) = $';
+				next unless $value;
+
+				$key =~ tr/A-Z/a-z/;
+				$key =~ s/\s+/ /g;
+				if(length($key) < 2) {
+					&log("Invalid header key '$key' in $file\n");
+				} else {
+					my($keyname) = substr($key, 0, 2);
+					if(substr($headers{$keyname}, 0, length($key)) eq $key) {
+					 	eval "\$$keyname = \$value";
+					 } else {
+					 	&log("Unknown header key '$key' in $file");
+					 }
+				}
+			} else {
+				&log("Syntax error in header section of $file");
+			}
+		}
+
+		if($na && $de) {
+			$na = &mangleName($na);
+			&dumpHeader($na, $de);
+			if($eq) {
+				&dumpEqual($eq);
+			} else {
+				@se = sort map { &mangleName($_) }  split(/[,\s;]+/, $se);
+				@re = sort map { &mangleName($_) }  split(/[,\s;]+/, $re);
+				@op = sort map { &mangleName($_) }  split(/[,\s;]+/, $op);
+				@co = sort map { &mangleName($_) }  split(/[,\s;]+/, $co);
+				&dumpHeaderEntry;
+				&dumpBodyEntry;
+			}
+			&dumpFooter;
+		} else {
+			&log("Missing header keys 'name' or 'description' in $file");
+		}
+
+		close IN;
+	}
+}
+
+## Dump "equal-to" command in HTML
+sub dumpEqual {
+	my($eq) = &mangleName(@_);
+
+	print HTML "This command is 100% compatible to ",
+	 &htmlCommandRef($eq), ", please see there\n";
+}
+
+## Dump new command header
+sub dumpHeader {
+	my($na, $de) = @_;
+
+	&dumpTOC($na, $de);
+	print HTML '<H2><A NAME="', lc($na), "\">$na - $de</H2>\n";
+	&writeCmdList(uc($na));
+}
+sub dumpAppendix {
+	print HTML '<H2><A NAME="_appendix">Appendix</A></H2>',"\n";
+	open(IN, "stuff")
+		or die "Cannot open Appendix: $!\n";
+	$na = "_Appendix";
+	&dumpBodyEntry;
+	close IN;
+}
+
+## Dump Headers for normal entry
+sub dumpHeaderEntry {
+	if($#se >= 0) {
+		print HTML "See also: "
+		 , join(', ', (map { &htmlCommandRef($_) } @se))
+		 , "<BR>\n";
+	}
+	if($#re >= 0) {
+		print HTML "Requirements: "
+		 , join(',', @re)
+		 , "<BR>\n";
+	}
+	if($#op >= 0) {
+		print HTML "Optional requirements: "
+		 , join(',', @op)
+		 , "<BR>\n";
+	}
+	if($#co >= 0) {
+		print HTML "Conflicts with: "
+		 , join(',', @co)
+		 , "<BR>\n";
+	}
+}
+sub dumpBodyEntry {
+	my($ref_na) = lc($na);		# refernce name of this object
+
+	while(<IN>) {
+		chomp;
+
+		if(/^CMD:/) {
+			$_ = "\n<CMD>$'</CMD><BR>";
+		} elsif(/^(SYNOPSIS):/ || /^(OPTIONS):/ || /^(EXAMPLES):/
+		 || /^(ARGUMENTS):/) {
+			$_ = &htmlSection($1);
+		} elsif(/^STD_OPTIONS:/) {
+			$_ = &htmlSection('Options') . $htmlHowToFormatOptions;
+		} elsif(/^EXAMPLE:\s*/) {
+			$_ = &htmlSubSection("Example: $'");
+		} elsif(/^DESCRIPTION:/) {
+			$_ = "<P>\n";
+		}
+
+		# Process the EBNF tag
+		if(/^EBNF(\!)?:/) {
+			my($line) = $';
+			my($own_line) = !$1;
+
+			$_ = '';
+			while($line =~ /^\s*('.*?'|[^'\s]\S*)/) {
+				my($token) = $1;
+				$line = $';
+				my($tag) = '';
+
+				if($token =~ /^[A-Z']/) {		# terminal characters
+					$tag = 'CMD';
+				} elsif($token =~ /^[a-z]/) {	# placeholder
+					$tag = 'I';
+				} elsif(index(',./[]{}():;', substr($token, 0, 1)) >= 0) {
+					$tag = 'B';
+				}
+				if($token =~ /^<<(.*)>>$/) {
+					$token = '&laquo;' . &htmlXLat($1) . '&raquo;';
+				} else {
+					$token = &htmlXLat($token);
+				}
+				if($token) {
+					$_ .= ' ';
+					$_ .= "<$tag>" if $tag;
+					$_ .= $token;
+					$_ .= "</$tag>" if $tag;
+					$_ .= ' ';
+				}
+			}
+
+			$_ .= "<BR>\n" if $own_line;
+		} else {
+			eval $cmdExpr;	# perform the linkaging of the commands
+		}
+
+		# Basic special tags
+		s:<OPT>:<TT><B>:ig;
+		s:</OPT>:</B></TT>:ig;
+		s:<ARG>:<TT><I>:ig;
+		s:</ARG>:</I></TT>:ig;
+		s:<CMD>:<TT>:ig;
+		s:</CMD>:</TT>:ig;
+
+		# Modify references
+		s:<A\s+NAME="(.+?)"\s*>:<A NAME="${ref_na}_\1">:ig;
+		while(m!<A\s+HREF=\"(.*?):(.*?)\"\s*>!i) {
+			$pre = $`;
+			$post = $';
+			$obj = lc($1);
+			$label = lc($2);
+			$label = "_" . $label if $label;
+			$obj = $ref_na unless $obj;
+			$obj = '_appendix' if $obj eq '!';	## appendix	
+			$_ = "$pre<A HREF=\"#$obj$label\">$post";
+		}
+
+
+		print HTML "$_\n";
+	}
+}
+
+sub dumpFooter {
+	&htmlFooter;
+}
+
+
+sub htmlCommandRef {
+	my($cmd) = @_;
+
+	return '<A HREF="#' . lc($cmd) . "\">$cmd</A>";
+}
+
+sub htmlSection {
+	my($name) = @_;
+
+	return "\n<H3>" . ucfirst(lc($name)) . "</H3>\n";
+}
+sub htmlSubSection {
+	my($name) = @_;
+
+	return "\n<H4>$name</H4>\n";
+}
+
+## Dump the command footer
+sub htmlFooter {
+	print HTML "<P><HR>\n";
+}
+
+# command name
+sub mangleName {
+	return uc($_[0]);
+}
+
+sub dumpTOC {
+	my($na, $de) = @_;
+
+	$toc{$na} = $de;
+}
+
+#############################3
+sub htmlOpenTOC {
+	open(TOC, ">$file_toc")
+		or die "Cannot create TOC: $file_toc: $!\n";
+}
+sub htmlCloseTOC {
+	my($na, $de);
+
+	foreach $na (sort keys %toc) {
+		print TOC '<LI><A HREF="#', lc($na), "\">$na - $toc{$na}</A>\n";
+	}
+	close TOC;
+}
+sub htmlOpenHtml {
+	open(HTML, ">$file_html")
+		or die "Cannot create HTML: $file_html: $!\n";
+print HTML '<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META HTTP-EQUIV="Content-Language" CONTENT="en">
+<META NAME="GENERATOR" CONTENT="VI">
+<META NAME="DESCRIPTION" CONTENT="Description of features and implementation status of FreeCOM, the COMMAND.COM replacement">
+<META NAME="AUTHOR" CONTENT="Steffen Kaiser">
+<META NAME="KEYWORDS" CONTENT="DOS, FreeDOS, FreeCOM, COMMAND.COM, CLI">
+<META NAME="DATE" CONTENT="2001-02-06">
+<TITLE>Internal Commands of FreeCOM</TITLE>
+</HEAD>
+
+<BODY>
+List of commands and features of FreeCOM:
+<UL>
+';
+	if(open(TOC, $file_toc)) {		# Import the previously created TOC
+		print HTML <TOC>;
+		close TOC;
+	}
+	print HTML "</UL>\n<BR><BR><HR><BR>\n";
+}
+sub htmlCloseHtml {
+	print HTML "</BODY>\n";
+	close HTML;
+}
+
+##################3
+sub openCmdList {
+	if(open(CMDLIST, $file_cmd)) {
+		# Read them
+		$cmdExpr = '';
+		while(<CMDLIST>) {
+			chomp;
+			$cmdlist{$_} = 1;
+			$cmdExpr .=  ", s/\\b$_\\b/"
+			 . quotemeta("<CMD>" . &htmlCommandRef($_) . "</CMD>")
+			 . "/g";
+		}
+		close CMDLIST;
+		$cmdExpr = substr($cmdExpr, 2);		# Kill the leading ", "
+	}
+	open(CMDLIST, ">$file_cmd")
+		or die "Cannot create command list file: $!\n";
+}
+sub closeCmdList {
+	close CMDLIST;
+}
+sub writeCmdList {
+	print CMDLIST $_[0] . "\n";
+}
+
+
+## Log an error to the console and the logfile
+sub log {
+	local($logging) = 0;
+
+	if(!$logging) {
+		my($file) = "$0.LOG";
+		die "Cannot create logfile: $!\n" unless open(LOG, ">$file");
+		$logging = 1;
+	}
+
+	print LOG join("\n", @_) . "\n";
+	print STDERR join("\n", @_) . "\n";
+}
+
+sub htmlXLat {
+	my($line) = @_;
+
+	$line =~ s/\&/\&amp;/g;
+	$line =~ s/\</\&lt;/g;
+	$line =~ s/\>/\&gt;/g;
+
+	return $line;
+}

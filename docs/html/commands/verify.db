@@ -1,0 +1,13 @@
+name: VERIFY
+de: Display or set verify level
+req: CMD_VERIFY
+
+SYNOPSIS:
+EBNF: VERIFY [ ON | OFF ]
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

@@ -1,0 +1,53 @@
+name: copy
+de: Copy one or more files to another location
+see: ren del
+req: CMD_COPY
+
+SYNOPSIS:
+
+<OL>
+<LI>
+EBNF: COPY [{ option }]  source [{ option }]  target [{ option }] 
+</OL>
+
+Copies the source file into the target file. See also: \REF{wildcards}
+
+STD_OPTIONS:
+<UL>
+<LI><OPT>/A</OPT> see below
+<LI><OPT>/B</OPT>: Specifies the mode, in which the file is copied,
+	<OPT>/A</OPT> forces ASCII
+	and <OPT>/B</OPT> forces binary mode.
+	<P>These options do alter the mode of the file immediately
+	preceeding them and all following ones, until changed again.
+	<P>In binary mode the file is copied and nothing is changed at all.
+	<P>In ASCII mode COPY takes special care about linefeeds / newline
+	characters and the end-of-line character.
+	<UL>
+	<LI>On read, the newline characters, which are a sequence of two
+	different bytes in DOS, are transformed into a single character, as
+	known from Unix-style systems. On write, this single character is
+	transformed into the two-byte sequence.
+	<BR>So, if both files are copied with different modes, newline
+	characters are transformed into either way.
+	<LI>If the end-of-file character is found on read, the remaining
+	contents of the file is ignored. On write, such character is appended
+	after the last character has been written.
+	</UL>
+	By default, files are copied in binary mode, whereas devices, e.g.
+	<CMD>CON:<CMD>, are copied in ASCII mode, but no end-of-file is appended.
+</UL>
+
+ARGUMENTS:
+<UL>
+<LI><ARG>source</ARG>: The source file.
+	<BR>If more than one source file is specified, the target must be
+	a directory.
+
+<LI><ARG>target</ARG>: The target of the <CMD>COPY<CMD> process.
+	<BR>If target is a directory, the destination file is placed into this
+	directory, but with the same filename as the source file.
+	<BR>If exactly one source is specified, but no target, target defaults
+	to just <CMD>.</CMD>, which represant the current directory.
+
+</UL>

@@ -1,0 +1,14 @@
+name: PROMPT
+de: Display or set the shell prompt
+req: CMD_PROMPT
+
+SYNOPSIS:
+EBNF: PROMPT
+EBNF: PROMPT [ '=' ] prompt
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

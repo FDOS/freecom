@@ -1,0 +1,14 @@
+name: MD
+de: make directory
+see: MKDIR RMDIR CHDIR
+req: CMD_MKDIR
+
+SYNOPSIS:
+EBNF: MD path
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

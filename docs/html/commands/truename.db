@@ -1,0 +1,13 @@
+name: TRUENAME
+de: Display the true name of a file
+req: CMD_TRUENAME
+
+SYNOPSIS:
+EBNF: TRUENAME path
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

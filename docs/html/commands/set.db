@@ -1,0 +1,14 @@
+name: SET
+de: Display or set environment variables
+req: CMD_SET
+
+SYNOPSIS:
+EBNF: SET
+EBNF: SET variable '=' <<string>>
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

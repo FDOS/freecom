@@ -1,0 +1,78 @@
+File format of .DB files:
+
+Header:
+na)me: of object described herein; should match the filename
+de)scription: one line description
+eq)ual to: name of object 100% equal to this one, no further entries
+	allowed
+se)e also: references
+re)quirements: which other objects this object depends on
+op)tional: optional requirements for certain features
+co)nflicts: which other objects this object conflicts with
+
+<empty line>	-- delimits header and body
+
+Body: The rest of the file is plain HTML text, except:
+
++ <OPT>...</OPT> encloses names of options
++ <ARG>...</ARG> encloses names of arguments
++ <CMD>...</CMD> encloses a command line embedded into HTML text
++ CMD: prefixes a line that solemny consits of a command line
++ EBNF: prefixes a line that solemny consists of a EBNF expression
++ EBNF!: prefixes a line that solemny consists of a EBNF expression, which
+is part of the surrounding HTML text.
++ Labels (aka: <A NAME="letters">) are mangeled to automatically be unique
+throughout the whole generated HTML files.
++ References to labels must be written like this:
+<A HREF="object:label"> where "object" is the name of the object the
+label is part of; an empty label references to the object itself, an
+empty object  references to the label within the same object.
+Both 'object' and 'label' must consist of letters only.
+
+The special object "!" refers to a central explanation location:
+	!:wildcards	Explains how wildcards are matched and their syntax
+	!:options	Explains how options are parsed standardly
+	!:path		Explains how path specification is formatted, abs/rel path
+
++ SYNOPSIS: is substituted by a "Synopsis" section header line.
++ ARGUMENTS: is substituted by a "Arguments" section header line.
++ OPTIONS: is substituted by a "Options" section header line.
++ STD_OPTIONS: is substituted by a standard "Options" section header line
+	including the reference to how to format options.
++ EXAMPLES: is substituted by a "Examples" section header line.
++ EXAMPLE: <<string>> is substituted by a "Example <<string>>"
+	subsection header line.
+
+EBNF (enhanced Backus-Naur-Format):
++ Tokens must be surrounded by at least one whitespace.
++ Tokens must not contain whitespaces.
++ Variants of tokens:
+++ first character is a capitol letter:
+	Fixed part of a command, set in <CMD> tags.
+++ first character is a lower-case letter:
+	Variable part of a command, a place holder; set in <I> tags.
+++ a sequence of characters enclosed in single quotes:
+	Characters to be written on command line; set in <CMD> tags
+	quotes not stripped.
+++ else:
+	Metacharacters for EBNF:
++++ ( ) narrows other operators
++++ | either left or right token list (*)
++++ [ ] encloses optional tokens, which may appear exactly once or not at all.
++++ { } encloses tokens, which must appear at least once.
++++ { : } as { }, but the tokens placed right of the colon are to be inserted
+	between two or more apearances of the tokens left of the colon (**)
++++ ::= assignes a meaning to a placeholder.
++++ << >> encloses an informal comment (expressed in natural language) (***)
++++ No special metacharacter is required to form a sequence of tokens.
++ Spaces, which must appear on the command line, are usually not explicitly
+	expressed within EBNF neither does the existance of a space imply that
+	such space must be entered on command line, see (***).
+	It is assumed that the reader knows the basic rules where to have to
+	insert spaces.
+
+
+(*) A sequence of |'s form an either-or-operator.
+(**) E.g.: COPY { srcfile : '+' } dstfile
+	is a short-hand form of:	COPY srcfile [{ '+' srcfile }] dstfile
+(***) E.g.: SET varname '=' <<any string>>

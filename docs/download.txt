@@ -1,0 +1,18 @@
+You can download pre-compiled variants of FreeCOM from:
+
+ftp://freedos.sourceforge.net/pub/freedos/freecom/
+
+
+binary.zip: the latest FreeCOM, binaries only
+
+plainedt.zip: the latest FreeCOM without the command line editing
+	enhancements (history, file complation)
+
+debug.zip: the latest FreeCOM with debug information enabled
+
+localize.zip: Developer package for localizer (to create new or
+	maintaing existing *.LNG files), includes latest FreeCOM
+
+suppl.zip: the SUPPL library pre-compiled for TC++ v1.01
+	its source code is avilable from:
+	http://www2.inf.fh-rhein-sieg.de/~skaise2a/ska/sources.html#suppl

@@ -1,0 +1,11 @@
+name: BEEP
+de: Issue a Beep
+req: CMD_BEEP
+
+SYNOPSIS:
+EBNF: BEEP
+
+DESCRIPTION:
+
+Issues a beep.
+<BR>At this time FreeCOM supports audible beeps only.

@@ -1,0 +1,75 @@
+name: CD
+de: Change current directory of a drive
+see: MKDIR, RMDIR, DIR, CDD, PUSHD, DIRS MD RD CHDIR
+req: CMD_CHDIR
+opt: FEATURE_LAST_DIR
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: CD 
+<LI>
+EBNF: CD [ drive ':' ] path
+<LI>
+EBNF: CD '-'
+</OL>
+
+<CMD>CD</CMD> is 100% compatible with the <CMD>CHDIR</CMD> command; there
+is no difference -- beside the spelling -- between them.
+
+<P>The first variant shows the <A HREF="!:cwd">current working
+directory</A> as absolute path.
+
+<P>The second variant changes the <A HREF="!:currdir">current
+directory</A> of the given drive.  If no drive is specified on command
+line, the current directory of the <A HREF="chgdrive:">currently
+selected drive (disk)</A> is changed.  This command does
+<STRONG>not</STRONG> change the currently selected drive in opposite to
+<CMD>CDD</CMD>!
+
+<P>The third variant changes back into the last visited directory
+<STRONG>and</STRONG> drive.  The commands <CMD>CD</CMD>,
+<CMD>CHDIR</CMD>, <CMD>CDD</CMD>, and <CMD>PUSHD</CMD> save the current
+working directory before performing the specified directory change; the
+command <CMD>CD '-'</CMD> restores this saved directory. This command is
+available only, if the feature LAST_DIR has been enabled during the
+compilation of FreeCOM.
+
+OPTIONS:
+There are no options for this command.
+
+EXAMPLES:
+EXAMPLE: 1
+CMD: CD \freedos\help
+
+Changes the current working directory of the currently selected drive to
+the path <CMD>\FREEDOS\HELP</CMD>.
+
+EXAMPLE: 2
+CMD: CD c:\freedos\help
+
+Changes the current directory of drive <CMD>C:</CMD>.
+
+EXAMPLE: 3
+Assuming the current working directory is <CMD>\FREEDOS\HELP</CMD> and
+the currently selected drive is <CMD>C:</CMD>.
+
+CMD: CD 
+
+Displays <CMD>C:\FREEDOS\HELP</CMD>
+
+EXAMPLE: 3
+The command sequence, provided the first two worked successfully:<BR>
+CMD: CD \FREEDOS\HELP
+CMD: CD ..
+CMD: CD -
+
+changes first into the directory <CMD>\FREEDOS\HTLP</CMD>, then into
+its parent directory, which is <CMD>\FREECOM</CMD>. And finally
+<CMD>CD -</CMD> changes back to <CMD>\FREEDOS\HELP</CMD>, because this
+was the previous directory before previous <CMD>CD</CMD>-like command.
+<P>Because <CMD>CD -</CMD> saves the previous directory, too, any
+subsequent:
+CMD: CD -
+will switch between these two directories; until another directory is
+changed to.

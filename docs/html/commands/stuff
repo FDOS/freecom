@@ -1,0 +1,169 @@
+<H3><A NAME="currdir">Current Directory</A></H3>
+
+The current directory is the default directory of a drive.
+
+<P>DOS stores a default directory for each drive. When a path is
+specified with a drive specification only, such as <CMD>D:</CMD>,
+it is completed with this default directory of that drive to
+construct the <A HREF="!:abspath">absolute path</A> to be used.
+
+<H3><A NAME="cwd">Current Working Direcory</A></H3>
+
+In opposite to the current directory the current <EM>working</EM>
+directory is the <A HREF="!:abspath">absolute path</A> constructed
+out of the <A HREF="chgdrive:">currently selected drive</A> and <A
+HREF="cd">current directory</A> of that drive.
+
+<H3><A NAME="abspath">Path Specification</A></H3>
+
+In DOS an absolute path is constructed out of several components:
+<OL>
+<LI>drive,
+<LI>directory,
+<LI>filename, and
+<LI>file extension.
+</OL>
+like this: <CMD>D:\DIR1\DIR2\FILENAME.EXT</CMD>.
+
+<P>The drive is a single letter from <CMD>A</CMD> through <CMD>Z</CMD>
+followed by a colon <CMD>:</CMD>.
+
+<P>The remaining part of a path consists of similiar components
+delimited by a single backslash <CMD>\</CMD>. The last component
+is also called filename. Each of these components may be formed of
+a name, up to eight characters long, and an extension, up to
+three characters long. Both parts are delimited by a single dot
+<CMD>.</CMD>. Although the extension may be absent, the filename
+must have at least one character.
+<BR>Note: The term <EM>filename</EM> is not limited to <EM>files</EM>
+in the usual sense, but may apply to any name visible in a directory,
+such as subdirectories and volume labels, as well.
+
+<P>To ease the way to enter a path the user may specify a relative path,
+rather than an absolute one. In such path one or more components may
+be missing:
+
+<UL>
+<LI>If no drive is specified, what means that no colon is specified, the
+path is prefixed by the <A HREF="chgdrive:">currently selected
+drive</A>.
+
+<LI>If the directory is not prefixed by the backslash or no directory
+is specified at all, the <A HREF="!:currdir">current directory</A>
+of the drive is inserted right behind the colon.
+
+<LI>Some programs may append an absent extension to the very last
+filename component.
+
+</UL>
+
+<P>Examples, assume the current directories of
+<TABLE BORDER=1>
+<TR>
+	<TD><B>Drive</B></TD>
+	<TD><B>Current Directory</B></TD>
+</TR>
+<TR>
+	<TD>C:</TD>
+	<TD><CMD>\FREEDOS\HELP</CMD></TD>
+</TR>
+<TR>
+	<TD>D:</TD>
+	<TD><CMD>\TEMP\TEXT</CMD></TD>
+</TR>
+</TABLE>
+The currently selected drive is <CMD>C:</CMD>.
+
+<OL>
+<LI><CMD>C:\</CMD>
+<BR>The root directory of drive <CMD>C:</CMD>.
+
+<LI><CMD>.</CMD>
+<BR>The current working directory, ergo: <CMD>C:\FREEDOS\HELP</CMD>.
+
+<LI><CMD>..</CMD>
+<BR>The parent directory, ergo: <CMD>C:\FREEDOS</CMD>.
+
+<LI><CMD>D:</CMD>
+<BR>The current directory of drive <CMD>D:</CMD>, ergo: <CMD>D:\TEMP</CMD>.
+
+<LI><CMD>D:.</CMD>
+<BR>The current directory of drive <CMD>D:</CMD>, ergo: <CMD>D:\TEMP</CMD>.
+
+<LI><CMD>D:..</CMD>
+<BR>The parent directory of drive <CMD>D:</CMD>, ergo: <CMD>D:\</CMD>.
+
+<LI><CMD>..\BIN</CMD>
+<BR>Because there is neither a drive nor a leading backslash, both the
+currently selected drive and the current directory of that drive
+is inserted before the given path, ergo: <CMD>C:\FREEDOS\HELP\..\BIN</CMD>.
+<BR>The embedded component <CMD>..</CMD> has the same meaning as when
+specified alone: <EM>parent directory</EM>, though, here in the context
+of the directory <CMD>C:\FREEDOS\HELP\</CMD>. That means that the
+final absolute path is: <CMD>C:\FREEDOS\BIN</CMD>.
+
+</OL>
+
+<P>Path specifications that do not conform to above mentioned
+format lead to various different behaviour of the various programs,
+because there is no standard to scan, parse and interprete such
+patterns.
+Problems include:
+<UL>
+<LI>multiple backslashes,
+<LI>multiple dots,
+<LI>multiple colons, or a colon at a position unequal to two,
+<LI>The current directory <CMD>.</CMD> or parent directory <CMD>..</CMD>
+special directories in the context of a root directory, such as
+<CMD>C:\.</CMD>, <CMD>C:\..</CMD>, or <CMD>C:\TEMP\..\..</CMD>.
+</UL>
+
+<P>Note: The special directories <CMD>.</CMD> and <CMD>..</CMD> are no
+phantom directories or virtual entries, but standard entries of
+every directory except the root directories. These entries help
+crash recovery tools, such as <CMD>CHKDSK</CMD> or <CMD>SCANDISK</CMD>,
+to find errors within the directory structure and restore it to
+a valid file tree. Therefore a common assumption that a tripple dot
+<CMD>...</CMD> directory means <EM>parent-of-parent</EM> is incorrect,
+though, might be supported by certain programs.
+
+<H3><A NAME="options">Standard Rules for Options</A></H3>
+
+Options are prefixed by one forward slash &quot;<CMD>/</CMD>&quot;,
+the following character identifies the option and is called
+option character, for instance: <OPT>/A</OPT>
+
+<P>Some commands do accept long option names, where a complete word
+identifies the option rather than a single character, e.g. <OPT>/MSG</OPT>.
+
+<P>Some option may be used in conjunction with an argument. The argument
+is appended to the option with one colon &quot;<CMD>:</CMD>&quot; or
+one equal sign &quot;<CMD>=</CMD>&quot;, for instance: <OPT>/A:hr</OPT>
+or <OPT>/P=fdexec.bat</OPT>.
+
+<P>Multiple options <EM>without</EM> argument maybe merged together
+as a single option with or without embedded slashes, e.g. <OPT>/WS</OPT>
+or <OPT>/W/S</OPT>, instead of <OPT>/W /S</OPT>.
+<BR>However, because some commands do accept long option names, the
+way with embedded slashes is more secure and is recommended therefore.
+<BR>An option with argument may be the last one of such merged options.
+
+<P>Options without arguments enable or disable certain features. Therefore,
+those options are sometimes called <EM>boolean</EM> options or flags.
+<BR>Boolean options may be optionally prefixed by a plus &quot;<CMD>+</CMD>&quot;
+or minus &quot;<CMD>-</CMD>&quot; sign. So, the boolean option <OPT>O</OPT>
+can be written in three ways:
+<OL>
+<LI><OPT>/+O</OPT>: The option is enabled.
+<LI><OPT>/-O</OPT>: The option is disabled.
+<LI><OPT>/O</OPT>: (<FONT SIZE=-1>neither plus nor minus sign</FONT>)
+The option is toggled or flipped; this means if the option is
+enabled currently, it is disabled; but if it is disabled currently,
+it is enabled.
+</OL>
+<BR>Without user invention a boolean option is disabled by default, so
+both <OPT>/+O</OPT> and <OPT>/O</OPT> behave the same most
+of the time. However, some commands allow the user to change the default
+settings of certain options, e.g. <A HREF="copy:">COPY</A> and
+<A HREF="dir:">DIR</A>.
+

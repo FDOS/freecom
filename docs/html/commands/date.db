@@ -1,0 +1,69 @@
+name: DATE
+de: Display or set current date
+see: TIME
+req: CMD_DATE
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: DATE [ /D ]
+<LI>
+EBNF: DATE [ /D ] date
+</OL>
+
+The first variant displays the current system date, then enters a loop
+prompting the user for a new date. The loop terminates, if the user
+entered a valid new date or just pressed the <TT>ENTER</TT> key.
+
+<P>The second variant does not display the current date and tries to
+change the date to the specified <ARG>date</ARG>. On success the
+command terminates, otherwise enters the loop explained above.
+
+<P>The individual portions of a date may be separated by at least:
+dots <TT>.</TT>, forward slashes <TT>/</TT> or dashes <TT>-</TT>.
+Other nationally used characters may be supported, too.
+<BR>DATE will support partial formats:
+<UL>
+<LI>A <EM>single numnber</EM>: specifies the day only.
+<LI><EM>Two numbers</EM>: specifies the day and the month in the order
+used by the national date format, which is MM/DD for American and Japanese
+and DD/MM for European format.
+<LI><EM>Three numbers</EM>: specifies a full date including day, month and
+year in the order suitable for the national date format, which is:
+<UL>
+<LI>MM/DD/[CC]YY: for American,
+<LI>DD/MM/[CC]YY: for European and
+<LI>[CC]YY/MM/DD: for Japanese format.
+</UL>
+If the year portion is less than 100, the century is assumed to be 1900, if
+it is greater or equal than 80; otherwise the century is 2000.
+<P><EM>Note</EM>: Some European countries introduced the so-called
+business date in 1996 or so, which is the same as the Japanese format;
+it makes sorting of literal dates a lot easier. If FreeCOM will or will not
+support it, will depend on the NLS used by DOS.
+</UL>
+
+<BR>Symbolical names of monthes are not support (yet).
+
+OPTIONS:
+
+All options must precced any argument.
+
+<P><OPT>/D</OPT> prevents from prompting the user.
+<OL>
+<LI>In variant 1, the date is displayed only.
+<LI>In variant 2, the date is tried to be changed, but the loop is not
+entered on failure.
+</OL>
+
+EXAMPLES:
+EXAMPLE: 1
+
+CMD: DATE /D
+
+Just display the current system date.
+
+EXAMPLE: 3
+CMD: DATE 2/1/00
+
+Sets the current date to 1st February of 2000.

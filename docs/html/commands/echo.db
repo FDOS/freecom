@@ -1,0 +1,14 @@
+name: ECHO
+de: Displays a string onto screen
+see: TYPE
+req: CMD_ECHO
+
+SYNOPSIS:
+EBNF: ECHO <<string>>
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

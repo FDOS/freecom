@@ -1,0 +1,20 @@
+name: CDD
+de: Changes the current working directory
+see: CD CHDIR MKDIR RMDIR DIR RD MD PUSHD
+req: CMD_CDD
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: CDD 
+<LI>
+EBNF: CDD [ drive ':' ] path
+<LI>
+EBNF: CDD '-'
+</OL>
+
+The behaviour of <CMD>CDD</CMD> is similiar to the <CMD>CD</CMD>
+command, but it always changes both the currently selected drive and
+the current directory, thus, it changes the current working directory.
+
+<P>For further details please see the <CMD>CD</CMD> command.

@@ -1,0 +1,13 @@
+name: REM
+de: Marks comments or remarks in batchfiles
+req: CMD_REM
+
+SYNOPSIS:
+EBNF: REM <<string>>
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

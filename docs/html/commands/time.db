@@ -1,0 +1,62 @@
+name: TIME
+de: Display or set current time
+see: DATE
+req: CMD_TIME
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: TIME [ /T ]
+<LI>
+EBNF: TIME [ /T ] time
+</OL>
+
+Variant 1 displays the current time, then enters a loop prompting the
+user to enter a new time. The loops terminates when a valid time had
+entered or the user just pressed the <TT>ENTER</TT> key.
+
+<P>Variant 2 does not display the current time, but tries to change the
+current time to the specified <ARG>time</ARG>, on failure the loop as
+explained above is entered.
+
+<P>The individual portions of a time may be sperated by at least:
+dots <TT>.</TT>, colons <TT>:</TT> and forward slashes <TT>/</TT>. Other
+nationally used characters may be supported, too.
+If a certain number of portions are specified:
+<OL>
+<LI>error,
+<LI>hour:minute; seconds and hundreds default to zero,
+<LI>hour:minute:seconds; hundreds defaults to zero,
+<LI>hour:minute:seconds.hundreds;
+<LI>more than 4 portions result in an error.
+</OL>
+Separated by no, one or more whitespaces the am/pm modifiers may follow
+optionally. If present they alter the given time as follows:
+<UL>
+<LI>AM: if hour is equal to 12, it becomes 0 (midnight).
+<LI>PM: f hour is greater than 12, it is incremented by 12.
+</UL>
+
+OPTIONS:
+
+All options must preceed any arguments.
+
+
+<P><OPT>/T</OPT>: prevents from prompting the user.
+<OL>
+<LI>In variant 1, the time is displayed only.
+<LI>In variant 2, the time is tried to be changed, but the loop is not
+entered on failure.
+</OL>
+
+EXAMPLES:
+EXAMPLE: 1
+CMD: TIME /T
+
+Just displays the current time.
+
+
+EXAMPLE: 2
+CMD: TIME 18:2
+
+Sets the current system time to 6:02 PM.
