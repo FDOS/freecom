@@ -1140,6 +1140,9 @@ FOR %variable IN (set) DO command [command-parameters]
 
 To use the FOR command in a batch program, specify %%variable instead of
 %variable.
+
+For example:
+  FOR %f IN (---start--- a*.* ---end---) DO ECHO - %f -
 .
 
 :TEXT_CMDHELP_GOTO
