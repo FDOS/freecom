@@ -1,21 +1,3 @@
-/*
-    This file is part of SUPPL - the supplemental library for DOS
-    Copyright (C) 1996-99 Steffen Kaiser
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 /* $Id$
    $Locker$	$Name$	$State$
 
@@ -45,12 +27,140 @@
 	#include'ing this header file, Fxopen() and Fxclose() replace
 	Fopen() and Fclose() by default.
 
+   $Log$
+   Revision 1.2  2000/07/09 22:19:22  skaus
+   + Support for international strings without recompiling
+   + Useage of TC++1
+
+   Revision 1.10  2000/03/31 09:09:34  ska
+   add: DBG_CLOSELOG, suppl_l_openmode
+   add: SYSLOG_ALWAYS_FLUSHLOG
+   add: fcommit(), Fcommit(), Fflush(), commit()
+   add: suppl_log_flush(), DBG_FLUSHLOG, DBG_ALWAYS_FLUSHLOG
+   fix: dfnsearch(): DBG_ARGUMENT()
+   chg: F[gs]etpos() -> true replacements of f[gs]etpos(); removed
+   	Fp[gs]etpos(); added FF[gs]etpos() using a non-pointer argument
+   bugfix: secure string functions: memory functions don't accept length == 0
+   add: MKSTRFCT.PL: generate DOC\SSTR.FCT
+   fix: dfnsplit(): a pathname without path components returns the root
+   	directory as path portion
+   add: dfnsplit(): debug output of return values of found drive/path/name/ext
+   fix: dfnsqueeze(): DBG_ENTER() contains wrong names
+   fix: dfnsplit(): chkHeap in drive spec detection routine breaks if/else
+   chg: moved NLS-depended stuff from DFN.H into NLS_F.H
+   add: integer SUPPL error codes -- all functions returning (int) error codes
+   	return unique codes used throughout all SUPPL, see ERRCODES.H
+
+   Revision 1.9  1999/12/13 02:23:44  ska
+   add: debug subsystem
+   bugfix: Fposcmp(): If abs(pos1 - pos2) > 32767, the return value is random
+   add: strend() --> returns the address of the NUL byte of a string
+   chg: StrAppend() --> StrAppQStr()
+   add: StrQuote(), StrUnquote()
+   bugfix: Strspn(): if any parameter is NULL, returns NULL now
+   bugfix: MemiCmp(): returned wrong sign
+   bugfix: dfnstat(): Win95 LFN's entry never or invalidly detected
+   add: dfndelim() & dfndelim2()
+   chg: environ.h: mcb_toenv() --> macro mcb_env()
+   fix: cfg_osen.c: cfg_ostkEnum(): If output stack empty --> random return value
+   fix: strnum(): '0x' prefix detection fails
+   chg: long*(): Except longcmp() all functions are void; for portable subsys
+   bugfix: Erealloc(): if len == 0, the program is terminated erroreously
+   add: Fcopyi() & Fcopyl() & Fcopybuf()
+   chg: Fcopyto(): 'topos' must contain a valid position returned by Fgetpos()
+   add: supplio.h: Fpos2dword() & Fppos2dword(): Extract (dword) pos from(fpos_t)
+   chg: env_newsize() renamed into env_setsize()
+   bugfix: env_check(): accepts no segm==0, as it is standard
+   sub: dynstr.h: STR_SAVE_MODES, not used anymore (StrSaveTokens() removed)
+   chg: dynstr.h: STR_SAVED_TOKENS is its own type now
+   bugfix: StrTok*(): if(st) effects first assignment only
+   bugfix: StrTail(): string is strdup()'ed two times
+   bugfix: _fStriCmp(): temporary storage into (char) is unportable
+   bugfix: StriCmp(): sign is inverted
+   bugfix: StriCmp(): accepts no NULL parameters
+   add: DFN_LFN to dfn.h and dfnstat()
+   bugfix: UNC-aware dfnmatch2(): function name wrong
+   sub: removed "Target compilers" note everywhere
+   fix: dfnstat(): returns DFN_DIRECTORY on "X:" and "X:\"
+   chg: No SUPPL function will invoke openlog() automatically
+
+   Revision 1.8  1999/04/13 00:11:50  ska
+   bugfix: dfnexpand(): fname == "" --> fname := "."
+   bugfix: dfnsearch(): Searching root instead of '.' if no search path
+   add: syslog subsystem
+   fix: spelling in comments etc.
+   bugfix: not all SUPPORT_UNC_PATH macros correct
+   add: INI file random access subsystem
+   add: Fmaxbuf()
+   add: Fcopy(), Fcopyto()
+   add: Fposcpy(), Fposcmp()
+   add: memzero(): unportable memory zero'ing function
+
+   Revision 1.7  1999/01/18 05:32:29  ska
+   add: INI file writing functions
+   fix: dfnstat() uses wrong register for result
+   add: dfnfreplace(), dfnbakname()
+
+   Revision 1.6  1999/01/13 03:26:03  ska
+   chg: renamed *.inc into *.loc
+   add: Fgetline() & Egetline()
+   sub: cfgfile subsystem to be added later
+   add: FFget()/FFput()
+   add: appName subsystem
+
+   Revision 1.5  1998/12/12 02:41:51  ska
+   chg: F_tmpfile(): returns NULL if fnam == NULL (to simplify Ftmpfile())
+
+   Revision 1.4  1998/12/10 03:43:24  ska
+   add: Fxcloseall()
+   fix: Ftmpfile(): to set the "istmp" attribute
+   chg: Fxopen() renamed to F_xopen() and returns the extended attributes
+   	added new Fxopen() to call F_xopen()
+   fix: cfg_rspwr(): Eget() instead of Eput()
+   fix: env_fetch(): ignoring segm==0, returning variable name as well
+   chg: cfgSplitArg() & cfgSplitBuffer() independed on what string is
+   	to be splitted
+   fix: getopt(): longname == NULL
+   fix: pushargv: wrong parameters in structure
+   fix: getarg(): C(_stk) == NULL --> return NULL
+   fix: getopt(): S(buf)[ ] = new char
+
+   Revision 1.3  1998/12/08 04:04:11  ska
+   add: dpeekc(), dpeekb(), dpeekw()
+   add: Eresize()
+   chg: env_change() to use env_ovrVarOffset() --> replaced variables
+   	remain at the position they were before
+   add: env_ovrVarOffset(), env_insVarOffset(), env_appVar()
+   sub: env_addVar() [replaced by env_appVar()]
+   bugfix: DOSalloc(): add FreeDOS compliant setting of flags prior call DOS
+
+   Revision 1.2  1998/12/04 06:00:44  ska
+   add: fpos_t/fsetpos()/fgetpos() to PAC
+   bugfix: DOSalloc(): If called with length == 0, the allocation
+   	strategy is not resetted
+   bugfix: env_newsize(): Grow block, if fails completely, the old environment
+   	was destroyed unneceesaryly
+   add: getbootdisk()
+   add: Ftmpfile(), Ftmpnam(), Etmpfile()
+   add: dfnstat(), dfnmktmp()
+   add: dfnwrdir(), dfnstat(), dfnmkfile()
+   fix/chg: StrTrim(): returns "s" if realloc() fails
+   fix: _getdcwd(): removed Carry()
+   bugfix: dfnsqueeze(): In non-UNC mode, there was nothing actually
+   	sequeezed, except the slashes were flipped
+   add: env_fetch(): DOS-ish getenv()
+   add: _fdupstr(): Duplicates far string into local heap
+
+   Revision 1.1  1998/11/25 09:33:08  ska
+   Initial revision
+
 */
 
 #ifndef __SUPPLIO_H
 #define __SUPPLIO_H
 
 #include <stdio.h>
+#include <supl_def.h>
 #ifndef __PORTABLE_H
 #include <portable.h>
 #endif
@@ -81,6 +191,7 @@ int fgetpos(FILE * const fp, fpos_t * const pos);
  *	Replacement of stdio functions
  *	All of these macros evaluate all parameter exactly once.
  */
+#define Fflush fflush
 #define Fyclose fclose
 #define Frewind rewind
 #define Fgetc(fp) getc((fp))
@@ -94,11 +205,9 @@ int fgetpos(FILE * const fp, fpos_t * const pos);
 #ifndef _MICROC_
 #define Fget(buf,size,fp) fread((buf), 1, (size), (fp))
 #define Fput(buf,size,fp) fwrite((buf), 1, (size), (fp))
+#define Fgetpos(fp,pos) fgetpos((fp), (pos))
+#define Fsetpos(fp,pos) fsetpos((fp), (pos))
 #define Fsetmode(fp,mode) 	// overcome Micro-C bug with R&W files
-#define Fgetpos(fp,pos) fgetpos((fp), &(pos))
-#define Fsetpos(fp,pos) fsetpos((fp), &(pos))
-#define Fpgetpos(fp,pos) fgetpos((fp), (pos))
-#define Fpsetpos(fp,pos) fsetpos((fp), (pos))
 #define Fseeki(fp,ofs)	fseek((fp), (long)(ofs), SEEK_CUR)
 #define Fseekc(fp,pos)	Fseeki((fp), (ofs))
 #define Fpseekc(fp,pos)	Fseeki((fp), *(ofs))
@@ -122,11 +231,9 @@ int fgetpos(FILE * const fp, fpos_t * const pos);
 void Fsetmode(FILE *fp, int mode);
 int Fgetpos(FILE *fp, fpos_t *pos);
 #define Fsetpos(fp,pos)	Fseek((fp), (pos), SEEK_SET)
-#define Fpgetpos(fp,pos) Fgetpos((fp), (pos))
-#define Fpsetpos(fp,pos) Fsetpos((fp), (pos))
 int Fseeki(FILE *fp, int ofs);
 #define Fseekc(fp,pos)	Fseek((fp), (pos), SEEK_CUR)
-#define Fpseekc(fp,pos)	Fseeks((fp),(pos))
+#define Fpseekc(fp,pos)	Fseekc((fp),(pos))
 #define Fseeke(fp)	fseek((fp), 0, 0, SEEK_END)
 FILE *Fyopen(char *fnam, char *mode);
 FILE *Fdopen(int fd, char *mode);
@@ -135,6 +242,8 @@ int Fseek(FILE *fp, dword *pos, int whence);
 #define Fileno(fp)	(fp)->FILE_handle
 int Feof(FILE *fp);
 #endif
+#define FFgetpos(fp,pos) Fgetpos((fp), aS(pos))
+#define FFsetpos(fp,pos) Fsetpos((fp), aS(pos))
 
 /* Read/write a buffer to the file.
  *	Is a function in order to evaluate all parameters only once.
@@ -143,6 +252,17 @@ int Feof(FILE *fp);
  */
 int FFget(void * const buf, size_t len, FILE *f);
 int FFput(const void * const buf, size_t len, FILE *f);
+
+/*
+ * Commit a file
+ *
+ *	Flushes the buffers cached by the C library, and
+ *	Flushes the buffers cached by the system and also makes sure
+ *	that the directory structure is updated.
+ */
+#define Fcommit fcommit
+int fcommit(FILE *fp);
+int commit(int fd);
 
 /* Read a line into dynamical memory.
  *
@@ -213,22 +333,36 @@ char *Ftmpdir(void);
 /* Copy the value of one position to another location
 */
 
-#ifndef NDEBUG
-	/* if debug enabled --> use this function and provide the test
+	/* if debug enabled --> use the function and provide the test
 		if fpos_t==long */
 int Fposcmp(const fpos_t * const pos1, const fpos_t * const pos2);
-#else
-#ifndef _MICROC_
-#define Fposcmp(pos1,pos2)	longcmp(*(pos1), *(pos2))
-#else
-#define Fposcmp(pos1,pos2)	longcmp((pos1), (pos2))
-#endif
+
+#ifdef NDEBUG
+#define Fposcmp(pos1,pos2)	\
+	longcmp1(nM(*(unsigned long*))pos1, nM(*(unsigned long*))pos2)
 #endif
 /* Compare both positions
 	Return:
 		<0: if pos1 < pos2
 		=0: if pos1 = pos2
 		>0: if pos1 > pos2
+*/
+
+// void Fppos2dword(const fpos_t const *fpos, dword * const longPosp)
+#ifdef _MICROC_
+#define Fpos2dword(fpos,longPos) Fposcpy(fpos, longPos)
+#define Fppos2dword(fpos,longPos) Fposcpy(fpos, longPos)
+#else
+#define Fpos2dword(fpos,longPos) (longPos) = (dword)(fpos);
+#define Fppos2dword(fpos,longPos) *(longPos) = (dword)(fpos);
+#endif
+/* Extract the file position from a (fpos_t) type
+
+	Note: There is _NO_ reverse function.
+
+	Also note: (fpos_t) is known to contain more than just the
+	file position, when special text handling code is enabled, such
+	as multi-byte characters.
 */
 
 int Fmaxbuf(byte ** const buf, size_t * const len);
@@ -253,6 +387,22 @@ int Fcopyto(FILE * const fdst, FILE * const fsrc, const fpos_t * const pos);
 
 int Fcopy(FILE * const fdst, FILE * const fsrc);
 /* Copy any byte from fsrc into fdst
+	Return: 0 on success
+*/
+
+int Fcopyi(FILE * const fdst, FILE * const fsrc, size_t len);
+/* Copy len byte from fsrc into fdst
+	Return: 0 on success
+*/
+
+int Fcopyl(FILE * const fdst, FILE * const fsrc, dword iM(*) len);
+/* Copy len byte from fsrc into fdst
+	Return: 0 on success
+*/
+
+int Fcopybuf(FILE * const fdst, FILE * const fsrc, byte * const buf
+	, const size_t len, size_t * const num);
+/* Copies one block from one stream into another one.
 	Return: 0 on success
 */
 
@@ -312,14 +462,14 @@ void Eput(const void * const buf, size_t size, FILE * const fp);
 	terminate the program with: "Cannot write into file"
 */
 
-#define Egetpos(fp,pos) Epgetpos((fp), aS(pos))
-void Epgetpos(FILE * const fp, fpos_t * const pos);
+#define EEgetpos(fp,pos) Egetpos((fp), aS(pos))
+void Egetpos(FILE * const fp, fpos_t * const pos);
 /* Retreive the file position from the stream; on failure terminate
 	the program with: "Cannot access file"
 */
 
-#define Esetpos(fp,pos) Epsetpos((fp), aS(pos))
-void Epsetpos(FILE * const fp, const fpos_t * const pos);
+#define EEsetpos(fp,pos) Esetpos((fp), aS(pos))
+void Esetpos(FILE * const fp, const fpos_t * const pos);
 /* Seek to the position saved in *pos; on failure terminate the
 	program with: "Cannot access file"
 */

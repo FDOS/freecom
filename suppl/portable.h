@@ -1,24 +1,17 @@
-/*
-    This file is part of SUPPL - the supplemental library for DOS
-    Copyright (C) 1996-99 Steffen Kaiser
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 /* $Id$
    $Locker$	$Name$	$State$
 
+
+   $Log$
+   Revision 1.2  2000/07/09 22:19:22  skaus
+   + Support for international strings without recompiling
+   + Useage of TC++1
+
+   Revision 1.2  1998/08/19 07:27:05  ska
+   fix: incompatiblies Watcom to other compilers
+
+   Revision 1.1  1998/08/19 06:33:33  ska
+   Initial revision
 
 */
 
@@ -132,5 +125,9 @@ int longcmp(long d1, long d2);
 #endif
 
 #endif	/* _MICROC_ */
+
+#ifndef strend
+#define strend(s)	strchr((s), '\0')
+#endif
 
 #endif

@@ -1,36 +1,59 @@
-/*
-    This file is part of SUPPL - the supplemental library for DOS
-    Copyright (C) 1996-99 Steffen Kaiser
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 /* $Id$
    $Locker$	$Name$	$State$
 
 	DOS NLS implementation -- "Country" information DOS-65-XX
+	See DOC\CNTRY.H
 
 	These functions provide an easy access to the information
 	stored in the DOS NLS, but does not actually offer any
 	functions to transform/compare etc.
+
+   $Log$
+   Revision 1.2  2000/07/09 22:19:22  skaus
+   + Support for international strings without recompiling
+   + Useage of TC++1
+
+   Revision 1.3  2000/03/31 09:09:32  ska
+   add: DBG_CLOSELOG, suppl_l_openmode
+   add: SYSLOG_ALWAYS_FLUSHLOG
+   add: fcommit(), Fcommit(), Fflush(), commit()
+   add: suppl_log_flush(), DBG_FLUSHLOG, DBG_ALWAYS_FLUSHLOG
+   fix: dfnsearch(): DBG_ARGUMENT()
+   chg: F[gs]etpos() -> true replacements of f[gs]etpos(); removed
+   	Fp[gs]etpos(); added FF[gs]etpos() using a non-pointer argument
+   bugfix: secure string functions: memory functions don't accept length == 0
+   add: MKSTRFCT.PL: generate DOC\SSTR.FCT
+   fix: dfnsplit(): a pathname without path components returns the root
+   	directory as path portion
+   add: dfnsplit(): debug output of return values of found drive/path/name/ext
+   fix: dfnsqueeze(): DBG_ENTER() contains wrong names
+   fix: dfnsplit(): chkHeap in drive spec detection routine breaks if/else
+   chg: moved NLS-depended stuff from DFN.H into NLS_F.H
+   add: integer SUPPL error codes -- all functions returning (int) error codes
+   	return unique codes used throughout all SUPPL, see ERRCODES.H
+
+   Revision 1.2  1999/07/02 05:16:11  ska
+   bugfix: DFN_LABEL wrong; DFN_SYSTEM missing
+   fix: cfgASBoolean: bad function name
+   fix: cntry.h: 'char' members could be treated signed
+   add: syslogo(), syslogv()
+   add: SUPPL_LOG_MEMORY & *alloc/free/strdup replacements
+   add: SUPPLDBG.H	as last #include into all *.C files
+   fix: openlog() prevents recursive calls
+   fix: syslog_printv() accepts syslog_logfile == NULL
+   chg: syslog_openmode --> []
+
+   Revision 1.1  1998/12/04 07:30:36  ska
+   Initial revision
 
 */
 
 #ifndef __CNTRY_H
 #define __CNTRY_H
 
+#ifndef __PORTABLE_H
 #include <portable.h>
+#endif
 #include "suppl.h"
 
 /* All information from Ralf Brown's interrupt list v5.6 */

@@ -3,6 +3,6 @@ The SUPPL package; a supplemental library written by
 Copyright (C) 1995-99 Steffen Kaiser, Release Version 2.7pre
 
 This library is available from the Steffen's site at
-ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/
+ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/ALPHA
 
-It is also mirrored at ftp://ftp.gcfl.net/freedos/suppl/
+>>SUPPL_S.LIB is precompiled for TC++ v1.<<

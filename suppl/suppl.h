@@ -1,25 +1,151 @@
-/*
-    This file is part of SUPPL - the supplemental library for DOS
-    Copyright (C) 1996-99 Steffen Kaiser
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 /* $Id$
    $Locker$	$Name$	$State$
 
 	Declarations for the supplemental functions.
+
+	This header file is part of the "portable" subsystem
+	and will be removed, or moved to another purpose.
+
+   $Log$
+   Revision 1.2  2000/07/09 22:19:22  skaus
+   + Support for international strings without recompiling
+   + Useage of TC++1
+
+   Revision 2.13  2000/03/31 09:09:34  ska
+   add: DBG_CLOSELOG, suppl_l_openmode
+   add: SYSLOG_ALWAYS_FLUSHLOG
+   add: fcommit(), Fcommit(), Fflush(), commit()
+   add: suppl_log_flush(), DBG_FLUSHLOG, DBG_ALWAYS_FLUSHLOG
+   fix: dfnsearch(): DBG_ARGUMENT()
+   chg: F[gs]etpos() -> true replacements of f[gs]etpos(); removed
+   	Fp[gs]etpos(); added FF[gs]etpos() using a non-pointer argument
+   bugfix: secure string functions: memory functions don't accept length == 0
+   add: MKSTRFCT.PL: generate DOC\SSTR.FCT
+   fix: dfnsplit(): a pathname without path components returns the root
+   	directory as path portion
+   add: dfnsplit(): debug output of return values of found drive/path/name/ext
+   fix: dfnsqueeze(): DBG_ENTER() contains wrong names
+   fix: dfnsplit(): chkHeap in drive spec detection routine breaks if/else
+   chg: moved NLS-depended stuff from DFN.H into NLS_F.H
+   add: integer SUPPL error codes -- all functions returning (int) error codes
+   	return unique codes used throughout all SUPPL, see ERRCODES.H
+
+   Revision 2.12  1999/04/13 00:11:50  ska
+   bugfix: dfnexpand(): fname == "" --> fname := "."
+   bugfix: dfnsearch(): Searching root instead of '.' if no search path
+   add: syslog subsystem
+   fix: spelling in comments etc.
+   bugfix: not all SUPPORT_UNC_PATH macros correct
+   add: INI file random access subsystem
+   add: Fmaxbuf()
+   add: Fcopy(), Fcopyto()
+   add: Fposcpy(), Fposcmp()
+   add: memzero(): unportable memory zero'ing function
+
+   Revision 2.11  1998/12/08 04:04:11  ska
+   add: dpeekc(), dpeekb(), dpeekw()
+   add: Eresize()
+   chg: env_change() to use env_ovrVarOffset() --> replaced variables
+   	remain at the position they were before
+   add: env_ovrVarOffset(), env_insVarOffset(), env_appVar()
+   sub: env_addVar() [replaced by env_appVar()]
+   bugfix: DOSalloc(): add FreeDOS compliant setting of flags prior call DOS
+
+   Revision 2.10  1998/12/04 07:30:36  ska
+   chg: toupperx.c: to use nlsInfo(); added toLower()
+   add: cntry.?: nlsInfo(): NLS information provider
+
+   Revision 2.9  1998/12/04 06:00:44  ska
+   add: fpos_t/fsetpos()/fgetpos() to PAC
+   bugfix: DOSalloc(): If called with length == 0, the allocation
+   	strategy is not resetted
+   bugfix: env_newsize(): Grow block, if fails completely, the old environment
+   	was destroyed unneceesaryly
+   add: getbootdisk()
+   add: Ftmpfile(), Ftmpnam(), Etmpfile()
+   add: dfnstat(), dfnmktmp()
+   add: dfnwrdir(), dfnstat(), dfnmkfile()
+   fix/chg: StrTrim(): returns "s" if realloc() fails
+   fix: _getdcwd(): removed Carry()
+   bugfix: dfnsqueeze(): In non-UNC mode, there was nothing actually
+   	sequeezed, except the slashes were flipped
+   add: env_fetch(): DOS-ish getenv()
+   add: _fdupstr(): Duplicates far string into local heap
+
+   Revision 2.8  1998/11/25 09:33:08  ska
+   add: ff*.c/supplio.h: F*(), equal (FILE*) functions for Micro-C & ANSI C
+   add: gm_*.c: get memory, wrappers of malloc() and assoc. functions
+   chg: getopt.c: to use msgs.h
+   add: msgs.h: shared MSGLIB/internal message handling
+   add: StrChr(): searches for a character within a string
+   add: StrWord(): strips leading & trailing whitespaces and trim string
+   bugfix: StrTrim(): if realloc() fails, no NULL was returned.
+
+   Revision 2.7  1998/08/19 07:26:56  ska
+   fix: incompatiblies Watcom to other compilers
+
+   Revision 2.6  1998/08/19 06:32:54  ska
+   chg: added Watcom C v10.6
+
+   Revision 2.5  1998/08/05 09:42:22  ska
+   Release Version 2.5:
+
+   chg: getopt() to not depend on msglib
+   add: portable.h: getvect(), setvect(), isr
+   chg: moving _f*() memory/string function declarations into fmemory.h
+   bugfix: env_size.c: env_newsize(): shrinking causes unpredictable results
+   add: _fmemcmp(), _fnormalize(), _fmemmove() for PAC
+   add: dta.c/suppl.h: setdta()/getdta()
+   add: suppl.h/filefind.c: findfirst()/findnext()/ffblk for PAC
+   add: _getdcwd.c: Pacific C version
+   add: suppl.h: settings for Pacific C, incl. (struct REGPACK)
+   chg: all *.c files include INITSUPL.INC as the very first
+   	line after the welcome header. This will setup various
+   	compiler depend macros (e.g. _PAC_NOCLIB_)
+   add: setdisk.c, getdisk.c, osvers.c: for Pacific C
+   add: portable.h: various settings: Support for Pacific C v7.51
+
+   Revision 2.4  1998/01/14 02:45:07  ska
+   fix: dossize.c: In Micro-C mode the INT 21h was called with random values
+   chg: env_nullStrings(): Eliminated the Missing Prototype warning
+   fix: env_sub.c: segm must >>NOT<< be zero :)
+
+   Revision 2.3  1996/12/05 03:56:02  ska
+   fix: suppl.h: invokeDOS() struct REGPACK typedef for Micro-C
+
+   Revision 2.2  1996/12/02 03:28:30  ska
+   add: StrAppend(), StrAppChr()
+   fix: env_replace(): the 3rd argument as length with native CREATE mode
+   chg: DOSalloc(): update the name field of the MCB to the caller's one
+   add: StrStrip(), StrChar()
+   add: toFUpper(), MemFCmp(), _fMemFCmp()
+   add: dfnpath(), dfntruename()
+   chg: toUpper(): retreive the upcase table only once
+   add: _fStrCmp(), _fMemCmp(), StrCmp(),& MemCmp()
+   add: toUpper()
+   add: env_matchVar()
+   add: env_dupvar() & dupvar()
+   chg: env_switch() -> env_replace()
+
+   Revision 2.1  1996/11/08 03:18:16  ska
+   chg: Makefile: automatically detect, when switching compiler or mem model etc.
+   fix: mcb_walk: evaluating _FLAGS after destroying them by a compare
+   add: env_noSpace: check if environment can hold another variable
+   fix: env_change: don't delete the variable if environment too small
+   fix: env_strput: check env size, ¡f a new string is appended
+   chg: environ.h: prototype: putenv(char *var) to conform to DOS quasi-standard
+
+   Revision 2.0  1996/08/01 08:22:35  ska
+   Release Version 2
+
+   Target compilers: Micro-C, Borland C v2.0, v3.1, v4.52
+
+   Revision 1.2  1996/07/29 06:53:45  ska
+   add: DOSalloc(), addu()
+   chg: newenv(), sizenv()
+
+   Revision 1.1  1996/07/25 06:34:48  ska
+   Initial revision
 
 */
 
@@ -28,19 +154,7 @@
 
 #include <stdio.h>
 
-#ifndef _SUPPL_
-#ifdef HI_TECH_C
-	/* Probe if PAC is used in conjunction with CLib */
-#include <stddef.h>
-
-#ifdef _CLIB_
-#define _PAC_	1
-#else
-#define _PAC_NOCLIB_	1
-#endif	/* _CLIB_ */
-
-#endif /* HI_TECH_C */
-#endif
+#include <supl_def.h>
 
 #include <portable.h>
 
@@ -313,6 +427,9 @@ void ctrlbrk(int (*fct)(void));
 #define COMPILE
 #endif
 #ifdef __WATCOMC__
+#define COMPILE
+#endif
+#ifdef _TC_EARLY_
 #define COMPILE
 #endif
 

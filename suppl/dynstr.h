@@ -1,28 +1,222 @@
-/*
-    This file is part of SUPPL - the supplemental library for DOS
-    Copyright (C) 1996-99 Steffen Kaiser
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
-
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
 /* $Id$
    $Locker$	$Name$	$State$
 
 	Dynamic string functions.
-	Most of the functions take the first argument as the destination string
-	and will be transformed into pointer by a macro.
-	In this case, the pointer must be pre-initialized.
+
+ob(ject): dynstr
+su(bsystem): dynstr
+ty(pe): 
+sh(ort description): Basic data type to represent a dynamic string
+lo(ng description): 
+pr(erequistes): 
+va(lue): a (char*) pointer, must be initialized prior use
+re(lated to): 
+se(condary subsystems): 
+in(itialized by): user
+wa(rning): 
+bu(gs): 
+co(mpilers): 
+
+ob(ject): STR_SAVED_TOKENS
+su(bsystem): dynstr
+ty(pe): 
+sh(ort description): data type for reentrant \tok{strtok()} function
+lo(ng description): This data type is used to save to and restore from
+	reentrant information of the function \tok{StrTokenize()}.
+pr(erequistes): 
+va(lue): Blackbox type used by \tok{StrTokSave()} and \tok{StrTokRestore()}
+	only.
+re(lated to): StrTokenize StrTokSave StrTokRestore
+se(condary subsystems): 
+in(itialized by): StrTokSave
+wa(rning): 
+bu(gs): 
+co(mpilers): 
+
+ob(ject): STR_QUOTES
+su(bsystem): dynstr
+ty(pe): 
+sh(ort description): data type for quote-related functions
+lo(ng description): This structure consists of members describing
+	what quotes and character to be quoted the quote-related functions
+	shall be aware of. The members enumerate the word delimiters,
+	characters to be quoted, single character quotes, pairily used
+	quotes and unpairily used quotes.
+pr(erequistes): 
+va(lue): 
+re(lated to): StrQuote StrUnquote StrAppQStr
+se(condary subsystems): 
+in(itialized by): user
+wa(rning): 
+bu(gs): 
+co(mpilers): 
+
+ob(ject): StrTokStop
+su(bsystem): dynstr
+ty(pe): 
+sh(ort description): End a \fct{StrTokenize()} inspection
+lo(ng description): Instructres the function \fct{StrTokenize} to
+	flush all internal values in order to return \fct{NULL} next time
+	it is called and, therefore, definitely end a tokenizer loop \em{and}
+	ensures that the string has been restored to its original value.
+pr(erequistes): 
+va(lue): none
+re(lated to): StrTokenize
+se(condary subsystems): 
+in(itialized by): 
+wa(rning): 
+bu(gs): 
+co(mpilers): 
+
+   $Log$
+   Revision 1.3  2000/07/09 22:19:22  skaus
+   + Support for international strings without recompiling
+   + Useage of TC++1
+
+   Revision 1.14  2000/03/31 09:09:32  ska
+   add: DBG_CLOSELOG, suppl_l_openmode
+   add: SYSLOG_ALWAYS_FLUSHLOG
+   add: fcommit(), Fcommit(), Fflush(), commit()
+   add: suppl_log_flush(), DBG_FLUSHLOG, DBG_ALWAYS_FLUSHLOG
+   fix: dfnsearch(): DBG_ARGUMENT()
+   chg: F[gs]etpos() -> true replacements of f[gs]etpos(); removed
+   	Fp[gs]etpos(); added FF[gs]etpos() using a non-pointer argument
+   bugfix: secure string functions: memory functions don't accept length == 0
+   add: MKSTRFCT.PL: generate DOC\SSTR.FCT
+   fix: dfnsplit(): a pathname without path components returns the root
+   	directory as path portion
+   add: dfnsplit(): debug output of return values of found drive/path/name/ext
+   fix: dfnsqueeze(): DBG_ENTER() contains wrong names
+   fix: dfnsplit(): chkHeap in drive spec detection routine breaks if/else
+   chg: moved NLS-depended stuff from DFN.H into NLS_F.H
+   add: integer SUPPL error codes -- all functions returning (int) error codes
+   	return unique codes used throughout all SUPPL, see ERRCODES.H
+
+   Revision 1.13  1999/12/13 02:23:41  ska
+   add: debug subsystem
+   bugfix: Fposcmp(): If abs(pos1 - pos2) > 32767, the return value is random
+   add: strend() --> returns the address of the NUL byte of a string
+   chg: StrAppend() --> StrAppQStr()
+   add: StrQuote(), StrUnquote()
+   bugfix: Strspn(): if any parameter is NULL, returns NULL now
+   bugfix: MemiCmp(): returned wrong sign
+   bugfix: dfnstat(): Win95 LFN's entry never or invalidly detected
+   add: dfndelim() & dfndelim2()
+   chg: environ.h: mcb_toenv() --> macro mcb_env()
+   fix: cfg_osen.c: cfg_ostkEnum(): If output stack empty --> random return value
+   fix: strnum(): '0x' prefix detection fails
+   chg: long*(): Except longcmp() all functions are void; for portable subsys
+   bugfix: Erealloc(): if len == 0, the program is terminated erroreously
+   add: Fcopyi() & Fcopyl() & Fcopybuf()
+   chg: Fcopyto(): 'topos' must contain a valid position returned by Fgetpos()
+   add: supplio.h: Fpos2dword() & Fppos2dword(): Extract (dword) pos from(fpos_t)
+   chg: env_newsize() renamed into env_setsize()
+   bugfix: env_check(): accepts no segm==0, as it is standard
+   sub: dynstr.h: STR_SAVE_MODES, not used anymore (StrSaveTokens() removed)
+   chg: dynstr.h: STR_SAVED_TOKENS is its own type now
+   bugfix: StrTok*(): if(st) effects first assignment only
+   bugfix: StrTail(): string is strdup()'ed two times
+   bugfix: _fStriCmp(): temporary storage into (char) is unportable
+   bugfix: StriCmp(): sign is inverted
+   bugfix: StriCmp(): accepts no NULL parameters
+   add: DFN_LFN to dfn.h and dfnstat()
+   bugfix: UNC-aware dfnmatch2(): function name wrong
+   sub: removed "Target compilers" note everywhere
+   fix: dfnstat(): returns DFN_DIRECTORY on "X:" and "X:\"
+   chg: No SUPPL function will invoke openlog() automatically
+
+   Revision 1.12  1999/04/13 00:11:50  ska
+   bugfix: dfnexpand(): fname == "" --> fname := "."
+   bugfix: dfnsearch(): Searching root instead of '.' if no search path
+   add: syslog subsystem
+   fix: spelling in comments etc.
+   bugfix: not all SUPPORT_UNC_PATH macros correct
+   add: INI file random access subsystem
+   add: Fmaxbuf()
+   add: Fcopy(), Fcopyto()
+   add: Fposcpy(), Fposcmp()
+   add: memzero(): unportable memory zero'ing function
+
+   Revision 1.11  1999/01/05 01:14:57  ska
+   add: Esetsize()
+
+   Revision 1.10  1998/12/08 04:04:11  ska
+   add: dpeekc(), dpeekb(), dpeekw()
+   add: Eresize()
+   chg: env_change() to use env_ovrVarOffset() --> replaced variables
+   	remain at the position they were before
+   add: env_ovrVarOffset(), env_insVarOffset(), env_appVar()
+   sub: env_addVar() [replaced by env_appVar()]
+   bugfix: DOSalloc(): add FreeDOS compliant setting of flags prior call DOS
+
+   Revision 1.9  1998/12/04 07:30:36  ska
+   chg: toupperx.c: to use nlsInfo(); added toLower()
+   add: cntry.?: nlsInfo(): NLS information provider
+
+   Revision 1.8  1998/12/04 06:00:44  ska
+   add: fpos_t/fsetpos()/fgetpos() to PAC
+   bugfix: DOSalloc(): If called with length == 0, the allocation
+   	strategy is not resetted
+   bugfix: env_newsize(): Grow block, if fails completely, the old environment
+   	was destroyed unneceesaryly
+   add: getbootdisk()
+   add: Ftmpfile(), Ftmpnam(), Etmpfile()
+   add: dfnstat(), dfnmktmp()
+   add: dfnwrdir(), dfnstat(), dfnmkfile()
+   fix/chg: StrTrim(): returns "s" if realloc() fails
+   fix: _getdcwd(): removed Carry()
+   bugfix: dfnsqueeze(): In non-UNC mode, there was nothing actually
+   	sequeezed, except the slashes were flipped
+   add: env_fetch(): DOS-ish getenv()
+   add: _fdupstr(): Duplicates far string into local heap
+
+   Revision 1.7  1998/11/25 09:33:08  ska
+   add: ff*.c/supplio.h: F*(), equal (FILE*) functions for Micro-C & ANSI C
+   add: gm_*.c: get memory, wrappers of malloc() and assoc. functions
+   chg: getopt.c: to use msgs.h
+   add: msgs.h: shared MSGLIB/internal message handling
+   add: StrChr(): searches for a character within a string
+   add: StrWord(): strips leading & trailing whitespaces and trim string
+   bugfix: StrTrim(): if realloc() fails, no NULL was returned.
+
+   Revision 1.6  1998/08/17 07:19:21  ska
+   bugfix: dfnsearch(): "c:\path\fnam" doesn't work
+   chg: splitted StrSaveTokens() into StrTokSave() & StrTokRestore()
+   add: StrTokStop(): stop StrTokenize() cycle (next call to it returns NULL)
+
+   Revision 1.5  1998/07/20 08:42:46  ska
+   Release Version 2.4:
+
+   bugfix: getopt.c: Micro-C complains about comment in #include
+   add: dfnmatch(): check if a filename matches a p‘ttern, DOS style
+   add: dfnmatch2(): check if a filename matches a p‘ttern, Win32 style
+   ren: *MemCmp() --> *MemiCmp()
+   bugfix: env_resize(): growing/shrinking swapped
+   bugfix: env_resize() and assoc. fail on length == 0 or non-existent
+   	environment segments
+
+   Revision 1.4  1998/01/14 02:45:07  ska
+   fix: dossize.c: In Micro-C mode the INT 21h was called with random values
+   chg: env_nullStrings(): Eliminated the Missing Prototype warning
+   fix: env_sub.c: segm must >>NOT<< be zero :)
+
+   Revision 1.3  1996/12/11 06:22:46  ska
+   Release Version 2.2:
+
+   fix: dfnumerge(): double backslash with UNC drive & root path
+   add: StrCString(), toxdigit(), isodigit()
+   add: UNC path support to the dfn*() functions
+   add: StrLeft(), StrRight(), StrMiddle(), StrTail(), StrBeg()
+
+   Revision 1.2  1996/12/05 07:37:57  ska
+   add: dfnsearch(), StrTokenize(), StrSaveTokens()
+   add: Carry() for Micro-C only
+   chg: dfnpath(): use _getdcwd() for Micro-C
+   add: _getdcwd() for Micro-C only
+   fix: dfnpath(): getdrive() -> get_dir()
+
+   Revision 1.1  1996/12/02 03:28:30  ska
+   Initial revision
 
 */
 
@@ -33,104 +227,71 @@
 #include <string.h>
 #endif
 #include <portable.h>
+#include "sstr.h"
+#include "nls_c.h"
 
-/* Defines for StrSaveTokens() */
-#define STR_RESTORE_TOKENS 1
-#define STR_SAVE_TOKENS 0
-
-struct STR_SAVED_TOKENS {
+struct STR_SAVED_TOKENS_ {
 	char *str_next_saved_tokens;
 	char str_ch_saved_tokens;
 };
 
+#ifdef _MICROC_
+#define STR_SAVED_TOKENS struct STR_SAVED_TOKENS_
+#else
+typedef struct STR_SAVED_TOKENS_ STR_SAVED_TOKENS;
+#endif
 
-int toUpper(int ch);
-/* Upcase character using the DOS NLS API.
-	The upcase table is retreive only once during the program's run!
-*/
-
-int toFUpper(int ch);
-/* Upcase character using the DOS NLS API according the table for
-	filenames.
-	The upcase table is retreive only once during the program's run!
-*/
-
-int MemiCmp(const byte *buf1, const byte *buf2, unsigned len);
-/* Compare both memory area case-insensitvely.
-
-	To make the compare case-insensitve the toUpper() function is used.
-
-	If (buf1==NULL) || (buf2==NULL), the behaviour is undefined.
-	If len == 0, MemiCmp() returns 0.
-
-	Return:
-		 <0: buf1 is less then buf2
-		==0: buf1 is equal to buf2
-		 >0: buf1 is greater than buf2
-*/
+/* Enumerates all quotes a string may be quoted with: */
+/* If one member is equal to NULL or "", the particular value
+	does not exist. */
+struct STR_QUOTES_ {
+	const char
+		/* Characters that delimit two strings and must be quoted
+			if they appear within a string. */
+	 *str_delimiters
+		/* Characters that must be quoted if they appear within a
+			string. */
+	,*str_toquote
+		/* Characters that quote the immediately next character
+			as the backslash '\' does in C. These quotes are
+			still "active" within otherwise quoted strings. */
+	,*str_singleQuotes
+		/* Characters that enclose a quoted string. The same character
+			appears before and after the string, just like the '"' in C. */
+	,*str_pairyQuotes
+		/* Characters that enclose a quoted string. The first character,
+			the one on an even offset (first character has offset == 0),
+			is the left quote, the second character is the right one.
+			Compareble to parenthizes.  */
+	,*str_unpairyQuotes
+		/* Pairy and unpairy quotes (the left one is checked) that quote
+			single quotes, too. */
+	,*str_fullQuotes
+	;
+};
+#ifdef _MICROC_
+#define STR_QUOTES STR_QUOTES_
+#else
+typedef struct STR_QUOTES_ STR_QUOTES;
+#endif
 
 #ifdef _MICROC_
-int _fMemiCmp(unsigned const dseg, unsigned dofs
- , unsigned const sseg, unsigned sofs, unsigned length);
+#define dynstr char *
 #else
-int _fMemiCmp(const byte far * dest, const byte far * src, unsigned length);
+typedef char * dynstr;
 #endif
-/* Compare both far memory area case-insensitvely.
-
-	To make the compare case-insensitve the toUpper() function is used.
-
-	If (buf1==NULL) || (buf2==NULL), the behaviour is undefined.
-	If len == 0, _fMemiCmp() returns 0.
-
-	Return:
-		 <0: buf1 is less then buf2
-		==0: buf1 is equal to buf2
-		 >0: buf1 is greater than buf2
-*/
 
 int StriCmp(const char *s1, const char *s2);
-/* Compare two strings case-insensitively.
-
-	To make the compare case-insensitve the toUpper() function is used.
-
-	If (s1==NULL) || (s2==NULL), the behaviour is undefined.
-
-	Return:
-		 <0: s1 is less then s2
-		==0: s1 is equal to s2
-		 >0: s1 is greater than s2
-*/
-
-
-char *StrDup(const char s[]);
-/* Duplicate a string into the local heap.
-
-	Return:
-		NULL: s == NULL || malloc() failed
-		else: pointer to the malloc'ed buffer
-*/
+char *StrDup(const char * const s);
 
 #define StrChg(poi,size)	StrChg_(&(poi), (size))
 char *StrChg_(char ** const poi, size_t len);
-/* Reallocate the already initialized variable *poi.
-	Return:
-		NULL: on failure, *poi was free()'ed and is NULL
-		else: pointer reallocated memory area == *poi
-*/
-
 
 #define StrFree(str) StrRepl_(&(str), NULL)
-/* Free the string s[0] and place a NULL there
-
-	Return: NULL
-*/
+#define StrFree_(str) StrRepl_((str), NULL)
 
 #define StrRepl(dest,src) StrRepl_(&(dest), (src))
-char *StrRepl_(char *dest[], char src[]);
-/* Free dest[0] and place src there
-
-	Return: src
-*/
+char *StrRepl_(char ** const dest, char * const src);
 
 #ifdef _MICROC_
 register char *StrConcat(int argcnt);
@@ -139,70 +300,13 @@ register char *EStrConcat(int argcnt);
 char *StrConcat(int argcnt, ...);
 char *EStrConcat(int argcnt, ...);
 #endif
-/* Concat argcnt strings together and malloc() a buffer for the result.
-	With Micro-C, argcnt is limited to the number of arguments that
-	has been given in reality.
 
-	EStrConcat() never returns NULL, but terminates the program with
-	the "out of memory" error.
-
-	Return:
-		NULL: on failure (malloc() returned NULL)
-		else: the malloc'ed buffer
-*/
-
-char *StrTrim(char s[]);
-/* Reduces the malloc()'ed area of string s to the length (strlen(s) + 1).
-
-	Return:
-		NULL: if s == NULL || s cannot be shrinked (s is free()'ed!)
-		else: a pointer to the new location (don't rely on this is s!)
-*/
-
+char *StrTrim(char * const s);
 char *StrChar(int ch);
-/* Create a new dynamic string containing the single character ch
-
-	Return:
-		NULL: malloc() returned NULL
-		else: pointer to the malloc()'ed string
-*/
-
-char *StrStrip(char s[], int ch);
-/* Remove any number of the character ch from the end of the string s.
-
-	s[] may be NULL.
-	ch may be 0.
-
-	Return:	always s[].
-*/
-
-char *StrUpr(char s[]);
-/* Upcase the string s[] using the toUpper() function.
-
-	s may be NULL.
-
-	Return:	always s
-*/
-
-char *MemUpr(char buf[], unsigned length);
-/* Upcase the memory area buf[] using the toUpper() function.
-
-	buf may be NULL.
-
-	Return:	always buf
-*/
-
-void _fStrUpr(const word dseg, word dofs);
-/* Upcases the string at dseg:dofs using toUpper().
-*/
-
-void _fMemUpr(const word dseg, word dofs, unsigned length);
-/* Upcases the memory area at dseg:dofs using toUpper().
-*/
-
+char *StrStrip(char * const s, int ch);
 
 #define StrCpy(dest,src) StrCpy_(&(dest), (src))
-char *StrCpy_(char *dest[], const char src[]);
+char *StrCpy_(char ** const dest, const char * const src);
 /* Copy (duplicate) the string src[] into dest.
 	If src == NULL, this function is equal to StrFree(dest).
 
@@ -211,272 +315,73 @@ char *StrCpy_(char *dest[], const char src[]);
 		else: *dest
 */
 
+#define StrAppDelimStr(dst,src,q)		\
+	StrAppDelimStr_(&(dst), (src), (q))
+char *StrAppDelimStr_(char ** const dst, const char * const src
+ , const STR_QUOTES * const quotes);
+
+#define StrAppStr(dst,src)	StrCat_(&(dst), (src))
+#define StrAppStr_	StrCat_
 #define StrCat(dest,src) StrCat_(&(dest), (src))
-char *StrCat_(char *dest[], const char src[]);
-/* Append the string src[] at dest.
-	If src == NULL, this function performs no action.
-	If *dest == NULL, this functions performs StrCpy_(dest, src)
+char *StrCat_(char ** const dest, const char * const src);
 
-	Return:
-		NULL: malloc() failed; *dest is unchanged
-		else: *dest
-*/
-
-#define StrAppend(dest,src,delim,quotes) \
-	StrAppend_(&(dest), (src), (delim), (quotes))
-char *StrAppend_(char *dest[], const char src[]
- , const char delim[], const char quotes[]);
-/* Append the string src[] at dest delimited by *delim and quoted by a quote.
-
-	If src == NULL, this function performs no action.
-
-	If *dest == NULL, src[] is quoted if necessary.
-
-	If *dest does not end with one character out of delim[] and src[] does not
-	start with one character out of delim and **dest != '\0', *delim is
-	placed between *dest and src[].
-
-	delim[] consists of two fields:
-		"*\0#"
-	- All characters out of "*" are valid delimiting characters.
-		Its first character is used as the delimiter.
-	- All characters out of "#" are characters that are no delimiters, but
-		must be quoted.
-
-	quotes[] consists of three fields delimited by '\0':
-		"*\0#\0[]"
-	- All characters out of "*" delimit a string like '"' in C.
-	- All characters out of "#" delimit a character like '\\' in C.
-		These characters also quote every other quotation character.
-	- All character pairs out of "[]" delimit a string like this:
-		'[' mark the start of a quoted string;
-		']' mark its end.
-	If src[] need to be quoted, this is done in this order:
-		1) If there is a quote out of "*" is not used within *dest,
-			the whole src[] is quoted.
-		2) If there is a quote pair out of "[]" is not used within *dest,
-			the whole src[] is quoted with this pair.
-		3) If there is a quote in "#", each character to be quoted is quoted
-			with this quotation characterú
-		4) src[] is not quoted.
-
-	Return:
-		NULL: malloc() failed; *dest is unchanged
-		else: *dest
-*/
+#define StrAppQStr(dst,src,quote_struct)		\
+	StrAppQStr_(&(dst), (src), (quote_struct))
+char *StrAppQStr_(char ** const dest, const char * const src
+	, const STR_QUOTES * const quotes);
 
 #define StrAppChr(dest,chr) StrAppChr_(&(dest), (chr))
-char *StrAppChr_(char *dest[], char chr);
-/* Append a single character to the string *dest.
+char *StrAppChr_(char ** const dest, char chr);
 
-	chr may be NUL.
-	*dest may be NULL.
+char *StrQuote(const char * const s, const STR_QUOTES * const quotes);
 
-	Return:
-		NULL: malloc() failed
-		else: pointer to the malloc()'ed buffer; original *dest free()'ed
-*/
+char *StrUnquote(const char * const s, const STR_QUOTES * const quotes);
 
-char *StrTokenize(char *str, const char token[]);
-/* Tokenize str. str is unchanged, after StrTokenize() returned NULL.
-	If str==NULL, the previous string is searched for the next token.
-	If two tokens follow each other immediately, an empty string is returned.
+int StrUnquoteTokenAppend(const char **src, const STR_QUOTES * const quotes
+	, char ** const dst);
 
-	Return:
-		NULL: no further token; the whole str is unchanged now
-		else: pointer to token; this string's '\0' is the only modified part
-				of the string.
-*/
+int StrUnquoteToken(const char **src, const STR_QUOTES * const quotes
+	, char ** const dst);
 
+
+char *StrTokenize(char *str, const char * const token);
 #define StrTokStop() (void)StrTokenize(NULL, NULL)
-/* Make sure StrTokenize() will return NULL in the next call. The
-	side effect is that the string is restored to its original
-	value.
-*/
+void StrTokSave(STR_SAVED_TOKENS *st);
+void StrTokRestore(STR_SAVED_TOKENS *st);
 
-void StrTokSave(struct STR_SAVED_TOKENS *st);
-/* Save the current context of the StrTokenize() function into *st.
-
-	If st==NULL, no action is performed.
-*/
-
-void StrTokRestore(struct STR_SAVED_TOKENS *st);
-/* Restore the current context of the StrTokenize() function from *st.
-
-	If st==NULL, no action is performed.
-*/
-
-char *StrLeft(const char s[], size_t length);
-/* Return the left length characters of s.
-
-	If strlen(s) < length, the string is duplicated.
-
-	s may be NULL.
-
-	Return:
-		NULL: s==NULL, malloc() failed
-		else: pointer to the malloc()'ed buffer
-*/
-
-char *StrRight(const char s[], size_t length);
-/* Return the right length characters of s.
-
-	If strlen(s) < length, the string is duplicated.
-
-	s may be NULL.
-
-	Return:
-		NULL: s==NULL, malloc() failed
-		else: pointer to the malloc()'ed buffer
-*/
-
-char *StrMiddle(const char s[], size_t pos, size_t length);
-/* Return the length characters of a string beginning with the pos'th
-	character. The first character has the position 0 (zero).
-
-	If strlen(s) < pos, "" is returned.
-	If strlen(s) < pos + length, StrTail(pos) is returned.
-
-	s may be NULL.
-
-	Return:
-		NULL: s==NULL, malloc() failed
-		else: pointer to the malloc()'ed string
-*/
-
-char *StrTail(const char s[], unsigned pos);
-/* Return the substring beginning at position pos.
-
-	If strlen(s) < pos, "" is returned.
-
-	s may be NULL.
-
-	Return:
-		NULL: s==NULL, malloc() failed
-		else: pointer to the malloc()'ed string
-*/
+char *StrLeft(const char * const s, size_t length);
+char *StrRight(const char * const s, size_t length);
+char *StrMiddle(const char * const s, size_t pos, size_t length);
+char *StrTail(const char * const s, unsigned pos);
 
 #ifdef _MICROC_
 #define StrBeg strbeg
 #else
-int StrBeg(const char s1[], const char s2[]);
-/* Return if s1[] begins with s2[].
-
-	Neither s1[] nor s2[] may be NULL.
-
-	Returns:  >0 second block is greater
-			 ==0 both are equal
-			  <0 first block is greater
-*/
+int StrBeg(const char * const s1, const char * const s2);
 #endif		/* !defined(_MICROC_) */
 
 int StrCString(char *str);
-/* Interprete C-style character strings. Control characters are left
-	in the file except the string "\\\n" and a backslash at the end of
-	the string, which are cut out of the string.
-
-	Return:
-		0: str == NULL
-		else: number of bytes str[] now contains; the terminating NUL
-			character is counted; str[] is modified
-*/
-
-int isodigit(int ch);
-/* Test if ch is an octal digit.
-
-	Return:
-		0: ch is not '0'..'7'
-		else: ch is no octal digit
-*/
-
-int toxdigit(int ch);
-/* Transform a hexa-decimal digit into integer number.
-
-	Return:
-		0..15: hex-digit
-		undefined: if ch is no hex-digit
-*/
 
 char *StrWord(char *s);
-/* Reallocates the dynstr s and strips any leading and trailing blanks.
 
-	Return:
-		NULL: if s == NULL || realloc() fails
-		else: new location (don't rely on == s)
-*/
+char *StrChr(const char * const s, int ch);
+size_t StrnLen(const char * const s, size_t len);
+char *StrDupe(const char * const beg, const char * const end);
 
-char *StrChr(const char s[], int ch);
-/*	Searches for the character ch within s.
+#define StrEnd Strend
+//char *StrEnd(char *str);
 
-	Return:
-		NULL: if s == NULL || ch == 0 || ch not in s
-		else: pointer to the location of ch
-*/
 
 extern void *Emalloc(size_t len);
-/*	Allocate a chunk of memory; on failure the program is
-	terminated
-*/
-
 extern void *Ecalloc(size_t len);
-/*	As getmem(); the allocated area is zero'ed
-*/
-
 extern void *Erealloc(void *p, size_t size);
-/*	Resize an allocated memory area; on failure the program is
-	terminated
-*/
-
 #define Esetsize(poi,size)	Esetsize_(&(void*)(poi), (size))
 extern void *Esetsize_(void **poi, size_t size);
-/* Sets the size of the dynamic memory block pointed to by *poi.
-	The contents of the block may change.
-	On failure the program is terminated with an "out of memory" error.
-
-	Return:
-		*poi
-*/
-
 #define Eresize(poi,size)	Eresize_(&(void*)(poi), (size))
 extern void *Eresize_(void **poi, size_t size);
-/* Reallocate the memory pointed to by *poi and stores the pointer of
-	the new block into *poi.
-	On failure the program is terminated with an "out of memory" error.
-
-	Return:
-		*poi
-*/
-
 extern char *Estrdup(const char * const str);
-/*	Duplicate a string; on failure the program is terminated
-*/
-
 #define Estrchg(var,str) Estrchg_(&(var),(str))
 extern char *Estrchg_(char ** const pvar, const char * const str);
-/*	free(var/ *pvar); var/ *pvar = Estrdup(str)
-*/
-
 extern char *Estrdupe(const char * const start, const char * const end);
-/* Duplicate the part of the string between start and end.
-	if start == NULL, return NULL
-	if end == NULL || end < start, return Estrdup(start)
-*/
-
-size_t StrnLen(const char * const s, size_t len);
-/* Return the length of the string, but ensures to break after
-	len bytes.
-
-	if beg == NULL, return 0
-*/
-
-char *StrDupe(const char * const beg, const char * const end);
-/* Duplicate the string beg, but not more than up to (not including)
-	*end
-
-	Return:
-		NULL: beg == NULL || malloc() failed
-		else: the duplicated (part of the) string
-*/
-
 
 #endif
