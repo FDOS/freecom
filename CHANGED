@@ -1,3 +1,4 @@
+bugfix: CTTY: added to try to set the device flags
 bugfix: LOADHIGH: disable swapping when executing
 bugfix: init.c: /p:arg ignores argument
 add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)

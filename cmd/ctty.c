@@ -69,8 +69,7 @@ static void devAttr(int fd)
 #endif
 
 int cmd_ctty(char *param)
-{ int fin, fout;
-  int failed;
+{ int f, attr, failed;
 
   if(!param || !*param) {
     displayString(TEXT_CMDHELP_CTTY);
@@ -83,12 +82,21 @@ int cmd_ctty(char *param)
   devAttr(2);
 #endif
 
-  if((fin = devopen(param, O_BINARY | O_RDONLY)) < 0
-   || (fout = devopen(param, O_BINARY | O_WRONLY)) < 0) {
-    close(fin);     /* if fin failed, close(-1) won't hurt */
+  if((f = devopen(param, O_BINARY | O_RDWR)) < 0) {
     error_no_rw_device(param);
     return 1;
   }
+
+  if(((attr = fdattr(f)) & 0x80) == 0
+   || write(f, "\r\n", 2) != 2) {		/* need \r as in bin mode */
+    close(f);
+    error_no_rw_device(param);
+    return 1;
+  }
+
+	/* Now inform the system that this device is the new console
+		now; STDIN and STDOUT flag are the most lowest two bits  */
+	fdsetattr(f, (attr & 0xFF) | 0x03);
 
   fflush(stdin);      /* prepare asynchroneous changes of internal fd's */
   fflush(stdout);
@@ -104,15 +112,14 @@ int cmd_ctty(char *param)
     after the redirections are restored. Otherwise a pipe or
     redirection would left CTTY in a half-made status.
   */
-  failed = dup2(fout, 2);   /* no redirection support */
-  if(oldinfd == -1) {     /* stdin not redirected */
-    failed = dup2(fin, 0) || failed;
-    close(fin);
-  } else  oldinfd = fin;
-  if(oldoutfd == -1) {      /* stdout not redirected */
-    failed = dup2(fout, 1) || failed;
-    close(fout);
-  } else  oldoutfd = fout;
+  failed = dup2(f, 2);   /* no redirection support */
+  if(oldinfd != -1)
+  	close(oldinfd);
+  oldinfd = f;
+  if(oldoutfd != -1)
+  	close(oldoutfd);
+  if((oldoutfd = dup(f)) == -1)
+  	failed = 1;
 
   if(failed)
     error_ctty_dup(param);
