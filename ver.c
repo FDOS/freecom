@@ -70,6 +70,8 @@ int cmd_ver(char *rest)
 
   short_version();
 
+	optR = optW = optD = optC = 0;
+
   if((argv = scanCmdline(rest, opt_ver, NULL, &argc, &opts)) == NULL)
     return 1;
 
