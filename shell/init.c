@@ -160,6 +160,9 @@ int initialize(void)
   FILE *f;
 #endif
 #endif
+#ifdef DEBUG
+	int orig_env;
+#endif
 
 /* Set up the host environment of COMMAND.COM */
 
@@ -370,9 +373,25 @@ int initialize(void)
 
   /* First of all, set up the environment */
     /* If a new valid size is specified, use that */
+#ifdef DEBUG
+	orig_env = env_glbSeg;
+#endif
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
   if(newEnvSize > 16 && newEnvSize < 32767)
     env_setsize(0, newEnvSize);
+#ifdef ENVIRONMENT_KEEP_FREE 
+#if ENVIRONMENT_KEEP_FREE > 0
+  else if(env_freeCount(env_glbSeg) < ENVIRONMENT_KEEP_FREE) {
+	dprintf(("[ENV: auto-resize environment because too small: %d]\n"
+		, env_freeCount(env_glbSeg)) );
+	env_replace(0		/* Modify the default segment */
+	 , ENV_DELETE | ENV_COPY | ENV_CREATE | ENV_FREECOUNT
+	 , ENVIRONMENT_KEEP_FREE);
+	}
+#else
+#error ENVIRONMENT_KEEP_FREE is non-positive
+#endif
+#endif
 
   /* Otherwise the path is placed into the environment */
     /* Set the COMSPEC variable. */
@@ -385,6 +404,12 @@ int initialize(void)
     	chgEnv("COMSPEC",  NULL);	/* Cannot set -> zap an old one */
   }
   	inInit = 0;
+#ifdef DEBUG
+	if(orig_env != env_glbSeg) {
+		dprintf(("[ENV: Environment changed: @%04x -> @%04x; free %u]\n"
+		 , orig_env, env_glbSeg, env_freeCount(env_glbSeg)));
+	}
+#endif
 
 #ifndef FEATURE_XMS_SWAP
 	/* Install INT 24 Critical error handler */

@@ -79,6 +79,10 @@
 /* Use these filemode while searching for file completion */
 #define FILE_SEARCH_MODE FA_RDONLY | FA_ARCH | FA_DIREC
 
+/* If no /E: is specified, always keep this amount of bytes
+	free within the environment */
+#define ENVIRONMENT_KEEP_FREE 256
+
 
 /* Default message settings:
   PATTERN: how the string is constructed for the ID (with \n)
