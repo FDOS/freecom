@@ -167,6 +167,14 @@ int initialize(void)
   atexit(exitfct);
   OwnerPSP = _psp;
 
+	dbg_printmem();
+#ifdef DEBUG
+	{ void* p;
+		if((p = malloc(5*1024)) == 0)
+			dprintf(("[MEM: Out of memory allocating test block during INIT]"));
+		else free(p);
+	}
+#endif
 
 #ifdef FEATURE_KERNEL_SWAP_SHELL
 	if(kswapInit()) {		/* re-invoked */
