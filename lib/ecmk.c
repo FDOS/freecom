@@ -10,6 +10,8 @@
 
 #include <assert.h>
 
+#include <fmemory.h>
+
 #include "../include/context.h"
 #include "../include/ierror.h"
 #include "../err_fcts.h"
@@ -35,5 +37,10 @@ ctxtEC_t far*ecMk(const enum ExecContext_Tags type, const unsigned length)
 
 	ec->ctxt_type = type;
 	ec->ctxt_length = length;
+
+#ifdef DEBUG
+	_fmemset(ecData(ec, char), '#', length);
+#endif
+
 	return ec;
 }
