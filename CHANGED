@@ -1,4 +1,6 @@
+fix: MKTOOLS must include $(CFG) into list
 add: command WHICH
+fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
 bugfix: if ENHANCED_INPUT && !HISTORY, CurRight falls through to CurLeft
 bugfix: CB_CATCH: In DEBUG mode: recursive test fails always
 bugfix: KSSF: restore parentPSP on exit
