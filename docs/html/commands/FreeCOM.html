@@ -384,9 +384,6 @@ minimum, but probably at the cost of optimization and performance.
 			for <CMD>REN</CMD>, <CMD>COPY</CMD> and <CMD>DIR</CMD></TD>
 		<TD ALIGN=CENTER><HELL>v0.93</HELL></TD>
 </TR>
-<TR>	<TD><CMD>DIR /O</CMD> and <CMD>DIR /A</CMD></TD>
-		<TD ALIGN=CENTER><HELL>v0.93</HELL></TD>
-</TR>
 <TR>	<TD><CMD>IF /I</CMD></TD>
 		<TD ALIGN=CENTER><HELL>v0.85</HELL></TD>
 </TR>
@@ -405,14 +402,11 @@ minimum, but probably at the cost of optimization and performance.
 <TR>	<TD>Code sharing of modules</TD>
 		<TD ALIGN=CENTER><HELL>v0.91</HELL></TD>
 </TR>
-<TR>	<TD>Full support for DOS NLS</TD>
-		<TD ALIGN=CENTER><HELL>pre v0.95</HELL></TD>
-</TR>
 <TR>	<TD>Redirection in conjunction with Swapping</TD>
 		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
 </TR>
 <TR>	<TD>Optimize FreeCOM for size</TD>
-		<TD ALIGN=CENTER>&gt;= v1.0</TD>
+		<TD ALIGN=CENTER>post v1.0</TD>
 </TR>
 <TR>	<TD>Other swap storage areas, e.g. XMS and EMS</TD>
 		<TD ALIGN=CENTER><A HREF="!!:todo2">post v1.0</A></TD>
@@ -449,7 +443,13 @@ minimum, but probably at the cost of optimization and performance.
 		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
 </TR>
 <TR>	<TD><CMD>IF ERRORLEVEL H<I>&lt;letter&gt;</I></CMD></TD>
-		<TD ALIGN=CENTER><DIMM>done (v0.83&szlig;48)</DIMM></TD>
+		<TD ALIGN=CENTER><DIMM>done (v0.82pl1)</DIMM></TD>
+</TR>
+<TR>	<TD>Full support for DOS NLS</TD>
+		<TD ALIGN=CENTER><DIMM>done (v0.82pl1)</DIMM></TD>
+</TR>
+<TR>	<TD><CMD>DIR /O</CMD> and <CMD>DIR /A</CMD></TD>
+		<TD ALIGN=CENTER><DIMM>done (v0.82pl2)</DIMM></TD>
 </TR>
 </TABLE>
 <BR><!-- FONT SIZE="-1" -->Footnotes:
@@ -483,12 +483,7 @@ FreeCOM can be downloaded from SourceForge in several ways and packages:
 
 <H3><A NAME="-download-ftp">Resources accessable via anonymous FTP</A></H3>
 
-SourceForge closed the FTP - Services, therefore an alternate
-location had been created at:
-<A HREF="ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/FreeCOM">
-ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/FreeCOM</A>.
-It contains the very same packages available at the HTTP location
-below.
+SourceForge closed the FTP - Services.
 
 <H3><A NAME="-download-http">Resources accessable via HTTP</A></H3>
 
@@ -556,7 +551,9 @@ specified module of the repository,
 e.g.: <PRE>cvs -z6 co freecom</PRE> downloads the <TT>MAIN</TT> trunk, also
 called <TT>HEAD</TT>, of FreeCOM.
 
-<P>Alternatively the WebCVS -- follow the <TT>Browse CVS</TT> link there
+<P>Alternatively the <A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/freedos/freecom/?only_with_tag=MAIN">WebCVS</A>
+-- follow the <TT>Browse CVS</TT> link there and remember to select the
+<TT>MAIN</TT> branch
 -- might be helpful in order to download a handful of files.
 
 <P>However, CVS allows to branch the development of a module at some
