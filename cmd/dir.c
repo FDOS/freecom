@@ -197,7 +197,12 @@
 #define ORDER_BY_MASK 0x1e    
 
 unsigned char optOdir = 0;
-char optOorderby[5];
+char optOorderby[5];	/* Array: One byte longer than order methods,
+							the last unused orderby[] byte is zero
+							by design always
+							--> eases implementation, e.g. memcpy()
+							in scanOrder() and for() loop in
+							orderFuntion() */
 
 
 struct currDir {
@@ -267,19 +272,15 @@ done:
     
 static scanOrder(const char *p)
 {
-	int dir = ORDER_DIRS_FIRST;
-
-
 restart:	
-	memset(optOorderby,0,sizeof(optOorderby));
+	memset(optOorderby, 0, sizeof(optOorderby));
 	optOdir = 0;
 
 	if(p && *p) {
-		dir = 0;
 		for(;;p++) {
 			int inverse = p[-1] == '-';
 			int option;
-			int i,j;
+			int i;
 			
 			switch(toupper(*p)) {
 			case '-': continue;
@@ -289,31 +290,32 @@ restart:
 			case 'E': option = ORDER_BY_EXT; break;
 			case 'G': optOdir = inverse? ORDER_DIRS_LAST: ORDER_DIRS_FIRST;
 						continue;
-			case 'U': goto restart;
+			case 'U': ++p; goto restart;
 			case '\0': goto done;
 			default:	/* error */
 				error_illformed_option(p);
 				return E_Useage;
 			}
-			
-			for (i = 0; i < sizeof(optOorderby); )
-				{
-				if (optOorderby[i] == 0)
-					break;
-				if ((optOorderby[i] & ORDER_BY_MASK) == option)
-					{
-					memcpy(optOorderby+i, optOorderby+i+1,(sizeof(optOorderby)-1-i)*sizeof(optOorderby[0]));
-					}        
-				else
-					i++;
-				}		
-			optOorderby[i] = option | inverse;		
 
+			for(i = 0; i < sizeof(optOorderby); ++i) {
+				if(optOorderby[i] == 0)
+					break;
+				if((optOorderby[i] & ORDER_BY_MASK) == option) {
+					memcpy(optOorderby+i, optOorderby+i+1
+					 , (sizeof(optOorderby)-1-i)*sizeof(optOorderby[0]));
+				}
+			}
+			optOorderby[i] = option | inverse;
+#ifdef DEBUG
+			while(++i < sizeof(sizeof(optOorderby))) {
+				assert(!optOorderby[i]);
+			}
+#endif
 		}
 done:;
 	}
 
-	optO = optOorderby[0];
+	optO = optOorderby[0] | optOdir;
 	return E_None;
 }
 
@@ -659,20 +661,19 @@ int _Cdecl orderFunction(const void *p1, const void *p2)
   _fmemcpy(&f1, orderArray + i1 , sizeof(f1));
   _fmemcpy(&f2, orderArray + i2 , sizeof(f2));
   
-  if((optOdir & (ORDER_DIRS_FIRST | ORDER_DIRS_LAST))
-   && (f1.ff_attrib & FA_DIREC) != (f2.ff_attrib & FA_DIREC))
+  if(optOdir && (f1.ff_attrib & FA_DIREC) != (f2.ff_attrib & FA_DIREC))
   	return (optOdir & ORDER_DIRS_FIRST ? f1.ff_attrib: f2.ff_attrib)
   	         & FA_DIREC ? -1 : 1;  
   	         
   
-  for (i = 0; rv == 0 && i < sizeof(optOorderby); i++)
-  	{
+  for (i = 0; rv == 0; i++) {
   	int opt = optOorderby[i];
+  	assert(i < sizeof(optOorderby));
   	
 	switch(opt & ORDER_BY_MASK) {
 	
 	  case 0:
-	  	break;
+	  	return rv;			/* is 0 actually */
 	
 	  case ORDER_BY_SIZE:
 		if(f1.ff_fsize > f2.ff_fsize) rv = 1;
@@ -691,7 +692,7 @@ int _Cdecl orderFunction(const void *p1, const void *p2)
 		
 		
 		if(!x1 && !x2)	/* both are equal */
-			return 0;
+			continue;
 		
 		if (x1 && x2) rv = strcmp(x1, x2);
 		else if (!x1 && x2) rv = -1;
