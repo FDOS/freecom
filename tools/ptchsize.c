@@ -10,6 +10,8 @@
 		the estimated minimum heap size is used.
 */
 
+#undef DEBUG
+
 #include <ctype.h>
 #include <limits.h>
 #include <stdio.h>
