@@ -96,6 +96,7 @@ void freep(char **p);
 int optScanString_(const char * const optstr, int bool, const char *arg, char **value);
 int optScanBool_(const char * const optstr, int bool, const char *arg, int *value);
 int optScanInteger_(const char * const optstr, int bool, const char *arg, int *value);
+#define optHasArg()	(strarg != 0)
 
 #define optScanString(var)    \
   optScanString_(optstr, bool, strarg, &(var))

@@ -86,7 +86,7 @@ optScanFct(opt_init)
   case 'F': return optScanBool(autofail);
   case 'D': return optScanBool(skipAUTOEXEC);
   case 'P':
-    if(arg)     /* change autoexec.bat */
+    if(optHasArg())     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
     canexit = 0;
     return ec;
