@@ -4,16 +4,19 @@ Compile notes:
 Borland's museum site).
 2) Configure CONFIG.MAK (see below)
 3) Configure CONFIG.H   (see there)
-4) Run MAKE -fcommand.mak
+4) Run BUILD.BAT
 (Some newer MAKE variants may require a space between the -f option
- and the makefile name.)
+ and the makefile name. On trouble try to fix BUILD.BAT.)
 
 You will find two executables in the FreeCOM directory:
 COMMAND.EXE and COMMAND.COM.
 The .COM file is the stand-alone application, which includes the
 strings etc, whereas COMMAND.EXE is the pure executable without the
-strings table for instance. For debugging you must use the .EXE
-file.
+strings table for instance.
+
+WARNING: It seems to be problematic to run FreeCOM built with
+Turbo C++ v1.01. There are no such massive problems when compiling
+with Borland C++ v5.
 
 
 CONFIG.MAK
@@ -34,3 +37,5 @@ ftp://freedos.sourceforge.net/pub/freedos/freecom/suppl.zip
 
 and if you have extracted the contents into the FreeCOM directory,
 the default values (.\SUPPL) are OK.
+
+Update NASM and NASMFLAGS as needed.

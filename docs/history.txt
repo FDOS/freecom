@@ -3,6 +3,8 @@ FreeDOS Command Line Interface Development History
 
 2001/02/16 ska
 ~~~~~~~~~~~~~~~~~~~~~~
+bugfix: "copy 1 + 2 + 3 target" copies first & last file only
+add: interactive command flag
 add: FDDEBUG: redirect output into file
 add: command WHICH
 chg: moved all assembly sources to NASM

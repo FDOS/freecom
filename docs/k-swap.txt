@@ -1,7 +1,7 @@
 Description of kernel-supoorted swapping of FreeCOM
 	-- 2001/01/21 ska
 
-Preface
+=== Preface
 
 This technique is an experimental implementation of a general purpose
 swap technique applyable to FreeCOM that does not require any special
@@ -11,7 +11,7 @@ It will therefore not support swapping in any circumstances and is intended
 to work as a "boot-through" shell for memory hungry programs, which
 normally don't require no function of a resident shell.
 
-Supported Swappings
+=== Supported Swappings
 
 The swapping is activated via the CALL command in this way:
 
@@ -30,7 +30,23 @@ Swapping is NOT supported in:
 
 Swapping does not preserve the history.
 
-Implementation
+=== How to use KSSF?
+
+In CONFIG.SYS:
+SHELL=C:\KSSF.COM C:\COMMAND.COM /E:2048 /P
+
+From command line:
+KSSF.COM c:\command.com /e:2048
+
+You can even nest KSSFs.
+Doing so KSSF and FreeCOM associate together very tidly, you will need
+to spawn FreeCOM via KSSF whenever you want to use the Swapping Support
+from within the spawned shell.
+
+Always use the absolute path to the shell.
+You cannot change the path to the shell once KSSF has been loded.
+
+=== Implementation
 
 The code of the kernel spawning process 0 (the primary shell) has been
 extended as loop. When process 0 finishes, the kernel checks a special
