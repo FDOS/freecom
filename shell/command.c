@@ -256,8 +256,8 @@ static void docommand(char *line)
 
 	if(*com) {
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-		int tryMUXAE = 1;
-		while(tryMUXAE) {
+		int tryMUXAE;
+		for(tryMUXAE = MUX_AE_MAX_REPEAT_CALL; tryMUXAE > 0; --tryMUXAE) {
 			/* Check for installed COMMAND extension */
 			switch(runExtension(com, args)) {
 				case 1:		/* OK, done */

@@ -43,6 +43,9 @@
 /* Enable to support installable COMMAND extensions (MUX-AE)
  */
 #define FEATURE_INSTALLABLE_COMMANDS
+/* How often gets the MUX-AE called, when an installable command
+	extension rewrote the command. */
+#define MUX_AE_MAX_REPEAT_CALL	32
 
 /* Name of the executable */
 #define COM_NAME "COMMAND.COM"
