@@ -9,8 +9,9 @@
 
 #include "../context.h_c"
 
+#define	FREECOM_NEED_MODULES
+
 typedef  kswap_t _seg *kswap_p;
-extern int swapOnExec, defaultToSwap;
 extern kswap_p kswapContext;		/* static context */
 
 /* Lock kswap feature within kernel and invalidate a previous external prg

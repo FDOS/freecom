@@ -739,6 +739,9 @@ Features available:
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
 [kernel swap] \
 .
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[XMS swap] \
+.
 :TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
 [default to swap] \
 .

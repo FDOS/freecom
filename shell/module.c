@@ -5,6 +5,8 @@
  * started
  */
 
+#include "../config.h"
+
 #include <string.h>
 #include <mcb.h>
 #include <suppl.h>
@@ -15,6 +17,7 @@
 #include "../include/res.h"
 #include "../include/misc.h"
 
+#ifdef FREECOM_NEED_MODULE
 
 #pragma argsused
 static int loadModule(res_majorid_t major
@@ -81,3 +84,5 @@ kswap_p modContext(void)
 
 	return (kswap_p)segm;
 }
+
+#endif

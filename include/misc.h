@@ -22,6 +22,15 @@ enum OnOff {		/* ON/OFF tester */
 	OO_Other			/* else */
 };
 
+typedef enum {
+	  STRINGS_LOADED
+	, STRINGS_ID_MISMATCH
+	, STRINGS_SIZE_MISMATCH
+	, STRINGS_NOT_FOUND
+	, STRINGS_READ_ERROR
+	, STRINGS_OUT_OF_MEMORY
+} loadStatus;
+
 #define BREAK_BATCHFILE 1
 #define BREAK_ENDOFBATCHFILES 2
 #define BREAK_INPUT 3
@@ -36,6 +45,7 @@ enum OnOff {		/* ON/OFF tester */
 
 extern FILE *errStream;
 #define outStream stdout
+extern int swapOnExec, defaultToSwap;
 
 int cgetchar(void);
 int vcgetchar(void);

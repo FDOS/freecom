@@ -62,12 +62,12 @@
 /* Define to support kernel-supported swapout of FreeCOM
 	see DOCS\K-SWAP.TXT
 */
-#define FEATURE_KERNEL_SWAP_SHELL
+/* #define FEATURE_KERNEL_SWAP_SHELL */
 
 /* Define to support XMS-only swap support of FreeCOM
 	This setting is incompatible with the above one!
 */
-/* #define FEATURE_XMS_SWAP */
+#define FEATURE_XMS_SWAP
 
 /* Define the size of the buffer used to store old paths for PUSHD/POPD */
 #define DIRSTACK_DEFAULT_SIZE 256
@@ -111,8 +111,8 @@
 #define INCLUDE_CMD_DEL
 #define INCLUDE_CMD_DIR
 #define INCLUDE_CMD_DIRS
-#define INCLUDE_CMD_LOADFIX
-#define INCLUDE_CMD_LOADHIGH
+//#define INCLUDE_CMD_LOADFIX
+//#define INCLUDE_CMD_LOADHIGH
 #define INCLUDE_CMD_MEMORY
 #define INCLUDE_CMD_MKDIR
 #define INCLUDE_CMD_PATH
@@ -197,6 +197,12 @@
 
 #if defined(FEATURE_KERNEL_SWAP_SHELL) && defined(FEATURE_XMS_SWAP)
 #error "FreeCOM cannot support both Kernel- and XMS-based swapping simultaneously"
+#endif
+
+/* Externally defined to compile with XMS-Swap support */
+#ifdef defined(XMS_SWAP)
+#undef FEATURE_KERNEL_SWAP_SHELL
+#define FEATURE_XMS_SWAP
 #endif
 
 #if sizeof(char*) > sizeof(short)

@@ -3,8 +3,8 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
-# Revision 1.4  2002/04/02 17:41:31  skaus
-# CleanUp before adding XMS Swapping
+# Revision 1.5  2002/04/02 18:09:31  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 #
 # Revision 1.3  2001/06/10 17:17:24  skaus
 # bugfix: Single point of configuration CONFIG.MAK/.H

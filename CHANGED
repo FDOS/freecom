@@ -1,3 +1,4 @@
+add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 chg: COPY: appFile unneccessarily declared FAR (Tom Ehlert)
 bugfix: cmdinput.c: histGet(,str,maxlen) (Tom Ehlert)
 bugfix: mux_ae.h: #ifdef --> #if (Tom Ehlert)

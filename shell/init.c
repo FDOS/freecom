@@ -27,6 +27,9 @@
 #include "../include/keys.h"
 #include "../strings.h"
 #include "../include/kswap.h"
+#include "../include/cswap.h"
+
+#define pspTermAddr *(void far* far*)MK_FP(_psp, 0xa)
 
         /* Check for an argument; ch may be evaluated multiple times */
 #define isargsign(ch)           \
@@ -38,9 +41,11 @@ static char logFilename[] = LOG_FILE;
 #endif
 #endif
 
-extern int canexit;
-
+#ifdef FEATURE_XMS_SWAP
+#define oldPSP	origPPID
+#else
 static unsigned oldPSP;
+#endif
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
 #ifdef DEBUG
@@ -56,8 +61,12 @@ int fddebug = FDDEBUG_INIT_VALUE;    /* debug flag */
    from memory */
 void exitfct(void)
 {
-  unloadMsgs();        /* free the message strings segment */
-  OwnerPSP = oldPSP;
+	unloadMsgs();        /* free the message strings segment */
+	OwnerPSP = oldPSP;
+	pspTermAddr = termAddr;
+#ifdef FEATURE_XMS_SWAP
+	XMSexit();
+#endif
 }
 
 
@@ -153,18 +162,29 @@ int initialize(void)
 
 /* Set up the host environment of COMMAND.COM */
 
+	/* Give us shell privileges */
+	myPID = _psp;
+	residentCS = _CS;
+	termAddr = pspTermAddr;
+	pspTermAddr = terminateFreeCOMHook;
+	oldPSP = OwnerPSP;
+	atexit(exitfct);
+	OwnerPSP = _psp;
+
 	/* Install the dummy handlers for Criter and ^Break */
-	initCBreak();
+/*	initCBreak(); */
 	setvect(0x23, cbreak_handler);
+#ifdef FEATURE_XMS_SWAP
+	/* There is no special handler for FreeCOM currently
+		--> activate the real one */
+	setvect(0x24, lowlevel_err_handler);
+#else
 	setvect(0x24, dummy_criter_handler);
+#endif
 
   /* DOS shells patch the PPID to the own PID, how stupid this is, however,
     because then DOS won't terminate them, e.g. when a Critical Error
     occurs that is not detected by COMMAND.COM */
-
-  oldPSP = OwnerPSP;
-  atexit(exitfct);
-  OwnerPSP = _psp;
 
 	dbg_printmem();
 #ifdef DEBUG
@@ -347,7 +367,7 @@ int initialize(void)
 
   /* First of all, set up the environment */
     /* If a new valid size is specified, use that */
-  env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE;
+  env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
   if(newEnvSize > 16 && newEnvSize < 32767)
     env_setsize(0, newEnvSize);
 
@@ -363,6 +383,7 @@ int initialize(void)
   }
   	inInit = 0;
 
+#ifndef FEATURE_XMS_SWAP
 	/* Install INT 24 Critical error handler */
 	/* Needs the ComPath variable, eventually */
 	if(!kswapContext) {
@@ -376,12 +397,26 @@ int initialize(void)
 			kswapRegister(kswapContext);
 #endif
 	}
+#endif
 
 	ctxtCreate();
 
+#ifdef FEATURE_XMS_SWAP
+	/* Now everything is setup --> initialize the XMS stuff */
+	XMSinit();
+	/* Initialize the EXEC Block structure used by XMS Swap Exec
+		interface */
+	/* envSeg = 0;		default & always updated by caller */
+	dosParamDosExec.cmdtail = dosCMDTAIL;
+	dosParamDosExec.FCB1 = dosFCB1;
+	dosParamDosExec.FCB2 = dosFCB2;
+	/* overlPtr1;		not used by this exec */
+	/* overlPtr2;		not used by this exec */
+#else
 	/* re-use the already loaded Module */
 	setvect(0x24, (void interrupt(*)())
 	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter));
+#endif
 
   if(internalBufLen)
     error_l_notimplemented();

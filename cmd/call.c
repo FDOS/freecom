@@ -67,6 +67,8 @@ int cmd_call(char *param)
 		return 1;
 	}
 
+	optS = optN = 0;
+
 	if((ec = leadOptions(&param, opt_call, 0)) != E_None)
 		return ec;
 

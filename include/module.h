@@ -10,8 +10,12 @@
 
 #include "../include/kswap.h"
 
+#ifdef FREECOM_NEED_MODULES
+
 	/* Retruns the pointer of the context pointer of the
 		Critical Error handler */
 extern kswap_p modContext(void);
+
+#endif
 
 #endif

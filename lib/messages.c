@@ -9,6 +9,9 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2002/04/02 18:09:31  skaus
+	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -50,22 +53,17 @@
 #include "../strings.h"
 #include "../include/strings.typ"
 
-typedef enum {
-	  STRINGS_LOADED
-	, STRINGS_ID_MISMATCH
-	, STRINGS_SIZE_MISMATCH
-	, STRINGS_NOT_FOUND
-	, STRINGS_READ_ERROR
-	, STRINGS_OUT_OF_MEMORY
-} loadStatus;
+#ifdef FEATURE_XMS_SWAP
+#include "../include/cswap.h"
+#endif
 
-unsigned msgSegm = 0;    /* strings segment if loaded */
+static unsigned msgSegm = 0;    /* strings segment if loaded */
 string_count_t strCnt = 0;		/* number of strings */
 
 /* Remove the string segment from memory */
 void unloadMsgs(void) 
 {
-  if (msgSegm) {
+  if(msgSegm) {
     freeBlk(msgSegm);
     dprintf( ("[Message segment 0x%04x deallocated.]\n", msgSegm) );
   }
@@ -161,58 +159,63 @@ unsigned msgSegment(void)              /* load messages into memory */
 	static int displayed = 0;
 #endif
 
-	if(!msgSegm) {     /* not loaded, yet */
+	if(msgSegm)
+		return msgSegm;
+
 		/* prevent reentrance */
-		if(--recurs == 0) {		/* OK */
-			enumResources(RES_ID_STRINGS, loadStrings, &status);
-			switch(status) {
-			case STRINGS_LOADED:
-			  assert(msgSegm);
-			  dprintf(("[Messages successfully loaded to segment 0x%04x]\n"
-			   , msgSegm));
-			   break;
-#ifdef DEBUG
-			/* Don't use dprintf() to ensure the message is issued, even
-				if fddebug is OFF */
-			case STRINGS_NOT_FOUND:
-				assert(msgSegm == 0);
-				dbg_outsn("[No STRINGS resource found!]");
-				break;
-			case STRINGS_ID_MISMATCH:
-				assert(msgSegm == 0);
-				dbg_outsn("[STRINGS ID string mismatch.]");
-				break;
-			case STRINGS_READ_ERROR:
-				assert(msgSegm == 0);
-				dbg_outsn("[Read error while loading STRINGS.]");
-				break;
-			case STRINGS_SIZE_MISMATCH:
-				assert(msgSegm == 0);
-				dbg_outsn("[STRINGS resource has invalid size.]");
-				break;
-			case STRINGS_OUT_OF_MEMORY:
-				assert(msgSegm == 0);
-				dbg_outsn("[Out of memory loading STRINGS.]");
-				break;
-			default:
-				assert(msgSegm == 0);
-				dbg_outsn("[Unknown error loading STRINGS.]");
-				break;
-#else	/* Even in non-debugging, an error should
-								be displayed */
-			case STRINGS_OUT_OF_MEMORY:
-				assert(msgSegm == 0);
-				puts("[Out of memory loading STRINGS.]");
-				break;
-			default:	
-				assert(msgSegm == 0);
-				if(!displayed) {
-					displayed = 1;
-					puts("\n\a[Could not load STRINGS resource.]");
-				}
-				break;
+	if(--recurs == 0) {		/* OK */
+#ifdef FEATURE_XMS_SWAP
+		msgSegm = XMSswapmessagesIn(&status);
+		if(status == STRINGS_NOT_FOUND)
 #endif
+			enumResources(RES_ID_STRINGS, loadStrings, &status);
+		switch(status) {
+		case STRINGS_LOADED:
+		  assert(msgSegm);
+		  dprintf(("[Messages successfully loaded to segment 0x%04x]\n"
+		   , msgSegm));
+			break;
+#ifdef DEBUG
+		/* Don't use dprintf() to ensure the message is issued, even
+			if fddebug is OFF */
+		case STRINGS_NOT_FOUND:
+			assert(msgSegm == 0);
+			dbg_outsn("[No STRINGS resource found!]");
+			break;
+		case STRINGS_ID_MISMATCH:
+			assert(msgSegm == 0);
+			dbg_outsn("[STRINGS ID string mismatch.]");
+			break;
+		case STRINGS_READ_ERROR:
+			assert(msgSegm == 0);
+			dbg_outsn("[Read error while loading STRINGS.]");
+			break;
+		case STRINGS_SIZE_MISMATCH:
+			assert(msgSegm == 0);
+			dbg_outsn("[STRINGS resource has invalid size.]");
+			break;
+		case STRINGS_OUT_OF_MEMORY:
+			assert(msgSegm == 0);
+			dbg_outsn("[Out of memory loading STRINGS.]");
+			break;
+		default:
+			assert(msgSegm == 0);
+			dbg_outsn("[Unknown error loading STRINGS.]");
+			break;
+#else	/* Even in non-debugging, an error should
+							be displayed */
+		case STRINGS_OUT_OF_MEMORY:
+			assert(msgSegm == 0);
+			puts("[Out of memory loading STRINGS.]");
+			break;
+		default:	
+			assert(msgSegm == 0);
+			if(!displayed) {
+				displayed = 1;
+				puts("\n\a[Could not load STRINGS resource.]");
 			}
+			break;
+#endif
 		}
 
 		++recurs;

@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.3  2002/04/02 18:09:31  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.2  2001/06/10 17:17:24  skaus
 # bugfix: Single point of configuration CONFIG.MAK/.H
 #
@@ -45,9 +48,15 @@ HDR = ..\config.h ..\include/batch.h ..\include/cmdline.h \
 	..\include/datefunc.h ..\include/debug.h ..\include/keys.h \
 	..\include/kswap.h ..\include/misc.h ..\include/module.h \
 	..\include/mux_ae.h ..\include/nls.h ..\include/openf.h ..\include/res.h \
-	..\include/resource.h ..\include/timefunc.h ..\include\model.inc \
-	..\include\small.inc ..\include\stuff.inc
+	..\include/resource.h ..\include/timefunc.h ..\include\large.inc \
+	..\include\model.inc ..\include\small.inc ..\include\stuff.inc
 
+.IF $(XMS_SWAP) == yes
+SRC += cswap.asm cswapc.c xms_crit.asm xms_brk.asm
+HDR += ../include/cswapc.h
+OBJ += cswapc.obj
+PRE_OBJ = xms_crit.obj xms_brk.obj cswap.obj
+.ENDIF
 
 
 #	Default target
@@ -76,15 +85,16 @@ __errl:
 	@+-if exist errlist del errlist >nul
 	-ctags *.c ..\lib\*.c ..\cmd\*.c \freedos\src\lib\suppl\*.c
 
-com.exe ?= _OBJS := $(OBJ:s/c0.obj//)
+com.exe ?= _OBJS := $(PRE_OBJ) $(OBJ:s/c0.obj//)
 # STD_OBJ !:= C0.OBJ
-com.exe com.map .UPDATEALL : $(OBJ) ../cmd/cmds.lib ../lib/freecom.lib
+com.exe com.map .UPDATEALL : $(PRE_OBJ) $(OBJ) ../cmd/cmds.lib ../lib/freecom.lib
 	$(MAK_EXE)
 
 #MAKEDEP START
 expalias.obj : expalias.c \
-	 ../config.h ../err_fcts.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/misc.h \
+	../include/timefunc.h
 command.obj : command.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/batch.h \
 	../include/cmdline.h ../include/command.h ../include/crossjmp.h \
@@ -98,19 +108,20 @@ module.obj : module.c \
 	../include/timefunc.h
 kswap.obj : kswap.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/kswap.h \
-	../include/misc.h ../include/timefunc.h
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/kswap.h ../include/misc.h ../include/timefunc.h
 cb_catch.obj : cb_catch.asm \
-	 .\..\include\model.inc .\..\include\small.inc .\..\include\stuff.inc
+	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc \
+	.\..\include\stuff.inc
 ver.obj : ver.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
 init.obj : init.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
-	../include/command.h ../include/datefunc.h ../include/debug.h \
-	../include/keys.h ../include/kswap.h ../include/misc.h \
-	../include/module.h ../include/timefunc.h ../strings.h
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/keys.h ../include/kswap.h \
+	../include/misc.h ../include/module.h ../include/timefunc.h ../strings.h
 cmdtable.obj : cmdtable.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
@@ -124,12 +135,15 @@ batch.obj : batch.c \
 	../include/misc.h ../include/timefunc.h \
 	/freedos/src/include/../include/dfn.h
 dummies.obj : dummies.asm \
-	 .\..\include\model.inc .\..\include\small.inc
+	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc
 redir.obj : redir.c \
-	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
+	../include/datefunc.h ../include/debug.h ../include/misc.h \
+	../include/timefunc.h
 DYNSOURCES =
 #MAKEDEP STOP
+
+cswapc.c : ../include/cswap.h ../include/misc.h
 
 clobber : clean
 	$(RM) $(RMFLAGS) *.com *.cln command.mak com.exe *.cfg

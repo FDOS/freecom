@@ -30,6 +30,7 @@
 #endif
 #include "../include/openf.h"
 #include "../include/kswap.h"
+#include "../include/cswap.h"
 
 #include <environ.h>
 
@@ -44,9 +45,12 @@
 int persistentMSGs = 0;
 int interactive_command = 0;	/* command directly entered by user */
 int exitflag = 0;               /* indicates EXIT was typed */
+#ifndef FEATURE_XMS_SWAP
+	/* If XMS-Swap, this variable is located in resident portion */
 int canexit = 0;                /* indicates if this shell is exitable
 									enable within initialize() */
-int ctrlBreak = 0;              /* Ctrl-Break or Ctrl-C hit */
+#endif
+/*int ctrlBreak = 0;*/              /* Ctrl-Break or Ctrl-C hit */
 int errorlevel = 0;             /* Errorlevel of last launched external prog */
 int forceLow = 0;               /* load resident copy into low memory */
 int oldinfd = -1;       /* original file descriptor #0 (stdin) */
@@ -160,7 +164,11 @@ static void execute(char *first, char *rest)
 #endif
 #endif
 		/* Install the dummy (always abort) handler */
+#ifdef FEATURE_XMS_SWAP
+	setvect(0x23, (void interrupt(*)()) lowlevel_cbreak_handler);
+#else
 	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
+#endif
     result = exec(fullname, rest, 0);
 	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
 	/* The external command might has killed the string area. */

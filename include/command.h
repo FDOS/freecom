@@ -72,17 +72,24 @@ enum
 /* prototypes for INIT.C */
 extern void interrupt dummy_criter_handler();
 extern void interrupt cbreak_handler();
-extern void initCBreak(void);
+;extern void initCBreak(void);
 
 /* prototypes for COMMAND.C */
 extern int interactive_command;
 extern int persistentMSGs;
-extern int ctrlBreak;
+;extern int ctrlBreak;
+extern int far CBreakCounter;
+#define ctrlBreak CBreakCounter
 extern int exitflag;
 extern unsigned int echo;       /* The echo flag */
 extern int tracemode;                   /* debug script? */
 extern int autofail;
-extern int canexit, inInit;
+#ifdef FEATURE_XMS_SWAP
+extern byte far canexit;
+#else
+extern int canexit;
+#endif
+extern int inInit;
 extern int errorlevel;
 extern int isSwapFile;
 extern int forceLow;

@@ -13,6 +13,8 @@
 ;		COMPILE_STRINGS to include English response strings right into
 ;			this image
 ;		NO_RESOURCE_BLOCK omit resource block at the end of the file
+;		XMS_SWAP_CRITER disables interfering stuff when assembling for
+;			XMS Swap variant
 ;
 ;	Doing a ECHO >A:\FILE results in:
 ;		WinNT 4 DOSbox:
@@ -77,6 +79,9 @@
 ;	  than ' ' are ignored (usually control characters)
 ;
 ; $Log$
+; Revision 1.2  2002/04/02 18:09:31  skaus
+; add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+;
 ; Revision 1.1  2001/04/23 21:35:41  skaus
 ; Beta 7 changes (code split)
 ;
@@ -106,7 +111,9 @@
 MODULE_VERSION EQU 253
 
 %include "../include/stuff.inc"
+%ifndef XMS_SWAP_CRITER
 %include "resource.inc"
+%endif
 
 ???start:
 
@@ -146,10 +153,12 @@ dummy_file DB "a:\aux", 0
 ;; Join both modules into the same memory image in order to handle
 ;; them easier
 
+%ifndef XMS_SWAP_CRITER
 	;; Static context of KSwap support
 %include "context.def" 
 
 %include "dmy_cbrk.asm"
+%endif
 
 ;; Low level Critical Error handler
 ;; Note: Both I/O functions should use the channel to read/write
@@ -220,6 +229,7 @@ StrErrCodes		EQU 15
 ;		ES:BX == pointer to context, package int24
 ;		else: as normal INT-24 handler
 
+	global _lowlevel_err_handler
 _lowlevel_err_handler:
 %ifdef AUTO_FAIL
 	;; most simple <-> return AL := 3
@@ -648,7 +658,7 @@ S36	DB 'Unknown error code', 0
 %endif		; AUTO_FAIL
 %endif		; NO_RESOURCE_BLOCK
 
-END
+;;END
 
 ; Quote from RBIL
 ;--------D-24---------------------------------
