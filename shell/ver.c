@@ -44,7 +44,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "0.82 pl 3q"
+const char shellver[] = "0.82 pl 3s"
 #ifdef FEATURE_XMS_SWAP
 	" XMS_Swap"
 #endif

@@ -1,3 +1,4 @@
+bugfix: CLS: use BIOS, unless fd1 is file or NUL {Eric Auer}
 add: config.h: MUX_AE_MAX_REPEAT_CALL
 bugfix: MUX-AE: useage of DS:[SI] {Eduardo Almao}
 bugfix: COPY C: D: heap corruption [#556] {Tom Ehlert}

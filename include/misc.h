@@ -43,6 +43,15 @@ typedef enum {
 #define MAXLEN  256
 #define exist dfnstat
 
+/* transformed into constants
+	unsigned far *maxx = MK_FP(0x40, 0x4a);
+	unsigned char far *maxy = MK_FP(0x40, 0x84);
+*/
+#define MAX_X (*(unsigned int  far*)MK_FP(0x40, 0x4a))
+#define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84))
+#define SCREEN_COLS MAX_X
+#define SCREEN_ROWS (MAX_Y + 1)
+
 extern FILE *errStream;
 #define outStream stdout
 extern int swapOnExec, defaultToSwap, swapContext;

@@ -10,13 +10,6 @@
 #include <fmemory.h>
 #include "../include/misc.h"
 
-/* transformed into constants
-	unsigned far *maxx = MK_FP(0x40, 0x4a);
-	unsigned char far *maxy = MK_FP(0x40, 0x84);
-*/
-#define MAX_X (*(unsigned int  far*)MK_FP(0x40, 0x4a))
-#define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84))
-
 #define MAX_INTERNAL_COMMAND_SIZE 256
 #define MAX_EXTERNAL_COMMAND_SIZE 125
 	/* The maximal external command line is:
