@@ -29,6 +29,9 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/06/10 15:20:39  skaus
+	add: error message if debugging when to open the resource file failed
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -52,14 +55,17 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
+
+#include "../config.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
+#include "../include/debug.h"
 #include "../include/resource.h"
 
 int enumFileResources(const char *const fnam
@@ -77,6 +83,10 @@ int enumFileResources(const char *const fnam
 	rc = 0;
 	if((f = fopen(fnam, "r+b")) == 0) {
 	 	rc = -1;
+	 	dprintf(("[RES: Failed to open file: %s]\n", fnam));
+#ifdef DEBUG
+		perror("Open");
+#endif
 
 		/* resource file could be opened --> seek to its end to
 			get the first resource */
