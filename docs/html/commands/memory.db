@@ -10,5 +10,44 @@ DESCRIPTION:
 Displays the useage of internal memory of FreeCOM.
 
 EXAMPLES:
-EXAMPLE: 1
+CMD: MEMORY
 
+may display this:
+<PRE>
+Environment segment    : max  1200 bytes; free     8 bytes
+Context segment        : max  2304 bytes; free  2252 bytes
+        Aliases        : limit  1024 bytes, current     5 bytes,     0 items
+        History        : limit   256 bytes, current    34 bytes,     2 items
+        Directory stack: limit   256 bytes, current     5 bytes,     0 items
+        Last dir cache : used      0 bytes,     0 items
+        Swapinfo       : used      0 bytes,     0 items
+Heap                   : free 482080 bytes
+</PRE>
+<UL>
+<LI>The <TT>Environment segment</TT> is the storage area, the environment
+variables are storred in. It may be changed passing the <OPT>/E</OPT>
+option to FreeCOM.
+<LI>FreeCOM stores several internal information into the
+<TT>Context segment</TT>; the aliases - modified by the ALIAS command -,
+the history - displayed using the HISTORY command, accessed by pressing
+the cursor Up/Down keys on command line -, the directory stack - displayed
+with the DIRS command and accessed using the PUSHD and POPD commands -,
+the last directory - accessed with the <CMD>CD -</CMD> command -, and,
+finally, some internal command used by the low-level swap interface of
+FreeCOM.
+<LI>The <TT>heap</TT> is the storage area FreeCOM can allocated
+memory from itself. This value is useful for FreeCOM developers
+mostly.
+</UL>
+<UL>
+<LI><TT>max</TT> specifies the maximum amount of bytes allocatable
+within this storage area.
+<LI><TT>free</TT> specifies the unused bytes within this storage area.
+<LI><TT>limit</TT> specifies the maximum amount of bytes allocatable
+for the particular information within the area.
+<LI><TT>current</TT> specifies the amount of bytes currently allocated
+for the particular information.
+<LI><TT>items</TT> specifies the number of items storred
+for the particular information, e.g. how many directories have been
+pushed onto the stack using PUSHD.
+</UL>

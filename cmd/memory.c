@@ -47,7 +47,8 @@ int cmd_memory(char *param)
 	displayTag(TEXT_MEMORY_CTXT_HISTORY, CTXT_TAG_HISTORY);
 	displayTag(TEXT_MEMORY_CTXT_DIRSTACK, CTXT_TAG_DIRSTACK);
 	displayTag1(TEXT_MEMORY_CTXT_LASTDIR, CTXT_TAG_LASTDIR);
-	displayTag1(TEXT_MEMORY_CTXT_BATCH, CTXT_TAG_BATCH);
+/*	displayTag1(TEXT_MEMORY_CTXT_BATCH, CTXT_TAG_BATCH);
+	not used, yet -- 2001/06/11 ska*/
 	displayTag1(TEXT_MEMORY_CTXT_SWAPINFO, CTXT_TAG_SWAPINFO);
 	displayString(TEXT_MEMORY_HEAP, (unsigned long)coreleft());
 
