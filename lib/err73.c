@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_no_env
-void error_no_env(void)
-{	displayError(TEXT_ERROR_NO_ENVIRONMENT);
+#undef error_on_off
+void error_on_off(void)
+{	displayError(TEXT_ERROR_ON_OR_OFF);
 }

@@ -481,7 +481,6 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 {	int rv;
 	unsigned long filecount, bytecount;
 	char *pattern, *cachedPattern;
-	char *p;
 
 		/* Modified to pre-allocate path to 270 bytes so that
 		   we don't have to realloc() it later.  That was causing
@@ -489,12 +488,11 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		   be reallocated once dir_list() is called, because dir_list()
 		   is recursive.  This will also help to reduce memory
 		   fragmentation. */
-	if((p = dfnfullpath(arg)) == 0) {
+	if((path = dfnfullpath(arg)) == 0) {
 		error_out_of_memory();
 		return E_NoMem;
 	}
-	if((path = erealloc(p, 270*sizeof(char))) == 0) {
-		myfree(p);
+	if((path = efrealloc(path, 270*sizeof(char))) == 0) {
 		return E_NoMem;
 	}
 
@@ -505,7 +503,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		/* There are some directory specs that are not detected by
 			dfnstat() as they are no part of the filesystem in DOS */
 		pattern = dfnfilename(path);
-		assert(p);
+		assert(pattern);
 		if(!*pattern || (dfnstat(path) & DFN_DIRECTORY) != 0) {
 			pattern = strchr(pattern, '\0');
 			if(pattern[-1] != '\\')

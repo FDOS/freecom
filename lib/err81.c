@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_goto_label
-void error_goto_label(void)
-{	displayError(TEXT_ERROR_NO_GOTO_LABEL);
+#undef error_no_ifct
+void error_no_ifct(const char * const name)
+{	displayError(TEXT_ERROR_UNKNOWN_IFUNCTION, name);
 }

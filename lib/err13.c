@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_selfcopy
-void error_selfcopy(const char * const s)
-{	displayError(TEXT_ERROR_SELFCOPY, s);
+#undef error_long_batchline
+void error_long_batchline(const char * const fnam, long linenr)
+{	displayError(TEXT_ERROR_LONG_LINE_BATCHFILE, linenr, fnam);
 }

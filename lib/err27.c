@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_illformed_option
-void error_illformed_option(const char * const s)
-{	displayError(TEXT_ERROR_ILLFORMED_OPTION, s);
+#undef error_opt_arg
+void error_opt_arg(const char * const  str)
+{	displayError(TEXT_ERROR_OPT_ARG, str);
 }

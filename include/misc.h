@@ -29,8 +29,11 @@ enum OnOff {		/* ON/OFF tester */
 #define MAXLEN  256
 #define exist dfnstat
 
-extern FILE *errStream;
-#define outStream stdout
+extern FILE *XerrStream;
+extern FILE *XoutStream;
+#define errStream (XerrStream? XerrStream: stderr)
+#define outStream (XoutStream? XoutStream: stdout)
+#define inStream stdin
 
 int cgetchar(void);
 int vcgetchar(void);
@@ -61,6 +64,7 @@ void freeSysBlk(const unsigned segm);
 	had been displayed on error */
 void *emalloc(const size_t len);
 void *erealloc(void *const p, const size_t len);
+void *efrealloc(void *const p, const size_t len);
 void *ecalloc(const size_t num, const size_t len);
 char *edupstr(const char far* const s);
 char *estrdup(const char far* const s);
@@ -71,6 +75,7 @@ char far *_fstpcpy(char far *dst, const char far *src);
 void partstrlower(char *str);
 char *readcommandEnhanced(void);
 char *readcommandDOS(void);
+char *readcommandFromFile(void);
 void convert(unsigned long num, char * const des);
 
 void goxy(const unsigned char x, const unsigned char y);
@@ -88,8 +93,8 @@ int is_pathdelim(const int c);
 int is_pathchar(const int c);
 int is_empty(const char *s);
 int is_num(const char * const s, unsigned * const num);
-/* int is_quote(const int c); */
-#define is_quote(c)	((c) == '"')
+int is_quote(const int c);
+char *skipquote(const char * const p);
 char *skipfnam(const char * const fnam);
 char *skippath(const char * const path);
 char *getCmdName(const char ** const cp);

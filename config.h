@@ -63,6 +63,7 @@
 	variables */
 #define EXEC_CONTEXT_MINIMUM_SIZE 512
 
+
 /* Define to support kernel-supported swapout of FreeCOM
 	see DOCS\K-SWAP.TXT
 */
@@ -102,6 +103,10 @@
 /* How many dynamically allocated strings shall be internally cached
 	before they are considered "old" and gets removed. */
 #define STRING_CACHE_ITEMS 5
+
+/* What quotes COMMAND shell honor (only paired quotes) */
+/* Note: at least the double quotes MUST be included */
+#define QUOTE_STR "\"'`"
 
 #define INCLUDE_CMD_BEEP
 #define INCLUDE_CMD_BREAK

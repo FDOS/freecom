@@ -2,14 +2,17 @@
 	$Locker$	$Name$	$State$
 
  *  Skip a quoted word, stop at end of string or at the given string
- 	compared case-sensitively or, if not specified, any argument delimter.
+ 	compared case-sensitively.
 
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.4.4  2001/07/16 20:28:38  skaus
+	Update #9
+
 	Revision 1.2.4.3  2001/07/08 17:23:43  skaus
 	Update #7
-
+	
 	Revision 1.2.4.2  2001/06/21 21:40:35  skaus
 	Update #2
 	
@@ -57,37 +60,22 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <ctype.h>
 #include <string.h>
 
-#include "../include/command.h"
+#include "../include/misc.h"
 #include "../include/cmdline.h"
 
-char *skipqword(const char * const pp, const char * const stop)
-{	return skipQuotedWord(pp, stop, (char*)0);
-}
-char *skipQuotedWord(const char * const pp
-	, const char * const stopStr
-	, const char * const stopChr)
+char *skipQuoteStr(const char * const pp, const char * const stop)
 {	size_t len;
-	int quote = 0;
-	const char *p;
+	char *p;
 
 	assert(pp);
+	assert(stop);
 
-	len = stopStr? strlen(stopStr): 0;
+	len = strlen(stop);
 
-	if(*(p = pp) != 0) do {
-		if(quote) {
-			if(quote == *p)
-				quote = 0;
-		} else if(strchr(QUOTE_STR, *p))
-			quote = *p;
-		else if(len? (memcmp(p, stopStr, len) == 0)
-		           : stopChr? strchr(stopChr, *p) != 0
-		                    : isargdelim(*p))
-			break;
-	} while(*++p);
+	p = (char*)pp - 1;
+	while(*(p = skipquote(p + 1)) != 0 || memcmp(p, stop, len) != 0);
 
-	return (char *)p;		/* strip const */
+	return p;
 }

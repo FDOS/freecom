@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_intermixed_redirection
-void error_intermixed_redirection(const int fd)
-{	displayError(TEXT_ERROR_INTERMIXED_REDIRECTION, fd);
+#undef error_no_such_forced_internal_command
+void error_no_such_forced_internal_command(const char * const name)
+{	displayError(name? TEXT_ERROR_FAILED_FORCED_ICMD_STR: TEXT_ERROR_FAILED_FORCED_ICMD, name);
 }

@@ -11,3 +11,4 @@ INIT and F() macro
 Check: cmd1 |& cmd2
 Check: cmd1 <in | cmd2 >out
 Check: correctness of exec ctxt for complex pipes
+Change: ecMk*[cC] functions

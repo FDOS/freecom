@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 
+extern char *dbg_trace;
 extern FILE *dbg_logfile;
 extern FILE *dbg_logfile2;
 extern int fddebug;

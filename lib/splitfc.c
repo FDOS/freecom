@@ -38,7 +38,7 @@ int splitFctLine(int argc, char ** const argv, char * const line)
 
 #ifdef FEATURE_NLS
 	refreshNLS();
-#define delim	nlsBuf->listSep
+#define delim	(char*)nlsBuf->listSep
 #define skipd	strlen(delim)
 #else
 #define delim	","
@@ -48,7 +48,7 @@ int splitFctLine(int argc, char ** const argv, char * const line)
 	p = line;
 	i = 0;
 loop:
-	p = skipqword(argv[i] = p, delim);
+	p = skipQuoteStr(argv[i] = p, delim);
 	if(*p && ++i < argc) {
 		*p = 0;
 		p += skipd;

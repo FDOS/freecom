@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_context_corrupted
-void error_context_corrupted(void)
-{	displayError(TEXT_ERROR_CONTEXT_CORRUPTED);
+#undef error_empty_command
+void error_empty_command(void)
+{	displayError(TEXT_ERROR_EMPTY_COMMAND);
 }

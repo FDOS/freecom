@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_empty_redirection
-void error_empty_redirection(void)
-{	displayError(TEXT_ERROR_EMPTY_REDIRECTION);
+#undef error_redirect_from_file
+void error_redirect_from_file(const char * const fnam)
+{	displayError(TEXT_ERROR_REDIRECT_FROM_FILE, fnam);
 }

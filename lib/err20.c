@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_filename_too_long
-void error_filename_too_long(const char * const fname)
-{	displayError(TEXT_ERROR_FILENAME_TOO_LONG, fname);
+#undef error_long_alias_line
+void error_long_alias_line(void)
+{	displayError(TEXT_ERROR_ALIAS_LINE_TOO_LONG);
 }

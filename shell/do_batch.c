@@ -48,6 +48,8 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_BATCH);
 
+	interactive = F(interactive) = 0;
+
 	bc = ecData(ctxt, ctxtEC_Batch_t);
 
 	assert(_fstrlen(bc->ec_fname)

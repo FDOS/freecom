@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_trailing_plus
-void error_trailing_plus(void)
-{	displayError(TEXT_ERROR_TRAILING_PLUS);
+#undef error_open_file
+void error_open_file(const char * const fnam)
+{	displayError(TEXT_ERROR_OPEN_FILE, fnam);
 }

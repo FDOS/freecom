@@ -9,6 +9,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/16 20:28:38  skaus
+	Update #9
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -42,13 +45,14 @@
 #include <string.h>
 
 #include "../include/cmdline.h"
+#include "../include/misc.h"
 
 /*
  * Find the next delimiter/non-delimiter within p
  *  Honor quotes and leading option characters
  */
 static char *find(char *p, int delim)
-{ int ch, quote;
+{ int ch;
   int isopt;
 
   assert(p);
@@ -76,16 +80,12 @@ static char *find(char *p, int delim)
     while((ch = *++p) != 0 && isoptch(ch));
   }
 
-  quote = 0;
-  while((ch = *p++) != '\0' && (quote
-   || (delim && !(isdelim(ch) || isoptch(ch)))
-   || (!delim && isdelim(ch))))
-    if(quote == ch)
-      quote = 0;
-    else if(strchr(QUOTE_STR, ch))
-      quote = ch;
+  --p;
+  while((ch = *(p = skipquote(p + 1))) != '\0'
+   && ((delim && !(isdelim(ch) || isoptch(ch)))
+    || (!delim && isdelim(ch))));
 
-  return p - 1;
+  return p;
 #undef isdelim
 }
 

@@ -7,9 +7,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.3  2001/07/16 20:28:38  skaus
+	Update #9
+
 	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
 	Update #5
-
+	
 	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
 	Update #1
 	
@@ -46,6 +49,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <dynstr.h>
+
 #include "../include/command.h"
 #include "../err_fcts.h"
 #include "../include/misc.h"
@@ -55,7 +60,7 @@
 char *curDateLong(void)
 {
 	struct dosdate_t d;
-	char *date, *h, *p;
+	char *date, *p;
 
 	_dos_getdate(&d);
 
@@ -64,19 +69,15 @@ char *curDateLong(void)
 		return 0;
 	}
 
-	if((h = getString(TEXT_WEEKDAY_SHORT_NAME_SUNDAY + d.dayofweek)) == 0) {
+	if((p = getString(TEXT_WEEKDAY_SHORT_NAME_SUNDAY + d.dayofweek)) == 0
+	 || !StrAppChr(p, ' ')
+	 || !StrCat(p, date)) {
+		myfree(p);
 		myfree(date);
 		error_out_of_memory();
 		return 0;
 	}
 
-	if((p = erealloc(h, strlen(h) + strlen(date) + 2)) == 0) {
-		myfree(h);
-		myfree(date);
-		return 0;
-	}
-
-	strcpy(stpcat(p, " "), date);
 	myfree(date);
 
 	return p;

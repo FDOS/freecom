@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_long_internal_line
-void error_long_internal_line(void)
-{	displayError(TEXT_ERROR_ILINE_TOO_LONG);
+#undef error_long_external_line
+void error_long_external_line(void)
+{	displayError(TEXT_ERROR_ELINE_TOO_LONG);
 }

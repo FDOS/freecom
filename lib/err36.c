@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_nothing_to_do
-void error_nothing_to_do(void)
-{	displayError(TEXT_ERROR_NOTHING_TO_DO);
+#undef dispCopy
+void dispCopy(const char src[], const char dst[], int append)
+{	displayError(TEXT_MSG_COPYING, src, append? "=>>": "=>", dst);
 }

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_quoted_c_k
-void error_quoted_c_k(void)
-{	displayError(TEXT_QUOTED_C_OR_K);
+#undef error_ctty_excluded
+void error_ctty_excluded(void)
+{	displayError(TEXT_CTTY_NOTIMPLEMENTED);
 }

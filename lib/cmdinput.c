@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <conio.h>
 #include <dir.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <string.h>
 
 #include <dynstr.h>
@@ -80,6 +80,7 @@ char *readcommandEnhanced(void)
 	unsigned charcount = 0;
 	char *str = 0;
 
+redo:
 	/* if echo off, don't print prompt */
 	if(dispPrompt)
 		printprompt();
@@ -92,9 +93,6 @@ char *readcommandEnhanced(void)
 #ifdef FEATURE_HISTORY
 	histGet(histLevel - 1, &prvLine);
 #endif
-
-	if(feof(stdin))
-		return 0;
 
 	do {
 		gochar(current);
@@ -143,7 +141,7 @@ char *readcommandEnhanced(void)
 #ifdef DEBUG
 		case KEY_CTL_T:
 			chkPtr(str);
-			if(!StrCat(str, "echo | echo")) {
+			if(!StrCat(str, "::=display_status")) {
 				error_out_of_memory();
 				break;
 			}
@@ -233,7 +231,7 @@ char *readcommandEnhanced(void)
 			  /* enable echo to let user know that's this
 				is the command line */
 			  dispPrompt = F(dispPrompt) = 1;
-			  printprompt();
+			  goto redo;
 			}
 			break;
 

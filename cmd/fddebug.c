@@ -31,6 +31,12 @@ int cmd_fddebug(char *param)
   		int duplicate, channel;
 
 		p = trimcl(param);
+
+		if(*p == '!') {
+			myfree(dbg_trace);
+			dbg_trace = p[1]? estrdup(p + 1): 0;
+			break;
+		}
 		if((duplicate = *p == '+') != 0)
 			++p;
   		if((p = estrdup(p)) == 0)
@@ -74,6 +80,8 @@ int cmd_fddebug(char *param)
 			assert(dbg_logname2);
 			displayString(TEXT_MSG_FDDEBUG_TARGET, dbg_logname2);
 		}
+		if(dbg_trace)
+			displayString(TEXT_MSG_FDDEBUG_TRACING, dbg_trace);
 		break;
   	case OO_Off:	fddebug = 0;	break;
 	}

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_syntax
-void error_syntax(const char * const s)
-{	displayError(s? TEXT_ERROR_SYNTAX_STR: TEXT_ERROR_SYNTAX, s);
+#undef error_nothin_to_do
+void error_nothin_to_do(void)
+{	displayError(TEXT_ERROR_NOTHING_TO_DO);
 }

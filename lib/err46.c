@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_save_session
-void error_save_session(void)
-{	displayError(TEXT_ERROR_SAVE_SESSION);
+#undef error_no_rw_device
+void error_no_rw_device(const char * const devname)
+{	displayError(TEXT_ERROR_NORW_DEVICE, devname);
 }

@@ -57,8 +57,7 @@ static void displaySize(int string, unsigned size)
 
 #pragma argsused
 int cmd_memory(char *param)
-{	unsigned size;
-
+{
 	displayString(TEXT_MEMORY_ENVIRONMENT
 		, mcb_length(env_glbSeg), env_freeCount(env_glbSeg));
 	displayString(TEXT_MEMORY_CONTEXT

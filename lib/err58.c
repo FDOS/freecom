@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_loading_context
-void error_loading_context(void)
-{	displayError(TEXT_ERROR_LOADING_CONTEXT);
+#undef error_dirfct_failed
+void error_dirfct_failed(const char * const fctname, const char * const dirname)
+{	displayError(TEXT_ERROR_DIRFCT_FAILED, fctname, dirname);
 }

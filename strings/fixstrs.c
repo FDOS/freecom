@@ -87,7 +87,7 @@ typedef enum STATE {
 	,GETTING_STRING
 } read_state;
 
-#define MAXSTRINGS       256
+#define MAXSTRINGS       1024
 
 #define VERSION_MISMATCH 128
 #define VALIDATION_MISMATCH 64
@@ -390,7 +390,12 @@ printf("FIXSTRS: loading file %s\n", fnam);
 					if(strcmp(strg[cnt].name, temp + 1) == 0)
 						goto strnameFound;
 				/* string name was not found --> create a new one */
-				++maxCnt;
+				if(++maxCnt >= MAXSTRINGS) {
+					fprintf(stderr
+					 , "The number of strings exceeded the limit of: %u\n"
+					 , MAXSTRINGS);
+					return 120;
+				}
 			strnameFound:
 				if(!strg[cnt].name) {
 					if((strg[cnt].name = strdup(temp + 1)) == 0) {

@@ -77,7 +77,7 @@ varfound:
 	}
 
 	/* Followed by a '(', find also matching ')' */
-	if(*param != '(' || ')' != *(*paramE = skipqword(param, ")")))
+	if(*param != '(' || ')' != *(*paramE = skipQuoteStr(param, ")")))
 		return noParens;
 
 	*paramS = param + 1;

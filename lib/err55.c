@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_alias_out_of_memory
-void error_alias_out_of_memory(void)
-{	displayError(TEXT_ERROR_ALIAS_OUT_OF_MEM);
+#undef error_alias_insert
+void error_alias_insert(void)
+{	displayError(TEXT_ERROR_ALIAS_INSERT);
 }

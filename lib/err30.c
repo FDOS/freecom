@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_leading_plus
-void error_leading_plus(void)
-{	displayError(TEXT_ERROR_LEADING_PLUS);
+#undef error_trailing_plus
+void error_trailing_plus(void)
+{	displayError(TEXT_ERROR_TRAILING_PLUS);
 }

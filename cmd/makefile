@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.2.2.8  2001/07/16 20:28:38  skaus
+# Update #9
+#
 # Revision 1.2.2.7  2001/07/11 21:46:26  skaus
 # Update #8
 #
@@ -57,19 +60,21 @@
 
 # Sources of this make target
 SRC = alias.c arg.c beep.c break.c call.c cancel.c cdd.c chdir.c cls.c \
-	copy.c ctty.c date.c del.c dir.c dirs.c disp_arg.c disp_flg.c disp_ivr.c \
-	disp_nls.c doskey.c echo.c exit.c f_bfnam.c f_blnr.c f_ivar.c f_tfile.c \
-	f_verb.c fd.c fddebug.c for.c goto.c history.c icmds.c if.c ivar.c \
-	memory.c mkdir.c path.c pause.c popd.c prompt.c pushd.c quit.c rem.c \
-	ren.c rmdir.c set.c shift.c time.c truename.c type.c verify.c which.c
+	copy.c ctty.c date.c del.c dir.c dirs.c disp_arg.c disp_ec.c disp_flg.c \
+	disp_ivr.c disp_nls.c disp_st.c doskey.c echo.c exit.c f_argv.c \
+	f_bfnam.c f_blnr.c f_ivar.c f_tfile.c f_verb.c fd.c fddebug.c for.c \
+	goto.c history.c icmds.c if.c ivar.c memory.c mkdir.c path.c pause.c \
+	popd.c prompt.c pushd.c quit.c rem.c ren.c rmdir.c set.c shift.c time.c \
+	truename.c type.c verify.c which.c
 OBJ = alias.obj arg.obj beep.obj break.obj call.obj cancel.obj cdd.obj \
 	chdir.obj cls.obj copy.obj ctty.obj date.obj del.obj dir.obj dirs.obj \
-	disp_arg.obj disp_flg.obj disp_ivr.obj disp_nls.obj doskey.obj echo.obj \
-	exit.obj f_bfnam.obj f_blnr.obj f_ivar.obj f_tfile.obj f_verb.obj fd.obj \
-	fddebug.obj for.obj goto.obj history.obj icmds.obj if.obj ivar.obj \
-	memory.obj mkdir.obj path.obj pause.obj popd.obj prompt.obj pushd.obj \
-	quit.obj rem.obj ren.obj rmdir.obj set.obj shift.obj time.obj \
-	truename.obj type.obj verify.obj which.obj
+	disp_arg.obj disp_ec.obj disp_flg.obj disp_ivr.obj disp_nls.obj \
+	disp_st.obj doskey.obj echo.obj exit.obj f_argv.obj f_bfnam.obj \
+	f_blnr.obj f_ivar.obj f_tfile.obj f_verb.obj fd.obj fddebug.obj for.obj \
+	goto.obj history.obj icmds.obj if.obj ivar.obj memory.obj mkdir.obj \
+	path.obj pause.obj popd.obj prompt.obj pushd.obj quit.obj rem.obj \
+	ren.obj rmdir.obj set.obj shift.obj time.obj truename.obj type.obj \
+	verify.obj which.obj
 HDR = ..\config.h ..\err_fcts.h ..\include/cmdline.h ..\include/command.h \
 	..\include/context.h ..\include/datefunc.h ..\include/debug.h \
 	..\include/ierror.h ..\include/message.h ..\include/misc.h \
@@ -113,6 +118,11 @@ mkdir.obj : mkdir.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
+disp_ec.obj : disp_ec.c \
+	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h ../strings.h
 memory.obj : memory.c \
 	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
@@ -255,6 +265,16 @@ f_verb.obj : f_verb.c \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
+f_argv.obj : f_argv.c \
+	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
+disp_st.obj : disp_st.c \
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 f_ivar.obj : f_ivar.c \
 	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \

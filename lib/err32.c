@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_open_file
-void error_open_file(const char * const fnam)
-{	displayError(TEXT_ERROR_OPEN_FILE, fnam);
+#undef error_read_file
+void error_read_file(const char * const fnam)
+{	displayError(TEXT_ERROR_READ_FILE, fnam);
 }

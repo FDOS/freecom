@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_out_of_memory
-void error_out_of_memory(void)
-{	displayError(TEXT_ERROR_OUT_OF_MEMORY);
+#undef error_syntax
+void error_syntax(const char * const s)
+{	displayError(s? TEXT_ERROR_SYNTAX_STR: TEXT_ERROR_SYNTAX, s);
 }

@@ -23,7 +23,7 @@ static int view(void *arg, word segm, word ofs)
 {
   if(peekb(segm, ofs) > ' ')		/* control characters tag hidden
   										features */
-  	printf("%Fs\n", MK_FP(segm, ofs));
+  	fprintf(outStream, "%Fs\n", MK_FP(segm, ofs));
   return 0;                     /* don't stop */
 }
 

@@ -1,4 +1,26 @@
+Update #9:
+add: on out-of-memory condition, doCancel is set to drop to prompt
+fix: if read command interactively, but stdin is not connected to the console
+	the normal Fgets() is used in order to avoid that FreeCOM locks;
+	e.g. running: COMMAND <NUL
+	Same behaviour using DOS-0A and <conio.h> functions.
+fix: cmdinput.c: if ECHO OFF && ^C enables prompt --> reset initial curpos
+fix: expEnvVars(): parenthesises may be nested
+fix: using the correct skipQuote*() function
+add: skipQuoteChars(), skipQuoteArg(), skipQuoteStr(), skipquote()
+fix: makePipeContext(): issue error on empty command
+fix: makePipeContext(): Leave trailing '|' for pipe stdout & stderr
+fix: exp_ev.c: call (fct->func) for fct==0 if argument present
+add: pre&post-exec status trace
+add: %* and %@ARGV()
+add: display_exec & display_status commands
+fix: fixstrs.c: maxCnt exceeding MAXSTRINGS
+chg: fixstrs.c: MAXSTRINGS ::= 1024
+
 Update #8:
+add: basic output streaming functions
+add: ctxtGetItem(): fetch a given name from a context
+chg: ctxtGetS(): construct tagged name itself
 fix: makePipeDelTemp(): 2nd ecMkc() missing (char*)0
 fix: makePipeContext(): 1st ecMkiVar() ::= makePipeDelTemp()
 fix: makePipeContext(): last memmove() length 1 too less

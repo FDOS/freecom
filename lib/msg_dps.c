@@ -6,9 +6,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.4.2  2001/07/16 20:28:38  skaus
+	Update #9
+
 	Revision 1.2.4.1  2001/07/05 22:18:34  skaus
 	Update #5
-
+	
 	Revision 1.2  2001/04/29 11:33:51  skaus
 	chg: default heap size (tools\ptchsize) set to 6KB
 	chg: error displaying functions centralized into lib\err_fcts.src
@@ -56,8 +59,6 @@
 
 #include "../include/misc.h"
 
-FILE *errStream = 0;
-
 static void displayXString(FILE *stream, unsigned id, va_list args)
 {	char *str;
 
@@ -77,6 +78,6 @@ void displayError(unsigned id,...)
 {	va_list ap;
 
 	va_start(ap, id);
-	displayXString(errStream? errStream: stderr, id, ap);
+	displayXString(errStream, id, ap);
 	va_end(ap);
 }

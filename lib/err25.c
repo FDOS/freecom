@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_tempfile
-void error_tempfile(void)
-{	displayError(TEXT_ERROR_TEMPFILE);
+#undef error_close_quote
+void error_close_quote(int quote)
+{	displayError(TEXT_ERROR_CLOSE_QUOTE, quote);
 }

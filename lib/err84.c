@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_no_such_forced_internal_command
-void error_no_such_forced_internal_command(const char * const name)
-{	displayError(name? TEXT_ERROR_FAILED_FORCED_ICMD_STR: TEXT_ERROR_FAILED_FORCED_ICMD, name);
+#undef error_context_corrupted
+void error_context_corrupted(void)
+{	displayError(TEXT_ERROR_CONTEXT_CORRUPTED);
 }

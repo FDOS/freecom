@@ -14,6 +14,7 @@
 
 #include "../include/context.h"
 #include "../include/misc.h"
+#include "../include/output.h"
 
 #pragma argsused
 char *readInteractive(ctxtEC_t far * const ctxt)
@@ -30,6 +31,11 @@ char *readInteractive(ctxtEC_t far * const ctxt)
 		dprintf(("!! EXIT flag active\n"));
 		return 0;
 	}
+
+	interactive = F(interactive) = iConsole();
+
+	if(!interactive)
+		return readcommandFromFile();
 
 #ifdef FEATURE_ENHANCED_INPUT
 	/* If redirected from file or so, should use normal one */

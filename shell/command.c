@@ -22,6 +22,7 @@
 
 #include <dynstr.h>
 #include <mcb.h>
+#include <environ.h>
 
 #include "../include/command.h"
 #include "../include/context.h"
@@ -40,6 +41,7 @@
 #include "../include/mux_ae.h"
 #endif
 #include "../include/crossjmp.h"
+
 
 
 int ctrlBreak = 0;              /* Ctrl-Break or Ctrl-C hit */
@@ -189,6 +191,18 @@ static void docommand(char *line)
 	if(*(rest = line) == 0)
 		return;		/* nothing to do */
 
+#ifdef DEBUG
+	if(dbg_trace) {
+		char *p;
+
+		p = StrConcat(3, dbg_trace, " prexec: ", rest);
+		if(p) {
+			cmd_dispStatus(p);
+			myfree(p);
+		} else	dprintf(("[DBG: Out of memory running preexec status]\n"));
+	}
+#endif
+
 	if((name = getCmdName(&(const char*)rest)) != 0) {
 		if(*rest && strchr(QUOTE_STR, *rest)) {
 			/* If the first word is quoted, it is no internal command */
@@ -212,7 +226,7 @@ static void docommand(char *line)
 	if(!forceInternalCommand && name) {
 		/* Check for installed COMMAND extension */
 		if(runExtension(&name, rest, &newargs))
-			return;		/* OK, executed! */
+			goto okRet;		/* OK, executed! */
 		dprintf( ("[Command on return of Installable Commands check: >%s<]\n"
 		 , name) );
 		if(newargs) {
@@ -284,13 +298,28 @@ static void docommand(char *line)
 		chkHeap
 	}
 
+okRet:
+#ifdef DEBUG
+	if(dbg_trace) {
+		char *p;
+
+		p = StrConcat(3, dbg_trace, " postexec: ", line);
+		if(p) {
+			cmd_dispStatus(p);
+			myfree(p);
+		} else	dprintf(("[DBG: Out of memory running preexec status]\n"));
+	}
+#endif
+
 errRet:
+	chkHeap
 	myfree(name);
 	chkHeap
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 	myfree(newargs);
 	chkHeap
 #endif
+
 }
 
 static int redirectJFTentry(int i
@@ -371,6 +400,11 @@ static int makePipeContext(char *** const Xout
 	if((ivarIn = makePipeDelTemp()) == 0)
 		goto errRet;
 	assert(pipe[num - 1]);
+	assert(pipe[0]);
+	if(!*ltrimcl(pipe[num - 1])) {
+		error_empty_command();
+		goto errRet;
+	}
 	if(out) {
 		int len;
 
@@ -412,9 +446,12 @@ static int makePipeContext(char *** const Xout
 	/* Process the middle commands */
 	for(i = num - 1; --i; ) {
 		assert(pipe[i]);
-		assert(*pipe[i]);
+		if(!*ltrimcl(pipe[i])) {
+			error_empty_command();
+			goto errRet;
+		}
 		if((q = strchr(pipe[i], 0))[-1] == '|') {
-			*q = 0;
+			q[-1] = 0;
 			q = 0;			/* q == 0 <-> redirect stderr, too */
 		}
 		myfree(ivarOut);
@@ -429,6 +466,11 @@ static int makePipeContext(char *** const Xout
 /* The first command of the pipe may be executed now */
 	/* perform the ::=IVAR <ivarIn>=%@TEMPFILE  command */
 	assert(!p);
+	assert(pipe[0]);
+	if(!*ltrimcl(pipe[0])) {
+		error_empty_command();
+		goto errRet;
+	}
 	if((p = tmpfn()) == 0			/* make the tempfile */
 	 || (q = erealloc(p, strlen(p) + 3)) == 0	/* needed below */
 	 || ivarSet(ivarIn, p = q) != E_None)		/* in 'p', if Set() fails */
@@ -437,20 +479,17 @@ static int makePipeContext(char *** const Xout
 	/* Setup the *Xout array to contain the previous ivarIn */
 	chkPtr(ivarIn);
 	StrFree(ivarIn);		/* the name is no longer needed */
-	if((out = ecalloc(2, sizeof(char*))) == 0)
+	if((*Xout = out = ecalloc(2, sizeof(char*))) == 0)
 		goto errRet;
 	out[0] = p;
 	/* out[1] = 0;		done by calloc() */
 	memmove(&p[2], p, strlen(p) + 1);
 	p[0] = '>';		/* output redirection ID */
 	p[1] = 2;			/* overwrite, stdout */
-	assert(pipe[0]);
-	assert(*pipe[0]);
 	if((q = strchr(pipe[0], 0))[-1] == '|') {
 		*q = 0;
 		p[1] = 6;			/* overwrite, stdout & stderr */
 	}
-	*Xout = out;
 	p = 0;
 
 	rv = 1;					/* OK */

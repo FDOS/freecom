@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_opt_noarg
-void error_opt_noarg(const char * const  str)
-{	displayError(TEXT_ERROR_OPT_NOARG, str);
+#undef error_leading_plus
+void error_leading_plus(void)
+{	displayError(TEXT_ERROR_LEADING_PLUS);
 }

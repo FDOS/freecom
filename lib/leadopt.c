@@ -6,9 +6,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.3  2001/07/16 20:28:38  skaus
+	Update #9
+
 	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
 	Update #5
-
+	
 	Revision 1.1.4.1  2001/07/01 22:04:31  skaus
 	Update #3
 	
@@ -58,7 +61,7 @@ int leadOptions(char **Xline, optScanner fct, void * arg)
 
   p = *Xline;
   if(!p)
-  	*Xline = "";
+  	p = *Xline = "";
 
   while(*(line = skipdm(p))) {
     q = unquote(line, p = skip_word(line));

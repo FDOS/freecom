@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef dispCopy
-void dispCopy(const char src[], const char dst[], int append)
-{	displayError(TEXT_MSG_COPYING, src, append? "=>>": "=>", dst);
+#undef error_invalid_number
+void error_invalid_number(const char * const s)
+{	displayError(TEXT_INVALID_NUMBER, s);
 }

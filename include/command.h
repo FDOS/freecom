@@ -118,6 +118,8 @@ int cmd_dispNLS(char *);
 int cmd_dispFlags(char *);
 int cmd_dispArgs(char *);
 int cmd_dispIVars(char *);
+int cmd_dispEC(char *);
+int cmd_dispStatus(char *);
 
 /* Internal functions */
 char *fct_tempfile(char *);
@@ -125,6 +127,7 @@ char *fct_ivar(char *);
 char *fct_verbatim(char *);
 char *fct_batchname(char *);
 char *fct_batchline(char *);
+char *fct_argv(char *);
 
 
 /* prototypes from PROMPT.C */
@@ -171,6 +174,7 @@ extern struct IFCT internalFunctions[];
 struct IFCT *is_ifct(const char *);
 
 int is_ivar(const char * const, char ** const);
+int is_alias(const char * const);
 
 /* New procs in BATCH.C */
 

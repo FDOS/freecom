@@ -29,10 +29,9 @@ static char *icmdsChangeList(void)
 	cmd = internalCommands;
 	do if((cmd->flags ^ (cmd->flags >> 1)) & CMD_HIDDEN) {
 		/* changed --> include into the list */
-		if((q = erealloc(p, buflen + strlen(cmd->name) + 3)) == 0)
+		if((p = efrealloc(p, buflen + strlen(cmd->name) + 3)) == 0)
 			return 0;
-		p = q;
-		q += buflen;
+		q = p + buflen;
 		*q++ = ' ';
 		*q++ = (cmd->flags & CMD_HIDDEN)? '-': '+';
 		q = stpcpy(q, cmd->name);

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_u_notimplemented
-void error_u_notimplemented(void)
-{	displayError(TEXT_ERROR_U_NOTIMPLEMENTED);
+#undef error_restore_session
+void error_restore_session(void)
+{	displayError(TEXT_ERROR_RESTORE_SESSION);
 }

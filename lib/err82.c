@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_no_ifct
-void error_no_ifct(const char * const name)
-{	displayError(TEXT_ERROR_UNKNOWN_IFUNCTION, name);
+#undef error_intermixed_redirection
+void error_intermixed_redirection(const int fd)
+{	displayError(TEXT_ERROR_INTERMIXED_REDIRECTION, fd);
 }

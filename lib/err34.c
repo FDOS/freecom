@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_write_file
-void error_write_file(const char * const fnam)
-{	displayError(TEXT_ERROR_WRITE_FILE, fnam);
+#undef error_copy
+void error_copy(void)
+{	displayError(TEXT_ERROR_COPY);
 }

@@ -24,11 +24,16 @@ cmds.lib : $(CFG) alias.obj \
 	del.obj \
 	dir.obj \
 	dirs.obj \
+	disp_arg.obj \
+	disp_ec.obj \
 	disp_flg.obj \
+	disp_ivr.obj \
 	disp_nls.obj \
+	disp_st.obj \
 	doskey.obj \
 	echo.obj \
 	exit.obj \
+	f_argv.obj \
 	f_bfnam.obj \
 	f_blnr.obj \
 	f_ivar.obj \
@@ -76,11 +81,16 @@ cmds.lib : $(CFG) alias.obj \
 +-del.obj &
 +-dir.obj &
 +-dirs.obj &
++-disp_arg.obj &
++-disp_ec.obj &
 +-disp_flg.obj &
++-disp_ivr.obj &
 +-disp_nls.obj &
++-disp_st.obj &
 +-doskey.obj &
 +-echo.obj &
 +-exit.obj &
++-f_argv.obj &
 +-f_bfnam.obj &
 +-f_blnr.obj &
 +-f_ivar.obj &
@@ -129,11 +139,16 @@ cmds.lib : $(CFG) alias.obj \
 +del.obj &
 +dir.obj &
 +dirs.obj &
++disp_arg.obj &
++disp_ec.obj &
 +disp_flg.obj &
++disp_ivr.obj &
 +disp_nls.obj &
++disp_st.obj &
 +doskey.obj &
 +echo.obj &
 +exit.obj &
++f_argv.obj &
 +f_bfnam.obj &
 +f_blnr.obj &
 +f_ivar.obj &

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_invalid_drive
-void error_invalid_drive(int drive)
-{	displayError(TEXT_ERROR_INVALID_DRIVE, drive + 'A');
+#undef error_no_env
+void error_no_env(void)
+{	displayError(TEXT_ERROR_NO_ENVIRONMENT);
 }

@@ -5,11 +5,9 @@
 #ifndef __CMDLINE_H
 #define __CMDLINE_H
 
+#include <ctype.h>
+#include <string.h>
 #include <portable.h>
-
-/* What quotes COMMAND shell honor (only paired quotes) */
-/* Note: at least the double quotes MUST be included */
-#define QUOTE_STR "\"'`"
 
 /* Used by %@VERBATIM() and the command line parser to communicate
 	with each other */
@@ -85,10 +83,9 @@ typedef int (* const optScanner)(const char * const chstr, int ch, int bool, con
 #define optLong(str)  (strcmpi(optstr, (str)) == 0)
 
 
-char *skipqword(const char *str, const char * const stop);
-char *skipQuotedWord(const char *pp
-	, const char * const stopStr
-	, const char * const stopChr);
+char *skipQuoteStr(const char *str, const char * const stop);
+char *skipQuoteChars(const char *str, const char * const stopChr);
+char *skipQuoteArg(const char *str);
 
 /* Use matchtok() to compare string constants */
 #define match(line,word,len) match_(&(line), (word), (len))

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_bfile_vanished
-void error_bfile_vanished(const char * const fnam)
-{	displayError(TEXT_ERROR_BFILE_VANISHED, fnam);
+#undef error_bfile_no_such_label
+void error_bfile_no_such_label(const char * const fnam, const char * const label)
+{	displayError(TEXT_ERROR_BFILE_LABEL, fnam, label);
 }

@@ -146,7 +146,7 @@ void ctxtPurgeCache(void);
 int ctxtSinglePurge(void);
 
 /* Execution Context settings */
-enum ExecContext_Tags {
+typedef enum ExecContext_Tags {
 	EC_TAG_INTERACTIVE 			/* I */
 	, EC_TAG_BATCH				/* B */
 	, EC_TAG_FOR_FIRST			/* F */
@@ -155,10 +155,11 @@ enum ExecContext_Tags {
 	, EC_TAG_COMMAND_IGNORE_EXIT	/* c */
 	, EC_TAG_KEEP_RUNNING		/* e */
 	, EC_TAG_TERMINATE			/* E */
-};
+} ecTag_t;
 #define EC_LAST_TAG EC_TAG_TERMINATE
 	/* >= tags that may be considered end of the stack */
 #define EC_FINAL_TAGS EC_TAG_KEEP_RUNNING
+#define ecNames "IBFfCceE"
 
 #if 0
 typedef struct {

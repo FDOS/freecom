@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.15.4.2  2001/07/16 20:28:36  skaus
+# Update #9
+#
 # Revision 1.15.4.1  2001/07/05 22:18:33  skaus
 # Update #5
 #
@@ -101,7 +104,7 @@ verscheck :
 
 __errl:
 	@+-if exist errlist del errlist >nul
-	-ctags cmd\*.c lib\*.c shell\*.c \freedos\src\lib\suppl\*.c
+	-ctags cmd\*.c lib\*.c shell\*.c \freedos\src\lib\suppl\*.c include\*.h \freedos\src\lib\suppl\*.h
 
 com.com .SEQUENTIAL : utils strings criter lib cmd shell\\com.exe infores
 	@+copy /b shell\\com.exe + infores + criter\\criter + criter\\criter1 + strings\\strings.dat $@

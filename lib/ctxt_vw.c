@@ -28,7 +28,7 @@ static int view(void *arg, word segm, word ofs)
 	assert(segm);
 	if(ctxtProbeItemTag(segm, ofs, ((view_t*)arg)->tag)) {
 		++((view_t*)arg)->count;
-		printf("%Fs\n", MK_FP(segm, ofs + 1));
+		fprintf(outStream, "%Fs\n", MK_FP(segm, ofs + 1));
 	}
 	return 0;                     /* don't stop */
 }

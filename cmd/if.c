@@ -80,7 +80,7 @@ int cmd_if(char *param)
 		size_t len;
 		char *r;      /* right operand */
 
-		pp = skipqword(param, "==");
+		pp = skipQuoteStr(param, "==");
 
 		if(*pp != '=' || pp[1] != '=') {
 			error_syntax(0);
@@ -91,7 +91,7 @@ int cmd_if(char *param)
 
 		/* skip over the '==' and subsquent spaces and
 			assign the end of the right operator to pp */
-		pp = skipqword(r = ltrimcl(pp + 2), 0);
+		pp = skipQuoteArg(r = ltrimcl(pp + 2));
 
 		/*	now: param := beginning of the left operand
 			r := beginning of the right operand

@@ -113,7 +113,7 @@ int get_redirection(char * const line
 	num = 1;
 
 	for(;;) {
-		char *p = skipQuotedWord(src, (char*)0, "<>|");
+		char *p = skipQuoteChars(src, "<>|");
 
 		if(p != src) {
 			if(dst != src) {

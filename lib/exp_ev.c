@@ -28,24 +28,40 @@ FLAG8 error;
 char *verbatim_token = 0;
 int verbatim = 0;
 
-static char *ifctArgRun(const int clQuote
-	, struct IFCT *fct
-	, char ** const Xp)
+static char *ifctArgRun(struct IFCT *fct, char ** const Xp)
 {	char *q, *p;
-	char *cmdline, c;
+	char *cmdline, *parens, c;
+	int rightPar, leftPar, cntParens;
 
 	assert(Xp);
 
 	p = *Xp;
 
-	if((q = strchr(++p, clQuote)) == 0) {
-		error_close_quote(clQuote);
-		return 0;
+	switch(leftPar = *p) {
+	case '(':	rightPar = ')'; parens = "()"; break;
+	case '[':	rightPar = ']'; parens = "[]"; break;
+	case '{':	rightPar = '}'; parens = "{}"; break;
+	default: assert(*p == '(' || *p == '[' || *p == '{');
 	}
+
+	for(cntParens = 1, q = p; ;)
+		if(*(q = skipQuoteChars(q + 1, parens)) == leftPar)
+			++cntParens;
+		else if(*q == rightPar) {
+			if(--cntParens == 0)
+				break;
+		} else if(!*q) {
+			error_close_quote(rightPar);
+			return 0;
+		}
+#ifndef NDEBUG
+		else assert(*q == leftPar || *q == rightPar);
+#endif
+
 	c = *q;
-	*(char*)q = 0;
-	cmdline = (fct->func)(p);
-	*(char*)q = c;
+	*q = 0;
+	cmdline = fct? (fct->func)(p + 1): 0;
+	*q = c;
 	*Xp = q + 1;
 	return cmdline;
 }
@@ -142,6 +158,13 @@ char *expEnvVars(char * const line)
 				appStr(h);
 				break;
 
+			case '*':	/* all script variables %1..%# (ignores shiftlevel!) */
+				if((q = fct_argv(",")) != 0) {
+					appStr(q);
+					myfree(q);
+				}
+				break;
+
 			case '?':
 				{	char hbuf[sizeof(unsigned) * 8 + 2];
 
@@ -160,10 +183,8 @@ char *expEnvVars(char * const line)
 					if((fct = is_ifct(q)) == 0)
 						error_no_ifct(q - 1);
 					*p = c;
-					if(*p == '[')
-						q = ifctArgRun(']', fct, &p);
-					else if(*p == '(')
-						q = ifctArgRun(')', fct, &p);
+					if(*p == '[' || *p == '(')
+						q = ifctArgRun(fct, &p);
 					else
 						q = fct? (fct->func)((char*)0): 0;
 					if(q) {

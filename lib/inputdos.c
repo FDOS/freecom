@@ -8,9 +8,12 @@
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.3  2001/07/16 20:28:38  skaus
+	Update #9
+
 	Revision 1.1.4.2  2001/07/01 22:04:31  skaus
 	Update #3
-
+	
 	Revision 1.1.4.1  2001/06/25 20:06:36  skaus
 	Update #3
 	
@@ -61,9 +64,6 @@ static unsigned char iobuf[CMD_SIZE + 3] = { CMD_SIZE, '\0'};
 #pragma argsused
 char *readcommandDOS(void)
 {	struct REGPACK r;
-
-	if(feof(stdin))
-		return 0;
 
 	iobuf[0] = CMD_SIZE;
 	if(iobuf[1] > iobuf[0])

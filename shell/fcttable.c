@@ -19,6 +19,7 @@ struct IFCT internalFunctions[] =
 	{"VERBATIM",		fct_verbatim},
 	{"BATCHNAME",		fct_batchname},
 	{"BATCHLINE",		fct_batchline},
+	{"ARGV",			fct_argv},
 
 	{0, 0}
 };

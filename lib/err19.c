@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_env_var_not_found
-void error_env_var_not_found(const char * const var)
-{	displayError(TEXT_ERROR_ENV_VAR_NOT_FOUND, var);
+#undef error_filename_too_long
+void error_filename_too_long(const char * const fname)
+{	displayError(TEXT_ERROR_FILENAME_TOO_LONG, fname);
 }

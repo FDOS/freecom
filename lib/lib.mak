@@ -11,6 +11,7 @@ all: $(CFG) freecom.lib
 freecom_deps :  \
 	act_qec.obj \
 	add_arg.obj \
+	alloc_e1.obj \
 	alloc_ec.obj \
 	alloc_ed.obj \
 	alloc_em.obj \
@@ -33,6 +34,7 @@ freecom_deps :  \
 	chgenvc.obj \
 	chgenvr.obj \
 	clrline.obj \
+	cmdifile.obj \
 	cmdinput.obj \
 	comfile.obj \
 	compfile.obj \
@@ -50,6 +52,7 @@ freecom_deps :  \
 	ctxt_ini.obj \
 	ctxt_mk.obj \
 	ctxt_mkn.obj \
+	ctxt_mks.obj \
 	ctxt_pop.obj \
 	ctxt_psh.obj \
 	ctxt_rnu.obj \
@@ -70,6 +73,7 @@ freecom_deps :  \
 	dbg_prnt.obj \
 	dbg_s.obj \
 	dbg_sn.obj \
+	dbg_v1.obj \
 	devopen.obj \
 	dispcnt.obj \
 	drvnum.obj \
@@ -94,6 +98,7 @@ freecom_deps :  \
 	ecvalid.obj \
 	efct_001.obj \
 	efct_002.obj \
+	efct_003.obj \
 	esdec.obj \
 	esenc.obj \
 	exec.obj \
@@ -120,7 +125,9 @@ freecom_deps :  \
 	hdlrctxt.obj \
 	hist_get.obj \
 	hist_set.obj \
+	i_tty.obj \
 	inputdos.obj \
+	is_alias.obj \
 	is_empty.obj \
 	is_fnamc.obj \
 	is_fnstr.obj \
@@ -128,16 +135,17 @@ freecom_deps :  \
 	is_ifct.obj \
 	is_ivar.obj \
 	is_num.obj \
+	chunk1
+
+chunk1 :  \
 	is_pch.obj \
 	is_pchr.obj \
+	is_quote.obj \
 	isadev.obj \
 	ivarset.obj \
 	keyprsd.obj \
 	lastdget.obj \
 	lastdset.obj \
-	chunk1
-
-chunk1 :  \
 	leadopt.obj \
 	lowexec.obj \
 	ltrimcl.obj \
@@ -154,11 +162,28 @@ chunk1 :  \
 	msg_gpt.obj \
 	msg_mkey.obj \
 	msg_prmp.obj \
+	msg_v1.obj \
 	mux_ae.obj \
 	nls.obj \
 	nls_date.obj \
 	nls_time.obj \
 	num_fmt.obj \
+	o_blank.obj \
+	o_blks.obj \
+	o_ch.obj \
+	o_cleft.obj \
+	o_flush.obj \
+	o_fnl.obj \
+	o_gcur.obj \
+	o_id.obj \
+	o_init.obj \
+	o_istty.obj \
+	o_mem.obj \
+	o_modes.obj \
+	o_nl.obj \
+	o_nsize.obj \
+	o_pad.obj \
+	o_str.obj \
 	onoff.obj \
 	openf.obj \
 	optsb.obj \
@@ -184,7 +209,10 @@ chunk1 :  \
 	scanopt.obj \
 	set_arg.obj \
 	showcmds.obj \
+	skiparg.obj \
+	skipchrs.obj \
 	skippath.obj \
+	skipquot.obj \
 	skqwd.obj \
 	spfnam.obj \
 	split.obj \
@@ -237,6 +265,9 @@ chunk1 :  \
 	err34.obj \
 	err35.obj \
 	err36.obj \
+	chunk2
+
+chunk2 :  \
 	err37.obj \
 	err38.obj \
 	err39.obj \
@@ -265,9 +296,6 @@ chunk1 :  \
 	err62.obj \
 	err63.obj \
 	err64.obj \
-	chunk2
-
-chunk2 :  \
 	err65.obj \
 	err66.obj \
 	err67.obj \
@@ -296,6 +324,7 @@ freecom.lib : $(CFG) freecom_deps
 	if exist freecom.lib $(AR) freecom.lib /c @&&|
 +-act_qec.obj &
 +-add_arg.obj &
++-alloc_e1.obj &
 +-alloc_ec.obj &
 +-alloc_ed.obj &
 +-alloc_em.obj &
@@ -318,6 +347,7 @@ freecom.lib : $(CFG) freecom_deps
 +-chgenvc.obj &
 +-chgenvr.obj &
 +-clrline.obj &
++-cmdifile.obj &
 +-cmdinput.obj &
 +-comfile.obj &
 +-compfile.obj &
@@ -335,6 +365,7 @@ freecom.lib : $(CFG) freecom_deps
 +-ctxt_ini.obj &
 +-ctxt_mk.obj &
 +-ctxt_mkn.obj &
++-ctxt_mks.obj &
 +-ctxt_pop.obj &
 +-ctxt_psh.obj &
 +-ctxt_rnu.obj &
@@ -355,6 +386,7 @@ freecom.lib : $(CFG) freecom_deps
 +-dbg_prnt.obj &
 +-dbg_s.obj &
 +-dbg_sn.obj &
++-dbg_v1.obj &
 +-devopen.obj &
 +-dispcnt.obj &
 +-drvnum.obj &
@@ -379,6 +411,7 @@ freecom.lib : $(CFG) freecom_deps
 +-ecvalid.obj &
 +-efct_001.obj &
 +-efct_002.obj &
++-efct_003.obj &
 +-esdec.obj &
 +-esenc.obj &
 +-exec.obj &
@@ -405,7 +438,9 @@ freecom.lib : $(CFG) freecom_deps
 +-hdlrctxt.obj &
 +-hist_get.obj &
 +-hist_set.obj &
++-i_tty.obj &
 +-inputdos.obj &
++-is_alias.obj &
 +-is_empty.obj &
 +-is_fnamc.obj &
 +-is_fnstr.obj &
@@ -415,6 +450,7 @@ freecom.lib : $(CFG) freecom_deps
 +-is_num.obj &
 +-is_pch.obj &
 +-is_pchr.obj &
++-is_quote.obj &
 +-isadev.obj &
 +-ivarset.obj &
 +-keyprsd.obj &
@@ -436,11 +472,28 @@ freecom.lib : $(CFG) freecom_deps
 +-msg_gpt.obj &
 +-msg_mkey.obj &
 +-msg_prmp.obj &
++-msg_v1.obj &
 +-mux_ae.obj &
 +-nls.obj &
 +-nls_date.obj &
 +-nls_time.obj &
 +-num_fmt.obj &
++-o_blank.obj &
++-o_blks.obj &
++-o_ch.obj &
++-o_cleft.obj &
++-o_flush.obj &
++-o_fnl.obj &
++-o_gcur.obj &
++-o_id.obj &
++-o_init.obj &
++-o_istty.obj &
++-o_mem.obj &
++-o_modes.obj &
++-o_nl.obj &
++-o_nsize.obj &
++-o_pad.obj &
++-o_str.obj &
 +-onoff.obj &
 +-openf.obj &
 +-optsb.obj &
@@ -466,7 +519,10 @@ freecom.lib : $(CFG) freecom_deps
 +-scanopt.obj &
 +-set_arg.obj &
 +-showcmds.obj &
++-skiparg.obj &
++-skipchrs.obj &
 +-skippath.obj &
++-skipquot.obj &
 +-skqwd.obj &
 +-spfnam.obj &
 +-split.obj &
@@ -573,6 +629,7 @@ freecom.lib : $(CFG) freecom_deps
 	if not exist freecom.lib $(AR) freecom.lib /c @&&|
 +act_qec.obj &
 +add_arg.obj &
++alloc_e1.obj &
 +alloc_ec.obj &
 +alloc_ed.obj &
 +alloc_em.obj &
@@ -595,6 +652,7 @@ freecom.lib : $(CFG) freecom_deps
 +chgenvc.obj &
 +chgenvr.obj &
 +clrline.obj &
++cmdifile.obj &
 +cmdinput.obj &
 +comfile.obj &
 +compfile.obj &
@@ -612,6 +670,7 @@ freecom.lib : $(CFG) freecom_deps
 +ctxt_ini.obj &
 +ctxt_mk.obj &
 +ctxt_mkn.obj &
++ctxt_mks.obj &
 +ctxt_pop.obj &
 +ctxt_psh.obj &
 +ctxt_rnu.obj &
@@ -632,6 +691,7 @@ freecom.lib : $(CFG) freecom_deps
 +dbg_prnt.obj &
 +dbg_s.obj &
 +dbg_sn.obj &
++dbg_v1.obj &
 +devopen.obj &
 +dispcnt.obj &
 +drvnum.obj &
@@ -656,6 +716,7 @@ freecom.lib : $(CFG) freecom_deps
 +ecvalid.obj &
 +efct_001.obj &
 +efct_002.obj &
++efct_003.obj &
 +esdec.obj &
 +esenc.obj &
 +exec.obj &
@@ -682,7 +743,9 @@ freecom.lib : $(CFG) freecom_deps
 +hdlrctxt.obj &
 +hist_get.obj &
 +hist_set.obj &
++i_tty.obj &
 +inputdos.obj &
++is_alias.obj &
 +is_empty.obj &
 +is_fnamc.obj &
 +is_fnstr.obj &
@@ -692,6 +755,7 @@ freecom.lib : $(CFG) freecom_deps
 +is_num.obj &
 +is_pch.obj &
 +is_pchr.obj &
++is_quote.obj &
 +isadev.obj &
 +ivarset.obj &
 +keyprsd.obj &
@@ -713,11 +777,28 @@ freecom.lib : $(CFG) freecom_deps
 +msg_gpt.obj &
 +msg_mkey.obj &
 +msg_prmp.obj &
++msg_v1.obj &
 +mux_ae.obj &
 +nls.obj &
 +nls_date.obj &
 +nls_time.obj &
 +num_fmt.obj &
++o_blank.obj &
++o_blks.obj &
++o_ch.obj &
++o_cleft.obj &
++o_flush.obj &
++o_fnl.obj &
++o_gcur.obj &
++o_id.obj &
++o_init.obj &
++o_istty.obj &
++o_mem.obj &
++o_modes.obj &
++o_nl.obj &
++o_nsize.obj &
++o_pad.obj &
++o_str.obj &
 +onoff.obj &
 +openf.obj &
 +optsb.obj &
@@ -743,7 +824,10 @@ freecom.lib : $(CFG) freecom_deps
 +scanopt.obj &
 +set_arg.obj &
 +showcmds.obj &
++skiparg.obj &
++skipchrs.obj &
 +skippath.obj &
++skipquot.obj &
 +skqwd.obj &
 +spfnam.obj &
 +split.obj &

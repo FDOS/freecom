@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_long_batchline
-void error_long_batchline(const char * const fnam, long linenr)
-{	displayError(TEXT_ERROR_LONG_LINE_BATCHFILE, linenr, fnam);
+#undef error_bfile_vanished
+void error_bfile_vanished(const char * const fnam)
+{	displayError(TEXT_ERROR_BFILE_VANISHED, fnam);
 }

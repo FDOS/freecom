@@ -27,9 +27,12 @@
 	This file bases on TMPNAM.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.3  2001/07/16 20:28:38  skaus
+	Update #9
+
 	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
 	Update #5
-
+	
 	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
 	Update #1
 	
@@ -110,10 +113,7 @@ char *mktempfile(const char * const path, const char *ext)
      + the user-supplied extension
      + the '\0' terminator byte
    */
-  if ((newpath = erealloc(fn, strlen(fn) + strlen(ext) + 10)) == 0)
-  {
-    /* out of mem */
-    myfree(fn);
+  if((newpath = efrealloc(fn, strlen(fn) + strlen(ext) + 10)) == 0) {
     return 0;
   }
 
