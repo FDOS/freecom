@@ -3,7 +3,7 @@ CC_BASE_PATH = D:\TC101
 
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
-SUPPL_INC_PATH = .\SUPPL
+SUPPL_INC_PATH = ..\SUPPL
 SUPPL_LIB_PATH = $(SUPPL_INC_PATH)
 
 ## Program locations
