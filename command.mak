@@ -189,9 +189,9 @@ echo.obj: $(CFG) echo.c
 
 environ.obj: $(CFG) environ.c
 
-error.obj: $(CFG) error.c
-
 err_hand.obj: $(CFG) err_hand.c
+
+error.obj: $(CFG) error.c
 
 exec.obj: $(CFG) exec.c
 
@@ -260,19 +260,19 @@ verify.obj: $(CFG) verify.c
 where.obj: $(CFG) where.c
 
 cb_catch.obj: $(CFG) cb_catch.asm
-	$(TASM) /MX /ZI /O CB_CATCH.ASM,CB_CATCH.OBJ
+	$(TASM) $(ASMFLAGS) CB_CATCH.ASM,CB_CATCH.OBJ
 
 lh.obj: $(CFG) lh.asm
-	$(TASM) /MX /ZI /O LH.ASM,LH.OBJ
+	$(TASM) $(ASMFLAGS) LH.ASM,LH.OBJ
 
 lowexec.obj: $(CFG) lowexec.asm
-	$(TASM) /MX /ZI /O LOWEXEC.ASM,LOWEXEC.OBJ
+	$(TASM) $(ASMFLAGS) LOWEXEC.ASM,LOWEXEC.OBJ
 
 spawn.obj: $(CFG) spawn.asm
-	$(TASM) /MX /ZI /O SPAWN.ASM,SPAWN.OBJ
+	$(TASM) $(ASMFLAGS) SPAWN.ASM,SPAWN.OBJ
 
 strings.h:
-	fixstrs.bat tc101
+	$(COMSPEC) /c fixstrs.bat tc101
 
 #		*Compiler Configuration File*
 #-h
