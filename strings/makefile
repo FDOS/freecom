@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.3  2000/07/10 22:26:56  skaus
+# Change internal strings without re-compiling FreeCOM
+#
 # Revision 1.2  2000/07/09 21:57:25  skaus
 # + Support for international strings without recompiling
 # + Useage of TC++1
@@ -21,7 +24,7 @@ INCDIR +=;$(FREEDOS)\SRC\INCLUDE
 LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
 #LDLIBS = suppl_$(_MODEL).lib
 LDFLAGS += /msl
-_MODEL !:= t
+_MODEL !:= c
 ## Disable debugging
 NDEBUG !:= Yes
 
@@ -50,10 +53,10 @@ __errl:
 	@+-if exist errlist del errlist >nul
 	-ctags *.c
 
-strings.h strings.dat .UPDATEALL : fixstrs.com strings.txt
-	+fixstrs.com
+strings.h strings.dat .UPDATEALL : fixstrs.exe default.lng
+	+fixstrs.exe $(LNG)
 
-fixstrs.com : fixstrs.c ../strings.typ
+fixstrs.exe : fixstrs.c ../strings.typ
 
 #MAKEDEP START
 #MAKEDEP STOP
