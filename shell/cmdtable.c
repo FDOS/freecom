@@ -113,6 +113,9 @@ struct CMD internalCommands[] =
 #endif
 
   {"EXIT", 0, internal_exit, TEXT_CMDHELP_EXIT},
+#ifdef DEBUG
+  {"EXIT!!", 0, force_exit, TEXT_CMDHELP_EXIT},
+#endif
 
   {"FOR", 0, cmd_for, TEXT_CMDHELP_FOR},
 

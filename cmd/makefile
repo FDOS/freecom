@@ -3,6 +3,15 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.3  2001/12/03 20:15:54  skaus
+# v0.83 Beta 32:
+# bugfix: if FREECOM.COM /P without AUTOEXEC.BAT --> assert() failure.
+# add: if DEBUG enabled: internal command EXIT!! that ignores /P
+# chg: FEATURE_BOOT_KEYS: mandory boot keys (F5/F8) turned into
+# 	optional compile-time option; disabled by default now as the
+# 	kernel provides F5/F8 checking
+# chg: some document updates
+#
 # Revision 1.2  2001/06/10 17:17:23  skaus
 # bugfix: Single point of configuration CONFIG.MAK/.H
 #
@@ -36,16 +45,16 @@
 
 # Sources of this make target
 SRC = alias.c beep.c break.c call.c cdd.c chdir.c cls.c copy.c ctty.c \
-	date.c del.c dir.c dirs.c doskey.c echo.c exit.c fddebug.c for.c goto.c \
-	history.c if.c memory.c mkdir.c path.c pause.c popd.c prompt.c pushd.c \
-	rem.c ren.c rmdir.c set.c shift.c time.c truename.c type.c verify.c \
-	which.c
+	date.c del.c dir.c dirs.c doskey.c echo.c exit.c exit2.c fddebug.c for.c \
+	goto.c history.c if.c memory.c mkdir.c path.c pause.c popd.c prompt.c \
+	pushd.c rem.c ren.c rmdir.c set.c shift.c time.c truename.c type.c \
+	verify.c which.c
 OBJ = alias.obj beep.obj break.obj call.obj cdd.obj chdir.obj cls.obj \
 	copy.obj ctty.obj date.obj del.obj dir.obj dirs.obj doskey.obj echo.obj \
-	exit.obj fddebug.obj for.obj goto.obj history.obj if.obj memory.obj \
-	mkdir.obj path.obj pause.obj popd.obj prompt.obj pushd.obj rem.obj \
-	ren.obj rmdir.obj set.obj shift.obj time.obj truename.obj type.obj \
-	verify.obj which.obj
+	exit.obj exit2.obj fddebug.obj for.obj goto.obj history.obj if.obj \
+	memory.obj mkdir.obj path.obj pause.obj popd.obj prompt.obj pushd.obj \
+	rem.obj ren.obj rmdir.obj set.obj shift.obj time.obj truename.obj \
+	type.obj verify.obj which.obj
 HDR = ..\config.h ..\err_fcts.h ..\include/batch.h ..\include/cmdline.h \
 	..\include/command.h ..\include/context.h ..\include/datefunc.h \
 	..\include/debug.h ..\include/kswap.h ..\include/misc.h ..\include/nls.h \
@@ -131,7 +140,7 @@ ren.obj : ren.c \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
 	../include/timefunc.h
 break.obj : break.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
+	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
 for.obj : for.c \
 	 ../config.h ../err_fcts.h ../include/batch.h ../include/cmdline.h \
@@ -151,6 +160,9 @@ set.obj : set.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h ../strings.h
+exit2.obj : exit2.c \
+	 ../config.h ../include/command.h ../include/datefunc.h \
+	../include/debug.h ../include/misc.h ../include/timefunc.h
 path.obj : path.c \
 	 ../config.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
@@ -195,9 +207,9 @@ type.obj : type.c \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
 	../include/openf.h ../include/timefunc.h ../strings.h
 prompt.obj : prompt.c \
-	 ../config.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../include/cmdline.h ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/misc.h ../include/timefunc.h
 cls.obj : cls.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h
@@ -217,7 +229,7 @@ fddebug.obj : fddebug.c \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
 verify.obj : verify.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
+	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
 del.obj : del.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \

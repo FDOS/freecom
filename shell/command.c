@@ -31,6 +31,8 @@
 #include "../include/openf.h"
 #include "../include/kswap.h"
 
+#include <environ.h>
+
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 #include "../include/mux_ae.h"
 #endif

@@ -23,6 +23,9 @@ NASMFLAGS =
 ## Add -DNDEBUG=1 below to disable any debug (even assert)
 CFLAGS =
 
+## Memory model of FreeCOM
+SHELL_MMODEL=s
+
 # Default configuration
 # added strings.h here because $(CFG) is included everywhere already
 ## Add -D_NO__DOS_DATE if your compiler does not have no dosdate_t (*)
@@ -42,8 +45,19 @@ $(CFG): $(CFG_DEPENDENCIES)
 -w+
 -O
 -Z
--k-
 -b-
 -I$(INCLUDEPATH)
 -L$(LIBPATH)
+-m$(SHELL_MMODEL)
 | $(CFG)
+
+
+#-k-
+
+#		*Implicit Rules*
+.c.exe:
+  $(CC) $< 
+.c.obj:
+  $(CC) -c {$< }
+.asm.obj:
+	$(NASM) $(NASMFLAGS) -f obj -DMODEL=$(SHELL_MMODEL) $<
