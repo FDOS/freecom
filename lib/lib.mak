@@ -11,6 +11,7 @@ all: $(CFG) freecom.lib
 freecom_deps :  \
 	absfile.obj \
 	alprmblk.obj \
+	almemblk.obj \
 	alsysblk.obj \
 	app_get.obj \
 	app_set.obj \
@@ -253,6 +254,7 @@ chunk1 :  \
 freecom.lib : $(CFG) freecom_deps 
 	if exist freecom.lib $(AR) freecom.lib /c @&&|
 +-absfile.obj &
++-almemblk.obj &
 +-alprmblk.obj &
 +-alsysblk.obj &
 +-app_get.obj &
@@ -491,6 +493,7 @@ freecom.lib : $(CFG) freecom_deps
 | , freecom.lst 
 	if not exist freecom.lib $(AR) freecom.lib /c @&&|
 +absfile.obj &
++almemblk.obj &
 +alprmblk.obj &
 +alsysblk.obj &
 +app_get.obj &
