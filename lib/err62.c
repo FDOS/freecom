@@ -1,15 +1,17 @@
-/* $Id$
+/*	This is an automatic generated file
 
-	Wrapper for error strings
-*/
+	DO NOT EDIT! SEE ERR_FCTS.SRC and SCANERR.PL.
+
+	Error printing function providing a wrapper for STRINGS
+ */
 
 #include "../config.h"
 
-#include "../include/command.h"
+#include "../include/misc.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-void error_context_out_of_memory(void)
-{
-	displayString(TEXT_ERROR_CONTEXT_OUT_OF_MEMORY);
+#undef error_no_context_after_swap
+void error_no_context_after_swap(void)
+{	displayError(TEXT_ERROR_CONTEXT_AFTER_SWAP);
 }

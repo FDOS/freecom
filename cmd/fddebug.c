@@ -33,7 +33,7 @@ int cmd_fddebug(char *param)
   		FILE *f;
   		char *p;
 
-  		if((p = strdup(trim(param))) == 0) {
+  		if((p = strdup(trimcl(param))) == 0) {
   			error_out_of_memory();
   			return 1;
   		}
@@ -41,7 +41,7 @@ int cmd_fddebug(char *param)
   		if(stricmp(param, "stderr") == 0) f = stderr;
   		else if(stricmp(param, "stdout") == 0) f = stdout;
   		else if((f = fopen(param, "at")) == 0) {
-  			displayString(TEXT_ERROR_OPEN_FILE, param);
+  			error_open_file(param);
   			return 2;
   		}
 		if(dbg_logfile != stderr && dbg_logfile != stdout)

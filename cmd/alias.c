@@ -37,7 +37,7 @@ int cmd_alias(char *param)
 	}
 
 	/* param[] == alias name -> check its validity */
-	rtrim(param);		/* spaces are ignored at its end */
+	rtrimsp(param);		/* spaces are ignored at its end */
 	if(!*param) {
 		error_syntax(0);
 		return 1;
@@ -47,7 +47,7 @@ int cmd_alias(char *param)
 		return 1;
 	}
 	StrFUpr(param);				/* Aliases are case-insensitive */
-	value = trim(value);
+	value = trimsp(value);
 
 	return chgCtxt(CTXT_TAG_ALIAS, param, *value? value: 0);
 }

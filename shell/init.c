@@ -420,7 +420,7 @@ int initialize(void)
 					process_input(1, autoexec);
 			} else {
 				if(user_autoexec)
-					displayString(TEXT_ERROR_SFILE_NOT_FOUND, user_autoexec);
+					error_sfile_not_found(user_autoexec);
 #ifdef INCLUDE_CMD_DATE
 					cmd_date(0);
 #endif

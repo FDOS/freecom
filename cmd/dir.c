@@ -748,7 +748,7 @@ int cmd_vol(char *rest)
   {
     if ((strlen(rest) != 2) || (rest[1] != ':'))
     {
-      displayString(TEXT_ERROR_INVALID_PARAMETER, rest);
+      error_syntax(rest);
       return E_Useage;
     }
   drive = toupper(rest[0]) - 'A';

@@ -59,44 +59,44 @@ int cmd_for(char *param)
 
 	/* Check that first element is % then an alpha char followed by space */
 
-	if(*param != '%' || !isalpha(param[1]) || !isspace(param[2])) {
-		displayString(TEXT_ERROR_BAD_VERABLE);
+	if(*param != '%' || !isalpha(param[1]) || !isargdelim(param[2])) {
+		error_for_bad_var();
 		return 1;
 	}
 
 	var = param[1];               /* Save FOR var name */
-	param = ltrim(param + 2);   /* skip whitespaces */
+	param = ltrimcl(param + 2);   /* skip whitespaces */
 
 	/* Check next element is 'IN' */
 
 	if(!matchtok(param, "in")) {
-		displayString(TEXT_ERROR_IN_MISSING);
+		error_for_in();
 		return 1;
 	}
 
 	/* Folowed by a '(', find also matching ')' */
 
 	if(*param != '(' || 0 == (pp = strchr(param, ')'))) {
-		displayString(TEXT_ERROR_MISSING_PARENTHESES);
+		error_for_parens();
 		return 1;
 	}
 
 	*pp = '\0';
 	param++;                      /* param now points at null terminated list */
 
-	pp = ltrim(pp + 1);
+	pp = ltrimcl(pp + 1);
 
 	/* Check DO follows */
 
 	if(!matchtok(pp, "do")) {
-		displayString(TEXT_ERROR_DO_MISSING);
+		error_for_do();
 		return 1;
 	}
 
 	/* Check that command tail is not empty */
 
 	if(*pp == '\0') {
-		displayString(TEXT_ERROR_NO_COMMAND_AFTER_DO);
+		error_for_no_command();
 		return 1;
 	}
 

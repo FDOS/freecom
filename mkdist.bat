@@ -75,6 +75,12 @@ ren /q config.h.backup config.h || cancel 21
 
 if not x%err == x cancel %err
 if not exist com.com goto ende
+iff not exist tools\ptchsize.exe then
+	echo no PTCHSIZE
+	goto ende
+endiff
+tools\ptchsize.exe com.com +6KB
+if errorlevel 1 goto ende
 move com.com packages\plainedt.std\command.com
 if exist com.com goto ende
 : pause
@@ -91,6 +97,12 @@ if not exist com.com goto ende
 copy /b shell\com.exe +infores + criter\criter + criter\criter1 command.cln
 ren com.com command.com
 if exist com.com goto ende
+iff not exist tools\ptchsize.exe then
+	echo no PTCHSIZE
+	goto ende
+endiff
+tools\ptchsize.exe command.com +6KB
+if errorlevel 1 goto ende
 
 perl get_ver.pl .\command.com
 

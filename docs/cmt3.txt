@@ -1,4 +1,5 @@
-Command line parser -- 1999/05/06 ska
+$Id$
+Command line parser
 
 Unless stated otherwise, double quotes shall mark the beginning and
 the end of strings in the following examples. If the quotes shall
@@ -67,3 +68,28 @@ serve a special function, strings are enclosed in [..].
 	-->
 		%1 == [/123]
 		%2 == [/456]
+
+COMMAND.COM of MS DOS 6 makes heavy useage of the three characters:
+comma ',', semicolon ';' and equal sign '='. Sometimes, but not always
+all of those three characters are ignored to extract tokens, sometimes
+any number, sometimes only a single character.
+
+FreeCOM now uses scheme described below when to ignore what character.
+
+Whitespaces, commas, semicolons and equal signs are ignored in any number
+when extracting tokens that are a) fixed words, b) filenames or c)
+options. The individual internal commands do treat those characters
+specially, but at places where one whitespace is allowed, there are allowed
+more than one always.
+
+Fixed words are the names of the internal commands, "IN", "DO", "EXIST",
+"ERRORLEVEL", but %v (in FOR), too.
+Filenames are the arguments of DEL, TYPE, FOR ()'s etc.
+
+For instance:
+C> ==FOR,%A,IN,(*.c,*.h),DO,ECHO %a
+is all correct.
+C> ECHO,,a
+will display ",a" ignoring the very first ',' only.
+C> IF,,a;;;==a====echo OK
+is all correct and will display "OK"

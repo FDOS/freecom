@@ -5,3 +5,6 @@ goxy(): to work with current page
 change size of context
 editing of long command lines that wraps the screen
 Test if "command.com A:\" accepts the A:\command.com
+nls_time.c: missing free(q) at the end?
+IF: MS DOS 6 says: if a,a==a echo OK!!!
+command line parsing: don't remove whitespaces for internal commands

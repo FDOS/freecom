@@ -1,3 +1,13 @@
+chg: default heap size (tools\ptchsize) set to 6KB
+chg: error displaying functions centralized into lib\err_fcts.src
+add: displayError() 
+chg: all errors are displayed through functions void error_*()
+bugfix: somtimes error messages are not displayed (see displayError())
+bugfix: docommand(): type:file must pass ":file" to TYPE
+bugfix: error_sfile(): string _SFILE_
+bugfix: error message on empty redirection
+bugfix: comma and semicolon ';' are recognized as argument seperators
+	of internal commands
 fix: config.mak: missing libpath & "-d" causes crashes
 fix: cmdinput.c: first histGet() is not #if'ed
 chg: new directory structure

@@ -14,6 +14,7 @@
 #include <fmemory.h>
 #include <nls_f.h>
 
+#include "../include/cmdline.h"
 #include "../include/context.h"
 #include "../include/misc.h"
 #include "../err_fcts.h"
@@ -35,11 +36,11 @@ void aliasexpand(char * const cmd, const int maxlen)
 	expanded = 0;
 
 redo:						/* iteration to expand all aliases */
-	cp = ltrim(cmd);		/* skip leading whitespaces */
+	cp = ltrimcl(cmd);		/* skip leading whitespaces */
 
 	/* Check if the user disabled alias expansion */
 	if(*cp == '*') {
-		cp = ltrim(cp + 1);
+		++cp;
 		memmove(cmd, cp, strlen(cp) + 1);
 		goto errRet;
 	}

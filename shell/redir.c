@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
 
@@ -109,11 +110,9 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
             sp++;
           }
 
-          while (isspace(*sp))
-            sp++;
+          p = sp = ltrimcl(sp);
 
-          p = sp--;             /* start of filename */
-          while (*++sp && !is_redir(*sp) && !isspace(*sp)) ;
+          while (*sp && !is_redir(*sp) && !isargdelim(*sp)) ++sp;
           free(*op);            /* ignore any previous one */
           ch = *sp;
           *sp = '\0';

@@ -6,6 +6,18 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/04/29 11:33:51  skaus
+	chg: default heap size (tools\ptchsize) set to 6KB
+	chg: error displaying functions centralized into lib\err_fcts.src
+	add: displayError()
+	chg: all errors are displayed through functions void error_*()
+	bugfix: somtimes error messages are not displayed (see displayError())
+	bugfix: docommand(): type:file must pass ":file" to TYPE
+	bugfix: error_sfile(): string _SFILE_
+	bugfix: error message on empty redirection
+	bugfix: comma and semicolon ';' are recognized as argument seperators
+		of internal commands
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +41,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -41,15 +53,27 @@
 
 #include "../include/misc.h"
 
-void displayString(unsigned id,...)
+FILE *errStream = 0;
+
+static void displayXString(FILE *stream, unsigned id, va_list args)
 {	char *str;
 
 	if((str = getString(id)) != 0) {
-		va_list ap;
-
-		va_start(ap, id);
-		vprintf(str, ap);
-		va_end(ap);
+		vfprintf(stream, str, args);
 		free(str);
 	}
+}
+void displayString(unsigned id,...)
+{	va_list ap;
+
+	va_start(ap, id);
+	displayXString(outStream, id, ap);
+	va_end(ap);
+}
+void displayError(unsigned id,...)
+{	va_list ap;
+
+	va_start(ap, id);
+	displayXString(errStream? errStream: stderr, id, ap);
+	va_end(ap);
 }

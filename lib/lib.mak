@@ -65,71 +65,7 @@ freecom_deps :  \
 	devopen.obj \
 	dispcnt.obj \
 	drvnum.obj \
-	err1.obj \
-	err10.obj \
-	err11.obj \
-	err12.obj \
-	err13.obj \
-	err14.obj \
-	err15.obj \
-	err16.obj \
-	err17.obj \
-	err18.obj \
-	err19.obj \
-	err2.obj \
-	err20.obj \
-	err21.obj \
-	err22.obj \
-	err23.obj \
-	err24.obj \
-	err25.obj \
-	err26.obj \
-	err27.obj \
-	err28.obj \
-	err29.obj \
-	err3.obj \
-	err30.obj \
-	err31.obj \
-	err32.obj \
-	err33.obj \
-	err34.obj \
-	err35.obj \
-	err36.obj \
-	err37.obj \
-	err38.obj \
-	err39.obj \
-	err4.obj \
-	err40.obj \
-	err41.obj \
-	err42.obj \
-	err43.obj \
-	err45.obj \
-	err46.obj \
-	err47.obj \
-	err48.obj \
-	err49.obj \
-	err5.obj \
-	err50.obj \
-	err51.obj \
-	err52.obj \
-	err53.obj \
-	err54.obj \
-	err55.obj \
-	err56.obj \
-	err57.obj \
-	err58.obj \
-	err59.obj \
-	err6.obj \
-	err60.obj \
-	err61.obj \
-	err62.obj \
-	err63.obj \
-	err64.obj \
-	err65.obj \
-	err66.obj \
-	err7.obj \
-	err8.obj \
-	err9.obj \
+	efct_001.obj \
 	exec.obj \
 	exec1.obj \
 	farread.obj \
@@ -143,9 +79,6 @@ freecom_deps :  \
 	frsysblk.obj \
 	fstpcpy.obj \
 	gallstr.obj \
-	chunk1
-
-chunk1 :  \
 	get1mcb.obj \
 	getenv.obj \
 	goxy.obj \
@@ -165,7 +98,8 @@ chunk1 :  \
 	lastdset.obj \
 	leadopt.obj \
 	lowexec.obj \
-	ltrim.obj \
+	ltrimcl.obj \
+	ltrimsp.obj \
 	lwr1wd.obj \
 	match.obj \
 	messages.obj \
@@ -199,7 +133,8 @@ chunk1 :  \
 	res_w.obj \
 	resfile.obj \
 	rmtmpfil.obj \
-	rtrim.obj \
+	rtrimcl.obj \
+	rtrimsp.obj \
 	salloc.obj \
 	samefile.obj \
 	scancmd.obj \
@@ -208,16 +143,100 @@ chunk1 :  \
 	skqwd.obj \
 	split.obj \
 	sumblink.obj \
+	chunk1
+
+chunk1 :  \
 	tempfile.obj \
 	timeget.obj \
 	timeset.obj \
 	tmpnam.obj \
-	trim.obj \
+	trimcl.obj \
+	trimsp.obj \
 	txtlend.obj \
 	unquote.obj \
 	vcgetch.obj \
 	vcgetstr.obj \
-	where.obj
+	where.obj \
+	err1.obj \
+	err2.obj \
+	err3.obj \
+	err4.obj \
+	err5.obj \
+	err6.obj \
+	err7.obj \
+	err8.obj \
+	err9.obj \
+	err10.obj \
+	err11.obj \
+	err12.obj \
+	err13.obj \
+	err14.obj \
+	err15.obj \
+	err16.obj \
+	err17.obj \
+	err18.obj \
+	err19.obj \
+	err20.obj \
+	err21.obj \
+	err22.obj \
+	err23.obj \
+	err24.obj \
+	err25.obj \
+	err26.obj \
+	err27.obj \
+	err28.obj \
+	err29.obj \
+	err30.obj \
+	err31.obj \
+	err32.obj \
+	err33.obj \
+	err34.obj \
+	err35.obj \
+	err36.obj \
+	err37.obj \
+	err38.obj \
+	err39.obj \
+	err40.obj \
+	err41.obj \
+	err42.obj \
+	err43.obj \
+	err44.obj \
+	err45.obj \
+	err46.obj \
+	err47.obj \
+	err48.obj \
+	err49.obj \
+	err50.obj \
+	err51.obj \
+	err52.obj \
+	err53.obj \
+	err54.obj \
+	err55.obj \
+	err56.obj \
+	err57.obj \
+	err58.obj \
+	err59.obj \
+	err60.obj \
+	err61.obj \
+	err62.obj \
+	err63.obj \
+	err64.obj \
+	err65.obj \
+	err66.obj \
+	err67.obj \
+	err68.obj \
+	err69.obj \
+	err70.obj \
+	err71.obj \
+	err72.obj \
+	err73.obj \
+	err74.obj \
+	err75.obj \
+	err76.obj \
+	err77.obj \
+	err78.obj \
+	err79.obj \
+	err80.obj
 
 
 freecom.lib : $(CFG) freecom_deps 
@@ -270,71 +289,7 @@ freecom.lib : $(CFG) freecom_deps
 +-devopen.obj &
 +-dispcnt.obj &
 +-drvnum.obj &
-+-err1.obj &
-+-err10.obj &
-+-err11.obj &
-+-err12.obj &
-+-err13.obj &
-+-err14.obj &
-+-err15.obj &
-+-err16.obj &
-+-err17.obj &
-+-err18.obj &
-+-err19.obj &
-+-err2.obj &
-+-err20.obj &
-+-err21.obj &
-+-err22.obj &
-+-err23.obj &
-+-err24.obj &
-+-err25.obj &
-+-err26.obj &
-+-err27.obj &
-+-err28.obj &
-+-err29.obj &
-+-err3.obj &
-+-err30.obj &
-+-err31.obj &
-+-err32.obj &
-+-err33.obj &
-+-err34.obj &
-+-err35.obj &
-+-err36.obj &
-+-err37.obj &
-+-err38.obj &
-+-err39.obj &
-+-err4.obj &
-+-err40.obj &
-+-err41.obj &
-+-err42.obj &
-+-err43.obj &
-+-err45.obj &
-+-err46.obj &
-+-err47.obj &
-+-err48.obj &
-+-err49.obj &
-+-err5.obj &
-+-err50.obj &
-+-err51.obj &
-+-err52.obj &
-+-err53.obj &
-+-err54.obj &
-+-err55.obj &
-+-err56.obj &
-+-err57.obj &
-+-err58.obj &
-+-err59.obj &
-+-err6.obj &
-+-err60.obj &
-+-err61.obj &
-+-err62.obj &
-+-err63.obj &
-+-err64.obj &
-+-err65.obj &
-+-err66.obj &
-+-err7.obj &
-+-err8.obj &
-+-err9.obj &
++-efct_001.obj &
 +-exec.obj &
 +-exec1.obj &
 +-farread.obj &
@@ -367,7 +322,8 @@ freecom.lib : $(CFG) freecom_deps
 +-lastdset.obj &
 +-leadopt.obj &
 +-lowexec.obj &
-+-ltrim.obj &
++-ltrimcl.obj &
++-ltrimsp.obj &
 +-lwr1wd.obj &
 +-match.obj &
 +-messages.obj &
@@ -401,7 +357,8 @@ freecom.lib : $(CFG) freecom_deps
 +-res_w.obj &
 +-resfile.obj &
 +-rmtmpfil.obj &
-+-rtrim.obj &
++-rtrimcl.obj &
++-rtrimsp.obj &
 +-salloc.obj &
 +-samefile.obj &
 +-scancmd.obj &
@@ -414,12 +371,93 @@ freecom.lib : $(CFG) freecom_deps
 +-timeget.obj &
 +-timeset.obj &
 +-tmpnam.obj &
-+-trim.obj &
++-trimcl.obj &
++-trimsp.obj &
 +-txtlend.obj &
 +-unquote.obj &
 +-vcgetch.obj &
 +-vcgetstr.obj &
-+-where.obj
++-where.obj &
++-err1.obj &
++-err2.obj &
++-err3.obj &
++-err4.obj &
++-err5.obj &
++-err6.obj &
++-err7.obj &
++-err8.obj &
++-err9.obj &
++-err10.obj &
++-err11.obj &
++-err12.obj &
++-err13.obj &
++-err14.obj &
++-err15.obj &
++-err16.obj &
++-err17.obj &
++-err18.obj &
++-err19.obj &
++-err20.obj &
++-err21.obj &
++-err22.obj &
++-err23.obj &
++-err24.obj &
++-err25.obj &
++-err26.obj &
++-err27.obj &
++-err28.obj &
++-err29.obj &
++-err30.obj &
++-err31.obj &
++-err32.obj &
++-err33.obj &
++-err34.obj &
++-err35.obj &
++-err36.obj &
++-err37.obj &
++-err38.obj &
++-err39.obj &
++-err40.obj &
++-err41.obj &
++-err42.obj &
++-err43.obj &
++-err44.obj &
++-err45.obj &
++-err46.obj &
++-err47.obj &
++-err48.obj &
++-err49.obj &
++-err50.obj &
++-err51.obj &
++-err52.obj &
++-err53.obj &
++-err54.obj &
++-err55.obj &
++-err56.obj &
++-err57.obj &
++-err58.obj &
++-err59.obj &
++-err60.obj &
++-err61.obj &
++-err62.obj &
++-err63.obj &
++-err64.obj &
++-err65.obj &
++-err66.obj &
++-err67.obj &
++-err68.obj &
++-err69.obj &
++-err70.obj &
++-err71.obj &
++-err72.obj &
++-err73.obj &
++-err74.obj &
++-err75.obj &
++-err76.obj &
++-err77.obj &
++-err78.obj &
++-err79.obj &
++-err80.obj
 | , freecom.lst 
 	if not exist freecom.lib $(TLIB) freecom.lib /c @&&|
 +alprmblk.obj &
@@ -470,71 +508,7 @@ freecom.lib : $(CFG) freecom_deps
 +devopen.obj &
 +dispcnt.obj &
 +drvnum.obj &
-+err1.obj &
-+err10.obj &
-+err11.obj &
-+err12.obj &
-+err13.obj &
-+err14.obj &
-+err15.obj &
-+err16.obj &
-+err17.obj &
-+err18.obj &
-+err19.obj &
-+err2.obj &
-+err20.obj &
-+err21.obj &
-+err22.obj &
-+err23.obj &
-+err24.obj &
-+err25.obj &
-+err26.obj &
-+err27.obj &
-+err28.obj &
-+err29.obj &
-+err3.obj &
-+err30.obj &
-+err31.obj &
-+err32.obj &
-+err33.obj &
-+err34.obj &
-+err35.obj &
-+err36.obj &
-+err37.obj &
-+err38.obj &
-+err39.obj &
-+err4.obj &
-+err40.obj &
-+err41.obj &
-+err42.obj &
-+err43.obj &
-+err45.obj &
-+err46.obj &
-+err47.obj &
-+err48.obj &
-+err49.obj &
-+err5.obj &
-+err50.obj &
-+err51.obj &
-+err52.obj &
-+err53.obj &
-+err54.obj &
-+err55.obj &
-+err56.obj &
-+err57.obj &
-+err58.obj &
-+err59.obj &
-+err6.obj &
-+err60.obj &
-+err61.obj &
-+err62.obj &
-+err63.obj &
-+err64.obj &
-+err65.obj &
-+err66.obj &
-+err7.obj &
-+err8.obj &
-+err9.obj &
++efct_001.obj &
 +exec.obj &
 +exec1.obj &
 +farread.obj &
@@ -567,7 +541,8 @@ freecom.lib : $(CFG) freecom_deps
 +lastdset.obj &
 +leadopt.obj &
 +lowexec.obj &
-+ltrim.obj &
++ltrimcl.obj &
++ltrimsp.obj &
 +lwr1wd.obj &
 +match.obj &
 +messages.obj &
@@ -601,7 +576,8 @@ freecom.lib : $(CFG) freecom_deps
 +res_w.obj &
 +resfile.obj &
 +rmtmpfil.obj &
-+rtrim.obj &
++rtrimcl.obj &
++rtrimsp.obj &
 +salloc.obj &
 +samefile.obj &
 +scancmd.obj &
@@ -614,11 +590,92 @@ freecom.lib : $(CFG) freecom_deps
 +timeget.obj &
 +timeset.obj &
 +tmpnam.obj &
-+trim.obj &
++trimcl.obj &
++trimsp.obj &
 +txtlend.obj &
 +unquote.obj &
 +vcgetch.obj &
 +vcgetstr.obj &
-+where.obj
++where.obj &
++err1.obj &
++err2.obj &
++err3.obj &
++err4.obj &
++err5.obj &
++err6.obj &
++err7.obj &
++err8.obj &
++err9.obj &
++err10.obj &
++err11.obj &
++err12.obj &
++err13.obj &
++err14.obj &
++err15.obj &
++err16.obj &
++err17.obj &
++err18.obj &
++err19.obj &
++err20.obj &
++err21.obj &
++err22.obj &
++err23.obj &
++err24.obj &
++err25.obj &
++err26.obj &
++err27.obj &
++err28.obj &
++err29.obj &
++err30.obj &
++err31.obj &
++err32.obj &
++err33.obj &
++err34.obj &
++err35.obj &
++err36.obj &
++err37.obj &
++err38.obj &
++err39.obj &
++err40.obj &
++err41.obj &
++err42.obj &
++err43.obj &
++err44.obj &
++err45.obj &
++err46.obj &
++err47.obj &
++err48.obj &
++err49.obj &
++err50.obj &
++err51.obj &
++err52.obj &
++err53.obj &
++err54.obj &
++err55.obj &
++err56.obj &
++err57.obj &
++err58.obj &
++err59.obj &
++err60.obj &
++err61.obj &
++err62.obj &
++err63.obj &
++err64.obj &
++err65.obj &
++err66.obj &
++err67.obj &
++err68.obj &
++err69.obj &
++err70.obj &
++err71.obj &
++err72.obj &
++err73.obj &
++err74.obj &
++err75.obj &
++err76.obj &
++err77.obj &
++err78.obj &
++err79.obj &
++err80.obj
 | , freecom.lst 
 

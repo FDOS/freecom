@@ -101,7 +101,7 @@ int cmd_time(char *param)
 		}
 		if(my_settime(param))
 			break;
-		displayString(TEXT_ERROR_INVALID_TIME);
+		error_invalid_time();
 		/* force user interaction the next time around. */
 		param = 0;
 	}

@@ -1,0 +1,151 @@
+$Id$
+Batch file processing
+	-- 2001/04/26 ska
+
+This document discusses the features and functionality of the
+batch file processing. It does not include help or explanation
+for the batch language itself.
+
+In the following "batch" files and the like are called "scripts"
+or "shell scripts" most of the time; the author assumes that most
+people running DOS/FreeCOM will associate the COMMAND batch language
+with this term.
+
+C> is an icon of the command line prompt an user is to enter commands at.
+It shall only visualize the interactive prompt and _not_ the particular
+drive C:.
+
+A '===' at the first column represents a section header.
+A '==' sourrounds file listings and, sometime, output of programs.
+
+=== Invoking Shell Scripts
+
+Variant 1:
+
+Shell scripts are invoked like any command:
+
+SCRIPT arg1 arg2 arg3 arg4 ... argN <in-file >out-file
+
+The arguments and the I/O redirection directives are optional, of course.
+
+Batch scripts are identified by the extension .BAT, it is currently
+not possible to execute a batch script without this file extension.
+
+In this variant, however, empties the execution context, what means that
+any formerly nested script are "forgotten". In addition, FOR loops are
+destroyed, too.
+
+Variant 2:
+
+In order to nest script they must be invoked via the CALL command:
+
+CALL SCRIPT arg1 arg2 arg3 arg4 ... argN <in-file >out-file
+
+
+The arguments and the I/O redirection directives are optional, again.
+Also, the scripts must have the file extension .BAT.
+
+Unlike to invoke scripts without CALL, the current position within
+the current script is preserved and the execution returns to the next
+command following the CALL command when the CALL'ed script finishes.
+FOR loops are destroyed nonetheless.
+
+EXAMPLE:
+
+== BATCH1.BAT
+echo In Batch1 - arg1 = %1
+== BATCH2.BAT
+@echo off
+call batch1 first
+echo second
+call batch1 third
+==
+
+Invoking script BATCH2 from command line:
+
+C> batch2
+
+would output:
+
+==
+In Batch1 - arg1 = first
+second
+In Batch1 - arg1 = third
+==
+
+Because there is no old execution context on command line, the user may
+invoke script BATCH2 with or without CALL; but if BATCH2.BAT would read:
+== BATCH2a.BAT
+@echo off
+batch1 first
+echo second
+batch1 third
+==
+
+Invoking the modified script BATCH2 from command line:
+
+C> batch2a
+
+would output:
+
+==
+In Batch1 - arg1 = first
+==
+
+Because to invoke a batch script without CALL destroys any former
+execution context, hence, the shell simply forgot where to return to
+when BATCH1.BAT ends.
+
+=== Accessing Arguments
+
+The argument passed to a script are accessable through the automatic
+variables: %1, %2 through %9 (there is no trailing second percent sign).
+Variable %0 returns the name of script in the same way it has been
+written on invokation, e.g.:
+== BATCH.BAT
+echo %0
+==
+
+C> batch
+batch
+C> BATCH
+BATCH
+C> batch.bat
+batch.bat
+C> .\batch.BAT
+.\batch.BAT
+
+Arguments may be separated on command line with: whitespaces, commas,
+semicolons ';' and equal signs '='. There is no known quotation mechanism.
+E.g.:
+== BATCH.BAT
+@echo :%1: :%2: :%3: :%4: :%5: :%6: :%7: :%8: :%9:
+==
+
+C> batch 1 2,3;4=5 6+7
+:1: :2: :3: :4: :5: :6+7: :: :: ::
+
+The tenth and later arguments are not accessable directly; to fetch them
+the command SHIFT must be used. Each SHIFT increments a "shift level" by
+one and when using "%n", it is replaced by the "n + shift_level"'th
+argument, e.g.:
+
+== BATCH.BAT
+echo %0
+SHIFT
+echo %0
+SHIFT
+echo %0
+==
+
+C> batch 1 2 3
+batch
+1
+2
+
+Please note that %0 is effected by SHIFT, too.
+
+There is no upper limit for SHIFT. If "n + shift_level" references to a
+non-existant argument, it is replaced by an empty string, aka by nothing.
+
+=== Noisiness / Echo State

@@ -125,7 +125,7 @@ int cmd_date(char *param)
 		if(my_setdate(param))
 			break;
 		
-		displayString(TEXT_ERROR_INVALID_DATE);
+		error_invalid_date();
 		// force input the next time around.
 		param = 0;
 	}

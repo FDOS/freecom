@@ -34,6 +34,8 @@ enum OnOff {		/* ON/OFF tester */
 #define MAXLEN  256
 #define exist dfnstat
 
+extern FILE *errStream;
+#define outStream stdout
 
 int cgetchar(void);
 int vcgetchar(void);
@@ -108,6 +110,7 @@ int showcmds(char *rest);
 void grabComFilename(const int warn, const char far * const fnam);
 
 void displayString(unsigned id,...);
+void displayError(unsigned id,...);
 int userprompt(unsigned id,...);
 int getPromptString(unsigned id, char ** const chars, char ** const fmt);
 #define freePromptString(chars,fmt)	free(chars)
@@ -131,9 +134,9 @@ int chgEnv(const char[], const char[]);
 int chgEnvRemove(const char[], const char[]);
 int chgEnvCase(const int, char[], const char[]);
 
-char *trim(char *str);
-char *ltrim(const char *str);
-void rtrim(char * const str);
+char *trimsp(char *str);
+char *ltrimsp(const char *str);
+void rtrimsp(char * const str);
 char *parsenum(const char *s, int maxCnt, int *cnt, int nums[]);
 char *textlineEnd(const char * const buf, const size_t buflen);
 

@@ -85,7 +85,7 @@ int cmd_if(char *param)
 		do  n = n * 10 + (*pp - '0');
 		while (isdigit(*++pp));
 
-		if(*pp && !isspace(*pp)) {
+		if(*pp && !isargdelim(*pp)) {
 			error_if_errorlevel_number();
 			return 0;
 		}
@@ -99,7 +99,7 @@ int cmd_if(char *param)
 		size_t len;
 		char *r;      /* right operand */
 
-		pp = ltrim(skipqword(param, "=="));
+		pp = skipqword(param, "==");
 
 		if(*pp != '=' || pp[1] != '=') {
 			error_syntax(0);
@@ -110,14 +110,14 @@ int cmd_if(char *param)
 
 		/* skip over the '==' and subsquent spaces and
 			assign the end of the right operator to pp */
-		pp = skipqword(r = ltrim(pp + 2), 0);
+		pp = skipqword(r = ltrimcl(pp + 2), 0);
 
 		/*	now: param := beginning of the left operand
 			r := beginning of the right operand
 			pp := end of right operand
 		*/
 
-		rtrim(param);      /* ensure that spurious whitespaces are ignored */
+		rtrimcl(param);      /* ensure that spurious whitespaces are ignored */
 		len = strlen(param);
 
 		if((pp - r) == len
@@ -126,7 +126,7 @@ int cmd_if(char *param)
 	}
 
 	if(x_flag ^ negate)		/* perform the command */
-		if(!*(pp = ltrim(pp)))
+		if(!*(pp = ltrimcl(pp)))
 			error_if_command();
 		else
 			parsecommandline(pp);

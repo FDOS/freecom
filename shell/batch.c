@@ -455,7 +455,8 @@ char *readbatchline(int *eflag, char *textline, int size)
     }
 
     /* Strip leading spaces and trailing space/control chars */
-    first = trim(textline);
+    rtrimsp(textline);
+    first = ltrimcl(textline);
 
     assert(first);
 
@@ -486,7 +487,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     if (*first == '@')          /* don't echo this line */
     {
-    	first = ltrim(first + 1);
+    	first = ltrimcl(first + 1);
       *eflag = 0;
     }
     else

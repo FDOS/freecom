@@ -9,6 +9,18 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/04/29 11:33:51  skaus
+	chg: default heap size (tools\ptchsize) set to 6KB
+	chg: error displaying functions centralized into lib\err_fcts.src
+	add: displayError()
+	chg: all errors are displayed through functions void error_*()
+	bugfix: somtimes error messages are not displayed (see displayError())
+	bugfix: docommand(): type:file must pass ":file" to TYPE
+	bugfix: error_sfile(): string _SFILE_
+	bugfix: error message on empty redirection
+	bugfix: comma and semicolon ';' are recognized as argument seperators
+		of internal commands
+
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +44,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -40,6 +52,7 @@
 #include <assert.h>
 #include <dir.h>
 
+#include "../err_fcts.h"
 #include "../include/misc.h"
 #include "../strings.h"
 
@@ -51,7 +64,7 @@ int changeDrive(int drive)
     if (getdisk() == drive) 
     	return 0;
 
-	displayString(TEXT_ERROR_INVALID_DRIVE, drive + 'A');
+	error_invalid_drive(drive);
 
 	return 1;
 }

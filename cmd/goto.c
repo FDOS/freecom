@@ -65,7 +65,7 @@ int cmd_goto(char *param)
 		param = skipdm(param + 1);
 
 	if(*param == '\0') {
-		displayString(TEXT_ERROR_NO_GOTO_LABEL);
+		error_goto_label();
 		exit_batch();
 		return 1;
 	}

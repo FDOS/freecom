@@ -40,7 +40,8 @@ int cmd_path(char *param)
 
 	if(*param == '=')
 	/* skip whitespaces */
-		param = ltrim(param + 1);
+		param = ltrimcl(param + 1);
 
+	rtrimcl(param);			/* remove trailing spaces */
 	return chgEnvRemove(PATHVAR, param);
 }

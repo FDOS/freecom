@@ -93,4 +93,13 @@ make -ftools.mak all
 if errorlevel 1 goto ende
 cd ..
 
+echo.
+echo Patching heap size to 6KB
+echo.
+tools\ptchsize.exe command.com +6KB
+
+echo.
+echo All done. COMMAND.COM is ready for useage!
+echo.
+
 :ende

@@ -204,7 +204,7 @@ static void docommand(char *line)
   assert(line);
 
   /* delete leading & trailing whitespaces */
-  line = trim(line);
+  line = trimcl(line);
 
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 #if BUFFER_SIZE < MAX_INTERNAL_COMMAND_SIZE
@@ -252,17 +252,13 @@ static void docommand(char *line)
       case CMD_SPECIAL_ALL: /* pass everything into command */
         break;
       case CMD_SPECIAL_DIR: /* pass '\\' & '.' too */
-        if(*rest == '\\' || *rest == '.') break;
+        if(*rest == '\\' || *rest == '.' || *rest == ':') break;
       default:        /* pass '/', ignore ',', ';' & '=' */
-        if(*rest == '/') break;
-        if(!*rest || isspace(*rest)) {  /* normal delimiter */
-          rest = ltrim(rest);
-          break;
-        }
-        if(strchr(",;=", *rest)) {
-          rest = ltrim(rest + 1);
-          break;
-        }
+        if(!*rest || *rest == '/') break;
+        if(isargdelim(*rest)) {
+			rest = ltrimcl(rest);
+			break;
+		}
 
         /* else syntax error */
         error_syntax(0);
@@ -302,7 +298,7 @@ static void docommand(char *line)
           error_out_of_memory();
           return;
         }
-		execute(cp, ltrim(rest));
+		execute(cp, ltrimsp(rest));
 		free(cp);
       }
   }
@@ -365,7 +361,7 @@ void parsecommandline(char *s)
     close(0);
     if (0 != devopen(in, O_TEXT | O_RDONLY, S_IREAD))
     {
-      displayString(TEXT_ERROR_REDIRECT_FROM_FILE, in);
+		error_redirect_from_file(in);
       goto abort;
     }
   }
@@ -403,7 +399,7 @@ void parsecommandline(char *s)
     close(1);
     if (1 != devopen(out, of_attrib, S_IREAD | S_IWRITE))
     {
-      displayString(TEXT_ERROR_REDIRECT_TO_FILE, out);
+		error_redirect_to_file(out);
       goto abort;
     }
 
@@ -523,8 +519,8 @@ int process_input(int xflag, char *commandline)
      *	C:\> ? command arguments
      *		==> enable tracemode for just this line
      */
-    if(*(ip = trim(ip)) == '?') {
-    	 ip = trim(ip + 1);
+    if(*(ip = ltrimcl(ip)) == '?') {
+    	 ip = ltrimcl(ip + 1);
     	 if(!*ip) {		/* is short help command */
 #ifdef INCLUDE_CMD_QUESTION
     	 	showcmds(ip);
@@ -546,7 +542,7 @@ int process_input(int xflag, char *commandline)
   */
   cp = ip;
   if(matchtok(cp, "for") && *cp == '%' && isalpha(cp[1])
-   && isspace(cp[2]))   /* activate FOR hack */
+   && isargdelim(cp[2]))   /* activate FOR hack */
     forvar = toupper(cp[1]);
   else forvar = 0;
 

@@ -231,23 +231,23 @@ static void lh_error(int errcode)
   switch (errcode)
   {
     case err_invalid_parms:
-      displayString(TEXT_ERROR_SYNTAX);
+      error_syntax(0);
       break;
 
     case err_file_not_found:
-      displayString(TEXT_ERROR_FILE_NOT_FOUND);
+      error_file_not_found();
       break;
 
     case err_out_of_memory:
-      displayString(TEXT_ERROR_OUT_OF_MEMORY);
+      error_out_of_memory();
       break;
 
     case err_mcb_chain:        /* error while searching the MCB chain */
-      displayString(TEXT_ERROR_BAD_MCB_CHAIN);
+		error_bad_mcb_chain();
       break;
 
     default:
-      displayString(TEXT_ERROR_UNDEFINED_ERROR,errcode);
+      error_unknown(errcode);
       break;
 
     case err_silent:

@@ -13,7 +13,7 @@
   options, useable w/in if() */
 /* Note: Do not include the option character */
 /* Also note: Do not include ',' or ';' within isoptdelim() */
-#define isargdelim(ch) (isspace(ch) || iscntrl(ch) || strchr(",;", ch))
+#define isargdelim(ch) (isspace(ch) || iscntrl(ch) || strchr(",;=", ch))
 #define isoptdelim(ch) (isspace(ch) || iscntrl(ch))
 
 /* What option character COMMAND shell honor, used within arguments too */
@@ -21,6 +21,11 @@
 
 /* Test if an argument is an option */
 #define isoption(string)  isoptch(*(string))
+
+/* Trimming command line (arguments) basing on isargdelim() */
+char *trimcl(char *str);
+char *ltrimcl(const char *str);
+void rtrimcl(char * const str);
 
 /*
  * Callback function invoked when an option is scanned

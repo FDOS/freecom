@@ -17,6 +17,18 @@
 	This file bases on TIME.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/04/29 11:33:51  skaus
+	chg: default heap size (tools\ptchsize) set to 6KB
+	chg: error displaying functions centralized into lib\err_fcts.src
+	add: displayError()
+	chg: all errors are displayed through functions void error_*()
+	bugfix: somtimes error messages are not displayed (see displayError())
+	bugfix: docommand(): type:file must pass ":file" to TYPE
+	bugfix: error_sfile(): string _SFILE_
+	bugfix: error message on empty redirection
+	bugfix: comma and semicolon ';' are recognized as argument seperators
+		of internal commands
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -40,7 +52,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -85,7 +97,7 @@ int parsetime(const char *s, struct dostime_t * const timep)
       else if(memicmp(s + 1, ".M.", 3) == 0)
         s += 4;
   }
-  if (*ltrim(s))
+  if(*ltrimsp(s))
     return E_Syntax;            /* too many characters on line */
 
   switch (items)

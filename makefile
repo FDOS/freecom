@@ -3,6 +3,18 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.15  2001/04/29 11:33:50  skaus
+# chg: default heap size (tools\ptchsize) set to 6KB
+# chg: error displaying functions centralized into lib\err_fcts.src
+# add: displayError()
+# chg: all errors are displayed through functions void error_*()
+# bugfix: somtimes error messages are not displayed (see displayError())
+# bugfix: docommand(): type:file must pass ":file" to TYPE
+# bugfix: error_sfile(): string _SFILE_
+# bugfix: error message on empty redirection
+# bugfix: comma and semicolon ';' are recognized as argument seperators
+# 	of internal commands
+#
 # Revision 1.14  2001/04/12 00:09:06  skaus
 # chg: New structure
 # chg: If DEBUG enabled, no available commands are displayed on startup
@@ -104,7 +116,7 @@ subdirs.mk : makefile
 
 .INCLUDE : subdirs.mk
 
-err_fcts.h : lib\\err*.c ; perl lib\\scanerr.pl lib\\err*.c >$@
+err_fcts.h : lib\\err_fcts.src lib\\efct_*.c ; perl lib\\scanerr.pl lib\\err_fcts.src lib\\efct_*.c >$@
 
 #MAKEDEP START
 #MAKEDEP STOP

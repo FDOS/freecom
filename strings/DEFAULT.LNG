@@ -79,15 +79,15 @@ Ill-formed option: '%s'
 .
 
 :TEXT_ERROR_OPT_ARG
-Option "%s" cannot have an argument
+Option '%s' cannot have an argument
 .
 
 :TEXT_ERROR_OPT_NOARG
-Option "%s" must have an argument
+Option '%s' must have an argument
 .
 
 :TEXT_INVALID_NUMBER
-Invalid number specified in "%s"
+Invalid number specified in '%s'
 .
 
 :TEXT_ERROR_CLOSE_QUOTE
@@ -99,7 +99,7 @@ Cannot create temporary file
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS_STR
-Too many parameters. - %s
+Too many parameters. - '%s'
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS
@@ -107,7 +107,7 @@ Too many parameters.
 .
 
 :TEXT_ERROR_INVALID_PARAMETER
-Invalid parameter. - %s
+Invalid parameter. - '%s'
 .
 
 :TEXT_ERROR_PATH_NOT_FOUND
@@ -119,7 +119,7 @@ File not found.
 .
 
 :TEXT_ERROR_SFILE_NOT_FOUND
-File not found. - %s
+File not found. - '%s'
 .
 
 :TEXT_ERROR_REQ_PARAM_MISSING
@@ -151,23 +151,23 @@ Line #%ld in batchfile '%s' too long.
 .
 
 :TEXT_ERROR_BFILE_VANISHED
-Batchfile "%s" not found.
+Batchfile '%s' not found.
 .
 
 :TEXT_ERROR_BFILE_LABEL
-Batchfile "%s" does not contain label "%s".
+Batchfile '%s' does not contain label '%s'.
 .
 
 :TEXT_ERROR_DIRFCT_FAILED#1
-%s failed for "%s".
+%s failed for '%s'.
 .
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ENV_VAR
-Can not set environment variable "%s".
+Can not set environment variable '%s'.
 Environment full?
 .
 :TEXT_ERROR_ENV_VAR_NOT_FOUND
-Environment variable "%s" not found.
+Environment variable '%s' not found.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
 No environment. Maybe memory short. Specify /E option.
@@ -175,17 +175,17 @@ No environment. Maybe memory short. Specify /E option.
 
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ALIAS#1
-Can not set alias "%s". Alias space full?
+Can not set alias '%s'. Alias space full?
 .
 :TEXT_ERROR_ALIAS_NOT_FOUND#1
-Alias "%s" not found.
+Alias '%s' not found.
 .
 :TEXT_ERROR_NO_ALIAS_SEGMENT#1
 No alias space. Maybe memory short.
 .
 
 :TEXT_ERROR_SYNTAX_STR
-Syntax error. - %s
+Syntax error. - '%s'
 .
 
 :TEXT_ERROR_SYNTAX
@@ -193,11 +193,11 @@ Syntax error.
 .
 
 :TEXT_ERROR_FILENAME_TOO_LONG
-Filename too long. - %s
+Filename too long. - '%s'
 .
 
 :TEXT_ERROR_SELFCOPY
-Cannot copy "%s" to itself
+Cannot copy '%s' to itself
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
@@ -209,7 +209,7 @@ Line too long.  Can not execute command.
 .
 
 :TEXT_ERROR_HISTORY_SIZE#1
-Invalid history size "%s".
+Invalid history size '%s'.
 .
 
 :TEXT_HISTORY_EMPTY#1
@@ -254,11 +254,15 @@ FOR: No command after DO statement.
 .
 
 :TEXT_ERROR_REDIRECT_FROM_FILE
-Can not redirect input from file %s.
+Can not redirect input from file '%s'.
 .
 
 :TEXT_ERROR_REDIRECT_TO_FILE
-Can not redirect output to file %s.
+Can not redirect output to file '%s'.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+Empty redirection.
 .
 
 :TEXT_ERROR_INVALID_DATE
@@ -298,7 +302,7 @@ Error writing to destination.
 .
 
 :TEXT_ERROR_CANNOT_OPEN_SOURCE
-Unable to open source. - %s
+Unable to open source. - '%s'
 .
 
 :TEXT_ERROR_OPEN_FILE
@@ -406,7 +410,7 @@ Out of alias space.
 .
 
 :TEXT_ERROR_ALIAS_NO_SUCH#1
-No such alias: %s
+No such alias: '%s'
 .
 
 :TEXT_ERROR_ALIAS_INSERT#1
@@ -414,7 +418,7 @@ Failed to insert alias.
 .
 
 :TEXT_ALIAS_INVALID_NAME#1
-Invalid alias name "%s".
+Invalid alias name '%s'.
 .
 
 :TEXT_ERROR_LOADING_CONTEXT#1
@@ -472,7 +476,7 @@ VERIFY is %s
 DEBUG output is %s.
 .
 :TEXT_MSG_FDDEBUG_TARGET
-DEBUG output is printed to %s.
+DEBUG output is printed to '%s'.
 .
 
 :TEXT_MSG_BREAK_STATE
@@ -522,7 +526,7 @@ Enter new time: \
 :PROMPT_DELETE_ALL#1
 YyNn{CR}{LF}{CBREAK}
 aabb   b   b       b
-All files in %s will be deleted!
+All files in '%s' will be deleted!
 Are you sure (Y/N)? \
 .
 
@@ -729,7 +733,7 @@ Features available:
 Press F8 for trace mode, or F5 to bypass %s... \
 .
 :TEXT_MSG_INIT_BYPASSING_AUTOEXEC
-Bypassing %s.
+Bypassing '%s'.
 .
 
 :TEXT_MSG_VER_DOS_VERSION
