@@ -5,13 +5,44 @@ req: CMD_FOR
 SYNOPSIS:
 EBNF: FOR '%' letter IN '(' { word | pattern } ')' DO <<any command>>
 
-Executes <EBNF><<any command>></EBNF> for several values assigned to
+Executes
+EBNF!: <<any command>>
+ for several values assigned to
 the variable <ARG>letter</ARG>. The values are read strictly left to right
 from the <ARG>word</ARG>s and <ARG>pattern</ARG>s enclosed in
 parenthises; where <ARG>pattern</ARG>s are words containing
 wildcards and are replaced by all matching filenames.
 <P>Any occurence of a percent sign <TT>%</TT> and the specified letter
 is replaced by the current value of the FOR loop.
+
+<P><STRONG>Warning #1</STRONG>: Unlike most commands
+<A HREF="!:redirection">I/O-redirections</A> are passed forth to the
+command instead of to apply them to FOR itself.
+
+<BR><STRONG>Warning #2</STRONG>: Due the syntactical problem that the
+FOR variable is specified as 
+EBNF!: '%' letter
+, which is also
+a legal start of an environment variable, the following kludge had
+been included to support FOR and its special variables:
+<UL>
+<LI>You can use as many percent character as you wish as long as you
+use exactly the same number for a particular FOR variable.
+<LI>Before any environment variables are expanded, the command line
+is checked for the skeleton specified within the synopsis (there must
+not be specified no redirection between the FOR and DO keywords), if
+it is found, the FOR command is executed <EM>without</EM> expanding
+any environment variables -- they get expanded each time the
+command is invoked.
+<LI><STRONG><FONT SIZE=+1>Known Bug</FONT></STRONG>: Otherwise any
+environment variables are expanded and, if it happens
+that a valid FOR command is found now, the environment variables within
+the command are expanded a second time.
+In this case the I/O redirections are applied to FOR, too, instead of
+passing them forth to the command.
+<LI>FOR commands as part of the command of CALL, IF, and FOR itself are
+never found before expanding the environment variables.
+</UL>
 
 EXAMPLES:
 EXAMPLE: 1

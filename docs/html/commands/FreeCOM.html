@@ -23,6 +23,7 @@
 	</OL>
 <LI><A HREF="#-appendix">Appendix</A>
 	<OL>
+	<LI><A HREF="#-download">Download</A>
 	<LI><A HREF="#-cvs-tags">CVS Resources</A>
 	<LI><A HREF="#-ebnf">EBNF</A>
 	</OL>
@@ -228,7 +229,7 @@ EBNF: redirection ::= ( '<' | '>' | '>>' ) filename
 
 <H3>Description:</H3>
 <P>The colon marks the line as label, which causes to let FreeCOM ignore the line
-completely as no interpretation is tried on this line, neiter are any redirections
+completely as no interpretation is tried on this line, neiter are any <A HREF="!:redirection">redirections</A>
 created.
 <P>The <CMD>?</CMD> forces FreeCOM to enable the trace mode for this line. In trace mode
 FreeCOM prompts the user wether to execute the resulting command.
@@ -337,15 +338,77 @@ file completion.  The following keys have a special meaning:
 <P><HR><P>
 <H1><A NAME="-appendix">Appendix</A></H1>
 
+<H2><A NAME="-download">Download</A></H2>
+
+FreeCOM can be downloaded from SourceForge in several ways and packages:
+
+<OL>
+<LI><A HREF="#-cvs-tags">source code files from the CVS repository</A>
+<LI><A HREF="#-download-ftp">tarball and pre-compiled packages from anonymous FTP</A>
+<LI><A HREF="#-download-filerelease">tarball and one pre-compiled package as file release</A>
+</OL>
+
+
+<H3><A NAME="-download-ftp">Resources accessable via anonymous FTP</A></H2>
+
+<A HREF="ftp://freedos.sourceforge.net/pub/freedos/freecom/">ftp://freedos.sourceforge.net/pub/freedos/freecom/</A>
+contains several variants of tarballs and pre-compiled packages of FreeCOM.
+The file immediately located in the directory contain the most current
+major release of FreeCOM, whereas the subdirectories include Beta releases
+of the upcoming release.
+
+<P>The packages themselves include:
+<TABLE BORDER>
+<TR>	<TH>file name</TH>
+		<TH>contents</TH>
+</TR>
+<TR>	<TD><TT>COM###.ZIP</TT> or <TT>###Beta##.ZIP</TT></TD>
+		<TD>tarball (<FONT SIZE=-1>the source code tree without CVS
+			information</FONT>)</TD>
+</TR>
+<TR>	<TD><TT>BINARY.ZIP</TT></TD>
+		<TD>the most commonly used pre-compiled FreeCOM with
+			almost any feature, but debugging enabled</TD>
+</TR>
+<TR>	<TD><TT>PLAINEDT.ZIP</TT></TD>
+		<TD>As <TT>BINARY.ZIP</TT> but using the plain command line
+			editor of the kernel instead of the enhanced one</TD>
+</TR>
+<TR>	<TD><TT>DEBUG.ZIP</TT></TD>
+		<TD>As <TT>BINARY.ZIP</TT> with debugging support enabled.
+			<BR>This variant is a lot larger than the standard release
+			and can generate lots of output.</TD>
+</TR>
+<TR>	<TD><TT>LOCALIZE.ZIP</TT></TD>
+		<TD>As <TT>BINARY.ZIP</TT> but targetted at maintainers of
+			a language description file (<TT>*.LNG</TT>).</TD>
+</TR>
+<TR>	<TD><TT>SUPPL.ZIP</TT></TD>
+		<TD>the SUPPL library required for linking FreeCOM precompiled
+			for use with Turbo C++ v1.01</TD>
+</TR>
+</TABLE>
+
+<H3><A NAME="-download-filerelease">File Releases on SourceForge</A></H2>
+
+On <A HREF="http://sourceforge.net/file/?group_id=5109">SourceForge</A>
+so-called <EM>File Releases</EM> can be created. The file release section of
+the FreeCOM module contains a source ZIP and a binary ZIP file, they are equal
+to the tarball and the <TT>BINARY.ZIP</TT> on the anon FTP space respectively.
+Unlike the FTP space, old versions are kept, but no Beta versions or side branches.
+
 <H2><A NAME="-cvs-tags">CVS Resources</A></H2>
 
 On <A HREF="http://sourceforge.net/project/?group_id=5109">SourceForge</A>
-a short description of how to access the CVS reository is located. Following those
+a short description of how to access the CVS repository is located. Following those
 instructions will download the main trunk of the specified module of the repository,
 e.g.: <PRE>cvs -z6 co freecom</PRE> downloads the <TT>MAIN</TT> trunk, also
 called <TT>HEAD</TT>, of FreeCOM.
 
-<P>However, CVS allows branch the development of a module at some point from the
+<P>Alternatively the WebCVS -- follow the <TT>Browse CVS</TT> link there --
+might be helpful in order to download a handful of files.
+
+<P>However, CVS allows to branch the development of a module at some point from the
 main trunk into side trees. On these branches the module can be developed further,
 new features can be added etc., without disturbing the main trunk (and therefore the
 primary release) of the module. When the side development proved its worthiness, the

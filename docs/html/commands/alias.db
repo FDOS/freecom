@@ -23,7 +23,9 @@ CMD: name { argument }
 is replaced by:
 CMD: <<string>> { argument }
 This mechanism is called <EM>alias expansion</EM>, because the alias
-<ARG>name</ARG> expands to the specified <EBNF><<string>></EBNF>. To
+<ARG>name</ARG> expands to the specified
+EBNF!: <<string>>
+. To
 prevent alias expansion the command must be prefixed by one asterisk,
 e.g.:
 CMD: *name arguments

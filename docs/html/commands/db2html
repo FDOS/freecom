@@ -173,6 +173,11 @@ sub dumpFooter {
 }
 
 
+sub htmlAppendixRef {
+	my($cmd) = @_;
+
+	return '<A HREF="#_appendix' . $cmd . "\">";
+}
 sub htmlCommandRef {
 	my($cmd) = @_;
 

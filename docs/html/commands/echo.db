@@ -22,8 +22,12 @@ is displayed.
 <BR>When entered on an interactive command line the echo status controls
 whether or not the PROMPT string is displayed.
 
-<P>The second variant displays the specified <EBNF><<string>></EBNF>.
-<BR>Note: Because of variant 1 <EBNF><<string>></EBNF> may not expand
+<P>The second variant displays the specified
+EBNF!: <<string>>
+.
+<BR>Note: Because of variant 1
+EBNF!: <<string>>
+ may not expand
 to the single words <CMD>ON</CMD> or <CMD>OFF</TT> without another
 character.
 

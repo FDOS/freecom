@@ -6,6 +6,11 @@ require 'parse.pl';
 
 &readCmdList;
 
+sub htmlAppendixRef {
+	my($cmd) = @_;
+
+	return '<A HREF="cmd.html#_appendix' . $cmd . "\">";
+}
 sub htmlCommandRef {
 	my($cmd) = @_;
 

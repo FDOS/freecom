@@ -1,3 +1,7 @@
+v0.83 Beta 28:
+bugfix: scancmd.c: /B and /A let COPY fail (ec == E_Ignore) (bug 829)
+upd: HTML section
+
 v0.83 Beta 25:
 bugfix: pre-compiled package BINARY.ZIP without command-line editing
 chg: FreeCOM archive (== executable) is opened read-only.

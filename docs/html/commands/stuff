@@ -164,6 +164,186 @@ it is enabled.
 <BR>Without user invention a boolean option is disabled by default, so
 both <OPT>/+O</OPT> and <OPT>/O</OPT> behave the same most
 of the time. However, some commands allow the user to change the default
-settings of certain options, e.g. <A HREF="copy:">COPY</A> and
-<A HREF="dir:">DIR</A>.
+settings of certain options, e.g. COPY and
+DIR.
 
+<H3><A NAME="redirection">I/O Redirection</A></H3>
+
+In DOS the standard input and output can be redirected to a file or
+another device; however, although it is common to use these I/O streams
+today, some programmers cowardly ignore them for reasons of speed or
+program size.
+
+<P>If the <STRONG>input</STRONG> stream is redirected to a file or
+device, instead of polling the keyboard and request the user to
+interactively enter characters via the keyboard, those characters
+are read from the file or device. Usually these programs terminate
+when the file has been read wholely.
+
+<P>If the <STRONG>output</STRONG> stream is redirected to a file
+or device, instead of issuing the information onto screen,
+it is dumped into the file or device. Per convention each program
+has two output streams: one (called standard output)
+to issue normal information and one (called standard error output) for
+error messages the user should not miss.
+
+<P>Redirections are specified on command line and effect exactly that
+command invoked herein, regardless if the command is an external or
+internal one, an alias or batch script. The utter exception is the FOR
+command, which requires that the redirection is to apply to the command
+specified behind the DO keyword rather than FOR itself.
+<BR>If more than one redirection is specified on the command line and
+they effect the same stream (input, output, or error), the rightmost one
+superceed any previous one.
+
+<P>Redirections are syntactically specified like this:
+<BR>
+EBNF: operator target
+EBNF: operator ::= '<' | '>' [ '>' ] [ '&' [ '>' ] ]
+EBNF: target ::= file | device
+
+<BR>Although it is not relevant where the redirections are placed on the
+command line, it is common praxis to place them at the end of it.
+<P>The <ARG>operators</ARG> have the following meaning:
+<TABLE BORDER>
+<TR>	<TH>Operator</TH>
+		<TH>Redirection</TH>
+</TR>
+<TR>	<TD><CMD>&lt;</CMD></TD>
+		<TD>Input stream</TD>
+</TR>
+<TR>	<TD><CMD>&gt;</CMD></TD>
+		<TD>Output stream; target file is overwritten</TD>
+</TR>
+<TR>	<TD><CMD>&gt;&gt;</CMD></TD>
+		<TD>Output stream; output is appended to target, if it already exists</TD>
+</TR>
+<TR>	<TD><CMD>&gt;&amp;</CMD></TD>
+		<TD>Output and error stream; target file is overwritten</TD>
+</TR>
+<TR>	<TD><CMD>&gt;&gt;&amp;</CMD></TD>
+		<TD>Output and error stream; output is appended to target, if it already exists</TD>
+</TR>
+<TR>	<TD><CMD>&gt;&amp;&gt;</CMD></TD>
+		<TD>Error stream; target file is overwritten</TD>
+</TR>
+<TR>	<TD><CMD>&gt;&gt;&amp;&gt;</CMD></TD>
+		<TD>Error stream; output is appended to target, if it already exists</TD>
+</TR>
+</TABLE>
+
+EXAMPLES:
+EXAMPLE: 1
+CMD: cmd &lt;in1 &lt;in2
+<BR>Input stream is redirected to file <CMD>IN2</CMD>, because it is the rightmost
+one.
+
+EXAMPLE: 2
+CMD: cmd &lt;in &gt;&amp;out
+<BR>Input stream is redirected to file <CMD>IN</CMD>, output and error streams are
+joined together and redireced into file <CMD>OUT</CMD>.
+If the file <CMD>OUT</CMD> already exists, the old contents is discarded and
+replaced by the new one; otherwise, the <CMD>OUT</CMD> is created anew.
+
+EXAMPLE: 3
+CMD: cmd &lt;in &gt;&gt;&amp;out
+<BR>As example 2, but instead of replacing the contents of <CMD>OUT</CMD>, if the
+file already exists, the new information is appended to the end of the file.
+
+EXAMPLE: 4
+CMD: FOR %a IN (*.*) DO ECHO %a &gt;out
+<BR>As mentioned earlier, FOR is an exception and passes forth the redirections
+to each invocation of the command specified right of the DO keyword. So this
+examples overwrites the output file each time the ECHO command is performed,
+thus, instead of creating a file list, only the last found file is recorded into
+<CMD>OUT</CMD>.
+
+EXAMPLE: 5
+CMD: IF EXIST out DEL out
+CMD: FOR %a IN (*.*) DO ECHO %a &gt;&gt;out
+<BR>This sequence eliminate the problem, the IF command is required to
+actually replace the file rather than appending the file list to the
+probably existent file.
+
+<H4>Pipes</H4>
+
+<P>Another form of redirection is <STRONG>piping</STRONG>. Hereby, the output stream
+of one command is connected to the input stream of another command. Pipes can combine
+any number of commands this way. Because DOS is no multitasking system, pipes are
+simulated by spawning the first command with an output redirection capturing the
+issued information into a temporary file and then the second command with an input
+redirection from that very same temporary file, on completation of the second
+command the temporary file is deleted.
+
+EXAMPLES:
+EXAMPLE: 1
+CMD: cmd1 | cmd2 | cmd3
+
+<BR>Which is similiar to this sequence:
+<BR>
+CMD: cmd1 &gt;%TEMP%\t1
+CMD: cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2
+CMD: DEL %TEMP%\t1
+CMD: cmd3 &lt;%TEMP%\t2
+CMD: DEL %TEMP%\t2
+
+EXAMPLE: 2
+
+The first and last command can have an input or output redirection
+respectively, like so:
+
+<BR>
+CMD: cmd1 | cmd2 | cmd3 &lt;in &gt;out
+
+
+<BR>Which is similiar to this sequence:
+<BR>
+CMD: cmd1 &gt;%TEMP%\t1 &lt;in
+CMD: cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2
+CMD: DEL %TEMP%\t1
+CMD: cmd3 &lt;%TEMP%\t2 &gt;out
+CMD: DEL %TEMP%\t2
+
+EXAMPLE: 3
+
+The error stream can be piped as well:
+
+<BR>
+CMD: cmd1 |&amp; cmd2 | cmd3
+
+<BR>Which is similiar to this sequence:
+<BR>
+CMD: cmd1 &gt;&amp;%TEMP%\t1
+CMD: cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2
+CMD: DEL %TEMP%\t1
+CMD: cmd3 &lt;%TEMP%\t2
+CMD: DEL %TEMP%\t2
+
+<BR>Here only the error messages of <CMD>cmd1</CMD> are passed
+into <CMD>cmd2</CMD>; the error messages of both <CMD>cmd2</CMD>
+and <CMD>cmd3</CMD> are issued to the screen.
+
+<H4>Nested redirections</H4>
+
+Batch scripts or when external programs invoke other programs or another shell,
+redirections may be nested, e.g.:
+
+<P>Consider the batch file <CMD>BATCH.BAT</CMD>:
+<PRE>
+@ECHO OFF
+ECHO 1
+ECHO 2 &gt;out_2
+ECHO 3
+</PRE>
+which is invoked via:
+<BR>
+CMD: BATCH &gt;out_1
+
+<BR>When the script <CMD>BATCH</CMD> gets executed, the actual output stream
+is redirected to the file <CMD>OUT_1</CMD>. Therefore the output of the first
+ECHO command is redirected into this file.
+<BR>Because the second ECHO command has its own output redirection, its
+output is redirected into the file <CMD>OUT_2</CMD>. On completion of ECHO
+the redirection is closed and the former one is restored.
+<BR>What causes that the output of the third ECHO command is redirected
+into <CMD>OUT_1</CMD> again.

@@ -22,6 +22,7 @@
 # undergo a larger change. The same language definition may contain the
 # same label up to one time, regardless of the version. FIXSTRS compares
 # both the label and the version ID and both must match.
+# A missing version is assumed as "#0".
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
@@ -29,8 +30,8 @@
 # the message is displayed, but a comma does not.
 #
 # The body may contain backslash escape sequences as known from C; there
-# are the usual \# (where '#' is a lowercase letter except 'x'),
-# \\ (to embed a backslash itself)
+# are the usual \# (where '#' is a lowercase letter except 'x' or one of
+# "[]{}?"), \\ (to embed a backslash itself)
 # \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
 # character), \, and \. (to specify a period or comma in the first column
 # of a line) and the single \ at the end of the line to suppress to append
@@ -47,11 +48,14 @@
 # Some prompts may cause an user interaction. Those ones should be in sync
 # with the issued text. To define how to interprete a pressed key, they
 # are mapped into metakeys like that: [ignore first hash sign]
+
+## Return value: a -> Yes; else -> No
 #:PROMPT_YES_NO#1
-#YyNn\n\r\3
-#aabb b b b
-# (Yes/No) ?
-#,
+#YyNn\n\r{CBREAK}
+#aabb b b       b
+# (Yes/No) ? \
+#.
+
 # All strings, which label start with "PROMPT_", are parsed as prompts.
 # The first two lines of the body are special; the first one enumerates all
 # valid keys, the second one assigns arbitary metakeys. Metakeys may
@@ -59,6 +63,26 @@
 # an error. The comment preceeding the prompt definition associates the
 # metakeys with their meaning.
 # The remaining lines of the body contain the text to be displayed.
+#
+# Above example defines a native Yes/No prompt with a space behind the question
+# mark and no appended newline.
+# The metakey 'a' means "User answered with 'Yes'" and 'b' means no.
+# The keys 'Y' and 'y' are mapped to metakey 'a' (aka Yes) and the keys
+# 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
+# The spaces between the 'b's in the second line had been inserted to
+# align them with the corresponding keys of the first line, hence in order
+# to enhance readibility of the association between the pressed keys and their
+# mapping into a metakey.
+#
+# The first line (pressed keys) has to enumerate the ASCII value as returned
+# by DOS or BIOS (INT-10); special keys normally expressed with ASCII code zero,
+# but a non-zero scancode are NOT supported; this limit includes for instance
+# the function keys F1 through F12 and the cursor keys and it is not possible
+# to differ between the number pad and normal keys.
+# The keys may be enumerated by their ASCII character, by a backslash sequence,
+# or a symbolic name enclosed in curly brackets (see FIXSTRS.C "symkeys[]"
+# array about the supported symnames).
+
 
 #
 #  These are error messages

@@ -116,10 +116,11 @@ perl get_ver.pl .\command.com
 :: Make HTML documents
 pushd docs\html\commands || quit
 echo Updating HTML documents
-perl db2html
-: Call it two times to have the command list updated
-perl db2html
-perl parseHTML
+call upd_html.bat
+::perl db2html
+::: Call it two times to have the command list updated
+::perl db2html
+::perl parseHTML
 popd
 
 : %_DBG echo on %+ setdos /y1

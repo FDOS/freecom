@@ -10,14 +10,14 @@ file is found, its path is displayed in this format:<BR>
 EBNF:command <<tab>> path
 <BR>The 
 EBNF!: <<tab>>
-stands for the tabulator character (ASCII 9).
+ stands for the tabulator character (ASCII 9).
 <BR>If the command is not found only the
 EBNF!: command
-part, but neither a
+ part, but neither a
 EBNF!: path
-nor the
+ nor the
 EBNF!: <<tab>>
-is displayed.
+ is displayed.
 <P>Internal commands, installable commands and aliases are not found.
 
 EXAMPLES:

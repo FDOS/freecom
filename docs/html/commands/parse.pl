@@ -9,6 +9,7 @@ sub parseEBNF {
 
 	while(<IN>) {
 		chomp;
+		my($own_line) = 1;
 
 		if(/^CMD:/) {
 			$_ = "\n<CMD>$'</CMD><BR>";
@@ -26,12 +27,15 @@ sub parseEBNF {
 		# Process the EBNF tag
 		if(/^EBNF(\!)?:/) {
 			my($line) = $';
-			my($own_line) = !$1;
+			$own_line = !$1;
 
 			$_ = '';
-			while($line =~ /^\s*('.*?'|[^'\s]\S*)/) {
+			my $delim = '';
+			while($line =~ /^\s*('.*?'|<<.*?>>)/
+			 || $line =~ /^\s*(\S+)/) {
 				my($token) = $1;
-				$line = $';
+				$line = $delim . $';
+				$delim = '';
 				my($tag) = '';
 
 				if($token =~ /^[A-Z']/) {		# terminal characters
@@ -41,7 +45,7 @@ sub parseEBNF {
 				} elsif(index(',./[]{}():;', substr($token, 0, 1)) >= 0) {
 					$tag = 'B';
 				}
-				if($token =~ /^<<(.*)>>$/) {
+				if($token =~ /^<<(.*?)>>$/) {
 					$token = '&laquo;' . &htmlXLat($1) . '&raquo;';
 				} else {
 					$token = &htmlXLat($token);
@@ -51,7 +55,7 @@ sub parseEBNF {
 					$_ .= "<$tag>" if $tag;
 					$_ .= $token;
 					$_ .= "</$tag>" if $tag;
-					$_ .= ' ';
+					$delim = ' ';
 				}
 			}
 
@@ -70,19 +74,32 @@ sub parseEBNF {
 
 		# Modify references
 		s:<A\s+NAME="([a-zA-Z].+?)"\s*>:<A NAME="${ref_na}_\1">:ig;
+		my $line = '';
 		while(m!<A\s+HREF=\"(.*?):(.*?)\"\s*>!i) {
-			$pre = $`;
-			$post = $';
-			$obj = lc($1);
-			$label = lc($2);
-			$label = "_" . $label if $label;
-			$obj = $ref_na unless $obj;
-			$obj = '_appendix' if $obj eq '!';	## appendix	
-			$_ = "$pre<A HREF=\"#$obj$label\">$post";
+			$line .= $`;
+			my $post = $';
+			my $all = $&;
+			my $obj = lc($1);
+			my $label = lc($2);
+			if($obj =~ /^ftp|http|about$/) {
+				# This is an absolute URL
+				$line .= $all;
+			} else {
+				$label = "_" . $label if $label;
+				$obj = $ref_na unless $obj;
+				if($obj eq '!') {	## command appendix	
+					$line .= &htmlAppendixRef($label);
+				} else {
+					$line .= "<A HREF=\"#$obj$label\">";
+				}
+			}
+			$_ = $post;
 		}
+		$line .= $_;
 
 
-		print HTML "$_\n";
+		print HTML $line;
+		print HTML "\n" if $own_line;
 	}
 }
 

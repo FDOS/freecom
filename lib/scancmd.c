@@ -16,6 +16,10 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/08/15 00:12:27  skaus
+	bugfix: scancmd.c: /B and /A let COPY fail (ec == E_Ignore) (bug 829)
+	upd: HTML docs
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -39,7 +43,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -76,7 +80,7 @@ static int parseOptions(optScanner fct, void * const arg, char **argv, int *argc
       }
 
   *argc -= *optcnt;
-  return ec;    /* everything done */
+  return ec == E_Ignore? E_None: ec;    /* everything done */
 }
 
 char **scanCmdline(char *line, optScanner fct, void * const arg
