@@ -1,3 +1,4 @@
+chg: doc DIR: note about how many entries can be sorted with /O [Eric Auer]
 bugfix: DIR: /b don#('t append spurios spaces {fd-doc#226}
 bugfix: use of the nls thousands separator in convert() [Eduardo Casino]
 add: ITALIAN.ERR {Roberto Mariottini}

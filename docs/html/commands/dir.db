@@ -74,6 +74,7 @@ letters rather than capitol ones.
 	<P><STRONG>Warning</STRONG>: The entries are cached within memory
 	before displaying them; if FreeCOM runs short on memory, to sort is
 	disabled completely or the entries are sorted in chunks only.
+	<BR>Usually DIR can sort well over 1000 entries.
 <LI><OPT>/P</OPT>: (Page) Page the output -- pause the display after
 	issuing one screen-full.
 <LI><OPT>/S</OPT>: (Subdirectories) Recursively display directories.
