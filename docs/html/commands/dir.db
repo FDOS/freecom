@@ -70,10 +70,6 @@ letters rather than capitol ones.
 	<OPT>/O</OPT> option, the last one superceeds previous ones; if
 	more than one <OPT>/O</OPT> option is specified, the last one
 	superceeds all previous ones.
-	<P><STRONG>Known bug:</STRONG> The current implementation cannot
-	combine two or more sort orders <OPT>D</OPT>, <OPT>E</OPT>,
-	<OPT>N</OPT>, and <OPT>S</OPT>; instead any of such sort order
-	cancells the effect of the other ones.
 	<P><STRONG>Warning</STRONG>: The entries are cached within memory
 	before displaying them; if FreeCOM runs short on memory, to sort is
 	disabled completely or the entries are sorted in chunks only.
