@@ -1,0 +1,20 @@
+name: HISTORY
+de: Display command line history
+req: FEATURE_HISTORY
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: HISTORY
+<LI>
+EBNF: HISTORY number
+</OL>
+
+DESCRIPTION:
+
+The first format without any argument displays all cached command
+lines.
+
+<P>The second format resizes the memory pre-allocated for the
+command line history cache to <ARG>number</ARG> bytes.
+

@@ -71,6 +71,10 @@ sub parseEBNF {
 		s:</ARG>:</I></TT>:ig;
 		s:<CMD>:<TT>:ig;
 		s:</CMD>:</TT>:ig;
+		s:<HELL>:<FONT COLOR="#CC0000">:ig;
+		s:</HELL>:</FONT>:ig;
+		s:<DIMM>:<FONT COLOR="#999999">:ig;
+		s:</DIMM>:</FONT>:ig;
 
 		# Modify references
 		s:<A\s+NAME="([a-zA-Z].+?)"\s*>:<A NAME="${ref_na}_\1">:ig;

@@ -9,6 +9,9 @@ DESCRIPTION:
 
 Displays the useage of internal memory of FreeCOM.
 
+<HELL>Note</HELL>: The internals of FreeCOM are currently under heavy
+construction, the actual output might vary heavily from this example.
+
 EXAMPLES:
 CMD: MEMORY
 

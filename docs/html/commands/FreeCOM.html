@@ -16,11 +16,12 @@
 <LI><A HREF="#-cmdline">FreeCOM Command Line Syntax</A>
 <LI><A HREF="#-envvars">Environment Variables</A>
 <LI><A HREF="#-icmds">Internal Commands</A>
-<LI><A HREF="#-userprompt">User prompt</A>
+<LI><A HREF="#-userprompt">User Prompt</A>
 	<OL>
 	<LI><A HREF="#-cmdline-syntax">Command Line Syntax</A>
 	<LI><A HREF="#-cmdline-editing">Command Line Editing</A>
 	</OL>
+<LI><A HREF="#-status">Status of FreeCOM / To-do List</A>
 <LI><A HREF="#-appendix">Appendix</A>
 	<OL>
 	<LI><A HREF="#-download">Download</A>
@@ -336,6 +337,97 @@ file completion.  The following keys have a special meaning:
 </TABLE>
 
 <P><HR><P>
+<H1><A NAME="-status">Status of FreeCOM</A></H1>
+
+FreeCOM's development currently targets the v1.0 version, which is to
+provide all functionality (features) of commonly known COMMAND.COMs at
+minimum, but probably at the cost of optimization and performance.
+
+<P>The To-Do list:
+<BR><TABLE BORDER WIDTH=100%>
+<TR>	<TH>Feature</TH>
+		<TH ALIGN=CENTER>Target</TH>
+</TR>
+<TR>	<TD>Swapping with supporting secondary programs (<CMD>KSSF.COM</CMD>
+			and <CMD>VSPAWN.COM<CMD>)</TD>
+		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
+</TR>
+<TR>	<TD>INT-2E backdoor</TD>
+		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
+<TR>	<TD>Wildcards for <CMD>REN</CMD>, same filename pattern matching code
+			for <CMD>REN</CMD>, <CMD>COPY</CMD> and <CMD>DIR</CMD></TD>
+		<TD ALIGN=CENTER><HELL>v0.93</HELL></TD>
+</TR>
+<TR>	<TD>Input/output functions to replace <TT>&lt;stdio.h&gt;</TT> by
+			<TT>&lt;io.h&gt;</TT> (aka replace <TT>FILE*</TT>-based
+			I/O by handle-based one)</TD>
+		<TD ALIGN=CENTER><A HREF="#-todo1"><HELL>v0.95</HELL></A></TD>
+</TR>
+<TR>	<TD>Strict error recognition, probably <TT>_doserrno</TT>
+			based</TD>
+		<TD ALIGN=CENTER><A HREF="#-todo1"><HELL>v0.97</HELL></A></TD>
+</TR>
+<TR>	<TD>Support for <CMD>DOS=HIGH</CMD></TD>
+		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
+</TR>
+<TR>	<TD>Code sharing of modules</TD>
+		<TD ALIGN=CENTER><HELL>v0.91</HELL></TD>
+</TR>
+<TR>	<TD>Full support for DOS NLS</TD>
+		<TD ALIGN=CENTER><HELL>pre v0.95</HELL></TD>
+</TR>
+<TR>	<TD>Redirection in conjunction with Swapping</TD>
+		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
+</TR>
+<TR>	<TD>Optimize FreeCOM for size</TD>
+		<TD ALIGN=CENTER>&gt;= v1.0</TD>
+</TR>
+<TR>	<TD>Other swap storage areas, e.g. XMS and EMS</TD>
+		<TD ALIGN=CENTER><A HREF="#-todo2">post v1.0</A></TD>
+</TR>
+<TR>	<TD>Long filenames</TD>
+		<TD ALIGN=CENTER>post v1.0</TD>
+</TR>
+<TR>	<TD><A HREF="#-icmds">internal commands</A></TD>
+		<TD ALIGN=CENTER><A HREF="#-icmds">mostly done</A></TD>
+</TR>
+<TR>	<TD>Aliases: ALIAS</TD>
+		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
+</TR>
+<TR>	<TD>History: HISTORY</TD>
+		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
+</TR>
+<TR>	<TD>Directory stack: DIRS, PUSHD, and POPD</TD>
+		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
+</TR>
+<TR>	<TD>MUX-AE interface</TD>
+		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
+</TR>
+<TR>	<TD><A HREF="#-cmdline-editing">Enhanced command line editing,
+			file completion</A></TD>
+		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
+</TR>
+<TR>	<TD>Last directory recognition: CD, CDD, PUSHD</TD>
+		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
+</TR>
+<TR>	<TD>Control Break handler</TD>
+		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
+</TR>
+<TR>	<TD>Critical Error handler</TD>
+		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
+</TR>
+</TABLE>
+<BR><FONT SIZE=-1>Footnotes:<BR>
+<UL>
+<LI><A NAME="-todo1">I/O replacement shallt preceed error reporting
+correction as some failures are impossible to detect without work-arounds
+with the <TT>&lt;stdio.h&gt;</TT> functions.</A>
+<LI><A NAME="-todo2">If I get contributions after v0.90, those portion
+may be added earlier.</A>
+</UL>
+</FONT>
+
+<P><HR><P>
 <H1><A NAME="-appendix">Appendix</A></H1>
 
 <H2><A NAME="-download">Download</A></H2>
@@ -362,7 +454,7 @@ of the upcoming release.
 <TR>	<TH>file name</TH>
 		<TH>contents</TH>
 </TR>
-<TR>	<TD><TT>COM###.ZIP</TT> or <TT>###Beta##.ZIP</TT></TD>
+<TR>	<TD><TT>COM###.ZIP</TT> or <TT>Com###Beta##.ZIP</TT></TD>
 		<TD>tarball (<FONT SIZE=-1>the source code tree without CVS
 			information</FONT>)</TD>
 </TR>

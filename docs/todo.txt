@@ -14,7 +14,7 @@ where the code is hardly optimal for either.
 
 (1) Swap out when exec'ing? YES! Unless running from a floppy?
 
-(4) ^S and ^Q to pause/resume displays.
+(4) ^S and ^Q to pause/resume displays. --> kernel thing
 
 (1) Add wildcard support to REN.
 
@@ -26,15 +26,11 @@ of command.com to use these same messages in memory.  Maybe the
 Multiplexor interrupt (2Fh)?  Does command.com have a MSDOS reserved
 mux handler number?
 
-(1) Move everything to freely available tools (TC++ v1.01, NASM)
-
 (1) Critical Error handler: Conditions and rules must be defined
 in which cases what action has to be done in order to prevent
 accidently kill FreeCOM on INT-24. Some recover mechanism must be
 implemented in hopeless situations, where the normal processing
 can not proceed.
-
-(2) Move all strings into *.LNG files.
 
 (2) Use all information available through DOS NLS API in all places
 they apply to.
