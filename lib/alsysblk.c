@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2004/06/29 21:57:20  skaus
+	fix: /LOW option
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -49,7 +52,7 @@ unsigned allocSysBlk(const unsigned size, const unsigned mode)
 {	unsigned segm;
 	struct MCB _seg *mcb;
 
-	if((segm = allocBlk(size, mode)) != 0) {
+	if((segm = allocMemBlk(size, mode)) != 0) {
 		mcb = (struct MCB _seg*)SEG2MCB(segm);
 		mcb->mcb_ownerPSP = 8;
 		dprintf(("[MEM: allocated system memory block: %04x/%u]\n"

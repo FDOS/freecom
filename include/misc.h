@@ -84,6 +84,7 @@ enum OnOff onoffStr(char *line);
 size_t farread(void far*buf, size_t length, FILE *f);
 unsigned allocPermBlk(const unsigned size, const unsigned mode);
 unsigned allocSysBlk(const unsigned size, const unsigned mode);
+unsigned allocMemBlk(const unsigned size, const unsigned mode);
 void freeSysBlk(const unsigned segm);
 
 char far *_fstpcpy(char far *dst, const char far *src);

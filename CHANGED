@@ -1,3 +1,4 @@
+fix: /LOW option
 upd: ITALIAN.LNG {Roberto Mariottini}
 fix: help screen of internal commands causes "Unknown command error" {Bernd Blaauw}
 chg: REN: disable APPEND.EXE {Eduardo Casino}

@@ -46,6 +46,8 @@ void ctxtCreate(void)
 	ctxtCreateMemBlock((unsigned)length);
 #if 0
 	env_resizeCtrl = ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
+  if(forceLow)
+	  env_resizeCtrl &= ~ENV_USEUMB;
 	if((ctxt = env_create((unsigned)length)) == 0) {
 		error_out_of_dos_memory();
 		jmp_fatal(E_NoMem);

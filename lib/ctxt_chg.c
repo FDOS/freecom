@@ -21,6 +21,8 @@ int ctxtChgSize(unsigned tosize)
 	assert(tosize);
 
 	env_resizeCtrl = ENV_USEUMB | ENV_FIRSTFIT | ENV_ALLOWMOVE;
+  if(forceLow)
+	  env_resizeCtrl &= ~ENV_USEUMB;
 	new_context = ctxt? env_setsize(ctxt, tosize)	/* alter context */
 	                  : env_create(tosize);			/* new context */
 

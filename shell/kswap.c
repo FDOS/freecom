@@ -208,6 +208,8 @@ int kswapLoadStruc(void)
 		must be applied each time FreeCOM is re-invoked, because DOS does
 		not preserve the size of the original environment. */
 	env_resizeCtrl = ENV_ALLOWMOVE | ENV_LASTFIT | ENV_USEUMB;
+  if(forceLow)
+	  env_resizeCtrl &= ~ENV_USEUMB;
 	/* if the size does not change this function performs no actions */
 	env_setsize(0, kswapContext->envSize);
 

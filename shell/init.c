@@ -391,12 +391,32 @@ int initialize(void)
 	}
   }
 
-  /* First of all, set up the environment */
+  /* First of all, set up the context */
+#ifndef FEATURE_XMS_SWAP
+	/* Install INT 24 Critical error handler */
+	/* Needs the ComPath variable, eventually */
+	if(!kswapContext) {
+		/* Load the module/context into memory */
+		if((kswapContext = modContext()) == 0) {
+			error_loading_context();
+			return E_NoMem;
+		}
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+		if(swapOnExec != ERROR)
+			kswapRegister(kswapContext);
+#endif
+	}
+#endif
+	ctxtCreate();
+
+  /* Now set up the environment */
     /* If a new valid size is specified, use that */
 #ifdef DEBUG
 	orig_env = env_glbSeg;
 #endif
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
+  if(forceLow)
+	  env_resizeCtrl &= ~ENV_USEUMB;
   if(newEnvSize > 16 && newEnvSize < 32767)
     env_setsize(0, newEnvSize);
 #ifdef ENVIRONMENT_KEEP_FREE 
@@ -430,24 +450,6 @@ int initialize(void)
 		 , orig_env, env_glbSeg, env_freeCount(env_glbSeg)));
 	}
 #endif
-
-#ifndef FEATURE_XMS_SWAP
-	/* Install INT 24 Critical error handler */
-	/* Needs the ComPath variable, eventually */
-	if(!kswapContext) {
-		/* Load the module/context into memory */
-		if((kswapContext = modContext()) == 0) {
-			error_loading_context();
-			return E_NoMem;
-		}
-#ifdef FEATURE_KERNEL_SWAP_SHELL
-		if(swapOnExec != ERROR)
-			kswapRegister(kswapContext);
-#endif
-	}
-#endif
-
-	ctxtCreate();
 
 #ifdef FEATURE_XMS_SWAP
 	/* Now everything is setup --> initialize the XMS stuff */

@@ -8,9 +8,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.7  2004/06/29 21:57:20  skaus
+	fix: /LOW option
+
 	Revision 1.6  2004/06/29 14:14:56  skaus
 	fix: help screen of internal commands causes "Unknown command error" {Bernd Blaauw}
-
+	
 	Revision 1.5  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -136,7 +139,7 @@ static int loadStrings(res_majorid_t major
 		return 0;
 	}
 		/* allocation mode: last fit, high first */
-	if ((msgSegm = allocBlk(len, 0x82)) == 0) {
+	if ((msgSegm = allocMemBlk(len, 0x82)) == 0) {
 		*ls = STRINGS_OUT_OF_MEMORY;
 		return 0;
 	}
