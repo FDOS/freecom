@@ -1,0 +1,16 @@
+name: FEATURE_BOOT_KEYS
+de: check for F5/F8 keys on startup if /P is present
+see: 
+req: 
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM, FreeCOM waits three seconds on
+startup, if the <OPT>/P</OPT> switch is present. If during this time
+a key has been pressed, <CODE>F5</CODE> will bypass AUTOEXEC.BAT execution
+and <CODE>F8</CODE> will enable trace mode.
+
+<BR><CODE>F5</CODE> is equal to to pass <A HREF="!!:cmdline">the <OPT>/D</OPT>
+switch</A> to FreeCOM.
+<BR><CODE>F8</CODE> is equal to to pass <A HREF="!!:cmdline">the <OPT>/Y</OPT>
+switch</A> to FreeCOM.

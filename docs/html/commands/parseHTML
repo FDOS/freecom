@@ -6,6 +6,16 @@ require 'parse.pl';
 
 &readCmdList;
 
+die "Cannot open TOC: $!\n"
+	unless open(TOC, "TOC");
+while(<TOC>) {
+	if(/FEATURE_/) {
+		s/#feature/cmd.html$1/;
+		$features .= $_;
+	}
+}
+close TOC;
+
 sub htmlAppendixRef {
 	my($cmd) = @_;
 
@@ -15,6 +25,12 @@ sub htmlCommandRef {
 	my($cmd) = @_;
 
 	return '<A HREF="cmd.html#' . lc($cmd) . "\">$cmd</A>";
+}
+sub htmlFreeCOMRef {
+	my($cmd) = @_;
+	$cmd = $' if $cmd =~ /^[-_]+/;
+
+	return '<A HREF="#-' . $cmd . "\">";
 }
 
 

@@ -3,12 +3,40 @@ de: Display or set environment variables
 req: CMD_SET
 
 SYNOPSIS:
-EBNF: SET
-EBNF: SET variable '=' <<string>>
+<OL>
+<LI>
+EBNF: SET [{ option }]
+<LI>
+EBNF: SET [{ option }] variable '=' <<string>>
+</OL>
 
+DESCRIPTION:
+
+The first variant <FONT SIZE=-1>(without any argument)</FONT> displays
+all the currently defined environment variables in the format
+<FONT SIZE=-1>(without any whitespaces before or after the equal sifn)</FONT>:
+EBNF: name '=' <<value>>
+
+<P>The second variant assigns a new value
+EBNF!: <<string>>
+ to the specified
+EBNF!: variable 
+. If the
+EBNF!: variable 
+ already exists, the old value is overwritten without notice; otherwise
+it is newly created.
 
 STD_OPTIONS:
 
-EXAMPLES:
-EXAMPLE: 1
+All options must preceed the assigment, if present.
 
+<P><UL>
+<LI><OPT>/C</OPT>: forces to keep the exact case of the letters
+of the variable name; by default all letters are uppercased to
+keep compatibly.
+<LI><OPT>/I</OPT>: has been temporarily included to the SET command to
+allow an easy way to display the current size of the environment segment,
+because it is one of the most frequently reported, but not reproduceable
+bug report. Once this option has been encountered, all the remaining command
+line is ignored.
+</UL>

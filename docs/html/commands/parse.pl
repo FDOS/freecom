@@ -22,6 +22,8 @@ sub parseEBNF {
 			$_ = &htmlSubSection("Example: $'");
 		} elsif(/^DESCRIPTION:/) {
 			$_ = "<P>\n";
+		} elsif(/^SKAUS_EVALUATE_PERL:/) {
+			eval $';
 		}
 
 		# Process the EBNF tag
@@ -93,6 +95,8 @@ sub parseEBNF {
 				$obj = $ref_na unless $obj;
 				if($obj eq '!') {	## command appendix	
 					$line .= &htmlAppendixRef($label);
+				} elsif($obj eq '!!') {	## FreeCOM
+					$line .= &htmlFreeCOMRef($label);
 				} else {
 					$line .= "<A HREF=\"#$obj$label\">";
 				}

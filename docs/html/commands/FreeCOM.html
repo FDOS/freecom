@@ -12,22 +12,23 @@
 
 <BODY>
 <OL>
-<LI><A HREF="#-intro">Introduction</A>
-<LI><A HREF="#-cmdline">FreeCOM Command Line Syntax</A>
-<LI><A HREF="#-envvars">Environment Variables</A>
-<LI><A HREF="#-icmds">Internal Commands</A>
-<LI><A HREF="#-userprompt">User Prompt</A>
+<LI><A HREF="!!:intro">Introduction</A>
+<LI><A HREF="!!:cmdline">FreeCOM Command Line Syntax - Useage, Switches
+	and Options</A>
+<LI><A HREF="!!:envvars">Environment Variables</A>
+<LI><A HREF="!!:icmds">Internal Commands</A>
+<LI><A HREF="!!:userprompt">User Prompt</A>
 	<OL>
-	<LI><A HREF="#-cmdline-syntax">Command Line Syntax</A>
-	<LI><A HREF="#-cmdline-editing">Command Line Editing</A>
+	<LI><A HREF="!!:cmdline-syntax">Command Line Syntax</A>
+	<LI><A HREF="!!:cmdline-editing">Command Line Editing</A>
 	</OL>
-<LI><A HREF="#-features">Features of FreeCOM</A>
-<LI><A HREF="#-status">Status of FreeCOM / To-do List</A>
-<LI><A HREF="#-appendix">Appendix</A>
+<LI><A HREF="!!:features">Features of FreeCOM</A>
+<LI><A HREF="!!:status">Status of FreeCOM / To-do List</A>
+<LI><A HREF="!!:appendix">Appendix</A>
 	<OL>
-	<LI><A HREF="#-download">Download</A>
-	<LI><A HREF="#-cvs-tags">CVS Resources</A>
-	<LI><A HREF="#-ebnf">EBNF</A>
+	<LI><A HREF="!!:download">Download</A>
+	<LI><A HREF="!!:cvs-tags">CVS Resources</A>
+	<LI><A HREF="!!:ebnf">EBNF</A>
 	</OL>
 </OL>
 
@@ -43,23 +44,23 @@ FreeCOM is a:
 <A HREF="http://www.freedos.org">FreeDOS</A>, a project that aims to implement
 a GNU GPL'ed DOS.
 
-<P>The main duty of FreeCOM is to prompt the user <A HREF="#-userprompt">to enter
+<P>The main duty of FreeCOM is to prompt the user <A HREF="!!:userprompt">to enter
 commands</A>, which
 are interpreted, processed directly by FreeCOM or executed as executable
 files.
 
 <P>Those commands processed by FreeCOM directly are called
-<A HREF="#-icmds"><EM>Internal Commands</EM></A>.
+<A HREF="!!:icmds"><EM>Internal Commands</EM></A>.
 
 <P>Non-internal commands, which cannot be processed by FreeCOM directly,
 are called <EM>External Commands</EM>,
 because FreeCOM will search for files equally named as typed-in.
 
 <P>Besides to implement certain commands FreeCOM offers some
-<A HREF="#-features">features</A>.
+<A HREF="!!:features">features</A>.
 
 <P><HR><P>
-<H1><A NAME="-cmdline">Command Line Syntax</A></H1>
+<H1><A NAME="-cmdline">Command Line Syntax, Useage, Switches and Options</A></H1>
 
 EBNF: COMMAND.COM [ path [ console ] ] [{ option }] [ '/' ( K | C ) <<commandline>> ]
 
@@ -89,6 +90,9 @@ to the CTTY command.
 <LI><OPT>/!</OPT>: Enable/disable debugging support, if compiled to FreeCOM.
 <LI><OPT>/Y</OPT>: Enables trace/single step mode. This mode is deaktivated
 when the user prompt has been reached.
+<LI><OPT>/D</OPT>: Disables to parse AUTOEXEC.BAT, even if the <OPT>/P</OPT> option
+	is present. This switch is usually set by the kernel, when F% had been pressed
+	during bootup.
 <LI><OPT>/F</OPT>: Enables autofail of Critical Errors; then instead of displaying
 the Abort/Retry/Ignore/Fail dialog, Critical Errors are automatically answered
 with Fail.
@@ -111,6 +115,9 @@ has no effect, because no part of FreeCOM is loaded high.
 <LI><OPT>/MSG</OPT>: Installs the message server. <EM>Note</EM>: Because the message
 server is not used nowadays, this option forces to permanently load FreeCOM's
 messages into memory.
+<LI><OPT>/SWAP</OPT>: Toggles, if to default to swapping or not; due to different default
+	values of this <EM>internal</EM> flag, it is recommended to always prefix the option
+	with '<CODE>+</CODE>' to enable or '<CODE>-</CODE>' to disable swapping.
 </UL>
 
 The options <OPT>/K</OPT> and <OPT>/C</OPT> are special cases and do not behave as normal
@@ -122,6 +129,9 @@ do behave exactly the same and execuate the command <CMD>DIR /s</CMD>.
 script is executed prior executing the specified command.
 <BR>In opposite to <OPT>/C</OPT> the <OPT>/K</OPT> option enters the interactive shell
 prompt after executing the specified command.
+
+<P>Boolean options, which can only be <EM>enabled</EM> or <EM>disabled</EM>, may be
+prefixed by '<CODE>+</CODE>' to enable or '<CODE>-</CODE>' to disable it.
 
 <P><HR><P>
 <H1><A NAME="-envvars">Environment Variables</A></H1>
@@ -203,7 +213,7 @@ to the user without presence of any external files, in fact they hide
 External Commands named equally.
 
 <P>The synopsises of the <A HREF="cmd.html">internal commands</A>
-are described in a style derived from <A HREF="#-ebnf">EBNF</A>.
+are described in a style derived from <A HREF="!!:ebnf">EBNF</A>.
 
 <P><HR><P>
 <H1><A NAME="-userprompt">User Prompt</A></H1>
@@ -238,7 +248,7 @@ FreeCOM prompts the user wether to execute the resulting command.
 <P>The optional <CMD>@</CMD> disables the echo status for this line. If the echo status
 is enabled, the line is displayed right before it is executed; see ECHO for more details.
 <P>The asterisk <CMD>*</CMD> is available only, if aliases are compiled into
-FreeCOM; if present, the <A HREF="#-aliases">alias expansion</A> is skipped.
+FreeCOM; if present, the <A HREF="!!:features">alias expansion</A> is skipped.
 <P>If commands are chained with the <CMD>|</CMD> symbols, those commands are to be executed
 as a <EM>pipe</EM>. For instance the command line:<BR>
 CMD: cmd1 | cmd2 | cmd3
@@ -340,11 +350,13 @@ file completion.  The following keys have a special meaning:
 </TABLE>
 
 <P><HR><P>
-<H1><A NAME="#-features">Features of FreeCOM</A></H1>
+
+<P><HR><P>
+<H1><A NAME="-features">Features of FreeCOM</A></H1>
 
 FreeCOM implements the following features:
 <UL>
-<LI>
+SKAUS_EVALUATE_PERL: $_ = $features
 </UL>
 
 <P><HR><P>
@@ -375,11 +387,11 @@ minimum, but probably at the cost of optimization and performance.
 <TR>	<TD>Input/output functions to replace <TT>&lt;stdio.h&gt;</TT> by
 			<TT>&lt;io.h&gt;</TT> (aka replace <TT>FILE*</TT>-based
 			I/O by handle-based one)</TD>
-		<TD ALIGN=CENTER><A HREF="#-todo1"><HELL>v0.95</HELL></A></TD>
+		<TD ALIGN=CENTER><A HREF="!!:todo1"><HELL>v0.95</HELL></A></TD>
 </TR>
 <TR>	<TD>Strict error recognition, probably <TT>_doserrno</TT>
 			based</TD>
-		<TD ALIGN=CENTER><A HREF="#-todo1"><HELL>v0.97</HELL></A></TD>
+		<TD ALIGN=CENTER><A HREF="!!:todo1"><HELL>v0.97</HELL></A></TD>
 </TR>
 <TR>	<TD>Support for <CMD>DOS=HIGH</CMD></TD>
 		<TD ALIGN=CENTER><HELL>v0.90</HELL></TD>
@@ -397,13 +409,13 @@ minimum, but probably at the cost of optimization and performance.
 		<TD ALIGN=CENTER>&gt;= v1.0</TD>
 </TR>
 <TR>	<TD>Other swap storage areas, e.g. XMS and EMS</TD>
-		<TD ALIGN=CENTER><A HREF="#-todo2">post v1.0</A></TD>
+		<TD ALIGN=CENTER><A HREF="!!:todo2">post v1.0</A></TD>
 </TR>
 <TR>	<TD>Long filenames</TD>
 		<TD ALIGN=CENTER>post v1.0</TD>
 </TR>
-<TR>	<TD><A HREF="#-icmds">internal commands</A></TD>
-		<TD ALIGN=CENTER><A HREF="#-icmds">mostly done</A></TD>
+<TR>	<TD><A HREF="!!:icmds">internal commands</A></TD>
+		<TD ALIGN=CENTER><A HREF="!!:icmds">mostly done</A></TD>
 </TR>
 <TR>	<TD>Aliases: ALIAS</TD>
 		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
@@ -417,7 +429,7 @@ minimum, but probably at the cost of optimization and performance.
 <TR>	<TD>MUX-AE interface</TD>
 		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
 </TR>
-<TR>	<TD><A HREF="#-cmdline-editing">Enhanced command line editing,
+<TR>	<TD><A HREF="!!:cmdline-editing">Enhanced command line editing,
 			file completion</A></TD>
 		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
 </TR>
@@ -449,10 +461,10 @@ may be added earlier.</A>
 FreeCOM can be downloaded from SourceForge in several ways and packages:
 
 <OL>
-<LI><A HREF="#-cvs-tags">source code files from the CVS repository</A>
-<LI><A HREF="#-download-ftp">tarball and pre-compiled packages from anonymous FTP</A>
-<LI><A HREF="#-download-http">tarball and pre-compiled packages via HTTP</A>
-<LI><A HREF="#-download-filerelease">tarball and one pre-compiled package as file release</A>
+<LI><A HREF="!!:cvs-tags">source code files from the CVS repository</A>
+<LI><A HREF="!!:download-ftp">tarball and pre-compiled packages from anonymous FTP</A>
+<LI><A HREF="!!:download-http">tarball and pre-compiled packages via HTTP</A>
+<LI><A HREF="!!:download-filerelease">tarball and one pre-compiled package as file release</A>
 </OL>
 
 

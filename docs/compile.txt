@@ -32,7 +32,7 @@ To compile this version of command.com, you have to add the SUPPL library.
 SUPPL_INC_PATH points to the directory with all the header files, whereas
 SUPPL_LIB_PATH contains the pre-compiled library (SUPPL_S.LIB). If you
 have downloaded SUPPL.ZIP from:
-ftp://freedos.sourceforge.net/pub/freedos/freecom/suppl.zip
+http://freedos.sourceforge.net/freecom/packages/suppl.zip
 
 and if you have extracted the contents into the FreeCOM directory,
 the default values (.\SUPPL) are OK.

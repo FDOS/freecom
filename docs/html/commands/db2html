@@ -129,7 +129,7 @@ sub dumpHeader {
 	my($na, $de) = @_;
 
 	&dumpTOC($na, $de);
-	print HTML '<H2><A NAME="', lc($na), "\">$na - $de</H2>\n";
+	print HTML '<H2><A NAME="', lc($na), "\">$na - $de</A></H2>\n";
 	&writeCmdList(uc($na));
 }
 sub dumpAppendix {
@@ -182,6 +182,12 @@ sub htmlCommandRef {
 	my($cmd) = @_;
 
 	return '<A HREF="#' . lc($cmd) . "\">$cmd</A>";
+}
+sub htmlFreeCOMRef {
+	my($cmd) = @_;
+	$cmd = $' if $cmd =~ /^[-_]+/;
+
+	return '<A HREF="FreeCOM.html#-' . $cmd . "\">";
 }
 sub htmlRefWord {
 	my($cmd) = @_;
