@@ -1,3 +1,4 @@
+chg: Prevent double-parsing of redirection in CALL and IF
 chg: updated FreeCOM implementation status doc
 add: documentation for Benny levels, IF and TESTS\BENNY.BAT
 bugfix: FREECOM.COM /?: is to terminate unless /P is present [Andrew Sly]

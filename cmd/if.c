@@ -156,7 +156,7 @@ int cmd_if(char *param)
 		if(!*(pp = ltrimcl(pp)))
 			error_if_command();
 		else
-			parsecommandline(pp);
+			parsecommandline(pp, FALSE);
 
 	return 0;
 }

@@ -326,7 +326,7 @@ static void docommand(char *line)
  * process the command line and execute the appropriate functions
  * full input/output redirection and piping are supported
  */
-void parsecommandline(char *s)
+void parsecommandline(char *s, int redirect)
 {
   char *in = 0;
   char *out = 0;
@@ -338,8 +338,6 @@ void parsecommandline(char *s)
   int num;
 
   assert(s);
-  assert(oldinfd == -1);  /* if fails something is wrong; should NEVER */
-  assert(oldoutfd == -1); /* happen! -- 2000/01/13 ska*/
 
   dprintf(("[parsecommandline (%s)]\n", s));
 
@@ -361,6 +359,14 @@ void parsecommandline(char *s)
       /* Pressed either "No" or ^Break */
       return;
   }
+
+  if(!redirect) {
+  	docommand(s);
+  	return;
+  }
+
+  assert(oldinfd == -1);  /* if fails something is wrong; should NEVER */
+  assert(oldoutfd == -1); /* happen! -- 2000/01/13 ska*/
 
   num = get_redirection(s, &in, &out, &of_attrib);
   if (num < 0)                  /* error */
@@ -712,7 +718,7 @@ int process_input(int xflag, char *commandline)
       	swapOnExec = defaultToSwap;
       if(tracethisline)
       	++tracemode;
-      parsecommandline(parsedline);
+      parsecommandline(parsedline, TRUE);
       if(tracethisline)
       	--tracemode;
       if (echothisline || echo)

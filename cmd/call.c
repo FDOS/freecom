@@ -80,7 +80,7 @@ int cmd_call(char *param)
 			swapOnExec = FALSE;
 	}
 
-	parsecommandline(param);
+	parsecommandline(param, FALSE);
 	if(swapOnExec != ERROR)
 		swapOnExec = FALSE;
 

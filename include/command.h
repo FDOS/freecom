@@ -104,7 +104,7 @@ void fatal_error(char *);
 int is_delim(int);
 void execute(char *, char *);
 void command(char *);
-void parsecommandline(char *);
+void parsecommandline(char *, int);
 int initialize(void);
 void short_version(void);
 int process_input(int xflg, char *cmdline);
