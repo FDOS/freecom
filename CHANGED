@@ -1,3 +1,5 @@
+add: Swedish LNG/ERR files {Oscar Molin}
+
 v0.82 pl 2:
 chg: Prevent double-parsing of redirection in CALL and IF
 chg: updated FreeCOM implementation status doc

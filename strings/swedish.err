@@ -1,0 +1,93 @@
+
+# Critical error national customization file
+#
+#	Language: Swedish / CP850
+#	Author:   OScar Molin
+# 
+#
+#
+#     THIS IS A TEST FILE! NOT FINISHED!
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+#
+## Primary strings
+S2
+BLOCK_DEVICE: Fel %1 enhet %A: %2 område: %3
+S3
+CHAR_DEVICE: Fel %1 enhet %A: %3
+
+## kind of operation
+S0
+READ: läser från
+S1
+WRITE: skriver till
+
+## kind of failed area of block devices
+S4
+DOS: DOS
+S5
+FAT: FAT
+S6
+ROOT: Rot
+S7
+DATA: Data
+
+## action strings
+S8
+IGNORE: (I)gnorera
+S9
+RETRY: (N)ytt försök
+S10
+ABORT: (A)vbryt
+S11
+FAIL: (F)ortsätt
+## keys associated with the actions
+S14 (compacted)
+KEYS_IGNORE: iI
+KEYS_RETRY:  rR
+KEYS_ABORT:  aA
+KEYS_FAIL:   fF
+## embedded strings
+S12
+QUESTION:  ? %.
+S13
+DELIMITER: , %.
+
+## Error strings
+OKÄND: Okänd fel-kod
+S15
+0: försök att bryta skrivskyddet
+1: okänd typ för drivrutin
+2: enhet inte klar
+3: drivrutin fick okänt kommando
+4: datafel (fel CRC)
+5: ogiltig strukturlängd på drivrutinsbegäran
+6: sökfel
+7: okänd mediatyp
+8: sektorn hittades inte
+9: slut på papper i skrivaren
+10: skrivfel
+11: läsfel
+12: allmänt fel
+13: delningsfel
+14: lås fel
+15: felaktigt diskbyte
+16: FCB ej tillgänglig
+17: delningsbuffer overflow
+18: codepage stämmer inte
+19: ingen input
+20: otillräckligt diskutrymme
