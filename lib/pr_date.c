@@ -18,6 +18,9 @@
 	This file bases on DATE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/04/29 12:56:57  skaus
+	bugfix: DATE: does not accept empty line
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -41,7 +44,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -87,7 +90,7 @@ int parsedate(const char * s, struct dosdate_t *datep)
 #endif
 		switch (items) {
 		case 0:                    /* empty line --> always OK */
-		  return 1;
+		  return E_Empty;
 
 		case 1:                    /* single number --> day only */
 		  d.day = nums[0];
@@ -107,7 +110,7 @@ int parsedate(const char * s, struct dosdate_t *datep)
 	case 1:		/* dd/mm/yy */
 		switch (items) {
 		case 0:                    /* empty line --> always OK */
-		  return 1;
+		  return E_Empty;
 
 		case 3:                    /* three numbers --> year, month & day */
 		  d.year = nums[2];
@@ -126,7 +129,7 @@ int parsedate(const char * s, struct dosdate_t *datep)
 	case 2:		/* yy/mm/dd */
 		switch (items) {
 		case 0:                    /* empty line --> always OK */
-		  return 1;
+		  return E_Empty;
 
 		case 3:                    /* three numbers --> year, month & day */
 		  d.year = nums[0];
