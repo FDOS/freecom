@@ -1,3 +1,4 @@
+bugfix: LOADHIGH: disable swapping when executing
 bugfix: init.c: /p:arg ignores argument
 add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 chg: COPY: appFile unneccessarily declared FAR (Tom Ehlert)
