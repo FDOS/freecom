@@ -236,6 +236,10 @@ int initialize(void)
     The name of the current file is string #0. */
   if((offs = env_string(0, 0)) != 0)    /* OK, environment filled */
     grabComFilename(0, (char far *)MK_FP(env_glbSeg, offs));
+#ifdef DEBUG
+  else dprintf(("[ENV: No argv[0]!]\n"));
+#endif
+
   /* After that argv[0] is no longer used and maybe zapped.
   	This also will help, as most programs altering the environment
   	segment externally don't expect a string area. */
@@ -356,6 +360,13 @@ int initialize(void)
     */
 
 /* Now process the options */
+
+#ifdef FEATURE_XMS_SWAP
+	if(autofail) {
+		dprintf(("[INIT: Activate AutoFail handler]\n"));
+		setvect(0x24, autofail_err_handler);
+	}
+#endif
 
 #ifdef INCLUDE_CMD_CTTY
   if (newTTY) {      /* change TTY as early as possible so the caller gets

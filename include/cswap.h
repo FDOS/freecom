@@ -61,7 +61,7 @@ extern struct XMScopy far XMSsave;
 /* Handlers in resident portion for external program execution */
 extern void far interrupt lowlevel_cbreak_handler();
 extern void far interrupt lowlevel_err_handler();
-
+extern void far interrupt autofail_err_handler();
 
 /* functions */
 word XMSswapmessagesIn(loadStatus *status);

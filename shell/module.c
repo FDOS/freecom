@@ -36,10 +36,12 @@ static int loadModule(res_majorid_t major
 	switch(minor) {
 	case 0x00:		/* CRITER autofail */
 		if(!autofail) break;
+		dprintf(("[INIT: Loading AutoFail context]\n"));
 		goto loadMod;
 
 	case 0x03:		/* CRITER code & strings */
 		if(autofail) break;
+		dprintf(("[INIT: Loading Interactive context]\n"));
 
 	loadMod:
 		/* If we reach here and swapOnExec == ERROR

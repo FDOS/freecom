@@ -79,6 +79,9 @@
 ;	  than ' ' are ignored (usually control characters)
 ;
 ; $Log$
+; Revision 1.3  2003/08/03 16:00:57  skaus
+; bugfix: /F (AutoFail) for the XMS_Swap variant
+;
 ; Revision 1.2  2002/04/02 18:09:31  skaus
 ; add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 ;
@@ -228,6 +231,13 @@ StrErrCodes		EQU 15
 ; arguments:
 ;		ES:BX == pointer to context, package int24
 ;		else: as normal INT-24 handler
+
+%ifdef XMS_SWAP_CRITER
+	global _autofail_err_handler
+_autofail_err_handler:
+	mov al, FAIL
+	iret
+%endif
 
 	global _lowlevel_err_handler
 _lowlevel_err_handler:

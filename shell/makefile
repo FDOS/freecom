@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.11  2003/08/03 16:00:57  skaus
+# bugfix: /F (AutoFail) for the XMS_Swap variant
+#
 # Revision 1.10  2002/05/11 22:50:32  skaus
 # v0.83 Beta 40:
 # bugfix: ^Break detection after XMS-Swapping
@@ -171,6 +174,8 @@ DYNSOURCES =
 #MAKEDEP STOP
 
 cswapc.c : ../include/cswap.h ../include/misc.h
+
+xms_crit.asm : ../criter/criter.asm
 
 clobber : clean
 	$(RM) $(RMFLAGS) *.com *.cln command.mak com.exe *.cfg
