@@ -3,9 +3,14 @@
 
 	Input a line via DOS-0A
 
+	Keep the buffer static to allow F3.
+
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/06/25 20:06:36  skaus
+	Update #3
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +34,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -40,6 +45,7 @@
 #include <string.h>
 
 #include "../include/command.h"
+#include "../include/context.h"
 
 #if MAX_INTERNAL_COMMAND_SIZE > 253
 #define CMD_SIZE 253
@@ -47,20 +53,18 @@
 #define CMD_SIZE MAX_INTERNAL_COMMAND_SIZE
 #endif
 
-static unsigned char iobuf[CMD_SIZE + 2] = { CMD_SIZE, '\0'};
+static unsigned char iobuf[CMD_SIZE + 3] = { CMD_SIZE, '\0'};
 
-void readcommandDOS(char * const str, int maxlen)
+#pragma argsused
+char *readcommandDOS(ctxtEC_t far * const ctxt)
 {	struct REGPACK r;
 
-	assert(str);
-	assert(maxlen);
-
-	iobuf[0] = (maxlen < CMD_SIZE)? maxlen: CMD_SIZE;
+	iobuf[0] = CMD_SIZE;
 	if(iobuf[1] > iobuf[0])
 		iobuf[1] = iobuf[0];
 
 	dprintf(("[CMDINPUT characters max:%u in:%u]\n", iobuf[0], iobuf[1]));
-	if(echo)
+	if(dispPrompt)
 		printprompt();
 
 	r.r_ax = 0xa00;
@@ -69,8 +73,7 @@ void readcommandDOS(char * const str, int maxlen)
 	intr(0x21, &r);
 
 	dprintf(("[CMDINPUT characters max:%u out:%u]\n", iobuf[0], iobuf[1]));
-	if(iobuf[1]) 		/* could bug if == 0 */
-		memcpy(str, &iobuf[2], iobuf[1]);
-	str[iobuf[1]] = 0;
+	iobuf[2 + iobuf[1]] = 0;	/* make sure it's terminated */
 	putchar('\n');
+	return estrdup((char*)&iobuf[2]);
 }

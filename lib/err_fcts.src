@@ -83,3 +83,4 @@ error_no_ifct(const char * const name):=TEXT_ERROR_UNKNOWN_IFUNCTION, name
 error_intermixed_redirection(const int fd):=TEXT_ERROR_INTERMIXED_REDIRECTION, fd
 error_no_such_forced_internal_command(const char * const name):=name? TEXT_ERROR_FAILED_FORCED_ICMD_STR: TEXT_ERROR_FAILED_FORCED_ICMD, name
 error_context_corrupted:=TEXT_ERROR_CONTEXT_CORRUPTED
+error_bfile_read(const char * const fnam, const unsigned long lcnt):=TEXT_ERROR_BFILE_READ, fnam, lcnt

@@ -7,11 +7,9 @@
 #include "../config.h"
 
 #include "../include/context.h"
+#include "../include/command.h"
 
-#pragma argsused
 int cmd_exit(char *param)
 {
-	F(exit) = 1;
-
-	return 0;
+	return qecAction(param, &doExit);
 }

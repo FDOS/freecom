@@ -6,6 +6,9 @@
 	This file bases on FILECOMP.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/06/25 20:06:36  skaus
+	Update #3
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,125 +32,57 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
 
 #include <assert.h>
-#include <ctype.h>
 #include <dir.h>
-#include <dos.h>
-#include <stdio.h>
 #include <string.h>
 
+#include <dfn.h>
+
 #include "../include/command.h"
-#include "../strings.h"
+#include "../err_fcts.h"
 
-void complete_filename(char *str, unsigned charcount)
-{
-  // variables found within code
-  struct ffblk file;
+void complete_filename(char * const str, const unsigned charcount)
+{	int matches, is_dir, i;
+	struct ffblk f;
+	char *fnam;
 
-  int found_dot = 0;
-  int curplace = 0;
-  int start;
-  int count;
-  int perfectmatch = 1;
-  int makelower;
-  char path[128];
-  char fname[14];
-  char maxmatch[13] = "";
-  char directory[128];
+	assert(str);
+	assert(charcount);
+	assert(strlen(str) < charcount);
 
-  assert(str);
+	fnam = dfnfilename(str);
+	assert(fnam);
+	if(sizeof(f.ff_name) + 2 >= charcount - (fnam - str)) {
+		error_long_internal_line();
+		return;
+	}
 
-  // expand current file name
-  count = charcount - 1;
-  if (count < 0)
-    makelower = count = 0;
-  else
-  {
-    // if last character is lower case, then make lookup lower case.
-    makelower = islower(str[count]);
-  }
+	if(strchr(fnam, '.'))
+		/* There is a dot --> search for extension only */
+		strcat(fnam, "*");
+	else	strcat(fnam, "*.*");
 
-  while (count > 0 && str[count] != ' ')  // find front of word
-
-    count--;
-
-  if (str[count] == ' ')        // if not at beginning, go forward 1
-
-    count++;
-
-  start = count;
-
-  // extract directory from word
-  strcpy(directory, &str[start]);
-  curplace = strlen(directory) - 1;
-  while (curplace >= 0 && directory[curplace] != '\\' &&
-         directory[curplace] != ':')
-  {
-    directory[curplace] = 0;
-    curplace--;
-  }
-
-  strcpy(path, &str[start]);
-
-  // look for a . in the filename
-  for (count = strlen(directory); path[count] != 0; count++)
-    if (path[count] == '.')
-    {
-      found_dot = 1;
-      break;
-    }
-  if (found_dot)
-    strcat(path, "*");
-  else
-    strcat(path, "*.*");
-
-  curplace = 0;                 // current fname
-
-  if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
-  {                             // find anything
-
-    do
-    {
-      if (file.ff_name[0] == '.') // ignore . and ..
-
-        continue;
-
-      strcpy(fname, file.ff_name);
-      if (makelower)
-        strlwr(fname);
-
-      if (file.ff_attrib == FA_DIREC)
-        strcat(fname, "\\");
-      else
-        strcat(fname, " ");
-
-      if (!maxmatch[0] && perfectmatch)
-        strcpy(maxmatch, fname);
-
-      else
-      {
-        for (count = 0; maxmatch[count] && fname[count]; count++)
-          if (maxmatch[count] != fname[count])
-          {
-            perfectmatch = 0;
-            maxmatch[count] = 0;
-            break;
-          }
-      }
-    }
-    while (FINDNEXT(&file) == 0);
-
-    strcpy(&str[start], directory);
-    strcat(&str[start], maxmatch);
-
-    if (!perfectmatch)
-      beep();
-  }
-  else                          /* no match found */
-    beep();
+	matches = 0;
+	if(findfirst(str, &f, FA_DIREC) == 0) {
+		do if((is_dir = f.ff_attrib & FA_DIREC) == 0
+		 || (strcmp(f.ff_name, ".") && strcmp(f.ff_name, ".."))) {
+			if(++matches == 1)			/* first match */
+				strcpy(fnam, f.ff_name);
+			else {						/* probe how much is equal */
+				for(i = 0; fnam[i] && fnam[i] == f.ff_name[i]; ++i);
+				fnam[i] = 0;		/* keep the same chars only */
+				if(!i)	break;		/* nothing can change the name */
+			}
+		} while(findnext(&f) == 0);
+	}
+	if(matches == 1) {			/* perfect match */
+		if(is_dir)
+			strcat(fnam, "\\");
+	} else				/* no or too many matches found */
+		beep();
 }

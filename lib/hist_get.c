@@ -17,20 +17,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <dynstr.h>
+
 #include "../include/context.h"
 #include "../include/misc.h"
 
-int histGet(const int num, char * const str, const unsigned len)
+int histGet(const int num, char ** const str)
 {	char *p;
 
 	assert(str);
-	assert(len);
 
 	if(ctxtGet(0, CTXT_TAG_HISTORY, realNum(CTXT_TAG_HISTORY, num), &p) == 0) {
 		assert(p);
-		strncpy(str, p, len);
-		str[len - 1] = 0;		/* Make sure the string is terminated */
-		free(p);
+		StrRepl(*str, p);
 		return 1;
 	}
 	return 0;

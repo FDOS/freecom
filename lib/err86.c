@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_context_corrupted
-void error_context_corrupted(void)
-{	displayError(TEXT_ERROR_CONTEXT_CORRUPTED);
+#undef error_bfile_read
+void error_bfile_read(const char * const fnam, const unsigned long lcnt)
+{	displayError(TEXT_ERROR_BFILE_READ, fnam, lcnt);
 }

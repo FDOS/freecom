@@ -14,17 +14,17 @@
 
 #include "../include/command.h"
 
-struct CMD *is_icmd(const char * const cname)
-{	struct CMD *cmd;
+struct IFCT *is_ifct(const char * const cname)
+{	struct IFCT *fct;
 	int len;
 
 	if(cname) {
 		len = strlen(cname) + 1;
 
-		cmd = internalCommands;
-		do if(memcmp(cmd->name, cname, len) == 0)
-			return cmd;
-		while((++cmd)->name);
+		fct = internalFunctions;
+		do if(memcmp(fct->name, cname, len) == 0)
+			return fct;
+		while((++fct)->name);
 	}
 
 	return 0;

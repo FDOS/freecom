@@ -139,7 +139,7 @@ char *expEnvVars(char * const param)
 			case '?':
 				{	char hbuf[sizeof(unsigned) * 8 + 2];
 
-					sprintf(hbuf, "%u", errorlevel);
+					sprintf(hbuf, "%u", F(errorlevel));
 					appStr(hbuf);
 				}
 				break;

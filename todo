@@ -9,3 +9,5 @@ nls_time.c: missing free(q) at the end?
 IF: MS DOS 6 says: if a,a==a echo OK!!!
 cvs remove message.c
 rm include\batch.h
+CTTY in redirection
+INIT and F() macro

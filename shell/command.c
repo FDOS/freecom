@@ -42,6 +42,7 @@
 #include "../include/crossjmp.h"
 
 
+#if 0
   /* Shall the message block remain in memory when an external
     program is executed */
 int persistentMSGs = 0;
@@ -49,13 +50,7 @@ int interactive = 0;	/* command directly entered by user */
 int exitflag = 0;               /* indicates EXIT was typed */
 int canexit = 0;                /* indicates if this shell is exitable
 									enable within initialize() */
-int ctrlBreak = 0;              /* Ctrl-Break or Ctrl-C hit */
 int errorlevel = 0;             /* Errorlevel of last launched external prog */
-int forceLow = 0;               /* load resident copy into low memory */
-int autofail = 0;				/* Autofail <-> /F on command line */
-int inInit = 1;
-int isSwapFile = 0;
-jmp_buf jmp_beginning;
 
 	/* FALSE: no swap this time
 		TRUE: swap this time
@@ -63,11 +58,22 @@ jmp_buf jmp_beginning;
 	*/
 int swapOnExec = FALSE;
 int defaultToSwap = FALSE;
+#endif
+
+int ctrlBreak = 0;              /* Ctrl-Break or Ctrl-C hit */
+int forceLow = 0;               /* load resident copy into low memory */
+int autofail = 0;				/* Autofail <-> /F on command line */
+int inInit = 1;
+int isSwapFile = 0;
+jmp_buf jmp_beginning;
 	/* if != 0, pointer to static context
 		NOT allowed to alter if swapOnExec == ERROR !!
 	*/
 kswap_p kswapContext = 0;
 
+FLAG swap, echoBatch, dispPrompt, rewindBatchFile, traceMode;
+FLAG interactive, called;
+FLAG doExit, doCancel, doQuit;
 
 void perform_exec_result(int result)
 {
@@ -75,7 +81,7 @@ void perform_exec_result(int result)
 	if (result == -1)
 		perror("executing spawnl function");
 	else
-		errorlevel = result;
+		F(errorlevel) = result;
 
 }
 
@@ -141,7 +147,7 @@ static void execute(char *first, char *rest)
 /* Prepare to call an external program */
 
 	/* Unload the message block if not loaded persistently */
-	if(!persistentMSGs)
+	if(!F(persistentMSGs))
 		unloadMsgs();
 
 /* Execute the external program */
@@ -412,7 +418,7 @@ static int makePipeContext(char *** const Xout
 		}
 		free(ivarOut);
 		ivarOut = ivarIn;
-		if((ivarIn = ecMkIVar()) == 0
+		if((ivarIn = makePipeDelTemp()) == 0
 		 || !ecMkV1C(pipe[i], ">", q? "": "&", "%@IVAR(", ivarOut, ")"
 		     , "<%@IVAR(", ivarIn, ")")
 		 || !ecMkHC("IVAR ", ivarOut, "=%@TEMPFILE"))
@@ -424,7 +430,7 @@ static int makePipeContext(char *** const Xout
 	assert(!p);
 	if((p = tmpfn()) == 0			/* make the tempfile */
 	 || (q = erealloc(p, strlen(p) + 3)) == 0	/* needed below */
-	 || !ivarSet(ivarIn, p = q))		/* in 'p', if Set() fails */
+	 || ivarSet(ivarIn, p = q) != E_None)		/* in 'p', if Set() fails */
 		goto errRet;
 
 	/* Setup the *Xout array to contain the previous ivarIn */
@@ -584,7 +590,7 @@ void parsecommandline(char *Xs)
 	dprintf(("[alias expanded to (%s)]\n", s));
 #endif
 
-	if(trace) {		/* Question after the variables expansion
+	if(traceMode) {		/* Question after the variables expansion
                                    and make sure _all_ executed commands will
                                    honor the mode */
 		fputs(s, stdout);
@@ -633,11 +639,15 @@ void run_exec_context(void)
 
 			/* as we are about to aquire a new command line, some
 				options are resetted to their defaults */
+#if 0
 			echo = F(echo);
 			trace = F(trace);
 			swap = F(swap);
 			called = F(call);
 			interactive = 0;
+#else
+			dprintf(("Need to set local options before exec'ing context\n"));
+#endif
 
 			if((cmdline = (ecFunction[ec->ctxt_type])(ec)) != 0) {
 				/* process this command line */
@@ -653,7 +663,7 @@ void run_exec_context(void)
 				 */
 				if(*(p = ltrimcl(cmdline)) == '?' && *(q = ltrimcl(p + 1))) {
 					/* something follows --> tracemode */
-					trace = 1;
+					traceMode = 1;
 					p = q;			/* skip the prefix */
 				}
 
@@ -937,7 +947,7 @@ int main(void)
   if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
     run_exec_context();
 
-  if(!canexit)
+  if(!F(canexit))
     hangForever();
 
 #ifdef FEATURE_KERNEL_SWAP_SHELL

@@ -12,6 +12,7 @@
 
 #include "../config.h"
 
+#include "../include/command.h"
 #include "../include/cmdline.h"
 #include "../include/misc.h"
 

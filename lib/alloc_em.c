@@ -11,7 +11,7 @@
 void *emalloc(const size_t size)
 {	void *h;
 
-	if((h = malloc(size)) != 0)
+	if((h = malloc(size)) == 0)
 		error_out_of_memory();
 
 	return h;

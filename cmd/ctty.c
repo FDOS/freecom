@@ -91,14 +91,10 @@ int cmd_ctty(char *param)
     redirection would left CTTY in a half-made status.
   */
   failed = dup2(fout, 2);   /* no redirection support */
-  if(oldinfd == -1) {     /* stdin not redirected */
     failed = dup2(fin, 0) || failed;
     close(fin);
-  } else  oldinfd = fin;
-  if(oldoutfd == -1) {      /* stdout not redirected */
     failed = dup2(fout, 1) || failed;
     close(fout);
-  } else  oldoutfd = fout;
 
   if(failed)
     error_ctty_dup(param);

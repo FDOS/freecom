@@ -7,6 +7,9 @@
 	This file bases on ENVIRON.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/06/25 20:06:36  skaus
+	Update #3
+
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -30,7 +33,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -42,13 +45,12 @@
 
 #include "../include/misc.h"
 
-void clrcmdline(char * const str, const int maxlen
- , const unsigned orgx, const unsigned orgy)
+void clrcmdline(char * const str, const unsigned orgx, const unsigned orgy)
 {
-	assert(str);
-
-	goxy(orgx, orgy);
-	fputmc(' ', strlen(str) + 1, stdout);
-	memset(str, 0, maxlen);
+	if(str) {
+		goxy(orgx, orgy);
+		fputmc(' ', strlen(str) + 1, stdout);
+		strset(str, 0);
+	}
 	goxy(orgx, orgy);
 }

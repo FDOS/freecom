@@ -286,9 +286,10 @@ many percent signs as enumerated in the string.
 
 'f' FOR context #2:
 21	BYTE	bytes required to call next findnext()
-ASCIIZ	variable name
-ASCIIZ	command
-
+WORD	offset of variable name within F-context
+WORD	offset of command within F-context
+ASCIIZ	prefix to found filenames
+A f-context is always preceeded by a F-context
 variable name - see 'F' context.
 
 'C' Command context:
@@ -297,6 +298,11 @@ ASCIIZ	command
 This context contains a command that is to be executed when popped.
 NOTE: This context is particularily useful in conjunction with the
 internal commands and "::=" (see CMT3.TXT and ICMDS.TXT).
+
+'c' non-ignore Command context:
+ASCIIZ	command
+
+As the C-context, but is not ignored when CANCEL'ling or EXIT'ting.
 
 'E' Exit context:
 Demands to terminate FreeCOM. Though, if FreeCOM was started with /P,

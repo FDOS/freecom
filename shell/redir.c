@@ -36,12 +36,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <sstr.h>
+
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
 
 /* The order of the strings MUST match the ones of the enum's below */
-static char ** redir[] = {
+static char * redir[] = {
 	">>&>"
 	, ">>&"
 	, ">&>"
@@ -67,8 +69,8 @@ static char outCode[] = {
 	3, 2
 };
 
-static prefixOut[] = ">?";
-static prefixIn[] = "<";
+static char prefixOut[] = ">?";
+static char prefixIn[] = "<";
 
 static int appEntry(const char * const prefix
 	, char *** const items
@@ -94,32 +96,37 @@ static int appEntry(const char * const prefix
 		return 0;
 	}
 	*items = h;
-	if((h[*numItems++] = l
+	if((h[(*numItems)++] = l
 	 = malloc(Strlen(prefix) + (len = q - p) + 1)) == 0) {
 		error_out_of_memory();
 		return 0;
 	}
 	assert(l);
-	memcpy(Stpcpy(l, prefix), p, len)[len] = 0;
+	q = Stpcpy(l, prefix);
+	memcpy(q, p, len);
+	q[len] = 0;
 	h[*numItems] = 0;
+
+	return 1;
 }
 
 int get_redirection(char * const s
 	, char *** const in
 	, char *** const out
 	, char *** const pipe)
-{	int ch, i, len;
+{	int i, len;
 	int numIn, numOut, num;
 	char *src = s;	/* The command line is compacted by copying */
 	char *dst = s;	/* it byte-wise, skipping redirections */
 
 	assert(s);
 	assert(in);
-	assert(on);
+	assert(out);
 	assert(pipe);
 
 	num = numIn = numOut = 0;
-	*in = *out = *pipe = 0;
+	*in = *out = 0;
+	*pipe = 0;
 
 	for(;;) {
 		char *p = skipQuotedWord(src, (char*)0, "<>|");
@@ -150,7 +157,7 @@ int get_redirection(char * const s
 			break;
 
 		case pipBoth:
-			*dst++ = #('|#(';		/* stdout & stderr marker */
+			*dst++ = '|';		/* stdout & stderr marker */
 			/**FALL THROUGH**/
 		case pipOut:
 			{	char **p;
@@ -173,9 +180,9 @@ int get_redirection(char * const s
 	}
 
 errRet:
-	freep(in);		*in = 0;
-	freep(out);		*out = 0;
-	StrFree_(pipe);
+	freep(*in);		*in = 0;
+	freep(*out);	*out = 0;
+	free(*pipe);	*pipe = 0;
 
 	return -1;
 }

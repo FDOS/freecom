@@ -158,6 +158,10 @@ Line #%ld in batchfile '%s' too long.
 Batchfile '%s' not found.
 .
 
+:TEXT_ERROR_BFILE_READ#1
+Error reading batchfile '%s' at line #%ul.
+.
+
 :TEXT_ERROR_BFILE_LABEL
 Batchfile '%s' does not contain label '%s'.
 .

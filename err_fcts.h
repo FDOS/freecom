@@ -85,3 +85,4 @@ void error_no_ifct(const char * const name);
 void error_intermixed_redirection(const int fd);
 void error_no_such_forced_internal_command(const char * const name);
 void error_context_corrupted(void);
+void error_bfile_read(const char * const fnam, const unsigned long lcnt);

@@ -11,7 +11,7 @@
 void *erealloc(void * const poi, const size_t size)
 {	void *h;
 
-	if((h = realloc(poi, size)) != 0)
+	if((h = realloc(poi, size)) == 0)
 		error_out_of_memory();
 
 	return h;

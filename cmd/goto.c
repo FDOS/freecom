@@ -41,6 +41,7 @@ int cmd_goto(char *param)
 	}
 
 	StrRepl(F(goto), tmp);
+	rewindBatchFile = 1;
 
 	return 0;
 }

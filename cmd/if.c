@@ -15,6 +15,7 @@
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
+#include "../include/context.h"
 #include "../err_fcts.h"
 
 int cmd_if(char *param)
@@ -47,7 +48,7 @@ int cmd_if(char *param)
 		pp = skip_word(param);
 		*pp++ = '\0';
 
-		if(FINDFIRST(param, &f, FA_NORMAL) == 0)
+		if(findfirst(param, &f, FA_NORMAL) == 0)
 			x_flag = X_EXEC;
 	}
 
@@ -70,7 +71,7 @@ int cmd_if(char *param)
 			return 0;
 		}
 
-		if(errorlevel >= n)
+		if(F(errorlevel) >= n)
 			x_flag = X_EXEC;
 	}
 

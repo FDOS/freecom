@@ -4,9 +4,15 @@
 	Show files matching a given file completion pattern
 	returns 1 if at least one match, else returns 0
 
+	This function should somehow use:
+		DIR/B/W <pattern>
+
 	This file bases on FILECOMP.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/06/25 20:06:36  skaus
+	Update #3
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -30,111 +36,64 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
 
 #include <assert.h>
-#include <ctype.h>
 #include <dir.h>
-#include <dos.h>
-#include <stdio.h>
 #include <string.h>
+
+#include <dfn.h>
 
 #include "../include/command.h"
 #include "../strings.h"
+#include "../err_fcts.h"
 
-int show_completion_matches(char *str, unsigned charcount)
-{
-  // varibles found within code
-  struct ffblk file;
+int show_completion_matches(char * const str, const unsigned charcount)
+{	int count, is_dir;
+	struct ffblk f;
+	char *fnam, *end, buf[sizeof(f.ff_name) + 2];
 
-  int found_dot = 0;
-  int curplace = 0;
-  int start;
-  int count;
-  char path[128];
-  char fname[14];
-  char directory[128];
+	assert(str);
+	assert(charcount);
+	assert(strlen(str) < charcount);
 
-  assert(str);
+	fnam = dfnfilename(str);
+	assert(fnam);
+	if(4 >= charcount - (fnam - str)) {
+		error_long_internal_line();
+		return 0;
+	}
 
-  // expand current file name
-  count = charcount - 1;
-  if (count < 0)
-    count = 0;
+	end = strchr(fnam, '\0');
+	if(strchr(fnam, '.'))
+		/* There is a dot --> search for extension only */
+		strcat(fnam, "*");
+	else	strcat(fnam, "*.*");
 
-  while (count > 0 && str[count] != ' ')  // find front of word
+	count = 1;
+	if(findfirst(str, &f, FA_DIREC) == 0) {
+		do if((is_dir = f.ff_attrib & FA_DIREC) == 0
+		 || (strcmp(f.ff_name, ".") && strcmp(f.ff_name, ".."))) {
+		 	if(--count == 0) {
+		 		putchar('\n');
+		 		count = 5;
+		 	}
+		 	if(is_dir)
+		 		sprintf(buf, "[%s]", f.ff_name);
+			displayString(TEXT_FILE_COMPLATION_DISPLAY
+			 , is_dir? buf: f.ff_name);
+		} while(findnext(&f) == 0);
+		putchar('\n');
+		*end = 0;			/* Make the string unchanged */
+		return 1;
+	}
 
-    count--;
+	/* no match found */
+	beep();
+	*end = 0;				/* Make the string unchanged */
 
-  if (str[count] == ' ')        // if not at beginning, go forward 1
-
-    count++;
-
-  start = count;
-
-  // extract directory from word
-  strcpy(directory, &str[start]);
-  curplace = strlen(directory) - 1;
-  while (curplace >= 0 && directory[curplace] != '\\' &&
-         directory[curplace] != ':')
-  {
-    directory[curplace] = 0;
-    curplace--;
-  }
-
-  strcpy(path, &str[start]);
-
-  // look for a . in the filename
-  for (count = strlen(directory); path[count] != 0; count++)
-    if (path[count] == '.')
-    {
-      found_dot = 1;
-      break;
-    }
-  if (found_dot)
-    strcat(path, "*");
-  else
-    strcat(path, "*.*");
-
-  curplace = 0;                 // current fname
-
-  if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
-  {                             // find anything
-
-    putchar('\n');
-    count = 0;
-    do
-    {
-      if (file.ff_name[0] == '.') // ignore . and ..
-
-        continue;
-
-      if (file.ff_attrib == FA_DIREC)
-        sprintf(fname, "[%s]", file.ff_name);
-      else
-        strcpy(fname, file.ff_name);
-
-      displayString(TEXT_FILE_COMPLATION_DISPLAY, fname);
-      if (++count == 5)
-      {
-        putchar('\n');
-        count = 0;
-      }
-    }
-    while (FINDNEXT(&file) == 0);
-
-    if (count)
-      putchar('\n');
-
-  }
-  else
-    /* no match found */
-  {
-    beep_low();
-    return 0;
-  }
-  return 1;
+	return 0;
 }

@@ -20,6 +20,7 @@
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
+#include "../include/context.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
@@ -116,7 +117,7 @@ int cmd_del(char *param)
 				}
 			}
 
-			if (FINDFIRST(fullname, &f, FA_ARCH)) {
+			if(findfirst(fullname, &f, FA_ARCH)) {
 				error_sfile_not_found(fullname);
 			} else do {
 				strcpy(p, f.ff_name);       /* Make the full path */
@@ -150,13 +151,13 @@ int cmd_del(char *param)
 					++count;
 #endif
 
-			} while (FINDNEXT(&f) == 0);
+			} while(findnext(&f) == 0);
 		} while(++i < argc);
 	}
 
 errRet:
 
-	if(echo)
+	if(implicitVerbose)
 		dispCount(count, TEXT_MSG_DEL_CNT_FILES);
 
 	freep(arg);

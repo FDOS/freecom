@@ -19,8 +19,9 @@
 #include <dfn.h>
 #include <supplio.h>
 
-#include "../include/command.h"
 #include "../include/cmdline.h"
+#include "../include/command.h"
+#include "../include/context.h"
 #include "../err_fcts.h"
 #include "../include/misc.h"
 #include "../strings.h"
@@ -112,7 +113,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
   assert(pattern);
   assert(src);
 
-  if(FINDFIRST(pattern, &ff, FA_RDONLY | FA_ARCH) != 0) {
+  if(findfirst(pattern, &ff, FA_RDONLY | FA_ARCH) != 0) {
     error_sfile_not_found(pattern);
     return 0;
   }
@@ -142,7 +143,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
       }
     } while((h = h->app) != 0);
 
-    if(interactive_command		/* Suppress prompt if in batch file */
+    if(interactive		/* Suppress prompt if in batch file */
      && openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != 0) {
     	int destIsDevice = isadev(fileno(fout));
 
@@ -269,7 +270,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
       return 0;
     }
     free(rDest);
-  } while(FINDNEXT(&ff) == 0);
+  } while(findnext(&ff) == 0);
 
   return 1;
 }

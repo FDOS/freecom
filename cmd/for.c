@@ -76,7 +76,7 @@ varfound:
 	}
 
 	/* Followed by a '(', find also matching ')' */
-	if(*param != '(' || 0 == (*paramE = strchr(param, ')')))
+	if(*param != '(' || ')' != *(*paramE = skipqword(param, ")")))
 		return noParens;
 
 	*paramS = param + 1;
@@ -97,6 +97,8 @@ varfound:
 static int doFOR(char *var, char *varE, char *param, char *paramE
 	, char *cmd, int flags)
 {	char *oldContents;
+	char **argv;			/* pattern list */
+	int argc;
 	int rv;
 
 	assert(var);
@@ -143,11 +145,20 @@ static int doFOR(char *var, char *varE, char *param, char *paramE
 		rv = ecMkHC("SET /C ", var, "=", oldContents, (char*)0);
 	}
 
-	if(rv != E_None)
-		return rv;
+	if(rv == E_None) {
+		if((argv = split(param, &argc)) == 0) {
+			error_out_of_memory();
+			return E_NoMem;
+		}
 
-	/* Make the F context */
-	return ecMkF(param, var, cmd);
+		/* Make the F context */
+		if(argc)
+			rv = ecMkF(argv, argc, var, cmd);
+		/* else silently ignore an empty argument line */
+		freep(argv);
+	}
+
+	return rv;
 }
 
 
@@ -188,7 +199,7 @@ int cmd_for(char *param)
 	case OK:
 		break;
 	default:
-		dprintf(("FOR: Invalid return value from checkFOR()]\n"));
+		dprintf(("[FOR: Invalid return value from checkFOR()]\n"));
 		return 1;
 #endif
 	}

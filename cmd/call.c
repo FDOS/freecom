@@ -13,6 +13,7 @@
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
+#include "../include/context.h"
 #include "../err_fcts.h"
 
 static int optS = 0;		/* force to swap out FreeCOM during call */

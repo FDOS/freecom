@@ -52,7 +52,7 @@ int cmd_ver(char *rest)
   char **argv;
   int argc, opts, ec = E_None;
 
-  short_version();
+  short_version(0);
 
 	optR = optW = optD = optC = 0;
 

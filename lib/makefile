@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.3.2.3  2001/06/25 20:06:36  skaus
+# Update #3
+#
 # Revision 1.3.2.2  2001/06/21 21:40:35  skaus
 # Update #2
 #
@@ -55,57 +58,58 @@ MAXLINELENGTH !:= 4096
 .INCLUDE : ../_config.mk
 
 # Sources of this make target
-SRC = alloc_ec.c alloc_em.c alloc_er.c alprmblk.c alsysblk.c beep_l.c \
-	beep_n.c brk_get.c brk_set.c cbreak.c cbs.c cd_dir.c cgetch.c cgettime.c \
-	chgctxt.c chgdrv.c chgenv.c chgenvc.c chgenvr.c clrline.c cmdinput.c \
-	comfile.c compfile.c ctxt.c ctxt_adr.c ctxt_as.c ctxt_chg.c ctxt_clr.c \
-	ctxt_get.c ctxt_inf.c ctxt_ini.c ctxt_mk.c ctxt_mkn.c ctxt_pop.c \
-	ctxt_psh.c ctxt_rnu.c ctxt_ses.c ctxt_set.c ctxt_sp.c ctxt_ss.c \
-	ctxt_vw.c curdatel.c curtime.c cwd.c dateget.c dateset.c dbg_c.c \
-	dbg_mem.c dbg_prnt.c dbg_s.c dbg_sn.c devopen.c dispcnt.c drvnum.c \
-	efct_001.c efct_002.c exec.c exec1.c exp_ev.c farread.c fcompl1.c \
-	fcompl2.c fdattr.c fdevopen.c fillcomp.c find.c find_arg.c freep.c \
-	frsysblk.c fstpcpy.c gallstr.c get1mcb.c getcnam.c getenv.c goxy.c \
-	grabfcom.c gumblink.c hdlrctxt.c hist_get.c hist_set.c inputdos.c \
-	is_empty.c is_fnamc.c is_fnstr.c is_icmd.c is_ivar.c is_num.c is_pchr.c \
-	isadev.c keyprsd.c lastdget.c lastdset.c leadopt.c lowexec.asm ltrimcl.c \
-	ltrimsp.c lwr1wd.c match.c messages.c mk_rddir.c mktmpfil.c msg_dflt.c \
-	msg_dps.c msg_fstr.c msg_get.c msg_gpt.c msg_mkey.c msg_prmp.c mux_ae.c \
-	nls.c nls_date.c nls_time.c num_fmt.c onoff.c openf.c optsb.c optsi.c \
-	optss.c parsenum.c pr_date.c pr_prmpt.c pr_time.c prprompt.c realnum.c \
-	reg_str.c res.c res_r.c res_w.c resfile.c rmtmpfil.c rtrimcl.c rtrimsp.c \
-	salloc.c samefile.c scancmd.c scanopt.c set_arg.c showcmds.c skippath.c \
-	skqwd.c spfnam.c split.c splitfc.c sumblink.c tempfile.c timeget.c \
-	timeset.c tmpnam.c trimcl.c trimsp.c txtlend.c unquote.c vcgetch.c \
-	vcgetstr.c where.c
-OBJ = alloc_ec.obj alloc_em.obj alloc_er.obj alprmblk.obj alsysblk.obj \
-	beep_l.obj beep_n.obj brk_get.obj brk_set.obj cbreak.obj cbs.obj \
-	cd_dir.obj cgetch.obj cgettime.obj chgctxt.obj chgdrv.obj chgenv.obj \
-	chgenvc.obj chgenvr.obj clrline.obj cmdinput.obj comfile.obj \
-	compfile.obj ctxt.obj ctxt_adr.obj ctxt_as.obj ctxt_chg.obj ctxt_clr.obj \
-	ctxt_get.obj ctxt_inf.obj ctxt_ini.obj ctxt_mk.obj ctxt_mkn.obj \
-	ctxt_pop.obj ctxt_psh.obj ctxt_rnu.obj ctxt_ses.obj ctxt_set.obj \
-	ctxt_sp.obj ctxt_ss.obj ctxt_vw.obj curdatel.obj curtime.obj cwd.obj \
-	dateget.obj dateset.obj dbg_c.obj dbg_mem.obj dbg_prnt.obj dbg_s.obj \
-	dbg_sn.obj devopen.obj dispcnt.obj drvnum.obj efct_001.obj efct_002.obj \
-	exec.obj exec1.obj exp_ev.obj farread.obj fcompl1.obj fcompl2.obj \
-	fdattr.obj fdevopen.obj fillcomp.obj find.obj find_arg.obj freep.obj \
-	frsysblk.obj fstpcpy.obj gallstr.obj get1mcb.obj getcnam.obj getenv.obj \
-	goxy.obj grabfcom.obj gumblink.obj hdlrctxt.obj hist_get.obj \
-	hist_set.obj inputdos.obj is_empty.obj is_fnamc.obj is_fnstr.obj \
-	is_icmd.obj is_ivar.obj is_num.obj is_pchr.obj isadev.obj keyprsd.obj \
-	lastdget.obj lastdset.obj leadopt.obj lowexec.obj ltrimcl.obj \
-	ltrimsp.obj lwr1wd.obj match.obj messages.obj mk_rddir.obj mktmpfil.obj \
-	msg_dflt.obj msg_dps.obj msg_fstr.obj msg_get.obj msg_gpt.obj \
-	msg_mkey.obj msg_prmp.obj mux_ae.obj nls.obj nls_date.obj nls_time.obj \
-	num_fmt.obj onoff.obj openf.obj optsb.obj optsi.obj optss.obj \
-	parsenum.obj pr_date.obj pr_prmpt.obj pr_time.obj prprompt.obj \
-	realnum.obj reg_str.obj res.obj res_r.obj res_w.obj resfile.obj \
-	rmtmpfil.obj rtrimcl.obj rtrimsp.obj salloc.obj samefile.obj scancmd.obj \
-	scanopt.obj set_arg.obj showcmds.obj skippath.obj skqwd.obj spfnam.obj \
-	split.obj splitfc.obj sumblink.obj tempfile.obj timeget.obj timeset.obj \
-	tmpnam.obj trimcl.obj trimsp.obj txtlend.obj unquote.obj vcgetch.obj \
-	vcgetstr.obj where.obj
+SRC = act_qec.c alloc_ec.c alloc_ed.c alloc_em.c alloc_er.c alloc_es.c \
+	alprmblk.c alsysblk.c beep_l.c beep_n.c brk_get.c brk_set.c cbreak.c \
+	cbs.c cd_dir.c cgetch.c cgettime.c chgctxt.c chgdrv.c chgenv.c chgenvc.c \
+	chgenvr.c clrline.c cmdinput.c comfile.c compfile.c ctxt.c ctxt_adr.c \
+	ctxt_as.c ctxt_chg.c ctxt_clr.c ctxt_get.c ctxt_inf.c ctxt_ini.c \
+	ctxt_mk.c ctxt_mkn.c ctxt_pop.c ctxt_psh.c ctxt_rnu.c ctxt_ses.c \
+	ctxt_set.c ctxt_sp.c ctxt_ss.c ctxt_vw.c curdatel.c curtime.c cwd.c \
+	dateget.c dateset.c dbg_c.c dbg_mem.c dbg_prnt.c dbg_s.c dbg_sn.c \
+	devopen.c dispcnt.c drvnum.c efct_001.c efct_002.c exec.c exec1.c \
+	exp_ev.c farread.c fcompl1.c fcompl2.c fdattr.c fdevopen.c fillcomp.c \
+	find.c find_arg.c freep.c frsysblk.c fstpcpy.c gallstr.c get1mcb.c \
+	getcnam.c getenv.c goxy.c grabfcom.c gumblink.c hdlrctxt.c hist_get.c \
+	hist_set.c inputdos.c is_empty.c is_fnamc.c is_fnstr.c is_icmd.c \
+	is_ifct.c is_ivar.c is_num.c is_pchr.c isadev.c ivarset.c keyprsd.c \
+	lastdget.c lastdset.c leadopt.c lowexec.asm ltrimcl.c ltrimsp.c lwr1wd.c \
+	match.c messages.c mk_rddir.c mktmpfil.c msg_dflt.c msg_dps.c msg_fstr.c \
+	msg_get.c msg_gpt.c msg_mkey.c msg_prmp.c mux_ae.c nls.c nls_date.c \
+	nls_time.c num_fmt.c onoff.c openf.c optsb.c optsi.c optss.c parsenum.c \
+	pr_date.c pr_prmpt.c pr_time.c prprompt.c realnum.c reg_str.c res.c \
+	res_r.c res_w.c resfile.c rmtmpfil.c rtrimcl.c rtrimsp.c salloc.c \
+	samefile.c scancmd.c scanopt.c set_arg.c showcmds.c skippath.c skqwd.c \
+	spfnam.c split.c splitfc.c sumblink.c tempfile.c timeget.c timeset.c \
+	tmpnam.c trimcl.c trimsp.c txtlend.c unquote.c vcgetch.c vcgetstr.c \
+	where.c
+OBJ = act_qec.obj alloc_ec.obj alloc_ed.obj alloc_em.obj alloc_er.obj \
+	alloc_es.obj alprmblk.obj alsysblk.obj beep_l.obj beep_n.obj brk_get.obj \
+	brk_set.obj cbreak.obj cbs.obj cd_dir.obj cgetch.obj cgettime.obj \
+	chgctxt.obj chgdrv.obj chgenv.obj chgenvc.obj chgenvr.obj clrline.obj \
+	cmdinput.obj comfile.obj compfile.obj ctxt.obj ctxt_adr.obj ctxt_as.obj \
+	ctxt_chg.obj ctxt_clr.obj ctxt_get.obj ctxt_inf.obj ctxt_ini.obj \
+	ctxt_mk.obj ctxt_mkn.obj ctxt_pop.obj ctxt_psh.obj ctxt_rnu.obj \
+	ctxt_ses.obj ctxt_set.obj ctxt_sp.obj ctxt_ss.obj ctxt_vw.obj \
+	curdatel.obj curtime.obj cwd.obj dateget.obj dateset.obj dbg_c.obj \
+	dbg_mem.obj dbg_prnt.obj dbg_s.obj dbg_sn.obj devopen.obj dispcnt.obj \
+	drvnum.obj efct_001.obj efct_002.obj exec.obj exec1.obj exp_ev.obj \
+	farread.obj fcompl1.obj fcompl2.obj fdattr.obj fdevopen.obj fillcomp.obj \
+	find.obj find_arg.obj freep.obj frsysblk.obj fstpcpy.obj gallstr.obj \
+	get1mcb.obj getcnam.obj getenv.obj goxy.obj grabfcom.obj gumblink.obj \
+	hdlrctxt.obj hist_get.obj hist_set.obj inputdos.obj is_empty.obj \
+	is_fnamc.obj is_fnstr.obj is_icmd.obj is_ifct.obj is_ivar.obj is_num.obj \
+	is_pchr.obj isadev.obj ivarset.obj keyprsd.obj lastdget.obj lastdset.obj \
+	leadopt.obj lowexec.obj ltrimcl.obj ltrimsp.obj lwr1wd.obj match.obj \
+	messages.obj mk_rddir.obj mktmpfil.obj msg_dflt.obj msg_dps.obj \
+	msg_fstr.obj msg_get.obj msg_gpt.obj msg_mkey.obj msg_prmp.obj \
+	mux_ae.obj nls.obj nls_date.obj nls_time.obj num_fmt.obj onoff.obj \
+	openf.obj optsb.obj optsi.obj optss.obj parsenum.obj pr_date.obj \
+	pr_prmpt.obj pr_time.obj prprompt.obj realnum.obj reg_str.obj res.obj \
+	res_r.obj res_w.obj resfile.obj rmtmpfil.obj rtrimcl.obj rtrimsp.obj \
+	salloc.obj samefile.obj scancmd.obj scanopt.obj set_arg.obj showcmds.obj \
+	skippath.obj skqwd.obj spfnam.obj split.obj splitfc.obj sumblink.obj \
+	tempfile.obj timeget.obj timeset.obj tmpnam.obj trimcl.obj trimsp.obj \
+	txtlend.obj unquote.obj vcgetch.obj vcgetstr.obj where.obj
 HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\include/cmdline.h \
 	..\include/command.h ..\include/context.h ..\include/crossjmp.h \
 	..\include/datefunc.h ..\include/debug.h ..\include/keys.h \
@@ -206,9 +210,9 @@ parsenum.obj : parsenum.c \
 dbg_prnt.obj : dbg_prnt.c \
 	 ../config.h ../include/debug.h
 fcompl2.obj : fcompl2.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
+	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/timefunc.h
 efct_002.obj : efct_002.c \
 	 ../config.h ../err_fcts.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
@@ -338,6 +342,9 @@ trimsp.obj : trimsp.c \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 res_w.obj : res_w.c \
 	 ../include/resource.h
+alloc_es.obj : alloc_es.c \
+	 ../err_fcts.h ../include/datefunc.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 ctxt_ini.obj : ctxt_ini.c \
 	 ../config.h ../include/context.h ../include/debug.h
 skippath.obj : skippath.c \
@@ -348,9 +355,9 @@ mktmpfil.obj : mktmpfil.c \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
 cmdinput.obj : cmdinput.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/keys.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/keys.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 exec.obj : exec.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
@@ -388,9 +395,9 @@ tempfile.obj : tempfile.c \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
 inputdos.obj : inputdos.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 is_icmd.obj : is_icmd.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
@@ -402,6 +409,10 @@ chgenvc.obj : chgenvc.c \
 dateget.obj : dateget.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h
 lwr1wd.obj : lwr1wd.c \
+	 ../config.h ../include/command.h ../include/datefunc.h \
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
+is_ifct.obj : is_ifct.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
@@ -476,9 +487,9 @@ sumblink.obj : sumblink.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 set_arg.obj : set_arg.c \
-	 ../config.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../include/cmdline.h ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 ctxt_sp.obj : ctxt_sp.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/message.h \
@@ -498,6 +509,10 @@ mk_rddir.obj : mk_rddir.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
+act_qec.obj : act_qec.c \
+	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 msg_gpt.obj : msg_gpt.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -506,20 +521,20 @@ efct_001.obj : efct_001.c \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
 fcompl1.obj : fcompl1.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
+	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/timefunc.h
 curdatel.obj : curdatel.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/nls.h ../include/timefunc.h ../strings.h
+reg_str.obj : reg_str.c \
+	 ../config.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 exec1.obj : exec1.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
-reg_str.obj : reg_str.c \
-	 ../config.h ../include/datefunc.h ../include/debug.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
 ltrimcl.obj : ltrimcl.c \
 	 ../config.h ../include/cmdline.h ../include/debug.h
 ctxt_get.obj : ctxt_get.c \
@@ -564,6 +579,9 @@ ctxt_pop.obj : ctxt_pop.c \
 	 ../config.h ../err_fcts.h ../include/context.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
+alloc_ed.obj : alloc_ed.c \
+	 ../err_fcts.h ../include/datefunc.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 dispcnt.obj : dispcnt.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -586,6 +604,10 @@ msg_mkey.obj : msg_mkey.c \
 brk_get.obj : brk_get.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
+ivarset.obj : ivarset.c \
+	 ../config.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 ctxt_inf.obj : ctxt_inf.c \
 	 ../config.h ../include/context.h ../include/debug.h
 alloc_er.obj : alloc_er.c \

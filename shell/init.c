@@ -38,8 +38,6 @@ static char logFilename[] = LOG_FILE;
 #endif
 #endif
 
-extern int canexit;
-
 static unsigned oldPSP;
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
@@ -72,14 +70,14 @@ optScanFct(opt_init)
 
   switch(ch) {
   case '?': showhelp = 1; return E_None;
-  case '!': return optScanBool(fddebug);
-  case 'Y': return optScanBool(tracemode);
+  case '!': return optScanBool(F(debug));
+  case 'Y': return optScanBool(F(trace));
   case 'F': return optScanBool(autofail);
   case 'D': return optScanBool(skipAUTOEXEC);
   case 'P':
     if(arg)     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
-    canexit = 0;
+    F(canexit) = 0;
     return ec;
   case 'E': return optScanInteger(newEnvSize);
   case 'L': return optScanInteger(internalBufLen);
@@ -100,11 +98,11 @@ optScanFct(opt_init)
       break;
     case 'M':
       if(optLong("MSG"))
-        return optScanBool(persistentMSGs);
+        return optScanBool(F(persistentMSGs));
       break;
     case 'S':
     	if(optLong("SWAP"))
-    		return optScanBool(defaultToSwap);
+    		return optScanBool(F(swap));
       break;
     }
     break;
@@ -198,7 +196,7 @@ int initialize(void)
 /* Now parse the command line parameters passed to COMMAND.COM */
   /* Preparations */
   newTTY = 0;
-  comPath = tracemode = 0;
+  comPath = 0;
   showinfo = 1;
 
   /* Because FreeCom should be executed in a DOS3+ compatible
@@ -258,7 +256,7 @@ int initialize(void)
 #endif
 #endif
 
-  canexit = 1;
+  F(canexit) = 1;
   p = cmdline;    /* start of the command line */
   do {
   ec = leadOptions(&p, opt_init, 0);
@@ -385,17 +383,17 @@ int initialize(void)
   if(inputBufLen)
     error_u_notimplemented();
 
-  if(tracemode)
+  if(F(trace))
     showinfo = 0;
 
   if (showhelp)
     displayString(TEXT_CMDHELP_COMMAND);
 
-  if ((showhelp || exitflag) && canexit)
+  if (showhelp && F(canexit))
     return E_Exit;
 
 	/* Check if FreeCOM keeps interactively */
-	if(canexit) {
+	if(F(canexit)) {
 		/* the primary context is TERMINATE rather than KEEP_RUNNING */
 		ctxtEC_t far*ec;
 		assert(ctxtMain);
@@ -419,13 +417,13 @@ int initialize(void)
   }
 
   /* Now the /P option can be processed */
-	if(!canexit) {
+	if(!F(canexit)) {
 		char *autoexec;
 
 		autoexec = user_autoexec? user_autoexec: AUTO_EXEC;
 
 		showinfo = 0;
-		short_version();
+		short_version(0);
 
 		if(skipAUTOEXEC) {		/* /D option */
 			displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
@@ -434,7 +432,7 @@ int initialize(void)
 				struct REGPACK r;
 				r.r_ax = 0x3000;	/* Get DOS version & OEM ID */
 				intr(0x21, &r);
-				if(!tracemode	/* /Y --> F8 on CONFIG.SYS */
+				if(!F(trace)	/* /Y --> F8 on CONFIG.SYS */
 				 || ((r.r_bx & 0xff00) == 0xfd00	/* FreeDOS >= build 2025 */
 				      && (r.r_cx > 0x101 || (r.r_bx & 0xff) > 24))) {
 					displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
@@ -443,7 +441,7 @@ int initialize(void)
 				} else key = 0;
 
 				if(key == KEY_F8)
-					tracemode = 1;
+					F(trace) = 1;
 
 				if(key == KEY_F5)
 					displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);

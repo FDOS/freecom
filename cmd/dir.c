@@ -156,7 +156,7 @@ static int dir_print_header(int drive)
  	displayString(TEXT_DIR_HDR_VOLUME, drive + 'A');
 
 
-  if (FINDFIRST("\\*.*", &f, FA_LABEL) == 0)
+  if(findfirst("\\*.*", &f, FA_LABEL) == 0)
   {
         /* Added to remove "." from labels which are longer than
                8 characters (as DOS does). */
@@ -285,7 +285,7 @@ static int dir_list(int pathlen
   path[pathlen - 1] = '\\';
   strcpy(&path[pathlen], pattern);
 
-  if (FINDFIRST(path, &file, mode) == 0) {
+  if(findfirst(path, &file, mode) == 0) {
   /* moved down here because if we are recursively searching and
    * don't find any files, we don't want just to print
    * Directory of C:\SOMEDIR
@@ -430,7 +430,7 @@ static int dir_list(int pathlen
     }
    }
   }
-  while (rv == E_None && FINDNEXT(&file) == 0);
+  while (rv == E_None && findnext(&file) == 0);
   }
 
   if (rv == E_None && optW && (count != 0))
@@ -456,7 +456,7 @@ static int dir_list(int pathlen
       /* already set for optB && optS before do {} while above 
 		  path[pathlen - 1] = '\\';		*/
       strcpy(&path[pathlen], "*.*");
-      if (FINDFIRST(path, &file, mode) == 0) do {
+      if (findfirst(path, &file, mode) == 0) do {
         if((file.ff_attrib & FA_DIREC) != 0 /* is directory */
          && strcmp(file.ff_name, ".") != 0  /* not cur dir */
          && strcmp(file.ff_name, "..") != 0) {  /* not parent dir */
@@ -467,7 +467,7 @@ static int dir_list(int pathlen
            , &dircount, &filecount, &bytecount
            );
         }
-      } while (rv == E_None && FINDNEXT(&file) == 0);
+      } while (rv == E_None && findnext(&file) == 0);
   }
 
     *dcnt += dircount;

@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.2.2.3  2001/06/25 20:06:36  skaus
+# Update #3
+#
 # Revision 1.2.2.2  2001/06/21 21:40:35  skaus
 # Update #2
 #
@@ -41,11 +44,12 @@
 .INCLUDE : ../_config.mk
 
 # Sources of this make target
-SRC = batch.c cb_catch.asm cmdtable.c command.c dummies.asm expalias.c \
-	init.c kswap.c loadhigh.c module.c redir.c ver.c
-OBJ = batch.obj cb_catch.obj cmdtable.obj command.obj dummies.obj \
-	expalias.obj init.obj kswap.obj loadhigh.obj module.obj redir.obj \
-	ver.obj
+SRC = batch.c cb_catch.asm cmdtable.c command.c do_batch.c do_cmd.c \
+	do_for.c dummies.asm ec_fcts.c expalias.c fcttable.c init.c kswap.c \
+	loadhigh.c module.c redir.c ver.c
+OBJ = batch.obj cb_catch.obj cmdtable.obj command.obj do_batch.obj \
+	do_cmd.obj do_for.obj dummies.obj ec_fcts.obj expalias.obj fcttable.obj \
+	init.obj kswap.obj loadhigh.obj module.obj redir.obj ver.obj
 HDR = ..\config.h ..\include/cmdline.h ..\include/command.h \
 	..\include/context.h ..\include/crossjmp.h ..\include/datefunc.h \
 	..\include/debug.h ..\include/keys.h ..\include/kswap.h \
@@ -98,6 +102,10 @@ command.obj : command.c \
 	../include/datefunc.h ../include/debug.h ../include/kswap.h \
 	../include/message.h ../include/misc.h ../include/mux_ae.h \
 	../include/nls.h ../include/openf.h ../include/timefunc.h ../strings.h
+fcttable.obj : fcttable.c \
+	 ../config.h ../include/command.h ../include/datefunc.h \
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 module.obj : module.c \
 	 ../context.h_c ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/kswap.h ../include/message.h \
@@ -107,6 +115,10 @@ kswap.obj : kswap.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/kswap.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
+do_cmd.obj : do_cmd.c \
+	 ../config.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
 cb_catch.obj : cb_catch.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc \
@@ -121,6 +133,12 @@ init.obj : init.c \
 	../include/debug.h ../include/keys.h ../include/kswap.h \
 	../include/message.h ../include/misc.h ../include/module.h \
 	../include/timefunc.h ../strings.h
+ec_fcts.obj : ec_fcts.c \
+	 ../config.h ../include/context.h ../include/debug.h
+do_for.obj : do_for.c \
+	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 cmdtable.obj : cmdtable.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
@@ -135,6 +153,10 @@ batch.obj : batch.c \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 dummies.obj : dummies.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc
+do_batch.obj : do_batch.c \
+	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 redir.obj : redir.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/message.h \

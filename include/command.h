@@ -52,13 +52,6 @@ enum InternalErrorCodes {
 extern const char shellver[];
 extern const char shellname[];
 
-#define FINDFIRST(path,attrib,ffblk) findfirst(path,attrib,ffblk)
-#define FINDNEXT(ffblk)  findnext(ffblk)
-#define FINDSTOP(ffblk)
-#ifndef FA_NORMAL
-#define FA_NORMAL 0
-#endif
-
 /* Useage:
 	FALSE: no, false etc.
 	TRUE: yes, OK, etc.
@@ -75,22 +68,23 @@ extern void interrupt cbreak_handler();
 extern void initCBreak(void);
 
 /* prototypes for COMMAND.C */
-extern int interactive_command;
-extern int persistentMSGs;
+//extern int interactive_command;
+//extern int persistentMSGs;
 extern int ctrlBreak;
-extern int exitflag;
+//extern int exitflag;
 //extern unsigned int echo;       /* The echo flag */
 //extern int tracemode;                   /* debug script? */
-extern FLAG swap, called, echo, trace;
+//extern FLAG swap, called, echo, trace;
 extern int autofail;
-extern int canexit, inInit;
-extern int errorlevel;
+extern int inInit;
+//obsoleted extern int canexit;
+//extern int errorlevel;
 extern int isSwapFile;
 extern int forceLow;
 extern unsigned far *maxx;
 extern unsigned char far *maxy;
 extern char *ComPath;            /* absolute filename of COMMAND shell */
-extern int oldinfd, oldoutfd;
+//extern int oldinfd, oldoutfd;
 
 void fatal_error(char *);
 int is_delim(int);
@@ -137,8 +131,19 @@ int cmd_popd(char *);
 int cmd_dirs(char *);
 int cmd_which(char *);
 void history(int, char *);      /* prototype for the command-line history */
-void complete_filename(char *str, unsigned charcount);
-int show_completion_matches(char *str, unsigned charcount);
+void complete_filename(char * const str, const unsigned charcount);
+int show_completion_matches(char * const str, const unsigned charcount);
+int cmd_icmds(char *);
+int cmd_ivar(char *);
+int cmd_fd(char *);
+int cmd_arg(char *);
+int cmd_cancel(char *);
+int cmd_quit(char *);
+
+/* Internal functions */
+char *fct_tempfile(char *);
+char *fct_ivar(char *);
+char *fct_verbatim(char *);
 
 
 /* prototypes from PROMPT.C */
@@ -178,7 +183,7 @@ struct CMD *is_icmd(const char * const);
 
 struct IFCT {
 	char *name;
-	char *(*func)(const char*);
+	char *(*func)(char*);
 };
 extern struct IFCT internalFunctions[];
 
@@ -188,7 +193,6 @@ int is_ivar(const char * const, char ** const);
 
 /* New procs in BATCH.C */
 
-char *readbatchline(int *, char *, int);
 char *find_arg(int);
 int setArguments(const char * const line);
 
@@ -208,5 +212,6 @@ int get_redirection(char *, char *** const, char *** const, char *** const);
 char *expEnvVars(char * const param);
 
 int batch(char *, char *, char *);
+int qecAction(char *param, FLAG * const flag);
 
 #endif

@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <dynstr.h>
 #include <environ.h>
 #include <fmemory.h>
 #include <nls_f.h>
@@ -21,15 +22,15 @@
 
 char *aliasexpand(const char * const Xcmd)
 {	char *cmd;				/* work buffer */
-	char *cp, *p, *name;
+	char *cp, *name;
 	unsigned ofs, *expanded, *he;
-	int i, numExpanded, newlen;
+	int i, numExpanded, newlen, len;
 
 	assert(Xcmd);
 
 	if((cmd = strdup(Xcmd)) == 0) {
 		error_out_of_memory();
-		return Xcmd;
+		return (char*)Xcmd;
 	}
 
 	numExpanded = 0;
@@ -48,7 +49,7 @@ redo:						/* iteration to expand all aliases */
 
 	free(name);
 	/* Get the name of this command */
-	if((name = getCmdName(&cp)) == 0 || is_pathdelim(*cp))
+	if((name = getCmdName(&(const char*)cp)) == 0 || is_pathdelim(*cp))
 		goto errRet;
 
 	StrFUpr(name);			/* all aliases are uppercased */
@@ -98,7 +99,7 @@ redo:						/* iteration to expand all aliases */
 	}
 
 errRet1:
-	error_command_too_long();
+	error_long_internal_line();
 
 errRet:							/* return to caller */
 	free(expanded);

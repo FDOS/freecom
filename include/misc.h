@@ -68,16 +68,17 @@ void freeSysBlk(const unsigned segm);
 void *emalloc(const size_t len);
 void *erealloc(void *const p, const size_t len);
 void *ecalloc(const size_t num, const size_t len);
+char *edupstr(const char far* const s);
+char *estrdup(const char far* const s);
 
 char far *_fstpcpy(char far *dst, const char far *src);
 void partstrlower(char *str);
-void readcommandDOS(char * const str, int maxlen);
-void readcommandEnhanced(char * const str, const int maxlen);
+//void readcommandDOS(char * const str, int maxlen);
+//void readcommandEnhanced(char * const str, const int maxlen);
 void convert(unsigned long num, char * const des);
 
 void goxy(const unsigned char x, const unsigned char y);
-void clrcmdline(char * const str, const int maxlen
- , const unsigned orgx, const unsigned orgy);
+void clrcmdline(char * const str, const unsigned orgx, const unsigned orgy);
 
 int decode_exec_result(int rc);
 int exec(const char *, char *, const unsigned);
@@ -156,8 +157,10 @@ word alias_find(char * const tagged_name);
 	- may disapeear in the future */
 /* history wrapper: negative idx --> from end of buffer;
 	currently no non-negative idx used */
-int histGet(const int num, char * const str, const unsigned len);
+int histGet(const int num, char ** const str);
 void histSet(const int num, const char * const str);
+
+int ivarSet(const char * const varnam, const char * const value);
 
 void lastDirSet(void);
 void lastDirGet(char ** const buf);

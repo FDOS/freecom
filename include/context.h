@@ -39,6 +39,12 @@ typedef struct {	/* B context */
 	dword ec_lnum;		/* line number */
 	char ec_fname[1];	/* file name; dynamically extended */
 } ctxtEC_Batch_t;
+typedef struct {	/* f context */
+	byte ec_ffblk[21];	/* DOS specific ffblk continuation info */
+	word ec_varname;	/* displacement of varname in F-context */
+	word ec_cmd;		/* displacement of command in F-context */
+	char ec_prefix[1];	/* argument prefix; dynamically extended */
+} ctxtEC_For_t;
 #include <algndflt.h>
 #if sizeof(ctxtCB_t) != 16
 #error "The size of type ctxtCB_t must be equal to 16"
@@ -49,6 +55,7 @@ typedef struct {	/* B context */
 	((ctxtEC_t far*)MK_FP(ctxtSegm + ctxtp->ctxt_size, ctxtp->ctxt_eOffs))
 extern ctxtCB_t ctxtInitialCB;
 extern ctxtEC_t ctxtInitialEC;
+#define ecData(ec,type)	((type far*)((byte far*)(ec) + sizeof(ctxtEC_t)))
 
 /* Major IDs of context tags */
 typedef enum {
@@ -138,13 +145,14 @@ enum ExecContext_Tags {
 	, EC_TAG_FOR_FIRST			/* F */
 	, EC_TAG_FOR_NEXT			/* f */
 	, EC_TAG_COMMAND			/* C */
+	, EC_TAG_COMMAND_NO_IGNORE	/* c */
 	, EC_TAG_KEEP_RUNNING		/* e */
 	, EC_TAG_TERMINATE			/* E */
 };
 #define EC_LAST_TAG EC_TAG_TERMINATE
 
 typedef struct {
-	FLAG f_exit;			/* exit all contexts */
+	FLAG f_canexit;			/* may allowed to exit this shell */
 	FLAG f_interactive;		/* set if the current command had been entered
 								interactively via command line */
 	FLAG f_call;			/* invoke via CALL by default */
@@ -152,6 +160,9 @@ typedef struct {
 	FLAG f_dispPrompt;		/* display prompt on interactive cmdline */
 	FLAG f_echo;			/* batch script echo mode */
 	FLAG f_trace;			/* batch script trace mode by default */
+	FLAG f_debug;			/* FreeCOM debugging */
+	FLAG f_persistentMSGs;	/* keep messages in memory */
+	unsigned f_errorlevel;
 	unsigned f_base_shiftlevel;
 	unsigned f_shiftlevel;	/* argument shift level */
 	unsigned f_batchlevel;	/* how many batch nesting levels */
@@ -160,7 +171,12 @@ typedef struct {
 extern ctxt_flags_t ctxtFlags;
 #define F(flags)	ctxtFlags.CTXT_join(f_,flags)
 
-/* flags currently in use are declared in command.h */
+extern FLAG swap, echoBatch, dispPrompt, rewindBatchFile, traceMode;
+extern FLAG interactive, called;
+extern FLAG doExit, doCancel, doQuit;
+#define implicitVerbose (interactive? dispPrompt: echoBatch)
+
+extern char* (*ecFunction[])(ctxtEC_t far * const);
 
 	/* Make a silent & hidden C context */
 int ecMkHC(const char * const str, ...);
@@ -168,11 +184,13 @@ int ecMkHC(const char * const str, ...);
 int ecMkSC(const char * const str, ...);
 	/* Make a C context, for which the 1st argument is made "Verbatim" */
 int ecMkV1C(const char * const str, ...);
-	/* Make a F context: param, varname, cmd */
-int ecMkF(const char * const, const char * const, const char * const);
+	/* Make a F context: (param[], params), varname, cmd */
+int ecMkF(const char * const * const, const int, const char * const, const char * const);
+	/* Make a f context: ffblk, varname, cmd, prefix */
+int ecMkf(const void * const, const char far* const, const char far* const, const char * const);
 	/* Make a I context */
 int ecMkI(void);
-	/* Make a F context: fullname (pos & lcount default to 0) */
+	/* Make a B context: fullname (pos & lcount default to 0) */
 int ecMkB(const char * const fullname);
 	/* Make a C/FD context */
 int ecMkFD(int jft, int sft);
@@ -187,6 +205,28 @@ char *ecFreeIVar(char * const ivar);
 
 	/* Remove the topmost context; uses the "size" member only */
 void ecPop(void);
+	/* Shrink the topmost context by diff bytes */
+int ecShrink(int diff);
+
+/* Functions to handle the particular contexts */
+	/* EC_TAG_INTERACTIVE -- I context */
+char *readcommandEnhanced(ctxtEC_t far * const);
+char *readcommandDOS(ctxtEC_t far * const);
+	/* EC_TAG_BATCH -- B-context */ 
+char *readbatchline(ctxtEC_t far * const);
+	/* EC_TAG_FOR_FIRST -- F-context */ 
+char *readFORfirst(ctxtEC_t far * const);
+	/* EC_TAG_FOR_NEXT -- f-context */ 
+char *readFORnext(ctxtEC_t far * const);
+	/* EC_TAG_COMMAND -- C-context */ 
+char *readCommand(ctxtEC_t far * const);
+	/* EC_TAG_COMMAND_NO_IGNORE -- c-context */ 
+char *readCommandNoIgnore(ctxtEC_t far * const);
+	/* EC_TAG_KEEP_RUNNING -- e-context */ 
+char *keepMeRunning(ctxtEC_t far * const);
+	/* EC_TAG_TERMINATE -- E-context */ 
+char *terminateShell(ctxtEC_t far * const);
+
 
 /*****************
 	Encoded strings
@@ -195,5 +235,8 @@ void ecPop(void);
 #define ES_SET_HIGH 2
 #define ES_STRING_DELIM	0x1e
 #define ES_PAD_BYTE	0x1f
+
+	/* Transform s from internal quoted form into ASCII */
+void esDecode(char * const s);
 
 #endif

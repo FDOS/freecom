@@ -153,11 +153,6 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 	} else
 		kswapContext->shell = MK_FP(segm, shellname);
 
-	/* Update central settings of FreeCOM */
-	kswapContext->canexit = canexit;
-	kswapContext->dfltSwap = defaultToSwap;
-	kswapContext->debug = fddebug;
-
 /* Create the dynamic portion of the context */
 	/* Construct command line string */
 	if(*cmdline) {
@@ -195,11 +190,8 @@ int kswapLoadStruc(void)
 	assert(!kswapContext->prg);
 	perform_exec_result(decode_exec_result(kswapContext->execErr));
 
-	canexit = kswapContext->canexit;
-	defaultToSwap = kswapContext->dfltSwap;
-	fddebug = kswapContext->debug;
 	grabComFilename(1, kswapContext->shell);
-	if((ctxt = kswapContext->dyn_ctxt) == 0) {
+	if((ctxtMain = kswapContext->dyn_ctxt) == 0) {
 		error_no_context_after_swap();
 		ctxtCreate();
 	}
