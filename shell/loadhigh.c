@@ -559,21 +559,22 @@ static int loadfix_prepare(void)
 
 static int loadfix_prepare(void)
 {	unsigned bl;
+	int old_strat = dosGetAllocStrategy();
 
 	dosSetAllocStrategy(0x0);
 
 	while((bl = DosAlloc(1)) != 0) {
-		dprintf(("loadfix:allocated 0x%04x\n",bl));
-
 		if(bl >= 0x1000) {
 			DOSfree(bl);
 			break;
 		}
 
+		dprintf(("loadfix: allocated 0x%04x\n",bl));
 		DOSresize(bl, 0x1000 - bl);  		
 		block[allocatedBlocks++] = bl;
 	}
 
+	dosSetAllocStrategy(old_strat);
 	return OK;
 }
 
