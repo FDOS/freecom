@@ -1,3 +1,4 @@
+fix: appendDisable(): should disable APPEND [Eduardo Casino]
 fix: /LOW option
 upd: ITALIAN.LNG {Roberto Mariottini}
 fix: help screen of internal commands causes "Unknown command error" {Bernd Blaauw}

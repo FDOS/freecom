@@ -7,9 +7,12 @@
 	Enable DOS/APPEND if state & 1
 
 	$Log$
+	Revision 1.2  2004/07/12 18:48:38  skaus
+	fix: appendDisable(): should disable APPEND [Eduardo Casino]
+
 	Revision 1.1  2004/06/21 17:49:26  skaus
 	fix: DIR: disable APPEND.EXE during DIR processing {Eduardo Almao}
-
+	
  */
 
 #include "../config.h"
@@ -27,6 +30,6 @@ void appendRestore(const int state)
 		r.r_bx = state;
 		intr(0x2f, &r);
 
-		dprintf(("MUX-B7: set state 0x%04x]\n", state);
+		dprintf(("MUX-B7: set state 0x%04x]\n", state) );
 	}
 }
