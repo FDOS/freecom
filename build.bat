@@ -1,10 +1,7 @@
 @echo off
-if exist lastmake.mk del lastmake.mk
-if exist command.com del command.com
-if exist *.cfg del *.cfg
-if exist strings\*.cfg del strings\*.cfg
-if exist tools\*.cfg del tools\*.cfg
-if exist utils\*.cfg del utils\*.cfg
+if exist lastmake.mk call clean.bat
+if "%1"=="clean" clean.bat
+if "%1"=="clean" goto ende
 
 if not x%1==x set LNG=%1
 if "%lng%"=="" set LNG=english

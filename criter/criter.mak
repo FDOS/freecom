@@ -1,12 +1,13 @@
 .AUTODEPEND
 
 CFG = TCCDOS.CFG
+CFG_DEPENDENCIES = criter.mak
+
+all:  context.def criter criter1
 
 #		*Translator Definitions*
 !include "..\config.mak"
 
-
-all:  context.def criter criter1
 
 context.def : context.x
 	..\utils\mkctxt.exe context

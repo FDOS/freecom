@@ -1,4 +1,5 @@
 CFG = TCCDos.Cfg
+CFG_DEPENDENCIES = tools.mak
 
 all : $(CFG) ptchsize.exe kssf.com vspawn.com icmd
 

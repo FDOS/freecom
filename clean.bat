@@ -1,4 +1,5 @@
 @echo off
+del lastmake.mk
 del CONTEXT.H_C
 del CONTEXT.INC
 del STRINGS.H
@@ -6,6 +7,7 @@ del strings\strings.h
 del strings\strings.err
 del strings\strings.dat
 del strings\strings.lib
+del strings\strings.lst
 del strings\strings.log
 del criter\criter
 del criter\criter1
@@ -14,11 +16,16 @@ del criter\context.inc
 del criter\context.h_c
 del command.com
 del shell\command.exe
+del shell\command.map
 del lib\freecom.lib
+del lib\freecom.lst
 del cmd\cmds.lib
+del cmd\cmds.lst
 del tools\*.icd
 del tools\*.exe
+del tools\*.map
 del tools\*.com
 del utils\*.exe
+del utils\*.map
 for %%a in (cmd lib shell strings criter tools utils) do del %%a\*.obj
 for %%a in (cmd lib shell strings criter tools utils) do del %%a\*.cfg

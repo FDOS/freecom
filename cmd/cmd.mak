@@ -3,12 +3,11 @@
 CFG = TCCDOS.CFG
 CFG_DEPENDENCIES = cmd.mak
 
-#		*Translator Definitions*
+all: $(CFG) cmds.lib
+
 ##>> Modify this file with your local settings
 !include "..\config.mak"
 
-
-all: $(CFG) cmds.lib
 
 cmds.lib : $(CFG) alias.obj \
 	beep.obj \

@@ -1,12 +1,12 @@
 .AUTODEPEND
 
 CFG = TCCDOS.CFG
+CFG_DEPENDENCIES = utils.mak
 
-#		*Translator Definitions*
+all: $(CFG) mktools.exe mkctxt.exe chunk.exe mkinfres.exe
+
 ##>> Modify this file with your local settings
 !include "..\config.mak"
 
-
-all: $(CFG) mktools.exe mkctxt.exe chunk.exe mkinfres.exe
 
 mktools.c : ..\config.h

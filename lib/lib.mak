@@ -3,12 +3,10 @@
 CFG = TCCDOS.CFG
 CFG_DEPENDENCIES = lib.mak
 
-#		*Translator Definitions*
+all: $(CFG) freecom.lib
+
 ##>> Modify this file with your local settings
 !include "..\config.mak"
-
-
-all: $(CFG) freecom.lib
 
 freecom_deps :  \
 	alprmblk.obj \

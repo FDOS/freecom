@@ -4,7 +4,7 @@ set DBG=Yes
 set DBG=
 
 : don't forget to pass on the default rather than mine
-copy config.dflt config.mak
+copy config.std config.mak
 
 for %pkg in (binary debug plainedt) for %fnam in (ptchldrv.exe ptchsize.exe kssf.com vspawn.com command.com) (set fn=packages\%pkg.std\%fnam %+ if exist %fn del /q %fn)
 
