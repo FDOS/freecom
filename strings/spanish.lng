@@ -1,0 +1,447 @@
+# (C) 2000 Alessio Palma
+# http://www.khet.net/freedos
+# http://www.khet.net/freedos/Europe
+
+#
+#  These are error messages
+#
+:TEXT_ERROR_INVALID_SWITCH
+(!) Opzione invalida - /%c
+.
+
+:TEXT_ERROR_CLOSE_QUOTE
+(!) Mancano le virgolette di chiusura: %c
+.
+
+:TEXT_ERROR_TEMPFILE
+(!) Non posso creare un file temporaneo.
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR
+(!) Troppi parametri - %s
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS
+(!) Troppi parametri.
+.
+
+:TEXT_ERROR_INVALID_PARAMETER
+(!) Parametro invalido - %s
+.
+
+:TEXT_ERROR_PATH_NOT_FOUND
+(!) Percorso non trovato.
+.
+
+:TEXT_ERROR_FILE_NOT_FOUND
+(!) File non trovato.
+.
+
+:TEXT_ERROR_SFILE_NOT_FOUND
+(!) File non trovato. - %s
+.
+
+:TEXT_ERROR_REQ_PARAM_MISSING
+(!) E' necessario passare almeno un parametro.
+.
+
+:TEXT_ERROR_INVALID_DRIVE
+(!) Unit… specificata invalida.
+.
+
+:TEXT_ERROR_BADCOMMAND
+(!) Nome di file o comando errato.
+.
+
+:TEXT_ERROR_OUT_OF_MEMORY
+(!) Memoria esaurita.
+.
+
+:TEXT_ERROR_CANNOTPIPE
+(!) Non posso ridirigere l'output poichŠ non posso aprire un file temporaneo.
+.
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE
+(!) La linea #%ld nel batchfile '%s' Š troppo lunga.
+.
+
+:TEXT_ERROR_BFILE_VANISHED
+(!) Il file Batch "%s" non Š stato trovato.
+.
+
+:TEXT_ERROR_BFILE_LABEL
+(!) Il file Batch "%s" non contiene l'etichetta "%s".
+.
+
+:TEXT_ERROR_ENVIRONMENT_ERR
+(!) Errore nello spazio di ambiente, probabilmente spazio esaurito.
+.
+
+:TEXT_ERROR_SET_ENV_VAR
+(!) Non posso salvare la variabile di ambiente "%s".
+.
+
+:TEXT_ERROR_ENV_VAR_NOT_FOUND
+(!) Variabile di ambiente "%s" non trovata.
+.
+
+:TEXT_ERROR_SYNTAX_STR
+(!) Errore di sintassi - %s
+.
+
+:TEXT_ERROR_SYNTAX
+(!) Errore di sintassi.
+.
+
+:TEXT_ERROR_FILENAME_TOO_LONG
+(!) Nome di file troppo lungo - %s
+.
+
+:TEXT_ERROR_COMMAND_TOO_LONG
+(!) L'espansione degli "alias" ha prodotto una riga di commando troppo lunga.
+.
+
+:TEXT_ERROR_LINE_TOO_LONG
+(!) Linea troppo lunga, non posso eseguire il comando.
+.
+
+:TEXT_ERROR_HISTORY_SIZE
+(!) La dimensione del registro storico dei comandi immessi non Š accettabile.
+.
+
+:TEXT_ERROR_BAD_MCB_CHAIN
+(!) MCB chain corrupt, or MS-DOS incompatible system.
+.
+
+:TEXT_ERROR_UNDEFINED_ERROR
+(!) Errore numero %d - messaggio di testo non ancora definito per questo errore.
+.
+
+:TEXT_ERROR_REGION_WARNING
+(!) Illegal memory region %d - ignored.
+.
+
+:TEXT_ERROR_ON_OR_OFF
+(i) Deve essere specificato come parametro ON oppure OFF.
+.
+
+:TEXT_ERROR_BAD_VERABLE
+(!) Specificazione mal definita di variabile.
+.
+
+:TEXT_ERROR_IN_MISSING
+(!) Manca la voce IN nella struttura del comando FOR.
+.
+
+:TEXT_ERROR_MISSING_PARENTHESES
+(!) Una o entrambi le parentesi mancano.
+.
+
+:TEXT_ERROR_DO_MISSING
+(!) Manca la voce DO nel comando FOR.
+.
+
+:TEXT_ERROR_NO_COMMAND_AFTER_DO
+(!) Non Š specificato nessun comando dopo la voce DO nella struttura FOR.
+.
+
+:TEXT_ERROR_REDIRECT_FROM_FILE
+(!) Non posso prelevare l'input dal file %s.
+.
+
+:TEXT_ERROR_REDIRECT_TO_FILE
+(!) Non posso inviare l'output al file %s.
+.
+
+:TEXT_ERROR_INVALID_DATE
+(!) Data invalida.
+.
+
+:TEXT_ERROR_INVALID_TIME
+(!) Orario invalido.
+.
+
+:TEXT_ERROR_NO_GOTO_LABEL
+(!) Nessuna etichetta specificata dopo il comando GOTO.
+.
+
+:TEXT_ERROR_NO_CTTY_CMD
+(!) CTTY non Š stato ancora implementato.
+.
+
+:TEXT_ERROR_WRITING_DEST
+(!) Si Š verificato un errore mentre inviavo i dati nella destinazione assegnata.
+.
+
+:TEXT_ERROR_COPIED_ONTO_SELF
+(!) Non posso copiare un file su esso stesso.
+.
+
+:TEXT_ERROR_CANNOT_OPEN_SOURCE
+(!) Non posso aprire il file origine - %s
+.
+
+:TEXT_NOT_IMPLEMENTED_YET
+(i) Funzionalit… non ancora disponibile.
+.
+
+:TEXT_FAILED_LOAD_STRINGS
+(!) Non sono riuscito a caricare i messaggi in memoria.
+.
+
+:TEXT_MSG_NOTIMPLEMENTED
+(i) L'opzione  /MSG non Š stata implementata da questa versione di COMMAND.COM.
+.
+
+#
+# Informational messages
+#
+
+:TEXT_MSG_PAUSE
+(i) Premi un tasto per continuare . . .
+.
+
+:TEXT_MSG_HISTORY_SIZE
+(i) La dimensione del registro storico dei comandi Š impostata a %d bytes.
+.
+
+:TEXT_MSG_DOSKEY
+(i) Le funzionalit… di DOSKEY sono state implementate nell'interprete dei 
+    comandi, non Š pi— necessario caricalo.
+.
+
+:TEXT_MSG_ECHO_STATE
+(i) ECHO Š %s
+.
+
+:TEXT_MSG_VERIFY_STATE
+(i) VERIFY Š %s
+.
+
+:TEXT_MSG_BREAK_STATE
+(i) BREAK Š %s
+.
+
+:TEXT_MSG_CURRENT_DATE
+(i) La data in questo sistema Š impostata a: %s %02d-%02d-%d
+.
+
+:TEXT_MSG_CURRENT_TIME
+(i) L'orario in questo sistema Š impostato a:%2d:%02d:%02d.%02d%c
+.
+
+:TEXT_MSG_DELETE_ALL
+(?) State per cancellare tutti i files presenti nella directory corrente.
+    Sei sicuro di voler continuare (Y/N)?
+,
+
+:TEXT_MSG_VER_COPYRIGHT
+(i) Copyright (C) 1994-1998 Tim Norman and others.
+.
+
+:TEXT_MSG_VER_BASIC
+
+(i) The FreeDOS Command Shell comes with ABSOLUTELY NO WARRANTY.
+    For details type: "ver /w". This is free software, and you are
+    welcome to redistribute it under certain conditions; type "ver /d"
+    for details.  Type "ver /c" for a listing of credits.
+
+    Send bug reports to command@gcfl.net.
+    Updates are available from http://www.gcfl.net/FreeDOS/command.com
+    Traduzione in italiano di Alessio P. (www.khet.net/freedos)
+.
+
+:TEXT_MSG_VER_WARRANTY
+
+(i) This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    Send bug reports to command@gcfl.net.
+    Updates are available from http://www.gcfl.net/FreeDOS/command.com
+.
+
+:TEXT_MSG_VER_REDISTRIBUTION
+
+(i) This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or (at
+    your option) any later version.
+
+    Send bug reports to command@gcfl.net.
+    Updates are available from http://www.gcfl.net/FreeDOS/command.com
+.
+
+:TEXT_MSG_VER_DEVELOPERS
+
+(i) The FreeDOS Command Shell developed by:
+		Tim Norman      Matt Rains
+		Evan Jeffrey    Steffen Kaiser
+		Svante Frey     Oliver Mueller
+		Aaron Kaufman   Marc Desrochers
+		Rob Lake        John P Price
+		Hans B Pufal
+
+   Currently maintained by John P Price & Rob Lake.
+
+   Send bug reports to command@gcfl.net.
+   Updates are available from http://www.gcfl.net/FreeDOS/command.com
+.
+
+
+#
+# Command help text
+#
+
+:TEXT_CMDHELP_ALIAS
+(i) Usa "help alias"
+.
+
+:TEXT_CMDHELP_BEEP
+Make a beep sound.
+.
+
+:TEXT_CMDHELP_BREAK
+(i) Usa "help break"
+.
+
+:TEXT_CMDHELP_CALL
+(i) Usa "help call"
+.
+
+:TEXT_CMDHELP_CD
+(i) Usa "help cd"
+.
+
+:TEXT_CMDHELP_CHCP
+(i) Usa "help CHCP"
+.
+
+:TEXT_CMDHELP_CLS
+(i) Usa "help cls"
+.
+
+:TEXT_CMDHELP_COMMAND
+(i) Usa "help command"
+.
+
+:TEXT_CMDHELP_COPY
+(i) Usa "help copy"
+.
+
+:TEXT_CMDHELP_CTTY
+(i) Usa "help ctty"
+.
+
+:TEXT_CMDHELP_DATE
+(i) Usa "Help date"
+.
+
+:TEXT_CMDHELP_DEL
+(i) Usa "help del"
+.
+
+:TEXT_CMDHELP_DIR
+(i) Usa "help dir"
+.
+
+:TEXT_CMDHELP_DOSKEY
+(i) Usa "help doskey"
+.
+
+:TEXT_CMDHELP_ECHO
+(i) Usa "help echo"
+.
+
+:TEXT_CMDHELP_EXIT
+(i) use "help exit"
+.
+
+:TEXT_CMDHELP_FOR
+(i) Usa "help for"
+.
+
+:TEXT_CMDHELP_GOTO
+(i) Usa "help goto"
+.
+
+:TEXT_CMDHELP_HISTORY
+(i) Usa "help history"
+.
+
+:TEXT_CMDHELP_IF
+(i) Usa "help if"
+.
+
+:TEXT_CMDHELP_LH
+(i) Usa "help lh"
+.
+
+:TEXT_CMDHELP_LOADFIX
+(i) Usa "help loadfix"
+.
+
+:TEXT_CMDHELP_MD
+(i) Usa "help md"
+.
+
+:TEXT_CMDHELP_PATH
+(i) Usa "help path"
+.
+
+:TEXT_CMDHELP_PAUSE
+(i) Usa "help pause"
+.
+
+:TEXT_CMDHELP_PROMPT
+(i) Usa "help prompt"
+.
+
+:TEXT_CMDHELP_RD
+(i) Usa "help rd"
+.
+
+:TEXT_CMDHELP_REM
+(i) Usa "help Rem"
+.
+
+:TEXT_CMDHELP_REN
+(i) Usa "help ren"
+.
+
+:TEXT_CMDHELP_SET
+(i) Usa "help set"
+.
+
+:TEXT_CMDHELP_SHIFT
+(i) Usa "help Shift"
+.
+
+:TEXT_CMDHELP_TIME
+(i) Usa "help time"
+.
+
+:TEXT_CMDHELP_TRUENAME
+(i) Usa "Help truename"
+.
+
+:TEXT_CMDHELP_TYPE
+(i) Usa "help type"
+.
+
+:TEXT_CMDHELP_VER
+(i) Usa "help ver"
+.
+
+:TEXT_CMDHELP_VERIFY
+(i) Usa "help verify"
+.
+
+:TEXT_CMDHELP_VOL
+(i) Usa "help vol"
+.
+
+:TEXT_CMDHELP_QUESTION
+(i) usa ? per visualizzare una lista dei comandi di FreeCOM.
+.
