@@ -33,13 +33,15 @@ static int chkp(char *p)
 #define chkp(p)	StrFree((p))
 #endif
 
-char *readbatchline(ctxtEC_t far * const ctxt)
-{	ctxtEC_Batch_t far *bc;		/* current batch context */
+char *readBatch(char far * const ctxt)
+{	unsigned long pos, lnr;
 	char *line, *p;				/* read line */
 	char *name;
 	FILE *f;
+	unsigned idFnam;
+	char buf[EC_LENGTH_B];
 
-	dprintf(("readbatchline()\n"));
+	dprintf(("readBatch()\n"));
 	if(lflag_doExit || lflag_doCancel || lflag_doQuit) {
 		dprintf(("[BATCH: Exit, Cancel, or Quit terminated script]\n"));
 		lflag_doQuit = FALSE;
@@ -47,25 +49,19 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 	}
 
 	assert(ctxt);
-	assert(ctxt->ctxt_type == EC_TAG_BATCH);
+	assert(ctxt[0] == EC_TAG_BATCH);
 
 	lflag_interactive = gflag_interactive = 0;
 
-	bc = ecData(ctxt, ctxtEC_Batch_t);
+	if(ecScanArg(ctxt, 3, "%u|%lu %lu", &idFnam, &pos, &lnr) != E_None
+	 || (name = ecString(idFnam)) == 0)
+		return 0;
 
-	assert(_fstrlen(bc->ec_fname)
-	 == ctxt->ctxt_length - sizeof(ctxtEC_Batch_t));
-
-	dprintf(("[BATCH: pos=%lu, line=%lu: %Fs]\n"
-	 , bc->ec_pos, bc->ec_lnum, bc->ec_fname));
+	dprintf(("[BATCH: pos=%lu, line=%lu: %s]\n", pos, lnr, name));
 #ifdef DEBUG
 	if(lflag_gotoLabel)
 		dprintf(("[BATCH: Searching for label: %s]\n", lflag_gotoLabel));
 #endif
-
-	 if((name = regStr(edupstr(bc->ec_fname))) == 0) {
-	 	return 0;
-	 }
 
 	if((f = fopen(name, "rt")) == 0) {
 		error_bfile_vanished(name);
@@ -76,37 +72,39 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 
 	if(lflag_rewindBatchFile) {
 		/* reset the statistics */
-		bc->ec_lnum = 0;
+		lnr = 0;
 		lflag_rewindBatchFile = 0;
 		dprintf(("[BATCH: Script rewinded]\n"));
 	} else {
-		if(fseek(f, bc->ec_pos, SEEK_SET))
+		if(fseek(f, pos, SEEK_SET))
 			goto errRet;		/* silently ignore this error */
+								/* as line == 0 --> gets popped */
 	}
 
 	for(; !cbreak; chkp(line)) {
 		dprintf(("[BATCH: about to read line #%lu from @%lu]\n"
-		 , bc->ec_lnum + 1, ftell(f)));
+		 , lnr + 1, ftell(f)));
 		if((line = Fgetline(f)) == 0) {
 			error_out_of_memory();
 			break;
 		}
 		if(!*line) {			/* End of file */
 			dprintf(("[BATCH: End of file reached]\n"));
+			myfree(line);
 			line = 0;		/* Force ecPop() */
 			break;
 		}
-		++bc->ec_lnum;
+		++lnr;
 		if(ferror(f)) {
-			error_bfile_read(name, bc->ec_lnum);
-			chkPtr(line);
-			StrFree(line);
+			error_bfile_read(name, lnr);
+			myfree(line);
+			line = 0;
 			break;
 		}
 
 		assert(strlen(line) >= 1);
 
-		/* Ignore the trailing \nonly, as some commands rely on trailing
+		/* Ignore the trailing \n only, as some commands rely on trailing
 			whitespaces. */
 		assert(strchr(line, '\0')[-1] == '\n');
 		strchr(line, '\0')[-1] = 0;
@@ -129,7 +127,7 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 				if(memcmpFI(p + 1, lflag_gotoLabel, len) == 0
 				 && !isgraph(line[len + 1]))
 					/* got it! -> proceed with next line */
-					chkPtr(line);
+					chkPtr(lflag_gotoLabel);
 					StrFree(lflag_gotoLabel);
 			}
 			dprintf(("BATCH: Skipping label: %s]\n", line));
@@ -157,7 +155,10 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 
 errRet:
 	/* Record the current position */
-	bc->ec_pos = ftell(f);
+	assert(_fstrchr(ctxt, '|'));
+	sprintf(buf, "|%lu %lu|", ftell(f), lnr);
+		/* The \0 byte is not transferred */
+	_fmemcpy(_fstrchr(ctxt, '|'), TO_FP(buf), strlen(buf));
 	fclose(f);
 	return line;
 }

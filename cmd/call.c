@@ -16,14 +16,14 @@
 #include "../include/context.h"
 #include "../err_fcts.h"
 
-static int optS = 0;		/* force to swap out FreeCOM during call */
-static int optN = 0;		/* force to NOT swap (superceeds optS) */
+static FLAG optS = 0;		/* force to swap out FreeCOM during call */
+static FLAG optN = 0;		/* force to NOT swap (superceeds optS) */
 
 #pragma argsused
 optScanFct(opt_call)
 { switch(ch) {
-  case 'S': return optScanBoolI(optS);
-  case 'N': return optScanBoolI(optN);
+  case 'S': return optScanBool(optS);
+  case 'N': return optScanBool(optN);
   }
   optErr();
   return E_Useage;

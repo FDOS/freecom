@@ -23,6 +23,17 @@ enum OnOff {		/* ON/OFF tester */
 	OO_Other			/* else */
 };
 
+/* Useage:
+	FALSE: no, false etc.
+	TRUE: yes, OK, etc.
+	ERROR: only used in tri-state flags, in binary flags same as TRUE
+	IGNORE: when copy flags, ignore this one
+*/
+enum
+{
+  IGNORE = (FLAG)-1, FALSE = 0, TRUE, ERROR
+};
+
 #define cbreak chkCBreak()
 
 #define MAXARGS 20
@@ -59,6 +70,7 @@ size_t farread(void far*buf, size_t length, FILE *f);
 unsigned allocPermBlk(const unsigned size, const unsigned mode);
 unsigned allocSysBlk(const unsigned size, const unsigned mode);
 void freeSysBlk(const unsigned segm);
+void purgeMemory(void);
 
 /* as their counterpart, the "error_out_of_memory()"
 	had been displayed on error */
@@ -103,6 +115,7 @@ FILE *tempfile(void);
 void rmtmpfile(void);
 
 char *regStr(const char * const str);
+void unregStr(const char * const s);
 
 /************* Imported from LH.ASM        */
 

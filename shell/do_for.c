@@ -30,37 +30,36 @@
 /* Patch the FOR command line with the currently found argument
 	and return a dynamically allocated command line.
 	param is to be deallocated */
-static char *forPatchCmdline(const char far* const varname
-	, const char far* const cmd
+static char *forPatchCmdline(const unsigned idVarname
+	, const unsigned idCmd
 	, char *param)
 {	char *p;
 	int rv;
 
-	if((p = edupstr(varname)) == 0) {
-		myfree(param);
-		return 0;
-	}
+	if((p = ecString(idVarname)) != 0) {
+		/* Record the value of the variable */
+		if(*p == '%')		/* hackery variable */
+			/* Add its value to the internal variables */
+			rv = ctxtSetS(CTXT_TAG_IVAR, p, param);
+		else
+			rv = chgEnv(p, param);
+	} else
+		rv = E_NoMem;
 
-	/* Record the value of the variable */
-	if(*p == '%')		/* hackery variable */
-		/* Add its value to the internal variables */
-		rv = ctxtSetS(CTXT_TAG_IVAR, p, param);
-	else
-		rv = chgEnv(p, param);
-
-	myfree(p);
 	myfree(param);
 
-	return rv == E_None? edupstr(cmd): 0;
+	if(rv == E_None && (p == ecString(idCmd)) != 0) {
+		unregStr(p);
+		return p;
+	}
+	return 0;
 }
 
-char *readFORfirst(ctxtEC_t far * const ctxt)
-{	char far* pattern, far* varname, far* cmd;	/* param of ctxt */
+char *readFORfirst(char far * const ctxt)
+{	unsigned idPattern, idVarname, idCmd;
+	char *pattern;
 	struct ffblk f;
-	char far* next;			/* poi into pattern where to set start of
-								context to */
-
-	char *param;				/* current argument */
+	char buf[EC_LENGTH_F];
 
 	lflag_doQuit = cbreak;
 
@@ -71,64 +70,53 @@ char *readFORfirst(ctxtEC_t far * const ctxt)
 	}
 
 	assert(ctxt);
-	assert(ctxt->ctxt_type == EC_TAG_FOR_FIRST);
-	assert(ctxt->ctxt_length >= 3);
+	assert(*ctxt == EC_TAG_FOR_FIRST);
 
-	pattern = ecData(ctxt, char);
-	assert(_fstrlen(pattern) < ctxt->ctxt_length - 3);
-
-	varname = pattern + _fstrlen(pattern) + 1;
-	assert(_fstrlen(pattern) + _fstrlen(varname) < ctxt->ctxt_length - 3);
-
-	cmd = varname + _fstrlen(varname) + 1;
-	assert(_fstrlen(pattern) + _fstrlen(varname) + _fstrlen(cmd)
-	 == ctxt->ctxt_length - 3);
-
-	dprintf(("[FOR#1: %Fs (%Fs) %Fs]\n", varname, pattern, cmd));
-
-	if(!*pattern)						/* nothing to do */
+	if(ecScanArg(ctxt, 3, "%u %u|%u", &idVarname, &idCmd, &idPattern) != E_None
+	 || idPattern <= idCmd			/* no more patterns */
+	 || (pattern = ecString(idPattern)) == 0)
 		return 0;
 
-	if((next = _fstrchr(pattern, ES_STRING_DELIM)) == 0) {
-		/* This is the last pattern */
-		param = edupstr(pattern);
-		next = pattern + strlen(param);	/* '\0' byte */
-	} else {
-		*next = '\0';
-		param = edupstr(pattern);
-		++next;
+#ifdef DEBUG
+	{ char *varname, *cmd;
+		if((varname = ecString(idVarname)) == 0
+		 || (cmd = ecString(idCmd)) == 0)
+		 	return 0;
+		dprintf(("[FOR#1: %Fs (%Fs) %Fs]\n", varname, pattern, cmd));
+		unregStr(cmd);
+		unregStr(varname);
+		myfree(cmd);
+		myfree(varname);
 	}
+#endif
 
-	if(!param) {
-		return 0;
-	}
+	/* modify the context string to hold the id of the next pattern */
+	assert(idPattern > 0);
+	assert(_fstrchr(ctxt, '|'));
+	sprintf(buf, "|%u|", idPattern - 1);
+		/* don't transfer the \0 */
+	_fmemcpy(_fstrchr(ctxt, '|'), TO_FP(buf), strlen(buf));
 
-	if(ecShrink(next - pattern) != E_None)
-		return 0;
-
-	esDecode(param);			/* decode string from internal quote form */
-
-	if(findfirst(param, &f, 0) == 0) {	/* need a f-context */
-		*dfnfilename(param) = '\0';	/* extract path */
-		if(ecMkf(&f, varname, cmd, param) != E_None)
+	if(findfirst(pattern, &f, 0) == 0) {	/* need a f-context */
+		*dfnfilename(pattern) = '\0';	/* extract path */
+		if(ecMkf(&f, idVarname, idCmd, pattern) != E_None)
 			return 0;
-		chkPtr(param);
-		if(!StrCat(param, f.ff_name)) {
-			myfree(param);
-			error_out_of_memory();
+		chkPtr(pattern);
+		unregStr(pattern);
+		if((pattern
+		 = efrealloc(pattern, strlen(pattern) + strlen(f.ff_name) + 1)) == 0)
 			return 0;
-		}
+		strcat(pattern, f.ff_name);
+		chkHeap
 	}
 
-	return forPatchCmdline(varname, cmd, param);
+	return forPatchCmdline(idVarname, idCmd, pattern);
 }
 
-char *readFORnext(ctxtEC_t far * const ctxt)
-{	char far* varname, far* cmd;	/* param of ctxt */
-	ctxtEC_For_t far*fc;
+char *readFORnext(char far * const ctxt)
+{	unsigned idFfblk, idPrefix, idVarname, idCmd;
+	char *prefix, *ffstr;
 	struct ffblk f;
-
-	char *param;				/* current argument */
 
 	lflag_doQuit = cbreak;
 
@@ -139,37 +127,37 @@ char *readFORnext(ctxtEC_t far * const ctxt)
 	}
 
 	assert(ctxt);
-	assert(ctxt->ctxt_type == EC_TAG_FOR_NEXT);
-	assert(ctxt->ctxt_length >= sizeof(ctxtEC_For_t));
+	assert(*ctxt == EC_TAG_FOR_NEXT);
 
-	fc = ecData(ctxt, ctxtEC_For_t);
-	assert(_fstrlen(fc->ec_prefix)
-	 == ctxt->ctxt_length - sizeof(ctxtEC_For_t));
-
-	assert(ctxtp->ctxt_size < 0x1000);
-	varname = MK_FP(ctxtMain, fc->ec_varname);
-	cmd = MK_FP(ctxtMain, fc->ec_cmd);
-	assert(cmd[-1] == 0
-	 && _fnormalize(cmd) == _fnormalize(varname + _fstrlen(varname) + 1));
+	prefix = 0;
+	if(ecScanArg(ctxt, 4, "%u %u %u %u"
+	  , &idFfblk, &idVarname, &idCmd, &idPrefix) != E_None
+	 || (idPrefix && (prefix = ecString(idPrefix)) == 0)
+	 || (ffstr = ecString(idFfblk)) == 0)
+		return 0;
 
 		/* necessary information to let findnext() do some good */
-	_fmemcpy(TO_FP(&f), fc->ec_ffblk, sizeof(fc->ec_ffblk));
+	esDecode(ffstr);
+	memcpy(&f, ffstr, 21);
 	if(findnext(&f) != 0) {		/* f-context used up */
 		dprintf(("[FOR#2: No further match]\n"));
 		return 0;
 	}
+			/* 21: length of ffblk structure required for findnext() */
+	if((ffstr = regStr(esEncMem(&f, 21))) == 0) {
+		error_out_of_memory();
+		return 0;
+	}
+	if(ctxtSet(CTXT_TAG_STRING, idFfblk, ffstr) != E_None)
+		return 0;
 
-	param = _fdupstr(fc->ec_prefix);
-	chkPtr(param);
-	if(!param || !StrCat(param, f.ff_name)) {
-		myfree(param);
+	unregStr(prefix);
+	chkPtr(prefix);
+	if(!StrCat(prefix, f.ff_name)) {
+		myfree(prefix);
 		error_out_of_memory();
 		return 0;
 	}
 
-		/* save the info for next run */
-	_fmemcpy(fc->ec_ffblk, TO_FP(&f), sizeof(fc->ec_ffblk));
-	dprintf(("[FOR#2: %Fs (%s) %Fs]\n", varname, param, cmd));
-
-	return forPatchCmdline(varname, cmd, param);
+	return forPatchCmdline(idVarname, idCmd, prefix);
 }

@@ -12,8 +12,7 @@
  *			int fct(res_majorid_t, res_minorid_t, length, FILE*, arg)
  *		The "length" parameter specifies the length of the data
  *		block (unsigned long), the file is the resource file opened
- *		in "r+b" modus <<be careful!!>>, "arg" is the pointer passed to
- *		enumREsources().
+ *		in "rb" modus, "arg" is the pointer passed to enumREsources().
  *		The callback function may reposition the file, though, the file
  *		itself must not be closed.
  *
@@ -29,9 +28,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.2.1  2001/07/30 00:45:17  skaus
+	Update #13 / Beta 27: plain dynamic context
+
 	Revision 1.2  2001/06/10 15:20:39  skaus
 	add: error message if debugging when to open the resource file failed
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -81,7 +83,7 @@ int enumFileResources(const char *const fnam
 	assert(fnam);
 
 	rc = 0;
-	if((f = fopen(fnam, "r+b")) == 0) {
+	if((f = fopen(fnam, "rb")) == 0) {
 	 	rc = -1;
 	 	dprintf(("[RES: Failed to open file: %s]\n", fnam));
 #ifdef DEBUG

@@ -12,7 +12,7 @@
 
 void ctxtDestroy(void)
 {
-	if(ctxtMain)
-		freeSysBlk(ctxtMain);
-	ctxtMain = 0;
+	if(ctxtSegm)
+		freeSysBlk(ctxtSegm);
+	ctxtSegm = 0;
 }

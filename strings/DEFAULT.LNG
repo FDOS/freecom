@@ -894,7 +894,10 @@ Heap                   : free %6lu bytes; largest block: %lu bytes
 \tSwapinfo       : used  %5u bytes, %5u items
 .
 :TEXT_MEMORY_CTXT_EXEC#1
-\tExecution stack: used  %5u paragraphes (%lu bytes)
+\tExecution stack: used  %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_STRING#1
+\tContext strings: used  %5u bytes, %5u items
 .
 
 
@@ -1502,25 +1505,25 @@ No internal variables defined.
 .
 
 :TEXT_EC_HDR_UNKNOWN#1
-%u.: %Fp - #%u - %u
+%u.: %Fp\tunkown tag #%u
 .
 :TEXT_EC_HDR#1
-%u.: %Fp - %c - %u
+%u.: %Fp\ttag %c
 .
-:TEXT_EC_FOOTER#1
-Upper boundary of execution context: %Fp
+:TEXT_EC_DISP_SET_STRING#1
+     : Reset string stack to #%u
 .
 :TEXT_EC_DISP_BATCH#1
 Batch: offset @%lu, line #%lu
-     : %Fs
+     : %s
 .
 :TEXT_EC_DISP_FOR1#1
-FOR#1: var: %Fs, remaining pattern: %Fs
-     : %Fs
+FOR#1: var: %s, remaining pattern: %s
+     : %s
 .
 :TEXT_EC_DISP_FOR2#1
-FOR#2: var: %Fs, prefix: %Fs
-     : %Fs
+FOR#2: var: %s, prefix: %s
+     : %s
 .
 :TEXT_EC_DISP_CMD_1#1
 CMD  : flags: 0x%02x\
@@ -1539,7 +1542,7 @@ CMD  : flags: 0x%02x\
 .
 :TEXT_EC_DISP_CMD_2#1
 
-     : %Fs
+     : %s
 .
 
 :TEXT_DISP_STATUS_HDR#1

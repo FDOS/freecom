@@ -57,7 +57,7 @@ int ctxtGet(int remove
 	, const unsigned num
 	, char ** const buf)
 {
-	char name[CTXT_ITEMNAME_LENGTH];
+	char name[CTXT_LENGTH_ITEMNAME];
 
 	ctxtMkItemName(name, tag, num);
 	return ctxtGetItem(remove, tag, name, buf);

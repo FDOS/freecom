@@ -8,9 +8,12 @@
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/30 00:45:17  skaus
+	Update #13 / Beta 27: plain dynamic context
+
 	Revision 1.1.4.1  2001/07/25 20:17:28  skaus
 	Update #12
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -54,7 +57,7 @@ void goxy(const unsigned char x, const unsigned char y)
 	assert(y > 0);
 
 
-	_DX = (y - 1) << 8 | (x - 1);
+	_DX = ((y - 1) << 8) | (x - 1);
 	_BH = 0;                /* video page 0 */
 	_AH = 2;                /* set cursor position */
 	geninterrupt(0x10);

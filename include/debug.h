@@ -18,6 +18,9 @@ extern FILE *dbg_logfile;
 extern FILE *dbg_logfile2;
 extern int fddebug;
 
+#define obsoleted()	obsoleted_(__FILE__, __LINE__)
+void obsoleted_(const char * const, const int);
+
 #ifdef DEBUG
 		/* DEBUG ENABLED */
 #include <alloc.h>

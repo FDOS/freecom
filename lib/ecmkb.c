@@ -20,30 +20,31 @@
 #include "../include/misc.h"
 
 int ecMkB(const char * const name)
-{	ctxtEC_t far* ec;
-	ctxtEC_Batch_t far *d;
-	unsigned length;
-#ifndef NDEBUG
-	char far *q;
-#endif
+{	unsigned idFName;
+	char buf[EC_LENGTH_B];
+	int rv;
+
+	if((rv = ecMkS()) != E_None)
+		return rv;
 
 	assert(name);
 
-	if((ec = ecMk(EC_TAG_BATCH, length = strlen(name) + sizeof(*d))) == 0)
+	if((idFName = ecPushString(name)) == 0)
 		return E_NoMem;
-	d = ecData(ec, ctxtEC_Batch_t);
-	d->ec_pos = d->ec_lnum = 0;
 
-#ifndef NDEBUG
-	q =
-#endif
-	_fstpcpy(d->ec_fname, TO_FP(name));
-	assert(_fnormalize(q) == _fnormalize(&ecData(ec, byte)[length - 1]));
+		/* Make "buf" the largest possible buffer size */
+		/* The '|' ensures to update the two last values later on */
+	sprintf(buf, "%c%u|%lu %lu|", EC_TAG_BATCH, idFName, -1L, -1L);
+	assert(strlen(buf) < sizeof(buf));
 
-	if(++gflag_batchlevel == 1) {
+		/* reset position & line number to zero */
+	strcpy(strchr(buf, '|'), "|0 0|");
+
+	if((rv = ctxtPush(CTXT_TAG_EXEC, buf)) == E_None
+	 && ++gflag_batchlevel == 1) {
 		/* First batch level */
 		gflag_echo = gflag_echoBatch;
 	}
 
-	return E_None;
+	return rv;
 }

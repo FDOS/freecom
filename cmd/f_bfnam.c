@@ -13,7 +13,7 @@
 
 #pragma argsused
 char *fct_batchname(char *param)
-{	ctxtEC_Batch_t far *bc = ecLastB();
+{	ctxtEC_Batch_t *bc = ecLastB();
 
-	return bc? edupstr(bc->ec_fname): 0;
+	return bc? ecString(bc->ec_idFnam): 0;
 }

@@ -11,23 +11,18 @@
 #include "../include/context.h"
 
 void ecPop(void)
-{	ctxtEC_t far *ec;
+{	char *buf;
 
-	if((ec = ecValidateTOS()) != 0) {
-		if(ec->ctxt_type == EC_TAG_BATCH) {
-			if(gflag_batchlevel > 0) {
-				if(--gflag_batchlevel == 0) {
-					/* Drop to interactive command line */
-					gflag_echo = gflag_dispPrompt;
-				}
-			} else dprintf(("!! GFlag(Batchlevel) underflow\n"));
+	if(ctxtPop(CTXT_TAG_EXEC, &buf)) {
+		assert(buf);
+		switch(*buf) {
+		case EC_TAG_BATCH:
+			if(gflag_batchlevel-- == 0) {
+				dprintf(("[CTXT: Batch nestinglevel underflow]\n"));
+				gflag_batchlevel = 0;
+			}
+			break;
 		}
-#ifdef DEBUG
-		if(ec->ctxt_length)
-			_fmemset(ecData(ec, byte), 'K', ec->ctxt_length);
-		ec->ctxt_type = 255;
-#endif
-		ecSetTOS((ctxtEC_t far*)((byte far*)ec
-		                        + ec->ctxt_length + sizeof(*ec)));
+		myfree(buf);
 	}
 }

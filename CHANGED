@@ -1,3 +1,10 @@
+Update #13 / Beta 27: plain dynamic context
+
+Beta 26 (main branch):
+chg: using FLAG for all boolean options (reduce size)
+chg: tmpnam.c: reduced size
+chg: FreeCOM archive (== executable) is opened read-only.
+
 Update #12 / Beta 25: make smaller
 chg: removed int86(), intdos() reduce by 560 bytes
 chg: fixed COPY, reduce by 400 bytes

@@ -14,7 +14,7 @@
 #include "../include/context.h"
 
 char far*ctxtAddress(const Context_Tag tag, const unsigned num)
-{	char name[CTXT_ITEMNAME_LENGTH];
+{	char name[CTXT_LENGTH_ITEMNAME];
 	word ofs, segm;
 
 	ctxtMkItemName(name, tag, num);

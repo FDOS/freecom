@@ -35,7 +35,7 @@
 
 #define WIDE_COLUMNS 5
 
-static int optS, optP, optW, optB, optA, optL, longyear;
+static FLAG optS, optP, optW, optB, optA, optL, longyear;
 
 char *path;
 unsigned line;
@@ -44,13 +44,13 @@ int need_nl;
 #pragma argsused
 optScanFct(opt_dir)
 { switch(ch) {
-  case 'S': return optScanBoolI(optS);
-  case 'P': return optScanBoolI(optP);
-  case 'W': return optScanBoolI(optW);
-  case 'B': return optScanBoolI(optB);
-  case 'A': return optScanBoolI(optA);
-  case 'L': return optScanBoolI(optL);
-  case 'Y': return optScanBoolI(longyear);
+  case 'S': return optScanBool(optS);
+  case 'P': return optScanBool(optP);
+  case 'W': return optScanBool(optW);
+  case 'B': return optScanBool(optB);
+  case 'A': return optScanBool(optA);
+  case 'L': return optScanBool(optL);
+  case 'Y': return optScanBool(longyear);
   }
   optErr();
   return E_Useage;

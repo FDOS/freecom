@@ -14,5 +14,5 @@
 
 #include "../include/context.h"
 
-volatile ctxt_t ctxtMain = 0;
+volatile ctxt_t ctxtSegm = 0;
 ctxt_flags_t far *ctxtFlagsP = &ctxtInitialFlags;

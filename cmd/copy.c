@@ -42,14 +42,14 @@ extern int FAR appFile; /* Append the next file rather than new source */
 char *destFile;     /* destination file/directory/pattern */
 int destIsDir;      /* destination is directory */
 
-static int optY, optV, optA, optB;
+static FLAG optY, optV, optA, optB;
 
 #pragma argsused
 optScanFct(opt_copy)
 {
   switch(ch) {
-  case 'Y': return optScanBoolI(optY);
-  case 'V': return optScanBoolI(optV);
+  case 'Y': return optScanBool(optY);
+  case 'V': return optScanBool(optV);
   case 'A': case 'B': return E_Ignore;
   }
   optErr();
@@ -69,7 +69,7 @@ optScanFct(opt_copy1)
   case 'A': opt = &optA; optReset = &optB; break;
   case 'B': opt = &optB; optReset = &optA; break;
   }
-  if((ec = optScanBoolI(*opt)) == E_None
+  if((ec = optScanBool(*opt)) == E_None
    && *opt)
     *optReset = 0;
 
@@ -385,7 +385,6 @@ static int addSource(char *p)
 int cmd_copy(char *rest)
 { char **argv, *p;
   int argc, opts, argi;
-  int freeDestFile = 0;
   struct CopySource *h;
 
   /* Initialize options */

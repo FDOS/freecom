@@ -17,54 +17,12 @@
 typedef word ctxt_t;		/* general context type <-> segment */
 #define CTXT_INVALID ((ctxt_t)0)
 
-extern volatile ctxt_t ctxtMain;	/* currently there is just one context
+extern volatile ctxt_t ctxtSegm;	/* currently there is just one context
 								-> so-called dynamic context
 								-> all data is located in there
 								it is the location of the subMCB */
-#define ctxtSegm (ctxtMain + 1)	/* segment of the subMCB creating the
-								pseudo-environment segment */
 
-#include <algnbyte.h>
-typedef struct CtxtCB {
-	byte ctxt_type;		/* type of sub-MCB <-> 'Z': no following MCB */
-	word ctxt_owner;	/* owner of this dyn context (future use) */
-	word ctxt_size;		/* size of this sub-MCB */
-	byte ctxt_eOffs;	/* offset of start of exec contexts */
-	byte ctxt_reserved[10];
-} ctxtCB_t;
-typedef struct CtxtEC {
-	byte ctxt_type;
-	word ctxt_length;
-} ctxtEC_t;
-typedef struct {	/* B context */
-	dword ec_pos;		/* file position */
-	dword ec_lnum;		/* line number */
-	char ec_fname[1];	/* file name; dynamically extended */
-} ctxtEC_Batch_t;
-typedef struct {	/* f context */
-	byte ec_ffblk[21];	/* DOS specific ffblk continuation info */
-	word ec_varname;	/* displacement of varname in F-context */
-	word ec_cmd;		/* displacement of command in F-context */
-	char ec_prefix[1];	/* argument prefix; dynamically extended */
-} ctxtEC_For_t;
-typedef struct {	/* C context */
-	unsigned ec_flags;
-	char ec_cmd[1];
-} ctxtEC_Cmd_t;
-#include <algndflt.h>
-#if sizeof(ctxtCB_t) != 16
-#error "The size of type ctxtCB_t must be equal to 16"
-#endif
-#define ctxtMCB ((struct MCB _seg *)SEG2MCB(ctxtMain))
-#define ctxtECHighestSegm()	(nxtMCB(FP_SEG(ctxtMCB)))
-#define ctxtECLowestSegm()	(ctxtSegm + (env_firstFree(ctxtSegm) + 15) / 16)
-#define ctxtp ((ctxtCB_t _seg *)ctxtMain)
-#define ctxtExecContext		\
-	((ctxtEC_t far*)MK_FP(ctxtSegm + ctxtp->ctxt_size, ctxtp->ctxt_eOffs))
-extern ctxtCB_t ctxtInitialCB;
-extern ctxtEC_t ctxtInitialEC;
-#define ecData(ec,type)	((type far*)((byte far*)(ec) + sizeof(ctxtEC_t)))
-#define ctxtECLenPar() (ctxtMCB->mcb_size - 1 - ctxtp->ctxt_size)
+#define ctxtMCB ((struct MCB _seg *)SEG2MCB(ctxtSegm))
 
 /* Major IDs of context tags */
 typedef enum {
@@ -76,6 +34,8 @@ typedef enum {
 	,CTXT_TAG_SWAPINFO
 	,CTXT_TAG_ARG
 	,CTXT_TAG_IVAR
+	,CTXT_TAG_STRING
+	,CTXT_TAG_EXEC
 /** pseudo tags */
 /* ALIAS must be the last tag */
 	,CTXT_TAG_ALIAS
@@ -122,14 +82,22 @@ extern ctxt_info_t ctxt_info[];
 #define ctxtProbeItemTag(segm,ofs,tag)							\
 	(peekb((segm), (ofs)) == (unsigned char)(Context_Tag)(tag)	\
 		 && peekb((segm), (ofs) + 1) != '=')
-#define CTXT_ITEMNAME_LENGTH (sizeof(unsigned) * 2 + 2)
+#define CTXT_LENGTH_ITEMNAME (sizeof(unsigned) * 2 + 2)
+#define CTXT_LENGTH_ID (sizeof(unsigned) * 4 + 1)
+
+typedef struct {
+	unsigned long ec_pos, ec_lnr;
+	unsigned ec_idFnam;
+} ctxtEC_Batch_t;
 
 void ctxtCreate(void);			/* Create the local context */
 void ctxtDestroy(void);			/* Deallocate the local context */
 int ctxtAddStatus(const Context_Tag tag);
 int ctxtChgSize(const unsigned newsize);
 int ctxtPop(const Context_Tag, char ** const);
+void ctxtPopTo(Context_Tag tag, unsigned to_del);
 int ctxtPush(const Context_Tag, const char * const);
+int ctxtRemove(const Context_Tag, const unsigned);
 int ctxtGet(const int, const Context_Tag, const unsigned, char ** const);
 int ctxtGetS(const int, const Context_Tag, const char * const, char ** const);
 int ctxtGetItem(const int, const Context_Tag, const char * const, char ** const);
@@ -146,13 +114,14 @@ int chgCtxt(const Context_Tag tag, const char * const, const char * const);
 unsigned realNum(const Context_Tag tag, const int num);
 
 /* Purge any internal cached value pointing into the dyn ctxt */
-void ctxtPurgeCache(void);
+//void ctxtPurgeCache(void);
 /* Purge one entry if a class is over its limit; Return 0 on failure */
 int ctxtSinglePurge(void);
 
 /* Execution Context settings */
 typedef enum ExecContext_Tags {
-	EC_TAG_INTERACTIVE 			/* I */
+	EC_TAG_INTERACTIVE = 1		/* I */
+	, EC_TAG_SET_STRING			/* S */
 	, EC_TAG_BATCH				/* B */
 	, EC_TAG_FOR_FIRST			/* F */
 	, EC_TAG_FOR_NEXT			/* f */
@@ -163,7 +132,12 @@ typedef enum ExecContext_Tags {
 #define EC_LAST_TAG EC_TAG_TERMINATE
 	/* >= tags that may be considered end of the stack */
 #define EC_FINAL_TAGS EC_TAG_KEEP_RUNNING
-#define ecNames "IBFfCeE"
+#define ecNames "?ISBFfCeE"
+
+#define EC_LENGTH_B  (sizeof(long) * 8 * 2 + CTXT_LENGTH_ID + 3)
+#define EC_LENGTH_F  (CTXT_LENGTH_ID * 3 + 2)
+#define EC_LENGTH_C  (sizeof(unsigned) * 2 + 3			\
+	+ sizeof(FORCE_INTERNAL_COMMAND_STRING))
 
 extern ctxt_flags_t far*ctxtFlagsP;
 extern ctxt_flags_t ctxtInitialFlags;
@@ -174,10 +148,10 @@ extern FLAG lflag_rewindBatchFile;
 extern char *lflag_gotoLabel;
 #define implicitVerbose (lflag_echo)
 
-extern char* (*ecFunction[])(ctxtEC_t far * const);
+extern char* (*ecFctRead[])(char far * const);
 
 	/* Make a new context of specified length and type */
-ctxtEC_t far *ecMk(const enum ExecContext_Tags, const unsigned);
+//ctxtEC_t far *ecMk(const enum ExecContext_Tags, const unsigned);
 	/* Make a silent & hidden c context */
 int ecMkc(const char * const str, ...);
 	/* Make a silent & hidden C context */
@@ -190,15 +164,21 @@ int ecMkV1C(const char * const str, ...);
 	/* Make a F context: (param[], params), varname, cmd */
 int ecMkF(char ** const, const int, const char * const, const char * const);
 	/* Make a f context: ffblk, varname, cmd, prefix */
-int ecMkf(const void * const, const char far* const, const char far* const, const char * const);
+int ecMkf(const void * const, unsigned, unsigned, const char * const);
+	/* Make a S context */
+int ecMkS(void);
 	/* Make a I context */
 int ecMkI(void);
+	/* Make an E, or e context */
+#define ecMkE()	ecMk(EC_TAG_TERMINATE)
+#define ecMke()	ecMk(EC_TAG_KEEP_RUNNING)
+int ecMk(const ecTag_t);
 	/* Make a B context: name (pos & lcount default to 0) */
 int ecMkB(const char * const name);
 	/* Make a C/FD context */
 int ecMkFD(const int jft, const int sft);
-	/* Return a pointer to the most current B context */
-ctxtEC_Batch_t far *ecLastB(void);
+	/* Return a pointer to the most current B context (static buffer) */
+ctxtEC_Batch_t *ecLastB(void);
 	/* Return the next available special internal variable
 		in a dynamically allocated buffer. */
 char *ecMkIVar(void);
@@ -207,6 +187,16 @@ char *ecMkIVar(void);
 void ecFreeIVar(char * const ivar);
 	/* Create a string that may enclose "str" with a %@VERBATIM() */
 char *ecMkVerbatimStr(const char * const str);
+	/* Push an item into the STRING tag */
+unsigned ecPushString(const char * const str);
+	/* Fetch an item from the STRING tag (return regged string!) */
+char *ecString(const unsigned id);
+	/* set the TOS of CTXT_TAG_STRING */
+void ecSetStringStack(const char far * const ctxt);
+	/* make a new I or S context */
+int ecMkI_S(const byte tag);
+	/* Get the arguments of an execution context */
+int ecScanArg(const char far * const ctxt, const int num, const char * const fmt,...);
 
 	/** Mode parameters for ecMkvcmd() */
 #define EC_CMD_FORCE_INTERNAL 1
@@ -217,13 +207,15 @@ char *ecMkVerbatimStr(const char * const str);
 
 
 	/* Validate the TOS and return a pointer to it */
-ctxtEC_t far *ecValidateTOS(void);
+//ctxtEC_t far *ecValidateTOS(void);
 	/* Set a new TOS; return 0 if target is below LowestSegm() */
-int ecSetTOS(const ctxtEC_t far *);
+//int ecSetTOS(const ctxtEC_t far *);
 	/* Remove the topmost context; uses the "size" member only */
 void ecPop(void);
+	/* Enumerate all values of a stack tag */
+int ecEnum(const Context_Tag, const unsigned startID, int (*fct)(unsigned id, char *buf, void * const arg), void * const arg);
 	/* Shrink the topmost context by diff bytes */
-int ecShrink(unsigned diff);
+//int ecShrink(unsigned diff);
 
 /* Functions to handle the particular contexts */
 /* These functions return:
@@ -233,20 +225,21 @@ int ecShrink(unsigned diff);
 */
 #define cmdlineIgnore ((char*)1)
 	/* EC_TAG_INTERACTIVE -- I context */
-char *readInteractive(ctxtEC_t far * const);
+char *readInteractive(char far * const);
 	/* EC_TAG_BATCH -- B-context */ 
-char *readbatchline(ctxtEC_t far * const);
+char *readBatch(char far * const);
 	/* EC_TAG_FOR_FIRST -- F-context */ 
-char *readFORfirst(ctxtEC_t far * const);
+char *readFORfirst(char far * const);
 	/* EC_TAG_FOR_NEXT -- f-context */ 
-char *readFORnext(ctxtEC_t far * const);
+char *readFORnext(char far * const);
 	/* EC_TAG_COMMAND -- C-context */ 
-char *readCommand(ctxtEC_t far * const);
+char *readCommand(char far * const);
 	/* EC_TAG_KEEP_RUNNING -- e-context */ 
-char *keepMeRunning(ctxtEC_t far * const);
+char *keepMeRunning(char far * const);
 	/* EC_TAG_TERMINATE -- E-context */ 
-char *terminateShell(ctxtEC_t far * const);
-
+char *terminateShell(char far * const);
+	/* EC_TAG_SET_STRING -- S-context */ 
+char *setStringStack(char far * const);
 
 /*****************
 	Encoded strings
@@ -259,5 +252,6 @@ char *terminateShell(ctxtEC_t far * const);
 	/* Transform s from internal quoted form into ASCII */
 void esDecode(char * const s);
 char *esEncode(const char * const s);
+char *esEncMem(const void * const buf, unsigned len);
 
 #endif

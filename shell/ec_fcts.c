@@ -8,11 +8,14 @@
 
 #include "../include/context.h"
 
-char* (*ecFunction[])(ctxtEC_t far * const) = {
+char* (*ecFctRead[])(char far * const) = {
+	0
 /* EC_TAG_INTERACTIVE */ 
-	readInteractive
+	, readInteractive
+/* EC_TAG_SET_STRING */ 
+	, setStringStack
 /* EC_TAG_BATCH */ 
-	, readbatchline
+	, readBatch
 /* EC_TAG_FOR_FIRST */ 
 	, readFORfirst
 /* EC_TAG_FOR_NEXT */ 
@@ -25,6 +28,6 @@ char* (*ecFunction[])(ctxtEC_t far * const) = {
 	, terminateShell
 };
 
-#if sizeof(ecFunction) / sizeof(char* (*)()) != (EC_TAG_TERMINATE + 1)
+#if sizeof(ecFctRead) / sizeof(char* (*)()) != (EC_TAG_TERMINATE + 1)
 #error "The ecFunction[] array has not EC_TAG_TERMINATE entries"
 #endif

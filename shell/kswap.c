@@ -169,7 +169,7 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 	} else
 		ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE, "\1 \r");
 	ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_PRGNAME, prg);
-	kswapContext->dyn_ctxt = ctxtMain;
+	kswapContext->dyn_ctxt = ctxtSegm;
 
 	return (kswapContext->cmdline	/* fetch first in case of failure */
 	   = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE)) != 0
@@ -193,7 +193,7 @@ int kswapLoadStruc(void)
 	perform_exec_result(decode_exec_result(kswapContext->execErr));
 
 	grabComFilename(1, kswapContext->shell);
-	if((ctxtMain = kswapContext->dyn_ctxt) == 0) {
+	if((ctxtSegm = kswapContext->dyn_ctxt) == 0) {
 		error_no_context_after_swap();
 		ctxtCreate();
 	}

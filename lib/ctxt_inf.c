@@ -25,6 +25,10 @@ ctxt_info_t ctxt_info[] = {
 	,{ (unsigned)-1, 0, 0, 0 }
 	/* CTXT_TAG_IVAR */
 	,{ (unsigned)-1, 0, 0, 0 }
+	/* CTXT_TAG_STRING */
+	,{ (unsigned)-1, 0, 0, 0 }
+	/* CTXT_TAG_EXEC */
+	,{ (unsigned)-1, 0, 0, 0 }
 /* pseudo entries */
 	/* CTXT_TAG_ALIAS */
 	,{ ALIAS_DEFAULT_SIZE, 0, 0, 0 }

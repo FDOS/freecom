@@ -20,44 +20,38 @@
 #include "ec.h"
 #include "../include/context.h"
 #include "../include/ierror.h"
+#include "../include/misc.h"
 #include "../err_fcts.h"
 
 int ecMkvcmd(int mode, const char * const str, va_list ap)
 {	char *p;
-	ctxtEC_t far *ec;
-	unsigned len;
-	va_list run;
+	char *buf, hbuf[EC_LENGTH_C];
+	FLAG missingCmd;
 
-	for(len = Strlen(str), run = ap; (p = va_arg(run, char *)) != 0;)  {
-		if(addu(&len, strlen(p))) {
-			error_long_internal_line();
-			return E_NoMem;
-		}
-	}
-	if(len >= INT_MAX - sizeof(ctxtEC_t)) {
-		error_long_internal_line();
+	sprintf(hbuf, "%c%u ", EC_TAG_COMMAND, mode);
+	if(mode & EC_CMD_FORCE_INTERNAL)
+		strcat(hbuf, FORCE_INTERNAL_COMMAND_STRING);
+
+	if((buf = StrConcat(2, hbuf, str)) == 0) {
+		error_out_of_memory();
 		return E_NoMem;
 	}
 
-	if(!len)			/* Don't make an empty context */
-		return E_None;		/* Though -> it's successful */
-
-	ec = ecMk(EC_TAG_COMMAND, len + sizeof(ctxtEC_Cmd_t));
-
-	if(ec) {
-		ctxtEC_Cmd_t far *cc;
-		char far *q;
-
-		cc = ecData(ec, ctxtEC_Cmd_t);
-		cc->ec_flags = mode;
-		q = cc->ec_cmd;
-		if(str)
-			q = _fstpcpy(q, TO_FP(str));
-		while((p = va_arg(ap, char *)) != 0)
-			q = _fstpcpy(q, TO_FP(p));
-		assert(q - (char far*)cc == ec->ctxt_length - 1);
-		return E_None;
+	missingCmd = TRUE;
+	while((p = va_arg(ap, char *)) != 0) if(*p) {
+		missingCmd = FALSE;
+		chkPtr(buf);
+		if(!StrCat(buf, p)) {
+			error_out_of_memory();
+			myfree(buf);
+			return E_NoMem;
+		}
 	}
 
-	return E_NoMem;
+	if(missingCmd) {		/* Don't make an empty context */
+		myfree(buf);
+		return E_None;		/* Though -> it's successful */
+	}
+
+	return ctxtPush(CTXT_TAG_EXEC, buf);
 }

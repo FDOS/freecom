@@ -18,13 +18,13 @@
 #include "../strings.h"
 
 
-static int noPrompt = 0;
+static FLAG noPrompt = 0;
 
 #pragma argsused
 optScanFct(opt_date)
 { switch(ch) {
   case 'D':
-  case 'T': return optScanBoolI(noPrompt);
+  case 'T': return optScanBool(noPrompt);
   }
   optErr();
   return E_Useage;

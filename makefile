@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.15.4.6  2001/07/30 00:45:16  skaus
+# Update #13 / Beta 27: plain dynamic context
+#
 # Revision 1.15.4.5  2001/07/25 20:17:28  skaus
 # Update #12
 #
@@ -55,7 +58,7 @@
 
 INCDIR +=;$(FREEDOS)\SRC\INCLUDE;$(PWD)\\INCLUDE
 LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
-LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib CMD\\CMDS.LIB LIB\\FREECOM.LIB STRINGS\\STRINGS.LIB
+LDLIBS = CMD\\CMDS.LIB LIB\\FREECOM.LIB STRINGS\\STRINGS.LIB $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib
 LDFLAGS += /msl
 NASM *= c:\TOOL\NASMW.EXE
 

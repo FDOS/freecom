@@ -15,7 +15,7 @@
 #include "../include/command.h"
 
 static int renumber(void *arg, word segm, word ofs)
-{	char buf[CTXT_ITEMNAME_LENGTH];
+{	char buf[CTXT_LENGTH_ITEMNAME];
 
 #define tag (Context_Tag)arg
 

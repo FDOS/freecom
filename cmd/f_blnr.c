@@ -13,11 +13,11 @@
 
 #pragma argsused
 char *fct_batchline(char *param)
-{	ctxtEC_Batch_t far *bc;
+{	ctxtEC_Batch_t *bc;
 
-	if((bc  = ecLastB()) != 0) {
+	if((bc = ecLastB()) != 0) {
 		char buf[sizeof(unsigned long) * 8 + 2];
-		sprintf(buf, "%lu", bc->ec_lnum);
+		sprintf(buf, "%lu", bc->ec_lnr);
 		return estrdup(buf);
 	}
 	return estrdup("-1");

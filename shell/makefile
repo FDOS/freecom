@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.2.2.6  2001/07/30 00:45:17  skaus
+# Update #13 / Beta 27: plain dynamic context
+#
 # Revision 1.2.2.5  2001/07/05 22:18:35  skaus
 # Update #5
 #
@@ -51,20 +54,20 @@
 
 # Sources of this make target
 SRC = batch.c cb_catch.asm cmdtable.c command.c do_batch.c do_cmd.c \
-	do_exit.c do_for.c do_inter.c do_keep.c dummies.asm ec_fcts.c expalias.c \
-	fcttable.c init.c kswap.c loadhigh.c module.c redir.c ver.c
+	do_exit.c do_for.c do_inter.c do_keep.c do_strg.c dummies.asm ec_fcts.c \
+	expalias.c fcttable.c init.c kswap.c loadhigh.c module.c redir.c ver.c
 OBJ = batch.obj cb_catch.obj cmdtable.obj command.obj do_batch.obj \
-	do_cmd.obj do_exit.obj do_for.obj do_inter.obj do_keep.obj dummies.obj \
-	ec_fcts.obj expalias.obj fcttable.obj init.obj kswap.obj loadhigh.obj \
-	module.obj redir.obj ver.obj
-HDR = ..\config.h ..\include/cmdline.h ..\include/command.h \
+	do_cmd.obj do_exit.obj do_for.obj do_inter.obj do_keep.obj do_strg.obj \
+	dummies.obj ec_fcts.obj expalias.obj fcttable.obj init.obj kswap.obj \
+	loadhigh.obj module.obj redir.obj ver.obj
+HDR = ..\config.h ..\gflags.h_c ..\include/cmdline.h ..\include/command.h \
 	..\include/context.h ..\include/crossjmp.h ..\include/datefunc.h \
 	..\include/debug.h ..\include/ierror.h ..\include/keys.h \
 	..\include/kswap.h ..\include/message.h ..\include/misc.h \
 	..\include/module.h ..\include/mux_ae.h ..\include/nls.h \
-	..\include/openf.h ..\include/res.h ..\include/resource.h \
-	..\include/timefunc.h ..\include\large.inc ..\include\model.inc \
-	..\include\small.inc ..\include\stuff.inc
+	..\include/openf.h ..\include/output.h ..\include/res.h \
+	..\include/resource.h ..\include/timefunc.h ..\include\large.inc \
+	..\include\model.inc ..\include\small.inc ..\include\stuff.inc
 
 
 
@@ -105,16 +108,17 @@ com.exe com.map .UPDATEALL : $(OBJ) ../cmd/cmds.lib ../lib/freecom.lib
 
 #MAKEDEP START
 expalias.obj : expalias.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/cmdline.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/nls.h ../include/timefunc.h
 command.obj : command.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
-	../include/command.h ../include/context.h ../include/crossjmp.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/kswap.h ../include/message.h ../include/misc.h \
-	../include/mux_ae.h ../include/nls.h ../include/openf.h \
-	../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/cmdline.h ../include/command.h ../include/context.h \
+	../include/crossjmp.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/kswap.h ../include/message.h \
+	../include/misc.h ../include/mux_ae.h ../include/nls.h \
+	../include/openf.h ../include/timefunc.h ../strings.h
 fcttable.obj : fcttable.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \
@@ -125,14 +129,14 @@ module.obj : module.c \
 	../include/message.h ../include/misc.h ../include/module.h \
 	../include/res.h ../include/resource.h ../include/timefunc.h
 kswap.obj : kswap.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/kswap.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/kswap.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 do_cmd.obj : do_cmd.c \
-	 ../config.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 cb_catch.obj : cb_catch.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc \
 	.\..\include\stuff.inc
@@ -141,22 +145,27 @@ ver.obj : ver.c \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
 	../strings.h
+do_strg.obj : do_strg.c \
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 init.obj : init.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
-	../include/command.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/ierror.h ../include/keys.h \
-	../include/kswap.h ../include/message.h ../include/misc.h \
-	../include/module.h ../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/cmdline.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/keys.h ../include/kswap.h ../include/message.h \
+	../include/misc.h ../include/module.h ../include/timefunc.h ../strings.h
 ec_fcts.obj : ec_fcts.c \
-	 ../config.h ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 do_keep.obj : do_keep.c \
-	 ../config.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/ierror.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
-do_for.obj : do_for.c \
-	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
+do_for.obj : do_for.c \
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 cmdtable.obj : cmdtable.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \
@@ -167,25 +176,25 @@ loadhigh.obj : loadhigh.c \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
 	../strings.h
 batch.obj : batch.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/cmdline.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 do_exit.obj : do_exit.c \
-	 ../config.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 dummies.obj : dummies.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc
 do_inter.obj : do_inter.c \
-	 ../config.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/output.h ../include/timefunc.h
 do_batch.obj : do_batch.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/cmdline.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 redir.obj : redir.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \

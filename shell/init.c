@@ -59,21 +59,22 @@ void exitfct(void)
 }
 
 
-int showhelp = 0, internalBufLen = 0, inputBufLen = 0;
+FLAG showhelp = 0;
+int internalBufLen = 0, inputBufLen = 0;
 int spawnAndExit = E_None;
 int newEnvSize = 0;          /* Min environment table size */
 char *user_autoexec = 0;
-int skipAUTOEXEC = 0;
+FLAG skipAUTOEXEC = 0;
 
 optScanFct(opt_init)
 { int ec = E_None;
 
   switch(ch) {
   case '?': showhelp = 1; return E_None;
-  case '!': return optScanBoolB(gflag_debug);
-  case 'Y': return optScanBoolB(gflag_trace);
-  case 'F': return optScanBoolI(autofail);
-  case 'D': return optScanBoolI(skipAUTOEXEC);
+  case '!': return optScanBool(gflag_debug);
+  case 'Y': return optScanBool(gflag_trace);
+  case 'F': return optScanBool(autofail);
+  case 'D': return optScanBool(skipAUTOEXEC);
   case 'P':
     if(arg)     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
@@ -94,15 +95,15 @@ optScanFct(opt_init)
       return E_NoOption;    /* don't tread as option */
     case 'L':
       if(optLong("LOW"))
-        return optScanBoolI(forceLow);
+        return optScanBool(forceLow);
       break;
     case 'M':
       if(optLong("MSG"))
-        return optScanBoolB(gflag_persistentMSGs);
+        return optScanBool(gflag_persistentMSGs);
       break;
     case 'S':
     	if(optLong("SWAP"))
-    		return optScanBoolB(gflag_swap);
+    		return optScanBool(gflag_swap);
       break;
     }
     break;
@@ -414,32 +415,25 @@ int initialize(void)
   if (showhelp && gflag_canexit)
     return E_Exit;
 
+	ec = E_None;
 	/* Check if FreeCOM keeps interactively */
 	if(gflag_canexit) {
 		/* the primary context is TERMINATE rather than KEEP_RUNNING */
-		ctxtEC_t far*ec;
-		assert(ctxtMain);
-		ec = ctxtExecContext;
-		assert(ec);
-		assert(ec->ctxt_type == EC_TAG_KEEP_RUNNING);
-		ec->ctxt_type = EC_TAG_TERMINATE;
-		if(spawnAndExit == E_None) {
+		if((ec = ecMkE()) == E_None && spawnAndExit == E_None) {
 			/* keep FreeCOM active --> push the I context */
-			if(ecMkI() != E_None)
-				return E_NoMem;
+			ec = ecMkI();
 		}
-	}
-	/* else: the KEEP_RUNNING context will add the I context */
+	} else	/* the KEEP_RUNNING context will add the I context */
+		ec = ecMke();
 
   /* Now push the /C or /K option onto the exec stack */
-  if(p) {
+  if(ec == E_None && p) {
     showinfo = 0;
-    if(ecMkSC(p, (char*)0) != E_None)
-		return E_NoMem;
+    ec = ecMkSC(p, (char*)0);
   }
 
   /* Now the /P option can be processed */
-	if(!gflag_canexit) {
+	if(ec == E_None && !gflag_canexit) {
 		char *autoexec;
 
 		autoexec = user_autoexec? user_autoexec: AUTO_EXEC;
@@ -467,18 +461,16 @@ int initialize(void)
 
 				if(key == KEY_F5)
 					displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
-				else if(ecMkSC(autoexec, (char*)0) != E_None)
-					return E_NoMem;
+				else ec = ecMkSC(autoexec, (char*)0);
 			} else {
 				if(user_autoexec)
 					error_sfile_not_found(user_autoexec);
 #ifdef INCLUDE_CMD_TIME
-					if(ecMkHC("TIME", (char*)0) != E_None)
-						return E_NoMem;
+				ec = ecMkHC("TIME", (char*)0);
 #endif
 #ifdef INCLUDE_CMD_DATE
-					if(ecMkHC("DATE", (char*)0) != E_None)
-						return E_NoMem;
+				if(ec == E_None)
+					ec = ecMkHC("DATE", (char*)0);
 #endif
 			}
 		}
@@ -488,10 +480,12 @@ int initialize(void)
 		assert(user_autoexec == 0);
 	}
 
+	if(ec != E_None)
+		return ec;
 
   /* Don't place something here that must be executed after a /K or /C */
 
-  if (showinfo) {	
+  if(showinfo) {	
   	/* in case of /C | /K | /P showinfo is equal to zero */
 #ifndef DEBUG
     putchar('\n');

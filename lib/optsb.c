@@ -6,9 +6,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/30 00:45:17  skaus
+	Update #13 / Beta 27: plain dynamic context
+
 	Revision 1.1.4.1  2001/07/02 21:04:07  skaus
 	Update #4
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -45,17 +48,7 @@
 #include "../include/cmdline.h"
 #include "../err_fcts.h"
 
-int optScanBoolB_(const char * const optstr, int bool, const char *arg, byte *value)
-{	int rv, v;
-
-	assert(value);
-
-	v = *value;
-	rv = optScanBoolI_(optstr, bool, arg, &v);
-	*value = (byte)v;
-	return rv;
-}
-int optScanBoolI_(const char * const optstr, int bool, const char *arg, int *value)
+int optScanBoolB_(const char * const optstr, int bool, const char *arg, FLAG far *value)
 {
   assert(optstr);
   assert(value);

@@ -14,10 +14,10 @@
 #include "../include/misc.h"
 
 #pragma argsused
-char *terminateShell(ctxtEC_t far * const ctxt)
+char *terminateShell(char far * const ctxt)
 {
 	assert(ctxt);
-	assert(ctxt->ctxt_type == EC_TAG_TERMINATE);
+	assert(*ctxt == EC_TAG_TERMINATE);
 
 	cbreak;
 	lflag_doExit = lflag_doCancel = lflag_doQuit = 0;

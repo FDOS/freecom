@@ -35,12 +35,7 @@ int cmd_arg(char *param)
 	if(argc == 0 
 	 || argc == 3 && is_num(argv[0], &base) && is_num(argv[1], &to_del)
 	     && is_num(argv[2], &shiftlevel) && base <= to_del) {
-	 		if(!to_del)
-	 			ctxtClear(CTXT_TAG_ARG);
-	 		else {
-	 			while(to_del <= CTXT_INFO(CTXT_TAG_ARG, nummax))
-	 				ctxtPop(CTXT_TAG_ARG, (char*)0);
-	 		}
+	     	ctxtPopTo(CTXT_TAG_ARG, to_del);
 			gflag_shiftlevel = shiftlevel;
 			gflag_base_shiftlevel = base;
 			freep(argv);

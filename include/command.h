@@ -36,17 +36,6 @@
 extern const char shellver[];
 extern const char shellname[];
 
-/* Useage:
-	FALSE: no, false etc.
-	TRUE: yes, OK, etc.
-	ERROR: only used in tri-state flags, in binary flags same as TRUE
-	IGNORE: when copy flags, ignore this one
-*/
-enum
-{
-  IGNORE = (FLAG)-1, FALSE = 0, TRUE, ERROR
-};
-
 /* prototypes for INIT.C */
 extern void interrupt dummy_criter_handler();
 extern void interrupt cbreak_handler();

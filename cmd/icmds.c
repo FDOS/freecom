@@ -65,17 +65,17 @@ int cmd_icmds(char *param)
 	} else {
 		char *p;
 		for(argc = 0; (p = argv[argc]) != 0; ++argc) {
-			int mode = 0;
+			int hide = 0;
 			struct CMD *cmd;
 
 			if(*p == '-') {
-				mode = 1;
+				hide = 1;
 				++p;
 			} else if(*p == '+')
 				++p;
 			StrFUpr(p);
 			if((cmd = is_icmd(p)) != 0) {
-				if(mode)	cmd->flags |= CMD_HIDDEN;
+				if(hide)	cmd->flags |= CMD_HIDDEN;
 				else		cmd->flags &= ~CMD_HIDDEN;
 /*			} else {	Ignore to allow ICMDS be intermixed with different
 							variants of FreeCOM */
@@ -84,10 +84,8 @@ int cmd_icmds(char *param)
 
 		if((p = icmdsChangeList()) != 0) {
 			/* Update the settings within the context */
-			char name[CTXT_ITEMNAME_LENGTH];
-
-			ctxtMkItemName(name, CTXT_TAG_FLAG, CTXT_FLAG_ICMDS);
-			ec = chgCtxt(CTXT_TAG_FLAG, name, p);
+			ec = ctxtSet(CTXT_TAG_FLAG, CTXT_FLAG_ICMDS, p);
+			myfree(p);
 		} else
 			ec = E_NoMem;
 	}

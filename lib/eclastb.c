@@ -1,6 +1,6 @@
 /* $id$
 
-	Return a pointer to the topmost B context
+	Return the ID of the topmost B context
 
 	Return:
 		0: on failure, message already displayed
@@ -9,28 +9,29 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <string.h>
-
-#include <fmemory.h>
+#include <stdio.h>
 
 #include "../include/context.h"
-#include "../include/misc.h"
+#include "../err_fcts.h"
 
-ctxtEC_Batch_t far*ecLastB(void)
-{	ctxtEC_t far* ec;
+static ctxtEC_Batch_t bc;
 
-	if((ec = ecValidateTOS()) == 0)
-		return 0;
-
-	do if(ec->ctxt_type == EC_TAG_BATCH)
-			return ecData(ec, ctxtEC_Batch_t);
-		else if(ec->ctxt_type < EC_FINAL_TAGS)
-			break;
-		else {
-			ec += ec->ctxt_length + sizeof(ec);
-			ec = (ctxtEC_t far*)_fnormalize(ec);
+#pragma argsused
+static int lastB(unsigned id, char *buf, void * const arg)
+{
+	if(*(byte*)buf == EC_TAG_BATCH) {
+		if(3 != sscanf(buf + 1, "%u|%lu %lu"
+		 , &bc.ec_idFnam, &bc.ec_pos, &bc.ec_lnr)) {
+		 	error_context_corrupted();
+		 	return -2;
 		}
-	while(FP_SEG(ec) < ctxtECHighestSegm());
-
+		return 1;
+	}
 	return 0;
+}
+
+ctxtEC_Batch_t *ecLastB(void)
+{
+	ecEnum(CTXT_TAG_EXEC, 0, lastB, 0);
+	return &bc;
 }

@@ -29,3 +29,19 @@ char *regStr(const char * const s)
 
 	return (char*)s;
 }
+
+void unregStr(const char * const s)
+{	int i;
+
+	if(s) {
+		i = STRING_CACHE_ITEMS;
+		while(i--) if(strCache[i] == s) {
+			if(i > 0)
+				memmove(&strCache[i], &strCache[i - 1]
+				 , sizeof(strCache[0]) * i);
+			strCache[0] = 0;
+			return;
+		}
+		dprintf(("[MEM: Unregistering of string failed]\n"));
+	}
+}

@@ -20,10 +20,10 @@
 #include "../include/misc.h"
 
 #pragma argsused
-char *keepMeRunning(ctxtEC_t far * const ctxt)
+char *keepMeRunning(char far * const ctxt)
 {
 	assert(ctxt);
-	assert(ctxt->ctxt_type == EC_TAG_KEEP_RUNNING);
+	assert(*ctxt == EC_TAG_KEEP_RUNNING);
 
 	lflag_doExit = lflag_doCancel = lflag_doQuit = 0;
 

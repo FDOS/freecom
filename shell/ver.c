@@ -15,7 +15,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "version 0.83 Beta 25 expExec branch [" __DATE__ "]";
+const char shellver[] = "version 0.83 Beta 27 expExec branch [" __DATE__ "]";
 const char shellname[] = "FreeCom";
 
 #pragma argsused
@@ -26,15 +26,15 @@ void short_version(char *param)
 
 #ifdef INCLUDE_CMD_VER
 
-static int optR, optW, optD, optC;
+static FLAG optR, optW, optD, optC;
 
 #pragma argsused
 optScanFct(opt_ver)
 { switch(ch) {
-  case 'R': return optScanBoolI(optR);
-  case 'W': return optScanBoolI(optW);
-  case 'D': return optScanBoolI(optD);
-  case 'C': return optScanBoolI(optC);
+  case 'R': return optScanBool(optR);
+  case 'W': return optScanBool(optW);
+  case 'D': return optScanBool(optD);
+  case 'C': return optScanBool(optC);
   }
   optErr();
   return E_Useage;

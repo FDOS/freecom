@@ -86,7 +86,7 @@ int batch(char *name, char *first, char *line)
 
 		sprintf(buf, "%u %u %u"
 		 , gflag_base_shiftlevel
-		 , CTXT_INFO(CTXT_TAG_ARG, nummax) + 1
+		 , CTXT_INFO(CTXT_TAG_ARG, nummax)
 		 , gflag_shiftlevel);
 		assert(strlen(buf) < sizeof(buf));
 		if(ecMkc("ARG ", buf, (char*)0) != E_None)

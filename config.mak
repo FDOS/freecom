@@ -43,7 +43,7 @@ $(CFG): $(CFG_DEPENDENCIES)
 -ff-
 -K
 -w+
--O
+-O1
 -Z
 -b-
 -I$(INCLUDEPATH)

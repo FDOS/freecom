@@ -104,7 +104,7 @@ int cmd_loadfix(char *rest)
 
 #ifdef INCLUDE_LOADHIGH_HANDLER
 
-static int optS;
+static FLAG optS;
 static char *optL;
 
 /* Helper functions */
@@ -504,7 +504,7 @@ static int loadfix_prepare(void)
 #pragma argsused
 optScanFct(opt_lh)
 { switch(ch) {
-  case 'S': return optScanBoolI(optS);
+  case 'S': return optScanBool(optS);
   case 'L': return optScanString(optL);
   }
   optErr();

@@ -24,13 +24,13 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-static int optP;
+static FLAG optP;
 
 #pragma argsused
 optScanFct(opt_del)
 {
   switch(ch) {
-  case 'P': return optScanBoolI(optP);
+  case 'P': return optScanBool(optP);
   }
   optErr();
   return E_Useage;

@@ -101,15 +101,12 @@ void freep(char **p);
 
 /* int isoption(char *str)  Return: 0: if str is no option */
 int optScanString_(const char * const optstr, int bool, const char *arg, char **value);
-int optScanBoolI_(const char * const optstr, int bool, const char *arg, int *value);
-int optScanBoolB_(const char * const optstr, int bool, const char *arg, byte *value);
+int optScanBoolB_(const char * const optstr, int bool, const char *arg, FLAG far *value);
 int optScanInteger_(const char * const optstr, int bool, const char *arg, int *value);
 
 #define optScanString(var)    \
   optScanString_(optstr, bool, strarg, &(var))
-#define optScanBoolI(var)    \
-  optScanBoolI_(optstr, bool, strarg, &(var))
-#define optScanBoolB(var)    \
+#define optScanBool(var)    \
   optScanBoolB_(optstr, bool, strarg, &(var))
 #define optScanInteger(var)   \
   optScanInteger_(optstr, bool, strarg, &(var))

@@ -1,6 +1,6 @@
 /* $id$
 
-	Make a silent C context.
+	Make a silent C context and make the first parameter "verbatim".
 
 	Return:
 		internal error code

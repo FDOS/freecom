@@ -17,22 +17,21 @@ void esDecode(char * const str)
 
 	assert(str);
 
-	if((q = p = strchr(str, ES_CLEAR_HIGH)) != 0) {
-		while((ch = *q++ = *p++) != 0) switch(ch) {
-		case ES_CLEAR_HIGH:
-			if(*p)
-				q[-1] = *p++ & 0x7f;
-			else --q;
-			break;
-		case ES_SET_HIGH:
-			if(*p)
-				q[-1] = *p++ | 0x80;
-			else --q;
-			break;
-		case ES_STRING_DELIM:
-		case ES_PAD_BYTE:
-			--q;
-			break;
-		}
+	p = q = str;
+	while((ch = *q++ = *p++) != 0) switch(ch) {
+	case ES_CLEAR_HIGH:
+		if(*p)
+			q[-1] = *p++ & 0x7f;
+		else --q;
+		break;
+	case ES_SET_HIGH:
+		if(*p)
+			q[-1] = *p++ | 0x80;
+		else --q;
+		break;
+	case ES_STRING_DELIM:
+	case ES_PAD_BYTE:
+		--q;
+		break;
 	}
 }

@@ -21,98 +21,37 @@
 #include "../err_fcts.h"
 
 int ctxtChgSize(unsigned tosize)
-{	ctxt_t new_context;
-
+{
 	assert(tosize);
-	if(ctxtMain) {
-		word tempSegm;
-		unsigned curSize;
-		/* Modify the size of an already existing dyn context */
-		/* Algorithm:
-			Because the usual dynamic context is allocted "last-fit",
-			the current contents is duplicated into a temporary segment
-			allocated with "first-fit" method, first.
-		*/
-		assert(ctxtp->ctxt_size);
-		assert(ctxtMCB->mcb_size > 2);
-		assert(ctxtMCB->mcb_size < 0x1000);
-		assert(ctxtp->ctxt_size <= ctxtMCB->mcb_size - 2);
-		if(tosize < (curSize = mcb_length(ctxtMain))) {
-			/* Check if the size does not shrink below the currently
-				used space */
-			while(curSize - tosize > env_freeCount(ctxtSegm))
-				if(!ctxtSinglePurge()) {
-					error_context_out_of_memory();
-					dprintf(("[CTXT: Tried to shrink dyn "
-					          "context below limit]"));
-					return E_NoMem;
-				}
-		}
-		tempSegm = DOSalloc(ctxtMCB->mcb_size, 0);	/* low mem, 1st fit */
-		if(!tempSegm) {
-			error_out_of_dos_memory();
-			return E_NoMem;
-		}
-		/** ctxtPurgeCache(); **/
-		/* Copy the contents there, incl the MCB name */
-		_fmemcpy(MK_FP(SEG2MCB(tempSegm), 8)
-		 , MK_FP(SEG2MCB(ctxtMain), 8)
-		 , ctxtMCB->mcb_size * 16 + 8);
-		freeSysBlk(ctxtMain);
-		ctxtMain = tempSegm;
-	}
 
-	new_context = allocSysBlk(tosize, 0x82);	/* last fit; high then low */
-	if(new_context) {
-		ctxtCB_t _seg *nctxtp = (ctxtCB_t _seg*)new_context;
+	purgeMemory();		/* remove all external memory */
 
-#ifdef DEBUG
-redo:
-#endif
-		if(ctxtMain) {		/* Move the current contents there */
-			unsigned ecLen;		/* #segm of exec context */
+	if(ctxtSegm) {
+		ctxt_t tmpSegm;
+		unsigned len;
 
-				/* Length of exec context stack area */
-			ecLen = ctxtMCB->mcb_size - ctxtp->ctxt_size - 1;
-			_fmemcpy(MK_FP(SEG2MCB(new_context), 8)		/* copy subMCB */
-			 , MK_FP(SEG2MCB(ctxtMain), 8) , 16 + 8);	/* and mem name */
-				/* all changes of the dyn ctxt memory block are 100%
-					distributed into/from the strings area */
-			nctxtp->ctxt_size
-			 = ((struct MCB far*)MK_FP(SEG2MCB(new_context), 0))->mcb_size
-			   - ecLen - 1;
-				/* copy the strings */
-			_fmemcpy(MK_FP(new_context + 1, 0), MK_FP(ctxtSegm, 0)
-			 , env_firstFree(ctxtSegm));
-			_fmemcpy(MK_FP(new_context + 1 + nctxtp->ctxt_size, 0)
-			 , MK_FP(ctxtExecContext, 0), ecLen * 16);
-			freeSysBlk(ctxtMain);
-#ifdef DEBUG
-			switch(env_check(new_context + 1)) {
-			case 0:	case 4:		/* OK & no string table */
-				break;
-			default:
-				fputs("[CTXT: Dynamic context had been corrupted!\n"
-				 , stderr);
-				freeSysBlk(new_context);
-				ctxtMain = 0;
-				goto redo;
-			}
-#endif
-		} else {
-			/* Erase all the context */
-			assert(sizeof(ctxtInitialEC) < 16);
-			_fmemcpy(nctxtp, TO_FP(&ctxtInitialCB), sizeof(ctxtInitialCB));
-			nctxtp->ctxt_size
-			 = ((struct MCB far*)MK_FP(SEG2MCB(new_context), 0))->mcb_size - 2;
-			nctxtp->ctxt_eOffs = 16 - sizeof(ctxtInitialEC);
-			_fmemcpy(MK_FP(new_context + 1 + nctxtp->ctxt_size
-			  , nctxtp->ctxt_eOffs)
-			 , TO_FP(&ctxtInitialEC), sizeof(ctxtInitialEC));
-			env_clear(new_context + 1);		/* Kill its contents */
+		len = mcb_length(ctxtSegm);
+
+		/* First duplicate block at the start of memory, then
+			create the new block of memory, then remove the temp block */
+		env_resizeCtrl = ENV_FIRSTFIT | ENV_ALLOWMOVE;
+		if((tmpSegm = env_replace(ctxtSegm
+		 , ENV_DELETE | ENV_COPY | ENV_CREATE | ENV_LIMITED)) != 0) {
+			env_resizeCtrl = ENV_LASTFIT | ENV_ALLOWMOVE | ENV_USEUMB;
+			if((ctxtSegm = env_replace(tmpSegm
+			 , ENV_DELETE | ENV_COPY | ENV_CREATE, tosize)) != 0)
+			 	return E_None;
+			/* Try to recreate the original size */
+			if((ctxtSegm = env_replace(tmpSegm
+			 , ENV_DELETE | ENV_COPY | ENV_CREATE, len)) == 0)
+			 	/* Argh, this won't make much fun */
+			 	ctxtSegm = tmpSegm;
 		}
-		ctxtMain = new_context;
-		return E_None;
+	} else {
+		/* Create a new segment */
+		env_resizeCtrl = ENV_LASTFIT | ENV_ALLOWMOVE | ENV_USEUMB;
+		if((ctxtSegm = env_create(tosize)) != 0)
+			return E_None;
 	}
 
 	error_out_of_dos_memory();

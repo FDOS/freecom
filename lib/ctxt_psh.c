@@ -20,12 +20,8 @@ int ctxtPush(const Context_Tag tag, const char * const buf)
 	assert(buf);
 
 	info = &CTXT_INFO_STRUCT(tag);
-	if(info->c_nummax == (unsigned)-1) {
-		/* numbers will wrap  -> recalculate them */
-		ctxtRenumberItems(tag);
-		if(info->c_nummax == (unsigned)-1)
-			return E_NoItems;
-	}
+	if(info->c_nummax == (unsigned)-1)
+		return E_NoItems;
 
 	if(ctxtSet(tag, info->c_nummax + 1, buf) == E_None)
 		return E_None;

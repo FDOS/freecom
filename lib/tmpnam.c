@@ -24,9 +24,12 @@
 	This file bases on TMPNAM.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/30 00:45:17  skaus
+	Update #13 / Beta 27: plain dynamic context
+
 	Revision 1.1.4.1  2001/06/21 21:40:35  skaus
 	Update #2
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -64,6 +67,20 @@
 
 #define probefn(path) mktempfile(path, ext)
 
+char *envvars[] = {
+	"TEMP",
+	"TMP",
+	"TEMPDIR",
+	"TMPDIR",
+	(char*)0
+};
+char *dirs[] = {
+	"\\TEMP",
+	"\\TMP",
+	".",
+	(char*)0
+};
+
 char *tmpfn(void)
 {	return tmpefn(0);
 }
@@ -72,15 +89,14 @@ char *tmpefn(const char * const ext)
 {	USEREGS
   char *fn;                     /* filename */
   static char buf[] = "?:\\";
+  char **p;
 
-  if ((fn = probefn(getEnv("TEMP"))) == 0
-      && (fn = probefn(getEnv("TMP"))) == 0
-      && (fn = probefn(getEnv("TEMPDIR"))) == 0
-      && (fn = probefn(getEnv("TMPDIR"))) == 0
-      && (fn = probefn("\\TEMP")) == 0
-      && (fn = probefn("\\TMP")) == 0
-      && (fn = probefn(".")) == 0)
-  {
+	for(fn = 0, p = envvars; !fn && *p; ++p)
+		fn = probefn(getEnv(*p));
+	for(p = dirs; !fn && *p; ++p)
+		fn = probefn(*p);
+
+  if(!fn) {
     /* everything failed --> probe the boot drive */
 
     _AX = 0x3305;               /* Get Boot drive, DOS 4+ */

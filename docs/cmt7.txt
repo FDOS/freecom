@@ -260,12 +260,18 @@ If the repetition is omited, "1" is assumed.
 The context ID describes, what kind of information is storred there; there are:
 
 'I' Interactive input:
-<no arguments>
+WORD	level of strings to reset when this context is hit
+
+'S' Set string stack:
+WORD	level of strings to reset when this context is hit
+
+Removes items from the string stack to the specified level.
+Preceeds all B and F contexts.
 
 'B' Batch contexts:
+ASCIIZ	absolute filename of batch file
 DWORD	position within file to read the next line from
 DWORD	number of lines already read from file
-ASCIIZ	absolute filename of batch file
 
 When such context is popped, the file is opened, seeked to the mentioned
 position, one line is read. Then the line number is incremented, the
@@ -275,9 +281,9 @@ empty lines.
 
 
 'F' FOR context #1:
-ASCIIZ	remaining patterns
 ASCIIZ	variable name
 ASCIIZ	command
+N*ASCIIZ	remaining patterns (last one is topmost)
 
 If the variable name is specified without any leading percent sign, it is
 treated as a normal environment variables and is also storred there.
@@ -298,11 +304,6 @@ ASCIIZ	command
 This context contains a command that is to be executed when popped.
 NOTE: This context is particularily useful in conjunction with the
 internal commands and "::=" (see CMT3.TXT and ICMDS.TXT).
-
-'c' non-ignore Command context:
-ASCIIZ	command
-
-As the C-context, but is not ignored when CANCEL'ling or EXIT'ting.
 
 'E' Exit context:
 Demands to terminate FreeCOM. Though, if FreeCOM was started with /P,

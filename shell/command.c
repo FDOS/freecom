@@ -45,10 +45,10 @@
 
 
 int ctrlBreak = 0;              /* Ctrl-Break or Ctrl-C hit */
-int forceLow = 0;               /* load resident copy into low memory */
-int autofail = 0;				/* Autofail <-> /F on command line */
+FLAG forceLow = 0;               /* load resident copy into low memory */
+FLAG autofail = 0;				/* Autofail <-> /F on command line */
 int inInit = 1;
-int isSwapFile = 0;
+FLAG isSwapFile = 0;
 jmp_buf jmp_beginning;
 	/* if != 0, pointer to static context
 		NOT allowed to alter if swapOnExec == ERROR !!
@@ -66,7 +66,6 @@ void perform_exec_result(int result)
 		perror("executing spawnl function");
 	else
 		gflag_errorlevel = result;
-
 }
 
 
@@ -127,9 +126,7 @@ static void execute(char *first, char *rest)
 
 		/* Prepare to call an external program */
 
-		/* Unload the message block if not loaded persistently */
-		if(!gflag_persistentMSGs)
-			unloadMsgs();
+		purgeMemory();
 
 		chkHeap
 		/* Execute the external program */
@@ -380,10 +377,9 @@ static int redirectJFTentry(int i
 static char *makePipeDelTemp(void)
 {	char *ivar;
 
-	if((ivar = ecMkIVar()) == 0) {	
-		error_out_of_memory();
+	if((ivar = ecMkIVar()) == 0)
 		return 0;
-	}
+
 	if(ecMkc("IVAR ", ivar, (char*)0) != E_None		/* remove the IVar */
 	 		/* remove tempfile */
 	 || ecMkc("DEL %@IVAR(", ivar, ")", (char*)0) != E_None) {
@@ -682,90 +678,83 @@ errRet:
  *	It returns if the very last context finishes
  */
 void run_exec_context(void)
-{	ctxtEC_t far *ec;
-	unsigned len;
+{	char far *ec;
+	unsigned id;
+	ecTag_t tag;
 	char *line;
 
-	for(;;) {
-		assert(ctxtMain);
-		ec = ctxtExecContext;
-		assert(ec);
-
+	while(0 != (id = CTXT_INFO(CTXT_TAG_EXEC, nummax))
+	 && id >= CTXT_INFO(CTXT_TAG_EXEC, nummin)) {
+		assert(ctxtSegm);
+		if((ec = ctxtAddress(CTXT_TAG_EXEC, id)) == 0) {
+			/* hole / topmost entry lost */
+			--CTXT_INFO(CTXT_TAG_EXEC, nummax);
+			continue;
+		}
 		chkHeap
-			/* absolute bottom of dynamic context */
-		if(FP_SEG(ec) >= nxtMCB(FP_SEG(ctxtMCB))
+		tag = *ec;
 		 	/* or an end context reached */
-		 || ec->ctxt_type == EC_TAG_TERMINATE)
+		if(tag == EC_TAG_TERMINATE)
 		 	return;
 
-			/* Does this context overflows the allocated bytes within
-				the execution context stack? */
-		len = ec->ctxt_length;
-		if(addu(&len, FP_OFF(ec) + sizeof(*ec))
-		 || (nxtMCB(FP_SEG(ctxtMCB)) - FP_SEG(ec)) * 16 < ec->ctxt_length) {
-		  	error_context_corrupted();
-		  	return;
+		if(tag >= EC_TAG_TERMINATE || !ecFctRead[tag]) {
+#ifdef DEBUG
+			if(ecFctRead[tag])
+				dprintf(("[EXEC: Skipping unknown exec context: %u]\n", tag));
+#endif
+			ecPop();
+			continue;
 		}
+
+		/* as we are about to aquire a new command line, some
+			options are resetted to their defaults */
+		_fmemcpy(&ctxtSharedFlags, ctxtFlagsP, sizeof(ctxtSharedFlags));
 
 		chkHeap
-		if(ec->ctxt_type >= EC_TAG_TERMINATE) {
-			dprintf(("[EXEC: Skipping unknown exec context: %u]\n"
-			 , ec->ctxt_type));
+		if((line = (ecFctRead[tag])(ec)) == 0)
 			ecPop();
-		} else {
-
-			assert(ecFunction[ec->ctxt_type]);
-
-			/* as we are about to aquire a new command line, some
-				options are resetted to their defaults */
-			_fmemcpy(&ctxtSharedFlags, ctxtFlagsP, sizeof(ctxtSharedFlags));
+		else if(line != cmdlineIgnore) {
+			/* process this command line */
+			char *p, *q;
 
 			chkHeap
-			if((line = (ecFunction[ec->ctxt_type])(ec)) == 0)
-				ecPop();
-			else if(line != cmdlineIgnore) {
-				/* process this command line */
-				char *p, *q;
-
-				chkHeap
-				dprintf(("[CTXT: aquired line: %s]\n", line));
-				/* 
-				 * The question mark '?' has a double meaning:
-				 *	C:\> ?
-				 *		==> Display short help
-				 *
-				 *	C:\> ? command arguments
-				 *		==> enable tracemode for just this line
-				 */
-				if(*(p = ltrimcl(line)) == '?' && *(q = ltrimcl(p + 1))) {
-					/* something follows --> tracemode */
-					lflag_trace = 1;
-					p = q;			/* skip the prefix */
-					dprintf(("[CTXT: Enable local TRACE status]\n"));
-				}
-
-				chkHeap
-				/* Placed here, FOR even preceeds any checks for 
-					redirections, pipes etc. */
-				if(cmd_for_hackery(p)) {
-					myfree(line);
-					continue;
-				}
-
-				chkHeap
-				p = expEnvVars(p);
-				chkHeap
-				myfree(line);
-				chkHeap
-				if(p != 0) {
-					parsecommandline(p);
-					chkHeap
-					myfree(p);
-					chkHeap
-				}
+			dprintf(("[CTXT: aquired line: %s]\n", line));
+			/* 
+			 * The question mark '?' has a double meaning:
+			 *	C:\> ?
+			 *		==> Display short help
+			 *
+			 *	C:\> ? command arguments
+			 *		==> enable tracemode for just this line
+			 */
+			if(*(p = ltrimcl(line)) == '?' && *(q = ltrimcl(p + 1))) {
+				/* something follows --> tracemode */
+				lflag_trace = 1;
+				p = q;			/* skip the prefix */
+				dprintf(("[CTXT: Enable local TRACE status]\n"));
 			}
-			/* else ignore this call */
+
+			chkHeap
+			/* Placed here, FOR even preceeds any checks for 
+				redirections, pipes etc. */
+			if(cmd_for_hackery(p)) {
+				myfree(line);
+				continue;
+			}
+
+			chkHeap
+			p = expEnvVars(p);
+			chkHeap
+			myfree(line);
+			chkHeap
+			if(p != 0) {
+				parsecommandline(p);
+				chkHeap
+				myfree(p);
+				chkHeap
+			}
 		}
+		/* else ignore this call */
 	}
 }
 
@@ -786,18 +775,8 @@ static void hangForever(void)
     if(--i == 0)
       cmd_ctty("CON");
 #endif
-#if 0
-    puts(   /* fcloseall() leaves the standard streams open */
-     "\r\n\r\n"
-     "The shell is about to be terminated, though, this is\r\n"
-     "forbidden (usually by enabling the \"/P\" option).\r\n"
-     "You must reboot the system or, if this shell runs in\r\n"
-     "a multitasking environment, terminate this process/task manually.\r\n"
-    );
-#else
 #undef 	TEXT_MSG_REBOOT_NOW
 	puts(TEXT_MSG_REBOOT_NOW);
-#endif
     beep();
     delay(1000);  /* Keep the message on the screen for
               at least 1s, in case FreeCom has some problems
