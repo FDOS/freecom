@@ -252,6 +252,15 @@ fcom1:
 	cmp al, ' '+1	; whitespaces
 	jc fcom1
 
+	cmp al, '/'		; KSSF /y COMMAND.COM if F8 during CONFIG.SYS
+	jne noY
+	cmp byte [si], 'Y'
+	jne noY
+	inc byte [haveY]
+	inc si
+	jmp short fcom1
+	
+noY:
 	;; Copy the command to an unused place, because between command and
 	;; argument list two bytes must be inserted.
 	mov dx, cmd_buf	; where the command is temporarily stored to
@@ -265,6 +274,18 @@ fcom_cpy:
 	mov ax, bx			; BX == end of command line
 						; SI == begin of command line + 1
 	dec si				; correction for SI + 1
+	cmp byte [haveY], 0
+	je noAddY
+	;; preserve the /Y
+	cmp byte [si], 0dh
+	je ignEOS
+	mov byte [si], ' '
+ignEOS:
+	dec si
+	mov byte [si], 'Y'
+	dec si
+	mov byte [si], '/'
+noAddY:
 	sub ax, si			; length of remaining command line
 	dec si				; position to the length byte
 	mov BYTE [si], al	; prefixed the command line tail with the length byte
@@ -302,6 +323,8 @@ useage DB 7, 'Useage: KSSF freecom [{ arguments }]', 13, 10
 	DB 'the Kernel Swap Support', 7, 13, 10, '$'
 
 errResize DB 7, 'Failed to resize KSSF memory block', 13, 10, '$'
+
+haveY	DB 0
 
 %ifdef DEBUG
 printLoadSegm:

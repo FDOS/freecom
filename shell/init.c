@@ -387,51 +387,53 @@ int initialize(void)
     return E_None;
 
   /* Now the /P option can be processed */
-  if (!canexit)
-  {
-    char *autoexec;
+	if(!canexit) {
+		char *autoexec;
 
-    autoexec = user_autoexec? user_autoexec: AUTO_EXEC;
+		autoexec = user_autoexec? user_autoexec: AUTO_EXEC;
 
-    showinfo = 0;
-    short_version();
-
-	if(skipAUTOEXEC) {
 		showinfo = 0;
-		displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
-	} else {
-    if (exist(autoexec)) {
-      displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
-      key = cgetchar_timed(3);
-      putchar('\n');
+		short_version();
 
-      if (key == KEY_F8)
-        tracemode = 1;
+		if(skipAUTOEXEC) {		/* /D option */
+			showinfo = 0;
+			displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
+		} else {
+			if(exist(autoexec)) {
+				struct REGPACK r;
+				r.r_ax = 0x3000;	/* Get DOS version & OEM ID */
+				intr(0x21, &r);
+				if(!tracemode	/* /Y --> F8 on CONFIG.SYS */
+				 || ((r.r_bx & 0xff00) == 0xfd00	/* FreeDOS >= build 2025 */
+				      && (r.r_cx > 0x101 || (r.r_bx & 0xff) > 24))) {
+					displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
+					key = cgetchar_timed(3);
+					putchar('\n');
+				} else key = 0;
 
-      if (key == KEY_F5)
-		  displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
-      else
-        process_input(1, autoexec);
-    }
-    else
-    {
-      if(user_autoexec)
-      	displayString(TEXT_ERROR_SFILE_NOT_FOUND, user_autoexec);
+				if(key == KEY_F8)
+					tracemode = 1;
+
+				if(key == KEY_F5)
+					displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
+				else
+					process_input(1, autoexec);
+			} else {
+				if(user_autoexec)
+					displayString(TEXT_ERROR_SFILE_NOT_FOUND, user_autoexec);
 #ifdef INCLUDE_CMD_DATE
-      cmd_date(0);
+					cmd_date(0);
 #endif
 #ifdef INCLUDE_CMD_TIME
-      cmd_time(0);
+					cmd_time(0);
 #endif
-    }
-    }
+			}
+		}
 
-    free(user_autoexec);
-  }
-  else
-  {
-    assert(user_autoexec == 0);
-  }
+		free(user_autoexec);
+	} else {
+		assert(user_autoexec == 0);
+	}
 
   /* Now the /C or /K option can be processed */
   if (p)

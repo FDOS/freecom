@@ -38,3 +38,5 @@ can not proceed.
 
 (2) Use all information available through DOS NLS API in all places
 they apply to.
+
+(9) Remove the WaitForKey() code on next FreeDOS release (> Beta 6).
