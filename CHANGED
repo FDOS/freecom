@@ -1,3 +1,5 @@
+fix: PTCHSIZE also patches min extra size to force to have this amount
+	of memory available on start
 bugfix: CALL doesn't reset options
 add: PTCHSIZE to patch heap size
 add: VSPAWN, /SWAP switch, .SWP resource handling

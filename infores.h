@@ -19,20 +19,24 @@
 	tag type:
 	Type	Meaing
 	0		end of structure (may be absent)
-	1		location of _heaplen variable
+	1		minimum extra paragaphes required by C host environment
+			length := 2
+			value  := number of paragraphes that need to be additionally
+						allocated by the program minimally
+	2		location of _heaplen variable
 			length := 4
 			value  := offset within file where the (unsigned)_heaplen
 						variable is located
-	2		Aliases present in FreeCOM
+	3		Aliases present in FreeCOM
 			length := 2
 			value  := default size of aliases buffer
-	3		History present in FreeCOM
+	4		History present in FreeCOM
 			length := 2
 			value  := default size of history buffer
-	4		Dirstack present in FreeCOM
+	5		Dirstack present in FreeCOM
 			length := 2
 			value  := default size of dirstack buffer
-	5		Internal command line size
+	6		Internal command line size
 			length := 2
 			value  := size of internal command line
 
@@ -43,6 +47,7 @@
 
 typedef enum {
 	INFO_END = 0
+	,INFO_EXTRA_SPACE
 	,INFO_POS_HEAPLEN
 	,INFO_ALIASES
 	,INFO_HISTORY
@@ -54,5 +59,15 @@ typedef struct {
 	unsigned char type;
 	unsigned char length;
 } infotag;
+
+#include <algnbyte.h>
+struct EXE_header {
+	unsigned sig, lastFill, numBlocks, numReloc;
+	unsigned header;
+	unsigned extraMin, extraMax;
+	unsigned fSS, fSP, checksum, fIP, fCS;
+	unsigned offReloc, ovrlyNum;
+};
+#include <algndflt.h>
 
 #endif

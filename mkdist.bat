@@ -1,9 +1,13 @@
 @echo off
 : Prepare binary distribution
-: set DBG=Yes
+set DBG=Yes
+set DBG=
 
 : don't forget to pass on the default rather than mine
 copy config.mak.default config.mak
+
+for %pkg in (binary debug plainedt) for %fnam in (ptchldrv.exe ptchsize.exe kssf.com vspawn.com command.com) (set fn=packages\%pkg.std\%fnam %+ if exist %fn del /q %fn)
+
 
 set _DBG=REM
 if NOT "%DBG%"=="" set _DBG=
@@ -44,13 +48,10 @@ dmake || quit
 %_DBG setdos /y1 %+ %_DBG echo on
 : pause
 
-if exist packages\debug.std\kssf.com del /q packages\debug.std\kssf.com
-if exist packages\debug.std\command.com del /q packages\debug.std\command.com
 if not exist com.com goto ende
 move com.com packages\debug.std\command.com
 if exist com.com goto ende
-if exist tools\kssf.com move tools\kssf.com packages\debug.std\kssf.com
-if exist tools\kssf.com goto ende
+for %file in (tools\kssf.com tools\vspawn.com tools\ptchldrv.exe tools\ptchsize.exe) (if exist %file move %file packages\debug.std\ %+ if exist %file goto ende)
 :noKSSFDBG
 : pause
 
@@ -63,8 +64,6 @@ echo #define IGNORE_ENHANCED_INPUT >config.h
 type config.h.backup >>config.h
 
 
-if exist packages\plainedt.std\kssf.com del /q packages\plainedt.std\kssf.com
-if exist packages\binary.std\kssf.com del /q packages\binary.std\kssf.com
 set err=
 %_DBG setdos /y0 %+ %_DBG echo off
 dmake || set err=%?
@@ -74,7 +73,9 @@ del /q config.h
 ren /q config.h.backup config.h || cancel 21
 
 if not x%err == x cancel %err
+if not exist com.com goto ende
 move com.com packages\plainedt.std\command.com
+if exist com.com goto ende
 : pause
 
 
@@ -82,9 +83,7 @@ move com.com packages\plainedt.std\command.com
 dmake -W config.h || quit
 %_DBG setdos /y1 %+ %_DBG echo on
 : pause
-if exist tools\kssf.com copy /b tools\kssf.com packages\plainedt.std\kssf.com
-if exist tools\kssf.com move tools\kssf.com packages\binary.std\kssf.com
-if exist tools\kssf.com goto ende
+for %file in (tools\kssf.com tools\vspawn.com tools\ptchldrv.exe tools\ptchsize.exe) (if exist %file copy %file packages\plainedt.std\ %+ if exist %file move %file packages\binary.std\ %+ if exist %file goto ende)
 
 if not exist com.com goto ende
 copy /b com.exe + criter.mod\criter + criter.mod\criter1 command.cln

@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.13  2001/04/02 19:54:44  skaus
+# fix: PTCHSIZE also patches min extra size to force to have this amount
+# 	of memory available on start
+#
 # Revision 1.12  2001/04/01 21:05:44  skaus
 # bugfix: CALL doesn't reset options
 # add: PTCHSIZE to patch heap size
@@ -255,7 +259,7 @@ criter_clobber .SETDIR=criter.mod :
 	@+echo ==Leaving $(PWD)
 
 infores : config.h command.h com.map com.exe
-	utils\mkinfres.exe $@ com.map com.exe
+	utils\mkinfres.exe /T$@.txt $@ com.map com.exe
 
 #MAKEDEP START
 lowexec.obj : lowexec.asm \

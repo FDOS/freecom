@@ -34,7 +34,7 @@ start:
 jmp goon
 
 %ifdef DEBUG
-strExiting	DB 13, 10, 'Exiting KSSF'
+strExiting	DB 13, 10, 'Exiting VSpawn'
 strNL		DB 13, 10, '$', 0
 strNotMe	DB 'The current PSP is not me!', 7, 13, 10, '$', 0
 %endif
@@ -331,13 +331,13 @@ errOut:
 
 ErrBadEnv DB 7, 'Bad environment', 13, 10, '$'
 ErrEnvSeg DB 7, 'Cannot determine my own executable file name', 13, 10, '$'
-useage DB 7, 'Useage: KSSF freecom [{ arguments }]', 13, 10
+useage DB 7, 'Useage: VSpawn freecom [{ arguments }]', 13, 10
 	DB 9, 'freecom: absolute filename of FreeCOM', 13, 10
 	DB 9, 'arguments: any optionally arguments or options', 13, 10
 	DB 'Spawns FreeCOM and fakes the necessary kernel functions for', 13, 10
 	DB 'the Kernel Swap Support', 7, 13, 10, '$'
 
-errResize DB 7, 'Failed to resize KSSF memory block', 13, 10, '$'
+errResize DB 7, 'Failed to resize VSpawn memory block', 13, 10, '$'
 
 EVEN
 extensionStart	DB '.SWP', 0
@@ -381,7 +381,7 @@ print1:
 	mov ah, 2
 	int 21h
 	ret
-dbgStr1	DB 'KSSF loaded at ', '$'
+dbgStr1	DB 'VSpawn loaded at ', '$'
 dbgStr2 DB 10, 13, '$'
 %endif
 

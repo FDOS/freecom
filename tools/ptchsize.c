@@ -19,16 +19,6 @@
 #include "../res.h"
 #include "../infores.h"
 
-#include <algnbyte.h>
-struct EXE_header {
-	unsigned sig, lastFill, numBlocks, numReloc;
-	unsigned header;
-	unsigned extraMin, extraMax;
-	unsigned fSS, fSP, checksum, fIP, fCS;
-	unsigned offReloc, ovrlyNum;
-};
-#include <algndflt.h>
-
 
 FILE *freecom = 0;
 unsigned char *info = 0;
@@ -36,7 +26,7 @@ unsigned infoLen = 0;
 unsigned long minSize;
 
 struct {
-	unsigned alias, hist, dirs, bufsize;
+	unsigned alias, hist, dirs, bufsize, extraSpace;
 	unsigned long heapPos;
 } ival;
 
@@ -77,6 +67,7 @@ void getInfoValues(void)
 	unsigned *pu;
 
 	ival.alias = ival.hist = ival.dirs = ~0;
+	ival.extraSpace = 2 * 1024;
 	ival.bufsize = 256;
 	ival.heapPos = ~0;
 
@@ -105,6 +96,9 @@ void getInfoValues(void)
 			goto valUnsigned;
 		case INFO_BUFSIZE:
 			pu = &ival.bufsize;
+			goto valUnsigned;
+		case INFO_EXTRA_SPACE:
+			pu = &ival.extraSpace;
 			goto valUnsigned;
 		default:
 			printf("Warning: Unknown info tag found: %u\n", info[i - 1]);
@@ -200,10 +194,23 @@ main(int argc, char **argv)
 			"\tFile read error.");
 		return 80;
 	}
+
+	if((freecom = fopen(argv[1], "r+b")) == 0) {
+		printf("Cannot open FreeCOM: %s\n", argv[1]);
+		return 30;
+	}
+
+	if(fread(&exe, sizeof(exe), 1, freecom) != 1) {
+		printf("Read error from: %s\n", argv[1]);
+		return 44;
+	}
+	/* exe.extraMin is not trustworthy as it might have been tweak
+		in a previous run */
+
 	assert(info);
 	/* Decompose the info resource */
 	getInfoValues();
-	minSize = 2 * 1024 						/* default stuff */
+	minSize = ival.extraSpace				/* default stuff */
 		+ 5 * (unsigned long)ival.bufsize	/* command lines */
 		+ 3 * (64 + 3 + 8 + 5)				/* filenames */
 		+ 256								/* env var buffer %PATH% etc */
@@ -225,10 +232,6 @@ main(int argc, char **argv)
 		if(ival.heapPos == ~0)
 			puts("Missing heap position -> cannot change heap size");
 		else {
-			if((freecom = fopen(argv[1], "rb")) == 0) {
-				printf("Cannot open FreeCOM: %s\n", argv[1]);
-				return 31;
-			}
 			if(fseek(freecom, ival.heapPos, SEEK_SET) != 0) {
 				printf("Failed to seek to heap size offset in %s\n", argv[1]);
 				return 43;
@@ -261,18 +264,12 @@ main(int argc, char **argv)
 
 	printf("Patching '%s' to heap size of %u bytes\n"
 	 , argv[1], tosize);
-	if((freecom = fopen(argv[1], "r+b")) == 0) {
-		printf("Cannot open FreeCOM: %s\n", argv[1]);
-		return 30;
-	}
-
-	if(fread(&exe, sizeof(exe), 1, freecom) != 1) {
-		printf("Read error from: %s\n", argv[1]);
-		return 44;
-	}
 	if(tosize)
-		exe.extraMax = exe.extraMin + tosize / 16 + 0x100;
-	else exe.extraMax = 0xffff;
+		exe.extraMin = exe.extraMax = ival.extraSpace + tosize / 16;
+	else {
+		exe.extraMax = 0xffff;
+		exe.extraMin = ival.extraSpace;
+	}
 	rewind(freecom);
 	if(fwrite(&exe, sizeof(exe), 1, freecom) != 1) {
 		printf("Failed to patch heap size into FreeCOM executable.\n"
