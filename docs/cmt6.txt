@@ -116,6 +116,12 @@ III. Incompatiblies
 	registers simply point to the strings. DS == ES always.
 	This may vary in future!
 
+- If an extension rewrites the command, FreeCOM is to call MUX-AE again.
+	This might lead to an infinite loop. In order to prevent such situation,
+	FreeCOM calls the MUX-AE chain only a limited number of times, which
+	can be customized through the MUX_AE_MAX_REPEAT_CALL setting of
+	CONFIG.H.
+
 IV. Side definitions
 
 - The buffer DS:BX will always be larger than 12 bytes:
