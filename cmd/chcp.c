@@ -6,9 +6,12 @@
  	via DOS-66-01/02
 
 	$Log$
+	Revision 1.3  2004/07/19 18:13:39  skaus
+	bugfix: CHCP: use n to set new codepage [Eduardo Casino]
+
 	Revision 1.2  2003/03/05 17:43:51  skaus
 	bugfix: cached NLS data not flushed
-
+	
 	Revision 1.1  2002/11/12 21:47:16  skaus
 	add: CHCP (disabled by default)
 	
@@ -65,7 +68,7 @@ int cmd_chcp(char *param)
 		invalidateNLSbuf();
 
 		_DX = sysCP;
-		_BX = curCP;
+		_BX = n;
 		_AX = 0x6602;
 		geninterrupt(0x21);
 		if(_CFLAG) {

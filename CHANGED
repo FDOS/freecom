@@ -1,3 +1,4 @@
+bugfix: CHCP: use n to set new codepage [Eduardo Casino]
 add: cmdinput.c: Ctrl-Left & Ctrl-Right [Tom Ehlert]
 fix: xms-swap.mak: dependencies [Tom Ehlert]
 chg: init.c: Don't displays command on startup [Tom Ehlert] {common request}
