@@ -42,6 +42,7 @@ optScanFct(opt_call)
 { switch(ch) {
   case 'S': return optScanBool(optS);
   case 'N': return optScanBool(optN);
+  case 'Y': return optScanBool(tracemode);
   }
   optErr();
   return E_Useage;

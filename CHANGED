@@ -1,3 +1,4 @@
+add: CALL /Y: To enable tracemode during command
 bugfix: PROMPT $T: hour: space padded; fraction zero padded [#1481]
 bugfix: command line scanner: must accept ' and ` as filename characters
 	hence dropping them as quote character [#1244]
