@@ -343,7 +343,8 @@ static char *makePipeDelTemp(void)
 		return 0;
 	}
 	if(ecMkc("IVAR ", ivar, (char*)0) != E_None		/* remove the IVar */
-	 || ecMkc("DEL %@IVAR(", ivar, ")") != E_None) {	/* remove tempfile */
+	 		/* remove tempfile */
+	 || ecMkc("DEL %@IVAR(", ivar, ")", (char*)0) != E_None) {
 	 	ecFreeIVar(ivar);
 	 	return 0;
 	}
@@ -359,7 +360,6 @@ static int makePipeContext(char *** const Xout
 	char *p, **out, *q;
 
 	assert(Xout);
-	assert(*Xout);
 	assert(pipe);
 	assert(num >= 2);
 
@@ -368,7 +368,7 @@ static int makePipeContext(char *** const Xout
 
 /* The commands must be pushed from the last to the top one */
 	p = ivarOut = 0;
-	if((ivarIn = ecMkIVar()) == 0)
+	if((ivarIn = makePipeDelTemp()) == 0)
 		goto errRet;
 	assert(pipe[num - 1]);
 	if(out) {
@@ -441,7 +441,7 @@ static int makePipeContext(char *** const Xout
 		goto errRet;
 	out[0] = p;
 	/* out[1] = 0;		done by calloc() */
-	memmove(&p[2], p, strlen(p));
+	memmove(&p[2], p, strlen(p) + 1);
 	p[0] = '>';		/* output redirection ID */
 	p[1] = 2;			/* overwrite, stdout */
 	assert(pipe[0]);
@@ -453,7 +453,7 @@ static int makePipeContext(char *** const Xout
 	*Xout = out;
 	p = 0;
 
-	rv = 0;						/* OK */
+	rv = 1;					/* OK */
 
 errRet:
 	myfree(ivarIn);
@@ -535,7 +535,7 @@ void parseExpandedCommand(char *line)
 
 		chkHeap
 		/* apply the redirections */
-		for(i = getJFTlen(); --i;) if(jftUsed[i]) {
+		for(i = getJFTlen(); i--;) if(jftUsed[i]) {
 			switch(jftUsed[i][0]) {
 			case '<':
 				jftUsed[i][0] = 'I';	/* prevent the same action

@@ -182,8 +182,8 @@ char *expEnvVars(char * const line)
 						} else {
 							*q = 0;
 							appStr(p);
-							StrFree(verbatim_token);
 							p = q + strlen(verbatim_token);
+							StrFree(verbatim_token);
 						}
 					}
 				}

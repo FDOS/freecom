@@ -19,26 +19,26 @@
 #include "../err_fcts.h"
 
 char *ecMkVerbatimStr(const char * const str)
-{	char *verb;
+{	char *verbatim;
 	int i;
 
-	if((verb = estrdup(" ")) == 0)
+	if((verbatim = estrdup(" ")) == 0)
 		return 0;
 
 	do {
 		i = 0;
-		while(++verb[i] == '\0') {
-			verb[i] = ' ' + 1;
-			if(!verb[++i]) {		/* end of string --> append a character */
-				if(!StrAppChr(verb, ' ' + 1)) {
-					myfree(verb);
+		while(++verbatim[i] == '\0') {
+			verbatim[i] = ' ' + 1;
+			if(!verbatim[++i]) {	/* end of string --> append a character */
+				if(!StrAppChr(verbatim, ' ' + 1)) {
+					myfree(verbatim);
 					error_out_of_memory();
 					return 0;
 				}
 				break;
 			}
 		}
-	} while(strstr(str, verb));
+	} while(strstr(str, verbatim));
 
-	return verb;
+	return verbatim;
 }

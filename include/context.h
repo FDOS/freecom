@@ -59,6 +59,7 @@ typedef struct {	/* f context */
 extern ctxtCB_t ctxtInitialCB;
 extern ctxtEC_t ctxtInitialEC;
 #define ecData(ec,type)	((type far*)((byte far*)(ec) + sizeof(ctxtEC_t)))
+#define ctxtECLenPar() (ctxtMCB->mcb_size - 1 - ctxtp->ctxt_size)
 
 /* Major IDs of context tags */
 typedef enum {
@@ -126,6 +127,7 @@ int ctxtPop(const Context_Tag, char ** const);
 int ctxtPush(const Context_Tag, const char * const);
 int ctxtGet(const int, const Context_Tag, const unsigned, char ** const);
 int ctxtGetS(const int, const Context_Tag, const char * const, char ** const);
+int ctxtGetItem(const int, const Context_Tag, const char * const, char ** const);
 int ctxtSet(const Context_Tag, const unsigned, const char * const);
 int ctxtSetS(const Context_Tag, const char * const, const char * const);
 char far*ctxtAddress(const Context_Tag tag, const unsigned num);
@@ -133,6 +135,7 @@ int ctxtClear(const Context_Tag);
 int ctxtView(const Context_Tag, const unsigned);
 void ctxtRenumberItems(const Context_Tag);
 void ctxtMkItemName(char * const, const Context_Tag, const unsigned num);
+char *ctxtMkSymName(const Context_Tag tag, const char * const tail);
 int breakVarAssign(ctxt_t context, char * const s, char ** const value);
 int chgCtxt(const Context_Tag tag, const char * const, const char * const);
 unsigned realNum(const Context_Tag tag, const int num);

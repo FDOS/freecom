@@ -19,7 +19,7 @@
 #include "../include/context.h"
 #include "../include/misc.h"
 
-int ctxtGetS(int remove
+int ctxtGetItem(int remove
 	, const Context_Tag tag
 	, const char * const name
 	, char ** const buf)
@@ -60,5 +60,19 @@ int ctxtGet(int remove
 	char name[CTXT_ITEMNAME_LENGTH];
 
 	ctxtMkItemName(name, tag, num);
-	return ctxtGetS(remove, tag, name, buf);
+	return ctxtGetItem(remove, tag, name, buf);
+}
+
+int ctxtGetS(int remove
+	, const Context_Tag tag
+	, const char * const tail
+	, char ** const buf)
+{	char *name;
+
+	assert(tail);
+	if((name = regStr(ctxtMkSymName(tag, tail))) == 0)
+		return 2;
+	assert((byte)name[0] == (byte)tag);
+
+	return ctxtGetItem(remove, tag, name, buf);
 }

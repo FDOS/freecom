@@ -167,8 +167,8 @@ var: (environment) variable
 	13) Initiate batch file processing if absolute filename ends in ".BAT"
 	14) otherwise: call external command
 5.1. Redirections
-- Working verified for non-pipes with batchfiles (see tests\recurs?.bat);
-	no support for swapping
+- Working verified for input, output and pipes with batchfiles (see
+	tests\recurs?.bat) and internal commands; no support for swapping
 - Supported redirections:
 	">>&>"	- stderr into file (append)
 	">>&"	- merging stderr & stdout into file (append)
@@ -183,7 +183,7 @@ var: (environment) variable
 6. Dynamic context
 - Working
 - Allows to change the boundaries of history etc. at run-time
-- Layput:
+- Layout:
 	-> start of DOS memory block
 		+ string-based information in env-style memory block
 		+ binary information of ec

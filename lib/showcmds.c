@@ -6,9 +6,12 @@
 	This file bases on INIT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/11 21:46:26  skaus
+	Update #8
+
 	Revision 1.1.4.1  2001/07/01 22:04:31  skaus
 	Update #3
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -43,72 +46,69 @@
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../include/misc.h"
+#include "../include/output.h"
 #include "../strings.h"
+
+static void printID(int str)
+{	oID(OUT_MODE_BLOCK_ENLARGE | OUT_MODE_BRACKETS | OUT_MODE_JUSTIFY_LEFT
+	  | OUT_MODE_PAD_BLANK | OUT_MODE_NO_WRAP
+	 , 0, str);
+	oBlank();
+}
 
 #pragma argsused
 int showcmds(char *rest)
-{
-  struct CMD *cmdptr;
-  int y;
+{	struct CMD *p;
 
-  displayString(TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS);
-  y = 0;
-  cmdptr = internalCommands;
-  while (cmdptr->name)
-  {
-    if (++y == 8)
-    {
-      puts(cmdptr->name);
-      y = 0;
-    }
-    else
-      printf("%-10s", cmdptr->name);
+	oInit();
+	displayString(TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS);
+	for(p = internalCommands; p->name; ++p)
+		oBlockString((p->flags & CMD_HIDDEN? OUT_MODE_BRACKETS: 0)
+		  | OUT_MODE_JUSTIFY_LEFT | OUT_MODE_BLOCK_CHUNK
+		  | OUT_MODE_NO_WRAP | OUT_MODE_PAD_BLANK
+		 , 10, p->name);
+	oFlushNL();
 
-    cmdptr++;
-  }
-  if (y != 0)
-    putchar('\n');
-
-  displayString(TEXT_MSG_SHOWCMD_FEATURES);
+	displayString(TEXT_MSG_SHOWCMD_FEATURES);
 #ifdef FEATURE_ALIASES
-	displayString(TEXT_SHOWCMD_FEATURE_ALIASES);
+	printID(TEXT_SHOWCMD_FEATURE_ALIASES);
 #endif
 #ifdef FEATURE_ENHANCED_INPUT
-	displayString(TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT);
+	printID(TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT);
 #endif
 #ifdef FEATURE_HISTORY
-	displayString(TEXT_SHOWCMD_FEATURE_HISTORY);
+	printID(TEXT_SHOWCMD_FEATURE_HISTORY);
 #endif
 #ifdef FEATURE_FILENAME_COMPLETION
-	displayString(TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION);
+	printID(TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION);
 #endif
 #ifdef FEATURE_SWAP_EXEC
-	displayString(TEXT_SHOWCMD_FEATURE_SWAP_EXEC);
+	printID(TEXT_SHOWCMD_FEATURE_SWAP_EXEC);
 #endif
 #ifdef FEATURE_CALL_LOGGING
-	displayString(TEXT_SHOWCMD_FEATURE_CALL_LOGGING);
+	printID(TEXT_SHOWCMD_FEATURE_CALL_LOGGING);
 #endif
 #ifdef FEATURE_LAST_DIR
-	displayString(TEXT_SHOWCMD_FEATURE_LAST_DIR);
+	printID(TEXT_SHOWCMD_FEATURE_LAST_DIR);
 #endif
 #ifdef FEATURE_KERNEL_SWAP_SHELL
-	displayString(TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL);
+	printID(TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL);
 	if(F(swap) != ERROR && F(swap) == TRUE)
-		displayString(TEXT_SHOWCMD_DEFAULT_TO_SWAP);
+		printID(TEXT_SHOWCMD_DEFAULT_TO_SWAP);
 #endif
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-	displayString(TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS);
+	printID(TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS);
 #endif
 #ifdef FEATURE_NLS
-	displayString(TEXT_SHOWCMD_FEATURE_NLS);
+	printID(TEXT_SHOWCMD_FEATURE_NLS);
 #endif
 #ifdef FEATURE_DIRSTACK
-	displayString(TEXT_SHOWCMD_FEATURE_DIRSTACK);
+	printID(TEXT_SHOWCMD_FEATURE_DIRSTACK);
 #endif
 #ifdef DEBUG
-	displayString(TEXT_SHOWCMD_FEATURE_DEBUG);
+	printID(TEXT_SHOWCMD_FEATURE_DEBUG);
 #endif
-  putchar('\n');
+	oFlushNL();
 
-  return 0;
+	return 0;
 }

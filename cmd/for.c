@@ -118,8 +118,7 @@ static int doFOR(char *varname, char *varE, char *param, char *paramE
 /* OK all is correct, build the exec contexts */
 	/* 1st: C/FORVAR|SET hidden context */
 	if(*varname == '%') {	/* special FOR variable */
-		varname[-1] = CTXT_TAG_IVAR;
-		switch(ctxtGetS(1, CTXT_TAG_IVAR, varname - 1, &oldContents)) {
+		switch(ctxtGetS(1, CTXT_TAG_IVAR, varname, &oldContents)) {
 #ifdef DEBUG
 		default:
 			dprintf(("[FOR: Invalid return value from ctxtGetS]\n"));

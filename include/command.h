@@ -106,7 +106,6 @@ int cmd_pushd(char *);
 int cmd_popd(char *);
 int cmd_dirs(char *);
 int cmd_which(char *);
-void history(int, char *);      /* prototype for the command-line history */
 void complete_filename(char * const str, const unsigned charcount);
 int show_completion_matches(char * const str, const unsigned charcount);
 int cmd_icmds(char *);
@@ -117,6 +116,8 @@ int cmd_cancel(char *);
 int cmd_quit(char *);
 int cmd_dispNLS(char *);
 int cmd_dispFlags(char *);
+int cmd_dispArgs(char *);
+int cmd_dispIVars(char *);
 
 /* Internal functions */
 char *fct_tempfile(char *);

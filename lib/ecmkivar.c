@@ -30,7 +30,7 @@ char *ecMkIVar(void)
 	do {
 		sprintf(ivar + 2, "%x", num);
 		assert(strlen(ivar) < sizeof(ivar));
-		if(ctxtGetS(0, CTXT_TAG_IVAR, ivar, (char*)0) == 1) {
+		if(ctxtGetItem(0, CTXT_TAG_IVAR, ivar, (char*)0) == 1) {
 			/* No such item --> return it! */
 			/* Create an empty entry, so it's locked for next attempts */
 			if(chgCtxt(CTXT_TAG_IVAR, ivar, "") == 0)

@@ -19,23 +19,15 @@
 #include "../include/misc.h"
 
 
-int is_ivar(const char * const name, char ** const buf)
-{	char *tagname;
-	int rv;
+int is_ivar(const char * const tail, char ** const buf)
+{	char *name;
 
-	assert(buf);
+	if(!tail) return 1;
 
-	if(!name) return 1;
+	if((name = regStr(emalloc(strlen(tail) + 2))) == 0)
+		return 2;
 
-	if((tagname = emalloc(strlen(name) + 2)) != 0) {
-		*tagname = CTXT_TAG_IVAR;
-		strcpy(&tagname[1], name);
-		strupr(&tagname[1]);
-		rv = ctxtGetS(0, CTXT_TAG_IVAR, tagname, buf);
-		myfree(tagname);
-		if(rv < 2)
-			return rv;
-	}
-
-	return 2;
+	name[0] = CTXT_TAG_IVAR;
+	strupr(strcpy(&name[1], tail));
+	return ctxtGetItem(0, CTXT_TAG_IVAR, name, buf);
 }

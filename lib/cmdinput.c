@@ -143,7 +143,7 @@ char *readcommandEnhanced(void)
 #ifdef DEBUG
 		case KEY_CTL_T:
 			chkPtr(str);
-			if(!StrCat(str, "echo q >q")) {
+			if(!StrCat(str, "echo | echo")) {
 				error_out_of_memory();
 				break;
 			}

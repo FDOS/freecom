@@ -17,6 +17,13 @@
 #include "../include/command.h"
 #include "../strings.h"
 
+#if sizeof(void*)==2
+#define getFree		(unsigned long)my_coreleft()
+#else
+#define getFree		(unsigned long)my_farcoreleft()
+#endif
+
+
 static void displayTag(int string, Context_Tag tag)
 {	ctxt_info_t *info;
 
@@ -35,6 +42,17 @@ static void displayTag1(int string, Context_Tag tag)
 	 , info->c_nummin < info->c_nummax
 	 	? info->c_nummax - info->c_nummin : 0);
 }
+static void displayTag2(int string, Context_Tag tag)
+{	ctxt_info_t *info;
+
+	info = &CTXT_INFO_STRUCT(tag);
+
+	displayString(string, info->c_sizecur);
+}
+static void displaySize(int string, unsigned size)
+{
+	displayString(string, size, (unsigned long)size << 4);
+}
 
 
 #pragma argsused
@@ -49,20 +67,13 @@ int cmd_memory(char *param)
 	displayTag(TEXT_MEMORY_CTXT_HISTORY, CTXT_TAG_HISTORY);
 	displayTag(TEXT_MEMORY_CTXT_DIRSTACK, CTXT_TAG_DIRSTACK);
 	displayTag1(TEXT_MEMORY_CTXT_LASTDIR, CTXT_TAG_LASTDIR);
-	displayTag1(TEXT_MEMORY_CTXT_FLAG, CTXT_TAG_FLAG);
 	displayTag1(TEXT_MEMORY_CTXT_ARG, CTXT_TAG_ARG);
-	displayTag1(TEXT_MEMORY_CTXT_IVAR, CTXT_TAG_IVAR);
 	displayTag1(TEXT_MEMORY_CTXT_SWAPINFO, CTXT_TAG_SWAPINFO);
-	displayString(TEXT_MEMORY_HEAP, (unsigned long)coreleft()
-	 , (unsigned long)
-#if sizeof(void*)==2
-		my_coreleft()
-#else
-		my_farcoreleft()
-#endif
-	 );
-	size = DOSalloc(0, 0x80 | 0x10);
-	displayString(TEXT_MEMORY_DOSMEM, size, (unsigned long)size << 4);
+	displayTag2(TEXT_MEMORY_CTXT_FLAG, CTXT_TAG_FLAG);
+	displayTag2(TEXT_MEMORY_CTXT_IVAR, CTXT_TAG_IVAR);
+	displaySize(TEXT_MEMORY_CTXT_EXEC, ctxtECLenPar());
+	displayString(TEXT_MEMORY_HEAP, (unsigned long)coreleft(), getFree);
+	displaySize(TEXT_MEMORY_DOSMEM, DOSalloc(0, 0x80 | 0x10));
 
 	return 0;
 }

@@ -1,3 +1,11 @@
+Update #8:
+fix: makePipeDelTemp(): 2nd ecMkc() missing (char*)0
+fix: makePipeContext(): 1st ecMkiVar() ::= makePipeDelTemp()
+fix: makePipeContext(): last memmove() length 1 too less
+fix: expev.c: p += strlen(verbatim_token)
+fix: ecMkV1C(): Mkvcmd() gets "str"
+fix: ECLenPar(): one paragraphe too large
+
 Update #7:
 fix: skippath(): accepting '.'
 fix: open output redirection: append & overwrite switched

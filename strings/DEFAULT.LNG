@@ -731,43 +731,43 @@ Features available:
 ## Displayed within "?" <-> showcmd() to enumerate the included features
 ## Note the trailing single space
 :TEXT_SHOWCMD_FEATURE_ALIASES#1
-[aliases] \
+aliases\
 .
 :TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
-[enhanced input] \
+enhanced input\
 .
 :TEXT_SHOWCMD_FEATURE_HISTORY#1
-[history] \
+history\
 .
 :TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
-[filename completion] \
+filename completion\
 .
 :TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
-[swapping] \
+swapping\
 .
 :TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
-[start logging] \
+start logging\
 .
 :TEXT_SHOWCMD_FEATURE_LAST_DIR#1
-[last dir] \
+last dir\
 .
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
-[kernel swap] \
+kernel swap\
 .
 :TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
-[default to swap] \
+default to swap\
 .
 :TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
-[installable commands] \
+installable commands\
 .
 :TEXT_SHOWCMD_FEATURE_NLS#1
-[DOS NLS] \
+DOS NLS\
 .
 :TEXT_SHOWCMD_FEATURE_DIRSTACK#1
-[directory stack (PUSHD)] \
+directory stack (PUSHD)\
 .
 :TEXT_SHOWCMD_FEATURE_DEBUG#1
-[FreeCOM debugging] \
+FreeCOM debugging\
 .
 
 :TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
@@ -851,16 +851,16 @@ C:\\FDOS
 
 
 :TEXT_MEMORY_ENVIRONMENT#1
-Environment segment    : max %5u bytes; free %5u bytes
+Environment segment    : max %7u bytes; free %8u bytes
 .
 :TEXT_MEMORY_CONTEXT#1
-Context segment        : max %5u bytes; free %5u bytes
+Context segment        : max %7u bytes; free %8u bytes
 .	
 :TEXT_MEMORY_DOSMEM#1
-Largest DOS memory blk : free %5u paragraphes (%lu bytes)
+Largest DOS memory blk : free %6u paragraphes (%lu bytes)
 .
 :TEXT_MEMORY_HEAP#1
-Heap                   : free %5lu bytes; largest block: %5lu bytes
+Heap                   : free %6lu bytes; largest block: %lu bytes
 .
 :TEXT_MEMORY_CTXT_ALIAS#1
 \tAliases        : limit %5u bytes, current %5u bytes, %5u items
@@ -875,16 +875,19 @@ Heap                   : free %5lu bytes; largest block: %5lu bytes
 \tLast dir cache : used  %5u bytes, %5u items
 .
 :TEXT_MEMORY_CTXT_FLAG#1
-\tInternal flags : used  %5u bytes, %5u items
+\tInternal flags : used  %5u bytes
 .
 :TEXT_MEMORY_CTXT_ARG#1
 \tBatch arguments: used  %5u bytes, %5u items
 .
 :TEXT_MEMORY_CTXT_IVAR#1
-\tInternal vars  : used  %5u bytes, %5u items
+\tInternal vars  : used  %5u bytes
 .
 :TEXT_MEMORY_CTXT_SWAPINFO#1
 \tSwapinfo       : used  %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_EXEC#1
+\tExecution stack: used  %5u paragraphes (%lu bytes)
 .
 
 
@@ -1469,4 +1472,18 @@ Verbose       : %u\tInteractive command : %u
 Trace mode    : %u\tRewind batch file   : %u
 Exit (FreeCOM): %u\tCancel (any scripts): %u
 Quit (script) : %u\tSearching GOTO label: %s
+
+Text flags (enumerated flags storred in context):
 .
+:TEXT_FLAG_CTXT_EMPTY#1
+None.
+.
+
+:TEXT_ARG_CTXT_EMPTY#1
+The argument stack is empty.
+.
+
+:TEXT_IVAR_CTXT_EMPTY#1
+No internal variables defined.
+.
+

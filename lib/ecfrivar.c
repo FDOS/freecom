@@ -19,12 +19,6 @@
 #include "../include/context.h"
 
 void ecFreeIVar(char *ivar)
-{	char buf[sizeof(int) * 2 + 2 + 1];
-
-	assert(ivar);
-	assert(strlen(ivar) < sizeof(buf) - 1);
-
-	buf[0] = CTXT_TAG_IVAR;
-	strcpy(buf + 1, ivar);
+{
 	ctxtGetS(1, CTXT_TAG_IVAR, ivar, (char*)0);
 }

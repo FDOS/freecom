@@ -28,5 +28,5 @@ int cmd_dispFlags(char *param)
 	 , traceMode, rewindBatchFile
 	 , doExit, doCancel
 	 , doQuit, gotoLabel? gotoLabel: "");
-	return 1;
+	return ctxtView(CTXT_TAG_FLAG, TEXT_FLAG_CTXT_EMPTY);
 }

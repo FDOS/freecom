@@ -6,6 +6,8 @@
 
 #include "../config.h"
 
+#include <string.h>
+
 #include "../include/context.h"
 
 void ecPop(void)
