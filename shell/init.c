@@ -406,8 +406,9 @@ int initialize(void)
 			kswapRegister(kswapContext);
 #endif
 	}
+	ctxtCreate();	/* Create context before env seg, as it is
+						persistent in non-XMS-Mode */
 #endif
-	ctxtCreate();
 
   /* Now set up the environment */
     /* If a new valid size is specified, use that */
@@ -452,6 +453,9 @@ int initialize(void)
 #endif
 
 #ifdef FEATURE_XMS_SWAP
+	ctxtCreate();	/* Create context after env seg, as it is
+						floating in XMS-Mode */
+
 	/* Now everything is setup --> initialize the XMS stuff */
 	XMSinit();
 	/* Initialize the EXEC Block structure used by XMS Swap Exec
