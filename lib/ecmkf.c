@@ -24,7 +24,7 @@
 
 int ecMkF(char ** const param
 	, const int params
-	, const char * const varnam
+	, const char * const varname
 	, const char * const cmd)
 {	ctxtEC_t far* ec;
 	char far *p;
@@ -32,48 +32,52 @@ int ecMkF(char ** const param
 	int i;
 
 	assert(cmd);
-	assert(varnam);
-	assert(param || !params);
+	assert(varname);
+	assert(params);
+	assert(param);
 
 	length = strlen(cmd);
-	if(!addu(&length, strlen(varnam))
-	 || !addu(&length, params)
-	 || !addu(&length, 3)) {
+	if(addu(&length, strlen(varname))
+	 || addu(&length, 2)) {
 		error_context_out_of_memory();
 		return E_NoMem;
 	}
 
-	if((i = params) != 0) {
+	for(i = 0; i < params; ++i) {
 		char *p;
 
-		while(i--) {
-			assert(param[i]);
-			if((p = esEncode(param[i])) == 0)
-				return E_NoMem;
-			chkPtr(param[i]);
-			StrRepl(param[i], p);
-			if(!addu(&length, strlen(p))) {
-				error_context_out_of_memory();
-				return E_NoMem;
-			}
+		assert(param[i]);
+		if((p = esEncode(param[i])) == 0)
+			return E_NoMem;
+		chkPtr(param[i]);
+		StrRepl(param[i], p);
+		if(addu(&length, strlen(p) + 1)) {
+			error_context_out_of_memory();
+			return E_NoMem;
 		}
 	}
 
 	if((ec = ecMk(EC_TAG_FOR_FIRST, length)) == 0)
 		return E_NoMem;
 	p = ecData(ec, char);
+#define check(p)	\
+	assert(FP_OFF(p) > FP_OFF(ecData(ec, char))	\
+	 && FP_OFF(p) -  FP_OFF(ecData(ec, char)) < length)
 
 	for(i = 0; i < params; ++i) {
 		assert(param[i]);
-		p = _fstpcpy(p, TO_FP(param[i]));
-		assert(_fnormalize(p) < _fnormalize(&ecData(ec, char)[length]));
+		p = _fstpcpy(p, TO_FP(param[i])) + 1;
+		check(p);
+		p[-1] = ES_STRING_DELIM;
 	}
 
-	p = _fstpcpy(p, TO_FP(varnam));
-	assert(_fnormalize(p) < _fnormalize(&ecData(ec, char)[length]));
+	p[-1] = 0;
+	p = _fstpcpy(p, TO_FP(varname)) + 1;
+	check(p);
 
 	p = _fstpcpy(p, TO_FP(cmd));
-	assert(_fnormalize(p) == _fnormalize(&ecData(ec, char)[length - 1]));
+	check(p);
+	assert(p + 1 == ecData(ec, char) + length);
 
 	return E_None;
 }

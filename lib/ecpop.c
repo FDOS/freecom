@@ -17,6 +17,11 @@ void ecPop(void)
 				--F(batchlevel);
 			else dprintf(("!! Flag(Batchlevel) underflow\n"));
 		}
+#ifdef DEBUG
+		if(ec->ctxt_length)
+			_fmemset(ecData(ec, byte), 'K', ec->ctxt_length);
+		ec->ctxt_type = 255;
+#endif
 		ecSetTOS((ctxtEC_t far*)((byte far*)ec
 		                        + ec->ctxt_length + sizeof(*ec)));
 	}

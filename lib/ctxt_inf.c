@@ -11,7 +11,7 @@
 ctxt_info_t ctxt_info[] = {
 	/* CTXT_TAG_ERROR */
 	{ 0, 0, 0, 0 }				/* dummy entry */
-	/* CTXT_TAG_EXEC */
+	/* CTXT_TAG_FLAG */
 	,{ (unsigned)-1, 0, 0, 0 }
 	/* CTXT_TAG_HISTORY */
 	,{ HISTORY_DEFAULT_SIZE, 0, 0, 0 }

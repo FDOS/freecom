@@ -1,3 +1,23 @@
+Update #6:
+chg: cbreak <-> using doExit/Quit/Cancel, no modes
+chg: CTXT_TAG_EXEC renamed to CTXT_TAG_FLAG
+fix: %@VERBATIM(): uses verbatim & verbatim_token to communicate with
+	expEnvVars()
+fix: cmd_for(): To reset the variable to its previous value must be
+	quoted, e.g. by %@VERBATIM()
+fix: ecShrink(): 2nd validateTOS() is incorrect, because the new TOS header
+	is not initialized so far
+chg: renamed variables for FOR: varname, param, cmd
+fix: ecMkf(): calculation of varname & cmd based on normalized ec
+fix: forPatchCmdline(): wrong internal <-> external var ident
+fix: ecMkf(): prefix == 0
+fix: readFORfirst(): wrong return value for ecShrink()
+fix: ecMkF(): pre-calculation of length one byte too large
+fix: ecMkF(): missing ES_STRING_DELIM between multiple arguments
+fix: ecMkF(): assert()'s
+fix: cmd_for_hackery(): must strip leading "FOR" keyword
+
+Update #5:
 fix: ecMkc()/ecMkvcmd(): Ignore-Exit commands tagged as normal ones
 fix: ctxtChgSize(): clear environment if newly created
 fix: ARG: wrong operator to pop old arguments

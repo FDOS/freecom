@@ -30,6 +30,7 @@ int is_ivar(const char * const name, char ** const buf)
 	if((tagname = emalloc(strlen(name) + 2)) != 0) {
 		*tagname = CTXT_TAG_IVAR;
 		strcpy(&tagname[1], name);
+		strupr(&tagname[1]);
 		rv = ctxtGetS(0, CTXT_TAG_IVAR, tagname, buf);
 		myfree(tagname);
 		if(rv < 2)

@@ -23,6 +23,7 @@ char *readInteractive(ctxtEC_t far * const ctxt)
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_INTERACTIVE);
 
+	cbreak;			/* Ignore a probably given ^Break */
 	doCancel = doQuit = 0;
 
 	if(doExit) {

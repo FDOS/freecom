@@ -11,6 +11,7 @@
 
 #include <environ.h>
 #include <mcb.h>
+#include <suppl.h>
 
 #include "../include/context.h"
 #include "../include/command.h"
@@ -38,7 +39,8 @@ static void displayTag1(int string, Context_Tag tag)
 
 #pragma argsused
 int cmd_memory(char *param)
-{
+{	unsigned size;
+
 	displayString(TEXT_MEMORY_ENVIRONMENT
 		, mcb_length(env_glbSeg), env_freeCount(env_glbSeg));
 	displayString(TEXT_MEMORY_CONTEXT
@@ -47,10 +49,20 @@ int cmd_memory(char *param)
 	displayTag(TEXT_MEMORY_CTXT_HISTORY, CTXT_TAG_HISTORY);
 	displayTag(TEXT_MEMORY_CTXT_DIRSTACK, CTXT_TAG_DIRSTACK);
 	displayTag1(TEXT_MEMORY_CTXT_LASTDIR, CTXT_TAG_LASTDIR);
-/*	displayTag1(TEXT_MEMORY_CTXT_BATCH, CTXT_TAG_BATCH);
-	not used, yet -- 2001/06/11 ska*/
+	displayTag1(TEXT_MEMORY_CTXT_FLAG, CTXT_TAG_FLAG);
+	displayTag1(TEXT_MEMORY_CTXT_ARG, CTXT_TAG_ARG);
+	displayTag1(TEXT_MEMORY_CTXT_IVAR, CTXT_TAG_IVAR);
 	displayTag1(TEXT_MEMORY_CTXT_SWAPINFO, CTXT_TAG_SWAPINFO);
-	displayString(TEXT_MEMORY_HEAP, (unsigned long)coreleft());
+	displayString(TEXT_MEMORY_HEAP, (unsigned long)coreleft()
+	 , (unsigned long)
+#if sizeof(void*)==2
+		my_coreleft()
+#else
+		my_farcoreleft()
+#endif
+	 );
+	size = DOSalloc(0, 0x80 | 0x10);
+	displayString(TEXT_MEMORY_DOSMEM, size, (unsigned long)size << 4);
 
 	return 0;
 }

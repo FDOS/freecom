@@ -853,8 +853,11 @@ Environment segment    : max %5u bytes; free %5u bytes
 :TEXT_MEMORY_CONTEXT#1
 Context segment        : max %5u bytes; free %5u bytes
 .	
+:TEXT_MEMORY_DOSMEM#1
+Largest DOS memory blk : free %5u paragraphes (%lu bytes)
+.
 :TEXT_MEMORY_HEAP#1
-Heap                   : free %5lu bytes
+Heap                   : free %5lu bytes; largest block: %5lu bytes
 .
 :TEXT_MEMORY_CTXT_ALIAS#1
 \tAliases        : limit %5u bytes, current %5u bytes, %5u items
@@ -868,8 +871,14 @@ Heap                   : free %5lu bytes
 :TEXT_MEMORY_CTXT_LASTDIR#1
 \tLast dir cache : used  %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_BATCH#1
-\tBatch nesting  : used  %5u bytes, %5u items
+:TEXT_MEMORY_CTXT_FLAG#1
+\tInternal flags : used  %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_ARG#1
+\tBatch arguments: used  %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_IVAR#1
+\tInternal vars  : used  %5u bytes, %5u items
 .
 :TEXT_MEMORY_CTXT_SWAPINFO#1
 \tSwapinfo       : used  %5u bytes, %5u items

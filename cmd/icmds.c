@@ -87,8 +87,8 @@ int cmd_icmds(char *param)
 			/* Update the settings within the context */
 			char name[CTXT_ITEMNAME_LENGTH];
 
-			ctxtMkItemName(name, CTXT_TAG_EXEC, CTXT_EXEC_ICMDS);
-			ec = chgCtxt(CTXT_TAG_EXEC, name, p);
+			ctxtMkItemName(name, CTXT_TAG_FLAG, CTXT_FLAG_ICMDS);
+			ec = chgCtxt(CTXT_TAG_FLAG, name, p);
 		} else
 			ec = E_NoMem;
 	}

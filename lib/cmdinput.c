@@ -143,11 +143,11 @@ char *readcommandEnhanced(void)
 #ifdef DEBUG
 		case KEY_CTL_T:
 			chkPtr(str);
-			if(!StrCat(str, "1234567890")) {
+			if(!StrCat(str, "for %a in (a*.* b*.*) do echo %a--%a")) {
 				error_out_of_memory();
 				break;
 			}
-			charcount += 10;
+			charcount = strlen(str);
 			/** FALL THROUGH **/
 #endif
 		case KEY_END:              /* goto end of string */

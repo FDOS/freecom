@@ -76,7 +76,7 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 			goto errRet;		/* silently ignore this error */
 	}
 
-	for(; !chkCBreak(BREAK_BATCHFILE); chkp(line)) {
+	for(; !cbreak; chkp(line)) {
 		if((line = Fgetline(f)) == 0) {
 			error_out_of_memory();
 			break;

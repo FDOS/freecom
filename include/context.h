@@ -63,7 +63,7 @@ extern ctxtEC_t ctxtInitialEC;
 /* Major IDs of context tags */
 typedef enum {
 	CTXT_TAG_ERROR = 0
-	,CTXT_TAG_EXEC
+	,CTXT_TAG_FLAG
 	,CTXT_TAG_HISTORY
 	,CTXT_TAG_DIRSTACK
 	,CTXT_TAG_LASTDIR
@@ -84,9 +84,9 @@ enum {
 	, CTXT_SWAPINFO_SHELLNAME
 };
 
-/* Minor IDs of CTXT_TAG_EXEC */
+/* Minor IDs of CTXT_TAG_FLAG */
 enum {
-	CTXT_EXEC_ICMDS = 1		/* status of ICMDS == arg of cmd_icmds() */
+	CTXT_FLAG_ICMDS = 1		/* status of ICMDS == arg of cmd_icmds() */
 };
 
 #define ctxtAlias ctxtSegm
@@ -228,7 +228,7 @@ int ecSetTOS(const ctxtEC_t far *);
 	/* Remove the topmost context; uses the "size" member only */
 void ecPop(void);
 	/* Shrink the topmost context by diff bytes */
-int ecShrink(int diff);
+int ecShrink(unsigned diff);
 
 /* Functions to handle the particular contexts */
 /* These functions return:

@@ -94,14 +94,14 @@ varfound:
 	return OK;
 }
 
-static int doFOR(char *var, char *varE, char *param, char *paramE
+static int doFOR(char *varname, char *varE, char *param, char *paramE
 	, char *cmd, int flags)
 {	char *oldContents;
 	char **argv;			/* pattern list */
 	int argc;
 	int rv;
 
-	assert(var);
+	assert(varname);
 	assert(varE);
 	assert(param);
 	assert(paramE);
@@ -116,9 +116,9 @@ static int doFOR(char *var, char *varE, char *param, char *paramE
 
 /* OK all is correct, build the exec contexts */
 	/* 1st: C/FORVAR|SET hidden context */
-	if(*var == '%') {	/* special FOR variable */
-		var[-1] = CTXT_TAG_IVAR;
-		switch(ctxtGetS(1, CTXT_TAG_IVAR, var - 1, &oldContents)) {
+	if(*varname == '%') {	/* special FOR variable */
+		varname[-1] = CTXT_TAG_IVAR;
+		switch(ctxtGetS(1, CTXT_TAG_IVAR, varname - 1, &oldContents)) {
 #ifdef DEBUG
 		default:
 			dprintf(("[FOR: Invalid return value from ctxtGetS]\n"));
@@ -128,10 +128,11 @@ static int doFOR(char *var, char *varE, char *param, char *paramE
 #else
 		default:
 #endif
-			rv = ecMkc("IVAR ", var, (char*)0);	/* kill the variable */
+			rv = ecMkc("IVAR %@VERBATIM()", varname, (char*)0);
 			break;
 		case 0:		/* Got it */
-			rv = ecMkc("IVAR ", var, "=", oldContents, (char*)0);
+			rv = ecMkc("IVAR %@VERBATIM()", varname, "="
+			 , oldContents, (char*)0);
 			myfree(oldContents);
 			break;
 		case 2:	/* Out of memory */
@@ -139,10 +140,10 @@ static int doFOR(char *var, char *varE, char *param, char *paramE
 			return 1;
 		}
 	} else {			/* normal variable */
-		oldContents = getEnv(var);
-			/* getEnv() will also update the var array with the current
+		oldContents = getEnv(varname);
+			/* getEnv() will also update the varname array with the current
 				case of the particular characters */
-		rv = ecMkc("SET /C ", var, "=", oldContents, (char*)0);
+		rv = ecMkc("SET /C %@VERBATIM()", varname, "=", oldContents, (char*)0);
 	}
 
 	if(rv == E_None) {
@@ -153,7 +154,7 @@ static int doFOR(char *var, char *varE, char *param, char *paramE
 
 		/* Make the F context */
 		if(argc)
-			rv = ecMkF(argv, argc, var, cmd);
+			rv = ecMkF(argv, argc, varname, cmd);
 		/* else silently ignore an empty argument line */
 		freep(argv);
 	}
@@ -171,15 +172,15 @@ int cmd_for(char *param)
 	 * If all is correct build a new F exec context.
 	 * If also preserves the old contents of the FOR variable
 	 *
-	 *	var := name of FOR variable
+	 *	varname := name of FOR variable
 	 *	param := parameters within '(...)'
 	 *	cmd := command
 	 */
 
-	char *var, *varE, *cmd, *paramE;
+	char *varname, *varE, *cmd, *paramE;
 	int flags;
 
-	switch(checkFOR(param, &var, &varE, &param, &paramE, &cmd, &flags)) {
+	switch(checkFOR(param, &varname, &varE, &param, &paramE, &cmd, &flags)) {
 	case badVar:
 		error_for_bad_var();
 		return 1;
@@ -204,21 +205,22 @@ int cmd_for(char *param)
 #endif
 	}
 
-	return doFOR(var, varE, param, paramE, cmd, flags);
+	return doFOR(varname, varE, param, paramE, cmd, flags);
 }
 
 int cmd_for_hackery(const char *Xparam)
 {	char *param;
-	char *var, *varE, *cmd, *paramE;
+	char *varname, *varE, *cmd, *paramE;
 	int flags;
 
-	if(checkFOR((char*)Xparam, &var, &varE, &param, &paramE, &cmd, &flags)
+	if(!matchtok((char*)Xparam, "for")
+	 || checkFOR((char*)Xparam, &varname, &varE, &param, &paramE, &cmd, &flags)
 	 != OK)
 		return 0;
 
 		/* Ignore the return value as this is a FOR cmd now, but if it
 			fails here, some other error caused it */
-	doFOR(var, varE, param, paramE, cmd, flags);
+	doFOR(varname, varE, param, paramE, cmd, flags);
 
 	return 1;
 }

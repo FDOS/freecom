@@ -18,7 +18,9 @@
 #include "../include/misc.h"
 
 char *fct_verbatim(char *param)
-{	return	(!param || !*param)
-	 ? 0
-	 : estrdup(param);
+{	
+	assert(verbatim_token == 0);
+	if(!(param && *param && (verbatim_token = estrdup(param)) == 0))
+		verbatim = 1;
+	return 0;		/* nothing to replace */
 }

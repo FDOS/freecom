@@ -1,6 +1,7 @@
 /* $id$
 
-	Perform a C context (cmd)
+	Perform a C or c context (cmd)
+	c context will ignore any active Exit/Cancel/Quit flags.
 
 	Return:
 		0: on error
@@ -19,7 +20,7 @@ char *readCommandIgnoreExit(ctxtEC_t far * const ctxt)
 {	char far* cmd;	/* arg of ctxt */
 	char *line;
 
-	dprintf(("readCommandNoIgnore()\n"));
+	dprintf(("readCommandIgnoreExit()\n"));
 
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_COMMAND_IGNORE_EXIT);
@@ -47,6 +48,8 @@ char *readCommand(ctxtEC_t far * const ctxt)
 
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_COMMAND);
+
+	doQuit = cbreak;
 
 	if(doExit || doCancel || doQuit) {
 #ifdef DEBUG

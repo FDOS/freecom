@@ -19,6 +19,7 @@ char *terminateShell(ctxtEC_t far * const ctxt)
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_TERMINATE);
 
+	cbreak;
 	doExit = doCancel = doQuit = 0;
 	return 0;
 }

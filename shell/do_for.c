@@ -28,40 +28,42 @@
 
 /* Patch the FOR command line with the currently found argument
 	and return a dynamically allocated command line.
-	arg is to be deallocated */
+	param is to be deallocated */
 static char *forPatchCmdline(const char far* const varname
 	, const char far* const cmd
-	, char *arg)
+	, char *param)
 {	char *p;
 	int rv;
 
 	if((p = edupstr(varname)) == 0) {
-		myfree(arg);
+		myfree(param);
 		return 0;
 	}
 
 	/* Record the value of the variable */
-	if(*p != '%')		/* hackery variable */
+	if(*p == '%')		/* hackery variable */
 		/* Add its value to the internal variables */
-		rv = ctxtSetS(CTXT_TAG_IVAR, p, arg);
+		rv = ctxtSetS(CTXT_TAG_IVAR, p, param);
 	else
-		rv = chgEnv(p, arg);
+		rv = chgEnv(p, param);
 
 	myfree(p);
-	myfree(arg);
+	myfree(param);
 
 	return rv == E_None? edupstr(cmd): 0;
 }
 
 char *readFORfirst(ctxtEC_t far * const ctxt)
-{	char far* pattern, far* varname, far* cmd;	/* arg of ctxt */
+{	char far* pattern, far* varname, far* cmd;	/* param of ctxt */
 	struct ffblk f;
 	char far* next;			/* poi into pattern where to set start of
 								context to */
 
-	char *arg;				/* current argument */
+	char *param;				/* current argument */
 
-	dprintf(("nextFpattern()\n"));
+	doQuit = cbreak;
+
+	dprintf(("readFORfirst()\n"));
 	if(doExit || doCancel || doQuit)
 		return 0;
 
@@ -79,54 +81,55 @@ char *readFORfirst(ctxtEC_t far * const ctxt)
 	assert(_fstrlen(pattern) + _fstrlen(varname) + _fstrlen(cmd)
 	 == ctxt->ctxt_length - 3);
 
-	dprintf(("[FOR_FIRST: '%Fs' pattern='%Fs'\n         : %Fs]\n"
-	 , varname, pattern, cmd));
+	dprintf(("[FOR_FIRST: %Fs (%Fs) %Fs]\n", varname, pattern, cmd));
 
 	if(!*pattern)						/* nothing to do */
 		return 0;
 
 	if((next = _fstrchr(pattern, ES_STRING_DELIM)) == 0) {
 		/* This is the last pattern */
-		arg = edupstr(pattern);
-		next = pattern + strlen(arg);	/* '\0' byte */
+		param = edupstr(pattern);
+		next = pattern + strlen(param);	/* '\0' byte */
 	} else {
 		*next = '\0';
-		arg = edupstr(pattern);
+		param = edupstr(pattern);
 		++next;
 	}
 
-	if(!arg) {
+	if(!param) {
 		return 0;
 	}
 
-	if(!ecShrink(next - pattern))
+	if(ecShrink(next - pattern) != E_None)
 		return 0;
 
-	esDecode(arg);			/* decode string from internal quote form */
+	esDecode(param);			/* decode string from internal quote form */
 
-	if(findfirst(arg, &f, FA_NORMAL) == 0) {	/* need a f-context */
-		*dfnfilename(arg) = '\0';	/* extract path */
-		if(ecMkf(&f, varname, cmd, arg) != E_None)
+	if(findfirst(param, &f, FA_NORMAL) == 0) {	/* need a f-context */
+		*dfnfilename(param) = '\0';	/* extract path */
+		if(ecMkf(&f, varname, cmd, param) != E_None)
 			return 0;
-		chkPtr(arg);
-		if(!StrCat(arg, f.ff_name)) {
-			myfree(arg);
+		chkPtr(param);
+		if(!StrCat(param, f.ff_name)) {
+			myfree(param);
 			error_out_of_memory();
 			return 0;
 		}
 	}
 
-	return forPatchCmdline(varname, cmd, arg);
+	return forPatchCmdline(varname, cmd, param);
 }
 
 char *readFORnext(ctxtEC_t far * const ctxt)
-{	char far* varname, far* cmd;	/* arg of ctxt */
+{	char far* varname, far* cmd;	/* param of ctxt */
 	ctxtEC_For_t far*fc;
 	struct ffblk f;
 
-	char *arg;				/* current argument */
+	char *param;				/* current argument */
 
-	dprintf(("nextFpattern()\n"));
+	doQuit = cbreak;
+
+	dprintf(("readFORnext()\n"));
 	if(doExit || doCancel || doQuit)
 		return 0;
 
@@ -138,25 +141,28 @@ char *readFORnext(ctxtEC_t far * const ctxt)
 	assert(_fstrlen(fc->ec_prefix)
 	 == ctxt->ctxt_length - sizeof(ctxtEC_For_t));
 
-	varname = MK_FP(FP_SEG(fc), fc->ec_varname);
-	cmd = MK_FP(FP_SEG(fc), fc->ec_cmd);
-	assert(cmd[-1] == 0 && cmd == varname + _fstrlen(varname) + 1);
+	assert(ctxtp->ctxt_size < 0x1000);
+	varname = MK_FP(ctxtMain, fc->ec_varname);
+	cmd = MK_FP(ctxtMain, fc->ec_cmd);
+	assert(cmd[-1] == 0
+	 && _fnormalize(cmd) == _fnormalize(varname + _fstrlen(varname) + 1));
 
 		/* necessary information to let findnext() do some good */
 	_fmemcpy(TO_FP(&f), fc->ec_ffblk, sizeof(fc->ec_ffblk));
 	if(findnext(&f) != 0)		/* f-context used up */
 		return 0;
 
-	arg = _fdupstr(fc->ec_prefix);
-	chkPtr(arg);
-	if(!arg || !StrCat(arg, f.ff_name)) {
-		myfree(arg);
+	param = _fdupstr(fc->ec_prefix);
+	chkPtr(param);
+	if(!param || !StrCat(param, f.ff_name)) {
+		myfree(param);
 		error_out_of_memory();
 		return 0;
 	}
 
 		/* save the info for next run */
 	_fmemcpy(fc->ec_ffblk, TO_FP(&f), sizeof(fc->ec_ffblk));
+	dprintf(("[FOR_NEXT: %Fs (%s) %Fs]\n", varname, param, cmd));
 
-	return forPatchCmdline(varname, cmd, arg);
+	return forPatchCmdline(varname, cmd, param);
 }

@@ -11,6 +11,11 @@
 /* Note: at least the double quotes MUST be included */
 #define QUOTE_STR "\"'`"
 
+/* Used by %@VERBATIM() and the command line parser to communicate
+	with each other */
+extern char *verbatim_token;
+extern int verbatim;
+
 /* What characters COMMAND shall delimit arguments and
   options, useable w/in if() */
 /* Note: Do not include the option character */

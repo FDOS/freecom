@@ -15,18 +15,21 @@
 #include "../include/context.h"
 #include "../include/ierror.h"
 
-int ecShrink(int diff)
+int ecShrink(unsigned diff)
 {	ctxtEC_t far *ec, far *nEc;
+#ifndef NDEBUG
+	int setTOSrv;
+#endif
 
 	if(diff) {
-#ifndef NDEBUG
-		int setTOSrv;
-#endif
 		ec = ecValidateTOS();
 		assert(ec);
 
 		assert(diff <= ec->ctxt_length);
 
+		/* setTOS() does not modify the memory within the exec context
+			therefore it's save to use the values of the current
+			*ec later on */
 #ifndef NDEBUG
 		setTOSrv =
 #endif
@@ -35,9 +38,7 @@ int ecShrink(int diff)
 		assert(setTOSrv == E_None);
 #endif
 
-		nEc = ecValidateTOS();
-		assert(nEc);
-
+		nEc = ctxtExecContext;
 		nEc->ctxt_length = ec->ctxt_length - diff;
 		nEc->ctxt_type = ec->ctxt_type;
 	}

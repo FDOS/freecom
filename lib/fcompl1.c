@@ -6,9 +6,12 @@
 	This file bases on FILECOMP.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/07 20:37:17  skaus
+	Update #6
+
 	Revision 1.1.4.1  2001/06/25 20:06:36  skaus
 	Update #3
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -47,7 +50,7 @@
 #include "../err_fcts.h"
 
 void complete_filename(char * const str, const unsigned charcount)
-{	int matches, is_dir, i;
+{	int matches, is_dir, i, baselen;
 	struct ffblk f;
 	char *fnam;
 
@@ -62,10 +65,11 @@ void complete_filename(char * const str, const unsigned charcount)
 		return;
 	}
 
+	baselen = strlen(fnam);
 	if(strchr(fnam, '.'))
 		/* There is a dot --> search for extension only */
-		strcat(fnam, "*");
-	else	strcat(fnam, "*.*");
+		strcpy(&fnam[baselen], "*");
+	else	strcpy(&fnam[baselen], "*.*");
 
 	matches = 0;
 	if(findfirst(str, &f, FA_DIREC) == 0) {
@@ -74,12 +78,15 @@ void complete_filename(char * const str, const unsigned charcount)
 			if(++matches == 1)			/* first match */
 				strcpy(fnam, f.ff_name);
 			else {						/* probe how much is equal */
-				for(i = 0; fnam[i] && fnam[i] == f.ff_name[i]; ++i);
+				for(i = baselen; fnam[i] && fnam[i] == f.ff_name[i]; ++i);
 				fnam[i] = 0;		/* keep the same chars only */
-				if(!i)	break;		/* nothing can change the name */
+				if(i == baselen) {
+					break;		/* nothing can change the name */
+				}
 			}
 		} while(findnext(&f) == 0);
-	}
+	} else
+		fnam[baselen] = 0;		/* no match found */
 	if(matches == 1) {			/* perfect match */
 		if(is_dir)
 			strcat(fnam, "\\");

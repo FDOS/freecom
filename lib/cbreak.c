@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.5  2001/07/07 20:37:17  skaus
+	Update #6
+
 	Revision 1.1.4.4  2001/07/05 22:18:34  skaus
 	Update #5
-
+	
 	Revision 1.1.4.3  2001/07/01 22:04:31  skaus
 	Update #3
 	
@@ -57,80 +60,59 @@
 #include "../include/context.h"
 #include "../strings.h"
 
-int chkCBreak(int mode)
+int chkCBreak(void)
 {
-  static int leaveAll = 0;      /* leave all batch files */
+	if(doExit || doCancel || doQuit) {
+		ctrlBreak = 0;                /* state processed */
+		return 1;
+	}
+	if(!ctrlBreak)
+		return 0;
+	ctrlBreak = 0;                /* state processed */
 
-  switch (mode)
-  {
-    case BREAK_ENDOFBATCHFILES:
-      leaveAll = 0;
-      return 0;
+	if(F(batchlevel)) {
+		/* we need to be sure the string arrives on the screen!
+			Therefore userprompt() is not what we need. */
 
-    case 0:
-      if (!F(batchlevel))
-        goto justCheck;
+		char *fmt, *chars;
+		int ch;
+		ctxtEC_Batch_t far *bc = ecLastB();
 
-    case BREAK_BATCHFILE:
-      if (leaveAll)
-        return 1;
-      if (!ctrlBreak)
-        return 0;
-
-      /* we need to be sure the string arrives on the screen!
-      	Therefore userprompt() is not we need. */
-      {	char *fmt, *chars;
-      	int ch;
-      	ctxtEC_Batch_t far *bc = ecLastB();
-
-      	if(!getPromptString(PROMPT_CANCEL_BATCH, &chars, &fmt)) {
-      			/* Fatal error <-> Terminate all batches */
-      		leaveAll = 1;
-      		break;
-      	}
-      	if(bc)
+		if(!getPromptString(PROMPT_CANCEL_BATCH, &chars, &fmt)) {
+			/* Fatal error <-> Terminate all batches */
+			return doCancel = 1;
+		}
+		if(bc)
 			cprintf(fmt, bc->ec_fname);
-      	else {
-      		char *fnam;
+		else {
+			char *fnam;
 
-      		if((fnam = getString(TEXT_UNKNOWN_FILENAME)) == 0)
-      			cprintf(fmt, (char far*)"<<unknown>>");
-      		else {
+			if((fnam = getString(TEXT_UNKNOWN_FILENAME)) == 0)
+				cprintf(fmt, (char far*)"<<unknown>>");
+			else {
 				cprintf(fmt, (char far*)fnam);
 				myfree(fnam);
 			}
 		}
 
-		while((ch = cgetchar()) == 0 || (ch = mapMetakey(chars, ch)) == 0)
+		while((ch = cgetchar()) == 0
+		 || (ch = mapMetakey(chars, ch)) == 0)
 			beep();
 
 		cputs("\r\n");
 		freePromptString(chars, fmt);
 
 		switch(ch) {
-		/* case 1:		Yes -> just fall through */
-		case 2:			/* No */
-			return ctrlBreak = 0;   /* ignore */
+		case 1:		/*	Yes --> leave this batch file */
+			doQuit = 1;
+			break;
+		case 2:			/* No --> ignore */
+			return 0;
 		case 3:			/* leave All batchfiles */
-		  leaveAll = 1;
-		  break;
+			doCancel = 1;
+			break;
 		}
-	  }
+	}
 
-      break;
-
-    justCheck:
-    case BREAK_FORCMD:         /* FOR commands are part of batch processing */
-      if (leaveAll)
-        return 1;
-      /* fall through */
-
-    case BREAK_INPUT:
-      if (!ctrlBreak)
-        return 0;
-      break;
-  }
-
-  ctrlBreak = 0;                /* state processed */
-  return 1;
+	return 1;
 }

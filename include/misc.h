@@ -23,13 +23,7 @@ enum OnOff {		/* ON/OFF tester */
 	OO_Other			/* else */
 };
 
-#define BREAK_BATCHFILE 1
-#define BREAK_ENDOFBATCHFILES 2
-#define BREAK_INPUT 3
-#define BREAK_IGNORE 4
-#define BREAK_FORCMD 5
-
-#define cbreak chkCBreak(0)
+#define cbreak chkCBreak()
 
 #define MAXARGS 20
 #define MAXLEN  256
@@ -43,7 +37,7 @@ int vcgetchar(void);
 int vcgetcstr(const char *const legalCh);
 int keypressed(void);
 int cgetchar_timed(int secs);
-int chkCBreak(int mode);
+int chkCBreak(void);
 void beep(void);
 void beep_low(void);
 char *comFile(void);

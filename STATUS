@@ -1,0 +1,255 @@
+Implementation and verification status of expExec branch.
+
+Abbreviations:
+ctxt: context
+dyn: dynamic (context)
+ec: execution context
+env: environment
+var: (environment) variable
+
+1. Internal commands
+1.0. General
+	All internal commands except the ones mentioned below
+	have not been changed as they are not effected by the
+	execution context
+	- Working
+1.1. CANCEL, QUIT, EXIT
+	- Working
+	- Set the the global flags doCancel, doQuit, doExit.
+		Those flags are actively evaluated by most ec handlers.
+1.2. FOR
+	- Working
+	- Added: FOR parser before the variables are expanded (and therefore
+		before anything is done to the command line at all). This allows
+		several known quirks of the MS COMMAND FOR command, such as
+		repeated (rather than applied) redirections: FOR .. DO echo >file
+	- Added: Multicharacter FOR variables are accepted and behave as
+		normal env vars.
+	- Added: Batch files _not_ executed via CALL cause to quit FOR loops.
+	- Env vars are expanded by the normal command line parser rather than
+		FOR itself, that means that FOR variables are active within
+		CALL'ed batch scripts.
+	- BUG?: Wildcarded, but non-matching parameters are passed unchanged
+		to the command.
+1.3. CALL
+	- Working
+	- Sets the local "called" flag.
+	- Handles options: /S and /N, which modify the local "swap" flag.
+	- Do work within FOR statements and pipes
+1.4. GOTO
+	- Working
+	- Sets the local flags "rewindBatchFile" and "gotoLabel".
+	- BUG?: Multiple words are ignored.
+1.5. ECHO
+	- Working
+	- Modifies the global flags "dispPrompt" or "echo", depending on
+		if issued from interactive command line.
+1.6. SHIFT
+	- Working
+	- Modifies global flag "shiftlevel".
+1.7. MEMORY
+	- Added: Display of new tags of the dynamic context: Arguments, Internal
+		flags and internal variables.
+	- Added: Display of largest available block within heap.
+	- Added: Display of largest available block of DOS memory.
+1.8. ARG
+	- Working
+	- Newly added
+	- Modifies the global flags "shiftlevel" and "base_shiftlevel" and
+		removes old entries of the dynamic context with tag CTXT_TAG_ARG.
+	- Used to reset the state of batch script arguments to the status of
+		before calling a batch script.
+1.9. DISPLAY_FLAGS or !
+	- Working
+	- Newly added
+	- Used to display the global and local flags
+1.10. DISPLAY_NLS or @
+	- Working
+	- Newly added
+	- Used to display the NLS information currently in effect
+1.11. ICMDS
+	- Working
+	- Newly added
+	- Used to enable or disable internal commands
+1.12. IVAR
+	- Working
+	- Newly added
+	- Used to modify internal variables, such as special FOR variables
+1.13. HISTORY
+	- Working
+	- Added: To change the lower limit of history buffer
+
+2. Internal functions
+2.0. General
+	- Working
+	- Newly added feature
+	= common syntax: %@NAME(arguments)
+	- processed by command line parser expanded env vars
+2.1. IVAR
+	- Working
+	- Newly added
+	- Return the value of an internal variable
+	- Used within pipes to store the name the temporary file
+2.2. TEMPFILE
+	- not verified
+	- Newly added
+	- Create and return the name of a temporary file
+	- Used within pipes
+2.3. VERBATIM
+	- Working
+	- Newly added
+	- Quotes text against expansion by the command line parser
+
+3. Command line parser (aka scanner)
+- Working
+- Expands special FOR variables, too
+- Added: internal functions (%@-syntax)
+- No line limit (except unused memory in heap)
+
+4. Enhanced command line editor
+- Working, except lines larger than one screenful
+- Fixed: multiline command lines
+- No line limit (except unused memory in heap)
+
+5. Command line executor (aka parser)
+- Working for internal commands; pipes and redirections are scanned OK, but
+	their working is not verified; external commands possibly work
+- Modified into a state-driven automaton; the state is storred into the
+	dynamic context, the "execution context" portion at its end.
+	The ec is organized as stack, to most current item (topmost) is located
+	near the beginning of the dyn context, the end is located at the end of
+	the dyn context.
+- Several stages:
+	-- run_exec_context()
+	1) acquire current state and retreive a command line from the actual
+		ec handler
+	2) probe for hackery FOR statement
+	3) expand env vars (command line parser)
+	-- parsecommandline()
+	4) expand aliases
+	5) apply trace mode
+	-- parseExpandedCommand()
+	6) extract redirections and split pipes
+	7) apply redirections for the current command (1st in pipe)
+	-- docommand()
+	8) check for forced internal command "::="
+	9) run command line extension MUX-AE
+	10) check for internal command -- run it, if so --> break stages here
+	-- execute()
+	11) check for "change drive": X:  command
+	12) search for command through ".:%PATH%" search paths
+	13) Initiate batch file processing if absolute filename ends in ".BAT"
+	14) otherwise: call external command
+- Supported redirections:
+	">>&>"	- stderr into file (append)
+	">>&"	- merging stderr & stdout into file (append)
+	">&>"	- stderr into file (overwrite) 
+	">&"	- merging stderr & stdout into file (overwrite)
+	">>"	- stdout into file (append)
+	">"		- stdout into file (overwrite) 
+	"<"		- stdin from file
+	"|&"	- pipe merging stderr & stdout
+	"|"		- pipe stdout only
+
+6. Dynamic context
+- Working
+- Allows to change the boundaries of history etc. at run-time
+- Layput:
+	-> start of DOS memory block
+		+ string-based information in env-style memory block
+		+ binary information of ec
+	-> end of DOS memory block
+- Stores: History, Aliases, Dirstack, Execution Context, Batch script
+	arguments, last dir, internal variables, swapinfo, size-variant
+	flags (such as ICMDS settings)
+
+7. Static context
+- Working as before, needs to be redesigned for code-sharing; part
+	of CRITER module
+- Stores: Hooks to Critical error and ^Break handlers, size-invariant
+	flags, such as the global flags
+
+8. Global flags
+- Working not verified, though, they are used
+- storred as part of the static context
+- if there is a corresponding local flag, the global one holds the default
+	value of the local flag
+8.1. dispPrompt
+	- Working
+8.2. echo
+	- Working, but is not resetted when batch script ends
+8.3. swap
+	- Not verified
+8.4. canexit
+	- Not verified
+8.5. interactive
+	- Not working
+8.6. called
+	- Working, but not really used currently
+8.7. trace
+	- Not verified
+8.8. debug
+	- Working
+8.9. persistentMSGs
+	- Working, as its behaviour wasn't chnaged at all
+8.10. errorlevel
+	- Not verified
+8.11. base_shiftlevel & shiftlevel
+	- Working, verified as part of batchfile processing
+8.12. batchlevel
+	- Working
+
+9. Local flags
+- Working not verified, though, they are used
+- Storred in global variables, their initial values are determined by the
+	internal status of FreeCOM or the value of certain global flags
+9.1. swap
+- Not verified
+- Defaults to global "swap", modified by CALL
+9.2. echoBatch
+- Working, but is not reset when batch execution ends
+- Defaults to global "echo", modified by a "@" preceeding input line
+9.3. dispPrompt
+- Working
+- Defaults to global "dispPrompt"
+9.4. rewindBatchFile & gotoLabl
+- Working
+- Default to zero, modified by GOTO
+9.5. traceMode
+- Not verified
+- Default to /Y, modified by a "?" preceeding input line
+9.6. interactive
+- Not working
+- Default to global "interactive"
+9.7. called
+- Working
+- Default to global "called", modified by CALL
+9.8. doExit, doCancel, doQuit
+- Working
+- Default to zero, synchroneously set by EXIT, CANCEL or QUIT respecfively,
+	asynchroneously set by ^Break handler, cleared by ec handlers.
+9.10. implicitVerbose
+- Not verified
+- derived flag
+
+10. External handlers
+10.1. Critical error handler
+- Working (not changed), but not verified for current release
+10.2. ^Break handler
+- Working, still a pull-technology
+- FreeCOM polls the status of ^Break from the global variable ctrlBreak
+	and sets doCancel or doQuit, if a ^Break occured.
+
+11. Reload support
+- Not working -- not verified for current release
+- still external service
+
+12. NLS
+- Included and used and is usually working; not verified is the outcome
+	of a non-working NLS
+- BUG: portions of FreeCOM will always use NLS, even with FEATURE_NLS disabled
+
+13. Overall
+- static and dynamic contexts must be handler together, not as two individual
+	chunks of external resources as now; this will certainly ease the error
+	condition handling and reduce malfunctioning

@@ -12,6 +12,7 @@
 
 #include <dynstr.h>
 
+#include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../err_fcts.h"
@@ -23,6 +24,9 @@
 char *cmdline;
 int cmdlen, cmdbuf;
 FLAG8 error;
+
+char *verbatim_token = 0;
+int verbatim = 0;
 
 static char *ifctArgRun(const int clQuote
 	, struct IFCT *fct
@@ -82,6 +86,9 @@ static void appCh(int c)
 char *expEnvVars(char * const line)
 {	char *h, c;
 	char *p, *q;
+
+	assert(!verbatim);
+	assert(!verbatim_token);
 
 	cmdline = 0;
 	cmdbuf = cmdlen = 0;
@@ -159,8 +166,26 @@ char *expEnvVars(char * const line)
 						q = ifctArgRun(')', fct, &p);
 					else
 						q = fct? (fct->func)((char*)0): 0;
-					if(q)
+					if(q) {
 						appStr(q);
+						myfree(q);
+					}
+					if(verbatim) {
+						/* %@VERBATIM() fetched --> process */
+						verbatim = 0;
+						if(!verbatim_token || !*verbatim_token
+						 || (q = strstr(p, verbatim_token)) == 0) {
+						 	/* quote all the remaining line */
+						 	appStr(p);
+							StrFree(verbatim_token);
+						 	goto endloop;
+						} else {
+							*q = 0;
+							appStr(p);
+							StrFree(verbatim_token);
+							p = q + strlen(verbatim_token);
+						}
+					}
 				}
 				break;
 
@@ -182,6 +207,7 @@ char *expEnvVars(char * const line)
 
 loop:
 	}
+endloop:
 
 	switch(error) {
 	case 1:

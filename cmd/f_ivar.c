@@ -9,6 +9,8 @@
 
 #include "../config.h"
 
+#include <string.h>
+
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../include/cmdline.h"
@@ -17,6 +19,7 @@
 char *fct_ivar(char *param)
 {	char *buf;
 
+	strupr(param);
 	return ctxtGetS(0, CTXT_TAG_IVAR, param, &buf) == E_None
 		? buf
 		: 0;
