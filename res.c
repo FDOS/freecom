@@ -38,19 +38,9 @@
 #include "debug.h"
 #include "command.h"
 
-int enumResources(const char * const altFNam
-	, res_majorid_t id
+int enumResources(res_majorid_t id
 	, int (*fct)()
 	, void * const arg)
-{	int rc;
-
-		/* We use enumResoures() to load a resource we know it must there,
-			and, if so, the callback function returns != 0
-				--> If enumFR() returns == 0 --> is equal to "not found"
-				--> we try the alternate file */
-	if(((rc = enumFileResources(comFile(), id, fct, arg)) == -1 || rc == 0)
-	 && altFNam && (rc = enumFileResources(altFNam, id, fct, arg)) == -1)
-	 	dprintf( ("[No resource file %s found!]\n", altFNam? altFNam: "??") );
-
-	return rc;
+{
+	return enumFileResources(comFile(), id, fct, arg);
 }

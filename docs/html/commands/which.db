@@ -1,0 +1,36 @@
+name: WHICH
+de: Search and display the executable file of specified commands
+req: CMD_WHICH
+
+SYNOPSIS:
+EBNF: WHICH [{ command }]
+<P>Searches for the specified command(s) the same way as if it would
+be specified on command line as command itself. If an executable
+file is found, its path is displayed in this format:<BR>
+EBNF:command <<tab>> path
+<BR>The 
+EBNF!: <<tab>>
+stands for the tabulator character (ASCII 9).
+<BR>If the command is not found only the
+EBNF!: command
+part, but neither a
+EBNF!: path
+nor the
+EBNF!: <<tab>>
+is displayed.
+<P>Internal commands, installable commands and aliases are not found.
+
+EXAMPLES:
+EXAMPLE: 1
+CMD: WHICH which
+
+Returns a file or nothing, because WHICH is an internal command.
+
+EXAMPLE: 2
+CMD: WHICH command
+Could display for instance:
+<CMD><PRE>
+command	C:\COMMAND.COM
+</PRE></TT>
+<P>Please note that <CMD>command</CMD> is the string &quot;command&quot;
+and no placeholder.

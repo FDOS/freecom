@@ -163,6 +163,7 @@ int internal_exit(char *);
 int cmd_pushd(char *);          /*DLP 06/01/2000 */
 int cmd_popd(char *);           /*DLP 06/01/2000 */
 int cmd_dirs(char *);           /*DLP 06/01/2000 */
+int cmd_which(char *);
 
 /* prototypes for ENVIRON.C */
 char *getEnv(char *);

@@ -76,6 +76,8 @@
 #include "misc.h"
 #include "nls.h"
 #include "strings.h"
+#include "datefunc.h"
+#include "timefunc.h"
 
 /*
  * get a character out-of-band and honor Ctrl-Break characters

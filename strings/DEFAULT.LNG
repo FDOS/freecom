@@ -1080,3 +1080,9 @@ Displays a list of commands and features available with in the shell.
 
 ? [/?]
 .
+
+:TEXT_CMDHELP_WHICH
+Searches and displays the executable file for each specified file.
+
+WHICH {command}
+.

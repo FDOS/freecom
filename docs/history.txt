@@ -1,6 +1,15 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+2001/02/16 ska
+~~~~~~~~~~~~~~~~~~~~~~
+add: command WHICH
+chg: moved all assembly sources to NASM
+chg: using STRINGS resources for all non-interactive strings
+bugfix: if ENHANCED_INPUT && !HISTORY, CurRight falls through to CurLeft
+bugfix: CB_CATCH: In DEBUG mode: recursive test fails always
+bugfix: KSSF: restore parentPSP on exit
+
 2001/02/14 ska
 ~~~~~~~~~~~~~~~~~~~~~~
 fix: parse years 80..199 as century 1900 (by Arkady)

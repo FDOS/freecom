@@ -15,11 +15,15 @@
 			of the specific package
 
   	$Log$
+  	Revision 1.1.2.2  2001/02/18 21:08:24  skaus
+  	add: command WHICH
+  	fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
+
   	Revision 1.1.2.1  2001/02/18 17:59:37  skaus
   	bugfix: KSSF: restore parentPSP on exit
   	chg: Using STRINGS resource for all non-interactive messages
   	chg: moving all assembly files to NASM
-
+  	
   	Revision 1.1.2.1  2000/12/17 21:57:37  skaus
   	intermediate update 1
   	
@@ -115,7 +119,7 @@ static char *word_(char **Xp)
 	return p;
 }
 #define match(w) match_(&p, (w))
-static char *match_(char **Xp, char *w)
+static int match_(char **Xp, char *w)
 {	char *p, *q;
 
 	q = p = skipws(*Xp);

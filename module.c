@@ -76,7 +76,7 @@ kswap_p modContext(void)
 {	word segm;
 
 	segm = 0;
-	enumResources("CRITER", RES_ID_CRITER, loadModule, &segm);
+	enumResources(RES_ID_CRITER, loadModule, &segm);
 #ifdef DEBUG
 	if(segm)
 		dprintf(("[CRITER loaded to segment 0x%04x.]\n", segm));

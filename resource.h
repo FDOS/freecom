@@ -40,6 +40,9 @@ typedef struct {		/* type of a control area */
 	/* standard alignment */
 #pragma -a.
 
+typedef int (*res_callbackp_t)(res_majorid_t, res_minorid_t
+ , unsigned long, FILE *, void *);
+
 #define RES_COOKIE "FREECOM "
 
 
@@ -48,7 +51,8 @@ typedef struct {		/* type of a control area */
  ****************************/
 
 
-int enumFileResources(const char * const fnam, res_majorid_t id, int (*fct)(), void * const arg);
+int enumFileResources(const char * const fnam, res_majorid_t id
+ , int (*fct)(), void * const arg);
 void startResource(FILE *f, res_majorid_t majorID, res_minorid_t minorID);
 void endResource(FILE *f);
 

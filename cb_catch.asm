@@ -12,6 +12,10 @@
 ;	optimizes for the polling rather this handler.
 
 ;   $Log$
+;   Revision 1.1.1.1.4.2  2001/02/18 21:08:23  skaus
+;   add: command WHICH
+;   fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
+;
 ;   Revision 1.1.1.1.4.1  2001/02/18 17:59:36  skaus
 ;   bugfix: KSSF: restore parentPSP on exit
 ;   chg: Using STRINGS resource for all non-interactive messages
@@ -38,7 +42,7 @@ _initCBreak:
 _cbreak_handler:
 %ifdef DEBUG
 		dec BYTE [CS:strEnd]
-		jnz noRecurs
+		jz noRecurs
 		inc BYTE [CS:strEnd]
 		jmp short recurs
 

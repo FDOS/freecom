@@ -10,6 +10,10 @@
 #
 #
 # $Log$
+# Revision 1.2.4.3  2001/02/18 21:08:24  skaus
+# add: command WHICH
+# fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
+#
 # Revision 1.2.4.2  2001/02/18 17:59:37  skaus
 # bugfix: KSSF: restore parentPSP on exit
 # chg: Using STRINGS resource for all non-interactive messages
@@ -81,12 +85,7 @@ kssf.com : kssf.asm
 
 load_icd.obj : load_icd.c
 
-clobber : clean
-	$(RM) $(RMFLAGS) *.exe *.com *.icd default.mk
-
-clean :
-	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) *.dmp
-
+.INCLUDE : makefile.1
 
 .IF $(CFG) != $(NULL)
 

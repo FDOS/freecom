@@ -25,6 +25,9 @@
  *
  * 2000/12/10 ska
  *	chg: Uppercased command names (support for Installable Commands)
+ *
+ * 2001/02/16 ska
+ * add: command WHICH
  */
 
 #include <stdlib.h>
@@ -212,6 +215,11 @@ struct CMD cmds[] =
 #ifdef DEBUG
   {"FDDEBUG", 0, cmd_fddebug, TEXT_CMDHELP_FDDEBUG},
 #endif
+
+#ifdef INCLUDE_CMD_WHICH
+  {"WHICH", 0, cmd_which, TEXT_CMDHELP_WHICH},
+#endif
+
 
         {NULL, 0, NULL, 0}
 };

@@ -7,11 +7,13 @@ CFG = TCCDOS.CFG
 !include "config.mak"
 
 
-all: command.com
+all: $(CFG) command.com
 
 #		*Implicit Rules*
 .c.obj:
   $(CC) -c {$< }
+.asm.obj:
+	$(NASM) $(NASMFLAGS) -f obj $<
 
 command.exe : $(CFG) alias.obj \
 	batch.obj \
@@ -32,9 +34,9 @@ command.exe : $(CFG) alias.obj \
 	del.obj \
 	dir.obj \
 	dstack.obj \
+	dummies.obj \
 	echo.obj \
 	environ.obj \
-	err_hand.obj \
 	error.obj \
 	exec.obj \
 	fddebug.obj \
@@ -45,11 +47,12 @@ command.exe : $(CFG) alias.obj \
 	if.obj \
 	init.obj \
 	internal.obj \
-	lh.obj \
+	kswap.obj \
 	loadhigh.obj \
 	lowexec.obj \
 	messages.obj \
 	misc.obj \
+	module.obj \
 	mux_ae.obj \
 	nls.obj \
 	openf.obj \
@@ -59,11 +62,11 @@ command.exe : $(CFG) alias.obj \
 	prompt.obj \
 	redir.obj \
 	ren.obj \
-	session.obj \
+	res.obj \
+	res_r.obj \
+	res_w.obj \
 	set.obj \
 	shift.obj \
-	spawn.obj \
-	swapexec.obj \
 	tempfile.obj \
 	time.obj \
 	timefunc.obj \
@@ -94,9 +97,9 @@ debug.obj+
 del.obj+
 dir.obj+
 dstack.obj+
+dummies.obj+
 echo.obj+
 environ.obj+
-err_hand.obj+
 error.obj+
 exec.obj+
 fddebug.obj+
@@ -107,11 +110,12 @@ history.obj+
 if.obj+
 init.obj+
 internal.obj+
-lh.obj+
+kswap.obj+
 loadhigh.obj+
 lowexec.obj+
 messages.obj+
 misc.obj+
+module.obj+
 mux_ae.obj+
 nls.obj+
 openf.obj+
@@ -121,11 +125,11 @@ pause.obj+
 prompt.obj+
 redir.obj+
 ren.obj+
-session.obj+
+res.obj+
+res_r.obj+
+res_w.obj+
 set.obj+
 shift.obj+
-spawn.obj+
-swapexec.obj+
 tempfile.obj+
 time.obj+
 timefunc.obj+
@@ -142,22 +146,7 @@ $(LIBPATH)\cs.lib
 |
 
 command.com : command.exe
-	copy /b command.exe + strings.dat command.com
-
-cb_catch.obj: $(CFG) cb_catch.asm
-	$(TASM) $(ASMFLAGS) CB_CATCH.ASM,CB_CATCH.OBJ
-
-lh.obj: $(CFG) lh.asm
-	$(TASM) $(ASMFLAGS) LH.ASM,LH.OBJ
-
-lowexec.obj: $(CFG) lowexec.asm
-	$(TASM) $(ASMFLAGS) LOWEXEC.ASM,LOWEXEC.OBJ
-
-spawn.obj: $(CFG) spawn.asm
-	$(TASM) $(ASMFLAGS) SPAWN.ASM,SPAWN.OBJ
-
-strings.h:
-	$(COMSPEC) /c fixstrs.bat tc101
+	copy /b command.exe + criter.mod\criter + criter.mod\criter1 + strings.dat command.com
 
 #		*Compiler Configuration File*
 #-h

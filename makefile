@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.4.4.5  2001/02/18 21:08:23  skaus
+# add: command WHICH
+# fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
+#
 # Revision 1.4.4.4  2001/02/18 17:59:36  skaus
 # bugfix: KSSF: restore parentPSP on exit
 # chg: Using STRINGS resource for all non-interactive messages
@@ -192,12 +196,12 @@ tools .SETDIR=tools : default.mk
 
 tools_clean .SETDIR=tools :
 	@+echo ==Entering $(PWD)
-	$(MAKE) clean
+	$(MAKE) -f makefile.1 clean
 	@+echo ==Leaving $(PWD)
 
 tools_clobber .SETDIR=tools :
 	@+echo ==Entering $(PWD)
-	$(MAKE) clobber
+	$(MAKE) -f makefile.1 clobber
 	@+echo ==Leaving $(PWD)
 
 utils .SETDIR=utils :

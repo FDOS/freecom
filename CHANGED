@@ -1,4 +1,9 @@
+add: command WHICH
+bugfix: if ENHANCED_INPUT && !HISTORY, CurRight falls through to CurLeft
+bugfix: CB_CATCH: In DEBUG mode: recursive test fails always
 bugfix: KSSF: restore parentPSP on exit
+chg: using STRINGS resource for all non-interactive messages
+chg: moved all assembly files to NASM
 v0.80b
 add: DIR /Y to display 4digit year
 fix: DIR displays "bytes free" at the very end, but if more than one

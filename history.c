@@ -89,15 +89,6 @@ void history(int dir, char *commandline)
         lines[count] = lines[count + 1] - length;
 
       numlines--;
-#ifdef DEBUG
-			if (fddebug)
-			{
-				printf("Reduced size:  %ld lines\n", numlines);
-
-	      for (count = 0; count < numlines; count++)
-	        printf("%d: %s\n", count, lines[count]);
-			}
-#endif
     }
 
     strcpy(lines[numlines], commandline);

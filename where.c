@@ -53,17 +53,21 @@
  *   (does not have .bat, .com, or .exe extention). Before command would
  *   to execute any file with any extension (opps!)
  *
+ * 2001/02/16 ska
+ * add: command WHICH
  */
 
 #include "config.h"
 
-#include <stdio.h>
-#include <dos.h>
+#include <assert.h>
 #include <dir.h>
+#include <dos.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "command.h"
+#include "cmdline.h"
 
 #include "dfn.h"
 
@@ -79,6 +83,33 @@ char *find_which(char *fname)
   free(buf);
   return buf = dfnsearch(fname, NULL, NULL);
 }
+
+#ifdef INCLUDE_CMD_WHICH
+
+int cmd_which(char *rest)
+{
+	char **arg, *p;
+	int argc, optc, i;
+
+	if((arg = scanCmdline(rest, NULL, NULL, &argc, &optc)) == NULL)
+		return E_Other;
+
+	for(i = 0; i < argc; ++i) {
+		assert(arg[i]);
+		fputs(arg[i], stdout);
+		if((p = find_which(arg[i])) != 0) {
+			putchar('\t');
+			puts(p);
+		} else {
+			putchar('\n');
+		}
+	}
+
+	freep(arg);
+	return E_None;
+}
+
+#endif
 
 #ifdef DEBUG_STANDALONE
 int main(int argc, char **argv)

@@ -14,6 +14,6 @@
 
 #include "resource.h"
 
-int enumResources(const char * const altFnam, res_majorid_t id, int (*fct)(), void * const arg);
+int enumResources(res_majorid_t id, int (*fct)(), void * const arg);
 
 #endif

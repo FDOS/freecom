@@ -189,7 +189,7 @@ unsigned msgSegment(void)              /* load messages into memory */
 	if(!msgSegm) {     /* not loaded, yet */
 		/* prevent reentrance */
 		if(--recurs == 0) {		/* OK */
-			enumResources("STRINGS.DAT", RES_ID_STRINGS, loadStrings, &status);
+			enumResources(RES_ID_STRINGS, loadStrings, &status);
 			switch(status) {
 			case STRINGS_LOADED:
 			  assert(msgSegm);
