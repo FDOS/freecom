@@ -84,7 +84,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "../include/dfn.h"
+#include <dfn.h>
 
 #include "../include/command.h"
 #include "../include/cmdline.h"
