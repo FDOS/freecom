@@ -44,7 +44,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "version 0.83 Beta 40 "
+const char shellver[] = "version 0.83 Beta 42 "
 #ifdef FEATURE_XMS_SWAP
 	"XMS_Swap "
 #endif

@@ -42,7 +42,7 @@ Entries of the command line history and the directory stack can also
 be expressed as such strings easily.
 Even the batch nesting can be easily written as a string.
 
-However, there need to be a way to distinguish all different kinds of
+However, there must be a way to distinguish all different kinds of
 information stored within such pseudo-environment. Under the
 prerequisite that almost all 3rd party tools honor the convention that
 names are constructed out of printable characters, non-printable
@@ -101,14 +101,14 @@ Theoretical notes:
 + The lowlevel functions to maintain an environment segment are known,
 	so it is possible to rely on this or that implementation, e.g.
 	new entries are always appended to the end of the environment
-	and existing entries are changed on place. That means if a variable,
+	and existing entries are changed in place. That means if a variable,
 	e.g. with an empty name or unknown tag is create at the very
 	beginning of the environment, FreeCOM can rely on that the value
 	of the variable is located at easily calculatable addresses.
 	Though, the value must not contain no NUL characters.
 
 + The memory block must be located in its own DOS memory block, because
-	the lowlevel functions to rely on information located in the MCB
+	the lowlevel functions rely on information located in the MCB
 	preceeding the environment segment -- esp. to aquire the length
 	of the segment from.
 

@@ -126,9 +126,10 @@ III. Incompatiblies
 	-> thus, the external command COMMAND.COM/EXE/BAT within the
 	subdirectory GO.
 
-- If an Installed Command may replace the command by another Installed
-	Command depends on the order in which they had been installed.
-	FreeCOM calls the MUX-AE chain exactly once per command.
+- FreeCOM calls the MUX-AE chain exactly once per command. Hence, if
+	one Installed Command A changes the command into a string of
+	another Installed Command B, B must be installed prior A, in order
+	to let B reach the command line.
 
 - FreeCOM always uses BYTE DS:[BX+1] to determine the length of
 	STRING DS:[BX+2]. If an Installed Command wants to change the
@@ -138,6 +139,7 @@ III. Incompatiblies
 
 - As FreeCOM has no meaning of "transient" portion, the segment
 	registers simply point to the strings. DS == ES always.
+	This may vary in future!
 
 IV. Side definitions
 

@@ -3,6 +3,8 @@ Description of kernel-supoorted swapping of FreeCOM
 
 ===> Please also read VSPAWN.TXT.
 
+This sort of swap is incompatible with XMS-Only swap!
+
 === Preface
 
 This technique is an experimental implementation of a general purpose

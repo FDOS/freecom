@@ -1,6 +1,8 @@
 Swap Support #2
 	-- 2001/04/01 ska
 
+This style of swapping is incompatible with XMS-Only swapping!
+
 This swapping is derived from KSSF (see k-swap.txt), but instead of
 let the user decide what shell to execute, this swap faker uses a fixed
 filename.

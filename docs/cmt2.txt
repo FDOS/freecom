@@ -30,7 +30,7 @@ The arguments and the I/O redirection directives are optional, of course.
 Batch scripts are identified by the extension .BAT, it is currently
 not possible to execute a batch script without this file extension.
 
-In this variant, however, empties the execution context, what means that
+This variant, however, empties the execution context, what means that
 any formerly nested script are "forgotten". In addition, FOR loops are
 destroyed, too.
 
@@ -39,7 +39,6 @@ Variant 2:
 In order to nest script they must be invoked via the CALL command:
 
 CALL SCRIPT arg1 arg2 arg3 arg4 ... argN <in-file >out-file
-
 
 The arguments and the I/O redirection directives are optional, again.
 Also, the scripts must have the file extension .BAT.

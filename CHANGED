@@ -1,3 +1,4 @@
+v0.83 Beta 42:
 add: feature ENVIRONMENT_KEEP_FREE
 bugfix: DOS memory corruption by bad struct MCB declaration
 

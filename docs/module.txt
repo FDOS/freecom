@@ -1,6 +1,8 @@
 Description of Modules Used Within FreeCOM
 	-- 2000/07/15 ska
 
+The information of this document is obsolte!
+
 FreeCOM uses some kind of free-standing pieces of code that perform
 some low-level functions and are shared among all copies of FreeCOM
 currently loaded into memory. These modules are plain memory images
