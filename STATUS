@@ -159,7 +159,7 @@ var: (environment) variable
 5.0. General
 - Working & verified for internal & external commands and batch scripts;
 	pipes and redirections are verified for internal commands and batch
-	scripts; no swapping tested
+	scripts; not working: redirections and pipes in conjunction with swapping
 - Modified into a state-driven automaton; the state is storred into the
 	dynamic context, the "execution context" portion at its end.
 	The ec is organized as stack, to most current item (topmost) is located
@@ -232,7 +232,7 @@ var: (environment) variable
 	- Working
 	- see echo
 8.3. swap
-	- Not verified
+	- Working
 8.4. canexit
 	- Working
 8.5. interactive
@@ -268,7 +268,7 @@ var: (environment) variable
 - Storred in global variables, their initial values are determined by the
 	internal status of FreeCOM or the value of certain global flags
 9.1. swap
-- Not verified
+- Working
 - Defaults to global "swap", modified by CALL
 9.2. echo
 - Working

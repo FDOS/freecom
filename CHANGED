@@ -1,3 +1,7 @@
+Update 11 / Beta 24: verification of kernel swap support
+fix: dyn_ctxt never initialized
+chg: gflag_swap: defaults to TRUE
+
 Update 10 / Beta 23: verficiation of flag processing
 add: lflag_ignoreCBreak
 fix: makePipeContext(): Leave trailing '|' for pipe stdout & stderr of 1st cmd

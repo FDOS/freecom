@@ -43,10 +43,10 @@ pointer shell 0		# absolute path to shell to be executed
 
 structure flags ctxt_flags_t
 ###> START OF FLAGS
-byte f_swap 2			# do swapping by default?
+byte f_swap 1			# do swapping by default?
 byte f_echo	1			# current echo mode
 byte f_interactive 0	# set if the current command had been entered
-#							interactively via command line
+	#						interactively via command line
 byte f_called 0			# invoke via CALL by default
 byte f_trace 0			# batch script trace mode by default
 byte f_ignoreCBreak 0	# cbreak() ignores ^Break && doExit/Cancel/Quit

@@ -148,6 +148,9 @@ int initialize(void)
   FILE *f;
 #endif
 #endif
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	int registerWithKswap = 0;
+#endif
 
 /* Set up the host environment of COMMAND.COM */
 
@@ -354,8 +357,7 @@ int initialize(void)
 			return E_NoMem;
 		}
 #ifdef FEATURE_KERNEL_SWAP_SHELL
-		if(gflag_swap != ERROR)
-			kswapRegister(kswapContext);
+		registerWithKswap = gflag_swap != ERROR;
 #endif
 	}
 
@@ -386,6 +388,10 @@ int initialize(void)
     if(chgEnv("COMSPEC", ComPath))
     	chgEnv("COMSPEC",  NULL);	/* Cannot set -> zap an old one */
   }
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	if(registerWithKswap)
+		kswapRegister(kswapContext);
+#endif
   	inInit = 0;
 
 	ctxtCreate();

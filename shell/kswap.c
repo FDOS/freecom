@@ -169,6 +169,7 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 	} else
 		ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE, "\1 \r");
 	ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_PRGNAME, prg);
+	kswapContext->dyn_ctxt = ctxtMain;
 
 	return (kswapContext->cmdline	/* fetch first in case of failure */
 	   = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE)) != 0

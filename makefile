@@ -3,8 +3,8 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
-# Revision 1.15.4.3  2001/07/25 20:01:18  skaus
-# Update #10
+# Revision 1.15.4.4  2001/07/25 20:13:46  skaus
+# Update #11
 #
 # Revision 1.15.4.2  2001/07/16 20:28:36  skaus
 # Update #9
@@ -147,5 +147,6 @@ command.lsm : command.com
 
 my_clean :
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp
-	$(RM) $(RMFLAGS) strings.dat strings.h context.h_c criter1 criter2 context.inc infores
+	$(RM) $(RMFLAGS) strings.dat strings.h context.h_c criter1 criter2
+	$(RM) $(RMFLAGS) context.inc gflags.h_c infores infores.txt
 

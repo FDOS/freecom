@@ -124,6 +124,8 @@ exit:						; exit kssf
 	mov dx, strNotMe
 	mov ah, 9
 	int 21h
+	mov ah, 7
+	int 21h
 dbg_1:
 %endif
 	mov ax, WORD [origParent]	; restore parentPSP to original value
