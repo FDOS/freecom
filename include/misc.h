@@ -75,6 +75,7 @@ void freeSysBlk(const unsigned segm);
 
 char far *_fstpcpy(char far *dst, const char far *src);
 void partstrlower(char *str);
+void readcommand(char * const str, int maxlen);
 void readcommandDOS(char * const str, int maxlen);
 void readcommandEnhanced(char * const str, const int maxlen);
 void convert(unsigned long num, char * const des);

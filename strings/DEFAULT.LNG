@@ -1460,3 +1460,11 @@ FreeCOM cannot be a device: "%s"
 This file is no valid FreeCOM or of an incompatible version:
 %s
 .
+
+:TEXT_ERROR_LOADING_STRINGS
+Failed to load the strings resource into memory, the location
+pointed to in %COMSPEC% seems to be invalid. Please specify another
+location of FreeCOM to try to load the strings from, e.g.:
+C:\\COMMAND.COM
+or just hit enter to cancel to load the strings.
+.

@@ -1,4 +1,4 @@
-/*	$id$
+/*	$Id$
 	$Locker$	$Name$	$State$
 
 	Input a line via DOS-0A
@@ -6,6 +6,9 @@
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2003/12/09 21:29:24  skaus
+	bugfix: Ask for FreeCOM location when STRINGS are missing [#687]
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"

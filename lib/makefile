@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.13  2003/12/09 21:29:24  skaus
+# bugfix: Ask for FreeCOM location when STRINGS are missing [#687]
+#
 # Revision 1.12  2003/12/09 20:25:34  skaus
 # bugfix: INIT: FreeCOM-path and TTY can be in any order
 #
@@ -89,11 +92,11 @@ SRC = alprmblk.c alsysblk.c beep_l.c beep_n.c brk_get.c brk_set.c cbreak.c \
 	mk_rddir.c mktmpfil.c msg_dflt.c msg_dps.c msg_fstr.c msg_get.c \
 	msg_gpt.c msg_mkey.c msg_prmp.c mux_ae.c nls.c nls_date.c nls_time.c \
 	num_fmt.c onoff.c openf.c optsb.c optsi.c optss.c parsenum.c pr_date.c \
-	pr_prmpt.c pr_time.c prprompt.c realnum.c res.c res_r.c res_vald.c \
-	res_w.c resfile.c rmtmpfil.c rtrimcl.c rtrimsp.c salloc.c samefile.c \
-	scancmd.c scanopt.c session.c showcmds.c skqwd.c split.c sumblink.c \
-	tempfile.c timeget.c timeset.c tmpnam.c trimcl.c trimsp.c truncate.c \
-	txtlend.c unquote.c vcgetch.c vcgetstr.c where.c
+	pr_prmpt.c pr_time.c prprompt.c readcmd.c realnum.c res.c res_r.c \
+	res_vald.c res_w.c resfile.c rmtmpfil.c rtrimcl.c rtrimsp.c salloc.c \
+	samefile.c scancmd.c scanopt.c session.c showcmds.c skqwd.c split.c \
+	sumblink.c tempfile.c timeget.c timeset.c tmpnam.c trimcl.c trimsp.c \
+	truncate.c txtlend.c unquote.c vcgetch.c vcgetstr.c where.c
 OBJ = alprmblk.obj alsysblk.obj beep_l.obj beep_n.obj brk_get.obj \
 	brk_set.obj cbreak.obj cbs.obj cd_dir.obj cgetch.obj cgettime.obj \
 	chgctxt.obj chgdrv.obj chgenv.obj chgenvc.obj chgenvr.obj clrline.obj \
@@ -114,11 +117,12 @@ OBJ = alprmblk.obj alsysblk.obj beep_l.obj beep_n.obj brk_get.obj \
 	msg_mkey.obj msg_prmp.obj mux_ae.obj nls.obj nls_date.obj nls_time.obj \
 	num_fmt.obj onoff.obj openf.obj optsb.obj optsi.obj optss.obj \
 	parsenum.obj pr_date.obj pr_prmpt.obj pr_time.obj prprompt.obj \
-	realnum.obj res.obj res_r.obj res_vald.obj res_w.obj resfile.obj \
-	rmtmpfil.obj rtrimcl.obj rtrimsp.obj salloc.obj samefile.obj scancmd.obj \
-	scanopt.obj session.obj showcmds.obj skqwd.obj split.obj sumblink.obj \
-	tempfile.obj timeget.obj timeset.obj tmpnam.obj trimcl.obj trimsp.obj \
-	truncate.obj txtlend.obj unquote.obj vcgetch.obj vcgetstr.obj where.obj
+	readcmd.obj realnum.obj res.obj res_r.obj res_vald.obj res_w.obj \
+	resfile.obj rmtmpfil.obj rtrimcl.obj rtrimsp.obj salloc.obj samefile.obj \
+	scancmd.obj scanopt.obj session.obj showcmds.obj skqwd.obj split.obj \
+	sumblink.obj tempfile.obj timeget.obj timeset.obj tmpnam.obj trimcl.obj \
+	trimsp.obj truncate.obj txtlend.obj unquote.obj vcgetch.obj vcgetstr.obj \
+	where.obj
 HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\include/batch.h \
 	..\include/cmdline.h ..\include/command.h ..\include/context.h \
 	..\include/crossjmp.h ..\include/cswap.h ..\include/datefunc.h \
@@ -295,10 +299,10 @@ scanopt.obj : scanopt.c \
 openf.obj : openf.c \
 	 ../config.h ../include/debug.h ../include/openf.h
 messages.obj : messages.c \
-	 ../config.h ../include/cswap.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/res.h \
-	../include/resource.h ../include/strings.typ ../include/timefunc.h \
-	../strings.h
+	 ../config.h ../include/command.h ../include/cswap.h \
+	../include/datefunc.h ../include/debug.h ../include/misc.h \
+	../include/res.h ../include/resource.h ../include/strings.typ \
+	../include/timefunc.h ../strings.h
 scancmd.obj : scancmd.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
@@ -401,6 +405,9 @@ compfile.obj : compfile.c \
 	../include/misc.h ../include/timefunc.h
 dbg_c.obj : dbg_c.c \
 	 ../config.h ../include/debug.h
+readcmd.obj : readcmd.c \
+	 ../config.h ../include/command.h ../include/datefunc.h \
+	../include/debug.h ../include/misc.h ../include/timefunc.h
 devopen.obj : devopen.c \
 	 ../include/openf.h
 num_fmt.obj : num_fmt.c \
@@ -535,7 +542,8 @@ msg_dps.obj : msg_dps.c \
 	../include/misc.h ../include/timefunc.h
 res_vald.obj : res_vald.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/misc.h ../include/openf.h \
+	../include/resource.h ../include/strings.typ ../include/timefunc.h
 cbs.obj : cbs.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h

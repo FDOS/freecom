@@ -122,6 +122,7 @@ freecom_deps :  \
 	pr_prmpt.obj \
 	pr_time.obj \
 	prprompt.obj \
+	readcmd.obj \
 	realnum.obj \
 	res.obj \
 	res_r.obj \
@@ -134,10 +135,10 @@ freecom_deps :  \
 	salloc.obj \
 	samefile.obj \
 	scancmd.obj \
-	scanopt.obj \
 	chunk1
 
 chunk1 :  \
+	scanopt.obj \
 	session.obj \
 	showcmds.obj \
 	skqwd.obj \
@@ -358,6 +359,7 @@ freecom.lib : $(CFG) freecom_deps
 +-pr_prmpt.obj &
 +-pr_time.obj &
 +-prprompt.obj &
++-readcmd.obj &
 +-realnum.obj &
 +-res.obj &
 +-res_r.obj &
@@ -589,6 +591,7 @@ freecom.lib : $(CFG) freecom_deps
 +pr_prmpt.obj &
 +pr_time.obj &
 +prprompt.obj &
++readcmd.obj &
 +realnum.obj &
 +res.obj &
 +res_r.obj &

@@ -9,9 +9,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2003/12/09 21:29:24  skaus
+	bugfix: Ask for FreeCOM location when STRINGS are missing [#687]
+
 	Revision 1.3  2002/04/02 23:36:37  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
-
+	
 	Revision 1.2  2002/04/02 18:09:31  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 	
@@ -46,10 +49,12 @@
 #include <assert.h>
 #include <dos.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include <suppl.h>
 
+#include "../include/command.h"
 #include "../include/misc.h"
 #include "../include/resource.h"
 #include "../include/res.h"
@@ -154,16 +159,18 @@ static int loadStrings(res_majorid_t major
  */
 unsigned msgSegment(void)              /* load messages into memory */
 {	static int recurs = 1;
-	loadStatus status = STRINGS_NOT_FOUND;
-#ifndef DEBUG		/* To ensure the error is displayed only once */
-	static int displayed = 0;
-#endif
+	loadStatus status;
+//#ifndef DEBUG		/* To ensure the error is displayed only once */
+	//static int displayed = 0;
+//#endif
 
 	if(msgSegm)
 		return msgSegm;
 
 		/* prevent reentrance */
 	if(--recurs == 0) {		/* OK */
+		for(;;) {
+		status = STRINGS_NOT_FOUND;
 #ifdef FEATURE_XMS_SWAP
 		msgSegm = XMSswapmessagesIn(&status);
 		if(status == STRINGS_NOT_FOUND)
@@ -208,6 +215,7 @@ unsigned msgSegment(void)              /* load messages into memory */
 			assert(msgSegm == 0);
 			puts("[Out of memory loading STRINGS.]");
 			break;
+#if 0
 		default:	
 			assert(msgSegm == 0);
 			if(!displayed) {
@@ -216,6 +224,36 @@ unsigned msgSegment(void)              /* load messages into memory */
 			}
 			break;
 #endif
+#endif
+		}
+
+			if(msgSegm)
+				break;
+#undef TEXT_ERROR_OUT_OF_MEMORY
+#undef TEXT_ERROR_LOADING_STRINGS
+			puts(TEXT_ERROR_LOADING_STRINGS);
+			{	char *buf = malloc(128 + 1);
+
+				if(!buf)
+					fputs(TEXT_ERROR_OUT_OF_MEMORY, stderr);
+				else {
+					int orgEcho = echo;
+
+					echo = 0;
+					readcommand(buf, 128);
+					echo = orgEcho;
+					if(!*buf) {
+						free(buf);
+						break;
+					}
+					if(0 == grabComFilename(0, (char far*)buf)) {
+							/* Try to set the valid %COMSPEC% */
+						if(chgEnv("COMSPEC", ComPath))
+							chgEnv("COMSPEC", 0);	/* Zap the old one */
+					}
+					free(buf);
+				}
+			}
 		}
 
 		++recurs;
