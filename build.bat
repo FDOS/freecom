@@ -110,7 +110,7 @@ echo.
 if NOT "%SWAP%"=="" goto ende
 
 echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
-echo BUILD.BAT -r xms-swap
+echo BUILD.BAT -r xms-swap %LNG%
 goto ende
 
 :err1
