@@ -97,12 +97,14 @@ Cookie: "FREECOM "
 Major resource IDs (hexadecimal):
 00: Strings
 01: Critial Error handler
+02: ^Break handler
+03: Respawner
 
 Minor resource IDs (hexadecimal):
 00:**: none particular, used for version control
-01:00: code of the Critical Error handler
-01:01: strings used by the handler
-01:02: already merged code and strings of the handler as one resource
-01:10: code of the "autofail" variant of the handler
-01:11: strings used by the "autofail" handler
-01:12: already merged code and strings of the "autofail" handler
+01:00: code of the "autofail" variant of the handler
+01:01: code of the Critical Error handler
+01:02: strings used by the handler
+01:03: already merged code and strings of the handler as one resource
+02:**: none
+03:00: Respawner error handler

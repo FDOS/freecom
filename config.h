@@ -43,7 +43,9 @@
 //#define FEATURE_NLS
 
 /* Define to enable swapping to XMS/EMS/disk */
+#if 0		/* obsoleted */
 //#define FEATURE_SWAP_EXEC
+#endif
 
 /* Command line logging feature */
 //#define FEATURE_CALL_LOGGING

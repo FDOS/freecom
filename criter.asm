@@ -1,14 +1,17 @@
 ; $Id$
 ;
-;		Critical Error handler
+;		Critical Error handler -- module
 ;
-; Two macros to customize the assembler process:
+; Three macros to customize the assembler process:
 ;		COMPILE_TO_COM in order to generate a .COM file (Debugging ONLY)
+;			automatically defines COMPILE_STRINGS
 ;		COMPILE_STRINGS to include English response strings right into
 ;			this image
 ;		NO_RESOURCE_BLOCK omit resource block at the end of the file
 ;
 ;	This handler does:
+;	0) The current context is passed into this function within ES:BX
+;		The original ES & BX are restored by CRITER.
 ;	1) Probe for Autofail <-> return FAIL for all criterrs
 ;	2) Display error message:
 ;	block devices:
@@ -17,7 +20,10 @@
 ;		Error "reading from"|"writing to" device XXXXXXX: error
 ;	3) Display user action possebilities:
 ;		(A)bort (I)gnore (R)etry (F)ail? _
-;	4) Get user input & return to caller
+;	4) Get user input & return to DOS (via IRET)
+;
+;	Fields of context used:
+;		offset 0, byte (boolean), autofail
 ;
 ;	== What to do if neither I,R,nor F are allowed??
 ;	== Simply return??
@@ -45,17 +51,24 @@
 ;	+ for robustness when displaying the driver's name, characters less
 ;	  than ' ' are ignored (usually control characters)
 ;
-;	Known Bugs:
-;	+ If this module is loaded into memory, but no context is specified,
-;	  0000:0000 is used as the pointer to the context. For "autofail" that
-;	  means most probably that it is considered to be "true".
+; $Log$
+; Revision 1.1.2.1.2.1  2000/12/17 21:57:36  skaus
+; intermediate update 1
 ;
+
+;; Version of this module
+MODULE_VERSION EQU 2
+
+%include "resource.inc"
+%include "context.inc"
 
 ???start:
 
 %ifdef COMPILE_TO_COM
 ORG 100h
-jmp short _lowlevel_err_handler
+%ifndef COMPILE_STRINGS
+%define COMPILE_STRINGS
+%endif
 %endif
 
 ;; Note: Both I/O functions should use the channel to read/write
@@ -122,21 +135,16 @@ StrErrCodes		EQU 15
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;; Entry point
 
-??context	dd 0		;; here a far pointer is placed
-						;; pointing to the context of the most current
-						;; FreeCOM that uses this handler
-;; Structure:
-;;	OFFSET	TYPE	Meaning
-;;	0		byte	autofail (C-style boolean)
+; arguments:
+;		ES:BX == pointer to context, package int24
+;		else: as normal INt-24 handler
 
 _lowlevel_err_handler:
 	push ds
-	push es
 	push bp
 	push si
 	push di
 	push cx
-	push bx
 	push ax
 
 	mov cx, cs
@@ -148,8 +156,7 @@ _lowlevel_err_handler:
 	xor al, al
 	mov BYTE [??strargA + 1], al	; end of string
 
-	les bx, [??context]
-	or al, [ES:bx]
+	or al, [ES:bx+?int24_autoFail]
 	je ?noAutoFail
 		mov bl, FAIL
 		jmp ?iret
@@ -270,13 +277,15 @@ _lowlevel_err_handler:
 ?iret:
 	pop ax			; preserve AH
 	mov al, bl		; action code
-	pop bx
 	pop cx
 	pop di
 	pop si
 	pop bp
-	pop es
 	pop ds
+					;; Restore the context pointer
+					;; saved by the caller
+	pop bx
+	pop es
 	iret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -402,10 +411,6 @@ _lowlevel_err_handler:
 ??strings		DB 36	;; number of strings
 	;; Here start all the strings!
 
-;; Some strings
-;??string1	DB 'Error %1 drive %A: %2 area: %3', 13, 10, 0
-;??string2	DB 'Error %1 device %A: %3', 13, 10, 0
-
 DW S0
 DW S1
 DW S2
@@ -488,19 +493,11 @@ S36	DB 'Unknown error code', 0
 
 %ifndef NO_RESOURCE_BLOCK
 ;; Include resource block
-	dd	???ende - ???start		;; Length of this resource
-	dw 1						;; major resource ID
 %ifndef COMPILE_STRINGS
-	dw 0						;; minor resource ID criter without strings
+	resIdBlock RES_ID_CRITER, 1
 %else
-	dw 2						;; criter with strings
+	resIdBlock RES_ID_CRITER, 3
 %endif
-	db 'FREECOM '				;; cookie
-%endif
-
-???endRes:
-%if ???endRes - ???ende != 16
-%error "resource block wrong"
 %endif
 
 END

@@ -29,10 +29,11 @@
 
 	/* information about the currently opened resource */
 static resource_t res = {
-	(long)-1, RES_ID_NONE, 0, RES_COOKIE
+	(long)-1, RES_ID_NONE, 0, 0, RES_COOKIE
 };
 
-void startResource(FILE *f, res_majorid_t major, res_minorid_t minor)
+void startResource(FILE *f, res_majorid_t major, res_minorid_t minor
+	, res_version_t version)
 {
 
 	assert(f != NULL);
@@ -44,6 +45,7 @@ void startResource(FILE *f, res_majorid_t major, res_minorid_t minor)
 
 	res.res_majorID = major;
 	res.res_minorID = minor;
+	res.res_version = version;
 
 }
 

@@ -1,6 +1,9 @@
 /*
  * ERROR.C -- Error reporting functions
  *
+ *	ATTENTION: The function headers must not span across multiple lines!
+ *	Otherwise the automatically generation of the header file breaks.
+ *
  * 07/12/98 (Rob Lake)
  *      started
  *
@@ -249,7 +252,10 @@ void error_no_cwd(int drive)
 {	displayString(TEXT_ERROR_CWD_FAILED, drvNum(drive) + 'A');
 }
 
-//void newperror(unsigned error_id)
-//{
-//
-//}
+void error_missing_modules(void)
+{	displayString(TEXT_ERROR_MISSING_MODULES);
+}
+
+void error_fatal_load_module(const char name[])
+{	displayString(TEXT_ERROR_LOAD_MODULE, name);
+}

@@ -199,9 +199,6 @@
 #include "openf.h"
 #include "session.h"
 
-#ifdef FEATURE_SWAP_EXEC
-#include "swapexec.h"
-#endif
 extern struct CMD cmds[];       /* The internal command table */
 
 int exitflag = 0;               /* indicates EXIT was typed */

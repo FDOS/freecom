@@ -1,0 +1,361 @@
+Sharing code for modules
+
+Introduction
+Layout of shared modules
+Purging shared modules
+Multitasking issues
+Alternate layout
+Problematic shared modules
+Shared Module: Respawner
+
+=== Introduction
+
+Modules are pieces of code manually loaded into memory and executed
+by FreeCOM in order to process some actions. This way this code is
+not always present in memory consuming valuable memory.
+
+Some modules, such as the Critical Error handler (aka CRITER), must
+be present through the whole lifetime of an instance of FreeCOM,
+regardless if the main portion of FreeCOM has been swapped out of
+memory or not. Usually, this sort of modules would be installed
+residently.
+
+However, the more instances of FreeCOM are loaded the more of those
+modules will be residently installed, thus, the same code is loaded
+twice or more times, again consuming memory unnecessarily. However,
+those particular copies are not 100% the same, because they act upon
+different data; for instance:
+	Each instance of FreeCOM can be loaded with the /F switch to enable
+	the AutoFail feature, in which case CRITER won't display the menu,
+	but automatically selecting "Fail" without any user prompt.
+	Though, the information wether or not autofail is active may differ
+	from instance to instance.
+
+So shared modules do share their code only, but never the data.
+
+In order to let a module process the correct data, various methods
+can be thought of:
+1) a module is prefixed by a pointer referencing the data the module
+is to process.
+	Con: Although the normal processing in DOS is linear, which means
+	that always the topmost (latest invoked) instance of FreeCOM is
+	currently active, thus, is using the module; there are certain
+	cases, in which this assumption might fail, especially if some
+	clever program bypasses the "normal" DOS ways too much. Another
+	(legal) non-linear way to invoke FreeCOM is INT-2E, a sort of
+	backdoor into the primary (the firstever invoked) instance of FreeCOM.
+	Con 2: If an instance of FreeCOM crashes and the address remains in
+	there, the module will process and maybe destroy data of random
+	information , maybe already allocated by another process.
+2) the address to the data is calculated from the current active PSP.
+	Con: When FreeCOM invokes another program, the active PSP points
+	to that one; the module would need the walk the MCB chain in order
+	to find the parent of the program's process. Though, DOS does
+	not usually pay much attention to the process tree, so some program
+	might not as well and possibly the process tree becomes corrupted,
+	intentionally or not.
+3) the module is divided into two parts:
+	part 1: the stub, and
+	part 2: the function.
+
+	The code of part 1 will be chained into the interrupt or whatever
+	it processes and contains as less code as necessary to accept the
+	request, save two registers, load two registers with the address
+	of the current data, and jump to the code of part 2.
+	This stub is duplicated with each instance of FreeCOM, but because
+	it shall contain only the smallest possible code, the waste is
+	rather acceptable.
+
+Example of a CRITER request:
+Each instance of FreeCOM creates its own stub of the CRITER handler and
+the data required by CRITER. Each instance chains this stub into the
+INT-24 chain; the stub might look like this:
+	int24_catcher:
+		push es
+		push bx
+		mov es, SEG criter_data
+		mov bx, OFFSET criter_data
+		jmp FAR int24_shared_code
+
+On entry of the shared INT24 code the registers ES:BX point to the data
+structure processed by the handler; but because each instance has its own
+stub, it can easily create a _valid_ address to the data.
+
+=== Layout of shared modules
+
+The function part of shared modules is installed by some (most prossibly
+the primary) instance FreeCOM. In order to let other instances know where
+they are located, some mechanism to find all function parts must be
+implemented.
+
+Method 1: Hail the modules
+One could chain all modules into the same interrupt, e.g. MUX-something,
+and assign a number to them and on request they return their address.
+Well, this requires some overhead, not considerred currently.
+
+Method 2: Chain the modules
+All modules can be chained and are identified by some magic cookie.
+Though, where will this chain start?
+
+Method 3: Identify modules
+As some sort of sub-method of method 2, one can use the well-known
+MCB chain. Doing so, one can:
+a) load and install each module into its own block of DOS memory, thus,
+each module will have its own MCB.
+b) use the last 8 bytes of the MCB (name of process, since DOS4) as
+magic cookie. 
+
+=== Layout of shared modules
+
+The fundamental design of modules shall be as situation-depend as
+necessary, that means that there shall not be any layout _all_ modules
+must apply to with the exception of the process of identification and
+any data required.
+
+As described above the MCB of the memory block the shared module resides
+in will be used to identify the module itself. Due to the tradition of
+DOS the lastmost eight bytes do spring in mind very easily.
+
+Those bytes are currently used by PC DOS to store the name of the
+executable of MCBs created for a particular program by DOS-4B-00;
+system memory blocks are described by the two letters SD (usually
+explained as System Data), SC (System Code) and SM (System Memory).
+Usually other MCBs do not have no specific name there, but some random
+values.
+
+Because the modules are manually loaded by FreeCOM bypassing DOS-4B-00,
+these name field should be empty and free to use.
+
+Because the name field is derived from the name of the executable,
+the module identificator string should include some character _not_
+used as permittable character in filenames, also, it should be
+rather impossible to identify invalid modules; there the module ID
+has been formatted as follows:
+FREECOM\5
+Were "\5" is the byte with the value 0x5.
+
+The "\5" makes this ID invalid as filename, so no conflicts may arise
+with DOS-4B-00 created MCBs.
+The "FREECOM" and the fact that the MCB has been found as a _valid_ item
+of the system MCB chain, shall be enough to validate the MCB. In addition,
+if such shared module is purged from memory, this ID will overwritten,
+currently the "\5" is replaced by "\4".
+
+Each module has a prefixed MIB (Module Identification Block), which is
+16 bytes in size, too. This block stores information necessary to
+validate and identify a specific module:
+Offset	Type	Meaning
+0		WORD	major ID
+2		WORD	minor ID
+4		WORD	version
+6		WORD	link count
+8		4bytes	reserved for future use
+12		DWORD	previous INT value; otherwise reserved
+16		<--- start of module internal data/code
+
+See "Purging of shared modules" for more information about further
+requirements on the layout.
+
+The additional MIB is 16bytes in size, too, to make the generation of
+of modules more easier, because this way they can be created any way
+as they are always executed from a paragraphe boundary.
+
+= Code not to be included into shared modules
+
+They should contain the productive code only. No space should be wasted for:
++ hailing this module (except if it chained into MUX),
++ self-uninstallation.
+(This list is not complete.)
+
+Instead of hailing the identification through MCB is implemented. FreeCOM
+contains black-box functions to hides this fact.
+
+Uninstallation (and installation and initialization) shall be completely
+moved into the external program, FreeCOM in this case. The version portion
+of the module ID string shall be sufficient to verify, if the external
+program is able to handle this module (see below "Different versions of
+shared modules").
+
+= Different versions of shared modules
+
+If two FreeCOMs of different built level are used at the same system, it
+is possible that the same shared module is loaded more than once. Assume
+that FreeCOM F1 contains module #10 in version V4 and FreeCOM F2 includes
+the module #10 in version V6.
+
+If F2 is loaded _before_ F1, F1 will never use the module, because it does
+not know nothing about the internals of the module V6. However, if F2
+is loaded _after_ F1, it does locate module V4 and could decide to re-use
+the older one. However, it almost makes no sense to do so, as it would mean
+that FreeCOM doesn't use the improvements the new version should include.
+
+In such case multiple modules of the same major ID will be installed into
+memory.
+
+=== Purging of shared modules
+
+Because shared modules are no longer associated with one particular "host"
+program, it becomes problematic when they can be purged from memory.
+
+One way is to use a link count: Each time a program hooks into the module,
+an integer is incremented; each time a program unhooks from the module, the
+same intefer is decremented and if it reaches 0 (zero), it is removed from
+memory. (i-node style implementation)
+One possible problem is when a program crashes and cannot decrement the
+value, thus, the module is never purged.
+
+Another way is to link all users of a moule into one chain of some sort.
+Same problem as above, may even lead to hazardeous destruction if the chain
+invalidly points into already re-used memory.
+
+A third implementation focuses on the same implementation
+as the modules are identified themselves. Here, each program that hooks any
+of the shared modules must identify itself through the MCB and contain
+an internal list of which modules it hooks to.
+This would support if a program crashes and, thereby, was unable to unhook
+itself from a shared module, however, it adds a remarkable amount of
+complexity to all the process.
+
+Chains in any form won't help much, because a crashing program would also
+leave behind a corrupted chain.
+
+= Current implementation
+
+However, because the latter implementation is far from easy and 
+looking at the multitasking issues could lead to quite a lot work,
+the current implementation focusses on the link-count style method.
+
+=== Multitasking issues
+
+In DOS multitasking is often no issue, however, TSRs, device drivers
+and INT-2E could be interpreted as multitasking; at least they break
+the linear processing bestowed on DOS often. Also, TSRs could intervent
+a going update operation. Especially the third method of purging the
+modules is a relatively longtime operation.
+
+Therefore, each program actively working on a module has to "lock" the
+module.
+
+A locked module effectively hides this module from any access of other
+programs, which can then decide if to:
++ pause their operation,
++ cancel their operation, or
++ install a new copy od the module.
+
+However, due to the nature of shared modules to contain code only, the
+only reason to lock a module is that it is going to be installed or
+purged at that time.
+
+A module is locked, when the "\5" is actually a "\6" or above.
+
+The recommended code to lock a module is:
+
+byte far * p;
+
+p = address_of_\5;
+if(++*p != '\6') {
+	--*p;
+	/* The module has been locked already by another process */
+	/* do something to handle this condition here, NOT above */
+} else {
+	/* Do the stuff with the module */
+	--*p;
+}
+
+
+=== Alternate layout
+
+The 16byte MIB may look like a waste of resources (memory). What are the
+alternatives?
+
+A1: Join MCB and MIB
+
+The MCB has 11 bytes which are more or less free to use:
+8 bytes for the name and 3 bytes RBIL describes with:
+ 05h  3 BYTEs   unused by MS-DOS
+                (386MAX) if locked-out block, region start/prev region end
+
+When the major ID, minor ID, link count become BYTE, instead of WORD,
+they could be merged into the name field, e.g.:
+FCOM\5ail
+a: major ID (binary), i: minor ID (binary), l: link count (binary).
+And the version ID is placed into the three-byte space also used by
+386MAX.
+sub-variant: The version is integrated into the name field, too, e.g.:
+FC\5ailvv
+Though, now a validation is little more than a wild guess because of the
+small magic cookie (the first two/three bytes).
+
+A2: Place multiple modules into the same MCB
+
+The currently unused 4 bytes of a MIB could be used to include:
+size of module (in paragraphes) and type of module.
+MIBs would form a chain similiar to the MCBs themselves, however:
+The processes to install or purge a module becomes more complicated,
+and it seems to be almost impossible to develop an individual module
+in a black-box manner.
+
+
+=== Problematic shared modules
+
+Both the Critical Error handler and the ^Break handler are problematic in
+the sense that during the time their modules are loaded from the file
+a critical error or ^Break condition can arise. However, it is assumed
+that the time between the start of FreeCOM and the installation of the
+modules is rather short, that it is acceptable to install dummy handlers:
+(1) CRITER will automatically fail, and
+(2) ^Break will be ignored.
+
+Maybe (2) is a wrong assumption in conjunction with "/C".
+
+=== Shard Module: Respawner
+
+The Respawner is loop that spawns an external program and, on its exit,
+respawns FreeCOM, hence the name. This technique shall free as much memory
+as possible to be available to the external program.
+
+The algorithm of the Respawner is rather simple:
+
+10 DOS-4B-00 of an external program using the already prepared FCB1&2, the
+	EXEC block and the program's name
+20 Wait until the child process dies
+30 Aquire the child's exit code and save it into the context of FreeCOM
+40 DOS-4B-00 of FreeCOM using the already prepared EXEC block and program's
+	name
+
+So it has very limited features and all the remaining actions will be
+performed by FreeCOM itself _before_ the Respawner gets activated:
+
+During the initialization:
+0 If FreeCOM gets passed a specific condition, goto 1000
+1 Resolve FreeCOM's own filename
+2 Duplicate the five standard file descriptors (0 through 4)
+3 Install the local context as a normal child process of FreeCOM containing
+	its own PSP
+4 Patch the context in that way that it becomes the child of the current
+	process's parent and the parent of the current process
+5 Copy FreeCOM's filename into the context and the command line to passed
+	if it is respawned
+
+On execution of an external program:
+100	Interprete command line and resolve pipes, redirections etc.
+110	Split the command and its parameters
+120	Prepare the command's name, its command line, parse the first two
+	arguments into two FCBs, prepare the EXEC block
+	All these information is storred into the local context
+130	Aquire the names of the redirections, resolve pipes into two redirections
+	Open those files as file descriptors (handles)
+140	Save all internal variables and status into the context
+150 == at this point all pre-requisites seem to be full-filled and the
+		command can be called
+	Prepare the five standard file descriptors (0 through 4) matching the
+	redirections within the context's PSP, otherwise use the saved
+	descriptors (see step 2)
+160 terminate FreeCOM
+
+On respawning FreeCOM:
+1000 Retreive the address of the context (which is the parent process
+	of the current process)
+1010 Restore the save internal status
+1020 Re-enter the input procession loop as though as if FreeCOM had never
+	been terminated at all

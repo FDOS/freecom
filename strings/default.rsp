@@ -1,0 +1,59 @@
+# Respawner national customization file
+# 
+# The Respawner tries to execute an external program and, after its
+# termination, respawns FreeCOM.
+#
+# >> The order of the strings is hard-coded in the assembly source,
+# >> so DO NOT TOUCH!!
+
+# Displayed to inform the user that a previous try to respawn FreeCOM
+# failed and that the user shall enter the correct location of it
+:NOT_FOUND
+
+Cannot find FreeCOM and/or %COMSPEC% does point nowhere
+Enter the location of FreeCOM, such as: C:\COMMAND.COM
+Sometimes pressing F3 will bring up an elder location
+To terminate this FreeCOM session just hit ENTER
+.
+
+# Displayed if FreeCOM is to exit, but is not allowed to do so,
+# e.g. because the /P switch was given on invocation
+:TERMINATE
+
+Not allowed to terminate FreeCOM, respawning...
+.
+
+# Displayed when FreeCOM aborted abnormally
+:ABORTED
+
+FreeCOM aborted abnormally, respawning...
+.
+
+# Prefixes error messages when FreeCOM could not been respawned
+:RESPAWN_FAILED
+
+Execution of FreeCOM failed: 
+,
+
+
+# Error messages when FreeCOM could not been respawned
+# DOS error code not supported natively
+:errUnknown
+Unknown error
+.
+# They correspond to the DOS error code of the same number
+:err0B
+Invalid format
+.
+:err0A
+Invalid environment
+.
+:err08
+Insufficient memory
+.
+:err05
+Access denied
+.
+:err02
+File not found
+.

@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.2.2.1  2000/12/17 21:57:37  skaus
+# intermediate update 1
+#
 # Revision 1.2  2000/07/09 21:57:25  skaus
 # + Support for international strings without recompiling
 # + Useage of TC++1
@@ -25,7 +28,7 @@ MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 # Sources of this make target
 
 #	Default target
-all: ptchldrv.exe
+all: mkctxt.exe mkresid.exe
 
 
 .INIT : $(CFG) __errl
@@ -36,6 +39,10 @@ __errl:
 
 
 ptchldrv.obj : ptchldrv.c
+
+mkctxt.obj : mkctxt.c
+
+mkresid.obj : mkresid.c
 
 
 clobber : clean

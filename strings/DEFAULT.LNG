@@ -318,6 +318,15 @@ this problem.
 Drive %c: not responding or out of internal memory.
 .
 
+:TEXT_ERROR_MISSING_MODULES
+Fatal error: Cannot attach to shared modules. Maybe read error from
+executable or missing executable.
+.
+
+:TEXT_ERROR_LOAD_MODULE
+Fatal error: Cannot load module '%s'.
+.
+
 #
 # Informational messages
 #

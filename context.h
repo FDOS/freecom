@@ -11,31 +11,30 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-typedef unsigned char BYTE;			/* exactly 8bit unsigned */
-typedef unsigned short WORD;		/* exactly 16bit unsigned */
+#include "portable.h"
 
-	/* one-byte alignment */
-#pragma -a-
+#if 0
+typedef unsigned char byte;			/* exactly 8bit unsigned */
+typedef unsigned short word;		/* exactly 16bit unsigned */
+#endif
 
-typedef struct {		/* type of a control area */
-	WORD ctxt_autofail;
-} context_t;
-	/* standard alignment */
-#pragma -a.
+#include "context.h_c"
 
 /****
  **** Easy to use macros
  ****/
-#define autofail context.ctxt_autofail
+#define autofail context.int24.autoFail
 
 extern context_t context;
 
-#if sizeof(BYTE) != 1
+#ifndef LINT
+#if sizeof(byte) != 1
 	/* Well, per ANSI this never can happen */
 #error "BYTE must be typedef'ed to a 8bit type"
 #endif
-#if sizeof(WORD) != 2
+#if sizeof(word) != 2
 #error "WORD must be typedef'ed to a 16bit type"
+#endif
 #endif
 
 #endif

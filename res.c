@@ -50,7 +50,8 @@ int enumResources(const char * const altFNam
 				--> we try the alternate file */
 	if(((rc = enumFileResources(comFile(), id, fct, arg)) == -1 || rc == 0)
 	 && altFNam && (rc = enumFileResources(altFNam, id, fct, arg)) == -1)
-	 	dprintf( ("[No resource file %s found!]\n", altFNam? altFNam: "??") );
+	 	dprintf( ("[No resource file %s found!]\n"
+	 	 , altFNam? altFNam: "<no name specifed>") );
 
 	return rc;
 }

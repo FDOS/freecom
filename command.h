@@ -181,6 +181,8 @@ void interrupt far dos_critical_error(unsigned, unsigned, unsigned, unsigned,
 /* Moved to MISC.H */
 
 /* Prototypes for ERROR.C */
+#include "error.h"
+#if 0 
 void error_no_pipe(void);
 void error_bad_command(void);
 void error_invalid_drive(void);
@@ -227,6 +229,8 @@ void error_restore_session(void);
 void error_no_rw_device(const char * const);
 void error_ctty_dup(const char * const);
 void error_no_cwd(int drive);
+void error_missing_modules(void);
+#endif
 void dispCopy(const char src[], const char dst[], int append);
 void msg_pause(void);
 

@@ -109,7 +109,6 @@
 #include "fmemory.h"
 #include <suppl.h>
 
-//#include "err_hand.h"
 #include "batch.h"
 #include "timefunc.h"
 #include "cmdline.h"
@@ -129,28 +128,20 @@ static char logFilename[] = LOG_FILE;
 
 extern int canexit;
 
-static unsigned oldPSP;
+//static unsigned oldPSP;
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
 int fddebug = 0;    /* debug flag */
-
-static context_t far* far* criterCtxt = 0;
-static context_t far* oldCriterCtxt = 0;
 
 /* Without resetting the owner PSP, the program is not removed
    from memory */
 void exitfct(void)
 {
   unloadMsgs();        /* free the message strings segment */
-  if(oldCriterCtxt) {
-  	*criterCtxt = oldCriterCtxt;
-  } else {
-  	freeBlk(FP_SEG(criterCtxt));
-  	*(BYTE far*)MK_FP(SEG2MCB(FP_SEG(criterCtxt)), 8 + 4) = '-';
-  	dprintf(("[Critical Error handler deallocated (0x%04x).]\n"
-  	 , FP_SEG(criterCtxt)));
-  }
+  modDetach();		/* Detach this process from all shared modules */
+  	/* see below 
   OwnerPSP = oldPSP;
+  	*/
 }
 
 /*
@@ -270,7 +261,7 @@ optScanFct(opt_init)
   case '?': showhelp = 1; return E_None;
   case '!': return optScanBool(fddebug);
   case 'Y': return optScanBool(tracemode);
-  case 'F': return optScanBool((unsigned)autofail);
+  case 'F': return optScanBool(autofail);
   case 'P':
     if(arg)     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
@@ -316,7 +307,8 @@ void grabComFilename(int warn, char far *fnam)
   char *buf;
   size_t len;
 
-  assert(fnam);
+  if(!fnam)
+  	return;
 
   /* Copy the filename into the local heap */
   len = _fstrlen(fnam);
@@ -409,18 +401,20 @@ int initialize(void)
 #endif
 
 /* Set up the host environment of COMMAND.COM */
+	atexit(exitfct);
 
-  /* Install the ^Break handler (see chkCBreak() for more details) */
-  extern void initCBreakCatcher(void);
-  initCBreakCatcher();
+	if(modAttach()) {		/* Attach to any already loaded module */
+		/* successfully attached --> no further processing of
+			command line required as this instance was respawned by
+			Stub module --> restore session */
+		sessionLoad();
+		return E_None;
+	}
 
-  /* DOS shells patch the PPID to the own PID, how stupid this is, however,
-    because then DOS won't terminate them, e.g. when a Critical Error
-    occurs that is not detected by COMMAND.COM */
-
-  oldPSP = OwnerPSP;
-  atexit(exitfct);
-  OwnerPSP = _psp;
+	/* Prepare creating a new instance of FreeCOM */
+	/* Install the dummy handlers of CRITER and ^Break Catcher */
+	/* Though if the modules are already loaded, they are used right now */
+	modPreload();		/* activate dummies unless already attached */
 
   /* Some elder DOSs may not pass an initialzied environment segment */
   if (env_glbSeg && !isMCB(SEG2MCB(env_glbSeg)))
@@ -440,6 +434,9 @@ int initialize(void)
     The name of the current file is string #0. */
   if((offs = env_string(0, 0)) != 0)    /* OK, environment filled */
     grabComFilename(0, (char far *)MK_FP(env_glbSeg, offs));
+
+		/* Maybe an anchessor has an absolute path */
+	sessionInherit();
 
   /* Aquire the command line, there are three possible sources:
     1) DOS command line @PSP:0x80 as pascal string,
@@ -566,8 +563,7 @@ int initialize(void)
     /* If a new valid size is specified, use that */
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE;
   if(newEnvSize > 16 && newEnvSize < 32767)
-    env_setsize(0, newEnvSize); // SUPPL27+
-    //env_newsize(0, newEnvSize);   // SUPPL26-
+    env_setsize(0, newEnvSize);
 
   /* Otherwise the path is placed into the environment */
   if (chgEnv("COMSPEC", ComPath)) {
@@ -579,16 +575,15 @@ int initialize(void)
     error_env_var("COMSPEC");
   }
 
-  /* Install INT 24 Critical error handler */
-  /* Needs the ComPath variable */
-  //init_error_handler();
-  if((criterCtxt = modCriter()) == 0) {
-	puts("Cannot load Critical Error handler.");
-	return E_NoMem;
-	}
-	oldCriterCtxt = *criterCtxt;
-	*criterCtxt = (context_t far*)&context;
-	setvect(0x24, (void interrupt(*)())(criterCtxt + 1));
+  /* Install the resident portion(s)
+  	Now that the name of the executeable is known, they can be found
+  	definitely */
+ 	modLoad(); 		/* Load any module unless already attached to */
+ 	if(!modAttach()) {	/* Attach to the loaded modules */
+ 		error_missing_modules();
+ 		return E_Exit;
+ 	}
+
 
   if(internalBufLen)
     error_l_notimplemented();

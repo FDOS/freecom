@@ -46,6 +46,7 @@ chg: To use STRINGS.H to keep up the order becomes problematic, as this
 	the default string text.
 */
 
+#define MODULE_VERSION 0
 
 #include <ctype.h>
 #include <stdio.h>
@@ -272,7 +273,8 @@ int main(int argc, char **argv)
 	fprintf(inc,"#define  SIZE_OF_STRINGS    0x%04X\n", (unsigned)size);
 #endif
 
-	startResource(dat, RES_ID_STRINGS, STRING_RESOURCE_MINOR_ID);
+	startResource(dat, RES_ID_STRINGS, STRING_RESOURCE_MINOR_ID
+		, MODULE_VERSION);
 		/* Preamble of STRINGS.DAT file */
 	fprintf(dat, "%s%u", id, STRING_RESOURCE_MINOR_ID);
 /*	fwrite(id, sizeof(id) - 1, 1, dat);		*//* file contents ID */

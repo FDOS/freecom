@@ -1,0 +1,10 @@
+Context -- 2000/09/11 ska
+
+Layout of context
+
+Offset	Type	Meaning
+0		BYTE	AutoFail: 0 - off; else on (see Criter)
+1		BYTE	control Break detected within FreeCOM
+2		WORD	FreeCOM's PSP (resident portion)
+4		WORD	FreeCOM's PSP (transient portion)
+6

@@ -1,45 +1,47 @@
-COMMENT ~
-   $Id$
-   $Locker$	$Name$	$State$
-
-	^Break signal catcher and initialization function.
-
-	It performs two tasks:
-		1) If the current process is the same as the one the init
-		function has called, only ctrlBreak is set to 1 (one)
-		and the ^Break is ignored furtherly.
-		2) Otherwise, the process is terminated.
-
-	See the comments of the definitions of DEBUG and LOCAL_PID.
-
-	Note: TASM maintains "@Model" as a numerical representation of the
-		memory model, "1" == "Tiny". I don't know, if it is portable,
-		but the "SEG _psp" generates a reference EXE2COM cannot
-		resolve.
-
-   $Log$
-   Revision 1.1  2000/05/20 03:29:33  jimtabor
-   Initial revision
-
-   Revision 1.3  2000/03/30 14:07:03  jprice
-   Merge in changes from Steffen's 0.78ska2 code
-
-   Revision 1.1  1999/11/04 06:45:07  ska
-   Initial revision
-
-   Revision 1.2  1999/09/20 23:56:35  jprice
-   Steffen Kaiser patches
-
-   Revision 1.2  1999/07/12 03:17:29  ska
-   chg: added v0.77 patches <<what is the print_free() stuff in DIR.C?>>
-   chg: centralized DEBUG stuff (see debug.*)
-   add: SET: Issues no-such-variable if a variable could not be removed
-   bugfix: COPY *.C A:
-
-~
-	;; Source in the current model
-	INCLUDE MODEL.DEF
-	DATASEG
+;   $Id$
+;
+;	Dummy ^Break signal catcher
+;
+;	It performs two tasks:
+;		1) If the current process is the same as the one the init
+;		function has called, only ctrlBreak is set to 1 (one)
+;		and the ^Break is ignored furtherly.
+;		2) Otherwise, the process is terminated.
+;
+;	On return the caller must return to DOS the following way:
+;	if(Carry)	retf
+;	if(!Carry)	retf 2
+;
+;	The current context is passed in in ES:BX, the caller must
+;	save/restore ES & BX.
+;	Used fields:
+;		offset 0, byte, ctrlBreak detected
+;		offset 1, word, FreeCOM's PSP address of resident portion
+;		offset 3, word, FreeCOM's PSP address of transient portion
+;
+;	See the comments of the definitions of DEBUG.
+;
+;   $Log$
+;   Revision 1.1.1.1.2.1  2000/12/17 21:57:36  skaus
+;   intermediate update 1
+;
+;   Revision 1.1.1.1  2000/05/20 03:29:33  jimtabor
+;   The GNU GPL FreeCom Command Shell
+;
+;   Revision 1.3  2000/03/30 14:07:03  jprice
+;   Merge in changes from Steffen's 0.78ska2 code
+;
+;   Revision 1.1  1999/11/04 06:45:07  ska
+;   Initial revision
+;
+;   Revision 1.2  1999/09/20 23:56:35  jprice
+;   Steffen Kaiser patches
+;
+;   Revision 1.2  1999/07/12 03:17:29  ska
+;   chg: added v0.77 patches <<what is the print_free() stuff in DIR.C?>>
+;   chg: centralized DEBUG stuff (see debug.*)
+;   add: SET: Issues no-such-variable if a variable could not be removed
+;   bugfix: COPY *.C A:
 
 ;; Uncomment to enable debugging
 ;; If debugging is enabled, the catcher displays a line "COMMAND: ..."
@@ -47,109 +49,70 @@ COMMENT ~
 ;; redirected, too.
 ; DEBUG EQU 1
 
-	EXTRN ctrlBreak:WORD		;; where to record ^Break to
-	EXTRN _psp:WORD				;; COMMAND's process ID, if your C compiler
-				;; does not provide this identifier, check for another one
-				;; or comment out this definition, but uncomment the following
-				;; one
-; LOCAL_PID EQU 1
+MODULE_VERSION EQU 1
 
-	CODESEG
+%include "resource.inc"
+%include "context.inc"
 
-	PUBLIC initCBreakCatcher
-
-IFDEF LOCAL_PID
-?psp	dw ?		;; local process ID, if you want to use the C compiler's
-					;; PID variable, you have to EQU this variable to the
-					;; C identifier, declare it properly and add the
-					;; segment adjustment within the CBreakCatcher
-ENDIF
-
-initCBreakCatcher PROC
-IFDEF LOCAL_PID
-	mov ah, 51h		; Get PID
-	int 21h
-	mov cs:?psp, bx
-ENDIF
-	push ds			;; some memory models require this unchanged
-	mov ax, cs
-	mov ds, ax
-	mov dx, OFFSET ?CBreakCatcher
-	mov ax, 2523h	;; Set ^Break handler
-	int 21h
-	pop ds
-	ret
-initCBreakCatcher ENDP
-
-IFDEF DEBUG
-strBeg:
-	db 0dh, 0ah, 'COMMAND: ^Break detected.   ', 0dh, 0ah, 0dh, 0ah, '$'
-strEnd db 1
-ENDIF
+???start:
 
 ?CBreakCatcher:
 		push ax
-		push ds
-		push bx
 
-IFDEF DEBUG
-		dec strEnd
+%ifdef DEBUG
+		dec byte [strEnd]
 		jz noRecurs
-		pop bx
-		inc strEnd
+		inc byte [strEnd]
 		clc			;; recursively called ==> ignore
 		jmp short recurs
 
 noRecurs:
+		push ds
 		push dx
-		mov dx, Offset strBeg
+		mov dx, strBeg
 		mov ax, cs
 		mov ds, ax
 		mov ah, 9
 		int 21h
-		inc strEnd
+		inc byte strEnd
 		pop dx
-ENDIF
+		pop ds
+%endif
 
 		mov ah, 51h
 		int 21h
-IFDEF LOCAL_PID
-		cmp cs:?psp, bx
-ELSE
-IF @Model EQ 1		;; if tiny model
-		mov ax, cs
-ELSE
-		mov ax, SEG _psp
-ENDIF
-		mov ds, ax
-		cmp _psp, bx
-ENDIF
-		pop bx
-
+		cmp ax, [es:bx+?cb_catch_psp1]		;; FreeCOM's PSP 
+		jz localCBreak
+		cmp ax, [es:bx+?cb_catch_psp2]		;; FreeCOM's PSP 
 		jz localCBreak
 
 		;; ^Break of a called program --> terminate
-		pop ds
 		pop ax
 		stc			;; tell DOS to terminate the program
-		retf		;; ret far
+		pop bx		;; Restore the context pointer
+		pop es		;; saved by the caller
+		retf		;; no IRET!
 
 localCBreak:
 		;; ^Break of COMAMND --> just set the variable
-IF @Model EQ 1		;; if tiny model
-		mov ax, cs
-ELSE
-		mov ax, SEG ctrlBreak	;; Note SEG ctrlBreak might != SEG _psp
-ENDIF
-
-		mov ds, ax
-		mov ctrlBreak, 1
+		mov byte [es:bx+?cb_catch_cntrlBreak], 1
 
 recurs:
-		pop ds
 		pop ax
 
 ;;		clc			;; tell DOS to proceed	; set by CMP above
-		retf 2
+		pop bx		;; Restore the context pointer
+		pop es		;; saved by the caller
+		retf 2		;; no IRET!
+
+%ifdef DEBUG
+strBeg:
+	db 0dh, 0ah, 'COMMAND: ^Break detected.   ', 0dh, 0ah, 0dh, 0ah, '$'
+strEnd db 1
+%endif
+
+???ende:
+
+resIdBlock RES_ID_CBREAK
 
 END

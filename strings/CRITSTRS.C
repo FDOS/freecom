@@ -25,13 +25,14 @@ memory model.
 started
 */
 
+#define MODULE_VERSION 0
 
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include "../criter.h"
+//#include "../criter.h"
 #include "../resource.h"
 
 #define fDAT "STRINGS.ERR"
@@ -308,7 +309,7 @@ int main(int argc, char **argv)
 		return 35;
 	}
 
-	startResource(dat, RES_ID_CRITER, CRITER_RESOURCE_ID_STRINGS_FULL);
+	startResource(dat, RES_ID_CRITER, 2, MODULE_VERSION);
 		/* Number of strings */
 	b = maxNr;
 	fwrite(&b, sizeof(b), 1, dat);
