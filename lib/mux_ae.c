@@ -5,9 +5,12 @@
 	This file bases on MUX_AE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2004/06/07 19:32:14  skaus
+	bugfix: MUX-AE: useage of DS:[SI] {Eduardo Almao}
+
 	Revision 1.3  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.2  2003/03/05 17:53:01  skaus
 	bugfix: cached NLS data not flushed
 	
@@ -129,8 +132,11 @@ int runExtension(char * const command, char * const line)
 
 	/* Check the command line and transform it into a C-style string */
 	/* Must terminate as line[BUFFER_SIZE] == 0 */
-	for(p = line; *p && *p != '\xd'; ++p);
-	*p = 0;
+	line[(unsigned char)line[-1]]
+	 = line[(unsigned char)line[-2]]
+	 = '\0';
+	if(0 != (p = strchr(line, '\xd')))
+		*p = 0;
 
 	return 0;			/* Proceed command processing as usual */
 }

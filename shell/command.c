@@ -63,7 +63,7 @@ int forceLow = 0;               /* load resident copy into low memory */
 int oldinfd = -1;       /* original file descriptor #0 (stdin) */
 int oldoutfd = -1;        /* original file descriptor #1 (stdout) */
 int autofail = 0;				/* Autofail <-> /F on command line */
-int inInit = 1;
+int inInit = 2;
 int isSwapFile = 0;
 jmp_buf jmp_beginning;
 
@@ -192,6 +192,9 @@ static void docommand(char *line)
    *
    * line - the command line of the program to run
    */
+  char *cp;
+  char *rest;            /* pointer to the rest of the command line */
+  struct CMD *cmdptr = 0;
 
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 	/* Duplicate the command line into such buffer in order to
@@ -204,20 +207,23 @@ static void docommand(char *line)
 		+2 -> max length byte of com + cur length of com
 		+3 -> max length byte of args + cur length of args + additional '\0'
 	*/
-	char buf[2+2*BUFFER_SIZE_MUX_AE+2+1];
-#define com  (buf + 2)
-#define args (buf + 2 + BUFFER_SIZE_MUX_AE + 2)
+	char *buf = malloc(2+2*BUFFER_SIZE_MUX_AE+2+1);
+#define args  (buf + 2)
+#define ARGS_BUFFER_SIZE (2 + BUFFER_SIZE_MUX_AE + 3)
+#define com (buf + ARGS_BUFFER_SIZE)
 #define BUFFER_SIZE BUFFER_SIZE_MUX_AE
 #else
-	char com[MAX_INTERNAL_COMMAND_SIZE];
+	char *com = malloc(MAX_INTERNAL_COMMAND_SIZE);
+#define buf com
 #define BUFFER_SIZE MAX_INTERNAL_COMMAND_SIZE
 #endif
-  char *cp;
-  char *rest;            /* pointer to the rest of the command line */
-
-  struct CMD *cmdptr;
 
   assert(line);
+
+	if(!buf) {
+	  error_out_of_memory();
+	  return;
+	}
 
   /* delete leading spaces, but keep trailing whitespaces */
   line = ltrimcl(line);
@@ -226,7 +232,7 @@ static void docommand(char *line)
 #if BUFFER_SIZE < MAX_INTERNAL_COMMAND_SIZE
 	if(strlen(line) > BUFFER_SIZE) {
 		error_line_too_long();
-		return;
+		goto errRet;
 	}
 #endif
 	line = strcpy(args, line);
@@ -236,7 +242,7 @@ static void docommand(char *line)
   {
     cp = com;
 
-  /* Copy over 1st word as lower case */
+  /* Copy over 1st word as upper case */
   /* Internal commands are constructed out of non-delimiter
   	characters; ? had been parsed already */
     while(*rest && is_fnchar(*rest) && !strchr(QUOTE_STR, *rest))
@@ -251,9 +257,18 @@ static void docommand(char *line)
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 		/* Check for installed COMMAND extension */
 		if(runExtension(com, args))
-			return;		/* OK, executed! */
+			goto errRet;		/* OK, executed! */
+		/* reset the argument pointer */
+		rest = &args[(unsigned char)com[-1]];
 
-		dprintf( ("[Command on return of Installable Commands check: >%s<]\n", com) );
+		dprintf( ("[Command on return of Installable Commands check: >%s]\n", com) );
+#ifndef NDEBUG
+		dprintf( ("[Command line: >") );
+		for(cp = args; cp < rest; ++cp)
+			dprintf( ("%c", *cp) );
+		dprintf( ("|%s]\n", rest) );
+#endif	/* !defined(NDEBUG) */
+
 #endif
 
 		/* Scan internal command table */
@@ -263,7 +278,19 @@ static void docommand(char *line)
 
 	}
 
-    if(*com && cmdptr->name) {    /* internal command found */
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+	cp = realloc(buf, ARGS_BUFFER_SIZE);
+#ifndef NDEBUG
+	if(cp != buf) {
+		dprintf( ("[INTERNAL error: realloc() returned wrong result]") );
+		buf = cp;
+	}
+#endif
+#else
+	free(buf);  buf = 0;	/* no further useage of this buffer */
+#endif
+
+    if(cmdptr && cmdptr->name) {    /* internal command found */
       switch(cmdptr->flags & (CMD_SPECIAL_ALL | CMD_SPECIAL_DIR)) {
       case CMD_SPECIAL_ALL: /* pass everything into command */
         break;
@@ -278,7 +305,7 @@ static void docommand(char *line)
 
         /* else syntax error */
         error_syntax(0);
-        return;
+        goto errRet;
       }
 
         currCmdHelpScreen = cmdptr->help_id;
@@ -286,40 +313,28 @@ static void docommand(char *line)
         if(memcmp(ltrimcl(rest), "/?", 2) == 0)  {
           displayString(currCmdHelpScreen);
         } else {
-          dprintf(("CMD '%s' : '%s'\n", com, rest));
+          dprintf(("CMD '%s' : '%s'\n", cmdptr->name, rest));
           cmdptr->func(rest);
         }
       } else {
-#ifdef FEATURE_INSTALLABLE_COMMANDS
-		if(*com) {		/* external command */
-			/* Installable Commands are allowed to change both:
-				"com" and "args". Therefore, we may need to
-				reconstruct the external command line */
-			/* Because com and *rest are located within the very same
-				buffer and rest is definitely terminated with '\0',
-				the followinf memmove() operation is fully robust
-				against buffer overflows */
-			memmove(com + strlen(com), rest, strlen(rest) + 1);
-			/* Unsave, but probably more efficient operation:
-				strcat(com, rest);
-					-- 2000/12/10 ska*/
-			line = com;
-		}
-#endif
         /* no internal command --> spawn an external one */
         cp = unquote(line, rest = skip_word(line));
         if(!cp) {
           error_out_of_memory();
-          return;
+          goto errRet;
         }
 		execute(cp, rest);
 		free(cp);
       }
   }
-#undef line
+
 #undef com
 #undef args
 #undef BUFFER_SIZE
+#undef ARGS_BUFFER_SIZE
+
+errRet:
+	  free(buf);
 }
 
 /*
@@ -559,7 +574,8 @@ int expandEnvVars(char *ip, char * const line)
 			  }
 
 			  ip = tp + 1;
-			}
+			} else
+			  *cp++ = '%';
 			break;
 		}
 		continue;
@@ -755,7 +771,7 @@ static void hangForever(void)
 	puts(TEXT_MSG_REBOOT_NOW);
 #endif
     beep();
-    delay(1000);  /* Keep the message on the screen for
+    delay(9000);  /* Keep the message on the screen for
               at least 1s, in case FreeCom has some problems
               with the keyboard */
   }
