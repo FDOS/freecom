@@ -1,0 +1,1115 @@
+<!-- $Id$ -->
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-15">
+<META NAME="GENERATOR" CONTENT="VI">
+<META NAME="AUTHOR" CONTENT="Steffen Kaiser">
+<TITLE>HOW to compile FreeCOM v0.83 Beta 48</TITLE>
+</HEAD>
+
+<BODY>
+<H1>HOW to Compile FreeCOM v0.83 Beta 48 in Ten Steps</H1>
+
+Because of several complaints about how to compile FreeCOM, this description
+has been crafted to show this process step-by-step.
+
+<H2>Table of Contents</H2>
+
+<A HREF="#h2-preparations">Preparations</A>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#h3-usedsys">Used System</A>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#h3-libs">Required Programs and Libraries</A>
+<BR><A HREF="#h2-sysconfig">System Configuration</A>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#h3-config.sys">CONFIG.SYS</A>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#h3-autoexec.bat">AUTOEXEC.BAT</A>
+<BR><A HREF="#h2-one-time">One-time Preparations</A>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#h3-cd-bin">Contents of Directory C:\BIN</A>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#h3-cd-root">Contents of Directory C:\</A>
+<BR><A HREF="#h2-10steps">Ten Steps to Compile FreeCOM v0.83 Beta 48</A>
+<BR><P>
+
+<HR>
+
+<H2><A NAME="h2-preparations">Preparations</A></H2>
+
+This description starts at the scratch, hence, it is assumed that no
+other tools are already installed and up and running. If there are some
+program available, you must take precautions to incorporate them into the
+process.
+
+<H3><A NAME="h3-usedsys">Used System</A></H3>
+
+This examples uses the following system:
+<UL>
+<LI>VMware v2.0 (to emulate an unique PC, with a newly formatted, virtual
+parition)
+<LI>OS: FreeDOS kernel 2027rc, binary release downloaded from:
+<A HREF="http://freedos.sourceforge.net/kernel/ke2027rc.zip">sf.net</A>;
+build date 2002-10-23 23:17:37
+<LI>Shell: FreeCOM v0.83 Beta 46 (tested with both binary release and XMS-Swap
+release); downloaded from <A HREF="http://freedos.sourceforge.net/freecom/packages/083Beta46/">FreeCOM's home page on sf.net</A>
+<BR>The <EM>binary</EM> variant is installed as the default shell
+<TT>COMMAND.COM</TT>, the XMS-Swapping variant is installed as
+<TT>COM-XMS.COM</TT>; both on the root directory of the hard disk parition.
+</UL>
+
+<H3><A NAME="h3-libs">Required Programs and Libraries</A></H3>
+All this stuff will be made accessable to the Virtual PC through CD-Rom,
+as this is the only variant for this VMware release.
+
+<UL>
+<LI>Nasm (aka <EM>Netware Assembler</EM>) is used to compile enclosed
+assembly files, downloaded from: <A HREF="http://belnet.dl.sourceforge.net/sourceforge/nasm/nsm09835.zip">http://belnet.dl.sourceforge.net/sourceforge/nasm/nsm09835.zip</A>;
+Nasm is hosted on <A HREF="http://nasm.sourceforge.net/">sf.net</A>, too;
+because of bugs in earlier release, do use version v0.98.35 or newer of the
+16-bit pre-compiled Nasm.
+<BR>The Nasm Zip-file is unpacked into directory <TT>nasm</TT> on the CD-Rom.
+
+<LI>Turbo C++ v1.01 is used to compile the enclosed C files, download from
+the <A HREF="http://community.borland.com/article/0,1410,21751,00.html">Borland museum</A>.
+<BR>The Turbo C++ Zip-file is unpacked into directory <TT>tcpp101</TT> on
+the CD-Rom.
+
+<LI>Some <TT>unzip</TT>-utility for DOS, I'm using
+<QUOTE>UnZip 5.12 of 28 August 1994, by Info-ZIP</QUOTE>.
+<BR>Executable is located at the root directory of the CD-Rom.
+
+<LI>Some plain text editor for DOS, I'm using <A HREF="ftp://ftp.cs.pdx.edu/pub/elvis/">Elvis v2.1_4 for DOS</A>.
+<BR>The executable is named <TT>vi.exe</TT> and is located at the
+root directory of the CD-Rom.
+
+<LI><A HREF="http://freedos.sourceforge.net/freecom/packages/083Beta48/com083beta48.zip">The source of FreeCOM v0.83 Beta 48</A>, located on the root directory
+of the CD-Rom.
+<BR>Or pick <A HREF="http://freedos.sourceforge.net/freecom/packages/">some
+newer release</A>.
+
+<LI><A HREF="http://freedos.sourceforge.net/freecom/packages/suppl.zip">The SUPPL library</A>
+pre-compiled for Turbo C++ v1.01, located on the root directory of the CD-Rom.
+</UL>
+
+<H2><A NAME="h2-sysconfig">System Configuration</A></H2>
+
+<H3><A NAME="h3-config.sys">CONFIG.SYS</A></H3>
+<PRE><A HREF="#files20">files=20</A>
+<A HREF="#fdxms">device=fdxms.sys</A>
+<A HREF="#nec_ide">device=NEC_IDE.SYS /D:CD001</A>
+<A HREF="#com-xms">;shell=com-xms.com /p/e:256</A></PRE>
+
+<H3><A NAME="h3-autoexec.bat">AUTOEXEC.BAT</A></H3>
+<PRE><A HREF="#path">path c:\bin;c:\tcpp101\bin</A>
+<A HREF="#set-temp">set TEMP=C:\Temp</A>
+<A HREF="#shsucdx">SHSUCDX.EXE  /D:CD001</A></PRE>
+
+<H2><A NAME="h2-one-time">One-time Preparations</A></H2>
+<FONT SIZE=-1>Note: On drive <TT>D:</TT> the CD-Rom has been mounted.</FONT>
+<PRE><A HREF="#mkdir-temp">MKDIR %TEMP%</A>
+<A HREF="#mkdir-bin">MKDIR C:\BIN</A>
+<A HREF="#copy">COPY D:\NASM\NASM.EXE D:\VI.EXE D:\UNZIP.EXE C:\BIN</A>
+d:
+<A HREF="#cd-tcp">cd tcpp101</A>
+<A HREF="#install-tcp">install</A></PRE>
+
+<H3><A NAME="h3-cd-bin">Contents of Directory C:\BIN</A></H3>
+
+<PRE> Volume in drive C has no label
+ Volume Serial Number is 58EF-6DA7
+
+ Directory of C:\BIN
+
+.                    &lt;DIR&gt;  11-03-02  9:44a
+..                   &lt;DIR&gt;  11-03-02  9:44a
+VI       EXE       372,158  04-25-01 12:37p
+SHSUCDX  EXE        15,726  10-20-00 10:34p
+NASM     EXE       252,452  09-12-02  6:37p
+UNZIP    EXE        43,691  08-29-94  9:37p
+         4 file(s)        684,027 bytes
+         2 dir(s)      24,221,696 bytes free</PRE>
+
+<H3><A NAME="h3-cd-root">Contents of Directory C:\</A></H3>
+
+<PRE> Volume in drive C has no label
+ Volume Serial Number is 58EF-6DA7
+
+ Directory of C:\
+
+KERNEL   SYS        40,962  10-27-02 11:17p
+COMMAND  COM        86,573  10-16-02  9:10p
+COM-XMS  COM        88,203  10-16-02  9:07p
+CONFIG   SYS            86  10-30-02  1:24p
+AUTOEXEC BAT            69  10-30-02 11:28a
+FDXMS    SYS         4,836  03-02-02  6:55p
+NEC_IDE  SYS        29,089  04-26-96  8:37a
+TEMP                 &lt;DIR&gt;  04-25-01  1:32p
+TCPP101              &lt;DIR&gt;  11-03-02  9:56a
+BIN                  &lt;DIR&gt;  11-03-02  9:44a
+         7 file(s)        249,818 bytes
+         3 dir(s)      24,221,696 bytes free</PRE>
+
+<H2><A NAME="h2-10steps">Ten Steps to Compile FreeCOM v0.83 Beta 48</A></H2>
+<PRE>c:
+CD \
+<A HREF="#unzip-com">unzip d:\COM083BE.ZIP</A>
+<A HREF="#unzip-fcom">unzip -q freecom.zip</A>
+del freecom.zip 
+<A HREF="#cd-suppl">cd freecom\suppl\</A>
+<A HREF="#unzip-suppl">unzip -n d:\suppl.zip</A>
+<A HREF="#cd-main">cd ..</A>
+<A HREF="#edit-cfg">vi config.mak</A>
+<A HREF="#build">build</A></PRE>
+<P>There should be a <TT>COMMAND.COM</TT> located in the current
+directory now.
+<P>There is also a <A HREF="#build-log">sample build log</A>.
+<P>The <TT>build</TT> script uses the <A HREF="#build-env">environment
+variables <TT>SWAP</TT> and <TT>LNG</TT></A>.
+
+<HR>
+
+<H1>Appendix A: Description of settings</H1>
+
+<UL>
+<LI><P><A NAME="files20"><TT>FILES=20</TT></A> is required by Turbo C++.
+<LI><P><A NAME="fdxms">The driver <TT>fdxms.sys</TT></A> provides a XMS API
+similiar to <TT>HIMEM.SYS</TT>
+<LI><P><A NAME="nec_ide">The driver <TT>NEC_IDE.SYS</TT></A> I've got along
+with some Oak IDE-CD-Rom device and seems to handle all recent IDE-CD-Rom
+drivers pretty well, like the emulated CD-Rom in VMware.
+<BR>The option <TT>/D:CD001</TT> causes the driver to install a device
+named <TT>CD001</TT> for the CD-Rom device in order to be found by the
+CD-redirector later on.
+<LI><P><A NAME="com-xms">Uncomment <FONT SIZE=-1>(remove the semicolon from the
+first column of the line)</FONT> the line in order
+to use the XMS-Swapping variant</A> of FreeCOM v0.83 Beta 46.
+<LI><P><A NAME="path">The two directories in which DOS is to search for
+executable programs:
+<OL>
+<LI>In <TT>C:\BIN</TT> all relevant tools, such as assembler and Unzip,
+will be located.
+<LI>In <TT>c:\tcpp101\bin</TT> the executables of the Turbo C++ compiler
+are located.
+</OL>
+<LI><P><A NAME="set-temp">The environment variable <TT>TEMP</TT></A> points to the
+directory temporary files are to be created in.
+<LI><P><A NAME="shsucdx">Loads the CD-Rom mid-level driver</A>, similiar to
+<TT>MSCDEX</TT>, the option <TT>/D:CD001</TT> must specify the same driver
+name as the <A HREF="#nec_ide">low-level CD-Rom driver</A>.
+<LI><P><A NAME="mkdir-temp">Create the temporary directory</A>, if not altready
+present.
+<LI><P><A NAME="mkdir-bin">Create the directory for the executables</A>,
+if not altready present.
+<LI><P><A NAME="copy">Copy all the executables</A>, like assembler, text editor
+and unzip-utility, to the central directory.
+<LI><P><A NAME="cd-tcp">The unpacked Turbo C++ v1.01 install files</A>
+are located in this directory.
+<LI><P><A NAME="install-tcp">Runs the Turbo C++ v1.01 installation program</A>. The
+following settings are used:
+<UL>
+<LI>Source drive: <TT>D</TT>
+<LI>Source directory: <TT>\TCPP101</TT>
+<LI>select entry <TT>Turbo C++ Directory</TT>
+<LI>Target directory: <TT>C:\TCPP101</TT>
+<BR>All the remaining installation directories should automatically be changed
+below the this directory.
+<LI>select entry <TT>Start Installation</TT>
+</UL>
+<LI><P><A NAME="unzip-com">The <TT>SHSUCDX</TT> presents the long filename
+<TT>com083Beta48.zip</TT></A> as <TT>COM083BE.ZIP</TT>, hence, unzipping
+the FreeCOM source archive.
+<BR><EM>Note:</EM> This is the only point to change when compiling another
+FreeCOM release usually; just unpack the particular <TT>.ZIP</TT> file here.
+However, it is <EM>not</EM> recommended to overwrite an elder release of
+FreeCOM; when doing so, you should at least pass the <TT>-r</TT> option
+to <TT>build</TT>!
+<LI><P><A NAME="unzip-fcom">Because the FreeCOM archive is a double-zipped
+archive</A>, <TT>FREECOM.ZIP</TT> is the <EM>real</EM> archive containing
+the source files. In result a new directory <TT>FREECOM</TT> containing all
+the source tree is created. The option <TT>-q</TT> causes <TT>unzip</TT> to
+run quitely.
+<LI><P><A NAME="cd-suppl">Go to the default location of the SUPPL library</A>.
+<LI><P><A NAME="unzip-suppl">Unzip the pre-compiled SUPPL library</A>, the
+option <TT>-n</TT> causes <TT>unzip</TT> to not complain about the already
+present files in the current directory.
+<LI><P><A NAME="cd-main">Go to the main directory</A> of FreeCOM.
+<LI><P><A NAME="edit-cfg">Edit the configuration</A> of the build process
+via adopting the file <TT>CONFIG.MAK</TT>:
+<BR><EM>Note:</EM> The default configuration has been adjusted to
+comply with this steps, hence, no adoptions is required; so you might skip
+this step as well.
+<LI><P><A NAME="build">Actually runs the build process</A>:
+<UL>
+<LI>in order to force to <STRONG>re</STRONG>-built all portions of FreeCOM,
+e.g. when the source code was overwritten with another version or
+when switching between XMS-Swapping enabled or disabled, pass the
+<TT>-r</TT> option as the first argument to <TT>build</TT>.
+<LI>to build the XMS-Swapping variant of FreeCOM specify <TT>xms-swap</TT>
+as the first (or second) argument, e.g.: <PRE>build.bat xms-swap</PRE>.
+<LI>to build FreeCOM with some specific language other than English, specify
+the language as the last argument, e.g.: <PRE>build.bat Dutch</PRE> or
+<PRE>build.bat xms-swap Dutch</PRE>. For each supported language, a
+corresponding <TT>.LNG</TT> file is located in sub-directory <TT>STRINGS</TT>,
+hence, the command <TT>DIR STRINGS\*.LNG</TT> displays a list of supported
+languages. Do not specify the extension <TT>.LNG</TT> on <TT>build</TT>'s
+command line!
+</UL>
+<BR><A NAME="build-env">The environment variable <TT>SWAP</TT> is
+internally used by the <TT>build</TT> script and is removed upon
+successful finish.
+<BR>The script stores the selected language, or <TT>English</TT>
+if none has been selected on command line <STRONG>and</STRONG> the
+variable is not already defined, into the environment
+variable <TT>LNG</TT>; hence, the selected language keeps permanently
+selected between different runs of <TT>build</TT>, until reset by the
+user manually as the last argument of the <TT>build</TT> script, by
+removing or changing the variable directly or by rebooting the system.
+
+<LI><P><A NAME="build-log">
+<EM>Note:</EM> This Logfile stops when building the <TT>TOOLS</TT>
+directory.</A>
+<PRE>File not found. - 'C:\FREECOM\LASTMAKE.MK'
+File not found. - 'C:\FREECOM\TOOLS\*.MAP'
+File not found. - 'C:\FREECOM\TOOLS\*.COM'
+File not found. - 'C:\FREECOM\UTILS\*.MAP'
+File not found. - 'C:\FREECOM\CRITER\*.OBJ'
+File not found. - 'C:\FREECOM\CRITER\*.CFG'
+MAKE0000.$$$ =&gt; C:\FREECOM\UTILS\TCCDOS.CFG
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+mktools.c:
+Turbo Link  Version 3.01 Copyright (c) 1987, 1990 Borland International
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+mkctxt.c:
+Turbo Link  Version 3.01 Copyright (c) 1987, 1990 Borland International
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+chunk.c:
+Turbo Link  Version 3.01 Copyright (c) 1987, 1990 Borland International
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+mkinfres.c:
+Turbo Link  Version 3.01 Copyright (c) 1987, 1990 Borland International
+MAKE0000.$$$ =&gt; C:\FREECOM\STRINGS\TCCDOS.CFG
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+fixstrs.c:
+Turbo Link  Version 3.01 Copyright (c) 1987, 1990 Borland International
+FIXSTRS: loading file DEFAULT.LNG
+FIXSTRS: loading file english
+FIXSTRS: building STRINGS resource
+FIXSTRS: building STRINGS library source files
+strings.h =&gt; C:\FREECOM\STRINGS\..\strings.h
+MAKE0001.$$$ =&gt; C:\FREECOM\STRINGS\MKSTRLIB.BAT
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+critstrs.c:
+Turbo Link  Version 3.01 Copyright (c) 1987, 1990 Borland International
+CRITSTRS: load file DEFAULT.ERR
+CRITSTRS: load file english
+CRITSTRS: Running validation check
+CRITSTRS: Dumping CRITER strings resource
+TLIB 3.01 Copyright (c) 1987, 1990 Borland International
++str0000.obj &amp;
++str0001.obj &amp;
++str0002.obj &amp;
++str0003.obj &amp;
++str0004.obj &amp;
++str0005.obj &amp;
++str0006.obj &amp;
++str0007.obj &amp;
++str0008.obj &amp;
++str0009.obj &amp;
++str000a.obj &amp;
++str000b.obj &amp;
++str000c.obj &amp;
++str000d.obj &amp;
++str000e.obj &amp;
++str000f.obj &amp;
++str0010.obj &amp;
++str0011.obj &amp;
++str0012.obj &amp;
++str0013.obj &amp;
++str0014.obj &amp;
++str0015.obj &amp;
++str0016.obj &amp;
++str0017.obj &amp;
++str0018.obj &amp;
++str0019.obj &amp;
++str001a.obj &amp;
++str001b.obj &amp;
++str001c.obj &amp;
++str001d.obj &amp;
++str001e.obj &amp;
++str001f.obj &amp;
++str0020.obj &amp;
++str0021.obj &amp;
++str0022.obj &amp;
++str0023.obj &amp;
++str0024.obj &amp;
++str0025.obj &amp;
++str0026.obj &amp;
++str0027.obj &amp;
++str0028.obj &amp;
++str0029.obj &amp;
++str002a.obj &amp;
++str002b.obj &amp;
++str002c.obj &amp;
++str002d.obj &amp;
++str002e.obj &amp;
++str002f.obj &amp;
++str0030.obj &amp;
++str0031.obj &amp;
++str0032.obj &amp;
++str0033.obj &amp;
++str0034.obj &amp;
++str0035.obj &amp;
++str0036.obj &amp;
++str0037.obj &amp;
++str0038.obj &amp;
++str0039.obj &amp;
++str003a.obj &amp;
++str003b.obj &amp;
++str003c.obj &amp;
++str003d.obj &amp;
++str003e.obj &amp;
++str003f.obj &amp;
++str0040.obj &amp;
++str0041.obj &amp;
++str0042.obj &amp;
++str0043.obj &amp;
++str0044.obj &amp;
++str0045.obj &amp;
++str0046.obj &amp;
++str0047.obj &amp;
++str0048.obj &amp;
++str0049.obj &amp;
++str004a.obj &amp;
++str004b.obj &amp;
++str004c.obj &amp;
++str004d.obj &amp;
++str004e.obj &amp;
++str004f.obj &amp;
++str0050.obj &amp;
++str0051.obj &amp;
++str0052.obj &amp;
++str0053.obj &amp;
++str0054.obj &amp;
++str0055.obj &amp;
++str0056.obj &amp;
++str0057.obj &amp;
++str0058.obj &amp;
++str0059.obj &amp;
++str005a.obj &amp;
++str005b.obj &amp;
++str005c.obj &amp;
++str005d.obj &amp;
++str005e.obj &amp;
++str005f.obj &amp;
++str0060.obj &amp;
++str0061.obj &amp;
++str0062.obj &amp;
++str0063.obj &amp;
++str0064.obj &amp;
++str0065.obj &amp;
++str0066.obj &amp;
++str0067.obj &amp;
++str0068.obj &amp;
++str0069.obj &amp;
++str006a.obj &amp;
++str006b.obj &amp;
++str006c.obj &amp;
++str006d.obj &amp;
++str006e.obj &amp;
++str006f.obj &amp;
++str0070.obj &amp;
++str0071.obj &amp;
++str0072.obj &amp;
++str0073.obj &amp;
++str0074.obj &amp;
++str0075.obj &amp;
++str0076.obj &amp;
++str0077.obj &amp;
++str0078.obj &amp;
++str0079.obj &amp;
++str007a.obj &amp;
++str007b.obj &amp;
++str007c.obj &amp;
++str007d.obj &amp;
++str007e.obj &amp;
++str007f.obj &amp;
++str0080.obj &amp;
++str0081.obj &amp;
++str0082.obj &amp;
++str0083.obj &amp;
++str0084.obj &amp;
++str0085.obj &amp;
++str0086.obj &amp;
++str0087.obj &amp;
++str0088.obj &amp;
++str0089.obj &amp;
++str008a.obj &amp;
++str008b.obj &amp;
++str008c.obj &amp;
++str008d.obj &amp;
++str008e.obj &amp;
++str008f.obj &amp;
++str0090.obj &amp;
++str0091.obj &amp;
++str0092.obj &amp;
++str0093.obj &amp;
++str0094.obj &amp;
++str0095.obj &amp;
++str0096.obj &amp;
++str0097.obj &amp;
++str0098.obj &amp;
++str0099.obj &amp;
++str009a.obj &amp;
++str009b.obj &amp;
++str009c.obj &amp;
++str009d.obj &amp;
++str009e.obj &amp;
++str009f.obj &amp;
++str00a0.obj &amp;
++str00a1.obj &amp;
++str00a2.obj &amp;
++str00a3.obj &amp;
++str00a4.obj &amp;
++str00a5.obj &amp;
++str00a6.obj &amp;
++str00a7.obj &amp;
++str00a8.obj &amp;
++str00a9.obj &amp;
++str00aa.obj &amp;
++str00ab.obj &amp;
++str00ac.obj &amp;
++str00ad.obj &amp;
++str00ae.obj &amp;
++str00af.obj &amp;
++str00b0.obj &amp;
++str00b1.obj &amp;
++str00b2.obj &amp;
++str00b3.obj &amp;
++str00b4.obj &amp;
++str00b5.obj &amp;
++str00b6.obj &amp;
++str00b7.obj &amp;
++str00b8.obj &amp;
++str00b9.obj &amp;
++str00ba.obj &amp;
++str00bb.obj &amp;
++str00bc.obj &amp;
++str00bd.obj &amp;
++str00be.obj &amp;
++str00bf.obj &amp;
++str00c0.obj &amp;
++str00c1.obj &amp;
++str00c2.obj &amp;
++str00c3.obj &amp;
++str00c4.obj &amp;
++str00c5.obj &amp;
++str00c6.obj &amp;
++str00c7.obj &amp;
++str00c8.obj &amp;
++str00c9.obj &amp;
++str00ca.obj &amp;
++str00cb.obj &amp;
++str00cc.obj &amp;
++str00cd.obj &amp;
++str00ce.obj &amp;
++str00cf.obj &amp;
++str00d0.obj &amp;
++str00d1.obj &amp;
++str00d2.obj &amp;
++str00d3.obj &amp;
++str00d4.obj &amp;
++str00d5.obj &amp;
++str00d6.obj &amp;
++str00d7.obj &amp;
++str00d8.obj &amp;
++str00d9.obj &amp;
++str00da.obj &amp;
++str00db.obj &amp;
++str00dc.obj &amp;
++str00dd.obj &amp;
++str00de.obj &amp;
++str00df.obj &amp;
++str00e0.obj &amp;
++str00e1.obj &amp;
++str00e2.obj 
+strings.lib =&gt; C:\FREECOM\STRINGS\STRINGS\..\strings.lib
+strings.lst =&gt; C:\FREECOM\STRINGS\STRINGS\..\strings.lst
+context.h_c =&gt; C:\FREECOM\CRITER\..\context.h_c
+context.inc =&gt; C:\FREECOM\CRITER\..\context.inc
+MAKE0000.$$$ =&gt; C:\FREECOM\LIB\TCCDOS.CFG
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+alprmblk.c:
+alsysblk.c:
+beep_l.c:
+beep_n.c:
+brk_get.c:
+brk_set.c:
+cbreak.c:
+cbs.c:
+cd_dir.c:
+cgetch.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+cgettime.c:
+chgctxt.c:
+chgdrv.c:
+chgenv.c:
+chgenvc.c:
+chgenvr.c:
+clrline.c:
+cmdinput.c:
+comfile.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+compfile.c:
+ctxt.c:
+ctxt_adr.c:
+ctxt_as.c:
+ctxt_chg.c:
+ctxt_clr.c:
+ctxt_get.c:
+ctxt_inf.c:
+ctxt_mk.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+ctxt_mkn.c:
+ctxt_pop.c:
+ctxt_psh.c:
+ctxt_rnu.c:
+ctxt_set.c:
+ctxt_ss.c:
+ctxt_vw.c:
+curdatel.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+curtime.c:
+cwd.c:
+dateget.c:
+dateset.c:
+dbg_c.c:
+dbg_mem.c:
+dbg_prnt.c:
+dbg_s.c:
+dbg_sn.c:
+devopen.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+dispcnt.c:
+drvnum.c:
+efct_001.c:
+exec.c:
+exec1.c:
+farread.c:
+fcompl1.c:
+fcompl2.c:
+fdattr.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+fdevopen.c:
+fdsattr.c:
+fillcomp.c:
+find.c:
+freep.c:
+frsysblk.c:
+fstpcpy.c:
+gallstr.c:
+get1mcb.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+getenv.c:
+goxy.c:
+grabfcom.c:
+gumblink.c:
+hdlrctxt.c:
+hist_get.c:
+hist_set.c:
+inputdos.c:
+is_empty.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+is_fnamc.c:
+is_fnstr.c:
+is_pchr.c:
+isadev.c:
+keyprsd.c:
+kswap_c.c:
+lastdget.c:
+lastdset.c:
+leadopt.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+ltrimcl.c:
+ltrimsp.c:
+lwr1wd.c:
+match.c:
+messages.c:
+mk_rddir.c:
+mktmpfil.c:
+msg_dflt.c:
+msg_dps.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+msg_fstr.c:
+msg_get.c:
+msg_gpt.c:
+msg_mkey.c:
+msg_prmp.c:
+mux_ae.c:
+nls.c:
+nls_date.c:
+nls_time.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+num_fmt.c:
+onoff.c:
+openf.c:
+optsb.c:
+optsi.c:
+optss.c:
+parsenum.c:
+pr_date.c:
+pr_prmpt.c:
+pr_time.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+prprompt.c:
+realnum.c:
+res.c:
+res_r.c:
+res_w.c:
+resfile.c:
+rmtmpfil.c:
+rtrimcl.c:
+rtrimsp.c:
+salloc.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+samefile.c:
+scancmd.c:
+scanopt.c:
+showcmds.c:
+skqwd.c:
+split.c:
+sumblink.c:
+tempfile.c:
+timeget.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+timeset.c:
+tmpnam.c:
+trimcl.c:
+trimsp.c:
+txtlend.c:
+unquote.c:
+vcgetch.c:
+vcgetstr.c:
+where.c:
+err1.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+err2.c:
+err3.c:
+err4.c:
+err5.c:
+err6.c:
+err7.c:
+err8.c:
+err9.c:
+err10.c:
+err11.c:
+err12.c:
+err13.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+err14.c:
+err15.c:
+err16.c:
+err17.c:
+err18.c:
+err19.c:
+err20.c:
+err21.c:
+err22.c:
+err23.c:
+err24.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+err25.c:
+err26.c:
+err27.c:
+err28.c:
+err29.c:
+err30.c:
+err31.c:
+err32.c:
+err33.c:
+err34.c:
+err35.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+err36.c:
+err37.c:
+err38.c:
+err39.c:
+err40.c:
+err41.c:
+err42.c:
+err43.c:
+err44.c:
+err45.c:
+err46.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+err47.c:
+err48.c:
+err49.c:
+err50.c:
+err51.c:
+err52.c:
+err53.c:
+err54.c:
+err55.c:
+err56.c:
+err57.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+err58.c:
+err59.c:
+err60.c:
+err61.c:
+err62.c:
+err63.c:
+err64.c:
+err65.c:
+err66.c:
+err67.c:
+err68.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+err69.c:
+err70.c:
+err71.c:
+err72.c:
+err73.c:
+err74.c:
+err75.c:
+err76.c:
+err77.c:
+err78.c:
+err79.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+err80.c:
+TLIB 3.01 Copyright (c) 1987, 1990 Borland International
++alprmblk.obj &amp;
++alsysblk.obj &amp;
++beep_l.obj &amp;
++beep_n.obj &amp;
++brk_get.obj &amp;
++brk_set.obj &amp;
++cbreak.obj &amp;
++cbs.obj &amp;
++cd_dir.obj &amp;
++cgetch.obj &amp;
++cgettime.obj &amp;
++chgctxt.obj &amp;
++chgdrv.obj &amp;
++chgenv.obj &amp;
++chgenvc.obj &amp;
++chgenvr.obj &amp;
++clrline.obj &amp;
++cmdinput.obj &amp;
++comfile.obj &amp;
++compfile.obj &amp;
++ctxt.obj &amp;
++ctxt_adr.obj &amp;
++ctxt_as.obj &amp;
++ctxt_chg.obj &amp;
++ctxt_clr.obj &amp;
++ctxt_get.obj &amp;
++ctxt_inf.obj &amp;
++ctxt_mk.obj &amp;
++ctxt_mkn.obj &amp;
++ctxt_pop.obj &amp;
++ctxt_psh.obj &amp;
++ctxt_rnu.obj &amp;
++ctxt_set.obj &amp;
++ctxt_ss.obj &amp;
++ctxt_vw.obj &amp;
++curdatel.obj &amp;
++curtime.obj &amp;
++cwd.obj &amp;
++dateget.obj &amp;
++dateset.obj &amp;
++dbg_c.obj &amp;
++dbg_mem.obj &amp;
++dbg_prnt.obj &amp;
++dbg_s.obj &amp;
++dbg_sn.obj &amp;
++devopen.obj &amp;
++dispcnt.obj &amp;
++drvnum.obj &amp;
++efct_001.obj &amp;
++exec.obj &amp;
++exec1.obj &amp;
++farread.obj &amp;
++fcompl1.obj &amp;
++fcompl2.obj &amp;
++fdattr.obj &amp;
++fdevopen.obj &amp;
++fdsattr.obj &amp;
++fillcomp.obj &amp;
++find.obj &amp;
++freep.obj &amp;
++frsysblk.obj &amp;
++fstpcpy.obj &amp;
++gallstr.obj &amp;
++get1mcb.obj &amp;
++getenv.obj &amp;
++goxy.obj &amp;
++grabfcom.obj &amp;
++gumblink.obj &amp;
++hdlrctxt.obj &amp;
++hist_get.obj &amp;
++hist_set.obj &amp;
++inputdos.obj &amp;
++is_empty.obj &amp;
++is_fnamc.obj &amp;
++is_fnstr.obj &amp;
++is_pchr.obj &amp;
++isadev.obj &amp;
++keyprsd.obj &amp;
++kswap_c.obj &amp;
++lastdget.obj &amp;
++lastdset.obj &amp;
++leadopt.obj &amp;
++lowexec.obj &amp;
++ltrimcl.obj &amp;
++ltrimsp.obj &amp;
++lwr1wd.obj &amp;
++match.obj &amp;
++messages.obj &amp;
++mk_rddir.obj &amp;
++mktmpfil.obj &amp;
++msg_dflt.obj &amp;
++msg_dps.obj &amp;
++msg_fstr.obj &amp;
++msg_get.obj &amp;
++msg_gpt.obj &amp;
++msg_mkey.obj &amp;
++msg_prmp.obj &amp;
++mux_ae.obj &amp;
++nls.obj &amp;
++nls_date.obj &amp;
++nls_time.obj &amp;
++num_fmt.obj &amp;
++onoff.obj &amp;
++openf.obj &amp;
++optsb.obj &amp;
++optsi.obj &amp;
++optss.obj &amp;
++parsenum.obj &amp;
++pr_date.obj &amp;
++pr_prmpt.obj &amp;
++pr_time.obj &amp;
++prprompt.obj &amp;
++realnum.obj &amp;
++res.obj &amp;
++res_r.obj &amp;
++res_w.obj &amp;
++resfile.obj &amp;
++rmtmpfil.obj &amp;
++rtrimcl.obj &amp;
++rtrimsp.obj &amp;
++salloc.obj &amp;
++samefile.obj &amp;
++scancmd.obj &amp;
++scanopt.obj &amp;
++showcmds.obj &amp;
++skqwd.obj &amp;
++split.obj &amp;
++sumblink.obj &amp;
++tempfile.obj &amp;
++timeget.obj &amp;
++timeset.obj &amp;
++tmpnam.obj &amp;
++trimcl.obj &amp;
++trimsp.obj &amp;
++txtlend.obj &amp;
++unquote.obj &amp;
++vcgetch.obj &amp;
++vcgetstr.obj &amp;
++where.obj &amp;
++err1.obj &amp;
++err2.obj &amp;
++err3.obj &amp;
++err4.obj &amp;
++err5.obj &amp;
++err6.obj &amp;
++err7.obj &amp;
++err8.obj &amp;
++err9.obj &amp;
++err10.obj &amp;
++err11.obj &amp;
++err12.obj &amp;
++err13.obj &amp;
++err14.obj &amp;
++err15.obj &amp;
++err16.obj &amp;
++err17.obj &amp;
++err18.obj &amp;
++err19.obj &amp;
++err20.obj &amp;
++err21.obj &amp;
++err22.obj &amp;
++err23.obj &amp;
++err24.obj &amp;
++err25.obj &amp;
++err26.obj &amp;
++err27.obj &amp;
++err28.obj &amp;
++err29.obj &amp;
++err30.obj &amp;
++err31.obj &amp;
++err32.obj &amp;
++err33.obj &amp;
++err34.obj &amp;
++err35.obj &amp;
++err36.obj &amp;
++err37.obj &amp;
++err38.obj &amp;
++err39.obj &amp;
++err40.obj &amp;
++err41.obj &amp;
++err42.obj &amp;
++err43.obj &amp;
++err44.obj &amp;
++err45.obj &amp;
++err46.obj &amp;
++err47.obj &amp;
++err48.obj &amp;
++err49.obj &amp;
++err50.obj &amp;
++err51.obj &amp;
++err52.obj &amp;
++err53.obj &amp;
++err54.obj &amp;
++err55.obj &amp;
++err56.obj &amp;
++err57.obj &amp;
++err58.obj &amp;
++err59.obj &amp;
++err60.obj &amp;
++err61.obj &amp;
++err62.obj &amp;
++err63.obj &amp;
++err64.obj &amp;
++err65.obj &amp;
++err66.obj &amp;
++err67.obj &amp;
++err68.obj &amp;
++err69.obj &amp;
++err70.obj &amp;
++err71.obj &amp;
++err72.obj &amp;
++err73.obj &amp;
++err74.obj &amp;
++err75.obj &amp;
++err76.obj &amp;
++err77.obj &amp;
++err78.obj &amp;
++err79.obj &amp;
++err80.obj
+MAKE0000.$$$ =&gt; C:\FREECOM\CMD\TCCDOS.CFG
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+alias.c:
+beep.c:
+break.c:
+call.c:
+cdd.c:
+chdir.c:
+cls.c:
+copy.c:
+ctty.c:
+date.c:
+del.c:
+dir.c:
+dirs.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+doskey.c:
+echo.c:
+exit.c:
+exit2.c:
+fddebug.c:
+for.c:
+goto.c:
+history.c:
+if.c:
+memory.c:
+mkdir.c:
+path.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+pause.c:
+popd.c:
+prompt.c:
+pushd.c:
+rem.c:
+ren.c:
+rmdir.c:
+set.c:
+shift.c:
+time.c:
+truename.c:
+type.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+verify.c:
+which.c:
+TLIB 3.01 Copyright (c) 1987, 1990 Borland International
++alias.obj &amp;
++beep.obj &amp;
++break.obj &amp;
++call.obj &amp;
++cdd.obj &amp;
++chdir.obj &amp;
++cls.obj &amp;
++copy.obj &amp;
++ctty.obj &amp;
++date.obj &amp;
++del.obj &amp;
++dir.obj &amp;
++dirs.obj &amp;
++doskey.obj &amp;
++echo.obj &amp;
++exit.obj &amp;
++exit2.obj &amp;
++fddebug.obj &amp;
++for.obj &amp;
++goto.obj &amp;
++history.obj &amp;
++if.obj &amp;
++memory.obj &amp;
++mkdir.obj &amp;
++path.obj &amp;
++pause.obj &amp;
++popd.obj &amp;
++prompt.obj &amp;
++pushd.obj &amp;
++rem.obj &amp;
++ren.obj &amp;
++rmdir.obj &amp;
++set.obj &amp;
++shift.obj &amp;
++time.obj &amp;
++truename.obj &amp;
++type.obj &amp;
++verify.obj &amp;
++which.obj
+MAKE0000.$$$ =&gt; C:\FREECOM\SHELL\TCCDOS.CFG
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+cswapc.c:
+batch.c:
+cmdtable.c:
+command.c:
+Turbo C++  Version 1.01 Copyright (c) 1990 Borland International
+expalias.c:
+init.c:
+kswap.c:
+loadhigh.c:
+module.c:
+redir.c:
+ver.c:
+Turbo Link  Version 3.01 Copyright (c) 1987, 1990 Borland International
+Warning: __fstpcpy defined in module FSTPCPY.OBJ is duplicated in module FSTPCPY
+Warning: _exit defined in module cswapc.c is duplicated in module EXIT
+Warning: _putenv defined in module ENV_PUT.OBJ is duplicated in module PUTENV
+shell\command.exe =&gt; C:\FREECOM\COMMAND.COM
+infores =&gt;&gt; C:\FREECOM\COMMAND.COM
+criter\criter1 =&gt;&gt; C:\FREECOM\COMMAND.COM
+criter\criter =&gt;&gt; C:\FREECOM\COMMAND.COM
+strings\strings.dat =&gt;&gt; C:\FREECOM\COMMAND.COM
+Poking: @19DF:0080 = 1</PRE>
+
+</UL>
+
+<HR>
+<HR WIDTH=50%><HR WIDTH=25%><HR WIDTH=5%><P ALIGN=CENTER>
+Copyright 2002 &copy; Steffen Kaiser - current maintainer of FreeCOM
+<P>
+<FONT SIZE=1>
+<A HREF="ftp://ftp.cs.pdx.edu/pub/elvis/"><IMG SRC="../images/vi.gif" ALT="Elvis - The VI clone"></A>
+</FONT>
+</BODY>
+</HTML>

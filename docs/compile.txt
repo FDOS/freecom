@@ -1,10 +1,9 @@
 Compile notes:
 
-NOTE: NASM version 0.98.34 compiled on Jun 17 2002
-Contains a bug, you'll need to switch to a previous version,
-the DJGPP compiled or Win32 variant, e.g.:
-Win32: NASM version 0.98.34 compiled on Jun 13 2002
-                                            ^^   !!
+NOTE: Use NASM version 0.98.35 or later!
+
+There is a more detailed description located here:
+http://freedos.sourceforge.net/freecom/build48.html
 
 1) Setup TC++ v1.01 (see www.freedos.org, Links page for a reference to
 Borland's museum site).
@@ -15,11 +14,11 @@ Borland's museum site).
  and the makefile name. On trouble try to fix BUILD.BAT.)
 
 ** BUILD.BAT accepts to following options:
-C> BUILD.BAT [-r] [clean] [xms-swap]
+C> BUILD.BAT [-r] [clean] [xms-swap] [language]
 -r		Rebuilt (clean previous files before proceed)
 clean	remove *.COM, *.OBJ, *.LIB etc. files, then exit
 xms-swap	create FreeCOM with XMS-Only Swap support
-
+language	sets the specified language as the default build language
 
 You will find two executables in the FreeCOM directory:
 SHELL\COMMAND.EXE and COMMAND.COM.
