@@ -17,6 +17,7 @@ if NOT "%DBG%"=="" set _DBG=
 set compiler=tc101
 set compiler=bc5
 set lng=english
+set model=
 
 iff exist config.h.backup then
 	echo config.h.backup exists
@@ -60,6 +61,7 @@ for %file in (tools\kssf.com tools\vspawn.com tools\ptchldrv.exe tools\ptchsize.
 set ndebug=Yes
 set debug=
 set compiler=tc101
+set model=s
 
 ren /q config.h config.h.backup || cancel 20
 echo #define IGNORE_ENHANCED_INPUT >config.h
