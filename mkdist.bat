@@ -95,6 +95,15 @@ perl get_ver.pl .\command.com
 
 : %_DBG echo on %+ setdos /y1
 
+:: Make HTML documents
+pushd docs\html\commands || quit
+echo Updating HTML documents
+perl db2html
+: Call it two times to have the command list updated
+perl db2html
+perl parseHTML
+popd
+
 call mkpkgs.bat
 
 %_DBG setdos /y0 %+ %_DBG echo off
@@ -104,12 +113,5 @@ dmake command.mak || quit
 %_DBG setdos /y1 %+ %_DBG echo on
 
 rm -frd old
-
-:: Make HTML documents
-pushd docs\html\commands || quit
-echo Updating HTML documents
-perl db2html
-perl parseHTML
-popd
 
 :ende
