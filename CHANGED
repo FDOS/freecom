@@ -1,3 +1,9 @@
+bugfix: >>PATH<< with empty %PATH% --> PATH=(null)
+fix: BREAK/VERIFY ignore trailing spaces
+fix: >>PATH ;<< remove PATH environment variable
+fix: cache 3 environment variables to overcome nested useage (e.g. when
+	loading message segment to print environment variable)
+bugfix: keep trailing spaces of command line
 chg: default heap size (tools\ptchsize) set to 6KB
 chg: error displaying functions centralized into lib\err_fcts.src
 add: displayError() 

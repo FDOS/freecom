@@ -203,8 +203,8 @@ static void docommand(char *line)
 
   assert(line);
 
-  /* delete leading & trailing whitespaces */
-  line = trimcl(line);
+  /* delete leading spaces, but keep trailing whitespaces */
+  line = ltrimcl(line);
 
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 #if BUFFER_SIZE < MAX_INTERNAL_COMMAND_SIZE

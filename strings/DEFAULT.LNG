@@ -641,6 +641,9 @@ Directory of %s
 :TEXT_MSG_PATH
 PATH=%s
 .
+:TEXT_MSG_PATH_NONE#1
+No search path defined.
+.
 
 ## The following names MUST be in this order!
 :TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1

@@ -6,6 +6,13 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/04/29 12:24:36  skaus
+	bugfix: >>PATH<< with empty %PATH% --> PATH=(null)
+	fix: BREAK/VERIFY ignore trailing spaces
+	fix: >>PATH ;<< remove PATH environment variable
+	fix: cache 3 environment variables to overcome nested useage (e.g. when
+		loading message segment to print environment variable)
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +36,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -37,6 +44,7 @@
 #include <assert.h>
 #include <string.h>
 
+#include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../include/misc.h"
 
@@ -44,6 +52,7 @@ enum OnOff onoffStr(char *line)
 {
 	if(!line)
 		return OO_Null;
+	line = trimcl(line);
 	if(!*line)
 		return OO_Empty;
 	if (stricmp(line, D_OFF) == 0)

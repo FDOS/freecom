@@ -146,7 +146,7 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_PATH
-  {"PATH", 0, cmd_path, TEXT_CMDHELP_PATH},
+  {"PATH", CMD_SPECIAL_ALL, cmd_path, TEXT_CMDHELP_PATH},
 #endif
 
 #ifdef INCLUDE_CMD_PAUSE
