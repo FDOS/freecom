@@ -10,51 +10,29 @@
 #
 #
 # $Log$
-# Revision 1.6  2001/04/01 21:05:44  skaus
+# Revision 1.7  2001/04/12 00:09:06  skaus
+# chg: New structure
+# chg: If DEBUG enabled, no available commands are displayed on startup
+# fix: PTCHSIZE also patches min extra size to force to have this amount
+#    of memory available on start
 # bugfix: CALL doesn't reset options
 # add: PTCHSIZE to patch heap size
 # add: VSPAWN, /SWAP switch, .SWP resource handling
-#
-# Revision 1.5  2001/03/07 19:49:01  skaus
-# Merged in Swap Support changes
-#
-# Revision 1.2.4.6  2001/02/27 18:27:06  skaus
-# fix: criter.asm: DEBUG does no longer compile to .COM (for consistency)
-# chg: removed all NULLs to prevent NULL problematic, functions must be
-# 	used fully prototyped now
-#
-# Revision 1.2.4.5  2001/02/21 01:07:01  skaus
-# bugfix: _fstrchr() doesnot find '\0'
-# bugfix: NULL problematic
-#
-# Revision 1.2.4.4  2001/02/18 22:43:58  skaus
-# bugfix: STRINGS resource length value counts 1. string twice
-# sub: enumResources() won't check secondary files no longer
-#
-# Revision 1.2.4.3  2001/02/18 21:08:24  skaus
-# add: command WHICH
-# fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
-#
-# Revision 1.2.4.2  2001/02/18 17:59:37  skaus
-# bugfix: KSSF: restore parentPSP on exit
-# chg: Using STRINGS resource for all non-interactive messages
-# chg: moving all assembly files to NASM
-#
-# Revision 1.2.4.1  2001/02/06 16:30:14  skaus
-# chg: FreeCOM no longer uses the shell hack if kswap is active
-# bugfix: aliases were read back incorrectly
-#
-# Revision 1.4  2000/12/10 04:16:12  skaus
-# add: Installable Commands FEATURE_INSTALLABLE_COMMANDS
-# add: F1, F3, F5, cur-right command line editing
-# relased version 0.80
-#
-# Revision 1.3  2000/08/15 21:31:38  skaus
-# chg: binary packages on FTP\nbugfix: piping
-#
-# Revision 1.2  2000/07/09 21:57:25  skaus
-# + Support for international strings without recompiling
-# + Useage of TC++1
+# bugfix: COMMAND.COM A:\
+# bugfix: CALL: if swapOnExec == ERROR, no change of swapOnExec allowed
+# add: command MEMORY
+# bugfix: runExtension(): destroys command[-2]
+# add: clean.bat
+# add: localized CRITER strings
+# chg: use LNG files for hard-coded strings (hangForEver(), init.c)
+# 	via STRINGS.LIB
+# add: DEL.C, COPY.C, CBREAK.C: STRINGS-based prompts
+# add: fixstrs.c: prompts & symbolic keys
+# add: fixstrs.c: backslash escape sequences
+# add: version IDs to DEFAULT.LNG and validation to FIXSTRS.C
+# chg: splitted code apart into LIB\*.c and CMD\*.c
+# bugfix: IF is now using error system & STRINGS to report errors
+# add: CALL: /N
 #
 
 INCDIR +=;$(FREEDOS)\SRC\INCLUDE;..
@@ -78,11 +56,16 @@ NASMFLAGS = $(null,$(NDEBUG) $(NASMFLAGS_DBG) $(NASMFLAGS_NDBG))
 
 # Sources of this make target
 
+.IF $(MAKETARGETS:s/all//) == $(NULL)
 #	Default target
+#	Required only, if no targets were specified on command line
 .INCLUDE : default.mk
 ## all: ptchldrv.exe kssf.com icmd
 error:
 	errlvl 127
+.ENDIF
+
+dist : ;
 
 icmd : load_icd.exe icmd_{1 2 3}.icd
 

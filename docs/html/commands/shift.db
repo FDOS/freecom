@@ -1,0 +1,49 @@
+name: shift
+de: Shift the arguments of a batch script
+req: CMD_SHIFT
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: SHIFT
+<LI>
+EBNF: SHIFT DOWN
+</OL>
+
+DESCRIPTION:
+Shifts the arguments of a batch script one position up (first
+variant) or down (second variant).
+
+<P>Within a batch script the automatic variables %0 through %9
+are replaced by the script name and the first nine arguments.
+This can be imagined as a window to ten arguments of the script.
+SHIFT will allow to move this window of ten arguments towards its
+end (up) or its start (down).
+
+<P>After SHIFT has been executed, the former %0 is hidden and inaccessable,
+%1 became %0, %2 became %1 a.s.o, %9 became %8 and the formerly hidden
+tenth argument became %9.
+<BR><CMD>SHIFT DOWN</CMD> reverses one SHIFT command.
+
+<P>SHIFT can be called as many times as wanted, <CMD>SHIFT DOWN</CMD>
+won't allow to underflow the very first argument.
+
+EXAMPLES:
+EXAMPLE: 1
+
+If the batch script B.BAT:<BR>
+CMD: @ECHO OFF
+CMD: ECHO 0: %0
+CMD: ECHO 1: %1
+CMD: ECHO 2: %2
+had been executed using:<BR>
+CMD: B.BAT 1 2 3 4
+it displays:
+<PRE>B.BAT
+1
+2</PRE>
+<BR>If a SHIFT command had been inserted as second line, the
+same call displays:
+<PRE>1
+2
+3</PRE>

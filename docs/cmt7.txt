@@ -1,0 +1,121 @@
+Permanent data storage within external memory block
+	-- 20001/03/30 ska
+
+FreeCOM utilizes several information that need to keep the same
+when it gets reloaded. The current implementation, esp. ALIAS,
+command line history, directory stack and batch nesting level,
+maintain their own data within a module-local (aka static)
+data structure that is usually dynamically extended into the heap.
+ALIAS and batch processing use single linked lists, history and
+dirstack use a single memory block.
+
+During a swap of FreeCOM this information must be restored to its
+values, though, it need not be replicated exactly the same. For instance,
+if the "last command line" returns the same line, it is uninteresting
+where this information comes from.
+
+When this information is stored external to FreeCOM right away,
+there is no need to take special care about when FreeCOM swap, but
+it will require more time as "external" usually means that these
+locations cannot be addressed with near addresses, which are the default
+and fastest ones.
+
+There is already one data that is maintained external to FreeCOM,
+the block of environment variables. This block must be present in
+its format and syntax, because 3rd party tools are silently allowed
+to modify its contents.
+
+An environment segment is a simple structure, though, mainly implemented
+to store character strings within it:
+
+<name1>=<value1>\0
+<name2>=<value2>\0
+...
+<nameN>=<valueN>\0
+\0
+
+Per convention "<name>"s are printable characters except the equal sign
+itself.
+
+ALIASes are by nature already expressed in this syntax.
+Entries of the command line history and the directory stack can also
+be expressed as such strings easily.
+Even the batch nesting can be easily written as a string.
+
+However, there need to be a way to distinguish all different kinds of
+information stored within such pseudo-environment. Under the
+prerequisite that almost all 3rd party tools honor the convention that
+names are constructed out of printable characters, non-printable
+characters look fine; the low-level functions already implemented and
+used by FreeCOM to access an environment segment don't care at all
+about the name of the variable as long as it does not contain no
+equal sign or NUL character.
+
+Some information, for instance how many entries the history
+or the directory stack contains, could be located in this block
+as well, though it is not really required, because FreeCOM already
+utilizes a so-called "static" context, which primarily serves as
+interface between the higher and lower portions of the swapping
+process, but had been designed to include other data as well since
+its beginning. The main reason to split permanent information across
+two structures, the so-called static and dynamic contexts, arise
+from the fact that the amount of and even the maximal user-specified
+size of such information changes heavily at runtime.
+
+To have the static context firmly rooted in the memory of the systems
+allows to place vital functions within there, e.g. the Critical
+Error handler, without to worry about what happen if to resize the
+context fails. The static context will reference to the associated
+dynamic context, which, if lost, is rebuilt by FreeCOM easily, though,
+with 100% loss of all information stored within there.
+
+The slightly modified format of the dynamic context looks like this:
+
+<tag><name>=<value>\0
+...
+\0
+
+<tag> is a single character that specifies the kind of information
+stored in this line.
+
+<tag> has been choosen like this:
+\2 -> entries of the command line history  (A)
+\3 -> entries of the directory stack (A)
+\4 -> last directory (B)
+\5 -> batch nesting level (A)
+\6 -> swapinfo
+\7 .. ' ' -> reserved for future use
+'!' .. -> alias
+
+To let the aliases allocate all the remaining tags has the slight
+side effect that the syntax of aliases is the same one as of
+environment variables; and because the syntax of the commands
+SET and ALIAS is nearly the same one as well, both commands can
+share a lot of code. Here, SET is to ignore all entries with a
+non-printable first character.
+
+===
+
+Theoretical notes:
+
++ The lowlevel functions to maintain an environment segment are known,
+	so it is possible to rely on this or that implementation, e.g.
+	new entries are always appended to the end of the environment
+	and existing entries are changed on place. That means if a variable,
+	e.g. with an empty name or unknown tag is create at the very
+	beginning of the environment, FreeCOM can rely on that the value
+	of the variable is located at easily calculatable addresses.
+	Though, the value must not contain no NUL characters.
+
++ The memory block must be located in its own DOS memory block, because
+	the lowlevel functions to rely on information located in the MCB
+	preceeding the environment segment -- esp. to aquire the length
+	of the segment from.
+
+===
+
+At this time not every instance of FreeCOM maintains a static context,
+hence, there is no dynamic context by default.
+So for this time, the values that should normally go into the static
+context are implemented as global variables and are saved/restored
+into the static context on swap.

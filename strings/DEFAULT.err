@@ -1,4 +1,9 @@
+# $Id$
+#
 # Critical error national customization file
+#
+#	Language: 7bit ASCII English
+#	Author:   FreeCOM maintainer
 # 
 # The critical error (criter) handler receives some information
 # from the kernel about what error condition happens, generates some

@@ -9,7 +9,7 @@
 #include "../config.h"
 
 #ifdef _TC_EARLY_
-#include "fmemory.h"
+#include <fmemory.h>
 #endif
 
 #define BUFFER_SIZE 10*1024
@@ -38,7 +38,7 @@ main(int argc, char **argv)
 	}
 
 	if((f = fopen(argv[1], "rb")) == NULL) {
-		strcpy(stpcpy(buf, argv[1]), ".icd");
+		strcpy(stpcpy((char*)buf, argv[1]), ".icd");
 		if((f = fopen(argv[1], "rb")) == NULL) {
 			fputs("Cannot open file: ", stdout);
 			puts(argv[1]);
@@ -71,13 +71,13 @@ main(int argc, char **argv)
 		puts("File does not contain a valid Installable Command");
 		return 39;
 	}
-	p = h;
+	p = (unsigned*)h;
 	offName = *--p;
 	offPtr  = *--p;
 
 	if(*++h) {
 		puts("Installable Command comment record:");
-		puts(h);
+		puts((char*)h);
 	}
 
 	if(offName > len - sizeof(id) + 1 || offPtr > len - sizeof(id) + 1) {
@@ -97,7 +97,7 @@ main(int argc, char **argv)
 
 	strupr(q);
 	buf[offName] = (unsigned char)strlen(q);
-	strcpy(&buf[offName + 1], q);
+	strcpy((char*)&buf[offName + 1], q);
 	len = offName + strlen(q) + 2;
 
 	r.r_ax = 0x352f;
@@ -113,7 +113,7 @@ main(int argc, char **argv)
 		return 41;
 	}
 
-	icmd = r.r_ax - 1;
+	icmd = (unsigned char _seg*)(r.r_ax - 1);
 	*(unsigned far *)&icmd[1] = 8;		/* make it system property */
 	_fmemcpy(&icmd[8], &buf[offName + 1], 8);
 	_fmemcpy(&icmd[16], buf, len);

@@ -3,93 +3,84 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
-# Revision 1.6  2001/03/07 19:49:00  skaus
-# Merged in Swap Support changes
-#
-# Revision 1.3.4.3  2001/02/18 17:59:37  skaus
-# bugfix: KSSF: restore parentPSP on exit
-# chg: Using STRINGS resource for all non-interactive messages
-# chg: moving all assembly files to NASM
-#
-# Revision 1.3.4.2  2001/01/28 21:23:55  skaus
-# add: Kernel Swap Support
-#
-# Revision 1.3.4.1  2000/07/19 20:28:30  skaus
-# Experimental Resources, Modules, Context
-#
-# Revision 1.5  2000/08/15 21:31:37  skaus
-# chg: binary packages on FTP\nbugfix: piping
-#
-# Revision 1.4  2000/07/24 23:00:20  skaus
-# fix: DIR & COPY, envSize, Makefiles
-#
-# Revision 1.3.2.1  2000/07/24 22:38:10  skaus
-# add: Spanish Strings
-# fix: Makefiles COMMAND.MAK for TC++ v1.01
-# fix: environment size between 256..32767
-# fix: COPY (to be tested)
-# bugfix: DIR /S; output formatting to match MS COMMAND.COM
-#
-# Revision 1.3  2000/07/10 22:26:56  skaus
-# Change internal strings without re-compiling FreeCOM
-#
-# Revision 1.2  2000/07/09 21:57:25  skaus
-# + Support for international strings without recompiling
-# + Useage of TC++1
-#
-# Revision 1.1.1.1  2000/05/20 03:29:38  jimtabor
-# The GNU GPL FreeCom Command Shell
-#
-# Revision 1.2  2000/03/30 14:07:03  jprice
-# Merge in changes from Steffen's 0.78ska2 code
-#
-# Revision 1.1  1999/09/20 23:56:36  jprice
-# Steffen Kaiser patches
+# Revision 1.7  2001/04/12 00:09:06  skaus
+# chg: New structure
+# chg: If DEBUG enabled, no available commands are displayed on startup
+# fix: PTCHSIZE also patches min extra size to force to have this amount
+#    of memory available on start
+# bugfix: CALL doesn't reset options
+# add: PTCHSIZE to patch heap size
+# add: VSPAWN, /SWAP switch, .SWP resource handling
+# bugfix: COMMAND.COM A:\
+# bugfix: CALL: if swapOnExec == ERROR, no change of swapOnExec allowed
+# add: command MEMORY
+# bugfix: runExtension(): destroys command[-2]
+# add: clean.bat
+# add: localized CRITER strings
+# chg: use LNG files for hard-coded strings (hangForEver(), init.c)
+# 	via STRINGS.LIB
+# add: DEL.C, COPY.C, CBREAK.C: STRINGS-based prompts
+# add: fixstrs.c: prompts & symbolic keys
+# add: fixstrs.c: backslash escape sequences
+# add: version IDs to DEFAULT.LNG and validation to FIXSTRS.C
+# chg: splitted code apart into LIB\*.c and CMD\*.c
+# bugfix: IF is now using error system & STRINGS to report errors
+# add: CALL: /N
 #
 
-INCDIR +=;$(FREEDOS)\SRC\INCLUDE
-LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
-#LDLIBS = suppl_$(_MODEL).lib
-LDFLAGS += /m/s/l
-_MODEL !:= c
-## Disable debugging
-#NDEBUG !:= Yes
+.INCLUDE : ../_config.mk
 
-# Project specific C compiler flags
-MYCFLAGS_DBG = -DDEBUG=1
-MYCFLAGS_NDBG =
-MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
+LDLIBS !:= 
+
+.IF $(LNG) != $(NULL)
+
+_LNG = $(LNG:u:s/.LNG//)
+_LLNG = $(_LNG).LNG
+_ELNG = $(LNG).ERR
+
+.ELSE
+
+_LLNG = 
+_ELNG = 
+
+.ENDIF
 
 OBJ :=
 
-.SOURCE.lib := $(LIBDIR:s/;/ /:u)
-.IMPORT : FREEDOS
-
-# Sources of this make target
-
-
 #	Default target
-all: strings.h strings.dat
-#	strings.err
-	+copy strings.h .. >nul
-	+copy strings.dat .. >nul
-#	+copy strings.err .. >nul
+all: strings.h strings.dat strings.lib strings.err
 
+
+dist : ;
 
 .INIT : $(CFG) __errl
 
 __errl:
 	@+-if exist errlist del errlist >nul
-	-ctags *.c
+	-ctags *.c ..\lib\*.c
 
-strings.h strings.dat .UPDATEALL : fixstrs.exe default.lng
-	fixstrs.exe $(LNG)
+strings.h strings.dat .UPDATEALL : fixstrs.exe default.lng $(_LLNG)
+	fixstrs.exe /lib $(LNG)
+	+copy strings.h .. >nul
 
-strings.err : critstrs.exe default.err
+strings.lib : fixstrs.exe default.lng
+	$(RUNMAKE) strings_lib strings_lib_clean
+
+strings_lib .SETDIR=strings :
+	$(RUNMAKE) NDEBUG!:=Yes DEBUG!:=
+	+copy strings.lib ..
+	+copy strings.lst ..
+
+strings_lib_clean :
+	$(RM) -fr strings
+
+strings.err : critstrs.exe default.err $(_ELNG)
 	critstrs.exe $(LNG)
 
-fixstrs.exe : fixstrs.c ../strings.typ
+fixstrs.exe ?= _MODEL !:= c
+fixstrs.exe : fixstrs.c ../include/strings.typ
 
+critstrs.exe ?= _MODEL !:= c
 critstrs.exe : critstrs.c
 
 #MAKEDEP START
@@ -98,9 +89,9 @@ critstrs.exe : critstrs.c
 clobber : clean
 	$(RM) $(RMFLAGS) *.exe *.com ..\strings.h ..\strings.dat ..\string.err
 
-clean :
+clean : strings_lib_clean
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) strings.h strings.dat
-	$(RM) $(RMFLAGS) *.log string.err
+	$(RM) $(RMFLAGS) *.log strings.err strings.lib strings.lst
 
 
 .IF $(CFG) != $(NULL)

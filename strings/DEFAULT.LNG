@@ -1,3 +1,10 @@
+# $Id$
+#
+# FreeCOM national customization file
+#
+#	Language: 7bit ASCII English
+#	Author:   FreeCOM maintainer
+# 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
 # outputs strings.h and strings.dat.  The .DAT file is appended to
@@ -9,16 +16,49 @@
 # with "#" are ignored.
 # Each message starts with a label name that will be used to refer to
 # the message in the program.  A label starts with a colon ":".
-# Please look at other messages to see the pattern, and try to
-# follow with new messages.
+# A label has a version ID attached to it delimited by a hash sign, e.g.:
+#	:TEXT_LABEL#1
+# This version is incremented each time the contents of the string has
+# undergo a larger change. The same language definition may contain the
+# same label up to one time, regardless of the version. FIXSTRS compares
+# both the label and the version ID and both must match.
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
-# period signifies that there will be a final carrage return when
+# period (".") signifies that there will be a final carrage return when
 # the message is displayed, but a comma does not.
 #
+# The body may contain backslash escape sequences as known from C; there
+# are the usual \# (where '#' is a lowercase letter except 'x'),
+# \\ (to embed a backslash itself)
+# \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
+# character), \, and \. (to specify a period or comma in the first column
+# of a line) and the single \ at the end of the line to suppress to append
+# a newline character. Note: There is NO octal sequence except the short \0!
+# There is a known bug (or feature): [ignore the very first hash mark]
+#:TEXT_LABEL#2
 #
+#\
+#,
+# Although the first data line appends the newline, the second does not,
+# though the comma removes the newline from the first line.
 
+# Defining prompts
+# Some prompts may cause an user interaction. Those ones should be in sync
+# with the issued text. To define how to interprete a pressed key, they
+# are mapped into metakeys like that: [ignore first hash sign]
+#:PROMPT_YES_NO#1
+#YyNn\n\r\3
+#aabb b b b
+# (Yes/No) ?
+#,
+# All strings, which label start with "PROMPT_", are parsed as prompts.
+# The first two lines of the body are special; the first one enumerates all
+# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# range from 'a' through 'z'; spaces are ignored; everything else cause
+# an error. The comment preceeding the prompt definition associates the
+# metakeys with their meaning.
+# The remaining lines of the body contain the text to be displayed.
 
 #
 #  These are error messages
@@ -98,6 +138,10 @@ Bad command or filename.
 Out of memory error.
 .
 
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+Allocation of DOS memory failed.
+.
+
 :TEXT_ERROR_CANNOTPIPE
 Cannot pipe!  Cannot open temporary file!
 .
@@ -114,17 +158,30 @@ Batchfile "%s" not found.
 Batchfile "%s" does not contain label "%s".
 .
 
+:TEXT_ERROR_DIRFCT_FAILED#1
+%s failed for "%s".
+.
+# The next three errors must remain in this order!
 :TEXT_ERROR_SET_ENV_VAR
 Can not set environment variable "%s".
 Environment full?
 .
-
 :TEXT_ERROR_ENV_VAR_NOT_FOUND
 Environment variable "%s" not found.
 .
-
 :TEXT_ERROR_NO_ENVIRONMENT
 No environment. Maybe memory short. Specify /E option.
+.
+
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1
+Can not set alias "%s". Alias space full?
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1
+Alias "%s" not found.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+No alias space. Maybe memory short.
 .
 
 :TEXT_ERROR_SYNTAX_STR
@@ -151,9 +208,14 @@ Command line too long after alias expansion!
 Line too long.  Can not execute command.
 .
 
-:TEXT_ERROR_HISTORY_SIZE
-Invalid history size.
+:TEXT_ERROR_HISTORY_SIZE#1
+Invalid history size "%s".
 .
+
+:TEXT_HISTORY_EMPTY#1
+Command line history empty.
+.
+
 
 :TEXT_ERROR_BAD_MCB_CHAIN
 MCB chain corrupt, or MS-DOS incompatible system.
@@ -175,20 +237,20 @@ Must specify ON or OFF.
 Bad varable specification.
 .
 
-:TEXT_ERROR_IN_MISSING
-IN missing in FOR statement.
+:TEXT_ERROR_IN_MISSING#1
+FOR: IN missing.
 .
 
-:TEXT_ERROR_MISSING_PARENTHESES
-One or both paraentheses missing.
+:TEXT_ERROR_MISSING_PARENTHESES#1
+One or both parentheses missing.
 .
 
-:TEXT_ERROR_DO_MISSING
-DO missing in FOR statement.
+:TEXT_ERROR_DO_MISSING#1
+FOR: DO missing.
 .
 
-:TEXT_ERROR_NO_COMMAND_AFTER_DO
-No command after DO statement.
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+FOR: No command after DO statement.
 .
 
 :TEXT_ERROR_REDIRECT_FROM_FILE
@@ -209,10 +271,6 @@ Invalid time.
 
 :TEXT_ERROR_NO_GOTO_LABEL
 No label specified for GOTO.
-.
-
-:TEXT_ERROR_NO_CTTY_CMD
-CTTY not implemented yet.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
@@ -271,6 +329,19 @@ Nothing to do.
 COPY failed
 .
 
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: missing filename
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: missing number
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: invalid number
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: Missing command
+.
+
 :TEXT_NOT_IMPLEMENTED_YET
 Sorry...not implemented yet.
 .
@@ -283,20 +354,23 @@ Failed to load messages into memory.
 The /MSG option has been excluded from this COMMAND.COM.
 .
 
+:TEXT_MSG_ITEMS_DISPLAYED#1
+%u items displayed.
+.
+
 :TEXT_CORRUPT_COMMAND_LINE
 Corrupt command line. This is an internal error and is related to
 the system COMMAND.COM runs in. Please report this error.
 .
 
-:TEXT_QUOTED_C_OR_K
-The /C and /K options cannot be quoted,
-they are ignored.
+:TEXT_QUOTED_C_OR_K#1
+The /C and /K options cannot be quoted, they are ignored.
 .
 
-:TEXT_INIT_FULLY_QUALIFIED
+:TEXT_INIT_FULLY_QUALIFIED#1
 The path to COMMAND.COM must be fully qualified!
 That means including drive letter and beginning with a backslash.
-For example: C:\FDOS
+For example: C:\\FDOS
 
 COMMAND.COM assumes this path now:
 %s
@@ -327,12 +401,55 @@ Swapping failed: Aliases allocate too much memory.
 Swapping failed: Cannot allocate far memory.
 .
 
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+Out of alias space.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1
+No such alias: %s
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+Failed to insert alias.
+.
+
+:TEXT_ALIAS_INVALID_NAME#1
+Invalid alias name "%s".
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+Cannot load Context module or Critical Error handler.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+Context out of memory.
+If this error persists, consider to increase some internal buffer,
+such as history, direcory stack etc.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1
+Size of context totals %lu bytes exceeding maximal limit.
+Resizing context to %u bytes.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+Failed to add status information into context. This error may indicate
+memory corruption or an incorrectly determined minimum size of
+the context. Please inform the maintainer of FreeCOM at:
+freecom@freedos.org
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+The context is missing after swap. The context is re-created,
+but all aliases etc. are lost.
+.
+
 #
 # Informational messages
 #
 
-:TEXT_MSG_PAUSE
-Press any key to continue . . .
+:TEXT_MSG_PAUSE#1
+Press any key to continue . . .\
 .
 
 :TEXT_MSG_HISTORY_SIZE
@@ -367,49 +484,103 @@ Current date is %s
 .
 
 ## The three DATE prompts MUST be in this order!
-:TEXT_MSG_ENTER_DATE_AMERICAN
-Enter new date (mm%sdd%s[cc]yy): 
-,
-:TEXT_MSG_ENTER_DATE_EUROPE
-Enter new date (dd%smm%s[cc]yy): 
-,
-:TEXT_MSG_ENTER_DATE_JAPANESE
-Enter new date ([cc]yy%smm%sdd): 
-,
+:TEXT_MSG_ENTER_DATE_AMERICAN#1
+Enter new date (mm%sdd%s[cc]yy): \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1
+Enter new date (dd%smm%s[cc]yy): \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1
+Enter new date ([cc]yy%smm%sdd): \
+.
 
 :TEXT_MSG_CURRENT_TIME
 Current time is %s
 .
 
-:TEXT_STRING_PM
- pm
-,
+:TEXT_STRING_PM#1
+ pm\
+.
+:TEXT_STRING_AM#1
+ am\
+.
 
-:TEXT_STRING_AM
- am
-,
+:TEXT_MSG_ENTER_TIME#1
+Enter new time: \
+.
 
-:TEXT_MSG_ENTER_TIME
-Enter new time: 
-,
-
+# src-file <operation> target-file
 :TEXT_MSG_COPYING
 %s %s %s
 .
 
-:TEXT_MSG_DELETE_ALL
-All files in directory will be deleted!
-Are you sure (Y/N)?
-,
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (Y/N) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1
+YyNn{CR}{LF}{CBREAK}
+aabb   b   b       b
+All files in %s will be deleted!
+Are you sure (Y/N)? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+YyNn{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Yes=ENTER, No=ESC] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+#	by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1
+YyNnAaQq{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Control-Break pressed.\r
+Terminate batch file '%s' (Yes/No/All) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Overwrite '%s' (Yes/No/All/Quit) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Delete '%s' (Yes/No/All/Quit) ? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<unkown>>\
+.
 
 :TEXT_DIRSTACK_EMPTY
 Directory stack empty.
 .
 
 ## Strings to construct the DIR output
-:TEXT_DIR_HDR_VOLUME
- Volume in drive %c 
-,
+:TEXT_DIR_HDR_VOLUME#1
+ Volume in drive %c \
+.
 :TEXT_DIR_HDR_VOLUME_STRING
 is %s
 .
@@ -419,18 +590,18 @@ has no label
 :TEXT_DIR_HDR_SERIAL_NUMBER
  Volume Serial Number is %04X-%04X
 .
-:TEXT_DIR_FTR_FILES
-%10s file(s)
-,
+:TEXT_DIR_FTR_FILES#1
+%10s file(s)\
+.
 :TEXT_DIR_FTR_BYTES
    %12s bytes
 .
 :TEXT_DIR_FTR_TOTAL_NUMBER
 Total files listed:
 .
-:TEXT_DIR_FTR_DIRS
-%10s dir(s)
-,
+:TEXT_DIR_FTR_DIRS#1
+%10s dir(s)\
+.
 :TEXT_DIR_FTR_BYTES_FREE
  %15s bytes free
 .
@@ -440,56 +611,67 @@ Directory of %s
 :TEXT_DIR_DIRECTORY_WITH_SPACE
  Directory of %s
 .
-:TEXT_DIR_LINE_FILENAME_WIDE
-%-15s
-,
+:TEXT_DIR_LINE_FILENAME_WIDE#1
+%-15s\
+.
 :TEXT_DIR_LINE_FILENAME_BARE
 %-13s
 .
-:TEXT_DIR_LINE_FILENAME_SINGLE
-%-13s
-,
-:TEXT_DIR_LINE_FILENAME
-%-8s %-3s 
-,
-:TEXT_DIR_LINE_SIZE_DIR
-        <DIR> 
-,
-:TEXT_DIR_LINE_SIZE
-   %10s 
-,
+:TEXT_DIR_LINE_FILENAME_SINGLE#1
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <DIR> \
+.
+:TEXT_DIR_LINE_SIZE#1
+   %10s \
+.
 
-:TEXT_FILE_COMPLATION_DISPLAY
-%-14s
-,
+:TEXT_FILE_COMPLATION_DISPLAY#1
+%-14s\
+.
 
 :TEXT_MSG_PATH
 PATH=%s
 .
 
 ## The following names MUST be in this order!
-:TEXT_WEEKDAY_SHORT_NAME_SUNDAY
-Sun
-,
-:TEXT_WEEKDAY_SHORT_NAME_MONDAY
-Mon
-,
-:TEXT_WEEKDAY_SHORT_NAME_TUESDAY
-Tue
-,
-:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY
-Wed
-,
-:TEXT_WEEKDAY_SHORT_NAME_THURSDAY
-Thu
-,
-:TEXT_WEEKDAY_SHORT_NAME_FRIDAY
-Fri
-,
-:TEXT_WEEKDAY_SHORT_NAME_SATURDAY
-Sat
-,
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+Sun\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+Mon\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+Tue\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+Wed\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+Thu\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+Fri\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+Sat\
+.
 
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+no file removed.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+one file removed.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1
+%u files removed.
+.
 
 :TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
 Internal commands available:
@@ -502,44 +684,50 @@ Features available:
 
 ## Displayed within "?" <-> showcmd() to enumerate the included features
 ## Note the trailing single space
-:TEXT_SHOWCMD_FEATURE_ALIASES
-[aliases] 
-,
-:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT
-[enhanced input] 
-,
-:TEXT_SHOWCMD_FEATURE_HISTORY
-[history] 
-,
-:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION
-[filename completion] 
-,
-:TEXT_SHOWCMD_FEATURE_SWAP_EXEC
-[swapping] 
-,
-:TEXT_SHOWCMD_FEATURE_CALL_LOGGING
-[start logging] 
-,
-:TEXT_SHOWCMD_FEATURE_LAST_DIR
-[last dir] 
-,
-:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL
-[kernel swap] 
-,
-:TEXT_SHOWCMD_DEFAULT_TO_SWAP
-[default to swap] 
-,
-:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS
-[installable commands] 
-,
-:TEXT_SHOWCMD_FEATURE_NLS
-[DOS NLS] 
-,
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[aliases] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[enhanced input] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[history] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[filename completion] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[swapping] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[start logging] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+[last dir] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[kernel swap] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[default to swap] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[installable commands] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+[DOS NLS] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[directory stack (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[FreeCOM debugging] \
+.
 
-:TEXT_MSG_INIT_BYPASS_AUTOEXEC
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
 
-Press F8 for trace mode, or F5 to bypass %s... 
-,
+Press F8 for trace mode, or F5 to bypass %s... \
+.
 :TEXT_MSG_INIT_BYPASSING_AUTOEXEC
 Bypassing %s.
 .
@@ -593,6 +781,58 @@ Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+The shell is about to be terminated, though, this is\r
+forbidden (usually by enabling the "/P" option).\r
+You must reboot the system or, if this shell runs in\r
+a multitasking environment, terminate this process/task manually.\r
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+FreeCOM executable not found.
+You must specify the complete path to COMMAND.COM
+as the first argument of COMMAND, for instance:
+C:\\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1
+Environment segment    : max %5u bytes; free %5u bytes
+.
+:TEXT_MEMORY_CONTEXT#1
+Context segment        : max %5u bytes; free %5u bytes
+.	
+:TEXT_MEMORY_HEAP#1
+Heap                   : free %5lu bytes
+.
+:TEXT_MEMORY_CTXT_ALIAS#1
+\tAliases        : limit %5u bytes, current %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_HISTORY#1
+\tHistory        : limit %5u bytes, current %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1
+\tDirectory stack: limit %5u bytes, current %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1
+\tLast dir cache : used  %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_BATCH#1
+\tBatch nesting  : used  %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1
+\tSwapinfo       : used  %5u bytes, %5u items
+.
+
+
 #
 # Command help text
 #
@@ -621,13 +861,14 @@ BREAK [ON | OFF]
 Type BREAK without a parameter to display the current BREAK setting.
 .
 
-:TEXT_CMDHELP_CALL
+:TEXT_CMDHELP_CALL#1
 Calls one batch program from another.
 
-CALL [drive:][path]filename [batch-parameters]
+CALL [/S | /N] [drive:][path]filename [batch-parameters]
 
   batch-parameters   Specifies any command-line information required by
                      the batch program.
+/S enforces, /N denies swapping of FreeCOM.
 .
 
 :TEXT_CMDHELP_CD
@@ -730,13 +971,15 @@ CTTY device
   device   The terminal device you want to use, such as COM1.
 .
 
-:TEXT_CMDHELP_DATE
+:TEXT_CMDHELP_DATE#1
 Displays or sets the date.
 
-DATE [date]
+DATE [/D] [date]
 
 Type DATE without parameters to display the current date setting and a
 prompt for a new one.  Press ENTER to keep the same date.
+
+/D prevents DATE to become interactive.
 .
 
 :TEXT_CMDHELP_DEL
@@ -852,8 +1095,14 @@ GOTO label
 You type a label on a line by itself, beginning with a colon.
 .
 
-:TEXT_CMDHELP_HISTORY
+:TEXT_CMDHELP_HISTORY#1
 History command.
+
+HISTORY [size]
+
+Without "size" the current contents of the command line histoty
+buffer is displayed.
+With the size, the size of the history buffer is changed.
 .
 
 :TEXT_CMDHELP_IF
@@ -1003,34 +1252,41 @@ Note that you cannot specify a new drive or path for your destination. Use
 the MOVE command for that purpose.
 .
 
-:TEXT_CMDHELP_SET
+:TEXT_CMDHELP_SET#1
 Displays, sets, or removes environment variables.
 
-SET [variable[= | space][string]]
+SET [/C] [variable=[string]]
 
   variable  Specifies the environment-variable name.
   string    Specifies a series of characters to assign to the variable.
 
-* If you include a '=', but no string, then the variable is removed
-  from the environment.
-* Now you can use a space instead of '=' to create/change a variable.
+* If no string is specified, the variable is removed from the environment.
 
 Type SET without parameters to display the current environment variables.
+
+/C forces to keep the case of the variable; by default the variable is
+uppercased, if it is not located in the environment already, otherwise
+the case is retained.
 .
 
-:TEXT_CMDHELP_SHIFT
+:TEXT_CMDHELP_SHIFT#1
 Changes the position of replaceable parameters in a batch file.
 
-SHIFT
+SHIFT [DOWN]
+
+DOWN shifts the argument window toward the beginning (%0); otherwise
+toward the end.
 .
 
-:TEXT_CMDHELP_TIME
+:TEXT_CMDHELP_TIME#1
 Displays or sets the system time.
 
-TIME [time]
+TIME [/T] [time]
 
 Type TIME with no parameters to display the current time setting and a
 prompt for a new one.  Press ENTER to keep the same time.
+
+/T prevents TIME from becoming interactive.
 .
 
 :TEXT_CMDHELP_TRUENAME
@@ -1085,14 +1341,26 @@ Displays the disk volume label and serial number, if they exist.
 VOL [drive:]
 .
 
-:TEXT_CMDHELP_QUESTION
+:TEXT_CMDHELP_QUESTION#1
 Displays a list of commands and features available with in the shell.
 
-? [/?]
+?
+?command [argument]
+
+The first variant displays any available internal command and feature.
+The second one will prompt whether or not to execute the specified
+command as if trace mode would be active.
 .
 
 :TEXT_CMDHELP_WHICH
 Searches and displays the executable file for each specified file.
 
 WHICH {command}
+.
+
+:TEXT_CMDHELP_MEMORY#1
+Displays the internal memory used by FreeCOM internally
+
+MEMORY
+
 .

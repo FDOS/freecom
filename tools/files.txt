@@ -1,5 +1,6 @@
 Implementation of tools useful for FreeCOM at run-time
 
+PTCHSIZE	tool to display/restrict the default heap of FreeCOM
 PTCHLDRV	tool to change the drive the FEATURE_CALL_LOGGING
 		creates the logfile on.
 

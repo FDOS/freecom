@@ -14,7 +14,7 @@
 #include <string.h>
 
   /* Aquire LOG_FILE, the name of the logfile */
-#include "config.h"
+#include "../config.h"
 
 static char logFilename[] = LOG_FILE;
 static char hbuf[] = LOG_FILE;

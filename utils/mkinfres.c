@@ -13,9 +13,9 @@
 #include <string.h>
 
 #include "../config.h"
-#include "../command.h"
-#include "../res.h"
-#include "../infores.h"
+#include "../include/command.h"
+#include "../include/res.h"
+#include "../include/infores.h"
 
 #define pch(ch) (isprint((unsigned)(ch) & 0xFF)? (unsigned)(ch) & 0xFF: '.')
 
@@ -23,7 +23,7 @@ FILE *txt = 0;
 FILE *info = 0;
 char buf[3*1024];
 
-#include "../res_w.c"		/* Make this a single file project */
+#include "../lib/res_w.c"		/* Make this a single file project */
 
 int scanMapFile(const char * const fnam
 	, unsigned long * const pos
@@ -80,7 +80,8 @@ int scanMapFile(const char * const fnam
 
 	fclose(map);
 	printf("No valid entry of _heaplen found in: %s\n", fnam);
-	return 50;
+	*pos = 0;
+	return 0;
 }
 
 int addImageDisplacement(const char * const fnam
@@ -196,7 +197,9 @@ main(int argc, char **argv)
 	}
 	startResource(info, RES_ID_INFO, 0);
 	dumpTagU(INFO_EXTRA_SPACE, extraSpace);
-	dumpTag(INFO_POS_HEAPLEN, 4, &heapPos);
+	if(heapPos)
+		dumpTag(INFO_POS_HEAPLEN, 4, &heapPos);
+#if 0			/* They are external now */
 #ifdef FEATURE_ALIASES
 	dumpTagU(INFO_ALIASES, 0);
 #endif
@@ -204,7 +207,8 @@ main(int argc, char **argv)
 	dumpTagU(INFO_HISTORY, 256);
 #endif
 #ifdef INCLUDE_CMD_PUSHD
-	dumpTagU(INFO_DIRSTACK, DIR_STACK_LEN);
+	dumpTagU(INFO_DIRSTACK, DIRSTACK_DEFAULT_SIZE);
+#endif
 #endif
 	dumpTagU(INFO_BUFSIZE, MAX_INTERNAL_COMMAND_SIZE);
 	dumpTag(INFO_END, 0, 0);

@@ -1,31 +1,6 @@
 /*
  * config.h - Used to configure what will be compiled into the shell.
  *
- *
- * Comments:
- * 27 Jul 1998 - John P. Price
- * - started.
- *
- * 12-Aug-1998 ska
- * - added CTTY macro
- *
- * 2000/01/05 ska
- * chg: moved some declarations from INIT.C here (COM_NAME, AUTO_EXEC, &
- *	LOG_NAME)
- *
- * 2000/01/15 ska
- * add: FEATURE_AUTOREDIRECT_TO_CON: Number of loops after the output is
- *	redirected to CON, if FreeCom hangs in "hangForever()" in COMMAND.C
- *
- * 2000/06/22 ska
- *	add: DIR_STACK_LEN, commands: DIRS, POPD, PUSHD, CDD
- *	add: FEATURE_LAST_DIR
- *
- * 2000/09/26 ska
- *	add: FEATURE_ENHANCED_INPUT
- *
- * 2000/12/10 ska
- *	add: FEATURE_INSTALLABLE_COMMANDS
  */
 
 /* define DEBUG to add debugging code */
@@ -35,6 +10,7 @@
 
 /* Define to enable the alias command, and aliases. */
 #define FEATURE_ALIASES
+#define ALIAS_DEFAULT_SIZE 1024
 
 /* Define to enable enhanced input (prerequisite of History and Filename
 	completion */
@@ -42,6 +18,7 @@
 
 /* Define to enable history (aka DOSKEY); requires: Enhanced Input */
 #define FEATURE_HISTORY
+#define HISTORY_DEFAULT_SIZE 256
 
 /* Define to enable filename completion; requires: Enhanced Input */
 #define FEATURE_FILENAME_COMPLETION
@@ -75,13 +52,41 @@
    Undefine to remove this feature */
 #define FEATURE_AUTO_REDIRECT_TO_CON 5
 
+/* How many batch files should be nestable minimally */
+#define BATCH_NESTLEVEL_MIN 5
+
 /* Define to support kernel-supported swapout of FreeCOM
 	see DOCS\K-SWAP.TXT
 */
 #define FEATURE_KERNEL_SWAP_SHELL
 
 /* Define the size of the buffer used to store old paths for PUSHD/POPD */
-#define DIR_STACK_LEN 256
+#define DIRSTACK_DEFAULT_SIZE 256
+
+/* Use this errorlevel if an external program was terminated by
+	^C or ^Break */
+#define CBREAK_ERRORLEVEL 3
+
+/* Use these filemode while searching for file completion */
+#define FILE_SEARCH_MODE FA_RDONLY | FA_ARCH | FA_DIREC
+
+
+/* Default message settings:
+  PATTERN: how the string is constructed for the ID (with \n)
+  OUTOFMEMORY: string to issue on out-of-memory condition (no \n)
+  ID_: the error ID when no default pattern is to be created, but
+  	the out-of-memory string is to be displayed
+*/
+#define MSG_DFL_PATTERN "String #%u\n"
+#define MSG_DFL_OUTOFMEMORY "Out of memory!"
+#define MSG_ERR_ID_OUTOFMEMORY TEXT_ERROR_OUT_OF_MEMORY
+
+
+/* Default prompt */
+#define DEFAULT_PROMPT "$P$G"
+
+/* Provides the uppermost size the context may have */
+#define CONTEXT_MAX_SIZE (65535U - 12)
 
 /* Define this value to select the initialization value of fddebug */
 #define FDDEBUG_INIT_VALUE 1
@@ -109,6 +114,7 @@
 #define INCLUDE_CMD_DIRS
 #define INCLUDE_CMD_LOADFIX
 #define INCLUDE_CMD_LOADHIGH
+#define INCLUDE_CMD_MEMORY
 #define INCLUDE_CMD_MKDIR
 #define INCLUDE_CMD_PATH
 #define INCLUDE_CMD_PAUSE
@@ -172,4 +178,12 @@
 #undef FEATURE_FILENAME_COMPLETION
 #endif
 
-#include "debug.h"
+#ifdef INCLUDE_CMD_PUSHD
+#define FEATURE_DIRSTACK
+#endif
+
+#if CONTEXT_MAX_SIZE > 65535U - 12
+#error "The maximal context size may not exceed 65535 - 12 bytes"
+#endif
+
+#include "../include/debug.h"

@@ -16,8 +16,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../res.h"
-#include "../infores.h"
+#include "../include/res.h"
+#include "../include/infores.h"
 
 
 FILE *freecom = 0;
@@ -30,7 +30,7 @@ struct {
 	unsigned long heapPos;
 } ival;
 
-#include "../res_r.c"		/* make a single file project */
+#include "../lib/res_r.c"		/* make a single file project */
 
 #pragma argsused
 static int getInfo(res_majorid_t major
@@ -110,7 +110,7 @@ void prUns(unsigned val, char *name)
 {
 	fputs(name, stdout);
 	if(val == (unsigned)~0)
-		puts(" not included");
+		puts(" not included or in separated segment");
 	else printf(" default buffer size: %u\n", val);
 }
 

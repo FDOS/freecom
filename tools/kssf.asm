@@ -10,7 +10,7 @@
 ; This program fakes all interrupts and behaviour assumed by FreeCOM
 ; to use the kernel swap support. See DOS\K-SWAP.TXT for more details.
 
-%include "../criter.mod/context.inc"
+%include "../context.inc"
 
 STACK_SIZE EQU 64
 %define tsrend (tsrend_ - start + 100h + ((tsrend_ - start) & 1))

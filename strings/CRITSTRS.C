@@ -25,14 +25,14 @@ memory model.
 started
 */
 
+#define MODULE_VERSION 0
 
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include "../criter.h"
-#include "../resource.h"
+//ska: no resource in this project! #include "../resource.h"
 
 #define fDAT "STRINGS.ERR"
 #define fTXT "DEFAULT.ERR"
@@ -94,7 +94,7 @@ strings special[] = {
 char temp[256];
 
 	/* keep it a single-file project */
-#include "../res_w.c"
+//ska: no resource in this project! #include "../res_w.c"
 
 #define join(s1,s2)	strcpy(stpcpy(temp, s1), s2);
 void pxerror(char *msg1, char *msg2)
@@ -170,6 +170,8 @@ int loadFile(char *fnam)
 		return 33;
 	}
 
+	printf("CRITSTRS: load file %s\n", fnam);
+
 	linenr = 0;
 	while (fgets(temp, sizeof(temp), fin)) {
 		++linenr;
@@ -236,8 +238,9 @@ int main(int argc, char **argv)
 	int rc, i, j;
 	unsigned long size;
 
-	word w;
-	byte b, *p;
+	//word w;
+	byte *p;
+	//byte b, *p;
 
 
 	if(argc > 2) {
@@ -257,6 +260,8 @@ int main(int argc, char **argv)
 		return rc;
 
 /* Now all the strings are cached into memory */
+
+	puts("CRITSTRS: Running validation check");
 
 	i = rc = 0;
 	do if(!strg[i].text) {
@@ -300,24 +305,29 @@ int main(int argc, char **argv)
 			rc = 48;
 		}
 	if(rc) return rc;
-	strg[maxNr++].text = special[4].text;
+	strg[++maxNr].text = special[4].text;
+
+	puts("CRITSTRS: Dumping CRITER strings resource");
 
 /* Dump the stuff into a file */
-	if((dat = fopen(fDAT, "wb")) == NULL) {
+	//if((dat = fopen(fDAT, "wb")) == NULL) {
+	if((dat = fopen(fDAT, "wt")) == NULL) {
 		perror("creating " fDAT);
 		return 35;
 	}
 
-	startResource(dat, RES_ID_CRITER, CRITER_RESOURCE_ID_STRINGS_FULL);
-		/* Number of strings */
-	b = maxNr;
-	fwrite(&b, sizeof(b), 1, dat);
+	//ska: no resource in this project! startResource(dat, RES_ID_CRITER, 2, MODULE_VERSION);
+		/* Number of strings EXCEPT trailing "Unknown error" */
+	fprintf(dat, "??strings	DB %u\n", maxNr);
+	//b = maxNr;
+	//fwrite(&b, sizeof(b), 1, dat);
 		/* when loaded the pointer to the string, now offset
 			within file */
 	size = 1l + maxNr * 2;
-	for(i = 0; i < maxNr; ++i) {
-		w = (word)size;
-		fwrite(&w, sizeof(w), 1, dat);
+	for(i = 0; i <= maxNr; ++i) {
+		fprintf(dat, "\tDW S%u\n", i);
+		//w = (word)size;
+		//fwrite(&w, sizeof(w), 1, dat);
 		size += i == STR_KEYS? 1 + *(byte*)strg[STR_KEYS].text * 2
 			: strlen(strg[i].text) + 1;
 	}
@@ -327,13 +337,25 @@ int main(int argc, char **argv)
 		return 37;
 	}
 		/* Now dump the strings themselves */
-	for(i = 0; i < maxNr; ++i)
-		fwrite(strg[i].text, 1
-		 , i == STR_KEYS? 1 + *(byte*)strg[STR_KEYS].text * 2
-		                : strlen(strg[i].text) + 1
-		 , dat);
+	for(i = 0; i <= maxNr; ++i) {
+		int l;
 
-	endResource(dat);
+		fprintf(dat, "S%u\tDB ", i);
+		l = i == STR_KEYS? 1 + *(byte*)strg[STR_KEYS].text * 2
+		                 : strlen(strg[i].text) + 1;
+		p = (unsigned char*)strg[i].text;
+		if(l) {
+			while(--l)
+				fprintf(dat, "%u,", *p++);
+			fprintf(dat, "%u\n", *p);
+		}
+		//fwrite(strg[i].text, 1
+		 //, i == STR_KEYS? 1 + *(byte*)strg[STR_KEYS].text * 2
+		 //               : strlen(strg[i].text) + 1
+		 //, dat);
+	}
+
+	//ska: no resource in this project! endResource(dat);
 
 	fflush(dat);
 	if(ferror(dat)) {

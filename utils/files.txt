@@ -1,3 +1,4 @@
 Implementation of utilities required for the build process of FreeCOM
 
 MKCTXT		Creates .DEF, .H_C, .INC files from .X (see MKCTXT.C)
+MKTOOLS		Creates the default target for TOOLS\ subdir

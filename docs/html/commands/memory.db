@@ -1,0 +1,14 @@
+name: MEMORY
+de: Display the internally used memory
+req: CMD_MEMORY
+
+SYNOPSIS:
+EBNF: MEMORY
+
+DESCRIPTION:
+
+Displays the useage of internal memory of FreeCOM.
+
+EXAMPLES:
+EXAMPLE: 1
+

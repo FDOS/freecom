@@ -23,23 +23,3 @@ icmd_1.icd : icmd_inc.inc icmd_1.nas
 icmd_2.icd : icmd_inc.inc icmd_2.nas
 
 icmd_3.icd : icmd_inc.inc icmd_3.nas
-
-
-$(CFG): tools.mak
-	copy &&|
--a
--f-
--ff-
--K
--w+
--O
--Z
--k-
--d
--b-
--I$(INCLUDEPATH)
--L$(LIBPATH)
--D_NO__DOS_DATE
--D_NO__DOS_TIME
-| $(CFG)
-
