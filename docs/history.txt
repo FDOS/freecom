@@ -1,6 +1,11 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+2000/07/10 Ron Cemer
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: for DIR /S
+fix: COPY (started)
+
 2000/07/10 ska <ska-src@gmx.net>
 ~~~~~~~~~~~~~~~~~~~~~~
 chg: To support to change the STRINGS.DAT file without recompiling
