@@ -6,6 +6,9 @@
 	This file bases on DEBUG.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/06/11 20:33:37  skaus
+	fix: dbg_printmem() if compiled in Large memory model, near is invalid
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -40,12 +43,21 @@
 
 #include "../include/debug.h"
 
+#if sizeof(void*) != sizeof(void far*)
+#define DISP_NEAR
+#endif
+
 #undef dbg_printmem
 void dbg_printmem(void)
-{	static unsigned nearLast = 0;
+{
+#if DISP_NEAR
+	static unsigned nearLast = 0;
+#endif
 	static unsigned long farLast = 0;
 
+#if DISP_NEAR
 	unsigned nearThis;
+#endif
 	unsigned long farThis;
 
 	switch(heapcheck()) {
@@ -62,14 +74,24 @@ void dbg_printmem(void)
 		break;
 	}
 
+#if DISP_NEAR
 	nearThis = coreleft();
+#endif
 	farThis = farcoreleft();
 
+#if DISP_NEAR
 	dprintf(("[free memory: near=%6u far=%13lu]\n", nearThis, farThis));
 	if(nearLast)
 		dprintf(("[changed    : near=%6d far=%13ld]\n"
 		 , nearThis - nearLast , farThis - farLast));
+#else
+	dprintf(("[free memory: far=%13lu]\n", farThis));
+	if(farLast)
+		dprintf(("[changed    : far=%13ld]\n", farThis - farLast));
+#endif
 
+#if DISP_NEAR
 	nearLast = nearThis;
+#endif
 	farLast = farThis;
 }

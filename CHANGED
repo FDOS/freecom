@@ -1,3 +1,4 @@
+fix: dbg_printmem() if compiled in Large memory model, near is invalid
 v0.83 Beta 14:
 add: ALIAS HTML documentation
 bugfix: MEMORY displays batch nesting level, although, not implemented, yet
