@@ -65,6 +65,7 @@ int showhelp = 0, internalBufLen = 0, inputBufLen = 0;
 int spawnAndExit = E_None;
 int newEnvSize = 0;          /* Min environment table size */
 char *user_autoexec = 0;
+int skipAUTOEXEC = 0;
 
 optScanFct(opt_init)
 { int ec = E_None;
@@ -74,6 +75,7 @@ optScanFct(opt_init)
   case '!': return optScanBool(fddebug);
   case 'Y': return optScanBool(tracemode);
   case 'F': return optScanBool(autofail);
+  case 'D': return optScanBool(skipAUTOEXEC);
   case 'P':
     if(arg)     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
@@ -394,6 +396,9 @@ int initialize(void)
     showinfo = 0;
     short_version();
 
+	if(skipAUTOEXEC) {
+		showinfo = 0;
+	} else {
     if (exist(autoexec)) {
       displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
       key = cgetchar_timed(3);
@@ -417,6 +422,7 @@ int initialize(void)
 #ifdef INCLUDE_CMD_TIME
       cmd_time(0);
 #endif
+    }
     }
 
     free(user_autoexec);
