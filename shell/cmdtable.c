@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  CMDTABLE.C - table of internal commands.
  *
  *  Comments:

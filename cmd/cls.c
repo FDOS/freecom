@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  CLS.C - clear screen internal command
  *
  *  Comments:

@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  FOR.C - for command.
  *
  *	Synopsises:

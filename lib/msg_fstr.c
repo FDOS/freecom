@@ -1,5 +1,4 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
 	read the string from the resource and return a dummy entry
 	on failure
@@ -7,9 +6,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.3  2002/04/02 23:36:37  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
-
+	
 	Revision 1.2  2002/04/02 18:09:31  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 	

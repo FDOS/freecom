@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  ALIAS.C - alias administration module
  *
  */

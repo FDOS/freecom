@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  INIT.C - initialization code
  *
  *      This is more or less a complete rewrite based on the

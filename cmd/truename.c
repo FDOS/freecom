@@ -1,4 +1,4 @@
-/*
+/* $Id$
  * TRUENAME.C -- Truename Command (undocumented DOS?)
  *
  * 07/14/98 (Rob Lake)

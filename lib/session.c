@@ -1,5 +1,4 @@
 /*	$Id$
-	$Locker$	$Name$	$State$
 
 	Save/restore the current session
 
@@ -7,9 +6,12 @@
 	and restores it later
 
 	$Log$
+	Revision 1.5  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.4  2003/09/01 15:04:26  skaus
 	bugfix: LOADHIGH: deallocating context if /L is present {Tom Ehlert}
-
+	
 	Revision 1.3  2002/11/12 21:56:17  skaus
 	v0.83 Beta 52:
 	

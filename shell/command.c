@@ -1,4 +1,4 @@
-/*
+/* $Id$
  * COMMAND.C - command-line interface.
  *
  */

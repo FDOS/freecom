@@ -1,5 +1,4 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
  * Grab the filename of COMMAND.COM
  *
@@ -15,9 +14,12 @@
 	4 -> out of memory / syntax error ... .
 
 	$Log$
+	Revision 1.5  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.4  2004/02/01 13:24:22  skaus
 	bugfix: misidentifying unspecific failures from within SUPPL
-
+	
 	Revision 1.3  2003/12/09 20:25:34  skaus
 	bugfix: INIT: FreeCOM-path and TTY can be in any order
 	

@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  FDDEBUG.C - verify command.
  *
  *  Comments: Turn on/off the debug flag

@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  GOTO.C - goto command.
  *
  *  Comments:

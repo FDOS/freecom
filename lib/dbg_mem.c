@@ -1,14 +1,16 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
  *  Defines the functions only necessary while debugging is active
 
 	This file bases on DEBUG.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.3  2001/06/11 20:45:38  skaus
 	fix: dbg_printmem() #if must be #ifdef
-
+	
 	Revision 1.2  2001/06/11 20:33:37  skaus
 	fix: dbg_printmem() if compiled in Large memory model, near is invalid
 	

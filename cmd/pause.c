@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  PAUSE.C - pause command.
  *
  * FREEDOS extension : If resteter is specified use that as the pause

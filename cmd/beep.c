@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  BEEP.C - beep command.
  *
  *  Comments:

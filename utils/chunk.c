@@ -1,4 +1,4 @@
-/* $id$
+/* $Id$
 
 	Chunk a large dependency list into portions with less than
 	128 entries each. They'll form a cascaded dependency list

@@ -1,4 +1,4 @@
-/*
+/* $Id$
  * REN.C - rename command
  *
  * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)

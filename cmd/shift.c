@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  SHIFT.C - shift command.
  *
  * Only valid inside batch files.

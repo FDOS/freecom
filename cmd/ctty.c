@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  CTTY.C - ctty command.
  *
  *  Comments:

@@ -1,4 +1,4 @@
-/* $id$
+/* $Id$
 
 	Returns the far address to the value of a specified tag item
 

@@ -1,4 +1,4 @@
-/*
+/* $Id$
  * REDIR.C
  *
  * Comments:

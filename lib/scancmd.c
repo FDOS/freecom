@@ -1,5 +1,4 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
  * Scan command line and handle options
  *  line may be NULL and is treated as empty.
@@ -16,10 +15,13 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.2  2001/08/15 00:12:27  skaus
 	bugfix: scancmd.c: /B and /A let COPY fail (ec == E_Ignore) (bug 829)
 	upd: HTML docs
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup

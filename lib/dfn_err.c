@@ -1,13 +1,15 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
 	Display a nice errno-depend error message for
 	dfn*() functions.
 
 	$Log$
+	Revision 1.2  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.1  2004/02/01 13:24:22  skaus
 	bugfix: misidentifying unspecific failures from within SUPPL
-
+	
  */
 
 #include "../config.h"

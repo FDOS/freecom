@@ -1,5 +1,4 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
 	msgSegment() - return the segment of memory the STRINGS have been
 		loaded to; if they are not present in memory, they are loaded
@@ -9,9 +8,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.5  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.4  2003/12/09 21:29:24  skaus
 	bugfix: Ask for FreeCOM location when STRINGS are missing [#687]
-
+	
 	Revision 1.3  2002/04/02 23:36:37  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 	

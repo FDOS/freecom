@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *	Special FreeCOM defuinitions for the module management
  *
  * 2000/07/12 ska

@@ -1,4 +1,4 @@
-/*
+/* $Id$
  * COPY.C -- Internal Copy Command
  *
  * 1999/05/10 ska

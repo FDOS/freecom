@@ -1,4 +1,6 @@
-/* Load Installable Commands samples into memory
+/* $Id$
+
+	Load Installable Commands samples into memory
  */
 
 #include <dos.h>

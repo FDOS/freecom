@@ -1,5 +1,4 @@
 /*	$Id$
-	$Locker$	$Name$	$State$
 
 	Read a line from stdin
 

@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  DIR.C - dir internal command
  *
  *  Comments:

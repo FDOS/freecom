@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  DOSKEY -- command line editor extender <-> incorporated, but
  *		not loadable
  */

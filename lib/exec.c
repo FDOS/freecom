@@ -1,14 +1,16 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
 	Execute an external program using DOS-4B-00
 
 	This file bases on EXEC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.5  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.4  2003/03/05 17:43:52  skaus
 	bugfix: cached NLS data not flushed
-
+	
 	Revision 1.3  2002/11/12 18:31:57  skaus
 	add: save/restore session (swap context) {Tom Ehlert}
 	

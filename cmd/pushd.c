@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  DSTACK.C - Directory stack PUSHD/POPD support, compatible with 4/NDOS
  *
  *	PUSHD <dir>

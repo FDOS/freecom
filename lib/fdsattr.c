@@ -1,5 +1,4 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
  *  Set attributes of an opened handle
  *
@@ -8,9 +7,12 @@
  *    else: DOS error code
 
 	$Log$
+	Revision 1.2  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.1  2002/04/08 16:02:22  skaus
 	bugfix: CTTY: added to try to set the device flags
-
+	
  */
 
 #include <dos.h>

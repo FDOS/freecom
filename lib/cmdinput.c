@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  CMDINPUT.C - handles command input (tab completion, history, etc.)
  */
 

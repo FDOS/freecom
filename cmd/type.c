@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  TYPE.C - type internal command
  *
  *  Comments:

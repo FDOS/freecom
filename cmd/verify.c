@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  VERIFY.C - verify command.
  *
  *  Comments:

@@ -1,5 +1,4 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
 	Return the dynamically allocated ASCII representation of
 	the passed in time
@@ -7,9 +6,12 @@
 	This file bases on NLS.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.5  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.4  2003/03/11 20:01:14  skaus
 	bugfix: PROMPT $T: hour: space padded; fraction zero padded [#1481]
-
+	
 	Revision 1.3  2001/06/12 22:56:59  skaus
 	bugfix: nls_maketime(): 12hour display does not free AM/PM id
 	

@@ -1,5 +1,4 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
 	Search for an external program and return it in a static buffer,
 	which is overwritten the next time this function is called.
@@ -7,9 +6,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.3  2004/02/01 13:24:22  skaus
 	bugfix: misidentifying unspecific failures from within SUPPL
-
+	
 	Revision 1.2  2002/11/05 19:27:37  skaus
 	bugfix: FreeCOM is to pass the fully-qualified path to DOS-4B-00
 	

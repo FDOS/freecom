@@ -1,5 +1,4 @@
-/*	$id$
-	$Locker$	$Name$	$State$
+/*	$Id$
 
 	Parses a date given in ASCIIZ into a dosdate_t structure.
 
@@ -18,9 +17,12 @@
 	This file bases on DATE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2004/02/01 13:52:17  skaus
+	add/upd: CVS $id$ keywords to/of files
+
 	Revision 1.2  2001/04/29 12:56:57  skaus
 	bugfix: DATE: does not accept empty line
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup

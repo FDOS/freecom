@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  PROMPT.C - prompt handling.
  *
  */

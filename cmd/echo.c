@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  ECHO.C - echo command.
  *
  *  Comments:

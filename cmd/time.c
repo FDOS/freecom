@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  TIME.C - time internal command
  *
  *  Comments:

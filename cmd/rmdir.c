@@ -1,4 +1,4 @@
-/*
+/* $Id$
  * RD / RMDIR - makes a call to directory_handler to do its work
  */
 

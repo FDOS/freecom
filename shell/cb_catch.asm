@@ -1,5 +1,4 @@
 ;   $Id$
-;   $Locker$	$Name$	$State$
 
 ;	^Break signal catcher and initialization function.
 ;	Bases on CB_CATCH.ASM
@@ -12,6 +11,9 @@
 ;	optimizes for the polling rather this handler.
 
 ;   $Log$
+;   Revision 1.3  2004/02/01 13:52:18  skaus
+;   add/upd: CVS $id$ keywords to/of files
+;
 ;   Revision 1.2  2002/04/02 18:09:31  skaus
 ;   add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 ;

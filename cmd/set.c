@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *	Set environment variables
  *
  */

@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  DATE.C - date internal command
  *
  *  Comments:

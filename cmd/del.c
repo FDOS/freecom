@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  DEL.C - del command.
  *
  *  Comments:
