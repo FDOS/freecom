@@ -122,6 +122,7 @@ varfound:
 	return OK;
 }
 
+#pragma argsused
 static int doFOR(char *varname, char *varE, char *param, char *paramE
 	, char *cmd, int flags)
 {	/* char *oldContents;
@@ -142,10 +143,16 @@ static int doFOR(char *varname, char *varE, char *param, char *paramE
 #if 1
 	assert(*varname == '%');
 	{
-		struct bcontext *new = newBatchContext();
+		char parsedParam[MAX_INTERNAL_COMMAND_SIZE + sizeof(errorlevel) * 8];
 
-		if(!new)
+		if(!expandEnvVars(param, parsedParam)) {
+			error_line_too_long();
 			return 1;
+		}
+
+		if(!newBatchContext())
+			return 1;
+
 
 		if((bc->forproto = strdup(cmd)) == 0
 		 || (bc->forvar = strdup(varname)) == 0) {
@@ -154,7 +161,7 @@ static int doFOR(char *varname, char *varE, char *param, char *paramE
 			return 1;
 		}
 
-		if(!setBatchParams(param)) { /* Split out list */
+		if(!setBatchParams(parsedParam)) { /* Split out list */
 			exit_batch();
 			return 1;
 		}
@@ -259,7 +266,7 @@ int cmd_for(char *param)
 	return doFOR(varname, varE, param, paramE, cmd, flags);
 }
 
-int cmd_for_hackery(const char *Xparam)
+int cmd_for_hackery(char *Xparam)
 {	char *param;
 	char *varname, *varE, *cmd, *paramE;
 	int flags;
