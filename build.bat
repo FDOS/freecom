@@ -35,6 +35,8 @@ if not x%1==x set LNG=%1
 if "%lng%"=="" set LNG=english
 echo Building FreeCOM for lanaguage %LNG%
 
+if not exist config.mak goto err2
+
 echo.
 echo Checking SUPPL library
 cd suppl
@@ -132,6 +134,11 @@ if NOT "%SWAP%"=="" goto ende
 
 echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
 echo BUILD.BAT -r xms-swap %LNG%
+goto ende
+
+:err2
+echo Please copy CONFIG.STD into CONFIG.MAK and update the
+echo settings therein, especially CC_BASE_PATH and NASM
 goto ende
 
 :err1

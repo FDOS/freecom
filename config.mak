@@ -1,5 +1,5 @@
 ## is the base path ("root") of Turbo C++ v1.01
-CC_BASE_PATH = C:\TCPP101
+CC_BASE_PATH = O:\TC101
 
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
@@ -40,7 +40,7 @@ __XMS_SWAP = -DXMS_SWAP=1
 ## (*) Note: Should be detected by CONFIG.H automatically for Turbo C
 ##     and Borland C compilers.
 ##
-$(CFG): $(CFG_DEPENDENCIES)
+$(CFG): $(CFG_DEPENDENCIES) ..\CONFIG.MAK
   copy &&|
 -1-
 -a
