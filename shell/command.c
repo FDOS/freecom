@@ -20,6 +20,8 @@
 #include <io.h>
 #include <sys\stat.h>
 
+#include <dfn.h>
+
 #include "../include/command.h"
 #include "../include/batch.h"
 #include "../include/cmdline.h"
@@ -99,6 +101,7 @@ static void execute(char *first, char *rest)
    */
 
   char *fullname;
+  char *extension;
 
   assert(first);
   assert(rest);
@@ -110,9 +113,8 @@ static void execute(char *first, char *rest)
     return;
   }
 
-  if (strchr(first,'?') || strchr(first,'*'))
-  {
-    error_bad_command();
+  if(strchr(first,'?') || strchr(first,'*')) {
+    error_bad_command(first);
     return;
   }
 
@@ -121,29 +123,26 @@ static void execute(char *first, char *rest)
   fullname = find_which(first);
   dprintf(("[find_which(%s) returned %s]\n", first, fullname));
 
-  if (!fullname)
-  {
-    error_bad_command();
+  if(!fullname) {
+    error_bad_command(first);
     return;
   }
 
   /* check if this is a .BAT file */
-  assert(strrchr(fullname, '.'));
+  extension = strrchr(dfnfilename(fullname), '.');
+  assert(extension);
 
-  if (stricmp(strrchr(fullname, '.'), ".bat") == 0)
-  {
+  if(stricmp(extension, ".bat") == 0) {
     dprintf(("[BATCH: %s %s]\n", fullname, rest));
     batch(fullname, first, rest);
-  }
-  else
+  } else if(stricmp(extension, ".exe") == 0
+   || stricmp(extension, ".com") == 0) {
     /* exec the program */
-  {
     int result;
 
     dprintf(("[EXEC: %s %s]\n", fullname, rest));
 
-	if (strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE)
-	{
+	if(strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE) {
 		error_line_too_long();
 		return;
 	}
@@ -180,7 +179,8 @@ static void execute(char *first, char *rest)
 	env_nullStrings(0);
 
     perform_exec_result(result);
-  }
+  } else
+    error_bad_command(first);
 }
 
 static void docommand(char *line)
