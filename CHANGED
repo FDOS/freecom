@@ -1,3 +1,4 @@
+bugfix: CRITERR: to use DOS API {Tom Ehlert/Bart Oldeman}
 bugfix: LOADHIGH: deallocating context if /L is present {Tom Ehlert}
 fix: set.c: warning missing prototype strchr()
 bugfix: /F (AutoFail) for the XMS_Swap variant

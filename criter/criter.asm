@@ -79,6 +79,9 @@
 ;	  than ' ' are ignored (usually control characters)
 ;
 ; $Log$
+; Revision 1.4  2003/10/18 10:55:24  skaus
+; bugfix: CRITERR: to use DOS API {Tom Ehlert/Bart Oldeman}
+;
 ; Revision 1.3  2003/08/03 16:00:57  skaus
 ; bugfix: /F (AutoFail) for the XMS_Swap variant
 ;
@@ -171,8 +174,8 @@ dummy_file DB "a:\aux", 0
 	call ?oChar
 %endmacro
 %macro readALfromConsole 0
-	mov ah, 0
-	int 16h
+	mov ax, 0c07h	; clear buffer, read from STDIN one key without echo
+	int 21h
 %endmacro
 
 
@@ -246,6 +249,7 @@ _lowlevel_err_handler:
 	mov al, FAIL
 	iret
 %else
+	push dx
 	push es, ds, bp, si, di, cx, bx, ax
 
 	mov cx, cs
@@ -316,10 +320,12 @@ _lowlevel_err_handler:
 	call ?oBuffer
 %endif
 
+%if 0		;; No need when doing I/O through DOS
 	mov ah, 0fh		; Get current video mode
 	int 10h
 	mov BYTE [??actPage], bh
 	mov BYTE [??actColour], 255
+%endif
 
 	mov ax, di		; AL := lobyte(DI) -> error number
 	add al, StrErrCodes
@@ -363,6 +369,24 @@ _lowlevel_err_handler:
 	cld				; forward direction
 	mov ds, cx		; CX is still or again == CS
 
+;; Try to find a suitable I/O channel
+	push bx
+	mov ah, 62h		; Get PSP
+	int 21h
+	mov es, bx
+;;	mov cx, [ES:32h]	; number of entries in JFT
+	les bx, [ES:34h]	; Pointer to JFT
+	mov al, [es:bx+2]	; stderr
+	; patch STDIN & STDOUT to point to the found channel
+	mov ah, al
+	xchg WORD [ES:bx], ax
+	mov WORD [?orgIOchannels], ax
+	mov WORD [??repatchAddr], bx
+	mov WORD [??repatchAddr+2], es
+	pop bx
+	mov es, cx			;; reset ES to the shared code/data segement
+
+
 	call ?oString	; Display the Critical Error message string
 	call ?newline
 	mov bl, StrAbort
@@ -402,13 +426,21 @@ _lowlevel_err_handler:
 	or al, al
 	jz ?inputError		; not allowed
 
+?errRet:
 	;; allowed action code in BL
 	call ?newline
+
+	;; Restore the JFT
+	les di, [??repatchAddr]
+	mov ax, 1234h
+?orgIOchannels EQU $-2
+	mov WORD [ES:di], ax
 
 ?iret:
 	pop ax			; preserve AH
 	mov al, bl		; action code
 	pop es, ds, bp, si, di, cx, bx
+	pop dx
 	iret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -496,11 +528,17 @@ _lowlevel_err_handler:
 ;; IN: AL = character
 
 ?oChar:
+%if 0		;; no need when doing I/O through DOS
 	push bx
 	mov bx, [??0Earg]
 	mov ah, 0eh		; teletype output
 	int 10h
 	pop bx
+%else
+	mov ah, 2		; output to STDOUT
+	mov dl, al
+	int 21h
+%endif
 	ret
 
 %ifdef DEBUG
@@ -540,9 +578,15 @@ _lowlevel_err_handler:
 	ret
 %endif
 
+%if 0		;; no need for I/O through DOS
 ??0Earg:
 ??actColour	DB 7
 ??actPage	DB 0
+%endif
+
+??repatchAddr DD 0
+
+;?orgIOchannels DW 1234h
 
 	;; Numerical arguments
 ??strarg1	DB 0					;; read/write
