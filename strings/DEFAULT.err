@@ -2,7 +2,8 @@
 #
 # Critical error national customization file
 #
-#	Language: 7bit ASCII English
+#	Language: English
+#	Codepage: ASCII (7bit) / any codepage
 #	Author:   FreeCOM maintainer
 # 
 # The critical error (criter) handler receives some information

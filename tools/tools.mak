@@ -1,7 +1,7 @@
 CFG = TCCDos.Cfg
 CFG_DEPENDENCIES = tools.mak
 
-all : $(CFG) ptchsize.exe icmd
+all : $(CFG) ptchsize.exe kssf.com vspawn.com icmd
 
 !include "..\config.mak"
 
