@@ -84,6 +84,8 @@ void clrcmdline(char * const str, const int maxlen
 
 int decode_exec_result(int rc);
 int exec(const char *, char *, const unsigned);
+void restoreSession(void);
+void saveSession(void);
 
 int samefile(const char * const f1, const char * const f2);
 /* void fillComp(char * const dst, const char *pattern, const char *src, int len); */

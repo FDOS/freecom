@@ -77,6 +77,7 @@ extern ctxt_info_t ctxt_info[];
 #define CTXT_ITEMNAME_LENGTH (sizeof(unsigned) * 2 + 2)
 
 void ctxtCreate(void);			/* Create the local context */
+void ctxtCreateMemBlock(unsigned length);
 int ctxtAddStatus(const Context_Tag tag);
 //int ctxtChgSize(const unsigned newsize);
 int ctxtPop(const Context_Tag, char ** const);

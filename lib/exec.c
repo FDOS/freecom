@@ -6,9 +6,12 @@
 	This file bases on EXEC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2002/11/12 18:31:57  skaus
+	add: save/restore session (swap context) {Tom Ehlert}
+
 	Revision 1.2  2002/04/02 18:09:31  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -70,6 +73,8 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
   struct fcb fcb1,
     fcb2;
   struct ExecBlock execBlock;
+  int retval;
+
 
   assert(cmd);
   assert(cmdLine);
@@ -83,6 +88,8 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
   if ((cmdLine = parsfnm(cmdLine, &fcb1, 1)) != 0)
     parsfnm(cmdLine, &fcb2, 1);
 
+  saveSession();
+
 #ifdef FEATURE_XMS_SWAP
 	if(XMSisactive() && swapOnExec == TRUE) {
 		/* Copy the prepared values into the buffers in CSWAP.ASM module */
@@ -90,16 +97,22 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 		_fmemcpy(dosFCB2, &fcb2, sizeof(fcb1));
 		assert(strlen(cmd) < 128);
 		_fstrcpy(dosCMDNAME, cmd);
-		dosParamDosExec.envSeg = segOfEnv;
-		return decode_exec_result(XMSexec());
-	}
-#endif
-  /* fill execute structure */
-  execBlock.segOfEnv = segOfEnv;
-  execBlock.cmdLine = (char far *)buf;
-  execBlock.fcb1 = (struct fcb far *)&fcb1;
-  execBlock.fcb2 = (struct fcb far *)&fcb2;
+		dosParamDosExec.envSeg = segOfEnv; 
 
-	return decode_exec_result(
-	 lowLevelExec((char far *)cmd, (struct ExecBlock far *)&execBlock));
+		retval = XMSexec();
+		} else
+#endif
+	{
+	  /* fill execute structure */
+	  execBlock.segOfEnv = segOfEnv;
+	  execBlock.cmdLine = (char far *)buf;
+	  execBlock.fcb1 = (struct fcb far *)&fcb1;
+	  execBlock.fcb2 = (struct fcb far *)&fcb2;
+
+	  retval = lowLevelExec((char far*)cmd, (struct ExecBlock far*)&execBlock);
+	}
+
+  restoreSession();
+				
+  return decode_exec_result(retval);
 }
