@@ -595,6 +595,16 @@ Overwrite '%s' (Yes/No/All/Quit) ? \
 # Note: This prompt ignores DOS NLS intentionally in order to
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_APPEND_FILE#1%
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Append to '%s' (Yes/No/All/Quit) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
 :PROMPT_DELETE_FILE#1%
 YyNnAaQq{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
@@ -646,8 +656,8 @@ Directory of %s
 :TEXT_DIR_LINE_FILENAME_WIDE#1%
 %-15s\
 .
-:TEXT_DIR_LINE_FILENAME_BARE#0%
-%-13s
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
 .
 :TEXT_DIR_LINE_FILENAME_SINGLE#1%
 %-13s\

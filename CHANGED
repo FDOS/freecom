@@ -1,3 +1,4 @@
+bugfix: DIR: /b don#('t append spurios spaces {fd-doc#226}
 bugfix: use of the nls thousands separator in convert() [Eduardo Casino]
 add: ITALIAN.ERR {Roberto Mariottini}
 bugfix: CHCP: use n to set new codepage [Eduardo Casino]
