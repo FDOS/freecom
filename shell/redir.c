@@ -75,7 +75,7 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
     switch (ch)
     {
       case '"':
-      case '\'':               /* No redirects inside quotes */
+/*      case '\'':               /* No redirects inside quotes */
         {
           char *p;
           int len;
