@@ -312,7 +312,7 @@ static void docommand(char *line)
           error_out_of_memory();
           return;
         }
-		execute(cp, ltrimsp(rest));
+		execute(cp, rest);
 		free(cp);
       }
   }
