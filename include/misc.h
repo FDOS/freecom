@@ -70,11 +70,13 @@ void *erealloc(void *const p, const size_t len);
 void *ecalloc(const size_t num, const size_t len);
 char *edupstr(const char far* const s);
 char *estrdup(const char far* const s);
+unsigned my_coreleft(void);
+unsigned long my_farcoreleft(void);
 
 char far *_fstpcpy(char far *dst, const char far *src);
 void partstrlower(char *str);
-//void readcommandDOS(char * const str, int maxlen);
-//void readcommandEnhanced(char * const str, const int maxlen);
+char *readcommandEnhanced(void);
+char *readcommandDOS(void);
 void convert(unsigned long num, char * const des);
 
 void goxy(const unsigned char x, const unsigned char y);

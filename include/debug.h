@@ -14,12 +14,13 @@
 #include <stdio.h>
 
 extern FILE *dbg_logfile;
+extern FILE *dbg_logfile2;
 extern int fddebug;
 
 #ifdef DEBUG
 		/* DEBUG ENABLED */
 
-#define dprintf(p)  if (fddebug) dbg_print p
+#define dprintf(p)  do { if (fddebug) dbg_print p ; } while(0)
 void dbg_printmem(void);
 void dbg_print(const char * const fmt, ...);
 void dbg_outc(int ch);

@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.3  2001/07/01 22:04:31  skaus
+	Update #3
+
 	Revision 1.1.4.2  2001/06/21 21:40:34  skaus
 	Update #2
-
+	
 	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
 	Update #1
 	
@@ -75,7 +78,7 @@ int chkCBreak(int mode)
       	Therefore userprompt() is not we need. */
       {	char *fmt, *chars;
       	int ch;
-      	ctxtEC_Batch_t far *bc = ecLastF();
+      	ctxtEC_Batch_t far *bc = ecLastB();
 
       	if(!getPromptString(PROMPT_CANCEL_BATCH, &chars, &fmt)) {
       			/* Fatal error <-> Terminate all batches */

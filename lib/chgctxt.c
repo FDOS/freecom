@@ -17,9 +17,12 @@
 	This file bases on ENVIRON.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/01 22:04:31  skaus
+	Update #3
+
 	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
 	Update #1
-
+	
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -55,6 +58,7 @@
 
 #include "../include/command.h"
 #include "../include/context.h"
+#include "../include/ierror.h"
 #include "../err_fcts.h"
 
 int chgCtxt(const Context_Tag tag, const char * const name, const char * const value)

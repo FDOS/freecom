@@ -1,0 +1,38 @@
+/* $id$
+
+	Make a silent C context.
+
+	Return:
+		internal error code
+*/
+
+#include "../config.h"
+
+#include <stdlib.h>
+
+#include <dynstr.h>
+
+#include "ec.h"
+#include "../include/context.h"
+#include "../include/ierror.h"
+#include "../err_fcts.h"
+
+int ecMkV1C(const char * const str, ...)
+{	char *s, *verbatim;
+	va_list ap;
+	int rv;
+
+	if((verbatim = ecMkVerbatimStr(str)) == 0)
+		return E_NoMem;
+	if((s = StrConcat(5, "%@VERBATIM(", verbatim, ")", str, verbatim)) == 0) {
+		error_out_of_memory();
+		free(verbatim);
+		return E_NoMem;
+	}
+
+	free(verbatim);
+	va_start(ap, str);
+	rv = ecMkvcmd(echoBatch? 0: EC_CMD_SILENT, str, ap);
+	free(s);
+	return rv;
+}

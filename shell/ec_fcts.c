@@ -10,12 +10,7 @@
 
 char* (*ecFunction[])(ctxtEC_t far * const) = {
 /* EC_TAG_INTERACTIVE */ 
-#ifdef FEATURE_ENHANCED_INPUT
-	/* If redirected from file or so, should use normal one */
-	readcommandEnhanced
-#else
-	readcommandDOS
-#endif
+	readInteractive
 /* EC_TAG_BATCH */ 
 	, readbatchline
 /* EC_TAG_FOR_FIRST */ 
@@ -31,3 +26,7 @@ char* (*ecFunction[])(ctxtEC_t far * const) = {
 /* EC_TAG_TERMINATE */ 
 	, terminateShell
 };
+
+#if sizeof(ecFunction) / sizeof(char* (*)()) != (EC_TAG_TERMINATE + 1)
+#error "The ecFunction[] array has not EC_TAG_TERMINATE entries"
+#endif

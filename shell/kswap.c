@@ -52,7 +52,7 @@ int kswapInit(void)
 	}
 
 	dprintf(("[KSWAP: kernel swapping support is not used]\n"));
-	swapOnExec = ERROR;		/* No swapping allowed */
+	F(swap) = ERROR;		/* No swapping allowed */
 	return FALSE;
 }
 
@@ -85,7 +85,7 @@ void kswapRegister(kswap_p ctxt)
 	r.r_dx = 'FD';
 	intr(0x21, &r);
 	if((r.r_flags & 1) != 0) {	/* failed */
-		swapOnExec = ERROR;		/* cannot register -> cannot use */
+		F(swap) = ERROR;		/* cannot register -> cannot use */
 		dprintf(("[KSWAP: Registering failed, kernel swap deactivated]\n"));
 		return;
 	}
@@ -95,7 +95,7 @@ void kswapRegister(kswap_p ctxt)
 	ctxt->envSegm = allocSysBlk(ctxt->envSize, 0x82);
 	if(!ctxt->envSegm) {
 		error_kswap_allocmem();
-		swapOnExec = ERROR;
+		F(swap) = ERROR;
 	}
 	else
 		dprintf(("[KSWAP: master environment allocated at 0x%04x]\n"
@@ -103,7 +103,7 @@ void kswapRegister(kswap_p ctxt)
 }
 void kswapDeRegister(kswap_p ctxt)
 {
-	if(swapOnExec != ERROR) {	/* context belongs to this FreeCOM */
+	if(F(swap) != ERROR) {	/* context belongs to this FreeCOM */
 		dprintf(("[KSWAP: DeRegistering static context at: 0x%04x]\n", (word)ctxt));
 		assert(ctxt);
 		ctxt->shell = 0;		/* causes the kernel swap support to exit */
@@ -123,7 +123,7 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 	assert(prg);
 	assert(cmdline);
 
-	if(swapOnExec == ERROR)	/* missing kernel support */
+	if(F(swap) == ERROR)	/* missing kernel support */
 		return FALSE;
 
 	assert(kswapContext);
@@ -181,7 +181,7 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 int kswapLoadStruc(void)
 {
 	kswapSetISR();
-	if(swapOnExec == ERROR)	/* missing kernel support */
+	if(F(swap) == ERROR)	/* missing kernel support */
 		return FALSE;
 
 	assert(kswapContext);

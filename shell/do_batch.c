@@ -98,17 +98,17 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 			/* ::= is a special internal quotation mechanism */
 		if(*p == ':' && memcmp(p, "::=", 3) != 0) {
 			/* if a label is searched for test if we reached it */
-			if(F(goto)) {
+			if(gotoLabel) {
 				/* label: the 1st word immediately following the colon ':' */
-				int len = strlen(F(goto));
-				if(memicmp(p, F(goto), len) == 0 && !isgraph(line[len]))
+				int len = strlen(gotoLabel);
+				if(memicmp(p, gotoLabel, len) == 0 && !isgraph(line[len]))
 					/* got it! -> proceed with next line */
-					StrFree(F(goto));
+					StrFree(gotoLabel);
 			}
 			continue;			/* ignore label */
 		}
 
-		if(!F(goto)) {
+		if(!gotoLabel) {
 			if(*p == '@') {			/* don't echo this line */
 				p = ltrimcl(p + 1);
 				if(!*p)				/* ignore empty lines */

@@ -74,6 +74,7 @@ kswap_p kswapContext = 0;
 FLAG swap, echoBatch, dispPrompt, rewindBatchFile, traceMode;
 FLAG interactive, called;
 FLAG doExit, doCancel, doQuit;
+char *gotoLabel;
 
 void perform_exec_result(int result)
 {
@@ -152,7 +153,7 @@ static void execute(char *first, char *rest)
 
 /* Execute the external program */
 #ifdef FEATURE_KERNEL_SWAP_SHELL
-    if(swapOnExec == TRUE
+    if(swap == TRUE && F(swap) != ERROR
 	 && kswapMkStruc(fullname, rest)) {
 	 	/* The Criter and ^Break handlers has been installed within
 	 		the PSP in kswapRegister() --> nothing to do here */
@@ -160,7 +161,7 @@ static void execute(char *first, char *rest)
 	 	exit(123);		/* Let the kernel swap support do the rest */
 	}
 #ifdef DEBUG
-	if(swapOnExec == TRUE)
+	if(swap == TRUE && F(swap) != ERROR)
 		dprintf(("KSWAP: failed to save context, proceed without swapping\n"));
 #endif
 #endif
@@ -238,7 +239,8 @@ static void docommand(char *line)
 #endif
 
 	/* Scan internal command table */
-	if((cmdptr = is_icmd(name)) != 0) {
+	if((cmdptr = is_icmd(name)) != 0
+	 && (forceInternalCommand || (cmdptr->flags & CMD_HIDDEN) == 0)) {
 		switch(cmdptr->flags & (CMD_SPECIAL_ALL | CMD_SPECIAL_DIR)) {
 		case CMD_SPECIAL_ALL: /* pass everything into command */
 			break;
@@ -259,7 +261,7 @@ static void docommand(char *line)
 			goto errRet;
 		}
 
-		if(memcmp(ltrimcl(rest), "/?", 2))
+		if(memcmp(ltrimcl(rest), "/?", 2) == 0)
 			displayString(cmdptr->help_id);
 		else {
 			dprintf(("[ICMD %s: %s]\n", name, rest));
@@ -307,7 +309,7 @@ static int redirectJFTentry(int i
 
 	jft = getJFTp();
 
-	if(ecMkFD(i, jft[i]))
+	if(ecMkFD(i, jft[i]) != E_None)
 		return 0;
 
 	jft[i] = 255;		/* Mark the file descriptor as unused */
@@ -325,7 +327,7 @@ static int redirectJFTentry(int i
 
 	/* Apply the other entries of this redirection */
 	for(j = i; j--;) if(jftUsed[i] == jftUsed[j]) {
-		if(ecMkFD(j, jft[j]))
+		if(ecMkFD(j, jft[j]) != E_None)
 			return 0;
 		/* is the same --> duplicate the fd here, too */
 		if(dup2(i, j) != 0) {
@@ -343,8 +345,8 @@ static char *makePipeDelTemp(void)
 		error_out_of_memory();
 		return 0;
 	}
-	if(!ecMkHC("IVAR ", ivar)					/* remove the IVar */
-	 || !ecMkHC("DEL %@IVAR(", ivar, ")")) {	/* remove tempfile */
+	if(ecMkc("IVAR ", ivar, (char*)0) != E_None		/* remove the IVar */
+	 || ecMkc("DEL %@IVAR(", ivar, ")") != E_None) {	/* remove tempfile */
 	 	ecFreeIVar(ivar);
 	 	return 0;
 	}
@@ -399,13 +401,14 @@ static int makePipeContext(char *** const Xout
 			len = q - p;
 		}
 		p[len] = 0;
-		if(!ecMkV1C(pipe[num - 1], p, "<%@IVAR(", ivarIn, ")"))
+		if(ecMkV1C(pipe[num - 1], p, "<%@IVAR(", ivarIn, ")", (char*)0)
+		 != E_None)
 			goto errRet;
 		StrFree(p);
 		freep(out);
 		*Xout = 0;
 	} else
-		if(!ecMkV1C(pipe[num - 1], "<%@IVAR(", ivarIn, ")"))
+		if(ecMkV1C(pipe[num - 1], "<%@IVAR(", ivarIn, ")", (char*)0) != E_None)
 			goto errRet;
 
 	/* Process the middle commands */
@@ -419,9 +422,9 @@ static int makePipeContext(char *** const Xout
 		free(ivarOut);
 		ivarOut = ivarIn;
 		if((ivarIn = makePipeDelTemp()) == 0
-		 || !ecMkV1C(pipe[i], ">", q? "": "&", "%@IVAR(", ivarOut, ")"
-		     , "<%@IVAR(", ivarIn, ")")
-		 || !ecMkHC("IVAR ", ivarOut, "=%@TEMPFILE"))
+		 || ecMkV1C(pipe[i], ">", q? "": "&", "%@IVAR(", ivarOut, ")"
+		     , "<%@IVAR(", ivarIn, ")", (char*)0) != E_None
+		 || ecMkHC("IVAR ", ivarOut, "=%@TEMPFILE", (char*)0) != E_None)
 			goto errRet;
 	}
 
@@ -616,14 +619,25 @@ errRet:
  */
 void run_exec_context(void)
 {	ctxtEC_t far *ec;
+	unsigned len;
+	char *cmdline;
 
-	assert(ctxtMain);
-	ec = ctxtExecContext;
-	assert(ec);
+	for(;;) {
+		assert(ctxtMain);
+		ec = ctxtExecContext;
+		assert(ec);
 
-	while(ec->ctxt_type != EC_TAG_TERMINATE) {
-		if(FP_SEG(ec) + (FP_OFF(ec) + ec->ctxt_length + sizeof(*ec) - 1) / 16
-		  >= nxtMCB(FP_SEG(ctxtMCB))) {
+			/* absolute bottom of dynamic context */
+		if(FP_SEG(ec) >= nxtMCB(FP_SEG(ctxtMCB))
+		 	/* or an end context reached */
+		 || ec->ctxt_type == EC_TAG_TERMINATE)
+		 	return;
+
+			/* Does this context overflows the allocated bytes within
+				the execution context stack? */
+		len = ec->ctxt_length;
+		if(addu(&len, FP_OFF(ec) + sizeof(*ec))
+		 || (nxtMCB(FP_SEG(ctxtMCB)) - FP_SEG(ec)) * 16 < ec->ctxt_length) {
 		  	error_context_corrupted();
 		  	return;
 		}
@@ -631,25 +645,27 @@ void run_exec_context(void)
 		if(ec->ctxt_type >= EC_TAG_TERMINATE) {
 			dprintf(("[EXEC: Skipping unknown exec context: %u]\n"
 			 , ec->ctxt_type));
-			ecPop();			/* remove this context */
+			ecPop();
 		} else {
-			char *cmdline;
 
 			assert(ecFunction[ec->ctxt_type]);
 
 			/* as we are about to aquire a new command line, some
 				options are resetted to their defaults */
-#if 0
-			echo = F(echo);
-			trace = F(trace);
+#if 1
+			echoBatch = F(echo);
+			traceMode = F(trace);
 			swap = F(swap);
 			called = F(call);
-			interactive = 0;
+			interactive = F(interactive);
+			dispPrompt = F(dispPrompt);
 #else
 			dprintf(("Need to set local options before exec'ing context\n"));
 #endif
 
-			if((cmdline = (ecFunction[ec->ctxt_type])(ec)) != 0) {
+			if((cmdline = (ecFunction[ec->ctxt_type])(ec)) == 0)
+				ecPop();
+			else if(cmdline != cmdlineIgnore) {
 				/* process this command line */
 				char *p, *q;
 
@@ -667,14 +683,13 @@ void run_exec_context(void)
 					p = q;			/* skip the prefix */
 				}
 
-#ifdef CMD_INCLUDE_FOR
 				/* Placed here FOR even preceeds any checks for 
 					redirections, pipes etc. */
 				if(cmd_for_hackery(p)) {
 					free(cmdline);
 					continue;
 				}
-#endif
+
 				p = expEnvVars(p);
 				free(cmdline);
 				if(p != 0) {
@@ -953,6 +968,7 @@ int main(void)
 #ifdef FEATURE_KERNEL_SWAP_SHELL
 	kswapDeRegister(kswapContext);
 #endif
+	ctxtDestroy();
 
   return 0;
 }

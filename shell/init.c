@@ -168,7 +168,7 @@ int initialize(void)
 	dbg_printmem();
 #ifdef DEBUG
 	{ void* p;
-		if((p = malloc(5*1024)) == 0)
+		if((p = malloc(6*1024)) == 0)
 			dprintf(("[MEM: Out of memory allocating test block during INIT]"));
 		else free(p);
 	}
@@ -341,23 +341,11 @@ int initialize(void)
   }
 
   /* First of all, set up the environment */
-    /* If a new valid size is specified, use that */
-  env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE;
-  if(newEnvSize > 16 && newEnvSize < 32767)
-    env_setsize(0, newEnvSize);
-
-  /* Otherwise the path is placed into the environment */
-    /* Set the COMSPEC variable. */
-  if(chgEnv("COMSPEC", ComPath)) {		/* keep it silent */
-    /* Failed to add this variable, the most likely problem should be that
-      the environment is too small --> it is increased and the
-      operation is redone */
-    env_resize(0, strlen(ComPath) + 10);
-    if(chgEnv("COMSPEC", ComPath))
-    	chgEnv("COMSPEC",  NULL);	/* Cannot set -> zap an old one */
-  }
-  	inInit = 0;
-
+  	/* Deferred. It clashes with latter allocations of external
+  		blocks, so COMSPEC is removed from the environment in order
+  		to force comFile() to return the internally cached name.
+  		Then the environment is changed after the fixed-sized
+  		modules had been loaded. */
 	/* Install INT 24 Critical error handler */
 	/* Needs the ComPath variable, eventually */
 	if(!kswapContext) {
@@ -367,10 +355,34 @@ int initialize(void)
 			return E_NoMem;
 		}
 #ifdef FEATURE_KERNEL_SWAP_SHELL
-		if(swapOnExec != ERROR)
+		if(F(swap) != ERROR)
 			kswapRegister(kswapContext);
 #endif
 	}
+
+    /* If a new valid size is specified, use that */
+  env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
+  if(newEnvSize > 16 && newEnvSize < 32767)
+    env_setsize(0, newEnvSize);
+
+  /* Otherwise the path is placed into the environment */
+    /* Set the COMSPEC variable. */
+  if(chgEnv("COMSPEC", ComPath)) {		/* keep it silent */
+    /* Failed to add this variable, the most likely problem should be that
+      the environment is too small --> it is increased and the
+      operation is redone */
+#ifdef DEBUG
+	word oldSegm = env_glbSeg;
+#endif
+    env_resize(0, strlen(ComPath) + 10);
+#ifdef DEBUG
+	if(oldSegm != env_glbSeg)
+		dprintf(("[MEM: Global environment relocated to: %04x]\n", env_glbSeg));
+#endif
+    if(chgEnv("COMSPEC", ComPath))
+    	chgEnv("COMSPEC",  NULL);	/* Cannot set -> zap an old one */
+  }
+  	inInit = 0;
 
 	ctxtCreate();
 
@@ -403,7 +415,7 @@ int initialize(void)
 		ec->ctxt_type = EC_TAG_TERMINATE;
 		if(spawnAndExit == E_None) {
 			/* keep FreeCOM active --> push the I context */
-			if(ecMkI())
+			if(ecMkI() != E_None)
 				return E_NoMem;
 		}
 	}
@@ -412,7 +424,7 @@ int initialize(void)
   /* Now push the /C or /K option onto the exec stack */
   if(p) {
     showinfo = 0;
-    if(ecMkSC(p, (char*)0))
+    if(ecMkSC(p, (char*)0) != E_None)
 		return E_NoMem;
   }
 
@@ -445,17 +457,17 @@ int initialize(void)
 
 				if(key == KEY_F5)
 					displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
-				else if(ecMkSC(autoexec, (char*)0))
+				else if(ecMkSC(autoexec, (char*)0) != E_None)
 					return E_NoMem;
 			} else {
 				if(user_autoexec)
 					error_sfile_not_found(user_autoexec);
 #ifdef INCLUDE_CMD_TIME
-					if(ecMkHC("TIME", (char*)0))
+					if(ecMkHC("TIME", (char*)0) != E_None)
 						return E_NoMem;
 #endif
 #ifdef INCLUDE_CMD_DATE
-					if(ecMkHC("DATE", (char*)0))
+					if(ecMkHC("DATE", (char*)0) != E_None)
 						return E_NoMem;
 #endif
 			}

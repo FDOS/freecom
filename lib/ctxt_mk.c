@@ -16,6 +16,7 @@
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../include/crossjmp.h"
+#include "../include/ierror.h"
 #include "../err_fcts.h"
 
 void ctxtCreate(void)

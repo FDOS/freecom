@@ -1,3 +1,9 @@
+fix: Re-allocating the environment may clash with Borland#('s internal heap
+	management and with to allocate the other external memory blocks, when
+	no UMBs are available.
+bugfix: farcoreleft() is a nonsense function, replaced by a function
+	generating the size of the largest allocatable block
+bugfix: dprintf(): bugs in contexts like if() dprintf() else
 chg: core documentation CMT[378].TXT, ICMDS.TXT
 fix: dbg_printmem() if compiled in Large memory model, near is invalid
 

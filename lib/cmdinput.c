@@ -7,9 +7,7 @@
 #include <assert.h>
 #include <conio.h>
 #include <dir.h>
-//#include <dos.h>
 #include <stdlib.h>
-//#include <stdio.h>
 #include <string.h>
 
 #include <dynstr.h>
@@ -53,7 +51,7 @@ static void outsblank(const char * const s)
 
 /* read in a command line */
 #pragma argsused
-char *readcommandEnhanced(ctxtEC_t far * const ctxt)
+char *readcommandEnhanced(void)
 {
 	unsigned char insert = 1;
 	unsigned ch;
@@ -82,6 +80,9 @@ char *readcommandEnhanced(ctxtEC_t far * const ctxt)
 #ifdef FEATURE_HISTORY
 	histGet(histLevel - 1, &prvLine);
 #endif
+
+	if(feof(stdin))
+		return 0;
 
 	do {
 		ch = cgetchar();
@@ -353,5 +354,5 @@ char *readcommandEnhanced(ctxtEC_t far * const ctxt)
 #ifdef FEATURE_HISTORY
 	free(prvLine);
 #endif
-	return StrTrim(str);
+	return str? StrTrim(str): estrdup("");
 }

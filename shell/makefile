@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.2.2.4  2001/07/01 22:04:31  skaus
+# Update #3
+#
 # Revision 1.2.2.3  2001/06/25 20:06:36  skaus
 # Update #3
 #
@@ -45,18 +48,20 @@
 
 # Sources of this make target
 SRC = batch.c cb_catch.asm cmdtable.c command.c do_batch.c do_cmd.c \
-	do_for.c dummies.asm ec_fcts.c expalias.c fcttable.c init.c kswap.c \
-	loadhigh.c module.c redir.c ver.c
+	do_exit.c do_for.c do_inter.c do_keep.c dummies.asm ec_fcts.c expalias.c \
+	fcttable.c init.c kswap.c loadhigh.c module.c redir.c ver.c
 OBJ = batch.obj cb_catch.obj cmdtable.obj command.obj do_batch.obj \
-	do_cmd.obj do_for.obj dummies.obj ec_fcts.obj expalias.obj fcttable.obj \
-	init.obj kswap.obj loadhigh.obj module.obj redir.obj ver.obj
+	do_cmd.obj do_exit.obj do_for.obj do_inter.obj do_keep.obj dummies.obj \
+	ec_fcts.obj expalias.obj fcttable.obj init.obj kswap.obj loadhigh.obj \
+	module.obj redir.obj ver.obj
 HDR = ..\config.h ..\include/cmdline.h ..\include/command.h \
 	..\include/context.h ..\include/crossjmp.h ..\include/datefunc.h \
-	..\include/debug.h ..\include/keys.h ..\include/kswap.h \
-	..\include/message.h ..\include/misc.h ..\include/module.h \
-	..\include/mux_ae.h ..\include/nls.h ..\include/openf.h ..\include/res.h \
-	..\include/resource.h ..\include/timefunc.h ..\include\large.inc \
-	..\include\model.inc ..\include\small.inc ..\include\stuff.inc
+	..\include/debug.h ..\include/ierror.h ..\include/keys.h \
+	..\include/kswap.h ..\include/message.h ..\include/misc.h \
+	..\include/module.h ..\include/mux_ae.h ..\include/nls.h \
+	..\include/openf.h ..\include/res.h ..\include/resource.h \
+	..\include/timefunc.h ..\include\large.inc ..\include\model.inc \
+	..\include\small.inc ..\include\stuff.inc
 
 
 
@@ -99,23 +104,24 @@ expalias.obj : expalias.c \
 command.obj : command.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
 	../include/command.h ../include/context.h ../include/crossjmp.h \
-	../include/datefunc.h ../include/debug.h ../include/kswap.h \
-	../include/message.h ../include/misc.h ../include/mux_ae.h \
-	../include/nls.h ../include/openf.h ../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/kswap.h ../include/message.h ../include/misc.h \
+	../include/mux_ae.h ../include/nls.h ../include/openf.h \
+	../include/timefunc.h ../strings.h
 fcttable.obj : fcttable.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 module.obj : module.c \
 	 ../context.h_c ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/kswap.h ../include/message.h \
-	../include/misc.h ../include/module.h ../include/res.h \
-	../include/resource.h ../include/timefunc.h
+	../include/debug.h ../include/ierror.h ../include/kswap.h \
+	../include/message.h ../include/misc.h ../include/module.h \
+	../include/res.h ../include/resource.h ../include/timefunc.h
 kswap.obj : kswap.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/kswap.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	../include/ierror.h ../include/kswap.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 do_cmd.obj : do_cmd.c \
 	 ../config.h ../include/context.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
@@ -125,42 +131,58 @@ cb_catch.obj : cb_catch.asm \
 	.\..\include\stuff.inc
 ver.obj : ver.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 init.obj : init.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
 	../include/command.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/keys.h ../include/kswap.h \
-	../include/message.h ../include/misc.h ../include/module.h \
-	../include/timefunc.h ../strings.h
+	../include/debug.h ../include/ierror.h ../include/keys.h \
+	../include/kswap.h ../include/message.h ../include/misc.h \
+	../include/module.h ../include/timefunc.h ../strings.h
 ec_fcts.obj : ec_fcts.c \
 	 ../config.h ../include/context.h ../include/debug.h
+do_keep.obj : do_keep.c \
+	 ../config.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 do_for.obj : do_for.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 cmdtable.obj : cmdtable.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 loadhigh.obj : loadhigh.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 batch.obj : batch.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
+do_exit.obj : do_exit.c \
+	 ../config.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 dummies.obj : dummies.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc
+do_inter.obj : do_inter.c \
+	 ../config.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 do_batch.obj : do_batch.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 redir.obj : redir.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 DYNSOURCES =
 #MAKEDEP STOP
 

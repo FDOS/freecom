@@ -128,10 +128,10 @@ static int doFOR(char *var, char *varE, char *param, char *paramE
 #else
 		default:
 #endif
-			rv = ecMkHC("IVAR ", var, (char*)0);	/* kill the variable */
+			rv = ecMkc("IVAR ", var, (char*)0);	/* kill the variable */
 			break;
 		case 0:		/* Got it */
-			rv = ecMkHC("IVAR ", var, "=", oldContents, (char*)0);
+			rv = ecMkc("IVAR ", var, "=", oldContents, (char*)0);
 			free(oldContents);
 			break;
 		case 2:	/* Out of memory */
@@ -142,7 +142,7 @@ static int doFOR(char *var, char *varE, char *param, char *paramE
 		oldContents = getEnv(var);
 			/* getEnv() will also update the var array with the current
 				case of the particular characters */
-		rv = ecMkHC("SET /C ", var, "=", oldContents, (char*)0);
+		rv = ecMkc("SET /C ", var, "=", oldContents, (char*)0);
 	}
 
 	if(rv == E_None) {

@@ -11,6 +11,7 @@
 
 #include "../include/context.h"
 #include "../include/command.h"
+#include "../include/ierror.h"
 
 int ctxtPush(const Context_Tag tag, const char * const buf)
 {	ctxt_info_t *info;

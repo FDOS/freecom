@@ -13,13 +13,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <dynstr.h>
+
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-extern FILE *dbg_logfile;
-extern char *dbg_logname;
+//extern FILE *dbg_logfile;
+extern char *dbg_logname2;
 
 int cmd_fddebug(char *param)
 {
@@ -27,30 +29,51 @@ int cmd_fddebug(char *param)
   	default: {
   		FILE *f;
   		char *p;
+  		int duplicate, channel;
 
-  		if((p = strdup(trimcl(param))) == 0) {
-  			error_out_of_memory();
+		p = trimcl(param);
+		if((duplicate = *p == '+') != 0)
+			++p;
+  		if((p = estrdup(p)) == 0)
   			return 1;
-  		}
 
-  		if(stricmp(param, "stderr") == 0) f = stderr;
-  		else if(stricmp(param, "stdout") == 0) f = stdout;
-  		else if((f = fopen(param, "at")) == 0) {
-  			error_open_file(param);
+  		if(stricmp(p, "stderr") == 0) {
+  			f = stderr;
+  			channel = 1;
+  		} else if(stricmp(p, "stdout") == 0) {
+  			f = stdout;
+  			channel = 1;
+  		} else if((f = fopen(p, "at")) == 0) {
+  			error_open_file(p);
   			return 2;
-  		}
-		if(dbg_logfile != stderr && dbg_logfile != stdout)
-			fclose(dbg_logfile);
-		dbg_logfile = f;
-		free(dbg_logname);
-		dbg_logname = p;
+  		} else
+			channel = 2;
+		if(!duplicate || channel == 2) {
+			fclose(dbg_logfile2);
+			dbg_logfile2 = 0;
+			StrFree(dbg_logname2);
+		}
+		if(!duplicate || channel == 1)
+			dbg_logfile = 0;
+		if(channel == 2) {
+			dbg_logfile2 = f;
+			dbg_logname2 = p;
+		} else {
+			dbg_logfile = f;
+			free(p);
+		}
 		/* FALL THROUGH */
 	}
   	case OO_On:		fddebug = 1;	break;
 	case OO_Null:	case OO_Empty:
 		displayString(TEXT_MSG_FDDEBUG_STATE, fddebug ? D_ON : D_OFF);
-		displayString(TEXT_MSG_FDDEBUG_TARGET
-		 , dbg_logname? dbg_logname: "stdout");
+		if(dbg_logfile)
+			displayString(TEXT_MSG_FDDEBUG_TARGET
+			 , dbg_logfile == stderr? "stderr": "stdout");
+		if(dbg_logfile2) {
+			assert(dbg_logname2);
+			displayString(TEXT_MSG_FDDEBUG_TARGET, dbg_logname2);
+		}
 		break;
   	case OO_Off:	fddebug = 0;	break;
 	}

@@ -31,7 +31,9 @@ char *readCommandNoIgnore(ctxtEC_t far * const ctxt)
 	if((line = edupstr(cmd)) != 0) {
 		ecPop();
 		if(*line == '@') {		/* prevent any echo'ing */
-			++line;
+			*line = ' ';		/* remove this character from string */
+								/* cannot use ++line as the caller will
+									free() the returned string */
 			echoBatch = 0;
 		}
 	}

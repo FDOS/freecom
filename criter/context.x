@@ -37,9 +37,6 @@ pointer prg 0		# program to be executed
 pointer cmdline 0	# command line arguments of program 
 word execErr 0		# exit code of DOS-4B of external program
 pointer shell 0		# absolute path to shell to be executed 
-word canexit 0		# true unless FreeCOM was invoked with /P 
-word dfltSwap 0		# default value of swapOnExec
-word debug 0		# Debug status
 word envSize 0		# size of environment segment 
 word dyn_ctxt 0		# dynamically changed portions of context 
 word ofs_criter _lowlevel_err_handler		# offset of criter module within this context 

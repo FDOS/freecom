@@ -124,9 +124,12 @@ int get_redirection(char * const s
 	assert(out);
 	assert(pipe);
 
-	num = numIn = numOut = 0;
+	numIn = numOut = 0;
 	*in = *out = 0;
-	*pipe = 0;
+	if((*pipe = emalloc(2 * sizeof(char*))) == 0)
+		return -1;
+	(*pipe)[0] = src;
+	num = 1;
 
 	for(;;) {
 		char *p = skipQuotedWord(src, (char*)0, "<>|");
@@ -169,12 +172,11 @@ int get_redirection(char * const s
 				}
 				*pipe = p;
 				p[num++] = dst;
-				p[num] = 0;
 			}
 			break;
 		default:
 			assert(i == noRedir);
-			assert(src[-len] == 0);
+			(*pipe)[num] = 0;
 			return num;
 		}                           /* end switch */
 	}

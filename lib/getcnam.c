@@ -30,6 +30,7 @@ char *getCmdName(const char ** const cp)
 
 	memcpy(h, *cp, len);
 	h[len] = 0;
+	*cp = p;
 
 	return h;
 }

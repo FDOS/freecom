@@ -286,8 +286,8 @@ many percent signs as enumerated in the string.
 
 'f' FOR context #2:
 21	BYTE	bytes required to call next findnext()
-WORD	offset of variable name within F-context
-WORD	offset of command within F-context
+WORD	offset of variable name within F-context, base: f's segment, ofs=0
+WORD	offset of command within F-contex, base: f's segment, ofs=0
 ASCIIZ	prefix to found filenames
 A f-context is always preceeded by a F-context
 variable name - see 'F' context.

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <fmemory.h>
 #include "../include/misc.h"
+#include "../include/ierror.h"
 
 /* transformed into constants
 	unsigned far *maxx = MK_FP(0x40, 0x4a);
@@ -26,22 +27,6 @@
 		- 1: '\0' (at the very end)
 		= 125
 	*/
-
-enum InternalErrorCodes {
-	E_None = 0,
-	E_Useage = 1,
-	E_Other = 2,
-	E_CBreak = 3,
-	E_NoMem,
-	E_CorruptMemory,
-	E_NoOption,
-	E_Exit,
-	E_Ignore,			/* Error that can be ignored */
-	E_Empty,
-	E_Syntax,
-	E_Range,				/* Numbers out of range */
-	E_NoItems
-};
 
 #define PROMPTVAR "PROMPT"
 #define PATHVAR "PATH"
@@ -139,6 +124,8 @@ int cmd_fd(char *);
 int cmd_arg(char *);
 int cmd_cancel(char *);
 int cmd_quit(char *);
+int cmd_dispNLS(char *);
+int cmd_dispFlags(char *);
 
 /* Internal functions */
 char *fct_tempfile(char *);

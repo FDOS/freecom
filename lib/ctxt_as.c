@@ -18,6 +18,7 @@
 
 #include "../include/command.h"
 #include "../include/context.h"
+#include "../include/ierror.h"
 
 #if sizeof(unsigned) != 2
 #error "sizeof(unsigned) != 2 is not supported"

@@ -6,9 +6,12 @@
 	This file bases on DEBUG.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.2.2  2001/07/01 22:04:31  skaus
+	Update #3
+
 	Revision 1.2.2.1  2001/06/11 20:45:51  skaus
 	fix: dbg_printmem() #if must be #ifdef
-
+	
 	Revision 1.2  2001/06/11 20:33:37  skaus
 	fix: dbg_printmem() if compiled in Large memory model, near is invalid
 	
@@ -44,11 +47,15 @@
 #include <stdlib.h>
 #include <alloc.h>
 
+#include <suppl.h>
+
 #include "../include/debug.h"
+#include "../include/misc.h"
 
 #if sizeof(void*) != sizeof(void far*)
 #define DISP_NEAR
 #endif
+
 
 #undef dbg_printmem
 void dbg_printmem(void)
@@ -57,11 +64,13 @@ void dbg_printmem(void)
 	static unsigned nearLast = 0;
 #endif
 	static unsigned long farLast = 0;
+	static word dosLast = 0;
 
 #ifdef DISP_NEAR
 	unsigned nearThis;
 #endif
 	unsigned long farThis;
+	word dosThis;
 
 	switch(heapcheck()) {
 	case _HEAPCORRUPT:
@@ -78,23 +87,27 @@ void dbg_printmem(void)
 	}
 
 #ifdef DISP_NEAR
-	nearThis = coreleft();
+	nearThis = my_coreleft();
 #endif
-	farThis = farcoreleft();
+	farThis = my_farcoreleft();
+	dosThis = DOSalloc(0, 0x80 | 0x10);
 
 #ifdef DISP_NEAR
-	dprintf(("[free memory: near=%6u far=%13lu]\n", nearThis, farThis));
+	dprintf(("[free memory: near=%6u far=%13lu dos=%6u]\n"
+	 , nearThis, farThis, dosThis));
 	if(nearLast)
-		dprintf(("[changed    : near=%6d far=%13ld]\n"
-		 , nearThis - nearLast , farThis - farLast));
+		dprintf(("[changed    : near=%6d far=%10ld dos=%6d]\n"
+		 , nearThis - nearLast , farThis - farLast, dosThis - dosLast));
 #else
-	dprintf(("[free memory: far=%13lu]\n", farThis));
+	dprintf(("[free memory: far=%10lu dos=%6u]\n", farThis, dosThis));
 	if(farLast)
-		dprintf(("[changed    : far=%13ld]\n", farThis - farLast));
+		dprintf(("[changed    : far=%10ld dos=%6d]\n"
+		 , farThis - farLast, dosThis - dosLast));
 #endif
 
 #ifdef DISP_NEAR
 	nearLast = nearThis;
 #endif
 	farLast = farThis;
+	dosLast = dosThis;
 }

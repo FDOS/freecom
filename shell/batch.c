@@ -79,7 +79,7 @@ int batch(char *fullname, char *firstword, char *param)
 
 	if(!called)			/* when this batch file terminates,
 							drop to interactive command line */
-		if(!ecMkHC("CANCEL"))
+		if(ecMkc("CANCEL", (char*)0) != E_None)
 			return 1;
 
 	if(CTXT_INFO(CTXT_TAG_ARG, nummax)) {
@@ -91,10 +91,10 @@ int batch(char *fullname, char *firstword, char *param)
 		 , CTXT_INFO(CTXT_TAG_ARG, nummax) + 1
 		 , F(shiftlevel));
 		assert(strlen(buf) < sizeof(buf));
-		if(!ecMkHC("ARG ", buf))
+		if(ecMkc("ARG ", buf, (char*)0) != E_None)
 			return 1;
 	} else
-		if(!ecMkHC("ARG"))		/* reset all arguments */
+		if(ecMkc("ARG", (char*)0) != E_None)	/* reset all arguments */
 			return 1;
 
 		/* New base is the first non-used string */

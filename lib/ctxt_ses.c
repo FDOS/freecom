@@ -12,6 +12,7 @@
 
 #include "../include/command.h"
 #include "../include/context.h"
+#include "../include/ierror.h"
 #include "../err_fcts.h"
 
 int ctxtSetS(const Context_Tag tag

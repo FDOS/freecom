@@ -18,9 +18,12 @@
 	This file bases on DATE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.4.1  2001/07/01 22:04:31  skaus
+	Update #3
+
 	Revision 1.2  2001/04/29 12:56:57  skaus
 	bugfix: DATE: does not accept empty line
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -54,6 +57,7 @@
 #include <string.h>
 
 #include "../include/command.h"
+#include "../include/ierror.h"
 #include "../include/misc.h"
 #include "../include/nls.h"
 

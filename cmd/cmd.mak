@@ -14,6 +14,7 @@ cmds.lib : $(CFG) alias.obj \
 	beep.obj \
 	break.obj \
 	call.obj \
+	cancel.obj \
 	cdd.obj \
 	chdir.obj \
 	cls.obj \
@@ -23,9 +24,14 @@ cmds.lib : $(CFG) alias.obj \
 	del.obj \
 	dir.obj \
 	dirs.obj \
+	disp_flg.obj \
+	disp_nls.obj \
 	doskey.obj \
 	echo.obj \
 	exit.obj \
+	f_ivar.obj \
+	f_tfile.obj \
+	f_verb.obj \
 	fd.obj \
 	fddebug.obj \
 	for.obj \
@@ -41,6 +47,7 @@ cmds.lib : $(CFG) alias.obj \
 	popd.obj \
 	prompt.obj \
 	pushd.obj \
+	quit.obj \
 	rem.obj \
 	ren.obj \
 	rmdir.obj \
@@ -57,6 +64,7 @@ cmds.lib : $(CFG) alias.obj \
 +-beep.obj &
 +-break.obj &
 +-call.obj &
++-cancel.obj &
 +-cdd.obj &
 +-chdir.obj &
 +-cls.obj &
@@ -66,9 +74,14 @@ cmds.lib : $(CFG) alias.obj \
 +-del.obj &
 +-dir.obj &
 +-dirs.obj &
++-disp_flg.obj &
++-disp_nls.obj &
 +-doskey.obj &
 +-echo.obj &
 +-exit.obj &
++-f_ivar.obj &
++-f_tfile.obj &
++-f_verb.obj &
 +-fd.obj &
 +-fddebug.obj &
 +-for.obj &
@@ -84,6 +97,7 @@ cmds.lib : $(CFG) alias.obj \
 +-popd.obj &
 +-prompt.obj &
 +-pushd.obj &
++-quit.obj &
 +-rem.obj &
 +-ren.obj &
 +-rmdir.obj &
@@ -101,6 +115,7 @@ cmds.lib : $(CFG) alias.obj \
 +beep.obj &
 +break.obj &
 +call.obj &
++cancel.obj &
 +cdd.obj &
 +chdir.obj &
 +cls.obj &
@@ -110,9 +125,14 @@ cmds.lib : $(CFG) alias.obj \
 +del.obj &
 +dir.obj &
 +dirs.obj &
++disp_flg.obj &
++disp_nls.obj &
 +doskey.obj &
 +echo.obj &
 +exit.obj &
++f_ivar.obj &
++f_tfile.obj &
++f_verb.obj &
 +fd.obj &
 +fddebug.obj &
 +for.obj &
@@ -128,6 +148,7 @@ cmds.lib : $(CFG) alias.obj \
 +popd.obj &
 +prompt.obj &
 +pushd.obj &
++quit.obj &
 +rem.obj &
 +ren.obj &
 +rmdir.obj &

@@ -203,5 +203,10 @@ struct CMD internalCommands[] =
 	{"CANCEL", HIDDEN, cmd_cancel, TEXT_CMDHELP_INTERNAL_COMMAND},
 	{"QUIT", HIDDEN, cmd_quit, TEXT_CMDHELP_INTERNAL_COMMAND},
 
+#ifdef DEBUG
+	{"@", HIDDEN, cmd_dispNLS, TEXT_CMDHELP_INTERNAL_COMMAND},
+	{"!", HIDDEN, cmd_dispFlags, TEXT_CMDHELP_INTERNAL_COMMAND},
+#endif
+
 	{0, 0, 0, 0}
 };

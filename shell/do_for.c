@@ -106,7 +106,7 @@ char *readFORfirst(ctxtEC_t far * const ctxt)
 
 	if(findfirst(arg, &f, FA_NORMAL) == 0) {	/* need a f-context */
 		*dfnfilename(arg) = '\0';	/* extract path */
-		if(!ecMkf(&f, varname, cmd, arg))
+		if(ecMkf(&f, varname, cmd, arg) != E_None)
 			return 0;
 		if(!StrCat(arg, f.ff_name)) {
 			free(arg);
@@ -137,8 +137,8 @@ char *readFORnext(ctxtEC_t far * const ctxt)
 	assert(_fstrlen(fc->ec_prefix)
 	 == ctxt->ctxt_length - sizeof(ctxtEC_For_t));
 
-	varname = MK_FP(FP_SEG(fc), FP_OFF(fc) + fc->ec_varname);
-	cmd = MK_FP(FP_SEG(fc), FP_OFF(fc) + fc->ec_cmd);
+	varname = MK_FP(FP_SEG(fc), fc->ec_varname);
+	cmd = MK_FP(FP_SEG(fc), fc->ec_cmd);
 	assert(cmd[-1] == 0 && cmd == varname + _fstrlen(varname) + 1);
 
 		/* necessary information to let findnext() do some good */

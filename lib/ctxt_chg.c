@@ -17,6 +17,7 @@
 
 #include "../include/command.h"
 #include "../include/context.h"
+#include "../include/ierror.h"
 #include "../err_fcts.h"
 
 int ctxtChgSize(unsigned tosize)
@@ -52,7 +53,7 @@ int ctxtChgSize(unsigned tosize)
 			error_out_of_dos_memory();
 			return E_NoMem;
 		}
-		ctxtPurgeCache();
+		//ctxtPurgeCache();
 		/* Copy the contents there, incl the MCB name */
 		_fmemcpy(MK_FP(SEG2MCB(tempSegm), 8)
 		 , MK_FP(SEG2MCB(ctxtMain), 8)
@@ -75,7 +76,9 @@ redo:
 			 , MK_FP(SEG2MCB(ctxtMain), 8) , 16 + 8);	/* and mem name */
 				/* all changes of the dyn ctxt memory block are 100%
 					distributed into/from the strings area */
-			nctxtp->ctxt_size = mcb_length(new_context) - ecLen - 1;
+			nctxtp->ctxt_size
+			 = ((struct MCB far*)MK_FP(SEG2MCB(new_context), 0))->mcb_size
+			   - ecLen - 1;
 				/* copy the strings */
 			_fmemcpy(MK_FP(new_context + 1, 0), MK_FP(ctxtSegm, 0)
 			 , nctxtp->ctxt_size);
@@ -94,9 +97,10 @@ redo:
 			/* Erase all the context */
 			assert(sizeof(ctxtInitialEC) < 16);
 			_fmemcpy(nctxtp, TO_FP(&ctxtInitialCB), sizeof(ctxtInitialCB));
-			nctxtp->ctxt_size = mcb_length(new_context) - 2;
+			nctxtp->ctxt_size
+			 = ((struct MCB far*)MK_FP(SEG2MCB(new_context), 0))->mcb_size - 2;
 			nctxtp->ctxt_eOffs = 16 - sizeof(ctxtInitialEC);
-			_fmemcpy(MK_FP(new_context + 2 + nctxtp->ctxt_size
+			_fmemcpy(MK_FP(new_context + 1 + nctxtp->ctxt_size
 			  , nctxtp->ctxt_eOffs)
 			 , TO_FP(&ctxtInitialEC), sizeof(ctxtInitialEC));
 		}

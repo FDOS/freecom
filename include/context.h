@@ -15,7 +15,7 @@
 typedef word ctxt_t;		/* general context type <-> segment */
 #define CTXT_INVALID ((ctxt_t)0)
 
-extern ctxt_t ctxtMain;		/* currently there is just one context
+extern volatile ctxt_t ctxtMain;	/* currently there is just one context
 								-> so-called dynamic context
 								-> all data is located in there
 								it is the location of the subMCB */
@@ -50,6 +50,8 @@ typedef struct {	/* f context */
 #error "The size of type ctxtCB_t must be equal to 16"
 #endif
 #define ctxtMCB ((struct MCB _seg *)SEG2MCB(ctxtMain))
+#define ctxtECHighestSegm()	(nxtMCB(FP_SEG(ctxtMCB)))
+#define ctxtECLowestSegm()	(ctxtSegm + (env_firstFree(ctxtSegm) + 15) / 16)
 #define ctxtp ((ctxtCB_t _seg *)ctxtMain)
 #define ctxtExecContext		\
 	((ctxtEC_t far*)MK_FP(ctxtSegm + ctxtp->ctxt_size, ctxtp->ctxt_eOffs))
@@ -116,6 +118,7 @@ extern ctxt_info_t ctxt_info[];
 #define CTXT_ITEMNAME_LENGTH (sizeof(unsigned) * 2 + 2)
 
 void ctxtCreate(void);			/* Create the local context */
+void ctxtDestroy(void);			/* Deallocate the local context */
 int ctxtAddStatus(const Context_Tag tag);
 int ctxtChgSize(const unsigned newsize);
 int ctxtPop(const Context_Tag, char ** const);
@@ -150,15 +153,18 @@ enum ExecContext_Tags {
 	, EC_TAG_TERMINATE			/* E */
 };
 #define EC_LAST_TAG EC_TAG_TERMINATE
+	/* >= tags that may be considered end of the stack */
+#define EC_FINAL_TAGS EC_TAG_KEEP_RUNNING
 
 typedef struct {
+	FLAG f_dispPrompt;		/* display prompt on interactive cmdline */
+	FLAG f_echo;			/* batch script echo mode */
+	FLAG f_swap;			/* do swapping by default */
+/** flags below default to zero **/
 	FLAG f_canexit;			/* may allowed to exit this shell */
 	FLAG f_interactive;		/* set if the current command had been entered
 								interactively via command line */
 	FLAG f_call;			/* invoke via CALL by default */
-	FLAG f_swap;			/* do swapping by default */
-	FLAG f_dispPrompt;		/* display prompt on interactive cmdline */
-	FLAG f_echo;			/* batch script echo mode */
 	FLAG f_trace;			/* batch script trace mode by default */
 	FLAG f_debug;			/* FreeCOM debugging */
 	FLAG f_persistentMSGs;	/* keep messages in memory */
@@ -166,26 +172,33 @@ typedef struct {
 	unsigned f_base_shiftlevel;
 	unsigned f_shiftlevel;	/* argument shift level */
 	unsigned f_batchlevel;	/* how many batch nesting levels */
-	char * f_goto;			/* label to goto, if a B context is active */
 } ctxt_flags_t;
-extern ctxt_flags_t ctxtFlags;
+extern ctxt_flags_t far*ctxtFlagsP;
+extern ctxt_flags_t ctxtInitialFlags;
+#define ctxtFlags	(*ctxtFlagsP)
 #define F(flags)	ctxtFlags.CTXT_join(f_,flags)
 
 extern FLAG swap, echoBatch, dispPrompt, rewindBatchFile, traceMode;
 extern FLAG interactive, called;
 extern FLAG doExit, doCancel, doQuit;
+extern char *gotoLabel;
 #define implicitVerbose (interactive? dispPrompt: echoBatch)
 
 extern char* (*ecFunction[])(ctxtEC_t far * const);
 
+	/* Make a new context of specified length and type */
+ctxtEC_t far *ecMk(const enum ExecContext_Tags, const unsigned);
+	/* Make a silent & hidden c context */
+int ecMkc(const char * const str, ...);
 	/* Make a silent & hidden C context */
 int ecMkHC(const char * const str, ...);
 	/* Make a silent C context */
 int ecMkSC(const char * const str, ...);
-	/* Make a C context, for which the 1st argument is made "Verbatim" */
+	/* Make a C context, for which the 1st argument is made "Verbatim"
+		The "silence" is taken from echoBatch. */
 int ecMkV1C(const char * const str, ...);
 	/* Make a F context: (param[], params), varname, cmd */
-int ecMkF(const char * const * const, const int, const char * const, const char * const);
+int ecMkF(char ** const, const int, const char * const, const char * const);
 	/* Make a f context: ffblk, varname, cmd, prefix */
 int ecMkf(const void * const, const char far* const, const char far* const, const char * const);
 	/* Make a I context */
@@ -193,25 +206,36 @@ int ecMkI(void);
 	/* Make a B context: fullname (pos & lcount default to 0) */
 int ecMkB(const char * const fullname);
 	/* Make a C/FD context */
-int ecMkFD(int jft, int sft);
-	/* Return a pointer to the most current F context */
-ctxtEC_Batch_t far *ecLastF(void);
+int ecMkFD(const int jft, const int sft);
+	/* Return a pointer to the most current B context */
+ctxtEC_Batch_t far *ecLastB(void);
 	/* Return the next available special internal variable
 		in a dynamically allocated buffer. */
 char *ecMkIVar(void);
 	/* Free the dynamically allocated buffer and, if necessary,
 		mark the internal variable as free again */
-char *ecFreeIVar(char * const ivar);
+void ecFreeIVar(char * const ivar);
+	/* Create a string that may enclose "str" with a %@VERBATIM() */
+char *ecMkVerbatimStr(const char * const str);
 
+	/* Validate the TOS and return a pointer to it */
+ctxtEC_t far *ecValidateTOS(void);
+	/* Set a new TOS; return 0 if target is below LowestSegm() */
+int ecSetTOS(const ctxtEC_t far *);
 	/* Remove the topmost context; uses the "size" member only */
 void ecPop(void);
 	/* Shrink the topmost context by diff bytes */
 int ecShrink(int diff);
 
 /* Functions to handle the particular contexts */
+/* These functions return:
+	0: to pop the topmost context
+	cmdlineIgnore: to ignore the return value and proceed
+	else: to perform the returned command line (dynamically allocated)
+*/
+#define cmdlineIgnore ((char*)1)
 	/* EC_TAG_INTERACTIVE -- I context */
-char *readcommandEnhanced(ctxtEC_t far * const);
-char *readcommandDOS(ctxtEC_t far * const);
+char *readInteractive(ctxtEC_t far * const);
 	/* EC_TAG_BATCH -- B-context */ 
 char *readbatchline(ctxtEC_t far * const);
 	/* EC_TAG_FOR_FIRST -- F-context */ 
@@ -238,5 +262,6 @@ char *terminateShell(ctxtEC_t far * const);
 
 	/* Transform s from internal quoted form into ASCII */
 void esDecode(char * const s);
+char *esEncode(const char * const s);
 
 #endif

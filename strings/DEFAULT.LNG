@@ -1423,3 +1423,38 @@ This is an internal command for which no built-in help is
 available. Please refer to some external manual of FreeCOM.
 
 .
+
+:TEXT_NLS_EXCLUDED#1
+The DOS NLS support has been excluded from this variant of FreeCOM.
+.
+:TEXT_NLS_DISPLAY#1
+Country code: %5u\t\tCharacter set / Code page: %5u
+Formats:\tDate: %u\tTime: %u
+Separators:
+	Thousends: %5s\tDecimal: %5s
+	Date: %2s\tTime: %2s\tList: %2s
+Currency: Symbol: %5s\tPrecision: %u\tFormat: 0x%x
+Filename characters:
+	include: range: %u through %u
+	exclude: range: %u through %u
+	enumerated excluded characters: %Fs
+.
+
+:TEXT_FLAGS_DISPLAY#1
+Default value of flags:
+Display prompt: %u\tDisplay command line: %u
+Swap mode     : %u\tCall mode           : %u
+Can exit      : %u\tInteractive command : %u
+Trace mode    : %u\tDebug mode          : %u
+Shift level   : %u\tBase shift level    : %u
+Error level   : %u\tPersistent messages : %u
+Batch level   : %u
+
+Current values of flags:
+Display prompt: %u\tDisplay command line: %u
+Swap mode     : %u\tCall mode           : %u
+Verbose       : %u\tInteractive command : %u
+Trace mode    : %u\tRewind batch file   : %u
+Exit (FreeCOM): %u\tCancel (any scripts): %u
+Quit (script) : %u\tSearching GOTO label: %s
+.

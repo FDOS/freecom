@@ -22,6 +22,7 @@
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
+#include "../include/ierror.h"
 #include "../include/nls.h"
 
 int splitFctLine(int argc, char ** const argv, char * const line)

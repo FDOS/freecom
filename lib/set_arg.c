@@ -16,6 +16,7 @@
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../include/cmdline.h"
+#include "../include/ierror.h"
 
 int setArguments(const char * const line)
 {	char *start, *s;
