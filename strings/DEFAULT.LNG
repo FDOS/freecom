@@ -1309,7 +1309,7 @@ the MOVE command for that purpose.
 :TEXT_CMDHELP_SET#1
 Displays, sets, or removes environment variables.
 
-SET [/C] [variable=[string]]
+SET [/C] [/P] [variable=[string]]
 
   variable  Specifies the environment-variable name.
   string    Specifies a series of characters to assign to the variable.
@@ -1321,6 +1321,8 @@ Type SET without parameters to display the current environment variables.
 /C forces to keep the case of the variable; by default the variable is
 uppercased, if it is not located in the environment already, otherwise
 the case is retained.
+
+/P prompt the user with string, and assigns the user input to the variable.
 .
 
 :TEXT_CMDHELP_SHIFT#1

@@ -6,6 +6,7 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 #include <environ.h>
 
@@ -16,11 +17,14 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-static int optC;
+#define promptBuffer 256
+
+static int optC, promptUser;
 
 #pragma argsused
 optScanFct(opt_set)
 { switch(ch) {
+  /* case 'A': return optScanBool(optA); arithmetic expression */
   case 'C': return optScanBool(optC);
 #if 1
   case 'I': /* Display Information about current memory */
@@ -28,6 +32,7 @@ optScanFct(opt_set)
 		 , env_resize(0, 0), env_freeCount(env_glbSeg));
 		return E_Other;
 #endif
+  case 'P': return optScanBool(promptUser);
   }
   optErr();
   return E_Useage;
@@ -35,6 +40,10 @@ optScanFct(opt_set)
 
 int cmd_set(char *param)
 {	char *value;
+	char *promptBuf = 0;
+	int ret;
+
+	optC = promptUser = 0;
 
 	if(leadOptions(&param, opt_set, 0) != E_None)
 		return 1;
@@ -53,10 +62,31 @@ int cmd_set(char *param)
 #endif
 	}
 
+	if(promptUser) {	/* -> Display the value, then read and assign */
+		assert(value);
+		fputs(value, stdout);
+		promptBuf = malloc(promptBuffer);
+		if(!promptBuf) {
+			error_out_of_memory();
+			return E_NoMem;
+		}
+		fgets(promptBuf, promptBuffer, stdin);
+		if(cbreak) {
+			free(promptBuf);
+			return E_CBreak;
+		}
+		value = strchr(promptBuf, '\0');
+		while(--value >= promptBuf && (*value == '\n' || *value == '\r'));
+		value[1] = '\0';	/* strip trailing newlines */
+		value = promptBuf;
+	}
+
 	/* If the value is just blanks, it means to delete the value;
 		but otherwise even leading and trailing spaces must be kept */
 	if(is_empty(value))
 		value = 0;
 
-	return chgEnvCase(optC, param, value);
+	ret = chgEnvCase(optC, param, value);
+	free(promptBuf);
+	return ret;
 }

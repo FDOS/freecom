@@ -1,3 +1,4 @@
+add: SET /P {based on luojiuming}
 bugfix: removed /V from CMDHELP_DIR
 add: DIR /A*** (selected attributes) {based on patch from Michael Devore}
 

@@ -14,7 +14,7 @@ DESCRIPTION:
 
 The first variant <FONT SIZE=-1>(without any argument)</FONT> displays
 all the currently defined environment variables in the format
-<FONT SIZE=-1>(without any whitespaces before or after the equal sifn)</FONT>:
+<FONT SIZE=-1>(without any whitespaces before or after the equal sign)</FONT>:
 EBNF: name '=' <<value>>
 
 <P>The second variant assigns a new value
@@ -39,4 +39,12 @@ allow an easy way to display the current size of the environment segment,
 because it is one of the most frequently reported, but not reproduceable
 bug report. Once this option has been encountered, all the remaining command
 line is ignored.
+<LI><OPT>/P</OPT>: Prompts the user with the specified 
+EBNF!: <<string>>
+and assigns the user's input to the 
+EBNF!: variable 
+. If the no input is made, hence,
+one taps just <TT>ENTER</TT>, an empty value is assigned to the
+EBNF!: variable 
+, which is then removed from the environment.
 </UL>
