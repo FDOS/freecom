@@ -1,6 +1,6 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-29-May-2000      James Tabor <jimtabor@infohwy.com>
+19-May-2000      James Tabor <jimtabor@infohwy.com>
 ~~~~~~~~~~~~~~~~~~~~~~
 Import FreeCom from John Price CVS at gcfl.net to the new CVS at
 Sourceforge.net.
