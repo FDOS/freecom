@@ -1,3 +1,5 @@
+bugfix: command line editor: must accept ' and ` as filename characters
+	hence dropping them as quote character
 bugfix: DIR: /4 synonym for /Y [#937]
 bugfix: COPY: remove created files on error [#756]
 fix: COPY: broken wildcarded source pattern
