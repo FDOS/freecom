@@ -331,6 +331,7 @@ optScanFct(opt_dir)
   case 'A': if(!bool) return scanAttr(strarg);
   			break;
   case 'L': return optScanBool(optL);
+  case '4':
   case 'Y': return optScanBool(longyear);
   case 0:	/* Longname option, e.g. /A without argument sign */
   	switch(*optstr) {

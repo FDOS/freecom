@@ -1,6 +1,7 @@
-bugfix: COPY: remove created files on error
+bugfix: DIR: /4 synonym for /Y [#937]
+bugfix: COPY: remove created files on error [#756]
 fix: COPY: broken wildcarded source pattern
-add: COPY: colon'ed device names on command line, e.g. COPY CON: file
+add: COPY: colon'ed device names on command line, e.g. COPY CON: file [#225]
 fix: COPY: con: is misinterpreted as C:
 fix: DIR: /O: endless loop /OU; ignored /OG; /OE: return 0 if no extension
 add: DIR: /O: multiple /O** conditions {Tom Ehlert}
