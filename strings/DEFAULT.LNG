@@ -352,7 +352,10 @@ VERIFY is %s
 .
 
 :TEXT_MSG_FDDEBUG_STATE
-DEBUG output is %s
+DEBUG output is %s.
+.
+:TEXT_MSG_FDDEBUG_TARGET
+DEBUG output is printed to %s.
 .
 
 :TEXT_MSG_BREAK_STATE
@@ -1063,10 +1066,14 @@ Type VERIFY without a parameter to display the current VERIFY setting.
 If debugging is compiled into FreeDOS, this command will turn debug
 output on or off, or tell you if it is on or off.
 
-FDDEBUG [ON | OFF]
+FDDEBUG [ON | OFF | file]
 
 Type FDDEBUG without a parameter to display the current debug output
 setting.
+If a file is specified, all debug output is redirected into that file;
+the output is appended to the file, if it already exists. The special
+names "stdout" and "stderr" may be used to redirect the output
+to the standard output or standard error stream.
 .
 
 :TEXT_CMDHELP_VOL

@@ -379,19 +379,19 @@ void alias_streamfrom(char far *p)
 #endif
 
 #ifdef DEBUG_ALIASES
-	puts("[Alias dump]");
+	dbg_outsn("[Alias dump]");
 	for(len = 0; len < 4; ++len) {
-		printf("%04x ", len * 8);
+		dbg_print("%04x ", len * 8);
 		for(cnt = 0; cnt < 8; ++cnt)
-			printf("%02X ", (unsigned char)p[len * 8 + cnt]);
-		printf("     ");
+			dbg_print("%02X ", (unsigned char)p[len * 8 + cnt]);
+		dbg_outs("     ");
 		for(cnt = 0; cnt < 8; ++cnt) {
 			unsigned char ch = (unsigned char)p[len * 8 + cnt];
 			if(isprint(ch))
-				putchar(ch);
-			else putchar('.');
+				dbg_outc(ch);
+			else dbg_outc('.');
 		}
-		putchar('\n');
+		dbg_outc('\n');
 	}
 	cnt = 0;
 #endif

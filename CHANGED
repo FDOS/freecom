@@ -1,3 +1,5 @@
+add: interactive command flag
+add: FDDEBUG may redirect output into file
 bugfix: STRINGS resource length value counts 1. string twice
 sub: enumResources() won't check secondary files no longer
 fix: MKTOOLS must include $(CFG) into list

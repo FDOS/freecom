@@ -110,6 +110,7 @@ extern void interrupt cbreak_handler();
 extern void initCBreak(void);
 
 /* prototypes for COMMAND.C */
+extern int interactive_command;
 extern int ctrlBreak;
 extern int exitflag;
 extern int autofail;

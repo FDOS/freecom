@@ -134,7 +134,9 @@
         ((ch) == ':' || (ch) == '=')
 
 #ifdef FEATURE_CALL_LOGGING
+#ifndef INCLUDE_CMD_FDDEBUG
 static char logFilename[] = LOG_FILE;
+#endif
 #endif
 
 extern int canexit;
@@ -399,7 +401,9 @@ int initialize(void)
   char *cmdline;        /* command line duplicated into heap */
   char *p, *h, *q;
 #ifdef FEATURE_CALL_LOGGING
+#ifndef INCLUDE_CMD_FDDEBUG
   FILE *f;
+#endif
 #endif
 
 /* Set up the host environment of COMMAND.COM */
@@ -473,6 +477,7 @@ int initialize(void)
   _fmemcpy((char far*)cmdline, MK_FP(_psp, 0x81), cmdlen);
   cmdline[cmdlen] = '\0';
 #ifdef FEATURE_CALL_LOGGING
+#ifndef INCLUDE_CMD_FDDEBUG
   if((f = fopen(logFilename, "at")) == NULL) {
     fprintf(stderr, "Cannot open logfile: \"%s\"\n", logFilename);
   } else {
@@ -487,6 +492,15 @@ int initialize(void)
   putc('\n', f);
   fclose(f);
   }
+#else
+	cmd_fddebug(logFilename);
+
+	dbg_outc('"');
+	dbg_outs(ComPath);
+	dbg_outc('"');
+	dbg_outc(':');
+	dbg_outsn(cmdline);
+#endif
 #endif
 
   canexit = 1;

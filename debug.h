@@ -16,8 +16,12 @@ extern int fddebug;
 #ifdef DEBUG
 		/* DEBUG ENABLED */
 
-#define dprintf(p)  if (fddebug) printf p
+#define dprintf(p)  if (fddebug) dbg_print p
 void dbg_printmem(void);
+void dbg_print(const char * const fmt, ...);
+void dbg_outc(int ch);
+void dbg_outs(const char * const s);
+void dbg_outsn(const char * const s);
 
 #else
 		/* NO DEBUG */

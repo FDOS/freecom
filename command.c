@@ -186,6 +186,9 @@
  *
  * 2000/12/10 ska
  *	add: Installable COMMAND extensions
+ *
+ * 2001/02/16 ska
+ * add: interactive command flag
  */
 
 #include "config.h"
@@ -226,6 +229,7 @@ extern struct CMD cmds[];       /* The internal command table */
   /* Shall the message block remain in memory when an external
     program is executed */
 int persistentMSGs = 0;
+int interactive_command = 0;	/* command directly entered by user */
 int exitflag = 0;               /* indicates EXIT was typed */
 int canexit = 0;                /* indicates if this shell is exitable
 									enable within initialize() */
@@ -687,6 +691,7 @@ int process_input(int xflag, char *commandline)
 
   do
   {
+  	interactive_command = 0;		/* not directly entered by user */
   	echothisline = tracethisline = 0;
     if(commandline) {
       ip = commandline;
@@ -710,6 +715,7 @@ int process_input(int xflag, char *commandline)
       }
 
       /* Go Interactive */
+		interactive_command = 1;		/* directly entered by user */
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
       tracemode = 0;          /* reset trace mode */
       }

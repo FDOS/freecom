@@ -65,8 +65,6 @@ const char *day_strings[] =
   "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"
 };
 
-#else
-extern const char *day_strings[];
 #endif
 
 

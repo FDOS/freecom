@@ -247,7 +247,8 @@ int copy(char *dst, char *pattern, struct CopySource *src
       }
     } while((h = h->app) != NULL);
 
-    if(openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != NULL) {
+    if(interactive_command		/* Suppress prompt if in batch file */
+     && openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != NULL) {
     	int destIsDevice = isadev(fileno(fout));
 
       fclose(fout);

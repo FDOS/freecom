@@ -201,39 +201,39 @@ unsigned msgSegment(void)              /* load messages into memory */
 				if fddebug is OFF */
 			case STRINGS_NOT_FOUND:
 				assert(msgSegm == 0);
-				puts("[No STRINGS resource found!]");
+				dbg_outsn("[No STRINGS resource found!]");
 				break;
 			case STRINGS_ID_MISMATCH:
 				assert(msgSegm == 0);
-				puts("[STRINGS ID string mismatch.]");
+				dbg_outsn("[STRINGS ID string mismatch.]");
 				break;
 			case STRINGS_READ_ERROR:
 				assert(msgSegm == 0);
-				puts("[Read error while loading STRINGS.]");
+				dbg_outsn("[Read error while loading STRINGS.]");
 				break;
 			case STRINGS_SIZE_MISMATCH:
 				assert(msgSegm == 0);
-				puts("[STRINGS resource has invalid size.]");
+				dbg_outsn("[STRINGS resource has invalid size.]");
 				break;
 			case STRINGS_OUT_OF_MEMORY:
 				assert(msgSegm == 0);
-				puts("[Out of memory loading STRINGS.]");
+				dbg_outsn("[Out of memory loading STRINGS.]");
 				break;
 			default:
 				assert(msgSegm == 0);
-				puts("[Unknown error loading STRINGS.]");
+				dbg_outsn("[Unknown error loading STRINGS.]");
 				break;
 #else	/* Even in non-debugging, an error should
 								be displayed */
 			case STRINGS_OUT_OF_MEMORY:
 				assert(msgSegm == 0);
-				puts("[Out of memory loading STRINGS.]");
+				dbg_outsn("[Out of memory loading STRINGS.]");
 				break;
 			default:	
 				assert(msgSegm == 0);
 				if(!displayed) {
 					displayed = 1;
-					puts("\n\a[Could not load STRINGS resource.]");
+					dbg_outsn("\n\a[Could not load STRINGS resource.]");
 				}
 				break;
 #endif

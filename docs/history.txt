@@ -3,6 +3,7 @@ FreeDOS Command Line Interface Development History
 
 2001/02/16 ska
 ~~~~~~~~~~~~~~~~~~~~~~
+add: FDDEBUG: redirect output into file
 add: command WHICH
 chg: moved all assembly sources to NASM
 chg: using STRINGS resources for all non-interactive strings
