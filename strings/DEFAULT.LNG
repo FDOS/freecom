@@ -154,8 +154,8 @@ Required parameter missing.
 Invalid drive %c:.
 .
 
-:TEXT_ERROR_BADCOMMAND
-Bad command or filename.
+:TEXT_ERROR_BADCOMMAND#2
+Bad command or filename - "%s".
 .
 
 :TEXT_ERROR_OUT_OF_MEMORY
