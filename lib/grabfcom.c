@@ -9,6 +9,9 @@
 	This file bases on INIT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2002/11/05 19:29:21  skaus
+	bugfix: FreeCOM should accept relative path as argv[0]
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -84,6 +87,8 @@ void grabComFilename(const int warn, const char far * const fnam)
       }
       if(warn)
           error_init_fully_qualified(buf);
+
+    	len = strlen(buf);
     }
 
     while(buf[len - 1] == '\\')

@@ -217,8 +217,10 @@ int initialize(void)
 #endif
 
   /* Some elder DOSs may not pass an initializied environment segment */
-  if (env_glbSeg && !isMCB(SEG2MCB(env_glbSeg)))
+  if(env_glbSeg && !isMCB(SEG2MCB(env_glbSeg))) {
     env_setGlbSeg(0);       /* Disable the environment */
+    dprintf(("[ENV: Disabled invalid environment]"));
+  }
 
 /* Now parse the command line parameters passed to COMMAND.COM */
   /* Preparations */
