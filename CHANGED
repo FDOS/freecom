@@ -1,3 +1,4 @@
+chg: SCRIPTS\MAKECMD.BAT: replaces MAKE_LNG.BAT, make localized FreeCOMs
 add: SCRIPTS\MAKE_LNG.BAT: Make language-specific FreeCOM from *.LNG files {Bernd Blaauw}
 add: SPANISH.LNG/ERR {Aitor Santamar¡a Merino}
 add: copy.c: BIGcopy() - large buffer r/w copy {Tom Ehlert}

@@ -1,8 +1,9 @@
 @echo off
-: Make all the language files from the *.LNG files
-: Bernd Blaauw
+: Copyright (C) Bernd Blaauw
+: Creates localized FreeCOM-versions depending on which language files
+: are available in the current directory
 if "%1"=="continue" goto loop
-set languages=EN English NL Dutch FR French DE German IT Italian PTR PT_BR RU Russian Ser Serbian YUG YU437  call %0  continue %languages%
+set languages=EN English NL Dutch ES Spanish DE German FR French IT Italian PTR PT_BR RU Russian Ser Serbian YUG YU437  call %0  continue %languages%
 goto end
 
 :loop
@@ -21,6 +22,7 @@ fixstrs %2.lng
 copy /b command.cln + strings.dat command.com
 copy /b xmsswap.cln + strings.dat xmsswap.com
 if exist strings.err echo Translation file out of date for language %2 [file: %2.lng]!
+if exist strings.log echo Translation file out of date for language %2 [file: %2.lng]!
 if exist strings.dat del strings.dat
 if exist strings.h   del strings.h
 goto end
