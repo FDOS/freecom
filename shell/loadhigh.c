@@ -42,7 +42,6 @@
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
-#include "../include/cswap.h"
 #include "../err_fcts.h"
 #include "../include/misc.h"
 #include "../strings.h"
@@ -85,7 +84,6 @@ static int loadfix_flag;         /* Flag: LOADFIX instead of LOADHIGH? */
 #define INCLUDE_LOADHIGH_HANDLER
 
 /* This is the loadhigh handler */
-#pragma argsused
 int cmd_loadhigh(char *rest)
 {
         loadfix_flag = 0;
@@ -101,16 +99,14 @@ static int loadfix_flag;         /* Flag: LOADFIX instead of LOADHIGH? */
 #endif
 
 /* This is the loadfix handler */
-#pragma argsused
 int cmd_loadfix(char *rest)
 {
-#ifdef FEATURE_XMS_SWAP
-#error "LOADFIX is not compatible with XMS-Swap!"
-#endif
   loadfix_flag = 1;
   return lh_lf(rest);
 }
 #endif
+
+
 
 #ifdef INCLUDE_LOADHIGH_HANDLER
 
@@ -153,6 +149,26 @@ static int initialise(void)
   if ((block = malloc(256 * sizeof(*block))) == 0)
     return err_out_of_memory;
 
+#ifdef FEATURE_XMS_SWAP
+	if(_CS >= 0xa000 || _CS < 0x2000) {
+		/* Try to relocate the transient portion to the
+			end of the lower memory so *prepare won't
+			miscalculate our own memory block */
+		dprintf(("[MEM: Relocate our transient portion from: 0x%04x", _CS));
+		dosSetAllocStrategy(0x02);		/* low memory last fit */
+		exec(";=/","",0);     
+			/* Note:
+				1) Due to the invalid file name, exec() will fail,
+					but won't display an error message.
+					The ERRORLEVEL is destroyed, though, but there will
+					be started a program anyway (unless systax errors).
+				a) If XMS is not active or swapping is disabled,
+					to call exec() won't help anything, but won't hurt
+					on the other hand. */
+		dprintf((" to: 0x%04x\n", _CS));
+	}
+#endif
+
   /* find the UMB regions */
 	return findUMBRegions();
 }
@@ -170,10 +186,6 @@ static int lh_lf(char *args)
 
   int old_link = dosGetUMBLinkState();
   int old_strat = dosGetAllocStrategy();
-
-#ifdef FEATURE_XMS_SWAP
-	assert(_CS < 0xa000);
-#endif
 
   assert(args);
   assert(umbRegion == 0);
@@ -508,12 +520,13 @@ static int loadhigh_prepare(void)
 
 /* loadfix_prepare(): Allocates all memory up to 1000:0000. */
 
+#if 0
 static int loadfix_prepare(void)
 {
   struct MCB _seg *mcb;
 
   mcbAssign(mcb, umbRegion[0].start);
-
+  
   dosSetAllocStrategy(0);
 
   while (FP_SEG(mcb) < 0x1000)
@@ -526,7 +539,9 @@ static int loadfix_prepare(void)
       word bl = DosAlloc(mcb->mcb_size);
 
       if (bl != FP_SEG(mcb) + 1)  /* Did we get the block we wanted? */
+      	{
         return err_mcb_chain;
+        }
 
       block[allocatedBlocks++] = bl;
 
@@ -537,6 +552,32 @@ static int loadfix_prepare(void)
   }
   return OK;
 }
+#else
+
+
+/* loadfix_prepare(): Allocates all memory up to 1000:0000. */
+
+static int loadfix_prepare(void)
+{	unsigned bl;
+
+	dosSetAllocStrategy(0x0);
+
+	while((bl = DosAlloc(1)) != 0) {
+		dprintf(("loadfix:allocated 0x%04x\n",bl));
+
+		if(bl >= 0x1000) {
+			DOSfree(bl);
+			break;
+		}
+
+		DOSresize(bl, 0x1000 - bl);  		
+		block[allocatedBlocks++] = bl;
+	}
+
+	return OK;
+}
+
+#endif
 
 
 #pragma argsused

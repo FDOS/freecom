@@ -192,27 +192,27 @@ exec_error:
 
 		;; First ensure that FreeCOM is reloaded in low memory
 		;; so that LOADHIGH would come into problems
-		mov ax, 5800h		; Get current allocation strategy
-		int 21h
-		mov dx, ax
+;;ska		mov ax, 5800h		; Get current allocation strategy
+;;ska		int 21h
+;;ska		mov dx, ax
 
-		mov ax, 5801h		; Set current allocation strategy
-		mov bx, 0			; low memory / first fit
-		int 21h
+;;ska		mov ax, 5801h		; Set current allocation strategy
+;;ska		mov bx, 0			; low memory / first fit
+;;ska		int 21h
 		; ignore any errors
 
 		mov ah,48h
 		mov bx,[_SwapTransientSize]
 		int 21h
 
-		pushf
+;;ska		pushf
 
 		; Restore Alloc Strat
-		mov ax, 5801h		; Set current allocation strategy
-		mov bx, dx
-		int 21h
+;;ska		mov ax, 5801h		; Set current allocation strategy
+;;ska		mov bx, dx
+;;ska		int 21h
 
-		popf
+;;ska		popf
 		jc DOS_trouble_while_swapping_in
 
                                 ; calculate relocation factor

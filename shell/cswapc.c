@@ -236,7 +236,7 @@ void XMSinit(void)
 			XMSmsglen = msglen;
 #ifdef DEBUG
 			if(persistentMSGs)
-				out_sn("MEM: active XMS Swap superceeds persistent messages");
+				dbg_outsn("MEM: active XMS Swap superceeds persistent messages");
 #endif
 			persistentMSGs = FALSE;	/* when the messages are in XMS, there
 										is no need to keep them in
