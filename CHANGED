@@ -1,3 +1,5 @@
+bugfix: TYPE: first argument only
+bugfix: DATE: does not accept empty line
 bugfix: >>PATH<< with empty %PATH% --> PATH=(null)
 fix: BREAK/VERIFY ignore trailing spaces
 fix: >>PATH ;<< remove PATH environment variable
