@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include <dynstr.h>
+#include <suppl.h>
 
 #include "../include/command.h"
 #include "../include/context.h"
@@ -18,6 +19,9 @@
 #include "../err_fcts.h"
 
 static unsigned orgx, orgy;		/* start of current line */
+#ifndef FEATURE_HISTORY
+static char *prvLine = 0;
+#endif
 
 /* Print a character to current cursor position
 	Updates cursor postion
@@ -62,6 +66,57 @@ static void gochar(unsigned current)
 	goxy(x.rem + 1, orgy + x.quot);
 }
 
+#ifdef FEATURE_HISTORY
+static void switchHistlevel(
+	 char ** const Xstr
+	, char ** const prvLine
+	, unsigned * const current
+	, unsigned * const charcount
+	, unsigned * const histLevel
+	, int direction)
+{	unsigned newHistLevel;
+	char *str;
+
+	assert(histLevel);
+	assert(charcount);
+	assert(current);
+	assert(prvLine);
+	assert(Xstr);
+
+	newHistLevel = *histLevel;
+	if(!addu(&newHistLevel, direction)	/* underflow --> ignore */
+	 && CTXT_INFO(CTXT_TAG_HISTORY, nummin) < newHistLevel) {
+			/* save the current line to the ctxt  */
+		histSet(*histLevel, str = *Xstr);
+		*prvLine = ctxtAddress(CTXT_TAG_HISTORY, *histLevel);
+			/* remove the string from the screen & heap */
+		clrcmdline(str, orgx, orgy);
+		chkPtr(str);
+		StrFree(str);
+			/* Duplicate the previous cmd line.
+				On error: At this location a line should be
+					existing <-> ignore errors
+					e.g. if out-of-mem: proceed with empty line and replece
+						the long line with the newly added one */
+		if(direction)
+			ctxtGet(2, CTXT_TAG_HISTORY, *histLevel = newHistLevel, &str);
+		else {		/* F5 pressed */
+			outc('@');
+			if(orgy > MAX_Y) {
+				outc('\n');			/* Force scroll */
+				orgy = MAX_Y + 1;	/* MAX_Y is zero based, orgy not */
+			} else {
+				++orgy;
+			}
+		}
+		*current = *charcount = Strlen(str);
+		outs(str);
+		recalcOrgXY(*charcount);
+		*Xstr = str;
+	}
+}
+#endif
+
 /* read in a command line */
 #pragma argsused
 char *readcommandEnhanced(void)
@@ -71,16 +126,25 @@ char *readcommandEnhanced(void)
 #ifdef FEATURE_FILENAME_COMPLETION
 	unsigned lastch = 0;
 #endif
-#ifdef FEATURE_HISTORY
-	int histLevel = 0;
-	char *prvLine = 0;
-#endif
 	unsigned current = 0;
 	unsigned charcount = 0;
-	char *str = 0;
+	char *str = 0;				/* current line */
+
+#ifdef FEATURE_HISTORY
+	char *prvLine = 0;			/* previous line */
+	unsigned histLevel;
+#endif
+
+#ifdef FEATURE_HISTORY
+	if((histLevel = CTXT_INFO(CTXT_TAG_HISTORY, nummax)) != 0)
+		/* fetch last entry in stack */
+		prvLine = ctxtAddress(CTXT_TAG_HISTORY, histLevel);
+	++histLevel;			/* start with a new entry */
+#endif
 
 redo:
 #ifdef DEBUG
+	/* In the first line, the status information is displayed */
 	if(wherey() == 1)
 		putchar('\n');
 #endif
@@ -93,10 +157,6 @@ redo:
 
 	_setcursortype(_NORMALCURSOR);
 
-#ifdef FEATURE_HISTORY
-	histGet(histLevel - 1, &prvLine);
-#endif
-
 	do {
 #ifdef DEBUG
 		{	int x,y;
@@ -104,8 +164,8 @@ redo:
 		x = wherex();
 		y = wherey();
 		goxy(1,1);
-		cprintf(">> cur: %4u count: %4u orgX: %2u orgY: %2u curX: %2u curY: %2u echo: %c  <<"
-		 , current, charcount, orgx, orgy, x, y, lflag_echo? 'Y': 'N');
+		cprintf(">> cur: %4u count: %4u org: %2u/%2u cur: %2u/%2u max: %2u/%2u echo: %c  <<"
+		 , current, charcount, orgx, orgy, x, y, MAX_X, MAX_Y, lflag_echo? 'Y': 'N');
 		}
 #endif
 		gochar(current);
@@ -229,8 +289,7 @@ redo:
 		case KEY_ENTER:            /* end input, return to main */
 
 #ifdef FEATURE_HISTORY
-			if(charcount)
-			  histSet(0, str);      /* add to the history */
+			histSet(histLevel, str);      /* add to the history */
 #endif
 
 			outc('\n');
@@ -260,9 +319,6 @@ redo:
 				from the previous line */
 			/* FALL THROUGH */
 
-#ifndef FEATURE_HISTORY
-			break;
-#else
 		case KEY_F1:       /* get character from last command buffer */
 			if(current < Strlen(prvLine)) {
 				if(current != charcount) {
@@ -272,16 +328,21 @@ redo:
 				} else {		/* append the character */
 					if(!StrAppChr(str, prvLine[current])) {
 						error_out_of_memory();
-					} else
+					} else {
+						assert(str);
+						outc(str[current]);
 						charcount = ++current;
+					}
 				}
 			}
 			break;
 			  
 		case KEY_F3:               /* get previous command from buffer */
 			if(current < Strlen(prvLine)) {
-				if(charcount)
+				if(charcount) {
+					assert(str);
 					str[current] = 0;
+				}
 				chkPtr(str);
 				if(!StrCat(str, prvLine))
 					error_out_of_memory();
@@ -293,51 +354,41 @@ redo:
 			}
 			break;
 
+#ifdef FEATURE_HISTORY
 		case KEY_UP:               /* get previous command from buffer */
-			if(!histGet(--histLevel, &prvLine))
-				++histLevel;		/* failed -> keep current command line */
-			else {
-				clrcmdline(str, orgx, orgy);
-				chkPtr(str);
-				StrRepl(str, prvLine);
-				prvLine = 0;
-				current = charcount = Strlen(str);
-				outs(str);
-				recalcOrgXY(charcount);
-				histGet(histLevel - 1, &prvLine);
-			}
+			switchHistlevel(&str, &prvLine
+			 , &current, &charcount, &histLevel, -1);
 			break;
 
 		case KEY_DOWN:             /* get next command from buffer */
-			if(histLevel) {
-				clrcmdline(str, orgx, orgy);
-				chkPtr(prvLine);
-				StrRepl(prvLine, str);
-				str = 0;
-				histGet(++histLevel, &str);
-				current = charcount = Strlen(str);
-				outs(str);
-				recalcOrgXY(charcount);
-			}
+			switchHistlevel(&str, &prvLine
+			 , &current, &charcount, &histLevel, 1);
 			break;
+#endif
 
 		case KEY_F5: /* keep cmdline in F3/UP buffer and move to next line */
-			clrcmdline(str, orgx, orgy);
-			chkPtr(prvLine);
-			StrRepl(prvLine, str);
+#ifdef FEATURE_HISTORY
+			switchHistlevel(&str, &prvLine
+			 , &current, &charcount, &histLevel, 0);
+#else
+			if(str) {
+				/* Clear the string on the screen */
+				goxy(orgx, orgy);
+				fputmc(' ', charcount + 1, stdout);
+			}
+			myfree(prvLine);
+			prvLine = str;
 			str = 0;
 			current = charcount = 0;
+			goxy(orgx, orgy);
 			outc('@');
-			if(orgy >= MAX_Y) {
+			if(orgy > MAX_Y) {
 				outc('\n');			/* Force scroll */
-				orgy = MAX_Y;
-			} else {
+				orgy = MAX_Y + 1;	/* MAX_Y is zero based, orgy not */
+			} else
 				++orgy;
-			}
-
-			break;
-
 #endif
+			break;
 
 		case KEY_LEFT:             /* move cursor left */
 
@@ -382,8 +433,12 @@ redo:
 
 	_setcursortype(_NORMALCURSOR);
 
-#ifdef FEATURE_HISTORY
-	myfree(prvLine);
+#ifndef FEATURE_HISTORY
+	if(str) {
+		myfree(prvLine);
+		prvLine = strdup(str);
+	}
 #endif
+
 	return str? StrTrim(str): estrdup("");
 }

@@ -6,9 +6,12 @@
 	otherwise "normal" ones.
 
 	$Log$
+	Revision 1.1.4.5  2001/08/21 18:18:16  skaus
+	Update #14 / Beta 29: Direct access to dynamic context
+
 	Revision 1.1.4.4  2001/07/25 20:17:28  skaus
 	Update #12
-
+	
 	Revision 1.1.4.1  2001/07/01 22:04:31  skaus
 	Update #3
 	
@@ -41,6 +44,9 @@
 #include "../config.h"
 
 #include <assert.h>
+#ifdef DEBUG
+#include <dos.h>
+#endif
 
 #include <suppl.h>
 
@@ -51,6 +57,14 @@
 unsigned allocPermBlk(const unsigned size, const unsigned mode)
 {	assert(size);
 	if(gflag_swap == ERROR)
+#ifdef DEBUG
+	{	word segm = allocBlk(size, mode);
+		if(segm)
+			_fmemset(MK_FP(segm, 0), '-', size);
+		return segm;
+	}
+#else
 		return allocBlk(size, mode);
+#endif
 	return allocSysBlk(size, mode);
 }

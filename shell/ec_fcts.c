@@ -8,7 +8,7 @@
 
 #include "../include/context.h"
 
-char* (*ecFctRead[])(char far * const) = {
+char* (*ecFctRead[])(char * const) = {
 	0
 /* EC_TAG_INTERACTIVE */ 
 	, readInteractive

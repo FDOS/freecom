@@ -18,6 +18,6 @@ void ctxtPopTo(Context_Tag tag, unsigned to_del)
 		ctxtClear(tag);
 	else {
 		while(to_del < CTXT_INFO(tag, nummax))
-			ctxtPop(tag, (char*)0);
+			ctxtPop(tag, (char**)0);
 	}
 }

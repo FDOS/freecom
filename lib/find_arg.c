@@ -35,12 +35,11 @@ char *find_arg(int n)
 	if(n < 0 || (num += n) <= 0)
 		return "";		/* Overflow <-> no argument definitely */
 
-	switch(ctxtGet(0, CTXT_TAG_ARG, num, &buf)) {
+	switch(ctxtGet(2, CTXT_TAG_ARG, num, &buf)) {
 	case 0:		/* OK */
 		assert(buf);
 		return regStr(buf);
 	case 2:
-		error_out_of_memory();
 		break;
 #ifdef DBEUG
 	case 1: /* no such item */

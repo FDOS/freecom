@@ -22,16 +22,14 @@
 
 char *aliasexpand(const char * const Xcmd)
 {	char *cmd;				/* work buffer */
-	char *cp, *name;
+	char *cp, *name, *alias;
 	unsigned ofs, *expanded, *he;
 	int i, numExpanded, newlen, len;
 
 	assert(Xcmd);
 
-	if((cmd = strdup(Xcmd)) == 0) {
-		error_out_of_memory();
+	if((cmd = estrdup(Xcmd)) == 0)
 		return (char*)Xcmd;
-	}
 
 	numExpanded = 0;
 	expanded = 0;
@@ -42,8 +40,7 @@ redo:						/* iteration to expand all aliases */
 
 	/* Check if the user disabled alias expansion */
 	if(*cp == '*') {
-		++cp;
-		memmove(cmd, cp, strlen(cp) + 1);
+		*cp = ' ';
 		goto errRet;
 	}
 
@@ -71,9 +68,9 @@ redo:						/* iteration to expand all aliases */
 
 	/************ Expand the command line "cp" with the alias at
 						MK_FP(ctxtAlias, ofs)  ***********************/
-	ofs += strlen(name) + 1;		/* advance to value */
+	alias = ctxtP(ctxtAlias, ofs + strlen(name) + 1);
 		/* Check that the total command line won't overflow MAX_INT */
-	if((newlen = _fstrlen(MK_FP(ctxtAlias, ofs))) >= 0
+	if((newlen = strlen(alias)) >= 0
 	 && (len = strlen(cp)) >= 0 && ++len > 0 && newlen + len > 0) {
 	 	int dst = cp - cmd;		/* destination index within cmd[] */
 	 	if(newlen > dst) {
@@ -94,7 +91,7 @@ redo:						/* iteration to expand all aliases */
 	 		memmove(&cmd[newlen], &cmd[dst], len);
 
 		/* prepend alias value to remaining command line */
-		_fmemcpy(TO_FP(cmd), MK_FP(ctxtAlias, ofs), newlen);
+		memcpy(cmd, alias, newlen);
 		goto redo;				/* next expansion */
 	}
 

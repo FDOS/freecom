@@ -7,6 +7,9 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/08/21 18:18:16  skaus
+	Update #14 / Beta 29: Direct access to dynamic context
+
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -30,12 +33,16 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
 
 #include <assert.h>
+#ifdef DEBUG
+#include <dos.h>
+#include <string.h>
+#endif
 
 #include <mcb.h>
 #include <suppl.h>
@@ -48,6 +55,9 @@ unsigned allocSysBlk(const unsigned size, const unsigned mode)
 	struct MCB _seg *mcb;
 
 	if((segm = allocBlk(size, mode)) != 0) {
+#ifdef DEBUG
+		_fmemset(MK_FP(segm, 0), '-', size);
+#endif
 		mcb = (struct MCB _seg*)SEG2MCB(segm);
 		mcb->mcb_ownerPSP = 8;
 		dprintf(("[MEM: allocated system memory block: %04x/%u]\n"

@@ -32,8 +32,7 @@ int ctxtPop(const Context_Tag tag, char ** const buf)
 		case 1:			/* no such entry */
 			break;		/* --> ignore silently */
 		case 2:			/* out of memory */
-			error_out_of_memory();
-			return 0;	/* will case "context empty" message */
+			return 0;	/* will cause "context empty" message */
 		}
 
 	/* Nothing in the stack ==> make sure it's consistent */

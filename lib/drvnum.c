@@ -9,6 +9,9 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/08/21 18:18:16  skaus
+	Update #14 / Beta 29: Direct access to dynamic context
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -45,9 +48,9 @@
 
 int drvNum(int drive)
 {
-	if(drive == 0)		/* change to current drive */
+	if(drive == 0)		/* current drive */
 		return getdisk();
-	if(drive <= 32)
+	if(drive <= 32)		/* numerical drive */
 		return drive - 1;
 	return toupper(drive) - 'A';
 }

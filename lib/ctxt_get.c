@@ -19,7 +19,7 @@
 #include "../include/context.h"
 #include "../include/misc.h"
 
-int ctxtGetItem(int remove
+int ctxtGetItem(int mode
 	, const Context_Tag tag
 	, const char * const name
 	, char ** const buf)
@@ -27,18 +27,23 @@ int ctxtGetItem(int remove
 	word ofs;
 	word segm;
 
+	assert(name);
+
 	ctxtCheckInfoTag(tag);
 	assert(ctxtFromTag(tag) != CTXT_INVALID);
 
 	segm = (word)ctxtFromTag(tag);
 	assert(segm);
 	if((ofs = env_findVar(segm, name)) != (word)-1) {
-		assert(peekb(segm, ofs + strlen(name)) == '=');
-		if(buf) {		/* Retreive the contents */
-			if((*buf = _fdupstr(MK_FP(segm, ofs + strlen(name) + 1))) == 0)
-				return 2;		/* out of memory */
+		assert(((char*)(ctxtP(segm, ofs)))[strlen(name)] == '=');
+		if(buf) {
+			*buf = ctxtP(segm, ofs + strlen(name) + 1);
+			if(mode) {		/* Retreive the contents */
+				if((*buf = estrdup(*buf)) == 0)
+					return 2;		/* out of memory */
+			}
 		}
-		if(remove) {	/* remove the item from context */
+		if(mode & 1) {	/* mode the item from context */
 			if(CTXT_INFO(tag, sizecur) < env_varlen(segm, ofs))
 				CTXT_INFO(tag, sizecur) = 0;	/* inconsistent redundant
 														information */
@@ -52,7 +57,7 @@ int ctxtGetItem(int remove
 	return 1;		/* No such item */
 }
 
-int ctxtGet(int remove
+int ctxtGet(int mode
 	, const Context_Tag tag
 	, const unsigned num
 	, char ** const buf)
@@ -60,10 +65,10 @@ int ctxtGet(int remove
 	char name[CTXT_LENGTH_ITEMNAME];
 
 	ctxtMkItemName(name, tag, num);
-	return ctxtGetItem(remove, tag, name, buf);
+	return ctxtGetItem(mode, tag, name, buf);
 }
 
-int ctxtGetS(int remove
+int ctxtGetS(int mode
 	, const Context_Tag tag
 	, const char * const tail
 	, char ** const buf)
@@ -74,5 +79,5 @@ int ctxtGetS(int remove
 		return 2;
 	assert((byte)name[0] == (byte)tag);
 
-	return ctxtGetItem(remove, tag, name, buf);
+	return ctxtGetItem(mode, tag, name, buf);
 }

@@ -16,9 +16,6 @@ void lastDirGet(char ** const buf)
 {
 	assert(buf);
 
-	switch(ctxtGet(0, CTXT_TAG_LASTDIR, 1, buf)) {
-	case 2:		error_out_of_memory();
-	default:	*buf = 0;
-	case 0:		break;
-	}
+	*buf = 0;
+	ctxtGet(2, CTXT_TAG_LASTDIR, 1, buf);
 }

@@ -2,8 +2,8 @@
 
 	Output functions
 
-		Initialize the internal states, e.g. forget any currently
-		active ones.
+	Initialize the internal states, e.g. forget any currently
+	active ones.
 
 */
 

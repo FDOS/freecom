@@ -15,7 +15,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "version 0.83 Beta 27 expExec branch [" __DATE__ "]";
+const char shellver[] = "version 0.83 Beta 29 expExec branch [" __DATE__ "]";
 const char shellname[] = "FreeCom";
 
 #pragma argsused

@@ -19,9 +19,9 @@
 #include "../include/misc.h"
 #include "../err_fcts.h"
 
-char *readCommand(char far * const ctxt)
+char *readCommand(char * const ctxt)
 {
-	char *line, *p;
+	char *line;
 	int mode;
 
 	dprintf(("readCommand()\n"));
@@ -31,20 +31,20 @@ char *readCommand(char far * const ctxt)
 
 	lflag_doQuit = cbreak;
 
-		/* reg the string to let it be allocated on failure */
-	if((p = line = regStr(edupstr(ctxt + 1))) == 0)
-		return 0;
-	if(1 != sscanf(p, "%u", &mode) || 0 == (p = strchr(p, ' '))) {
+	*ctxt = EC_TAG_IGNORE;		/* let this context ignored next turn */
+
+	if(1 != sscanf(ctxt + 1, "%u", &mode)
+	 || 0 == (line = strchr(ctxt + 1, ' '))) {
 		error_context_corrupted();
 		return 0;
 	}
-	if(!*++p)
+	if(!*++line)
 		return 0;		/* empty command --> ignore */
 
 	if((mode & EC_CMD_IGNORE_EXIT) == 0) {
 		if(lflag_doExit || lflag_doCancel || lflag_doQuit) {
 #ifdef DEBUG
-			dprintf(("[CTXT: Skipping command: %s]\n", p));
+			dprintf(("[CTXT: Skipping command: %s]\n", line));
 #endif
 			return 0;
 		}
@@ -65,13 +65,7 @@ char *readCommand(char far * const ctxt)
 		dprintf(("[CTXT: disable local INTERACTIVE status]\n"));
 		lflag_interactive = 0;
 	}
-	if(p != line)
-		memset(line, ' ', p - line);
-
-	ecPop();		/* Remove this context as it has been done
-						completely now */
 
 		/* run_exec_context() deallocates the line itself */
-	unregStr(line);
-	return line;
+	return estrdup(line);
 }

@@ -18,24 +18,10 @@
 char *ecString(const unsigned id)
 {	char *buf;
 
-	switch(ctxtGet(0, CTXT_TAG_STRING, id, &buf)) {
-	case 0:		/* OK */
-		return regStr(buf);
-
-	case 1:		/* no such item */
+	if((buf = ctxtAddress(CTXT_TAG_STRING, id)) == 0) {
 		dprintf(("[CTXT: Missing string #%u]\n", id));
 		error_context_corrupted();
-		break;
-
-#ifdef DEBUG
-	default:
-		dprintf(("[CTXT: Invalid return value in ecString(): %u]\n"));
-#endif
-
-	case 2:		/* out of memory */
-		error_out_of_memory();
-		break;
 	}
 
-	return 0;
+	return buf;
 }

@@ -86,17 +86,12 @@ char *fct_argv(char *param)
 		return 0;
 
 	for(p = 0; first <= last; ++first) {
-		if(p && !StrAppChr(p, ' ')) {
-			error_out_of_memory();
-			myfree(p);
-			return 0;
-		}
 		q  = 0;
 		if(ctxtGet(0, CTXT_TAG_ARG, first, &q) > 1) {
 			myfree(p);
 			return 0;
 		}
-		if(!StrCat(p, q)) {
+		if((p && !StrAppChr(p, ' ')) || !StrCat(p, q)) {
 			error_out_of_memory();
 			myfree(p);
 			return 0;

@@ -12,7 +12,7 @@
 
 void purgeMemory(void)
 {
-		/* Unload the message block if not loaded persistently */
-		if(!gflag_persistentMSGs)
-			unloadMsgs();
+	/* Unload the message block if not loaded persistently */
+	if(!gflag_persistentMSGs)
+		unloadMsgs();
 }

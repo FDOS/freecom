@@ -16,17 +16,14 @@
 #include "../include/misc.h"
 #include "../err_fcts.h"
 
-int ecScanArg(const char far * const ctxt
+int ecScanArg(const char * const ctxt
 	, const int num
 	, const char * const fmt
 	, ...)
 {	va_list ap;
-	char *line;
 
 	va_start(ap, fmt);
-	if((line = regStr(edupstr(ctxt + 1))) == 0)
-		return E_NoMem;
-	if(num != vsscanf(line, fmt, ap)) {
+	if(num != vsscanf(ctxt + 1, fmt, ap)) {
 		error_context_corrupted();
 		return E_Syntax;
 	}

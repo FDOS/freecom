@@ -4,9 +4,12 @@
 	Display the internal execution context
 
 	$Log$
+	Revision 1.1.2.7  2001/08/21 18:18:16  skaus
+	Update #14 / Beta 29: Direct access to dynamic context
+
 	Revision 1.1.2.6  2001/08/02 21:51:56  skaus
 	Update #13
-
+	
 	Revision 1.1.2.5  2001/07/30 00:45:17  skaus
 	Update #13 / Beta 27: plain dynamic context
 	
@@ -31,18 +34,17 @@
 
 #pragma argsused
 static int view(unsigned id, char *buf, void * const arg)
-{	char far*p;
+{
 	ecTag_t tag;
 #define cnt (*(unsigned*)arg)
 
-	p = ctxtAddress(CTXT_TAG_EXEC, id);
-	assert(p);
 	++cnt;
-	if((tag = *buf++) > EC_LAST_TAG)
-		displayString(TEXT_EC_HDR_UNKNOWN, cnt, p, tag);
+	if((tag = *buf) > EC_LAST_TAG)
+		displayString(TEXT_EC_HDR_UNKNOWN, cnt, buf, tag);
 	else
-		displayString(TEXT_EC_HDR, cnt, p, ecNames[tag]);
+		displayString(TEXT_EC_HDR, cnt, buf, ecNames[tag]);
 
+	++buf;
 	chkHeap
 	switch(tag) {
 	case EC_TAG_BATCH:		/* Batch context */
@@ -75,18 +77,12 @@ static int view(unsigned id, char *buf, void * const arg)
 					myfree(pattern);
 					return 1;
 				}
-				unregStr(p);
-				chkPtr(p);
 				if(!StrAppChr(pattern, ' ') || !StrCat(pattern, p)) {
 				 	error_out_of_memory();
 				 	myfree(pattern);
-				 	myfree(p);
 				 	return 1;
 				}
-				myfree(p);
 			}
-			chkRegStr(varname);
-			chkRegStr(cmd);
 			displayString(TEXT_EC_DISP_FOR1, varname, pattern + 1, cmd);
 			myfree(pattern);
 		}
@@ -106,9 +102,6 @@ static int view(unsigned id, char *buf, void * const arg)
 				return 1;
 
 			displayString(TEXT_EC_DISP_FOR2, varname, prefix, cmd);
-			chkRegStr(varname);
-			chkRegStr(cmd);
-			chkRegStr(prefix);
 		}
 		break;
 	case EC_TAG_COMMAND:	/* command */

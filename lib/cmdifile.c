@@ -26,8 +26,10 @@ char *readcommandFromFile(void)
 		error_out_of_memory();
 		return cmdlineIgnore;
 	}
-	if(!*line)		/* EOF */
+	if(!*line) {	/* EOF -> kill context */
+		myfree(line);
 		return 0;
+	}
 
 	/* Strip a possibily appended newline; strlen(line) >= 1! */
 	if((p = strchr(line, '\0'))[-1] == '\n')

@@ -8,7 +8,6 @@ cvs remove message.c
 rm include\batch.h
 CTTY in redirection
 INIT and F() macro
-Check: cmd1 |& cmd2
-Check: cmd1 <in | cmd2 >out
 Check: correctness of exec ctxt for complex pipes
 Change: ecMk*[cC] functions
+

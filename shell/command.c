@@ -678,7 +678,7 @@ errRet:
  *	It returns if the very last context finishes
  */
 void run_exec_context(void)
-{	char far *ec;
+{	char *ctxt;
 	unsigned id;
 	ecTag_t tag;
 	char *line;
@@ -686,13 +686,13 @@ void run_exec_context(void)
 	while(0 != (id = CTXT_INFO(CTXT_TAG_EXEC, nummax))
 	 && id >= CTXT_INFO(CTXT_TAG_EXEC, nummin)) {
 		assert(ctxtSegm);
-		if((ec = ctxtAddress(CTXT_TAG_EXEC, id)) == 0) {
+		if((ctxt = ctxtAddress(CTXT_TAG_EXEC, id)) == 0) {
 			/* hole / topmost entry lost */
 			--CTXT_INFO(CTXT_TAG_EXEC, nummax);
 			continue;
 		}
 		chkHeap
-		tag = *ec;
+		tag = *ctxt;
 		 	/* or an end context reached */
 		if(tag == EC_TAG_TERMINATE)
 		 	return;
@@ -711,7 +711,7 @@ void run_exec_context(void)
 		_fmemcpy(&ctxtSharedFlags, ctxtFlagsP, sizeof(ctxtSharedFlags));
 
 		chkHeap
-		if((line = (ecFctRead[tag])(ec)) == 0)
+		if((line = (ecFctRead[tag])(ctxt)) == 0)
 			ecPop();
 		else if(line != cmdlineIgnore) {
 			/* process this command line */

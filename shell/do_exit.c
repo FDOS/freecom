@@ -14,7 +14,7 @@
 #include "../include/misc.h"
 
 #pragma argsused
-char *terminateShell(char far * const ctxt)
+char *terminateShell(char * const ctxt)
 {
 	assert(ctxt);
 	assert(*ctxt == EC_TAG_TERMINATE);

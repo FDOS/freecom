@@ -36,28 +36,26 @@ static char *forPatchCmdline(const unsigned idVarname
 {	char *p;
 	int rv;
 
-	if((p = ecString(idVarname)) != 0) {
+		/* Duplicate the name as it may be alterred when the
+			environment gets modified as the name is located in the
+			env as well */
+	if((p = estrdup(ecString(idVarname))) != 0) {
 		/* Record the value of the variable */
 		if(*p == '%')		/* hackery variable */
 			/* Add its value to the internal variables */
 			rv = ctxtSetS(CTXT_TAG_IVAR, p, param);
 		else
 			rv = chgEnv(p, param);
-		chkRegStr(p);
+		myfree(p);
 	} else
 		rv = E_NoMem;
 
 	myfree(param);
 
-	if(rv == E_None && (p == ecString(idCmd)) != 0) {
-		unregStr(p);
-		chkPtr(p);
-		return p;
-	}
-	return 0;
+	return rv == E_None? estrdup(ecString(idCmd)): 0;
 }
 
-char *readFORfirst(char far * const ctxt)
+char *readFORfirst(char * const ctxt)
 {	unsigned idPattern, idVarname, idCmd;
 	char *pattern;
 	struct ffblk f;
@@ -85,31 +83,24 @@ char *readFORfirst(char far * const ctxt)
 		 || (cmd = ecString(idCmd)) == 0)
 		 	return 0;
 		dprintf(("[FOR#1: %Fs (%Fs) %Fs]\n", varname, pattern, cmd));
-		unregStr(cmd);
-		unregStr(varname);
-		myfree(cmd);
-		myfree(varname);
 	}
 #endif
 
 	/* modify the context string to hold the id of the next pattern */
 	assert(idPattern > 0);
-	assert(_fstrchr(ctxt, '|'));
+	assert(strchr(ctxt, '|'));
 	sprintf(buf, "|%u|", idPattern - 1);
 		/* don't transfer the \0 */
-	_fmemcpy(_fstrchr(ctxt, '|'), TO_FP(buf), strlen(buf));
+	memcpy(strchr(ctxt, '|'), buf, strlen(buf));
 
 	if(findfirst(pattern, &f, 0) == 0) {	/* need a f-context */
 		*dfnfilename(pattern) = '\0';	/* extract path */
 		if(ecMkf(&f, idVarname, idCmd, pattern) != E_None)
 			return 0;
-		chkRegStr(pattern);
-		unregStr(pattern);
-		chkPtr(pattern);
-		if((pattern
-		 = efrealloc(pattern, strlen(pattern) + strlen(f.ff_name) + 1)) == 0)
+		if((pattern = StrConcat(2, pattern, f.ff_name)) == 0) {
+			error_out_of_memory();
 			return 0;
-		strcat(pattern, f.ff_name);
+		}
 		chkHeap
 	}
 
@@ -140,13 +131,17 @@ char *readFORnext(char far * const ctxt)
 		return 0;
 
 		/* necessary information to let findnext() do some good */
-	esDecode(ffstr);
-	chkRegStr(ffstr);
-	memcpy(&f, ffstr, 21);
+	esDecode(&f, ffstr, 21);
 	if(findnext(&f) != 0) {		/* f-context used up */
 		dprintf(("[FOR#2: No further match]\n"));
 		return 0;
 	}
+
+	if((prefix = StrConcat(2, prefix, f.ff_name)) == 0) {
+		error_out_of_memory();
+		return 0;
+	}
+
 			/* 21: length of ffblk structure required for findnext() */
 	if((ffstr = regStr(esEncMem(&f, 21))) == 0) {
 		error_out_of_memory();
@@ -154,15 +149,6 @@ char *readFORnext(char far * const ctxt)
 	}
 	if(ctxtSet(CTXT_TAG_STRING, idFfblk, ffstr) != E_None)
 		return 0;
-
-	chkRegStr(prefix);
-	unregStr(prefix);
-	chkPtr(prefix);
-	if(!StrCat(prefix, f.ff_name)) {
-		myfree(prefix);
-		error_out_of_memory();
-		return 0;
-	}
 
 	return forPatchCmdline(idVarname, idCmd, prefix);
 }

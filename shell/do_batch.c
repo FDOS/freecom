@@ -33,7 +33,7 @@ static int chkp(char *p)
 #define chkp(p)	StrFree((p))
 #endif
 
-char *readBatch(char far * const ctxt)
+char *readBatch(char * const ctxt)
 {	unsigned long pos, lnr;
 	char *line, *p;				/* read line */
 	char *name;
@@ -82,7 +82,6 @@ char *readBatch(char far * const ctxt)
 	}
 
 	for(; !cbreak; chkp(line)) {
-		chkRegStr(name);
 		dprintf(("[BATCH: about to read line #%lu from @%lu]\n"
 		 , lnr + 1, ftell(f)));
 		if((line = Fgetline(f)) == 0) {
@@ -156,10 +155,10 @@ char *readBatch(char far * const ctxt)
 
 errRet:
 	/* Record the current position */
-	assert(_fstrchr(ctxt, '|'));
+	assert(strchr(ctxt, '|'));
 	sprintf(buf, "|%lu %lu|", ftell(f), lnr);
 		/* The \0 byte is not transferred */
-	_fmemcpy(_fstrchr(ctxt, '|'), TO_FP(buf), strlen(buf));
+	memcpy(strchr(ctxt, '|'), buf, strlen(buf));
 	fclose(f);
 	return line;
 }

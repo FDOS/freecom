@@ -15,8 +15,9 @@ if($#ARGV == 0) {
 die "Cannot open old MAP file: $ARGV[0]: $!\n"
 	unless open(IN, $ARGV[0]);
 
+$totalLen = 0;
 while(<IN>) {
-	if(/Publics by/) {
+	if(/Publics by/ || /Detailed map of segments/) {
 		last;
 		next;
 	}
@@ -25,7 +26,7 @@ while(<IN>) {
 	next if $f[5] ne 'CODE';
 
 	$name = $f[4];
-	$length = hex($f[3]);
+	$totalLen += $length = hex($f[3]);
 	$len{$name} = $length;
 }
 
@@ -34,8 +35,27 @@ close IN;
 die "Cannot open new MAP file: $ARGV[1]: $!\n"
 	unless open(IN, $ARGV[1]);
 
+$ovrCODE = $totalCODE = 0;
 $diff = 0;
 while(<IN>) {
+	if(/Detailed map of segments/) {
+		$_ = <IN>;
+		while(<IN>) {
+			if(/^\s*$/) {
+				last;
+				next;
+			}
+			@h = split(/\s+/, $_);
+			shift(@h) if length($h[0]) == 0;
+			if($h[2] eq 'C=CODE') {
+				$totalCODE += hex($h[1]);
+				if($h[0] eq '0000:FFFF') {
+					$ovrCODE += hex($h[1]);
+				}
+			}
+		}
+	}
+
 	if(/Publics by/) {
 		last;
 		next;
@@ -67,6 +87,8 @@ while( ($name, $length) = each %len ) {
 }
 close IN;
 
-print "  overall change: $diff bytes\n";
+print "  overall change: $diff bytes\ttotal size of CODE: $totalLen bytes\n";
+print "  detailed CODE segment info: total: $totalCODE, over limit: $ovrCODE\n"
+	if $totalCODE;
 
 exit 0;

@@ -26,25 +26,15 @@ int ecEnum(const Context_Tag tag, const unsigned startID, int (*fct)(unsigned id
 	if(!id || id > CTXT_INFO(tag, nummax))
 		id = CTXT_INFO(tag, nummax);
 
-	for(rv = 0; !rv && id && id >= CTXT_INFO(tag, nummin); --id) {
+	for(rv = 0; !rv && id > CTXT_INFO(tag, nummin); --id) {
 		chkHeap
-		switch(ctxtGet(0, tag, id, &buf)) {
-		case 0:	/* OK */
+		if((buf = ctxtAddress(tag, id)) != 0)
 			rv = fct(id, buf, arg);
-			myfree(buf);
-			break;
-		case 2:	/* out of memory */
-			error_out_of_memory();
-			return -1;
 #ifdef DEBUG
-		case 1:	/* no such item */
+		else {
 			dprintf(("[CTXT: Hole in %u #%u]\n", tag, id));
-			break;
-		default:
-			dprintf(("[CTXT: Invalid rv in ctxtEnum]\n"));
-			return -1;
-#endif
 		}
+#endif
 		chkHeap
 	}
 	return rv;

@@ -39,8 +39,7 @@ int ctxtSinglePurge(void)
 		those are:
 			oldest item of history
 			oldest item of dirstack */
-	heaviest = 0;
-	for(i = 0; ++i <= CTXT_LAST_TAG;) {
+	for(heaviest = i = 0; ++i <= CTXT_LAST_TAG;) {
 		ctxt_info_t *p = &ctxt_info[i];
 
 						/* honor inconsitency of redundant info */
@@ -53,7 +52,7 @@ int ctxtSinglePurge(void)
 
 	if(heaviest) {
 		/* Remove only */
-		ctxtGet(1, heaviest, ++ctxt_info[heaviest].c_nummin, 0);
+		ctxtGet(1, heaviest, ++ctxt_info[heaviest].c_nummin, (char**)0);
 		return E_None;
 	}
 

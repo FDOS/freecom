@@ -79,9 +79,15 @@ extern ctxt_info_t ctxt_info[];
 /* probe if the item tag is of the format: <tag><count>=
 	because just <tag>= is not valid as _item_, but may contain
 	status information */
+#if 0
 #define ctxtProbeItemTag(segm,ofs,tag)							\
 	(peekb((segm), (ofs)) == (unsigned char)(Context_Tag)(tag)	\
 		 && peekb((segm), (ofs) + 1) != '=')
+#else
+#define ctxtProbeItemTag(p,tag)							\
+	(*(byte*)(p) == (unsigned char)(Context_Tag)(tag)	\
+		 && ((byte*)(p))[1] != '=')
+#endif
 #define CTXT_LENGTH_ITEMNAME (sizeof(unsigned) * 2 + 2)
 #define CTXT_LENGTH_ID (sizeof(unsigned) * 4 + 1)
 
@@ -103,7 +109,7 @@ int ctxtGetS(const int, const Context_Tag, const char * const, char ** const);
 int ctxtGetItem(const int, const Context_Tag, const char * const, char ** const);
 int ctxtSet(const Context_Tag, const unsigned, const char * const);
 int ctxtSetS(const Context_Tag, const char * const, const char * const);
-char far*ctxtAddress(const Context_Tag tag, const unsigned num);
+char *ctxtAddress(const Context_Tag tag, const unsigned num);
 int ctxtClear(const Context_Tag);
 int ctxtView(const Context_Tag, const unsigned);
 void ctxtRenumberItems(const Context_Tag);
@@ -133,6 +139,7 @@ typedef enum ExecContext_Tags {
 	/* >= tags that may be considered end of the stack */
 #define EC_FINAL_TAGS EC_TAG_KEEP_RUNNING
 #define ecNames "?ISBFfCeE"
+#define EC_TAG_IGNORE (EC_TAG_TERMINATE+1)
 
 #define EC_LENGTH_B  (sizeof(long) * 8 * 2 + CTXT_LENGTH_ID + 3)
 #define EC_LENGTH_F  (CTXT_LENGTH_ID * 3 + 2)
@@ -148,7 +155,7 @@ extern FLAG lflag_rewindBatchFile;
 extern char *lflag_gotoLabel;
 #define implicitVerbose (lflag_echo)
 
-extern char* (*ecFctRead[])(char far * const);
+extern char* (*ecFctRead[])(char * const);
 
 	/* Make a new context of specified length and type */
 //ctxtEC_t far *ecMk(const enum ExecContext_Tags, const unsigned);
@@ -192,11 +199,14 @@ unsigned ecPushString(const char * const str);
 	/* Fetch an item from the STRING tag (return regged string!) */
 char *ecString(const unsigned id);
 	/* set the TOS of CTXT_TAG_STRING */
-void ecSetStringStack(const char far * const ctxt);
+void ecSetStringStack(const char * const ctxt);
 	/* make a new I or S context */
 int ecMkI_S(const byte tag);
 	/* Get the arguments of an execution context */
-int ecScanArg(const char far * const ctxt, const int num, const char * const fmt,...);
+int ecScanArg(const char * const ctxt, const int num, const char * const fmt,...);
+
+#define ctxtP(segm,ofs)		MK_FP((segm), (ofs))
+
 
 	/** Mode parameters for ecMkvcmd() */
 #define EC_CMD_FORCE_INTERNAL 1
@@ -225,21 +235,21 @@ int ecEnum(const Context_Tag, const unsigned startID, int (*fct)(unsigned id, ch
 */
 #define cmdlineIgnore ((char*)1)
 	/* EC_TAG_INTERACTIVE -- I context */
-char *readInteractive(char far * const);
+char *readInteractive(char * const);
 	/* EC_TAG_BATCH -- B-context */ 
-char *readBatch(char far * const);
+char *readBatch(char * const);
 	/* EC_TAG_FOR_FIRST -- F-context */ 
-char *readFORfirst(char far * const);
+char *readFORfirst(char * const);
 	/* EC_TAG_FOR_NEXT -- f-context */ 
-char *readFORnext(char far * const);
+char *readFORnext(char * const);
 	/* EC_TAG_COMMAND -- C-context */ 
-char *readCommand(char far * const);
+char *readCommand(char * const);
 	/* EC_TAG_KEEP_RUNNING -- e-context */ 
-char *keepMeRunning(char far * const);
+char *keepMeRunning(char * const);
 	/* EC_TAG_TERMINATE -- E-context */ 
-char *terminateShell(char far * const);
+char *terminateShell(char * const);
 	/* EC_TAG_SET_STRING -- S-context */ 
-char *setStringStack(char far * const);
+char *setStringStack(char * const);
 
 /*****************
 	Encoded strings
@@ -250,7 +260,7 @@ char *setStringStack(char far * const);
 #define ES_PAD_BYTE	0x1f
 
 	/* Transform s from internal quoted form into ASCII */
-void esDecode(char * const s);
+void esDecode(void * const dst, const char * const src, int maxlen);
 char *esEncode(const char * const s);
 char *esEncMem(const void * const buf, unsigned len);
 

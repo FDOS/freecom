@@ -16,16 +16,19 @@
 
 static int renumber(void *arg, word segm, word ofs)
 {	char buf[CTXT_LENGTH_ITEMNAME];
+	char *p;
 
 #define tag (Context_Tag)arg
 
 	assert(segm);
 	assert(ofs != (word)-1);
+	p = ctxtP(segm, ofs);
 
-	if(ctxtProbeItemTag(segm, ofs, arg)) {
+	if(ctxtProbeItemTag(p, arg)) {
 		ctxtMkItemName(buf, tag, ++CTXT_INFO(tag, nummax));
-		assert(peekb(segm , ofs + strlen(buf)) == '=');
-		_fmemcpy(MK_FP(segm, ofs), TO_FP(buf), strlen(buf));
+		assert(p[strlen(buf)] == '=');
+			/* do not copy trailing '\0' */
+		memcpy(p, buf, strlen(buf));
 	}
 
 #undef tag

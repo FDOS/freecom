@@ -18,18 +18,19 @@
 static int scan(void *arg, word segm, word ofs)
 {	Context_Tag tag;
 	ctxt_info_t *info;
+	char *p;
 
 	assert(segm);
 	assert(ofs != (word)-1);
+	p = ctxtP(segm, ofs);
 
 redo:
-	if((tag = peekb(segm, ofs), ctxtIsInfoTag(tag))) {
+	if((tag = *p++, ctxtIsInfoTag(tag))) {
 		info = &CTXT_INFO_STRUCT(tag);
-		if(peekb(segm, ofs + 1) == '=' && peekb(segm, ofs + 4) == 0) {
+		if(p[0] == '=' && p[3] == 0) {
 			/* status entry */
-			info->c_sizemax = peekw(segm, ofs + 2) & ~0x8001;
+			info->c_sizemax = *(word*)(&p[1]) & ~0x8001;
 		} else {		/* normal entry */
-			char far *p = MK_FP(segm, ofs + 1);
 			unsigned num;
 
 			for(num = 0; isxdigit(*p); ++p) {

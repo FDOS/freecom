@@ -20,6 +20,9 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/08/21 18:18:16  skaus
+	Update #14 / Beta 29: Direct access to dynamic context
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -43,7 +46,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -84,10 +87,10 @@ int isDeviceName(char *const fnam)
   {                             /* no simple drive letter */
     int fd;
 
-    *p = '\0';                  /* strip off the colon to make it valid for DOS */
+    *p = '\0';      /* strip off the colon to make it valid for DOS */
 
     /* open with read access only to prevent from creating
-       disk fiels accidently */
+       disk files accidently */
     if ((fd = open(fnam, O_RDONLY)) >= 0)
     {                           /* open OK */
       int rv;

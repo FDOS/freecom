@@ -11,14 +11,17 @@
 
 #include "../include/context.h"
 
-void esDecode(char * const str)
-{	char *p, *q;
+void esDecode(void * const dst, const char * const src, int maxlen)
+{	const char *p;
+	char *q;
 	int ch;
 
-	assert(str);
+	assert(src);
+	assert(dst);
 
-	p = q = str;
-	while((ch = *q++ = *p++) != 0) switch(ch) {
+	p = src;
+	q = dst;
+	while(maxlen-- && (ch = *q++ = *p++) != 0) switch(ch) {
 	case ES_CLEAR_HIGH:
 		if(*p)
 			q[-1] = *p++ & 0x7f;

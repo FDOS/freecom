@@ -20,7 +20,8 @@ char *fct_ivar(char *param)
 {	char *buf;
 
 	strupr(param);
-	return ctxtGetS(0, CTXT_TAG_IVAR, param, &buf) == E_None
+
+	return ctxtGetS(2, CTXT_TAG_IVAR, param, &buf) == 0
 		? buf
 		: 0;
 }

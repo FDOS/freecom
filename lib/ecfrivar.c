@@ -20,5 +20,5 @@
 
 void ecFreeIVar(char *ivar)
 {
-	ctxtGetS(1, CTXT_TAG_IVAR, ivar, (char*)0);
+	ctxtGetS(1, CTXT_TAG_IVAR, ivar, (char**)0);
 }

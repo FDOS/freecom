@@ -17,7 +17,7 @@ static int clear(void *arg, word segm, word ofs)
 	assert(segm);
 	assert(ofs != 0xffff);
 
-	while(ctxtProbeItemTag(segm, ofs, arg))
+	while(ctxtProbeItemTag(ctxtP(segm, ofs), arg))
 	 	env_subVarOffset(segm, ofs);
 
 	return 0;		/* proceed loop */

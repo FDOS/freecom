@@ -25,12 +25,13 @@
 int histGet(const int num, char ** const str)
 {	char *p;
 
+	obsoleted();
+
 	assert(str);
 
 	if(ctxtGet(0, CTXT_TAG_HISTORY, realNum(CTXT_TAG_HISTORY, num), &p) == 0) {
 		assert(p);
-		chkPtr(*str);
-		StrRepl(*str, p);
+		*str = p;
 		return 1;
 	}
 	return 0;
