@@ -1,4 +1,5 @@
-add: Swedish LNG/ERR files {Oscar Molin}
+add: Serbian CP437 LNG/ERR files {Dejan Strbac}
+add: Swedish CP850 LNG/ERR files {Oscar Molin}
 
 v0.82 pl 2:
 chg: Prevent double-parsing of redirection in CALL and IF
