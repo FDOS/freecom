@@ -10,9 +10,3 @@ CFG_DEPENDENCIES = cmd.mak
 
 all: $(CFG) cmds.lib
 
-#		*Implicit Rules*
-.c.obj:
-  $(CC) -c {$< }
-.asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj $<
-

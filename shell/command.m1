@@ -10,9 +10,3 @@ CFG_DEPENDENCIES = COMMAND.MAK ..\strings.h
 
 all: $(CFG) command.exe
 
-#		*Implicit Rules*
-.c.obj:
-  $(CC) -c {$< }
-.asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj -DMODEL=s $<
-

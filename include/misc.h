@@ -84,6 +84,7 @@ int is_pathdelim(const int c);
 int is_empty(const char *s);
 // int is_quote(const int c);
 #define is_quote(c)	((c) == '"')
+char *skipfnam(const char * const fnam);
 
 FILE *tempfile(void);
 void rmtmpfile(void);

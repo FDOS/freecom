@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.2  2001/06/10 17:17:24  skaus
+# bugfix: Single point of configuration CONFIG.MAK/.H
+#
 # Revision 1.1  2001/04/12 00:09:06  skaus
 # chg: New structure
 # chg: If DEBUG enabled, no available commands are displayed on startup
@@ -71,7 +74,7 @@ verscheck :
 
 __errl:
 	@+-if exist errlist del errlist >nul
-	-ctags *.c ..\lib\*.c ..\cmd\*.c
+	-ctags *.c ..\lib\*.c ..\cmd\*.c \freedos\src\lib\suppl\*.c
 
 com.exe ?= _OBJS := $(OBJ:s/c0.obj//)
 # STD_OBJ !:= C0.OBJ
@@ -179,4 +182,4 @@ CONF_NDBG =	$(MYCFLAGS_NDBG)
 #-w-pro	\
 
 command.mak : makefile command.m1 command.m2
-	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(TLINK) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@
+	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(LD) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@

@@ -10,9 +10,3 @@ CFG_DEPENDENCIES = lib.mak
 
 all: $(CFG) freecom.lib
 
-#		*Implicit Rules*
-.c.obj:
-  $(CC) -c {$< }
-.asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj -DMODEL=s $<
-

@@ -1,3 +1,7 @@
+bugfix: Single point of configuration CONFIG.MAK/.H:
+	CONFIG.MAK <-> Compiler specific settings, paths etc.
+	CONFIG.H <-> FreeCOM releated settings, included commands etc.
+bugfix: DEFAULT strings for COMMAND /?, WHICH /?, DOSKEY /?, DIR /? (/A & /O)
 add: error message if debugging when to open the resource file failed
 bugfix: links in FreeCOM.html & typos in commands database
 add: check for low memory during init() when debugging

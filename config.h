@@ -91,16 +91,6 @@
 /* Define this value to select the initialization value of fddebug */
 #define FDDEBUG_INIT_VALUE 1
 
-/* Define if your compiler does not have 'dosdate_t' or 'dostime_t' */
-#if defined(__TURBOC__) && __TURBOC__ <= 0x297
-	/* TC++1 */
-#define _NO__DOS_DATE
-#define _NO__DOS_TIME
-#define _NO_FMEMCHR
-#define _NO_FMEMCMP
-#endif
-
-
 #define INCLUDE_CMD_BEEP
 #define INCLUDE_CMD_BREAK
 #define INCLUDE_CMD_CHDIR
@@ -167,6 +157,16 @@
 #endif
 
 #endif
+
+/* Define if your compiler does not have 'dosdate_t' or 'dostime_t' */
+#ifdef _TC_EARLY_
+	/* TC++1 */
+#define _NO__DOS_DATE
+#define _NO__DOS_TIME
+#define _NO_FMEMCHR
+#define _NO_FMEMCMP
+#endif
+
 
 	/* set by MKDIST.BAT */
 #ifdef IGNORE_ENHANCED_INPUT

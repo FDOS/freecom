@@ -10,12 +10,6 @@ CFG_DEPENDENCIES = cmd.mak
 
 all: $(CFG) cmds.lib
 
-#		*Implicit Rules*
-.c.obj:
-  $(CC) -c {$< }
-.asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj $<
-
 cmds.lib : $(CFG) alias.obj \
 	beep.obj \
 	break.obj \
@@ -54,7 +48,7 @@ cmds.lib : $(CFG) alias.obj \
 	type.obj \
 	verify.obj \
 	which.obj 
-	if exist cmds.lib $(TLIB) cmds.lib /c @&&|
+	if exist cmds.lib $(AR) cmds.lib /c @&&|
 +-alias.obj &
 +-beep.obj &
 +-break.obj &
@@ -94,7 +88,7 @@ cmds.lib : $(CFG) alias.obj \
 +-verify.obj &
 +-which.obj
 | , cmds.lst 
-	if not exist cmds.lib $(TLIB) cmds.lib /c @&&|
+	if not exist cmds.lib $(AR) cmds.lib /c @&&|
 +alias.obj &
 +beep.obj &
 +break.obj &

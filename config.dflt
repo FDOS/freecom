@@ -13,8 +13,8 @@ INCLUDEPATH = $(CC_BASE_PATH)\INCLUDE;$(SUPPL_INC_PATH)
 
 ## Which programs to use
 CC = $(BINPATH)\TCC +$(CFG)
-TLIB = $(BINPATH)\Tlib
-TLINK = $(BINPATH)\Tlink
+AR = $(BINPATH)\Tlib
+LD = $(BINPATH)\Tlink
 NASM = nasm.exe
 
 ## Add -DDEBUG=1 below to enable debug support for assembly files
@@ -25,6 +25,14 @@ CFLAGS =
 
 # Default configuration
 # added strings.h here because $(CFG) is included everywhere already
+## Add -D_NO__DOS_DATE if your compiler does not have no dosdate_t (*)
+## Add -D_NO__DOS_TIME if your compiler does not have no dostime_t (*)
+## Add -D_NO_FMEMCHR if your compiler does not have no _fmemchr() (*)
+## Add -D_NO_FMEMCMP if your compiler does not have no _fmemcmp() (*)
+##
+## (*) Note: Should be detected by CONFIG.H automatically for Turbo C
+##     and Borland C compilers.
+##
 $(CFG): $(CFG_DEPENDENCIES)
   copy &&|
 -a
@@ -38,6 +46,4 @@ $(CFG): $(CFG_DEPENDENCIES)
 -b-
 -I$(INCLUDEPATH)
 -L$(LIBPATH)
--D_NO__DOS_DATE
--D_NO__DOS_TIME
 | $(CFG)

@@ -1,6 +1,24 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+2001/06/10 ska
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: Single point of configuration CONFIG.MAK/.H:
+	CONFIG.MAK <-> Compiler specific settings, paths etc.
+	CONFIG.H <-> FreeCOM releated settings, included commands etc.
+bugfix: DEFAULT strings for COMMAND /?, WHICH /?, DOSKEY /?, DIR /? (/A & /O)
+add: error message if debugging when to open the resource file failed
+bugfix: links in FreeCOM.html & typos in commands database
+add: check for low memory during init() when debugging
+bugfix: TYPE: first argument only
+bugfix: DATE: does not accept empty line
+bugfix: >>PATH<< with empty %PATH% --> PATH=(null)
+fix: BREAK/VERIFY ignore trailing spaces
+fix: >>PATH ;<< remove PATH environment variable
+fix: cache 3 environment variables to overcome nested useage (e.g. when
+	loading message segment to print environment variable)
+bugfix: keep trailing spaces of command line
+
 2001/04/31 ska
 ~~~~~~~~~~~~~~~~~~~~~~
 chg: default heap size (tools\ptchsize) set to 6KB

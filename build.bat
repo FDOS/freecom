@@ -21,29 +21,12 @@ echo.
 echo Making STRINGS resource
 echo.
 cd strings
+if exist mkSTRLIB.Bat del mkSTRLIB.Bat >NUL
 make -fstrings.mak -DLNG=%LNG% all
 if errorlevel 1 goto ende
-if not exist strings\strings.rsp goto noStringLib
-cd strings
-echo.
-echo Making STRINGS library
-echo.
-tcc -c *.c >errlist
+if exist mkSTRLIB.Bat call mkSTRLIB.Bat
 if errorlevel 1 goto ende
-if exist strings.lib del strings.lib
-tlib strings.lib /c @strings.rsp, strings.lst
-if errorlevel 1 goto ende
-copy strings.lib ..
-copy strings.lst ..
-echo Purging temporary directory of strings library
-del strings.*	>NUL
-del makefile	>NUL
-del errlist	>NUL
-del *.obj	>NUL
-del *.c	>NUL
-cd ..
-rmdir strings
-:noStringLib
+if exist mkSTRLIB.Bat del mkSTRLIB.Bat >NUL
 cd ..
 
 echo.

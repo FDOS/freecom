@@ -10,12 +10,6 @@ CFG_DEPENDENCIES = COMMAND.MAK ..\strings.h
 
 all: $(CFG) command.exe
 
-#		*Implicit Rules*
-.c.obj:
-  $(CC) -c {$< }
-.asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj -DMODEL=s $<
-
 command.exe : $(CFG) batch.obj \
 	cb_catch.obj \
 	cmdtable.obj \
@@ -28,7 +22,7 @@ command.exe : $(CFG) batch.obj \
 	module.obj \
 	redir.obj \
 	ver.obj 
-	$(TLINK) /m/s/l /c /d @&&|
+	$(LD) /m/s/l /c /d @&&|
 $(LIBPATH)\c0s.obj+
 batch.obj+
 cb_catch.obj+

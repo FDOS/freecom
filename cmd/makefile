@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.2  2001/06/10 17:17:23  skaus
+# bugfix: Single point of configuration CONFIG.MAK/.H
+#
 # Revision 1.1  2001/04/12 00:09:06  skaus
 # chg: New structure
 # chg: If DEBUG enabled, no available commands are displayed on startup
@@ -274,5 +277,5 @@ CONF_NDBG =	$(MYCFLAGS_NDBG)
 #-w-pro	\
 
 cmd.mak : makefile cmd.m1 cmd.m2
-	+copy cmd.m1 + $(mktmp cmds.lib : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\tif exist cmds.lib \44(TLIB) cmds.lib /c @&&|\n+-$(OBJ:t" &\\n+-")\n| , cmds.lst \n\tif not exist cmds.lib \44(TLIB) cmds.lib /c @&&|\n+$(OBJ:t" &\\n+")\n| , cmds.lst \n) + cmd.m2 $@
+	+copy cmd.m1 + $(mktmp cmds.lib : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\tif exist cmds.lib \44(AR) cmds.lib /c @&&|\n+-$(OBJ:t" &\\n+-")\n| , cmds.lst \n\tif not exist cmds.lib \44(AR) cmds.lib /c @&&|\n+$(OBJ:t" &\\n+")\n| , cmds.lst \n) + cmd.m2 $@
 

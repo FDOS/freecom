@@ -10,12 +10,6 @@ CFG_DEPENDENCIES = lib.mak
 
 all: $(CFG) freecom.lib
 
-#		*Implicit Rules*
-.c.obj:
-  $(CC) -c {$< }
-.asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj -DMODEL=s $<
-
 freecom_deps :  \
 	alprmblk.obj \
 	alsysblk.obj \
@@ -240,7 +234,7 @@ chunk1 :  \
 
 
 freecom.lib : $(CFG) freecom_deps 
-	if exist freecom.lib $(TLIB) freecom.lib /c @&&|
+	if exist freecom.lib $(AR) freecom.lib /c @&&|
 +-alprmblk.obj &
 +-alsysblk.obj &
 +-beep_l.obj &
@@ -459,7 +453,7 @@ freecom.lib : $(CFG) freecom_deps
 +-err79.obj &
 +-err80.obj
 | , freecom.lst 
-	if not exist freecom.lib $(TLIB) freecom.lib /c @&&|
+	if not exist freecom.lib $(AR) freecom.lib /c @&&|
 +alprmblk.obj &
 +alsysblk.obj &
 +beep_l.obj &

@@ -9,24 +9,23 @@ Borland's museum site).
  and the makefile name. On trouble try to fix BUILD.BAT.)
 
 You will find two executables in the FreeCOM directory:
-COMMAND.EXE and COMMAND.COM.
+SHELL\COMMAND.EXE and COMMAND.COM.
 The .COM file is the stand-alone application, which includes the
 strings etc, whereas COMMAND.EXE is the pure executable without the
 strings table for instance.
 
-WARNING: It seems to be problematic to run FreeCOM built with
-Turbo C++ v1.01. There are no such massive problems when compiling
-with Borland C++ v5.
-
 
 CONFIG.MAK
+
+This is the central file to tweak options and environment settings
+regarding of your compiler.
 
 CC_BASE_PATH
 base path (aka "root") of Turbo C++ v1.01, usually it is sufficient to
 modify this macro and all files (headers and libraries) and programs
 (C compiler and linker) will be found. If not, check the macros at the
 end of the file and/or the useage of $(LIBPATH) within COMMAND.MAK or
-FIXSTRS.MAK respectively.
+STRINGS.MAK respectively.
 
 SUPPL_INC_PATH / SUPPL_LIB_PATH
 To compile this version of command.com, you have to add the SUPPL library.
@@ -39,3 +38,15 @@ and if you have extracted the contents into the FreeCOM directory,
 the default values (.\SUPPL) are OK.
 
 Update NASM and NASMFLAGS as needed.
+
+SHELL_MMODEL
+is the memory model used to compile the shell. It should be Small (s),
+unless you want to include debugging support; use Large (l) in such case.
+
+$(CFG): $(CFG_DEPENDENCIES)
+This rule is used to create the default option file for the compiler.
+It should set the header and library search paths and the memory
+model, disable floating
+point arethmetics (as it is not used by FreeCOM). The default char
+type should be unsigned. There are no known specific alignment
+or optimization settings, configure as you wish.

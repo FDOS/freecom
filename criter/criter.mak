@@ -8,12 +8,6 @@ CFG = TCCDOS.CFG
 
 all:  context.def criter criter1
 
-#		*Implicit Rules*
-.c.obj:
-  $(CC) -c {$< }
-.asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj $<
-
 context.def : context.x
 	..\utils\mkctxt.exe context
 	copy context.h_c ..
