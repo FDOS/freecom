@@ -1,11 +1,11 @@
 Begin3
 Title:          FreeCom
-Version:        0.78
-Entered-date:   20 Sep 1999
+Version:        0.79b
+Entered-date:   22 Jul 2000
 Description:    The FreeDOS Command Shell
 Keywords:       freecom freedos command shell
-Author:         command@gcfl.net (developers)
-Maintained-by:  linux-guru@gcfl.net
+Author:         fd-freecom@topica.com (developers)
+Maintained-by:  ska-src@gmx.net
 Primary-site:   http://www.gcfl.net/FreeDOS/FreeCom
 Alternate-site: www.freedos.org
 Original-site:  http://www.gcfl.net/FreeDOS/FreeCom

@@ -10,7 +10,7 @@ echo path is %path%
 echo PATH is %PATH%
 echo Absent variable is %Absent%
 echo Bad format : %bad format
-echo Testing double %%comspec%% 
+echo Testing double %%comspec%%
 
 echo Call another batch file...
 call test3.bat t3p1 t3p2 t3p3

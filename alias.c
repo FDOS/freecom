@@ -61,6 +61,12 @@
 
 #ifdef FEATURE_ALIASES
 
+/*
+#ifdef DEBUG
+#define DEBUG_ALIASES
+#endif
+*/
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -72,6 +78,7 @@
 #include "cmdline.h"
 #include "tempfile.h"
 #include "alias.h"
+#include "misc.h"
 
 typedef struct TAlias
 {
@@ -285,7 +292,7 @@ void aliasexpand(char *cmd, int maxlen)
           error_command_too_long();
           cmd[0] = '\0';        /* the parser won't cause any problems
           							with an empty line */
-          return; 
+          return;
         }
         else
         {
@@ -329,5 +336,99 @@ int cmd_alias(char *rest)
   aliasdel(rest);
   return 0;
 }
+
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+int alias_streamsize(void)
+{	int size = 1;			/* end-of-array marker */
+  TAlias *ptr = first;
+  while (ptr)
+  {
+  	assert(ptr->name);
+  	assert(ptr->subst);
+    if((size += strlen(ptr->name) + strlen(ptr->subst) + 2) <= 0)
+    	return 0;		/* error */
+    ptr = ptr->next;
+  }
+  return size;
+}
+void alias_streamto(char far *p)
+{ TAlias *ptr = first;
+#ifdef DEBUG
+	unsigned cnt = 0;
+#endif
+
+  while (ptr)
+  {
+  	assert(ptr->name);
+  	assert(ptr->subst);
+    p = _fstpcpy(p, ptr->name) + 1;
+    p = _fstpcpy(p, ptr->subst) + 1;
+    ptr = ptr->next;
+#ifdef DEBUG
+    ++cnt;
+#endif
+  }
+  *p = 0;
+  dprintf(("[KSWAP: %u alias(es) dumped to dynamic context]\n", cnt));
+}
+void alias_streamfrom(char far *p)
+{	TAlias *ptr;
+	size_t len;
+#ifdef DEBUG
+	unsigned cnt = 0;
+#endif
+
+#ifdef DEBUG_ALIASES
+	puts("[Alias dump]");
+	for(len = 0; len < 4; ++len) {
+		printf("%04x ", len * 8);
+		for(cnt = 0; cnt < 8; ++cnt)
+			printf("%02X ", (unsigned char)p[len * 8 + cnt]);
+		printf("     ");
+		for(cnt = 0; cnt < 8; ++cnt) {
+			unsigned char ch = (unsigned char)p[len * 8 + cnt];
+			if(isprint(ch))
+				putchar(ch);
+			else putchar('.');
+		}
+		putchar('\n');
+	}
+	cnt = 0;
+#endif
+
+	last = 0;
+	while(*p) {
+		/* newly create the alias */
+		if((ptr = (TAlias *) malloc(sizeof(TAlias))) == NULL)
+			break;
+
+		len = _fstrlen(p) + 1;
+		if((ptr->name = malloc(len)) == NULL) {
+			free(ptr);
+			break;
+		}
+		_fmemcpy(ptr->name, p, len);
+		p += len;
+
+		len = _fstrlen(p) + 1;
+		if((ptr->subst = malloc(len)) == NULL) {
+			free(ptr->name);
+			free(ptr);
+			break;
+		}
+		_fmemcpy(ptr->subst, p, len);
+		p += len;
+
+#ifdef DEBUG
+		++cnt;
+#endif
+
+		if(last)	last = last->next = ptr;
+		else		last = first = ptr;
+	}
+	if(last)		last->next = NULL;
+	dprintf(("[KSWAP: %u alias(es) read from dynamic context]\n", cnt));
+}
+#endif
 
 #endif

@@ -79,6 +79,13 @@
  *
  * 2000/01/05 ska
  * add: feature command line logging
+ *
+ * 2000/06/22 ska
+ * add: feature: last directory
+ *
+ * 2000/07/05 Ron Cemer
+ *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
+ *	fix: add typecase for local variables of _fmemcpy()
  */
 
 #include "config.h"
@@ -93,17 +100,23 @@
 #include <signal.h>
 #include <alloc.h>
 #include <limits.h>   /* INT_MAX */
+#include <conio.h>
 
 #include "mcb.h"
 #include "environ.h"
 #include "dfn.h"
+#define _TC_EARLY
+#include "fmemory.h"
+#include <suppl.h>
 
-#include "err_hand.h"
 #include "batch.h"
 #include "timefunc.h"
 #include "cmdline.h"
+#include "command.h"
+#include "module.h"
 
 #include "strings.h"
+#include "kswap.h"
 
         /* Check for an argument; ch may be evaluated multiple times */
 #define isargsign(ch)           \
@@ -118,7 +131,10 @@ extern int canexit;
 static unsigned oldPSP;
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
-unsigned char fddebug = 0;    /* debug flag */
+#ifndef FDDEBUG_INIT_VALUE
+#define FDDEBUG_INIT_VALUE 0
+#endif
+int fddebug = FDDEBUG_INIT_VALUE;    /* debug flag */
 
 /* Without resetting the owner PSP, the program is not removed
    from memory */
@@ -171,6 +187,12 @@ int showcmds(char *rest)
 #endif
 #ifdef FEATURE_CALL_LOGGING
   printf("[start logging] ");
+#endif
+#ifdef FEATURE_LAST_DIR
+  printf("[last dir] ");
+#endif
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	printf("[kernel swap] ");
 #endif
   putchar('\n');
 
@@ -240,6 +262,7 @@ optScanFct(opt_init)
 
   switch(ch) {
   case '?': showhelp = 1; return E_None;
+  case '!': return optScanBool(fddebug);
   case 'Y': return optScanBool(tracemode);
   case 'F': return optScanBool(autofail);
   case 'P':
@@ -282,7 +305,7 @@ optScanFct(opt_init)
  *  If warn != 0, warnings can be issued; otherwise this functions
  *  is silent.
  */
-void grabComFilename(int warn, char far *fnam)
+void grabComFilename(int warn, const char far * const fnam)
 {
   char *buf;
   size_t len;
@@ -302,7 +325,7 @@ void grabComFilename(int warn, char far *fnam)
     if(warn) error_out_of_memory();
     return ;
   }
-  _fmemcpy(buf, fnam, len);
+  _fmemcpy((char far*)buf, fnam, len);
   buf[len] = '\0';
 
     if (buf[1] != ':' || buf[2] != '\\')
@@ -312,10 +335,10 @@ void grabComFilename(int warn, char far *fnam)
       p = dfnexpand(buf, NULL);
       free(buf);
       if((buf = p) == NULL) {
-      if(warn) error_out_of_memory();
-      return ;
-        }
-        if(warn)
+		  if(warn) error_out_of_memory();
+		  return;
+      }
+      if(warn)
           error_init_fully_qualified(buf);
     }
 
@@ -385,9 +408,6 @@ int initialize(void)
   extern void initCBreakCatcher(void);
   initCBreakCatcher();
 
-  /* Install INT 24 Critical error handler */
-  init_error_handler();
-
   /* DOS shells patch the PPID to the own PID, how stupid this is, however,
     because then DOS won't terminate them, e.g. when a Critical Error
     occurs that is not detected by COMMAND.COM */
@@ -395,6 +415,22 @@ int initialize(void)
   oldPSP = OwnerPSP;
   atexit(exitfct);
   OwnerPSP = _psp;
+
+
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	if(kswapInit()) {		/* re-invoked */
+		if(kswapLoadStruc()) {
+			/* OK, on success we need not really keep the shell trick
+				(pretend we are our own parent), which might cause
+				problems with beta-software-bugs ;-)
+				In fact, KSSF will catch up our crashes and re-invoke
+				FreeCOM, probably with the loss of any internal
+				settings. */
+			  OwnerPSP = oldPSP;
+			return E_None;
+		}
+	}
+#endif
 
   /* Some elder DOSs may not pass an initialzied environment segment */
   if (env_glbSeg && !isMCB(SEG2MCB(env_glbSeg)))
@@ -433,8 +469,8 @@ int initialize(void)
     error_out_of_memory();  /* Cannot recover from this problem */
     return E_NoMem;
   }
+  _fmemcpy((char far*)cmdline, MK_FP(_psp, 0x81), cmdlen);
   cmdline[cmdlen] = '\0';
-  _fmemcpy(cmdline, MK_FP(_psp, 0x81), cmdlen);
 #ifdef FEATURE_CALL_LOGGING
   if((f = fopen(logFilename, "at")) == NULL) {
     fprintf(stderr, "Cannot open logfile: \"%s\"\n", logFilename);
@@ -476,7 +512,7 @@ int initialize(void)
     p = NULL;
     break;      /* end of line reached */
   }
-  q = unquote(p, h = skipwd(p));
+  q = unquote(p, h = skip_word(p));
   p = h;      /* Skip this word */
   if(!q) {
     error_out_of_memory();
@@ -540,8 +576,7 @@ int initialize(void)
     /* If a new valid size is specified, use that */
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE;
   if(newEnvSize > 16 && newEnvSize < 32767)
-    //env_setsize(0, newEnvSize); // SUPPL27+
-    env_newsize(0, newEnvSize);   // SUPPL26-
+    env_setsize(0, newEnvSize);
 
   /* Otherwise the path is placed into the environment */
   if (chgEnv("COMSPEC", ComPath)) {
@@ -552,6 +587,25 @@ int initialize(void)
     if (chgEnv("COMSPEC", ComPath))
     error_env_var("COMSPEC");
   }
+
+
+	/* Install INT 24 Critical error handler */
+	/* Needs the ComPath variable, eventually */
+	if(!kswapContext) {
+		/* Load the module/context into memory */
+		if((kswapContext = modContext()) == 0) {
+			puts("Cannot load Context module or Critical Error handler.");
+			return E_NoMem;
+		}
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+		if(swapOnExec != ERROR)
+			kswapRegister(kswapContext);
+#endif
+	}
+
+	/* re-use the already loaded Module */
+	setvect(0x24, (void interrupt(*)())
+	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter));
 
   if(internalBufLen)
     error_l_notimplemented();

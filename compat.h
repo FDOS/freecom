@@ -1,5 +1,5 @@
 /*
-   COMPAT.H: EXEC function with memory swap - 
+   COMPAT.H: EXEC function with memory swap -
              Borland/Microsoft compatibility header file.
 
    Public domain software by

@@ -22,6 +22,9 @@
  *
  * 1999/11/02 ska
  * bugfix: some DOS shells except a colon before the label
+ *
+ * 2000/07/05 Ron Cemer
+ *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  */
 
 #include "config.h"
@@ -69,7 +72,7 @@ int cmd_goto(char *rest)
     return 1;
   }
 
-  tmp = skipwd(rest);
+  tmp = skip_word(rest);
   *tmp = '\0';
 
   tmp = strdup(rest);

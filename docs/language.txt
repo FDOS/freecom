@@ -1,0 +1,54 @@
+How to change the language of FreeCOM?
+	-- 2000/07/10 ska
+
+
+At this time not all strings can be customized, but it will change!
+
+WAY 1	- using pre-compiled FreeCOM images
+
+There are four precompiled FreeCOMs:
+                - Debugging - Language
++ COMMAND.COM	-   none    - English (Default)
++ CMDDEBUG.COM  -   yes     - English (Default)
++ COMMAND.CLN	-   none    - none
++ CMDDEBUG.CLN  -   yes     - none
+
+You need:
++ one of the *.CLN files
++ STRINGS\FIXSTRS.EXE
++ STRINGS\DEFAULT.LNG
++ STRINGS\<your_desired_language>.LNG
+
+What do to:
+1) enter STRINGS subdirectory: cd strings
+2) create the string database for your language: fixstrs <language>
+	Don't write the angle brackets, e.g. to create Spanish string
+	run:		fixstrs spanish
+3) attach the strings to FreeCOM:
+		copy /b ..\command.cln + strings.dat command.com
+	If you want to include FreeCOM's debugging support run:
+		copy /b ..\cmddebug.cln + strings.dat cmddebug.com
+
+If you want to test several languages, do this:
+3) Perform steps 1) and 2) above, but NOT step 3)!
+4) Copy either COMMAND.CLN or CMDDEBUG.CLN into any directory you
+	like and rename it into COMMAND.COM, e.g.:
+		copy ..\CMDDEBUG.CLN a:\command.com
+5) Copy STRINGS.DAT (the strings database) into the same directory
+	as you copied the clean FreeCOM image above, e.g.:
+		copy STRINGS.DAT a:
+
+If you run A:\COMMAND.COM now, it will miss the embedded strings, but
+will use the external STRINGS.DAT file. To change FreeCOM's language
+just replace the STRINGS.DAT file.
+If you use the clean FreeCOM image, but do NOT supply an external
+STRINGS.DAT file, all strings appear as placeholders, e.g.:
+"Error #93"
+
+
+WAY 2	- Compile FreeCOM yourself
+
+Before you run dmake, create the environment variable LNG and specify
+the language as its contents, e.g.:
+	SET LNG=spanish
+

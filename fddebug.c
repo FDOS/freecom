@@ -13,25 +13,23 @@
 #ifdef INCLUDE_CMD_FDDEBUG
 
 #include <assert.h>
-#include <stdio.h>
-#include <string.h>
 #include <dos.h>
 
 #include "command.h"
 #include "strings.h"
 
-#pragma argsused
 int cmd_fddebug(char *param)
 {
-  if (!param || !*param)
-    displayString(TEXT_MSG_FDDEBUG_STATE, fddebug ? D_ON : D_OFF);
-  else if (stricmp(param, D_OFF) == 0)
-    fddebug = 0;
-  else if (stricmp(param, D_ON) == 0)
-    fddebug = 1;
-  else
-    displayString(TEXT_ERROR_ON_OR_OFF);
-
+	switch(onoffStr(param)) {
+  	default:
+		displayString(TEXT_ERROR_ON_OR_OFF);
+		return 1;
+	case OO_Null:	case OO_Empty:
+		displayString(TEXT_MSG_FDDEBUG_STATE, fddebug ? D_ON : D_OFF);
+		break;
+  	case OO_Off:	fddebug = 0;	break;
+  	case OO_On:		fddebug = 1;	break;
+	}
   return 0;
 }
 

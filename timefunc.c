@@ -32,6 +32,8 @@
  *
  */
 
+#include "config.h"
+
 #ifdef _NO__DOS_TIME
 
 #include <dos.h>

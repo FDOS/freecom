@@ -44,6 +44,13 @@
  *
  * 1999/07/02 ska
  * chg: removed exist(), replaced by dfnstat() [reduces size of image]
+ *
+ *	2000/06/22 ska
+ *	add: cwd(int drive); changeDrive(int drive), drvNum(int drive)
+ *	add: onoffStr()
+ *
+ * 2000/06/07 Ron Cemer
+ * fix: TC++1 compatibly
  */
 
 #include "config.h"
@@ -52,7 +59,6 @@
 #include <conio.h>
 #include <ctype.h>
 #include <dir.h>
-#include <direct.h>
 #include <dos.h>
 #include <fcntl.h>
 #include <io.h>
@@ -61,9 +67,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <dfn.h>
+#include <mcb.h>
+#include <suppl.h>
+
 #include "command.h"
 #include "batch.h"
-#include <dfn.h>
+#include "misc.h"
+
+#include "strings.h"
 
 /*
  * get a character out-of-band and honor Ctrl-Break characters
@@ -241,4 +253,120 @@ void dispCount(int cnt, const char * const zero, const char * const one
   case 1: fputs(one, stdout); break;
   default: printf(multiple, cnt); break;
   }
+}
+
+int drvNum(int drive)
+{
+	if(drive == 0)		/* change to current drive */
+		return getdisk();
+	if(drive <= 32)
+		return drive - 1;
+	return toupper(drive) - 'A';
+}
+
+/*
+ *	Retreive the current working directory including drive letter
+ *	Returns in a dynamically allocated buffer (free'ed by the caller)
+ *	on error: Displays "out of memory"
+ */
+char *cwd(int drive)
+{	char *h;
+
+	if((h = dfnpath(drive)) != NULL)
+		return h;
+
+	if(drive)
+		error_no_cwd(drive);
+	else error_out_of_memory();
+
+	return NULL;
+}
+
+int changeDrive(int drive)
+{	drive = drvNum(drive);
+
+    setdisk(drive);
+
+    if (getdisk() == drive) 
+    	return 0;
+
+  displayString(TEXT_ERROR_INVALID_DRIVE, drive + 'A');
+
+  return 1;
+}
+
+/*
+ *	Tests if a string is ON or OFF
+ */
+enum OnOff onoffStr(char *line)
+{
+	if(!line)
+		return OO_Null;
+	if(!*line)
+		return OO_Empty;
+  if (stricmp(line, D_OFF) == 0)
+  	return OO_Off;
+  if (stricmp(line, D_ON) == 0)
+    return OO_On;
+
+return OO_Other;
+}
+
+/*
+ *	Read a block of data from a FILE* into far memory
+ *	Return 0 on failure, otherwise the number of read bytes
+ */
+size_t farread(void far*buf, size_t length, FILE *f)
+{	struct REGPACK r;
+
+	/* synchronize FILE* with file descriptor in order to be able to
+		call the DOS API */
+	lseek(fileno(f), ftell(f), SEEK_SET);
+	/* Use DOS API in order to read the strings directly to the
+		far address */
+	r.r_ax = 0x3f00;              /* read from file descriptor */
+	r.r_bx = fileno(f);           /* file descriptor */
+	r.r_cx = length;              /* size of block to read */
+	r.r_ds = FP_SEG(buf);         /* segment of buffer to read block to */
+	r.r_dx = FP_OFF(buf);         /* offset of buffer to read block to */
+	intr(0x21, &r);               /* perform DOS API */
+	if ((r.r_flags & 1) != 0)     /* read failed */
+		return 0;
+
+	return r.r_ax;
+}
+
+
+unsigned allocSysBlk(const unsigned size, const unsigned mode)
+{	unsigned segm;
+	struct MCB _seg *mcb;
+
+	if((segm = allocBlk(size, mode)) != 0) {
+		mcb = (struct MCB _seg*)SEG2MCB(segm);
+		mcb->mcb_ownerPSP = 8;
+		dprintf(("[MEM: allocated system memory block: %04x/%u]\n"
+		 , segm, size));
+	}
+
+	return segm;
+}
+
+
+void freeSysBlk(unsigned segm)
+{	
+	struct MCB _seg *mcb;
+
+	assert(segm);
+
+	mcb = (struct MCB _seg *)SEG2MCB(segm);
+	mcb->mcb_ownerPSP = _psp;
+	freeBlk(segm);
+	dprintf(("[MEM: deallocated system memory block: %04x]\n", segm));
+}
+
+char far *_fstpcpy(char far *dst, const char far *src)
+{	
+	while((*dst++ = *src++) != 0);
+
+	return dst - 1;
 }

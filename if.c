@@ -17,6 +17,9 @@
  * + bugfix: if: added support for quoted operands of "==" format
  * + add: if: detailed error messages
  * + bugfix: if: keyword "EXIST" misspelled
+ *
+ * 2000/07/05 Ron Cemer
+ *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  */
 
 #include "config.h"
@@ -66,7 +69,7 @@ int cmd_if(char *rest)
       return 0;
     }
 
-    pp = skipwd(rest);
+    pp = skip_word(rest);
       *pp++ = '\0';
 
       if(FINDFIRST(rest, &f, FA_NORMAL) == 0)

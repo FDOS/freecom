@@ -1,0 +1,140 @@
+Description of kernel-supoorted swapping of FreeCOM
+	-- 2001/01/21 ska
+
+Preface
+
+This technique is an experimental implementation of a general purpose
+swap technique applyable to FreeCOM that does not require any special
+support of the kernel.
+
+It will therefore not support swapping in any circumstances and is intended
+to work as a "boot-through" shell for memory hungry programs, which
+normally don't require no function of a resident shell.
+
+Supported Swappings
+
+The swapping is activated via the CALL command in this way:
+
+C> CALL /S prg [{ args }]
+
+The /S switch forces the swapping mechanism to be activated on executation
+of the next command.
+
+Swapping is NOT supported in:
+- secondary shells or other programs,
+- pipes, e.g. CALL /S prg1 | prg2, nor prg1 | CALL /s prg2 ,
+- conjunction with redirections, e.g. CALL /s prg <input
+- batch files,
+- called batch files accessing any shell functions or patch the master
+	environment.
+
+Swapping does not preserve the history.
+
+Implementation
+
+The code of the kernel spawning process 0 (the primary shell) has been
+extended as loop. When process 0 finishes, the kernel checks a special
+internal variable, if this one points to a valid argument structure,
+the program mentioned herein is executed as process 0 and, then, FreeCOM
+is re-invoked. The only information passed from FreeCOM to the new process
+are the command line and the environment, no file descriptors are preserved!
+See below about Critical Error handler and ^Break handler.
+
+The argument structure contains the following information:
+#pragma -a-			/* byte aligned members of structure */
+typedef struct {
+	uint16	envSegm;	/* segment to be passed forth as environment */
+	char far *prg;		/* program to be executed */
+	char far *cmdline;	/* command line arguments of program */
+	char far *shell;	/* absolute path to shell to be executed */
+	/* ... internal information for FreeCOM */
+}
+
+envSegm is to be passed as environment segment to both the program and the
+re-invoked shell.
+
+The code to spawn process 0 passes NULL for both fcb1 and fcb2 pointers,
+neither is any support for both programs.
+
+The command line is empty for the re-invoked shell.
+
+If prg is equal to NULL, no external program is to be invoked.
+If shell is equal to NULL, the shell is not to be invoked --> shut down
+computer.
+
+The argument structure is made known to the system via an interrupt call,
+here are the specs:
+
+DOS-4B-FD:			Set Segment of Argument Structure
+	AH = 0x4B
+	AL = 0xFD		
+	BX = segment
+	DX = 0x4446 == 'FD'	(magic number)
+Return:
+	Carry == 1 on error (see below)
+	Carry == 0 on success
+		BX := _previous_ segment
+
+DOS-4B-FE:			Get Segment of Argument Structure
+	AH = 0x4B
+	AL = 0xFE
+	DX = 0x4446 == 'FD'	(magic number)
+Return:
+	Carry == 1 on error (see below)
+		if AX == 5 (Access Denied) --> BX := current segment
+	Carry == 0 on success
+		BX := current segment
+
+Note:
+	Only one process may use these functions, any other process gets the
+	  error 1 (invalid function). Therefore the primary shell MUST invoke
+	  DOS-4B-F? to lock this function for other processes.
+	Secondary shells may use DOS-4B-FE/Carry/AX==5 to detect a context
+	  of the primary shell and re-use it's critical error handler.
+	If segment == 0, no segment has been assigned so far.
+	  The kernel interpretes this situation as prg == NULL && shell == NULL.
+
+
+FreeCOM performs a swap-out request as follows:
+
++ Parse a "CALL /S prg argument" as "CALL prg arguments", but enable the
+flag swapOnExec.
+
++ Eventually the interpreter reaches the "exec()" function, that
+executes an external command. At this point all the remaining command
+line has been broken into the external program's name and it's command
+line.
+If at this point the flag "swapOnExec" is true, the argument structure
+is prepared and FreeCOM terminates with a DOS-4C API command.
+
++ Whenever FreeCOM is to read "the next input line" from whichever media
+is currently active, the flag is deactived, thus unless the CALL/S
+command is immediately followed by an external program, this switch is
+ignored completely.
+
+Because the shell provides two core functions, the Critical Error
+handler and the ^Break handler, which are not always included within
+every program, both handlers must be installed residently even if the
+primary copy of FreeCOM unloads on a swap request. That's why both
+handlers are installed when FreeCOM loads the first time and FreeCOM's
+own previous handlers are settings are tweaked in such way that when
+FreeCOM terminates for swapping, the addresses of the installed handlers
+are copied back into the system and, thus, furtherly re-used for both
+the external program and the re-invoked shell.
+
+FreeCOM knows two variants of the Critical Error handler:
+
+Type 1: displays the known menu Abort/Retry/Ignore/Fail.
+
+Type 2: is installed when the primary copy had been invoked with the /F
+switch == AutoFail. In this case the handler will automatically return
+"Fail" for all and any Critical Error.
+This variant is much smaller (about 5 bytes rather than approx. 390 bytes),
+but may cause unexpected and unretraceable behaviour.
+
+FreeCOM installs a ^Break handler, that will always "Abort" the program.
+This is required in order to make the handler independed on the context,
+in which it is triggered, aka if within FreeCOM or a spawned program.
+In most circumstances the external program spawned by a swaped-out
+FreeCOM will get the same PID as FreeCOM itself.
+

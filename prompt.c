@@ -31,6 +31,9 @@
  * - added SUPPL environment handling (see ENVIRON.C for more details)
  *    Currently a "PROMPT=" will remove the PROMPT variable.
  *    To create an empty one instead, replace chgEnv1() by chgEnv()
+ *
+ * 2000/06/07 Ron Cemer
+ * fix: #include "datefunc.h" if _NO__DOS_DATE is enabled
  */
 
 #include "config.h"
@@ -47,6 +50,7 @@
 
 #include "command.h"
 #include "cmdline.h"
+#include "datefunc.h"
 
 #define PROMPTVAR "PROMPT"
 

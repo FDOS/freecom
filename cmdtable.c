@@ -18,6 +18,10 @@
  *
  * 2000/01/15 ska
  * - CTTY is dummy no longer
+ *
+ * 2000/06/22 ska
+ *	add: DIRS/PUSHD/POPD patch D. Lucas Parker
+ *	add: CDD
  */
 
 #include <stdlib.h>
@@ -58,6 +62,10 @@ struct CMD cmds[] =
   {"chdir", CMD_SPECIAL_DIR, cmd_chdir, TEXT_CMDHELP_CD},
 #endif
 
+#ifdef INCLUDE_CMD_CDD
+	{"cdd", CMD_SPECIAL_DIR, cmd_cdd, TEXT_CMDHELP_CDD},
+#endif
+
 /*    { "chcp",     0,             cmd_chcp, TEXT_CMDHELP_CHCP},    !!    */
 
 #ifdef INCLUDE_CMD_CLS
@@ -82,6 +90,10 @@ struct CMD cmds[] =
 
 #ifdef INCLUDE_CMD_DIR
   {"dir", CMD_SPECIAL_DIR, cmd_dir, TEXT_CMDHELP_DIR},
+#endif
+
+#ifdef INCLUDE_CMD_DIRS
+  {"dirs", 0, cmd_dirs, TEXT_CMDHELP_DIRS},
 #endif
 
 #ifdef FEATURE_HISTORY
@@ -133,6 +145,14 @@ struct CMD cmds[] =
 
 #ifdef INCLUDE_CMD_PROMPT
   {"prompt", 0, cmd_prompt, TEXT_CMDHELP_PROMPT},
+#endif
+
+#ifdef INCLUDE_CMD_PUSHD
+  {"pushd", CMD_SPECIAL_DIR, cmd_pushd, TEXT_CMDHELP_PUSHD},
+#endif
+
+#ifdef INCLUDE_CMD_POPD
+  {"popd", 0, cmd_popd, TEXT_CMDHELP_POPD},
 #endif
 
 #ifdef INCLUDE_CMD_RMDIR
@@ -240,3 +260,5 @@ struct CMD cmds[] =
 /*    undelete,                           $$    */
 /*    unformat,                           $$    */
 /*    xcopy,                              $$    */
+/*    pushd,                              **    */
+/*    popd,                               **    */

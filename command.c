@@ -167,6 +167,9 @@
  * add: if the shell is about to terminate, but must not (/P switch),
  *  the output is redirected to CON after the infinite loop
  *  hanged ten times. see hangForever()
+ *
+ * 2000/07/05 Ron Cemer
+ *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  */
 
 #include "config.h"
@@ -195,10 +198,8 @@
 #endif
 #include "openf.h"
 #include "session.h"
+#include "kswap.h"
 
-#ifdef FEATURE_SWAP_EXEC
-#include "swapexec.h"
-#endif
 extern struct CMD cmds[];       /* The internal command table */
 
 int exitflag = 0;               /* indicates EXIT was typed */
@@ -208,6 +209,18 @@ int errorlevel = 0;             /* Errorlevel of last launched external prog */
 int forceLow = 0;               /* load resident copy into low memory */
 int oldinfd = -1;       /* original file descriptor #0 (stdin) */
 int oldoutfd = -1;        /* original file descriptor #1 (stdout) */
+int autofail = 0;				/* Autofail <-> /F on command line */
+
+	/* FALSE: no swap this time
+		TRUE: swap this time
+		ERROR: no swap avilable at all
+	*/
+int swapOnExec = FALSE;
+	/* if != 0, pointer to static context
+		NOT allowed to alter if swapOnExec == ERROR !!
+	*/
+kswap_p kswapContext = 0;
+
 
 void fatal_error(char *s)
 {
@@ -239,6 +252,21 @@ static int is_delim(int c)
 #endif
 }
 
+void perform_exec_result(int result)
+{
+	dprintf(("result of (do_)exec(): %d\n", result));
+	if (result == -1)
+		perror("executing spawnl function");
+	else
+		errorlevel = result;
+
+	if(!restoreSession()) {
+		error_restore_session();
+		exit_all_batch();
+	}
+}
+
+
 static void execute(char *first, char *rest)
 {
   /*
@@ -264,11 +292,7 @@ static void execute(char *first, char *rest)
   /* check for a drive change */
   if ((strcmp(first + 1, ":") == 0) && isalpha(*first))
   {
-    setdisk(toupper(*first) - 'A');
-
-    if (getdisk() != toupper(*first) - 'A')
-      displayString(TEXT_ERROR_INVALID_DRIVE);
-
+  	changeDrive(*first);
     return;
   }
 
@@ -278,8 +302,7 @@ static void execute(char *first, char *rest)
     return;
   }
 
-  /* get the PATH environment variable and parse it */
-  /* search the PATH environment variable for the binary */
+  /* search through %PATH% for the binary */
   fullname = find_which(first);
   dprintf(("[find_which(%s) returned %s]\n", first, fullname));
 
@@ -309,22 +332,21 @@ static void execute(char *first, char *rest)
       return;   /* Don't invoke the program in this case */
     }
 
-#ifdef FEATURE_SWAP_EXEC
-    result = do_exec(fullname, rest, USE_ALL, 0xFFFF, environ);
-#else
-    result = exec(fullname, rest, 0);
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+    if(swapOnExec == TRUE
+	 && kswapMkStruc(fullname, rest)) {
+	 	dprintf(("[EXEC: exiting to kernel swap support]\n"));
+	 	exit(123);		/* Let the kernel swap support do the rest */
+	}
+#ifdef DEBUG
+	if(swapOnExec == TRUE)
+		dprintf(("KSWAP: failed to save context, proceed without swapping\n"));
 #endif
-  dprintf(("result of (do_)exec(): %d\n", result));
-    if (result == -1)
-      perror("executing spawnl function");
-    else
-      errorlevel = result;
-  }
+#endif
+    result = exec(fullname, rest, 0);
 
-    if(!restoreSession()) {
-      error_restore_session();
-      exit_all_batch();
-    }
+    perform_exec_result(result);
+  }
 }
 
 static void docommand(char *line)
@@ -357,10 +379,12 @@ static void docommand(char *line)
     }
 
   /* Copy over 1st word as lower case */
-    while (!is_delim(*(unsigned char*)rest))
+  /* Internal commands are constructed out of alphabetic
+  	characters; ? had been parsed already */
+    while (isalpha(*rest))
       *cp++ = tolower(*rest++);
 
-    if(*rest && strchr(QUOTE_STR, *rest))
+    if(*rest && (!is_delim(*rest) || strchr(QUOTE_STR, *rest)))
       /* If the first word is quoted, it is no internal command */
       cp = com;   /* invalidate it */
     *cp = '\0';                 /* Terminate first word */
@@ -406,7 +430,7 @@ static void docommand(char *line)
       } else {
         /* no internal command --> spawn an external one */
         free(com);
-        com = unquote(line, rest = skipwd(line));
+        com = unquote(line, rest = skip_word(line));
         if(!com) {
           error_out_of_memory();
           return;
@@ -574,10 +598,12 @@ int process_input(int xflag, char *commandline)
   char *ip;
   char *cp;
   char forvar;
-  int echothisline = 0;
+  int echothisline;
+  int tracethisline;
 
   do
   {
+  	echothisline = tracethisline = 0;
     if(commandline) {
       ip = commandline;
       readline = commandline = NULL;
@@ -599,12 +625,33 @@ int process_input(int xflag, char *commandline)
         break;
       }
 
+      /* Go Interactive */
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
-      tracemode = 0;          //reset trace mode
-
-      echothisline = 0;
+      tracemode = 0;          /* reset trace mode */
       }
     }
+
+    /* 
+     * The question mark '?' has a double meaning:
+     *	C:\> ?
+     *		==> Display short help
+     *
+     *	C:\> ? command arguments
+     *		==> enable tracemode for just this line
+     */
+    if(*(ip = trim(ip)) == '?') {
+    	 ip = trim(ip + 1);
+    	 if(!*ip) {		/* is short help command */
+#ifdef INCLUDE_CMD_QUESTION
+    	 	showcmds(ip);
+#endif
+			free(readline);
+			continue;
+		}
+		/* this-line-tracemode */
+		echothisline = 0;
+		tracethisline = 1;
+	}
 
   /* The FOR hack
     If the line matches /^\s*for\s+\%[a-z]\s/, the FOR hack
@@ -613,7 +660,7 @@ int process_input(int xflag, char *commandline)
     When the percent (%) expansion is made later on, any
     sequence "%<ch>" is retained.
   */
-  cp = ip = trim(ip);
+  cp = ip;
   if(matchtok(cp, "for") && *cp == '%' && isalpha(cp[1])
    && isspace(cp[2]))   /* activate FOR hack */
     forvar = toupper(cp[1]);
@@ -720,7 +767,11 @@ intBufOver:
 
     if (*parsedline)
     {
+      if(tracethisline)
+      	++tracemode;
       parsecommandline(parsedline);
+      if(tracethisline)
+      	--tracemode;
       if (echothisline || echo)
         putchar('\n');
     }
@@ -773,6 +824,10 @@ int main(void)
 
   if(!canexit)
     hangForever();
+
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	kswapDeRegister(kswapContext);
+#endif
 
   return 0;
 }

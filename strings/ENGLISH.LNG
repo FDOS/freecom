@@ -1,0 +1,3 @@
+# Dummy file as the English language is the default
+# However, can be used to include non-7bit-ASCII characters forbidden
+# in DEFAULT.LNG

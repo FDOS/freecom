@@ -16,11 +16,15 @@
  * 2000/01/15 ska
  * add: FEATURE_AUTOREDIRECT_TO_CON: Number of loops after the output is
  *	redirected to CON, if FreeCom hangs in "hangForever()" in COMMAND.C
+ *
+ * 2000/06/22 ska
+ *	add: DIR_STACK_LEN, commands: DIRS, POPD, PUSHD, CDD
+ *	add: FEATURE_LAST_DIR
  */
 
 /* define DEBUG to add debugging code */
 #ifndef DEBUG			/* possibly already defined via command line */
-#define DEBUG
+//#define DEBUG
 #endif
 
 /* Define to enable the alias command, and aliases. */
@@ -38,11 +42,12 @@
 /* Define to enable DOS NLS */
 //#define FEATURE_NLS
 
-/* Define to enable swapping to XMS/EMS/disk */
-//#define FEATURE_SWAP_EXEC
-
 /* Command line logging feature */
-#define FEATURE_CALL_LOGGING
+//#define FEATURE_CALL_LOGGING
+
+/* Preserves last directory (CD, CHDIR, CDD, PUSHD, POPD);
+	"CD -" chdir's there */
+#define FEATURE_LAST_DIR
 
 /* Name of the executable */
 #define COM_NAME "COMMAND.COM"
@@ -56,22 +61,44 @@
    Undefine to remove this feature */
 #define FEATURE_AUTO_REDIRECT_TO_CON 5
 
+/* Define to support kernel-supported swapout of FreeCOM
+	see DOCS\K-SWAP.TXT
+*/
+#define FEATURE_KERNEL_SWAP_SHELL
+
+/* Define the size of the buffer used to store old paths for PUSHD/POPD */
+#define DIR_STACK_LEN 256
+
+/* Define this value to select the initialization value of fddebug */
+#define FDDEBUG_INIT_VALUE 1
+
+/* Define if your compiler does not have 'dosdate_t' or 'dostime_t' */
+#if defined(__TURBOC__) && __TURBOC__ <= 0x297
+	/* TC++1 */
+#define _NO__DOS_DATE
+#define _NO__DOS_TIME
+#endif
+
 
 #define INCLUDE_CMD_BEEP
 #define INCLUDE_CMD_BREAK
 #define INCLUDE_CMD_CHDIR
+#define INCLUDE_CMD_CDD
 #define INCLUDE_CMD_CLS
 #define INCLUDE_CMD_COPY
 #define INCLUDE_CMD_CTTY
 #define INCLUDE_CMD_DATE
 #define INCLUDE_CMD_DEL
 #define INCLUDE_CMD_DIR
+#define INCLUDE_CMD_DIRS
 #define INCLUDE_CMD_LOADFIX
 #define INCLUDE_CMD_LOADHIGH
 #define INCLUDE_CMD_MKDIR
 #define INCLUDE_CMD_PATH
 #define INCLUDE_CMD_PAUSE
 #define INCLUDE_CMD_PROMPT
+#define INCLUDE_CMD_PUSHD
+#define INCLUDE_CMD_POPD
 #define INCLUDE_CMD_REM
 #define INCLUDE_CMD_RENAME
 #define INCLUDE_CMD_RMDIR
@@ -99,4 +126,16 @@
 
  */
 
- #include "debug.h"
+/********
+	***** Resolve dependencies
+	***** Don't change without change the appropriate sources!
+	************/
+#if defined(INCLUDE_CMD_PUSHD) || defined(INCLUDE_CMD_POPD)
+#define	INCLUDE_CMD_CDD
+#endif
+
+#if defined(FEATURE_KERNEL_SWAP_SHELL) && defined(FEATURE_SWAP_EXEC)
+#error "You must not define both FEATURE_KERNEL_SWAP_SHELL && FEATURE_SWAP_EXEC"
+#endif
+
+#include "debug.h"
