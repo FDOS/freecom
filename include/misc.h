@@ -153,6 +153,8 @@ void rtrimsp(char * const str);
 char *parsenum(const char *s, int maxCnt, int *cnt, int nums[]);
 char *textlineEnd(const char * const buf, const size_t buflen);
 
+int truncate(int fd);
+
 /*
 void aliasprint(void);
 void aliaschange(const char * const name, const char * const value);

@@ -1431,3 +1431,9 @@ The COPY destination must not contain plus ('+') characters.
 :TEXT_DELETE_FILE#1
 Deleting file "%s".
 .
+
+:TEXT_ERROR_WRITE_FILE_DISC_FULL
+Unable to write to file '%s';
+probably disc full? (%lu bytes required)
+.
+

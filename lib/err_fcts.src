@@ -30,6 +30,7 @@ error_trailing_plus:=TEXT_ERROR_TRAILING_PLUS
 error_open_file(const char * const fnam):=TEXT_ERROR_OPEN_FILE, fnam
 error_read_file(const char * const fnam):=TEXT_ERROR_READ_FILE, fnam
 error_write_file(const char * const fnam):=TEXT_ERROR_WRITE_FILE, fnam
+error_write_file_disc_full(const char * const fnam, const unsigned long size):=TEXT_ERROR_WRITE_FILE_DISC_FULL, fnam, size
 error_copy:=TEXT_ERROR_COPY
 error_nothing_to_do:=TEXT_ERROR_NOTHING_TO_DO
 error_invalid_number(const char * const s):=TEXT_INVALID_NUMBER, s
