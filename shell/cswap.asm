@@ -38,8 +38,7 @@ _dosFCB2 times 37 db 0
 	global _dosCMDNAME
 ;;_dosCMDTAIL  times 128 db 0
 _dosCMDNAME times 128 db 0
-;;ska made it 256 bytes as requested by RBIL
- 		times 200	db 0
+ 		times 256	db 0
 localStack:
 
 

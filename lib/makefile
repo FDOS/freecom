@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.9  2002/04/25 18:50:40  skaus
+# v0.83 Beta 38:
+#
 # Revision 1.8  2002/04/23 16:40:41  skaus
 # bugfix: CTTY: added to try to set the device flags
 #
@@ -440,7 +443,7 @@ curdatel.obj : curdatel.c \
 	../include/debug.h ../include/misc.h ../include/nls.h \
 	../include/timefunc.h ../strings.h
 exec1.obj : exec1.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
+	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h
 ltrimcl.obj : ltrimcl.c \
 	 ../config.h ../include/cmdline.h ../include/debug.h

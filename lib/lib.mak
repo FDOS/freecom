@@ -65,6 +65,7 @@ freecom_deps :  \
 	fcompl2.obj \
 	fdattr.obj \
 	fdevopen.obj \
+	fdsattr.obj \
 	fillcomp.obj \
 	find.obj \
 	freep.obj \
@@ -134,10 +135,10 @@ freecom_deps :  \
 	scanopt.obj \
 	showcmds.obj \
 	skqwd.obj \
-	split.obj \
 	chunk1
 
 chunk1 :  \
+	split.obj \
 	sumblink.obj \
 	tempfile.obj \
 	timeget.obj \
@@ -290,6 +291,7 @@ freecom.lib : $(CFG) freecom_deps
 +-fcompl2.obj &
 +-fdattr.obj &
 +-fdevopen.obj &
++-fdsattr.obj &
 +-fillcomp.obj &
 +-find.obj &
 +-freep.obj &
@@ -510,6 +512,7 @@ freecom.lib : $(CFG) freecom_deps
 +fcompl2.obj &
 +fdattr.obj &
 +fdevopen.obj &
++fdsattr.obj &
 +fillcomp.obj &
 +find.obj &
 +freep.obj &

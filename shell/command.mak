@@ -19,7 +19,8 @@ command.exe : $(CFG) batch.obj \
 	loadhigh.obj \
 	module.obj \
 	redir.obj \
-	ver.obj 
+	ver.obj \
+	cswapc.obj 
 	$(LD) /m/s/l /c /d @&&|
 $(LIBPATH)\c0s.obj+
 batch.obj+
@@ -33,7 +34,8 @@ kswap.obj+
 loadhigh.obj+
 module.obj+
 redir.obj+
-ver.obj
+ver.obj+
+cswapc.obj
 command
 		# no map file
 $(SUPPL_LIB_PATH)\suppl_s.lib +

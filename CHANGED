@@ -1,3 +1,9 @@
+v0.83 Beta 38:
+chg: cswap.asm: make local stack 256 (as RBIL suggests)
+bugfix: cswap.asm: make local stack 200 bytes to let MS NET work (Tom Ehlert)
+chg: init.c: removed warning about non-used arguments
+bug: config.h: re-enabled LOADHIGH/FIX
+chg: BUILD.BAT to handle XMS-Swap better
 bugfix: CTTY: added to try to set the device flags
 bugfix: LOADHIGH: disable swapping when executing
 bugfix: init.c: /p:arg ignores argument

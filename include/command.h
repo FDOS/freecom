@@ -40,7 +40,8 @@ enum InternalErrorCodes {
 	E_Empty,
 	E_Syntax,
 	E_Range,				/* Numbers out of range */
-	E_NoItems
+	E_NoItems,
+	E_User		/* MUST be the last one */
 };
 
 #define PROMPTVAR "PROMPT"
