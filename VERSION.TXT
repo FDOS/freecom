@@ -1,1 +1,1 @@
-	FreeCom version 0.82 pl 2 [Apr 28 2003 17:50:57]
+	FreeCom version 0.82 pl 3 [Dec 10 2003 06:54:37]

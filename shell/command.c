@@ -465,16 +465,6 @@ abort:
     free(in);
 }
 
-void readcommand(char * const str, int maxlen)
-{
-#ifdef FEATURE_ENHANCED_INPUT
-	/* If redirected from file or so, should use normal one */
-	readcommandEnhanced(str, maxlen);
-#else
-	readcommandDOS(str, maxlen);
-#endif
-}
-
 /* line -- min size: MAX_INTERNAL_COMMAND_SIZE + sizeof(errorlevel) * 8
  */
 int expandEnvVars(char *ip, char * const line)

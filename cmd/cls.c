@@ -24,8 +24,8 @@
 #pragma argsused
 int cmd_cls(char *param)
 {
-	textcolor(LIGHTGRAY);
-	textbackground(BLACK);
-	clrscr();
+ 	textcolor(LIGHTGRAY);
+ 	textbackground(BLACK);
+ 	clrscr();
 	return 0;
 }

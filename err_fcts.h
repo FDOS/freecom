@@ -83,3 +83,5 @@ void error_get_codepage(void);
 void error_set_codepage(void);
 void error_copy_plus_destination(void);
 void error_invalid_parameter(const char * const str);
+void error_fcom_is_device(const char * const fnam);
+void error_fcom_invalid(const char * const fnam);
