@@ -1,3 +1,6 @@
+v0.83 Beta 40:
+bugfix: ^Break detection after XMS-Swapping
+
 v0.83 Beta 38:
 chg: cswap.asm: make local stack 256 (as RBIL suggests)
 bugfix: cswap.asm: make local stack 200 bytes to let MS NET work (Tom Ehlert)
