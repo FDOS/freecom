@@ -1,0 +1,108 @@
+Description of layout of COMMAND.COM image
+	-- 2000/07/11 ska
+
+
+General layout:
++ start of file at file offset 0
++ COMMAND.EXE : This is the product of the actual MAKE run or
+	however the FreeCOM executable was generated.
+	Usually this is in EXE format
++ some compiler/linker depend stuff, e.g. debug information
++ any number of modularized resources (see below)
++ end of file at topmost offset
+
+Resources:
+Til now only one type of resource was known to FreeCOM, though, due to
+the introduction of the external Critical Error handler a second one
+showed up. Therefore it was time to re-organize the way resources are
+attached to FreeCOM.
+
+Purpose of resources:
+Resources are information of any kind not included into the program
+image of FreeCOM. In order to access them they must be manually handled
+by FreeCOM.
+Examples:
++ Strings (already known since some releases) [data],
++ Critical Error handler [mixture of data and code].
+
+Problems to cope with:
++ FreeCOM should come as a single physically file, that means that all
+information must be "archived" together one way or another, but the
+result must be an executable file, which invokes a new copy of the
+command line interface by default.
++ The more complex the make process is the more problems will show up
+and the more possible contributers will be intimidated.
+
+Therefore the resources shall be as free-standing as possible and
+easily archived together, but still easily accessable from with
+FreeCOM.
+
+Design of resources:
+Each resource contructs its own block of data in this format:
++ lowest file offset
++ data of resource			[unlimited]
++ size of "data" portion	[4 bytes]
++ major resource ID			[2 bytes]
++ minor resource ID			[2 bytes]
++ cookie					[8 bytes]
++ highest file offset
+
+The latter 4 entries form the control area of the resource indicating:
++ how much data is included with this resource;
++ what type of resource it is via the resource ID, however, only the
+major resource ID is considered by the general resource locator, the
+minor ID is reserved for use by the loader specialized for the
+particular resource only; and
++ the cookie provides a validation mechanism like the magic number
+system. This cookie is the same for all resources throughout FreeCOM
+and all control areas with a valid cookies are considered valid themselves.
+
+To place the control area at the end of the resource has one fundamental
+disadvantage and one fundamental advantage:
+con: It is less efficient than placing it in front of the data, because
+files are read sequentially from beginning to the end most efficiently.
+pro: Those resources can be created individually into individual files.
+To create the desired "archive" the only thing to do is to append
+one by another to FreeCOM's executable.
+
+Now the process to locate the resource from inside FreeCOM arises:
+If the control area would be located at the beginning of the resource,
+there is no fixed way to seek to it, but because the controls are
+located behind the data at the end and because resources are appended
+to the executable, the control area of the last resources resides at
+the end of the file.
+
+This place is easy to seek to.
+
+And because the control area knows the length of the data of the
+current resource, it can seek before to the preceeding resource,
+if any.
+
+In opposite, to locate a control area at the beginning would require
+some algorithm to find the first resource located _somewhere_within_
+the file. The current implementation used some fields of the EXE header
+describing how much code/data the executable allocates. Unfortunately
+.COM files do not include this information and some compilers may
+append own information there, e.g. debug information.
+One would need sort of management program that keeps track of
+where the first resource is located within the executable and writes
+this information at a well-known location, e.g. at the end of the file.
+The message library MSGLIB includes such program, but although
+it is nearly required there, it adds a remarkable step to the complexity
+of the process to create a final program file.
+
+Assignments:
+Cookie: "FREECOM "
+
+Major resource IDs (hexadecimal):
+00: Strings
+01: Critial Error handler
+
+Minor resource IDs (hexadecimal):
+00:**: none particular, used for version control
+01:00: code of the Critical Error handler
+01:01: strings used by the handler
+01:02: already merged code and strings of the handler as one resource
+01:10: code of the "autofail" variant of the handler
+01:11: strings used by the "autofail" handler
+01:12: already merged code and strings of the "autofail" handler

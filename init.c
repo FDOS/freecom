@@ -100,17 +100,22 @@
 #include <signal.h>
 #include <alloc.h>
 #include <limits.h>   /* INT_MAX */
+#include <conio.h>
 
 #include "mcb.h"
 #include "environ.h"
 #include "dfn.h"
 #define _TC_EARLY
 #include "fmemory.h"
+#include <suppl.h>
 
-#include "err_hand.h"
+//#include "err_hand.h"
 #include "batch.h"
 #include "timefunc.h"
 #include "cmdline.h"
+#include "context.h"
+#include "command.h"
+#include "module.h"
 
 #include "strings.h"
 
@@ -127,13 +132,24 @@ extern int canexit;
 static unsigned oldPSP;
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
-unsigned char fddebug = 0;    /* debug flag */
+int fddebug = 0;    /* debug flag */
+
+static context_t far* far* criterCtxt = 0;
+static context_t far* oldCriterCtxt = 0;
 
 /* Without resetting the owner PSP, the program is not removed
    from memory */
 void exitfct(void)
 {
   unloadMsgs();        /* free the message strings segment */
+  if(oldCriterCtxt) {
+  	*criterCtxt = oldCriterCtxt;
+  } else {
+  	freeBlk(FP_SEG(criterCtxt));
+  	*(BYTE far*)MK_FP(SEG2MCB(FP_SEG(criterCtxt)), 8 + 4) = '-';
+  	dprintf(("[Critical Error handler deallocated (0x%04x).]\n"
+  	 , FP_SEG(criterCtxt)));
+  }
   OwnerPSP = oldPSP;
 }
 
@@ -252,8 +268,9 @@ optScanFct(opt_init)
 
   switch(ch) {
   case '?': showhelp = 1; return E_None;
+  case '!': return optScanBool(fddebug);
   case 'Y': return optScanBool(tracemode);
-  case 'F': return optScanBool(autofail);
+  case 'F': return optScanBool((unsigned)autofail);
   case 'P':
     if(arg)     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
@@ -396,9 +413,6 @@ int initialize(void)
   /* Install the ^Break handler (see chkCBreak() for more details) */
   extern void initCBreakCatcher(void);
   initCBreakCatcher();
-
-  /* Install INT 24 Critical error handler */
-  init_error_handler();
 
   /* DOS shells patch the PPID to the own PID, how stupid this is, however,
     because then DOS won't terminate them, e.g. when a Critical Error
@@ -564,6 +578,17 @@ int initialize(void)
     if (chgEnv("COMSPEC", ComPath))
     error_env_var("COMSPEC");
   }
+
+  /* Install INT 24 Critical error handler */
+  /* Needs the ComPath variable */
+  //init_error_handler();
+  if((criterCtxt = modCriter()) == 0) {
+	puts("Cannot load Critical Error handler.");
+	return E_NoMem;
+	}
+	oldCriterCtxt = *criterCtxt;
+	*criterCtxt = (context_t far*)&context;
+	setvect(0x24, (void interrupt(*)())(criterCtxt + 1));
 
   if(internalBufLen)
     error_l_notimplemented();

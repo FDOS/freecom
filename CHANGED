@@ -1,10 +1,2 @@
-chg: PTCHLDRV: gone into TOOLS section
-sub: the *.prj (IDE project) files are no longer maintained
-chg: ECHO, FDDEBUG, BREAK, VERIFY: share ON/OFF recognition code
-chg: shellname & shellver: type change: * --> const[]
-add: DIRS, PUSHD, POPD, CDD, FEATURE_LAST_DIR
-add: MISC.C: changeDrive(), cwd(), drvNum()
-chg: Display text: CMDHELP_CD, ERROR_INVALID_DRIVE
-bugfix: option are peristent for VAR command
-bugfix: "CD C:" must display current working directory of drive C:
-bugfix: unquote(): calculation of portion before left quote
+Sample implementation of resources [see DOCS\RESOURCE.TXT]
+Currently features: Critical Error handler and STRINGS

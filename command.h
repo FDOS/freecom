@@ -36,9 +36,14 @@
  *
  * 2000/07/05 Ron Cemer
  * fix: TC++1 compatibly: FA_NORMAL macro
+ *
+ * 2000/07/13 ska
+ * chg: Moved into MISC.H: OnOff, BREAK_* macros
  */
 
 #include <dos.h>
+#include "misc.h"
+#include "context.h"
 
 #define MAX_INTERNAL_COMMAND_SIZE 256
 #define MAX_EXTERNAL_COMMAND_SIZE 128
@@ -56,24 +61,8 @@ enum InternalErrorCodes {
 	E_Ignore			/* Error that can be ignored */
 };
 
-enum OnOff {		/* ON/OFF tester */
-	OO_Empty = 0,		/* Empty line */
-	OO_Null,			/* NULL line */
-	OO_On,				/* "ON" */
-	OO_Off,				/* "OFF" */
-	OO_Other			/* else */
-};
-
 #define EnvSeg (*(unsigned far*)MK_FP(_psp, 0x2c))
 #define OwnerPSP (*(unsigned far *)MK_FP(_psp, 0x16))
-
-#define BREAK_BATCHFILE 1
-#define BREAK_ENDOFBATCHFILES 2
-#define BREAK_INPUT 3
-#define BREAK_IGNORE 4
-#define BREAK_FORCMD 5
-
-#define cbreak chkCBreak(0)
 
 extern const char shellver[];
 extern const char shellname[];
@@ -91,7 +80,6 @@ enum
 };
 
 /* prototypes for INIT.C */
-extern unsigned char fddebug;
 
 /* prototypes for COMMAND.C */
 extern int ctrlBreak;
@@ -181,30 +169,16 @@ int aliasswapin(void);
 int cmd_alias(char *);
 
 /* Prototypes for ERR_HAND.C */
+#if 0
 void init_error_handler(void);
 void printstring(char *);
 char *get_err(unsigned);
 void interrupt far dos_critical_error(unsigned, unsigned, unsigned, unsigned,
                        unsigned, unsigned, unsigned, unsigned, unsigned);
+#endif
 
 /* Prototypes for MISC.C */
-#define MAXARGS 20
-#define MAXLEN  256
-// int exist(const char *);
-#define exist dfnstat
-int chkCBreak(int);
-int cgetchar(void);
-int vcgetchar(void);
-int vcgetcstr(const char *const legalCh);
-char *parse_firstarg(char *);
-char *comFile(void);
-char *comPathFile(const char * const fname);
-void dispCount(int cnt, const char * const zero, const char * const one
- , const char * const multiple);
-char *cwd(int drive);
-int changeDrive(int drive);
-int drvNum(int drive);
-enum OnOff onoffStr(char *line);
+/* Moved to MISC.H */
 
 /* Prototypes for ERROR.C */
 void error_no_pipe(void);
