@@ -193,4 +193,10 @@ void lastDirGet(char ** const buf);
 int appendDisable(void);
 void appendRestore(const int state);
 
+void registerCriterRepeatCheckAddr(word far *);
+char *critDriveReport(void);
+void critEnableRepeatCheck(void);
+unsigned critDisableRepeatCheck(void);
+void critEndRepCheck(void);
+
 #endif

@@ -1,0 +1,59 @@
+$Id$
+Critical Error Handler Repeat Check Autofailer
+	-- 2004-09-13 ska
+
+Due to some heavy and annoying invocations of the Critical Error handler
+by some operations the standard Critical Error handler has been extended
+by a feature to automatically switch into autofail mode, in which all
+requests are automatically returned by FAIL without displaying the
+Critical Error user dialogue.
+
+Currently this feature must be activated by FreeCOM before and deactivated
+after the operation.
+
+Current effected operations are:
++ the whole DIR command, and
++ the search for external commands through %PATH%.
+
+The algorithm is as followed:
+1. FreeCOM turns the CRITER repeat check ON.
+2. The operation is performed.
+3. FreeCOM turns the CRITER repeat check OFF and, if any, displays how many
+Critical Error requests had been hidden.
+
+The repeat check works like so:
++ If a Critical Error occurs, the handler checks, if the repeat check is
+active; if not, the standard CRITER dialogue is displayed, nothing
+special is happening.
++ If the repeat check is active, the handler verifies, if the current
+request is originated by a block device, that had been FAILed or ABORTed
+by the user earlier; if so and there occured less than 256 CRITERs til
+then, the request is silently FAILed, no dialogue is displayed.
++ In all other cases, the standard dialogue is displayed and the user is
+prompted for an action; if the action is either FAIL or ABORT, this
+particular block device will autofail the next 255 requests.
+
+=======================
+
+There had been another suggestion by Eric Auer to autofail requests, if
+they come in a short time.
+
+In my opinion this idea is nice, if one can decide:
++ if the request is almost similiar as the last request, e.g. it would not
+make sense to autofail a request from a character device or another block
+device, when block device A: failed last time,
++ what when the reasons of the failings differ heavily,
++ how long is short.
+
+The currently implemented solution will help at very context specific
+operations, where it is less likely that many different CRITERs occure;
+e.g. searching through %PATH% may result in problems accessing block drives,
+is it really of any interest whether the find API call failed because of
+trouble in FAT or data portion?
+However, it would be useful to know, whether drives A: and C: fail,
+would it not?
+
+"DIR a:*.* >prn" may fail very often, because of out-of-paper
+conditions, therefore it does not seem helpful to autofail requests for
+character devices. Also, there is currently no operation that seems to
+be heavily effected by ignoreable CRITERs for character devices.

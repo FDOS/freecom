@@ -1095,6 +1095,7 @@ int cmd_dir(char *rest)
   if ((argv = scanCmdline(rest, opt_dir, 0, &argc, &opts)) == 0)
     return 1;
 
+  critEnableRepeatCheck();
   appState = appendDisable();
   dircount = 0;
   if(argc)
@@ -1104,6 +1105,7 @@ int cmd_dir(char *rest)
       ;
   else
     rv = dir_print_body(".", &dircount);
+	critEndRepCheck();
 
   appendRestore(appState);
   freep(argv);

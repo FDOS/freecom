@@ -79,6 +79,9 @@
 ;	  than ' ' are ignored (usually control characters)
 ;
 ; $Log$
+; Revision 1.5  2004/09/13 18:59:39  skaus
+; add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
+;
 ; Revision 1.4  2003/10/18 10:55:24  skaus
 ; bugfix: CRITERR: to use DOS API {Tom Ehlert/Bart Oldeman}
 ;
@@ -112,9 +115,10 @@
 %define COMPILE_STRINGS		;; always keep this enabled in this release!!
 %define INCLUDE_STRINGS		;; use STRINGS.INC instead of hard-coded strings
 ;; %define AUTO_FAIL		;; make the autofail variant of Criter
+%define HIDE_CRITER_DRIVES 26	;; For how many drives hide-multiple is active
 
 ;; Version of this module
-MODULE_VERSION EQU 253
+MODULE_VERSION EQU 2
 
 %include "../include/stuff.inc"
 %ifndef XMS_SWAP_CRITER
@@ -148,7 +152,7 @@ mov ax, 4c00h
 int 21h
 int 20h
 
-dummy_file DB "a:\aux", 0
+dummy_file DB "a:\ux", 0
 
 %ifndef COMPILE_STRINGS
 %define COMPILE_STRINGS
@@ -259,6 +263,8 @@ _lowlevel_err_handler:
 	call ??dispAX
 %endif
 
+	push ax			; save AH bit 7  and AL for later
+
 			;; free AL
 	add al, 'A'		; AL may contain the drive number
 	mov BYTE [??strargA], al	;; will be overwritten, if char device
@@ -266,8 +272,6 @@ _lowlevel_err_handler:
 	mov BYTE [??strargA + 1], al	; end of string
 
 	mov es, cx		; still shared local code/data segm
-
-	push ax			; save AH bit 7 for later
 
 	shr ah, 1		; Carry := 0-> read; 1->write
 	adc al, al		; AL := 0-> read; 1->write
@@ -332,7 +336,7 @@ _lowlevel_err_handler:
 	mov BYTE [??strarg3], al
 
 	mov bl, StrBlockDevice		; by default issue block device error
-	pop ax
+	pop ax						; AL := drive letter again
 	shl ah, 1					; get bit 7 --> carry flag
 	jnc ?noCharDevice
 
@@ -363,14 +367,37 @@ _lowlevel_err_handler:
 		mov BYTE [ES:di+2], ch	; place termination character
 		mov cx, cs
 		mov bl, StrCharDevice		; issue device driver message
+		mov al, 0ffh		; AL := invalidate
 
 ?noCharDevice:
 
 	cld				; forward direction
 	mov ds, cx		; CX is still or again == CS
 
-;; Try to find a suitable I/O channel
 	push bx
+	;; Now many registers are available to use
+	;; Perform the repeat check; AL == -1 (char device), 0..31 if block
+	mov bx, ?repCheck
+	mov di, dummyByte	; Tha byte at [DI} will be decremented eventually
+	inc WORD [BX]	; check if enabled
+	jz ?noRepCheck
+	;; paranoid check to avoid memory overflow
+	;; also skips if char device
+	cmp al, HIDE_CRITER_DRIVES	; 0..26 == A..Z
+	jnc ?noRepCheck
+	cbw				; AH := 0
+	add al, 2		; correction as BX is two bytes below
+	add ax, bx		; repCheckByte area 
+	mov di, ax
+	inc BYTE [DI]	; will display the 1st and every 256th Criter
+	jnz	?fail		; displayed already --> AutoFail && keep incremented [BX]
+					; NOTE: There is no output generated til now!!
+					;	The output channels have not been touched
+?noRepCheck:
+	dec WORD [BX]	; keep the word at value -1
+	mov WORD [repCheckDecAddr], di
+
+;; Try to find a suitable I/O channel
 	mov ah, 62h		; Get PSP
 	int 21h
 	mov es, bx
@@ -400,6 +427,11 @@ _lowlevel_err_handler:
 	mov bl, StrQuestionMark
 	call ?oString
 	jmp short ?inputLoop
+
+?fail:
+	pop bx		; correct the stack from repeat check
+	mov bl, FAIL
+	jmp short ?iret	; actually return
 
 ?inputError:
 	mov al, LOCAL_BELL
@@ -439,6 +471,15 @@ _lowlevel_err_handler:
 ?iret:
 	pop ax			; preserve AH
 	mov al, bl		; action code
+	cmp al, ABORT
+	je ?iretNow
+	cmp al, FAIL
+	je ?iretNow
+	;; AutoFail is activated for ABORT and FAIL only
+	;; as user selected something else, reset the AutoFail state of the drive
+	dec BYTE [1234h]
+repCheckDecAddr EQU $-2
+?iretNow:
 	pop es, ds, bp, si, di, cx, bx
 	pop dx
 	iret
@@ -599,7 +640,21 @@ _lowlevel_err_handler:
 ??strarg8	DB StrFail
 
 	;; alphabetical arguments
+dummyByte:	;; This byte is destroyed, when no repeatCheck AutoFail is
+			;; active for the drive
 ??strargA	DB '12345678', 0		;; drive letter or device name string
+
+;; The repeat check is:
+;; _+ activated if ?repCheck != -1
+;;	+ the number of drives available to be checked is determined by
+;;		counting the number of 0xFF bytes the immediately after the module
+;;		got loaded into memory
+%ifdef XMS_SWAP_CRITER
+	global _criter_repeat_checkarea
+_criter_repeat_checkarea:
+%endif
+?repCheck	DW -1	;; disabled
+TIMES HIDE_CRITER_DRIVES DB -1		;; not displayed already
 
 ??allow:
 ??allowIgnore	DB 0
@@ -607,6 +662,7 @@ _lowlevel_err_handler:
 ??allowAbort	DB 1	;; always allowed
 ??allowFail		DB 0
 ??input			DB '%4%6', 0		;; temporary storage
+
 
 %ifndef COMPILE_STRINGS
 ??strings:
@@ -696,6 +752,13 @@ S36	DB 'Unknown error code', 0
 %endif		; INCLUDE_STRINGS
 %endif		; COMPILE_STRINGS
 %endif		; AUTO_FILE
+
+
+%ifndef NO_RESOURCE_BLOCK
+%ifndef AUTO_FAIL
+	DW ?repCheck
+%endif
+%endif
 
 ???ende:
 

@@ -6,9 +6,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.5  2004/09/13 18:59:40  skaus
+	add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
+
 	Revision 1.4  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.3  2004/02/01 13:24:22  skaus
 	bugfix: misidentifying unspecific failures from within SUPPL
 	
@@ -54,18 +57,22 @@
 
 char *find_which(const char * const fname)
 {	char *p;
-  static char *buf = 0;
+	static char *buf = 0;
+	unsigned critCount;
 
+	critEnableRepeatCheck();
 	if(0 == (p = dfnsearch(fname, 0, 0))) {
 		if(errno == ENOMEM) {
 			error_out_of_memory();
 		}
-		/* No other error is of interest! */
+		critEndRepCheck();
 		return 0;
 	}
 
-  free(buf);
-  buf = abspath(p, 1);
-  free(p);
-  return buf;
+	free(buf);
+	buf = abspath(p, 1);
+	free(p);
+
+	critEndRepCheck();
+	return buf;
 }

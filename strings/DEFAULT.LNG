@@ -1482,3 +1482,7 @@ or just hit enter to cancel to load the strings.
 :TEXT_TERMINATING
 Terminating now.
 .
+
+:TEXT_HIDDEN_CRITER#0%
+%u Critical Error requests suppressed.
+.

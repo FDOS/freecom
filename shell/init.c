@@ -189,6 +189,9 @@ int initialize(void)
 	/* There is no special handler for FreeCOM currently
 		--> activate the real one */
 	setvect(0x24, lowlevel_err_handler);
+	{	extern word far criter_repeat_checkarea;
+		registerCriterRepeatCheckAddr(&criter_repeat_checkarea);
+	}
 #else
 	setvect(0x24, dummy_criter_handler);
 #endif

@@ -58,6 +58,7 @@ static int loadModule(res_majorid_t major
 		  	freeSysBlk(segm);
 			return 0;
 		}
+		registerCriterRepeatCheckAddr(MK_FP(segm, peekw(segm, length - 2)));
 		*(word *)arg = segm;
 		return 1;		/* stop enumRes() */
 

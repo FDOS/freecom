@@ -1,3 +1,4 @@
+add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
 fix: CLS: cut debug message
 add: DIR: display LFNs if enabled with /lfn [Tom Ehlert]
 add: DIR: display FAT32 free space on drive [Tom Ehlert]
