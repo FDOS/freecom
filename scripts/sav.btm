@@ -1,0 +1,31 @@
+@echo off
+: setdos /y1 ø echo on
+
+iff %# == 0 then
+	echo Useage: %@name[%0] COM.* description
+else
+	set max=0
+	for /a:d %dir in (c[1-9]*) (set num=%@substr[%dir,1]øif %num GT %max set max=%num)
+	set ldir=..\c%max
+	set dir=c%@eval[%max+1]
+	mkdir %dir
+	iff not isdir %dir then
+		echo Cannot create directory %dir
+	else
+		dmake32 xref || (Echo failed to create XREF ø quit 20)
+		pushd %dir
+		echo %& >info
+		copy /q ..\com.* ..\xref ..\mkxref.log .
+		perl ..\fetchseg.pl com.map %ldir\com.map >chg_segs
+		perl ..\compsyms.pl com.map %ldir\com.map >chg_syms
+		echo Backup %dir created
+		iff %@filesize[chg_segs,b] GT 0 then
+			echo Changes of the length of the segments:
+			type chg_segs
+		endiff
+		iff %@lines[chg_syms] GE 0 then
+			echo The number of symbols changed by %@eval[%@lines[chg_syms]+1]
+		endiff
+		popd
+	endiff
+endiff

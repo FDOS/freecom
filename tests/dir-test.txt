@@ -1,0 +1,25 @@
+Regression tests for dir.c
+--------------------------
+
+If you add tests, please email them to normat@rpi.edu
+
+The following directories must exist: C:\TEMP, D:\TIM, C:\WINDOWS D:\TIM\C
+
+Current working directories are: C:\TEMP, D:\TIM
+
+Current drive is: C
+
+Type the command in the "From" column and make sure the files listed are what
+are shown in the other columns.
+
+From                                    Drive   Dir             File
+----                                    -----   ---             ----
+DIR                                     C       \TEMP           *.*
+DIR \                                   C       \               *.*
+DIR \windows                            C       \windows        *.*
+DIR d:                                  D       \tim            *.*
+DIR d:\                                 D       \               *.*
+DIR d:.                                 D       \tim            *.*
+DIR file                                C       \TEMP           file.*
+DIR .ext                                C       \TEMP           *.ext
+DIR D:c                                 D       \tim\c          *.*

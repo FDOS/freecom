@@ -1,0 +1,184 @@
+Notes from contributors....
+
+Notes from Hans B Pufal <hansp@digiweb.com>:
+
+Here is my package of changes to COMMAND, my coding was based on version
+74B, but I downloaded version 74D and modified my files accordingly.
+
+I use BC 4.5 and had some problems with the makefile, it was generating
+a .COM file of 102Kb!. I have included my modified makefile for your
+reference.
+
+For the files I have modified, I have reformatted them to my style (sorry).
+Take a look and see if you can live with it. I find that procedure headers
+are easier to find and that putting the history in reverse order helps
+quickly find the latest changes.
+
+
+
+   File   Description
+
+   batch.c  A new version, implements CALL, ECHO, GOT, IF, PAUSE, SHIFT
+    and BEEP. There is a stub for FOR but that's all.
+
+   cmdtable.c New file to keep the internal command table. I plan on
+    getting rid of the table real soon now and replacing it
+    with a dynamic mechanism.
+
+   command.c  A new (improved ;) version. Conforms closely to MS-DOS
+    specs. Cleaned up (and fixed) the redirection handler.
+
+   command.h  Your version D with changes. Look for the HBP tag.
+
+   makefile My version of the makefile, for BC 4.5. Sorry don't use
+    the IDE so could not make a .prj file.
+
+   notes.txt  This file...
+
+   redir.c  Modified file, now supports append redirects.
+
+   where.c  Modified, made it a little safer and quicker...
+
+
+The test subdirectory has some batch file tests. I run T.BAT which uses
+runs the test and sends output to a file. The tests are run twice once
+for a COMMAND.COM on the patch (presumably ours) and once with
+C:\COMMAND.COM, presumed to be the MSDOS version. Compare the outputs in
+MSDOS.OUT and FDOS.OUT to look for any problems.
+
+That's about it, ask if you have any questions.
+
+Regards,
+
+Hans <mailto:hansp@digiweb.com>
+
+-----------------------------------------------------------------------------
+
+10-Aug-1998 0.75b Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+
++ Corrected ^Break handling in batch.c
+  Try something like this:
+  ===== File batch1.bat
+  @echo off
+  echo Hi Batch1.bat
+  echo Hi Batch1.bat
+  ===== File batch2.bat
+  @echo off
+  :loop
+  call batch1.bat
+  goto loop
+  =====
+  The press ^Break or ^C. Most of the time you are asked to
+  terminate BATCH1.BAT (Y/N/A), if you press 'Y', you only terminate
+  BATCH1, but BATCH2 continue. But if you press 'A' (or ^C),
+  even BATCH2 is terminated.
+
++ added modifyable batch scripts (following the standard)
+
++ bug: nested comments in old split()
+
++ bug: DEL memory allocation
+
++ added ^Break checks to cmd_type(), cmd_dir()
+
++ added: chkCBreak(0) [aka "cbreak"] is a generic form that autodetects
+  if currently a batchfile is active and displays the batchfile
+  prompt, if so.
+  The batchfile prompt now displays the name of the batchfile.
+
+
++ echo off on command line --> frozen computer
+
++ The initialization code init() is still broken (included in my last
+  patch).
+
++ In init() the errorlevel of the processed command is returned.
+  This is a nice feature, however, MS COMMAND returns '0' to
+  indicate a successful run of COMMAND itself. It's non-standard,
+  offer an option.
+
++ fixed DEL char **arg allocation --> allocating a dynamic memory area
+  for each arg[] element, however, split() simply overwrites them and
+  they are no dynamic pointers for their own.
+
++ The DEL access()/stat() stuff is still broken (included in my last
+  buglist report)
+
++ The find_which() is still broken as it searches through PATH prior
+  testing all extensions within one directory.
+
++ Someone removed the ^Break catcher. It makes not much sense to incorporate
+  ^Break checks, but running without a ^C catcher. Therefore I have
+  re-added the catcher, this time using signals (the DOS emulation of
+  them, however).
+
+-----------------------------------------------------------------------------
+COPY.TXT
+Rob Lake
+Aug-19-98
+
+Notes:
+o Crashes when returning from cmd_copy.  Works fine on its own
+(see mod_copy.zip).  I can't figure out why myself.  I think that
+there is a memory allocation problem somewhere.  Hopefully someone
+more experienced can track it down.
+
+o I named the module version of copy `cp' to resolve possible abiguity of
+naming it copy.
+
+o I don't remember exactly what time I started writing, so I figured around
+Aug 1.
+
+o Although the program accepts the /Y or /-Y switches, it does not do
+anything with them, yet.
+
+o The default mode for copying is BINARY
+
+o Specify /a before or after the destination file, if one is given,
+will append the destination with a ^Z character.  Place appropriate
+warning here.  Ex. These commands will add the ^Z character:
+        cp "/a cp.com cp.txt"
+        cp "cp.com + /a cp.obj cp.txt"
+        cp "cp.com /a cp.txt"
+        cp "cp.com cp.txt /a"
+
+o You can define the mode for all files in the command line.  Ex.
+        cp "/b cp.com + /a copy.c + /a copy.obj /b cp.txt"
+works (for whatever reason someone would want to do that:-).
+
+o The following commands where tested with the module copy:
+        cp c:\autoexec.bat
+        cp "c:\autoexec.bat test.bat"
+        cp "..\ temp"
+- Given that ..\ has files.  If temp is a directory, will copy all files
+to it.  If temp is a file or does not exist, all the files with be copied
+to .\temp.  NOTE: Appended to temp, not over written each time.
+        cp "cp.com test.com"
+        cp "/a cp.com cp.txt"
+        cp "file1+file2+file3 file4"
+- Will ask to overwrite file4 after file1 has been copied.  This will be
+fixed later.
+        cp "file5+file1+file2+file3"
+- This appends file1, file2 and file3 to file5.  Will ask to overwrite
+file5 when file2 has been copied, if file5 does not exist.  Will be fixed
+later.
+- MS-DOS copy doesn't create file5 if it does not exist.  It
+concatenates all to file1, it should print an error message.  This copy
+creates a file5 if one does not exist.  This can be changed later.
+
+o This command doesn't work yet:
+        cp "*.c+*.h *.txt"
+- If tried, will print "NOT IMPLEMENTED YET" message.  This command may be
+kind of confusing.  Take for example you have a directory with these files:
+file1.c file1.h
+file2.c file2.h
+The command above will copy file1.c and file1.h to file1.txt and file2.c
+and file2.h to file2.txt.  If, say, file1.h does not exist, copy will
+produce the messages:
+FILE1.C
+FILE1.H
+File not found - FILE1.H
+Invalid handle - FILE1.TXT
+        0 file(s) copied
+-----------------------------------------------------------------------------
+

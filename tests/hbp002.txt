@@ -1,0 +1,23 @@
+OK, here is my implementation of the FOR command, files changed :
+
+   BATCH.C
+   BATCH.H
+   FOR.C
+
+
+There is a problem running form BATCH files. Formthe command line
+type in something like:
+
+	for %%a in (a bb ccc) do echo %%a
+  or
+        for %%a in (*.c) do echo %%a
+
+
+Put it in the next release and I'll work on fixing the batch issue.
+
+Hans
+19 Jul 1998
+
+
+
+

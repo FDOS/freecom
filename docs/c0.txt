@@ -1,0 +1,39 @@
+1999/06/17 - exclusion of argc/argv and C-style environment
+
+NOTE: Currently no changes have been made to the C0 code itself,
+it adjusted itself to most of the changes quite well enough.
+
+To save more memory and prevent possible inconsitencies when
+FreeCom starts up as the primary shell, when the environment
+has not been setup correctly, the processing of the command
+line and the handling of the environment is implemented
+manually.
+
+argc/argv are replaced by the scanCmdLine() function.
+The environment is replaced by the env*() functions of the SUPPL
+library, already wrapped into getEnv*() and putEnv*().
+
+Implementation problems with Borland C/C++ v5.0:
+
++ The Borland startup code processes a bunch of INITDATA entries
+that can be set via the #pragma startup directive.
+They are included, if and only if the module they are defined in
+is referenced by the source code or the parts of the C standard
+library directly or indirectly referenced by the sources.
+
++ The command line handler is included, unless the notation
+"main(void)" is used to define main().
+
++ The environment handler consists of two parts:
+#1: Many stuff within the C startup code (C0.ASM) that identifies
+and calculates the dimension of the current environment, e.g.
+how many variables are stored there and how large the environment is.
+#2: An #pargma startup function that sets up the C-style environment
+handling functions, namely, in near data pointer memory models the
+full environment is copied into the address space of the program and
+the global symbol char *_environ[] constructed to hold an array of
+pointers to each individual variable.
+
+The code within C0.ASM can be disabled.
+But to remove the other code, every reference to a C library function
+that uses the environment must be redesigned.

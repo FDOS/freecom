@@ -1,0 +1,38 @@
+Batchfile processing -- 1999/05/06 ska
+
++ Changed the way the command line arguments are parsed, because the
+  original code bugs, if one tries to access non-existent arguments.
+  Now it uses the shared command line parser.
+
++ Changed the contents of "%0".
+  Originally one gets the string as one typed it in, e.g.
+  	C:\> ..\foo\bar
+  resulted into "..\foo\bar"
+  Now the complete filename is returned. This is not completely wrong,
+  and I don't know if it could cause problems.
+
+  The reason to choose this behaviour is that:
+  a) to spare the code to prepend the passed word to the array of
+  	arguments, &
+  b) the full name has to be generated anyway.
+
++ To implement the standard behaviour of "%0"
+  ++ Add a new member to "struct bcontext" in BATCH.H,
+  	--> "char * firstarg;"
+  ++ Add into BATCH.C, batch() the following code before
+  	if(!setBatchParams(...))
+  	-->
+		if((bc->firstarg = strdup(first)) == NULL) {
+			error_out_of_memory();
+			exit_batch();
+			return 1;
+		}
+  ++ Change into BATCH.C, find_arg() the following code
+  	--> if(!n)	return bc->fnam;
+  	into
+  	-->	if(!n)	return bc->firstarg;
+
+  ++ Add into BATCH.C, clearBatchContext() the following code
+  	--> if(b->firstarg)	free(firstarg);
+
+

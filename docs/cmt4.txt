@@ -1,0 +1,70 @@
+How the COPY command works -- 1999/05/10 ska
+
+There are several curiosities about the COPY command:
+
+===
+Example: COPY a? + b? c?
+Files in current directory: a1, a2, a3, ba, bb, bc
+
+MS COMMAND:
++ Matches all files according the first parameter (a?).
++ The other parameters (b? and c?) are matched against the found
+  entry, meaning any wildcard is expanded with the text of the first
+  paramter.
+  E.g. Three files are copied:
+  	COPY a1 + b1 c1
+  	COPY a2 + b2 c2
+  	COPY a3 + b3 c3
+  Regardless if the other parameters would match other or more files,
+  e.g. because b1 does not exist, an error occures.
+
+4dos:
++ Matches all pattern against the file system strictly from left to
+  the right and concats them. The destination is matched against the
+  first parameter.
+  E.g. One file is copied:
+  	COPY a1 + a2 + a3 + ba + bb + bc c1
+  However, the order is unspecified, because DOS does not literally
+  sort the entries as Unix does. (Maybe 4dos does, but I don't know.)
+
+===
+
+Example: COPY a? + b? cc?
+Files in current directory: a1, a2, a3, ba, bb, bc
+
+4dos:
++ As above, but the files 'cc' is created.
+
+MS COMMAND:
++ Matches as above, but:
+	COPY a1 + b1 cc
+	COPY a2 + b2 cc
+	COPY a3 + b3 cc
+  That means if b[1-3] would exist, COPY would overwrite CC each time.
+
+===
+
+Example: COPY /a a + /b b /a c d /b
+
+MS COMMAND and 4dos:
++ The first '/a' and the last '/b' are ignored.
++ The switches are valid for all destination file specs right of the
+  option and one spec left of it.
++ The option right of the destination spec is scanned before all
+  other options are scanned.
+
+
+===
+
++ COPY will detect if it is copying a file to itself, even recursively, e.g.:
+	COPY *.c + *.1 *.1
+  However, COPY uses the TRUENAME DOS API function, which can fail.
++ COPY mimicks the MS COMMAND behaviour to expand wildcards.
++ COPY checks before overwriting the output file, if it already exists
+  with a read-only open call.
++ COPY opens devices (source files only) as ASCII by default, if no switch
+  was specified. Otherwise files are opened in BINARY mode.
+  An ^Z is appended only, if the /A switch was specified.
++ /-A is not the same as /B, but /A disables /B (and visa verce)
++ "COPY a+b a" is the same as: "COPY a+b ." and "COPY a+b", the latter
+  one is a short form of "COPY a+b ."

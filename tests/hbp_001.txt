@@ -1,0 +1,9 @@
+Minor changes to BATCH.C and BATCH.H to preserve the staets of the echo
+flag across batch calls.
+
+Please add HBP_001a.bat and hbp_001b.bat to test directory.
+
+
+19 July 1998
+Hans B Pufal
+

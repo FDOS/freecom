@@ -1,0 +1,33 @@
+
+D:\FREEDOS\COM074BS\SOURCE\PACK\TEST>echo This is a test batch file
+This is a test batch file
+
+D:\FREEDOS\COM074BS\SOURCE\PACK\TEST>echo
+ECHO is on
+Testing with echo off
+
+D:\FREEDOS\COM074BS\SOURCE\PACK\TEST>echo Testing wih echo on
+Testing wih echo on
+
+D:\FREEDOS\COM074BS\SOURCE\PACK\TEST>echo off
+Testing : test2 p1 p2 p3 p4
+Testing : p1 p2 p3 p4
+Testing : p2 p3 p4
+now test the environment substitution
+path is D:\AMI\TOOLS\MASM611\BIN;D:\AMI\TOOLS\BIN;C:\BIN;C:\WINDOWS;C:\WINDOWS\COMMAND;C:\BC45\BIN;C:\BRIEF;
+PATH is D:\AMI\TOOLS\MASM611\BIN;D:\AMI\TOOLS\BIN;C:\BIN;C:\WINDOWS;C:\WINDOWS\COMMAND;C:\BC45\BIN;C:\BRIEF;
+Absent variable is
+Bad format : bad format
+Testing double %comspec%
+Call another batch file...
+Testing : test3.bat t3p1 t3p2 t3p3
+Testing : t3p1 t3p2 t3p3
+Testing : t3p2 t3p3
+Press any key to continue . . .
+
+.
+Returned to TEST2
+.
+Testing : p2 p3 p4
+Testing : p3 p4
+Testing : p4

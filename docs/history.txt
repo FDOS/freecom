@@ -1,0 +1,647 @@
+FreeDOS Command Line Interface Development History
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+29-May-2000      James Tabor <jimtabor@infohwy.com>
+~~~~~~~~~~~~~~~~~~~~~~
+Import FreeCom from John Price CVS at gcfl.net to the new CVS at
+Sourceforge.net.
+
+30-Mar-2000 0.79 John Price <linux-guru@gcfl.net>
+~~~~~~~~~~~~~~~~~~~~~~
+Added fddebug command so you can turn debug output on and off.
+
+30-Mar-2000 0.79 Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+(Merged in code from Revision 0.78ska1 & 0.78ska2)
+add: internal command CTTY: redirects the three standard file descriptors
+	stdin, stdout and stderr to the specified device
+add: FEATURE_CALL_LOGGING & tool PTCHLDRV
+bugfix: Y2K: DIR displays year 2000 as "100"
++ bugfix: if: case-insensitive compare  in "==" format
++ bugfix: if: added support for quoted operands of "==" format
++ add: if: detailed error messages
++ bugfix: if: keyword "EXIST" misspelled
++ bugfix: echo: "ECHO" does not display the ECHO status
++ bugfix: goto: label may be prefixed by one colon
++ bugfix: "skipwd" is commented out --> SUPPL's skipwd() is used which
+	is not 100% compatible, though
+
+20-Sep-1999 0.78 Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+  chg: added v0.77 patches <<what is the print_free() stuff in DIR.C?>>
+  chg: centralized DEBUG stuff (see debug.*)
+  add: SET: Issues no-such-variable if a variable could not be removed
+  bugfix: COPY *.C A:
+  chg: automatic load of messages and keep them in memory
+  add: session management
+  add: comments
+  add: command line scanner acts over both internal command lines and
+  	arguments of COMMAND.COM itself ==> added longname options
+  chg: replaced access() by dfnstat()
+  chg: replaced stat() by dfnstat()
+  chg: split() may recieve NULL as line --> empty line
+  add: every internal command that can display some information, can
+  	be called with parameter == NULL and this info is displayed.
+  	cmd_echo(NULL) will display ECHO status.
+  add: ECHO. hack
+  chg: every internal command detects and scans the options in the
+  	same way; see CMT3.TXT
+  add: DEL accepts multiple arguments
+  bugfix: "FOR %a IN (dir\*.*) DO" expands to "dir\..." instead of
+  	just "..."
+  bugfix: %9 wrong, if 9 > number of paramters
+  chg: %0 returns fullname; see CMT2.TXT
+  chg: rewritten COPY. Now behaves as described in CMT4.TXT
+
+29-Apr-1999 0.77 (John P Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o dir.c: changed dir so it always shows the bytes free.
+  Changed so that "dir command" with no extension will do as
+  "dir command.*" (as it should).  Also made the display of the directory
+  not include the whole filespec, but only the directory
+o copy.c: Now works if dest is just a drive letter.
+  (i.e "copy file a:")
+
+25-Apr-1999 0.77 Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: alias.c: aliasexpand(): The main loop is multiply executed, if
+	at least one alias was expanded (controlled by variable 'd').
+	However, because 'ptr' is never resetted, the second loop
+	always immediately fails, because 'ptr' is still NULL.
+bugfix: batch.c: batch_params(): Copying a quoted argument: If the string
+	is not terminated, the do-while loop stops, then copies the '\0'
+	byte, then increments s2 --> s2 now behind the string.
+bugfix: batch.c: batch(): fullname is duplicated into heap, but
+	not freed if this function fails
+bugfix: batch.c: batch(): no error checking of batch_params()
+add: cmdinput.c: readcommand(): ^C: as ESC, also sets ECHO to ON
+bugfix: copy.c: cmd_copy(): If malloc of sources fails, 'p' is not freed
+bugfix: dir.c: cmd_dir(): dircmd can be NULL
+bugfix: filecomp.c: complete_filename(): makelower undefined if count < 0
+bugfix: for.c: cmd_for(): missing out-of-memory check with batch_params()
+bugfix: goto.c: cmd_goto(): leave the current FOR contexts
+add: command.h/misc.c: match(), matchtok(), match_() test if a word
+	begins a line, if so, skip over it and following spaces
+add: misc.c: comFile(): returns the absolute filename of COMMAND.COM
+add: misc.c: comPathFile(): returns the name of a file located in the
+	directory as COMMAND.COM
+chg: init.c: ComDir: replaced by ComPath, comFile() & comPathFile()
+fix: init.c: initialize(): combination of "/p" and "/c"|"/k" did not work
+bugfix: command.c: process_input(): FOR hack: On command line one can
+	enter "FOR %a IN () DO ...". The current implementation expanded
+	the %A's.
+chg: alias.c: ltrim() & rtrim() moved to MISC.C, all "skip whitespace"
+	code pieces use these functions now
+add: misc.c: trim(): combination of rtrim() & ltrim()
+add: assert()'s to every function
+
+24-Mar-1999 0.77 (John P Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o Added support for swapable exec.  There is a compile-time directive
+  so you can leave it out, or use it.  IT DOES NOT WORK UNDER
+  FREEDOS.  Probably a kernel problem, but that has not been
+  determined yet.
+o changed the way we run autoexec.bat or a batch file on the command
+  line.  This seemed to clear up some bugs with running autoexec.bat.
+o Changed set command so you can use a space between the variable and
+  the value.  Prints Syntax error if you don't have a space or a '='.
+
+24-Mar-1999 0.76b Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o date.c: bugfix: detection for invalid date strings.
+   Now the whole string must match: ^\s*\d+(.(\d+(.\d*)?)?)?\s*$
+   The numbers can be delimited by any character from the 7-bit ASCII set,
+   which is printable, but not alphanumerical.
+   One need not specify all three parts (in which case the delimiter
+   may be omitted, too). If one specify;
+     1 number --> only the day changes
+     2 numbers --> month/day; year remains unchanged
+     3 numbers --> month/day/year
+o time.c: bugfix: Detection of invalid time strings
+   One can specify:
+     ^\s*\d+.\d+(.(\d+(.\d*)?)?)?\s*([aApP]([mM]|\.[mM]\.)?\s*$
+   If one specifies:
+     1 number --> error
+     2 numbers --> hour:minute, seconds & hundreds default to zero
+     3 numbers --> hour:minute:seconds, hundreds defaults to zero
+     4 numbers --> hour:minute:seconds.hundreds
+   The numbers may be delimited by any character from the 7-bit ASCII set,
+   which is printable, but not alphanumerical.
+o err_hand.c: bugfix: Print garbage on screen, if no disk in floppy
+    drive An "interrupt" function saves & restores all registers and
+    also sets up DS correctly.
+o created parsenum.c
+
+11-Feb-1999 (John P Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o command.c: changed the spawnl call back to using the exec function.
+  Now that we are handling the environment correctly, this seems to
+  work better.  It passes new environment variables (even ones that
+  were created by this copy of command.com) to the child process.
+  This was suggested by Steffen Kaiser.
+o using keypressed() that I wrote instead of Turbo C's kbhit()
+  function because for some reason kbhit() hangs under the FreeDOS
+  kernel.
+o prints seconds as it waits for a keypress from user (during initial
+  boot)
+o Fixed path to autoexec.bat.
+o Changed openStrFile() function to try to read the strings from the
+  end of command first, and then to try to read strings.dat in the
+  same directory as command.com.  This helps when running from the
+  debugger.
+
+01-Feb-1999 0.76 Rob Linwood <rcl@udel.edu>
+~~~~~~~~~~~~~~~~~~~~~~
+o alias.c: added code to allow alias commands to contain extra
+  whitespace
+o added "?" command that shows the available commands.
+
+
+31-Jan-1999 0.76 (John P. Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o dir.c: Changed dir_print_header to use function INT21,AH=69 instead
+  of the function it was using.  I'm not sure if this will fix
+  anything or not.  Also fixed bug with changing and restoring the
+  current drive.
+o ver.c: changed /r to identify the FreeDOS kernel.  If you are using
+  kernel build 2000 or greater, it also shows the kernel version!
+o init.c: when command.com is started, it shows how much memory
+  command.com is not hogging!  Hopefully this will increase soon!
+
+
+28-Jan-1999 0.75i (John P. Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o alias.c: Changed noalias character from a dot to an asterisk (*).
+
+
+25-Jan-1999 0.75i Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o This patch includes the CP/M style device name support:
+o Changed any open() and fopen() calls, when definitely sure that
+  they are called for disk files only, into devopen() and fdevopen().
+o Support for COPY is a hack. Rob or John should double check it, or
+  possibly rewrite the whole file. (Thanx Steffen! - John :-)
+  Changes in COPY.C:
+  bugfix: setting time in ASCII mode before writing final ^Z
+  bugfix: copy(): if bsiz < 128: the opened files are not closed
+  chg: all error "return" statements perform the actions in the
+       same sequence to allow the code optimizer to re-use code
+  add: support for CP/M style device names (openf.h)
+  chg/bugfix: overwrite(): use vcgetcstr(); could overflow the buffer
+  chg: there were two individual flags ASCII and BINARY to indicate
+       which option was specified. Internally only the ASCII flag was
+       used, if it was clear, the files were copied in binary mode.
+       To support devices the two flags are passed unchanged to the
+       copy() function and, if both are clear (== none specified on
+       command line), it defaults to ASCII for devices, but will not
+       append the ^Z character.
+       Due to this, the destination file must be opened in ASCII
+       mode, too; otherwise the newline character had to be handled
+       manually.
+o Two new files: openf.c & openf.h
+
+
+25-Jan-1999 0.75i Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o This patch addresses the two bugs reported by Eric Kohl
+  <ekohl@abo.rhein-zeitung.de>:
+o alias.c: aliasdel(): accesses dynamic memory after it was free()'ed.
+o split()'s code to skip leading whitespaces crashes at end of string.
+
+22-Jan-1999 0.75i Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o bugfix: on suggestion of Charles Dye (raster@highfiber.com)
+  "/ccommand" "/c" must work without a space between [MS COMMAND
+  compatibly] also mimics: "/c/? dir" --> bad command or filename
+
+o add: DR DOS compatibly: "/c:" and "/c=" even supports wierd
+    looking: "/c:dir/?"
+
+o add: DR DOS compatibly: "/p:AUTOEXEC_replacement"
+
+o sub: calling _fullpath() for ComDir; at this point the path must be
+  fully-qualtifed by convention of the environ
+
+16-Dec-1998 0.75h (John P. Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o alias.c: Changed so that a dot before a command will disable alias
+  expansion.  I was "noalias" but I prefer the shorter solution.
+
+16-Dec-1998 0.75h Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o bugfix in init() for the /C branch (collecting arguments)
+o tracemode interaction in parsecommandline()
+o vcgetcstr() to fetch a visible user input, incl. validation check
+o command line parsing now exactly as the help screen (strings.txt)
+  describes
+o show help screen using display_string()
+o set exitflag (and exit if allowed) if help screen was issued or a
+  bad option was found
+o load messages into conventional far memory
+o change in message.c that string_index is not allocated dynamically
+o The "load messages into memory" feature allocates the block the
+  messages are read into using the DOS API. It is not guarranteed
+  that this block is freed by DOS upon termination of the program,
+  therefore the atexit() function (installed by init()) explicitly
+  frees the block, because it seems to be the best (and most secure)
+  place to do so.
+o is designed to work for a file STRINGS.DAT *less* than 64KB only!
+o bugfix: preserve ECHO state of interactive command line (see
+  TEST1.BAT)
+o bugfix with infinite loop in aliasexpand() when the useFlag warps
+
+04-Dec-1998 0.75g Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o changed dosalloc.c in the suppl library to fix the environment
+  problem.
+
+03-Dec-1998 0.75f (John P. Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o alias.c: changed to convert to lower case instead of upper
+o cls.c: cls now sets the text colors to lightgray on black before
+  clearing the screen.
+o command.c: Added code to remove white space from end of command in
+  docommand function.  Also added nextcmd char pointer so we don't
+  loose the other commands in the line.  This fixes the bug
+  with "type filename.c | more"
+o dir.c: Rewrote DIR command.  fixed problem with "DIR .COM" and
+  other bugs. Recursive switch does not work now, but it will be
+  added soon.
+o init.c: finished batch file trace mode.  Fixed bug with /C command
+  line switch running batch files.
+  Added about 2 second delay where user can press F8 to run
+  autoexec.bat in tracemode, or press F5 to bypass autoexec.bat
+  completely.
+o messages.c: Reduced the ammount of memory allocated by not reading
+  in entire index, but only the index element needed.
+
+27-Oct-1998 0.75e Rob Green <robg@sundial.net>
+~~~~~~~~~~~~~~~~~~~~~~
+o command.c: changed line in is_delim function to include backslash
+  and period.
+
+27-Oct-1998 0.75e Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o bugfix: cmd_del(): Prompting the user for "DEL ab*.*"
+o chg: display_string(): Invalid FreeDOS ID is not displayed on screen
+o chg: get_redirection(): join '|'-loop with the other loop
+o chg: get_redirection(): allocate filenames (instead of
+  parsecommand())
+o bugfix: get_redirection(): Missing closing quote
+o bugfix: parsecommandline(): replace tmpnam() by tmpfn() to ensure
+  that the temporary file is placed into the temporary directory
+  instead of the current one
+o chg: alias.c: to reflect changes in tempfile.c
+o chg: rmtmpfile(): to close file pointer
+o chg: tempfile(): to use tmpfn()
+o add: tmpfn(): to create a temporary filename
+
+13-Sep-1998 0.75d (Hans B Pufal <hansp@digiweb.com>)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+o added an icon for the program.  fdcom.ico.
+
+13-Sep-1998 0.75d (John P. Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o added VOL command.
+o fixed a couple of bugs in the COPY command.
+o move nearly all messages to external file that is appended to end
+  of command.com.  command.com is now an EXE type program, but has
+  only been renamed to .COM.  This allowed the file to be longger
+  than 64K.  Also changed model to small instead of tiny.
+o changed VER to print system info when /R is used.  /D shows
+  redistribution info now.
+
+13-Sep-1998 0.75d Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o Corrected/rewrote ^Break handling to work on external commands.
+
+13-Sep-1998 0.75d (Rob Lake <rlake@cs.mun.ca>)
+~~~~~~~~~~~~~~~~~~~~~~
+o added COPY command.  Not all functionality is implemented yet, but
+  it's a great start!
+
+10-Aug-1998 0.75b Steffen Kaiser <skaise2a@smail.inf.fh-rhein-sieg.de>
+~~~~~~~~~~~~~~~~~~~~~~
+o Corrected ^Break handling in batch.c.  If one batch file (BATCH1)
+  calls another (BATCH2), pressing ^Break or ^C most of the time asks
+  to terminate BATCH1.BAT (Y/N/A). If you press 'Y', you should only
+  terminate BATCH1, but BATCH2 should continue.  But if you press 'A'
+  (or ^C), all batch files should terminate.
+o added modifyable batch scripts (following the standard).
+o bug: nested comments in old split()
+o bug: DEL memory allocation
+o added ^Break checks to cmd_type(), cmd_dir()
+o added: chkCBreak(0) [aka "cbreak"] is a generic form that
+  autodetects if currently a batchfile is active and displays the
+  batchfile prompt, if so.  The batchfile prompt now displays the
+  name of the batchfile.
+
+09-Aug-1998 0.75a (Rob Lake <rlake@cs.mun.ca>)
+~~~~~~~~~~~~~~~~~~~~~~
+o dir.c: fixed bug that caused blank lines to be printed
+o dir.c: renamed _Read_Dir to Read_Dir
+o del.c: changed check for ^C
+o del.c: alloced mem for char **arg
+o misc.c: changed split function
+o misc.c: added freep function
+o truename.c: _truename now sets errno
+o created build.bat
+
+07-Aug-1998 0.75 (John P Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o Fixed carrage return output to better match MSDOS with echo on or off.
+
+04-Aug-1998 (Hans B Pufal) <hansp@digiweb.com>)
+~~~~~~~~~~~~~~~~~~~~~~
+o call.c: added lines to initialize for pointers.  This fixed the
+  lock-up that happened sometimes when calling a batch file from
+  another batch file.
+
+02-Aug-1998 (Hans B Pufal) <hansp@digiweb.com>)
+~~~~~~~~~~~~~~~~~~~~~~
+o batch.c: Fixed bug in ECHO flag restoration at exit from batch file
+o command.c: Fixed return value when called with /C option
+o Terminate label on first space character, use only first 8 chars of
+  label string
+
+30-Jul-1998 (John P Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o Fixed bug where if you typed something, then hit HOME, then tried to
+  type something else in insert mode, it locked up.
+o Changed default insert mode to on.  There should be a way to change
+  this.  Maybe options to doskey command.
+o Added VERIFY command
+
+30-Jul-1998 (John P Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o Changed filename completion so that a second TAB displays a list of
+  matching filenames!
+o made filename be lower case if last character typed is lower case.
+o Moved filename completion code to filecomp.c.
+o Change ver command to display email address to report bugs, and the
+  web page address for updates.
+o fixed so that it find_which returns NULL if filename is not
+  executable (does not have .bat, .com, or .exe extension).  Before
+  command would to execute any file with any extension. (opps!)
+
+29 Jul 1998 (Rob Lake rlake@cs.mun.ca)
+~~~~~~~~~~~~~~~~~~~~~~
+o changed date.c and time.c, and wrote datefunc.c and timefunc.c to
+  impliment _dos_getdate, _dos_setdate, _dos_gettime and _dos_settime.
+  This is the first of many steps to make the shell compatible under
+  Pacific C.
+
+28 Jul 1998 (John P Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o Added CLS command.
+o Put ifdef's around all commands and added include file config.h
+  Now you can define exact what commands you want to include in
+  command.com.
+o Also added ifdefs for optional features: aliases, command history
+  and filename completion.
+o Added display of available internal commands and options at startup.
+
+
+20 Jul 1998 (John P Price <linux-guru@gcfl.net>)
+~~~~~~~~~~~~~~~~~~~~~~
+o Fixed bug in DATE.C.
+o Fixed bug in LH.ASM.
+o Separated commands into individual files.
+
+
+19 Jul 1998 (Hans B Pufal) <hansp@digiweb.com>)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+o Preserve state of echo flag across batch calls.
+o Implementation of FOR command
+
+
+16 Jul 1998 (Rob Lake rlake@cs.mun.ca)
+~~~~~~~~~~~~~~~~~~~~~~
+Added TRUENAME command.
+
+
+16 Jul 1998 (Hans B Pufal <hansp@digiweb.com>)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+batch.c
+  A new version, implements CALL, ECHO, GOT, IF, PAUSE, SHIFT and
+  BEEP. There is a stub for FOR but that's all.
+
+cmdtable.c
+  New file to keep the internal command table. I plan on getting rid
+  of the table real soon now and replacing it with a dynamic
+  mechanism.
+
+command.c
+  A new (improved ;) version. Conforms closely to MS-DOS specs.
+  Cleaned up (and fixed) the redirection handler.
+
+command.h
+  Version D with changes. Look for the HBP tag.
+
+redir.c
+  Modified file, now supports append redirects.
+
+
+07/13/98 version 0.74d (Rob Lake rlake@cs.mun.ca)
+~~~~~~~~~~~~~~~~~~~~~~
+INTERNAL.C
+o removed most of the commands and placed them in there own file
+  -- del, ren, set and ver
+o created DEL.C, REN.C SET.C and VER.C
+o fixed bug that caused del not to delete files with no attributes
+o the critical error handler count number of times called, autofails
+  at 5 calls
+
+07/12/98 version 0.74c (Rob Lake rlake@cs.mun.ca)
+~~~~~~~~~~~~~~~~~~~~~~
+Various Files:
+o removed redundant use of error message defines and moved
+  error printing calls to ERROR.C to reduced program size.
+
+o created MISC.C
+o created ERR_HAND.C/H
+o created ERROR.C
+
+07/08/1998 version 0.74b (John P. Price (linux-guru@gcfl.net))
+~~~~~~~~~~~~~~~~~~~~~~~~
+COMMAND.C
+o fixed call to spawnl so that it would pass command line arguments
+  correctly.
+
+07/08/1998 version 0.74 (John P. Price (linux-guru@gcfl.net))
+~~~~~~~~~~~~~~~~~~~~~~~~
+COMMAND.C/COMMAND.H:
+o Now sets COMSPEC environment variable
+o misc clean up and optimization
+o added date, time and type commands
+o changed to using spawnl instead of exec.  exec does not copy the
+  environment to the child process!
+DIR.C
+o removed extra returns; closer to MSDOS
+o fixed wide display so that an extra return is not displayed when
+  there is five filenames in the last line.
+ENVIRON.C
+o commented out show_environment function.  Not used anymore.
+INTERAL.C
+o removed call to show_environment in set command.
+o moved test for syntax before allocating memory in set command.
+o misc clean up and optimization.
+
+o created DATE.C
+o created TIME.C
+o created TYPE.C
+
+07/01/98 version 0.73 (Rob Lake)
+~~~~~~~~~~~~~~~~~~~~~~
+o New DIR commands supported: /S, /B, /L, /A and /W.
+  (/R changed to /S).  Also /? added.
+o Supports DIRCMD in environment.
+o Supports turning off commands with hyphen (ex. /-S
+  turns off recursive listing)
+o Changed error messages for DIR and DEL to more MS-DOS'ish
+o Moved error messages from DIR.C and DEL.C to COMMAND.H
+  (more may go there soon)
+o Fixed bug that caused dir *.ext/X not to work (no spaces
+  between filespec and slash)
+o Added wildcard support for DEL command
+o Added prompt and help switch for DEL command, /P and /?
+  respectively.
+o Added support for /C when envoking the shell
+o Added /P support when Kernel loads shell.  This means
+  the shell now is permanent and runs the autoexec.bat
+  (/E is not implemented)
+o Added my name (Rob Lake) to the developer listing
+o Changed version routine to print out copyright notice
+  with no args, and with appropriate switches, warranty
+  and redistribution notices and developer listing
+
+07/13/97 version 0.72b
+~~~~~~~~~~~~~~~~~~~~~~
+Disabled a feature that caused a crash on some machines.
+
+o  Replaced setcursor calls in cmdinput.c with _setcursortype
+o  Added dir.c to the distribution (was left out in 0.72)
+
+07/12/97 version 0.72
+~~~~~~~~~~~~~~~~~~~~~
+More bug fixes and code cleanup
+
+o  Rewrote cmdinput.c to be more efficient (Marc Desrochers)
+o  Added insert/overstrike modes (Marc Desrochers)
+o  Replaced findxy() with pointers into BIOS (maxx, maxy) (Marc Desrochers)
+o  Fixed bug that disallowed listing of root directories
+o  Fixed bug that didn't search the first path (again!)
+
+06/14/97 version 0.71
+~~~~~~~~~~~~~~~~~~~~~
+Lots of bug fixes, plus some additional features.
+
+o  New DIR command.  Now more like MS-DOS's DIR.  /p supported, /s coming soon
+o  bug fix in internal.c - parse_firstarg
+o  Rewrote parser in batch.c (Steffan Kaiser)
+o  Ctrl-Break checking in various places (Steffan Kaiser)
+o  Error level setting/checking (%? in batch files) (Steffan Kaiser)
+o  bug fix in cmdinput.c ("%i" on command-line caused weird behavior)
+o  bug fix in where.c (first item in path wasn't searched)
+
+08/27/96 version 0.70
+~~~~~~~~~~~~~~~~~~~~~
+Finally added Oliver Mueller's ALIAS command!  Also numerous bug fixes.
+
+o  Added ALIAS command
+o  Removed support for - as a switch in LOADHIGH.C
+o  Bugfixes in BATCH.C.  %0 was returning garbage
+o  Removed lots of unused variables, reducing # of warnings when compiling
+o  Other miscellaneous code clean-ups
+o  Changed WHERE.C to use a little less memory
+
+07/26/96 version 0.61
+~~~~~~~~~~~~~~~~~~~~~
+Bugfixes
+
+o  Added hook to the PATH command
+o  Fixed CD.. bug
+
+07/26/96 version 0.60
+~~~~~~~~~~~~~~~~~~~~~
+Lots of internal changes here...  Not much added to the interface.
+
+o  Changed internals to use first,rest parameters instead of arrays of params
+o  Fixed some bugs
+o  Some other things I don't remember :)
+
+01/17/96 version 0.50
+~~~~~~~~~~~~~~~~~~~~~
+Version 0.40 was never released because I was home on Christmas vacation,
+and I couldn't upload it.  By the time I got back to school, I had the
+LOADHIGH patch from Svante Frey, so I decided to jump up to 0.50 without any
+release of 0.40...       - Tim Norman
+
+o  LOADHIGH/LOADFIX/LH support added!!!!  Many thanks go to Svante Frey!
+o  bug fixed in command parsing that didn't handle / switches correctly...
+o  removed debugging output from history.c
+
+01/06/96 version 0.40  (never released)
+~~~~~~~~~~~~~~~~~~~~~
+o  added redirection and piping support!!!  (see redir.c and command.c)
+o  fixed a stupid pointer problem in where.c that was causing LOTS of
+   problems in the strangest places...
+o  added day of the week support to prompt.c (oops, that was already supposed
+   to be there! :)
+o  fixed and reorganized the EXEC code!!!  Thanks to Svante Frey!
+o  reorganized command.c and internal.c to handle parsing internal commands
+   more efficiently and consistently.
+o  changed the behavior of MD, CD, RD to work without spaces (e.g. CD\DOS)
+o  small changes here and there to make it work with redirection/piping
+   (e.g. DIR only pauses if you're not doing redirection)
+
+12/14/95 version 0.31
+~~~~~~~~~~~~~~~~~~~~~
+o  modified cmdinput.c to work with non-standard screen sizes (see 28.com)
+o  fixed a bug in history.c that made it not work when you hit the up arrow
+   on the first line
+o  fixed DIR to work a little more like MS-DOS's DIR (see internal.c)
+o  fixed some code in where.c to make things a bit more efficient and nicer
+
+12/10/95 version 0.30
+~~~~~~~~~~~~~~~~~~~~~
+o  used Borland's spawnve to fix exec problem
+o  fixed CD again so you don't need a space after it
+o  couple of spelling fixes
+
+08/06/95 prerelease of version 0.30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+o  reorganized code into separate source modules.
+o  added batch processing support (thanks to Evan Jeffrey).
+o  added exec code (thanks to Steffan Kaiser).
+o  removed environment handling (thanks again to Steffan Kaiser)
+
+        [ 08/08/95 -- Matt Rains ]
+o  formatted this development log.
+o  formatted all existing source modules so that they comply with recommended
+        programming practice.
+o  added MD command.
+o  added RD command.
+o  added VER command.
+o  replaced CD command.
+o  modified DIR command.
+o  DIR now called regardless of other DIR.??? files. this is done because of
+        exec() problems.
+
+01/15/95 version 0.20
+~~~~~~~~~~~~~~~~~~~~~
+o  formatted all existing source modules.
+o  added prompt support.
+o  added drive selection.
+o  added dir command.
+o  started this development log.
+
+01/01/95 version 0.10
+~~~~~~~~~~~~~~~~~~~~~
+o  removed some scaffolding.
+o  modified CD.
+o  added tab file completion.
+o  added command line history.
+
+11/11/94 version 0.01
+~~~~~~~~~~~~~~~~~~~~~
+o  initial release.

@@ -1,0 +1,381 @@
+option parser -- 1999/07/09 ska
+
+All internal commands and the arguments of COMMAND.COM itself are
+scanned and parsed by the same set of functions. This shall serve
+as a way that everything within FreeCom behaves the same, the user
+need not use a different syntax for different _internal_ commands.
+
+This document describes how the parser works and which functions
+are available.
+
+=== How a command line is interpreted (parsed)
+
+Most options are parsed as so-called global options. That means that
+it is not significat at which place of the command line they appear,
+e.g.: "DIR /w *.c *.txt" is equal to: "DIR *.c /w *.txt" and
+	"DIR *.c *.txt /w".
+
+Options, that do not follow this rule, are specially remarked in the
+description of the particular internal command.
+
+Two well-know exception shall be included here:
+i) /A and /B of the COPY command are local options, e.g.:
+		COPY file1/a + file2 + file3/b fileOUT
+	file1 and file2 are effected by the /A option, whereas
+	file3 and fileOUT are effected by /B
+ii) the /C option of FreeCom itself don't follow any common rule for
+	option, because anything right of it (except one optional argument
+	sign) is interpreted as an argument for this option.
+
+
+=== How an option is parsed
+
+The way how a command line is broken into individual components is
+already described in file CMT3.TXT. There the way is described
+how options are separated from themselves and arguments.
+
+This section describes how each individual option is parsed.
+
+The syntax of an option looks like this:
+
+option ::= '/' boolean_sign option_name boolean_sign argument .
+
+boolean_sign ::= | '+' | '-' .
+
+option_name ::= single_character_option
+	| longname_option .
+
+argument ::= | argument_sign string .
+
+argument_sign ::= ':' | '=' .
+
+single_character_option ::= character .
+
+longname_options  ::= character character
+	| character longname_option .
+
+character ::= <<any character except unquoted whitespaces, 
+	boolean_signs or argument_signs, the case is not
+	significant>> .
+
+string ::= <<any combination of characters>> .
+
+Please note that:
++ empty options are ignored.
++ both argument and boolean sign are optional, the option itself is not.
++ the option name itself must not contain the special characters used
+	to identify boolean signs or the argument sign.
++ if the option name has a length of more than 1 character, it is
+	considered to be a longname option, otherwise it is a single
+	character option.
++ single character options cannot be combined as in the Unix-style.
++ arguments must be separated from the option name by an argument
+	sign.
++ the boolean sign may lead or trail the option name.
++ syntactically both boolean sign(s) and an argument are accepted.
++ anything right of the argument sign is not interpreted by the option
+	parser at all.
+
+After the syntactical check of the option a semantical check is
+performed. Unlike the syntactical one the semantical check is initiated
+by the command the options are scanned for.
+
+Currently, there are three semantical context an option can be
+interepreted as:
+1) string,
+2) integer, and
+3) boolean.
+
+Type 1: string, data type: (char *)
+- The option requires that an argument is present.
+- The argument may be empty, which is represented by
+		char[] = { '\0' }
+	rather than a NULL pointer. This can be used to detect if the
+	option was specified at all.
+- If the option is specified more than once, the rightmost argument
+	superceeds all previous ones.
+- The argument string is not changed in any way, except the quotes are
+	already removed by the command line scanner, which is executed
+	_before_ the option parser.
+
+Type 2: integer, data type: (int)
+- The option requires that an argument is present.
+- The argument must not be empty.
+- The argument must be an unsigned 16-bit value. (no overflow test)
+- The rightmost argument superceeds any previous value.
+
+Type 3: boolean, data type: (int)
+- The option must not be used with an argument.
+- If both a leading and a trailing boolean sign are given, the
+	trailing one superceeds the leading one.
+- If the '+' (plus) sign is specified, the option value is set
+	to "1" (one).
+- If the '-' (minus) sign is specified, the option value is set
+	to "0" (zero).
+- If no boolean sign is specified, the option value is toggled
+	between "1" (one) and "0" (zero). That means "1" is transformed
+	into "0" and "0" into "1".
+
+Examples: <<Note each line specifies one option, already preprocessed
+	by the option scanner, meaning quotes are removed and the
+	options were already separated.>>
+
+		/+l-=47
+If scanned as string --> "47"
+If scanned as integer --> 47
+If scanned as boolean --> error, because argument is present
+
+		/+l-=
+If scanned as string --> ""
+If scanned as integer --> error, because empty argument is present
+If scanned as boolean --> error, because argument is present
+
+		/+l-
+If scanned as string --> error, because no argument is present
+If scanned as integer --> error, because no argument is present
+If scanned as boolean --> 0, trailing '-' superceeds leading '+'
+
+		/l
+If scanned as boolean --> !original_value_of_option_L
+
+		/l/l
+If scanned as boolean --> !!original_value_of_option_L <-> usually no
+					change at all, if it was "0" or "1" before.
+
+
+		/l/+l
+If scanned as boolean --> "1", because /+l assigns regardless of the
+					previous value
+
+		/msg
+longname option "msg"; toggles if scanned as boolean
+
+		/msg-
+longname option "msg"; zeros if scanned as boolean
+
+
+
+
+== The interface to the implemented functions
+
+The option parser is implemented as a callback service: The user (in
+this case the function that shall perform the internal commands) invoke
+one of the parser functions (see below) and pass along a function (which
+is called back from the invoked ones) that assigns a semantic to each
+individual option already passed the syntactical check.
+
+The interface of the set of functions is separated into the files
+CMDLINE.C and CMDLINE.H, it mainly consists of functions to invoke
+the option parser and functions invoked by the callback function to
+actually parse the option under a specific semtantic.
+
+a) Callback functions MUST be defined using the macto optScanFct(), e.g.:
+
+optScanFct(opt_copy)
+{
+	/* ... */
+}
+
+Defines a callback function with the name "opt_copy". Note that these
+functions are static.
+
+Within the body of a callback function two variables are officially
+available:
+- "ch" is the name of the single character option; if the current
+	option is a longname option, ch is 0 (zero).
+- "arg" is a (void*) pointer passed along with the callback function
+	to one of the parser functions.
+Three other variables are passed, though, it is possible that they
+change in the future:
+- "optstr" is the longname option. It is also valid for
+	single character options.
+- "strarg" is a pointer to the associated argument, or NULL if none
+	is present. The argument is no longer available, once the
+	callback function returns.
+- "bool" is the active boolean sign: -1 <-> '-', +1 <-> '+', 0 <-> none
+
+Callback functions return a value identifying the failure of the
+semantic check: E_None specifies success, everything else some sort
+of failure. See below for a detailed description.
+
+If possible, use the following semantic functions to make use of this
+information. These function must not be used outside of a callback
+function!
+
+b1) void optErr(void ) prints "Invalid option - %s"
+
+b2) int optLong(char *optname) checks if the current option is a longname
+	option of the given name. 'optname' must be uppercased.
+b3) int optScanString(char *lvalue)
+	int optScanInteger(int lvalue)
+	int optScanBool(int lvalue)
+
+	Checks and interpreters (on success) the current option into the
+	given variable. Note: Actually these functions are macros that
+	take an address of the passed values, so they must be valid
+	l-values!
+
+	This three functions parses the option as described above and
+	issue an error message on failure.
+
+
+c) The callback function itself is called by one of these parsers:
+
+c1) int leadOptions(char **line, optScanner fct, void * const arg);
+
+Scan and parse all options at the beginning of the line "*line",
+but do not skip any argument.
+
+'line' is a pointer to the (char*) object with the beginning of the
+line to be scanned and parsed. On exit, this value is updated with the
+first position that could not be parsed as an option.
+
+'fct' is the pointer to the callback function. If NULL, any option
+generates an error.
+
+'arg' is passed unchanged to the callback function.
+
+The function returns the return value of the last call to the
+callback function.
+This functions exits if the callback function returns with an exit
+code different of E_None or E_Ignore.
+
+c2) char **scanCmdline(char *line, optScanner fct, void * const arg, int *argc, int *opts);
+
+Scan and parse a complete line into an array.
+
+'line' is a pointer to the line to be broken into individual arguments
+or parsed as options.
+
+'fct' is the pointer to the callback function. If NULL, any option
+generates an error.
+
+'arg' is passed unchanged to the callback function.
+
+'argc' is a pointer to an (int) object, which is updated with the number
+of arguments (non-option arguments) into which the line has been
+broken.
+
+'opts' is a pointer to an (int) object, which is updated with the number
+of successfully parsed options.
+
+This function returns:
+	NULL: on failure (the error message has been issued already)
+	else: a pointer to a dynamically allocated array of pointers
+		to also dyncamically allocated strings representing the
+		individual arguments. This array has (*argc + 1) elements,
+		the last one, (*argc) itself, is NULL.
+
+This functions fails if the callback function returns with an exit
+code different of E_None or E_Ignore.
+
+
+
+
+== Error codes
+	E_None = 0,			No error, is always 0 (zero)
+	E_Useage = 1,		useage error
+	E_Other = 2,		unspecified error
+	E_CBreak = 3,		^Break pressed
+	E_NoMem,			out of memory condition
+	E_NoOption,			parsed option is no "real" option
+	E_Exit,				exit program as soon as possible
+	E_Ignore			ignore this option
+
+
+
+== Implementation example
+
+#include "cmdline.h"
+
+
+int optP, optC;
+char *optMSG = NULL;
+
+optScanFct(opt_xmpl)
+{	switch(ch) {
+		/* parse single character options */
+	case 'P':	return optScanBool(optP);
+	case 'C':	return optScanBool(optC);
+		/* parse longname options */
+	case 0:
+		if(optLong("MSG"))
+			return optScanString(optMSG);
+	}
+
+	optErr();
+	return E_Useage;
+}
+
+xmpl(char *line)
+{	char **argv;
+	int argc, opts;
+
+	/* Initialize the default settings of the options */
+		optP = 1;
+		optC = 0;
+	/* Kill the left-over of the previous call to xmpl() */
+		free(optMSG);
+		optMSG = NULL;
+
+	argv = scanCmdLine(line		/* line to scan & parse */
+		, opt_xmpl				/* callback function */
+		, NULL 					/* no local 'arg' */
+		, &argc, &opts);		/* pointers to the counters */
+
+	if(!argv)		/* Failed */
+		return EXIT_FAILURE;
+
+	printf("The line had %u options.\n", opts);
+	printf("The current state of the /P option is: %s\n", optP? "on": "off");
+	printf("The current state of the /C option is: %s\n", optC? "on": "off");
+	printf("The current valus of the /MSG option is: %s\n"
+		, optMSG? optMSG: "<<not set>>");
+	if(argc) {
+		int i;
+
+		puts("The arguments of the line are:");
+		for(i = 0; i < argc; ++i)
+			printf("arg[%u] == \"%s\"\n", i + 1, argv[i]);
+	} else {
+		puts("No non-option argument found.");
+	}
+
+	freep(argv);		/* free the argument array, NOTE THE 'p' */
+
+	return EXIT_SUCCESS;
+}
+
+== General reflections
+
+1) The callback mechanism allows a very flexible association between
+	a syntacical correct option to a semantic.
+	However, if other semantics are needed, the optScan***() function
+	set should be improved rather than locally implemented into
+	the callback function.
+
+2) If the switch() statement in the callbacl functions are kept as
+	showed (meaning: "return optScanBool(var);") for all the entries,
+	Borland C's code optimizer generates something like this:
+		is_L:	mov ax, OFFSET optL
+				jmp short ?1
+		is_P:	mov ax, OFFSET optP
+				jmp short ?1
+		is_C:	mov ax, OFFSET optA
+				jmp short ?1
+		is_X:	mov ax, OFFSET optX
+		?1:		push ax
+				...
+				call _optScanBool
+				...
+				ret
+	Good enough?!
+
+3) The mechanism allows two non-standard things currently:
+3a) to leave options within the argument array, as used within COPY to
+	tread /A and /B as local options, thus, bypass them in the first
+	run to catch all the global options. See COPY.C for implementation
+	details.
+3b) to use options for something totally different, as used for the
+	/C option of FreeCom itself. See INIT.C for implementation
+	details.

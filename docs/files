@@ -1,0 +1,8 @@
+*.pl:	some perl scripts for generating the xref and the measurements
+xref:	reference which symbols are included within FreeCom and which
+	files are referenced by this symbol and which other files
+	reference the symbol (note: The references are generated per
+	file and not individually per symbol)
+makefile:	Makefile for DMake v4.1
+DOCS\cmt?.txt:	Some comments about my changes in general
+DOCS\c0.txt:	Some general comments about Borland's C startup code

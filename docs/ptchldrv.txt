@@ -1,0 +1,21 @@
+Start logging feature 2000/01/05 ska
+
+This feature logs, if compiled in, the command line into a file,
+whenever FreeCom is started. This feature shall help to identify
+calling problems with by default invalid command lines, but supported
+(or ignored) by other COMMAND.COM's.
+
+The logfile can be used for other logging purposes later, too.
+
+The logfile is specified as an hard-coded fully-qualified filename
+within CONFIG.H, see the macro LOG_FILE. This is necessary that all
+entries are collected into the same file and at various times some
+log entries will be written the actual location of FreeCom.COM itself
+is not known. Therefore the path of the logfile cannot be derived from
+the location of the executable.
+
+In order to change the drive the logfile is created on without the
+need to re-compile FreeCom, the utility PTCHLDRV (== PaTCH Logging
+DRiVe) is provided. To view the current drive just run "PTCHLDRV";
+to change the drive specify it on command line, e.g.: "PTCHLDRV A".
+

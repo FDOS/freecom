@@ -1,0 +1,132 @@
+1999/04/27 ska - Redesign of command line parser for internal commands
+
+Every internal command parses the command line individually bestowing
+individual rules what is detected and what is supported. This not
+only results into an inuniform behaviour, it also results into multiple
+code and different maintainance options.
+
+The redesign of the command line parsers shall honor all internal
+commands that behave like external ones (e.g. TYPE, DIR, but not
+FOR and IF).
+
+A list follows now that describes the way, how the command line is
+scanned by the internal commands:
+
+"no arg" == checks for no argument
+"any string" == takes a string, not broken into individual arguments
+"ign" == command line ignored totally
+"!# arg" == checks for exactly # argument(s)
+"glob opt" == global option neither mind if it preceeds or follows argument
+"seq" == sequence (of)
+"specific" == checks for specific words, e.g. ON or OFF
+"|" == choices to interprete the command line
+"and" == must all appear within the same choice
+
+alias: no arg | any string
+beep: ign
+break: no arg | specific word
+call: passed back to parsecommandline()
+chdir: no arg | !1 arg
+cls: ign
+copy: split() heavy detection of options and ‚mbedded '+' and local opt
+ctty: ign
+date: no arg | interactive loop
+del: glob opt and !1 arg
+dir: glob opt and !1 arg
+doskey: ign
+echo: no arg | specific word | anything else
+for: specific seq of words and trail passed back to parsecommandline()
+goto: first word
+history: no arg | any arg read as number
+if: specific seq of words
+loadfix: any string preceeded by switches
+loadhigh: any string preceeded by switches
+mkdir: !1 arg
+path: any string, optional /^=\s*/ removed
+pause: no arg | any string
+prompt: any string, optional /^=\s*/ removed
+rem: ign
+ren: !2 arg
+rmdir: !1 arg
+set: no arg | any string
+shift: no arg | specific word
+time: no arg | interactive loop
+truename: no arg | any string
+type: !1 arg
+ver: glob opt
+verify: no arg | specific seq of words
+vol: no arg | !1 arg and glob opt
+
+
+I put them into class:
+
+Class 1 - no command line
+beep, cls, rem, doskey, ctty
+
+Class 2 - simple command line
+call, break, alias, if, for, goto, truename, date, time, shift,
+prompt, pause, path, history, echo, verify
+
+Class 3 - broken command line
+chdir, copy, del, dir, mkdir, ren, rmdir, type, ver, vol
+
+Class 4 - individual command line
+loadhigh, loadfix, set
+
+
+
+Class 1 is simple to implement: One need not do nothing at all.
+
+Class 2 is mostly simple as well, they only:
++ test if there is an argument at all,
++ take the complete command line as it is,
++ test if the command line is a sequence of tokens, or
++ a combination of them.
+These functions can be effeciently achieved by normal string oriented
+functions already available in C or with ltrim() and matchtok().
+
+Class 3 becomes a little more problematic, because they:
++ require to get arguments in sequence as placed on command line,
+  but also randomly (e.g. COPY uses the last argument first).
++ scan the complete command line for options before the arguments
+  are processed.
++ break the command line in individual notions (see COPY).
+From my point of view these three points can be effeciently implemented
+by splitting the complete command line into an argv[] array, then
+process the embedded options, then pre-process the array in an
+individual manner, and finally read the arguments as necessary.
+The basic part would be the split() function, however, I'd also prefer
+a shared function to scan the options.
+
+By doing so one could simple imagine to extend, say, TYPE for use
+with more arguments than one or use options as well, e.g. /B for
+binary output.
+
+Class 4 is quite tricky. This is because LOADHIGH should not break
+the complete command line, because this could modify the command
+to be invoked by LH in an inproper manner. Therefore it is to
+design a set of tools to effectively scan the command line that are
+compatible (aka shared) by Class 3 implementation.
+As these commands have in common to read options preceeding the
+unstructured string, this would be a function to test for an option
+and return its value and argument, if so.
+
+
+
+===
+
+All internal command will now share the same algorithms to interprete
+the command, well more or less.
+
+The currently implemented rules:
++ Quotes are paired "", '' and ``. However, they currently do not serve
+any particular function other than to quote (rip of any metafunction)
+of enclosed characters.
++ Missing right quotes are silently assumed, but not added. Meaning:
+There is no "Missing quote" error.
++ Quotes can appear within words, but retain their metafunction.
++ A slash within quotes is never interpreted as option.
++ A slash outside quotes is always interpreted as option.
++ Quotes are removed.
++ Any non-empty and non-quoted sequence of whitespaces, commas and
+semicolons delimit two arguments. It is removed.

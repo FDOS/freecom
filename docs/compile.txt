@@ -1,0 +1,9 @@
+Compile notes:
+
+To compile this version of command.com, you have to add the suppl
+directory to your list of include directories so that the compiler
+can find the header files located there.
+
+The library suppl_s.lib was built with the suppl library version 2.6
+which had the dosalloc.c file modified to fix a problem with the
+FreeDOS kernel.

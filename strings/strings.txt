@@ -1,0 +1,879 @@
+# This file is used to generate all the messages that command.com
+# outputs.  This file is the input to the fixstrs program, and it
+# outputs strings.h and strings.dat.  The .DAT file is appended to
+# the command.exe file, and then renamed to command.com.  The .H
+# file contains all the info for the program to retreive the
+# messages.
+#
+# The format of this file is simple.  Blank lines and lines starting
+# with "#" are ignored.
+# Each message starts with a label name that will be used to refer to
+# the message in the program.  A label starts with a colon ":".
+# Please look at other messages to see the pattern, and try to
+# follow with new messages.
+#
+# All lines after the label are the message until a line with a
+# single "." or "," in the first column.  The difference is the
+# period signifies that there will be a final carrage return when
+# the message is displayed, but a comma does not.
+#
+#
+
+
+#
+#  These are error messages
+#
+## Issued if a single character option is unknown
+:TEXT_ERROR_INVALID_SWITCH
+Invalid switch. - /%c
+.
+
+## Issued if a longname option is unknown
+:TEXT_ERROR_INVALID_LSWITCH
+Invalid switch. - /%s
+.
+
+## Issued if the context, the type of argument etc. is invalid
+:TEXT_ERROR_ILLFORMED_OPTION
+Ill-formed option: '%s'
+.
+
+:TEXT_ERROR_OPT_ARG
+Option "%s" cannot have an argument
+.
+
+:TEXT_ERROR_OPT_NOARG
+Option "%s" must have an argument
+.
+
+:TEXT_INVALID_NUMBER
+Invalid number specified in "%s"
+.
+
+:TEXT_ERROR_CLOSE_QUOTE
+Missing closing quote: %c
+.
+
+:TEXT_ERROR_TEMPFILE
+Cannot create temporary file
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR
+Too many parameters. - %s
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS
+Too many parameters.
+.
+
+:TEXT_ERROR_INVALID_PARAMETER
+Invalid parameter. - %s
+.
+
+:TEXT_ERROR_PATH_NOT_FOUND
+Path not found.
+.
+
+:TEXT_ERROR_FILE_NOT_FOUND
+File not found.
+.
+
+:TEXT_ERROR_SFILE_NOT_FOUND
+File not found. - %s
+.
+
+:TEXT_ERROR_REQ_PARAM_MISSING
+Required parameter missing.
+.
+
+:TEXT_ERROR_INVALID_DRIVE
+Invalid drive specification.
+.
+
+:TEXT_ERROR_BADCOMMAND
+Bad command or filename.
+.
+
+:TEXT_ERROR_OUT_OF_MEMORY
+Out of memory error.
+.
+
+:TEXT_ERROR_CANNOTPIPE
+Cannot pipe!  Cannot open temporary file!
+.
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE
+Line #%ld in batchfile '%s' too long.
+.
+
+:TEXT_ERROR_BFILE_VANISHED
+Batchfile "%s" not found.
+.
+
+:TEXT_ERROR_BFILE_LABEL
+Batchfile "%s" does not contain label "%s".
+.
+
+:TEXT_ERROR_SET_ENV_VAR
+Can not set environment variable "%s".
+Environment full?
+.
+
+:TEXT_ERROR_ENV_VAR_NOT_FOUND
+Environment variable "%s" not found.
+.
+
+:TEXT_ERROR_NO_ENVIRONMENT
+No environment. Maybe memory short. Specify /E option.
+.
+
+:TEXT_ERROR_SYNTAX_STR
+Syntax error. - %s
+.
+
+:TEXT_ERROR_SYNTAX
+Syntax error.
+.
+
+:TEXT_ERROR_FILENAME_TOO_LONG
+Filename too long. - %s
+.
+
+:TEXT_ERROR_SELFCOPY
+Cannot copy "%s" to itself
+.
+
+:TEXT_ERROR_COMMAND_TOO_LONG
+Command line too long after alias expansion!
+.
+
+:TEXT_ERROR_LINE_TOO_LONG
+Line too long.  Can not execute command.
+.
+
+:TEXT_ERROR_HISTORY_SIZE
+Invalid history size.
+.
+
+:TEXT_ERROR_BAD_MCB_CHAIN
+MCB chain corrupt, or MS-DOS incompatible system.
+.
+
+:TEXT_ERROR_UNDEFINED_ERROR
+Undefined error %d.
+.
+
+:TEXT_ERROR_REGION_WARNING
+Illegal memory region %d - ignored.
+.
+
+:TEXT_ERROR_ON_OR_OFF
+Must specify ON or OFF.
+.
+
+:TEXT_ERROR_BAD_VERABLE
+Bad varable specification.
+.
+
+:TEXT_ERROR_IN_MISSING
+IN missing in FOR statement.
+.
+
+:TEXT_ERROR_MISSING_PARENTHESES
+One or both paraentheses missing.
+.
+
+:TEXT_ERROR_DO_MISSING
+DO missing in FOR statement.
+.
+
+:TEXT_ERROR_NO_COMMAND_AFTER_DO
+No command after DO statement.
+.
+
+:TEXT_ERROR_REDIRECT_FROM_FILE
+Can not redirect input from file %s.
+.
+
+:TEXT_ERROR_REDIRECT_TO_FILE
+Can not redirect output to file %s.
+.
+
+:TEXT_ERROR_INVALID_DATE
+Invalid date.
+.
+
+:TEXT_ERROR_INVALID_TIME
+Invalid time.
+.
+
+:TEXT_ERROR_NO_GOTO_LABEL
+No label specified for GOTO.
+.
+
+:TEXT_ERROR_NO_CTTY_CMD
+CTTY not implemented yet.
+.
+
+:TEXT_CTTY_NOTIMPLEMENTED
+The CTTY command has been excluded from this COMMAND.COM.
+.
+
+:TEXT_ERROR_NORW_DEVICE
+Invalid or no read-write device '%s'.
+.
+
+:TEXT_ERROR_CTTY_DUP
+Failed to change file descriptors to TTY '%s'.
+.
+
+:TEXT_ERROR_L_NOTIMPLEMENTED
+/L not implemented yet.
+.
+
+:TEXT_ERROR_U_NOTIMPLEMENTED
+/U not implemented yet.
+.
+
+:TEXT_ERROR_WRITING_DEST
+Error writing to destination.
+.
+
+:TEXT_ERROR_CANNOT_OPEN_SOURCE
+Unable to open source. - %s
+.
+
+:TEXT_ERROR_OPEN_FILE
+Unable to open file '%s'
+.
+
+:TEXT_ERROR_READ_FILE
+Unable to read from file '%s'
+.
+
+:TEXT_ERROR_WRITE_FILE
+Unable to write to file '%s'
+.
+
+:TEXT_ERROR_LEADING_PLUS
+The concatenation character '+' cannot lead the arguments.
+.
+
+:TEXT_ERROR_TRAILING_PLUS
+The concatenation character '+' cannot trail the arguments.
+.
+
+:TEXT_ERROR_NOTHING_TO_DO
+Nothing to do.
+.
+
+:TEXT_ERROR_COPY
+COPY failed
+.
+
+:TEXT_NOT_IMPLEMENTED_YET
+Sorry...not implemented yet.
+.
+
+:TEXT_FAILED_LOAD_STRINGS
+Failed to load messages into memory.
+.
+
+:TEXT_MSG_NOTIMPLEMENTED
+The /MSG option has been excluded from this COMMAND.COM.
+.
+
+:TEXT_CORRUPT_COMMAND_LINE
+Corrupt command line. This is an internal error and is related to
+the system COMMAND.COM runs in. Please report this error.
+.
+
+:TEXT_QUOTED_C_OR_K
+The /C and /K options cannot be quoted,
+they are ignored.
+.
+
+:TEXT_INIT_FULLY_QUALIFIED
+The path to COMMAND.COM must be fully qualified!
+That means including drive letter and beginning with a backslash.
+For example: C:\FDOS
+
+COMMAND.COM assumes this path now:
+%s
+.
+
+:TEXT_ERROR_RESTORE_SESSION
+The session information could not be restored, any local settings
+are lost. Please refer to above error messages for the reason
+of this problem.
+.
+
+:TEXT_ERROR_SAVE_SESSION
+The current information cannot be preserved during the call of the
+program. Please refer to above error messages for the reason of
+this problem.
+.
+#
+# Informational messages
+#
+
+:TEXT_MSG_PAUSE
+Press any key to continue . . .
+.
+
+:TEXT_MSG_HISTORY_SIZE
+History size is %d bytes.
+.
+
+:TEXT_MSG_DOSKEY
+DOSKEY features are already enabled in the shell.
+.
+
+:TEXT_MSG_ECHO_STATE
+ECHO is %s
+.
+
+:TEXT_MSG_VERIFY_STATE
+VERIFY is %s
+.
+
+:TEXT_MSG_FDDEBUG_STATE
+DEBUG output is %s
+.
+
+:TEXT_MSG_BREAK_STATE
+BREAK is %s
+.
+
+:TEXT_MSG_CURRENT_DATE
+Current date is %s %02d-%02d-%d
+.
+
+:TEXT_MSG_ENTER_DATE
+Enter new date (mm-dd-[yy]yy):
+.
+
+:TEXT_MSG_CURRENT_TIME
+Current time is %2d:%02d:%02d.%02d%c
+.
+
+:TEXT_MSG_ENTER_TIME
+Enter new time:
+.
+
+:TEXT_MSG_COPYING
+%s %s %s
+.
+
+:TEXT_MSG_DELETE_ALL
+All files in directory will be deleted!
+Are you sure (Y/N)?
+,
+
+:TEXT_MSG_VER_BASIC
+Copyright (C) 1994-1998 Tim Norman and others.
+
+The FreeDOS Command Shell comes with ABSOLUTELY NO WARRANTY.
+For details type: "ver /w". This is free software, and you are
+welcome to redistribute it under certain conditions; type "ver /d"
+for details.  Type "ver /c" for a listing of credits.
+
+Send bug reports to command@gcfl.net.
+Updates are available from http://www.gcfl.net/FreeCom
+.
+
+:TEXT_MSG_VER_WARRANTY
+Copyright (C) 1994-1998 Tim Norman and others.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+Send bug reports to command@gcfl.net.
+Updates are available from http://www.gcfl.net/FreeCom
+.
+
+:TEXT_MSG_VER_REDISTRIBUTION
+Copyright (C) 1994-1998 Tim Norman and others.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+Send bug reports to command@gcfl.net.
+Updates are available from http://www.gcfl.net/FreeCom
+.
+
+:TEXT_MSG_VER_DEVELOPERS
+
+The FreeDOS Command Shell developed by:
+		Tim Norman      Matt Rains
+		Evan Jeffrey    Steffen Kaiser
+		Svante Frey     Oliver Mueller
+		Aaron Kaufman   Marc Desrochers
+		Rob Lake        John P Price
+		Hans B Pufal
+
+Currently maintained by John P Price.
+
+Send bug reports to command@gcfl.net.
+Updates are available from http://www.gcfl.net/FreeCom
+.
+
+
+#
+# Command help text
+#
+
+:TEXT_CMDHELP_ALIAS
+Displays, sets, or removes aliases.
+
+ALIAS [variable[=][string]]
+
+	variable  Specifies the alias name.
+	string    Specifies a series of characters to assign to the alias.
+
+
+Type ALIAS without parameters to display the current aliases.
+.
+
+:TEXT_CMDHELP_BEEP
+Make a beep sound.
+.
+
+:TEXT_CMDHELP_BREAK
+Sets or clears extended CTRL+C checking.
+
+BREAK [ON | OFF]
+
+Type BREAK without a parameter to display the current BREAK setting.
+.
+
+:TEXT_CMDHELP_CALL
+Calls one batch program from another.
+
+CALL [drive:][path]filename [batch-parameters]
+
+  batch-parameters   Specifies any command-line information required by
+                     the batch program.
+.
+
+:TEXT_CMDHELP_CD
+Displays the name of or changes the current directory.
+
+CHDIR [drive:][path]
+CHDIR[..]
+CD [drive:][path]
+CD[..]
+
+  ..   Specifies that you want to change to the parent directory.
+
+Type CD drive: to display the current directory in the specified drive.
+Type CD without parameters to display the current drive and directory.
+.
+
+:TEXT_CMDHELP_CHCP
+Displays or sets the active code page number.
+
+CHCP [nnn]
+
+  nnn   Specifies a code page number.
+
+Type CHCP without a parameter to display the active code page number.
+.
+
+:TEXT_CMDHELP_CLS
+Clears the screen.
+
+CLS
+.
+
+:TEXT_CMDHELP_COMMAND
+Starts a new copy of the FreeDOS command shell.
+
+COMMAND [[drive:]path] [device] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+                       [/LOW] [/Y [/[C|K] command]]
+  [drive:]path    Specifies the directory containing COMMAND.COM.
+  device          Specifies the device to use for command input and output.
+  /E:nnnnn        Sets the initial environment size to nnnnn bytes.
+                  (nnnnn should be between 256 and 32,768).
+  /L:nnnn         Specifies internal buffers length (requires /P as well).
+                  (nnnn should be between 128 and 1,024).
+  /U:nnn          Specifies the input buffer length (requires /P as well).
+									(nnn should be between 128 and 255).
+  /P              Makes the new command shell permanent (can't exit).
+  /MSG            Stores all error messages in memory (requires /P as well).
+  /LOW            Forces the command shell to keep its resident data in
+                  low memory.
+  /Y              Steps through the batch program specified by /C or /K.
+  /C command      Executes the specified command and returns.
+  /K command      Executes the specified command and continues running.
+.
+
+:TEXT_CMDHELP_COPY
+Copies one or more files to another location.
+
+COPY [/A | /B] source [/A | /B] [+ source [/A | /B] [+ ...]] [destination
+  [/A | /B]] [/V] [/Y | /-Y]
+
+  source       Specifies the file or files to be copied.
+  /A           Indicates an ASCII text file.
+  /B           Indicates a binary file.
+  destination  Specifies the directory and/or filename for the new file(s).
+  /V           Verifies that new files are written correctly.
+  /Y           Suppresses prompting to confirm you want to overwrite an
+               existing destination file.
+  /-Y          Causes prompting to confirm you want to overwrite an
+               existing destination file.
+
+The switch /Y may be preset in the COPYCMD environment variable.
+This may be overridden with /-Y on the command line
+
+To append files, specify a single file for destination, but multiple files
+for source (using wildcards or file1+file2+file3 format).
+.
+
+:TEXT_CMDHELP_CTTY
+Changes the terminal device used to control your system.
+
+CTTY device
+
+  device   The terminal device you want to use, such as COM1.
+.
+
+:TEXT_CMDHELP_DATE
+Displays or sets the date.
+
+DATE [date]
+
+Type DATE without parameters to display the current date setting and a
+prompt for a new one.  Press ENTER to keep the same date.
+.
+
+:TEXT_CMDHELP_DEL
+Deletes one or more files.
+
+DEL [drive:][path]filename [/P]
+ERASE [drive:][path]filename [/P]
+
+  [drive:][path]filename  Specifies the file(s) to delete.  Specify multiple
+                          files by using wildcards.
+  /P		Prompts for confirmation before deleting each file.
+.
+
+:TEXT_CMDHELP_DIR
+Displays a list of files and subdirectories in a directory.
+
+DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
+  [/O[[:]sortorder]] [/S] [/B] [/L] [/V]
+
+  [drive:][path][filename]
+            Specifies drive, directory, and/or files to list.
+            (Could be enhanced file specification or multiple filespecs.)
+ /P         Pauses after each screenful of information.
+ /W         Uses wide list format.
+ /A         Displays files with specified attributes.
+ attributes  D  Directories                R  Read-only files
+             H  Hidden files               A  Files ready for archiving
+             S  System files               -  Prefix meaning not
+ /O         List by files in sorted order.
+ sortorder   N  By name (alphabetic)       S  By size (smallest first)
+             E  By extension (alphabetic)  D  By date & time (earliest first)
+             G  Group directories first    -  Prefix to reverse order
+             A  By Last Access Date (earliest first)
+ /S         Displays files in specified directory and all subdirectories.
+ /B         Uses bare format (no heading information or summary).
+ /L         Uses lowercase.
+ /V         Verbose mode.
+
+Switches may be preset in the DIRCMD environment variable.  Override
+preset switches by prefixing any switch with - (hyphen)--for example, /-W.
+.
+
+:TEXT_CMDHELP_DOSKEY
+Edits command lines, recalls command lines, and creates macros
+
+DOSKEY [/switch ...] [macroname=[text]]
+
+  /BUFSIZE:size Sets size of macro and command buffer            (default:512)
+  /ECHO:on|off  Enables/disables echo of macro expansions        (default:on)
+	/FILE:file    Specifies file containing a list of macros
+  /HISTORY      Displays all commands stored in memory
+  /INSERT       Inserts new characters into line when typing
+  /KEYSIZE:size Sets size of keyboard type-ahead buffer          (default:15)
+  /LINE:size    Sets maximum size of line edit buffer            (default:128)
+  /MACROS       Displays all DOSKey macros
+  /OVERSTRIKE   Overwrites new characters onto line when typing  (default)
+  /REINSTALL    Installs a new copy of DOSKey
+  macroname     Specifies a name for a macro you create
+  text          Specifies commands you want to assign to the macro
+
+  UP,DOWN arrows recall commands
+      Esc clears current command
+       F7 displays command history
+   Alt+F7 clears command history
+[chars]F8 searches for command beginning with [chars]
+       F9 selects a command by number
+  Alt+F10 clears macro definitions
+
+The following are special codes you can use in DOSKey macro definitions:
+  $T     Command separator: allows multiple commands in a macro
+  $1-$9  Batch parameters: equivalent to %1-%9 in batch programs
+  $*     Symbol replaced by everything following macro name on the command line
+.
+
+:TEXT_CMDHELP_ECHO
+Displays messages, or turns command-echoing on or off.
+
+  ECHO [ON | OFF]
+  ECHO [message]
+
+Type ECHO without parameters to display the current echo setting.
+.
+
+:TEXT_CMDHELP_EXIT
+Quits the FreeDOS command shell.
+
+EXIT
+.
+
+:TEXT_CMDHELP_FOR
+Runs a specified command for each file in a set of files.
+
+FOR %variable IN (set) DO command [command-parameters]
+
+  %variable  Specifies a replaceable parameter.
+  (set)      Specifies a set of one or more files.  Wildcards may be used.
+  command    Specifies the command to carry out for each file.
+  command-parameters
+             Specifies parameters or switches for the specified command.
+
+To use the FOR command in a batch program, specify %%variable instead of
+%variable.
+.
+
+:TEXT_CMDHELP_GOTO
+Directs the command shell to a labelled line in a batch program.
+
+GOTO label
+
+  label   Specifies a text string used in the batch program as a label.
+
+You type a label on a line by itself, beginning with a colon.
+.
+
+:TEXT_CMDHELP_HISTORY
+History command.
+.
+
+:TEXT_CMDHELP_IF
+Performs conditional processing in batch programs.
+
+IF [NOT] ERRORLEVEL number command
+IF [NOT] string1==string2 command
+IF [NOT] EXIST filename command
+
+  NOT               Specifies that the command shell should carry out the
+                    command only if the condition is false.
+  ERRORLEVEL number Specifies a true condition if the last program run
+                    returned an exit code equal to or greater than the
+                    number specified.
+  command           Specifies the command to carry out if the condition is
+                    met.
+  string1==string2  Specifies a true condition if the specified text
+                    strings match.
+  EXIST filename    Specifies a true condition if the specified filename
+                    exists.
+.
+
+:TEXT_CMDHELP_LH
+Loads a program into the upper memory area.
+
+LOADHIGH [drive:][path]filename [parameters]
+LOADHIGH [/L:region1[,minsize1][;region2[,minsize2]...] [/S]]
+         [drive:][path]filename [parameters]
+
+/L:region1[,minsize1][;region2[,minsize2]]...
+            Specifies the region(s) of memory into which to load the
+            program.  Region1 specifies the number of the first memory
+            region; minsize1 specifies the minimum size, if any, for
+            region1.  Region2 and minsize2 specify the number and minimum
+            size of the second region, if any.  You can specify as many
+            regions as you want.
+
+/S          Shrinks a UMB to its minimum size while the program is
+            loading.
+
+[drive:][path]filename
+            Specifies the location and name of the program.
+.
+
+:TEXT_CMDHELP_LOADFIX
+Loads a program above the first 64K of memory, and runs the program.
+
+LOADFIX [drive:][path]filename
+
+Use LOADFIX to load a program if you have received the message "Packed
+file corrupt" when trying to load it in low memory.
+.
+
+:TEXT_CMDHELP_MD
+Creates a directory.
+
+MKDIR [drive:]path
+MD [drive:]path
+.
+
+:TEXT_CMDHELP_PATH
+Displays or sets a search path for executable files.
+
+PATH [[drive:]path[;...]]
+PATH ;
+
+Type PATH ; to clear all search-path settings and direct the command shell
+to search only in the current directory.
+Type PATH without parameters to display the current path.
+.
+
+:TEXT_CMDHELP_PAUSE
+Suspends processing of a batch program and displays the message:
+"Press any key to continue...." or an optional specified message.
+
+PAUSE [message]
+.
+
+:TEXT_CMDHELP_PROMPT
+Changes the command prompt.
+
+PROMPT [text]
+
+  text    Specifies a new command prompt.
+
+Prompt can be made up of normal characters and the following special
+codes:
+
+  $Q   = (equal sign)
+  $$   $ (dollar sign)
+  $T   Current time
+  $D   Current date
+  $P   Current drive and path
+  $V   the FreeDOS command shell version number
+  $N   Current drive
+  $G   > (greater-than sign)
+  $L   < (less-than sign)
+  $B   | (pipe)
+  $H   Backspace (erases previous character)
+  $E   Escape code (ASCII code 27)
+  $_   Carriage return and linefeed
+
+Type PROMPT without parameters to reset the prompt to the default setting.
+.
+
+:TEXT_CMDHELP_RD
+Removes (deletes) a directory.
+
+RMDIR [drive:]path
+RD [drive:]path
+.
+
+:TEXT_CMDHELP_REM
+Records comments (remarks) in a batch file or CONFIG.SYS.
+
+REM [comment]
+.
+
+:TEXT_CMDHELP_REN
+Renames a file/directory or files/directories.
+
+RENAME [drive:][path][directoryname1 | filename1] [directoryname2 | filename2]
+REN [drive:][path][directoryname1 | filename1] [directoryname2 | filename2]
+
+Note that you cannot specify a new drive or path for your destination. Use
+the MOVE command for that purpose.
+.
+
+:TEXT_CMDHELP_SET
+Displays, sets, or removes environment variables.
+
+SET [variable[= | space][string]]
+
+  variable  Specifies the environment-variable name.
+  string    Specifies a series of characters to assign to the variable.
+
+* If you include a '=', but no string, then the variable is removed
+  from the environment.
+* Now you can use a space instead of '=' to create/change a variable.
+
+Type SET without parameters to display the current environment variables.
+.
+
+:TEXT_CMDHELP_SHIFT
+Changes the position of replaceable parameters in a batch file.
+
+SHIFT
+.
+
+:TEXT_CMDHELP_TIME
+Displays or sets the system time.
+
+TIME [time]
+
+Type TIME with no parameters to display the current time setting and a
+prompt for a new one.  Press ENTER to keep the same time.
+.
+
+:TEXT_CMDHELP_TRUENAME
+Displays the full path name of the path specified.
+
+TRUENAME [drive:][path][filename]
+.
+
+:TEXT_CMDHELP_TYPE
+Displays the contents of text files.
+
+TYPE [drive:][path]filename
+.
+
+:TEXT_CMDHELP_VER
+Displays the FreeDOS command shell version and other information.
+
+VER [/R] [/W] [/D] [/C]
+
+ /R         Shows kernel version and other information.
+ /W         FreeDOS command shell warranty.
+ /D         FreeDOS command shell redistribution information.
+ /C         FreeDOS command shell contributors.
+.
+
+:TEXT_CMDHELP_VERIFY
+Tells the FreeDOS file system whether to verify that your files are
+written correctly to a disk.
+
+VERIFY [ON | OFF]
+
+Type VERIFY without a parameter to display the current VERIFY setting.
+.
+
+:TEXT_CMDHELP_FDDEBUG
+If debugging is compiled into FreeDOS, this command will turn debug
+output on or off, or tell you if it is on or off.
+
+FDDEBUG [ON | OFF]
+
+Type FDDEBUG without a parameter to display the current debug output
+setting.
+.
+
+:TEXT_CMDHELP_VOL
+Displays the disk volume label and serial number, if they exist.
+
+VOL [drive:]
+.
+
+:TEXT_CMDHELP_QUESTION
+Displays a list of commands and features available with in the shell.
+
+? [/?]
+.
