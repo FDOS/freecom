@@ -130,6 +130,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   struct ftime fileTime;
   char *srcFile;
   FLAG wildcarded;
+  FLAG singleFileCopy = src->app == NULL;
 
   assert(dst);
   assert(pattern);
@@ -248,14 +249,41 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       /* Now copy the file */
       rc = 1;
       if(mode[1] != 't') {    /* binary file */
-        if(Fcopy(fout, fin) != 0) {
-          if(ferror(fin)) {
-            error_read_file(rSrc);
-          } else if(ferror(fout)) {
-            error_write_file(rDest);
-          } else error_copy();
-          rc = 0;
-        }
+      	FLAG sizeChanged = singleFileCopy && !isadev(fileno(fin))
+      	 && !isadev(fileno(fout));
+        if(sizeChanged) {	/* faster copy, *MUCH* faster on floppies
+								 change destination filesize to wanted size.
+								 this a) writes all required entries to the
+								 FAT (faster) determines, if there is enough
+								 space on the destination device
+								 no need to copy file, if it won't fit */
+        					/* No test if chsize() fails for MS DOS 5/6 bug
+        						see RBIL DOS-40 */
+        	if(chsize(fileno(fout),filelength(fileno(fin))) == -1) {
+				error_write_file_disc_full(rDest, filelength(fileno(fin)));
+        		rc = 0;
+			} else {
+				dprintf( ("[COPY chsize(%s, %lu)]\n", rDest,
+				 filelength(fileno(fin))) );
+			}
+		}
+      
+        if(rc != 0)
+			if(Fcopy(fout, fin) != 0) {
+			  if(ferror(fin)) {
+				error_read_file(rSrc);
+			  } else if(ferror(fout)) {
+				error_write_file(rDest);
+			  } else error_copy();
+			  rc = 0;
+			} else if(sizeChanged) {
+				/* probably the source file got truncated */
+				/* we silently ignore any failure here, because it is
+					assumed that we never extend, but truncate the file
+					only (or do not change the length at all) */
+				truncate(fileno(fout));
+			}
+
       } else {      /* text file, manually transform '\n' */
         if(Fmaxbuf((byte**)&buf, &len) == 0) {
           if(len > INT_MAX)
