@@ -76,6 +76,7 @@ int cmd_if(char *param)
 	else if(matchtok(param, "errorlevel")) {
 		int n = 0;
 
+#if 0
 		if(!isdigit(*param)) {
 			error_if_errorlevel();
 			return 0;
@@ -89,6 +90,32 @@ int cmd_if(char *param)
 			error_if_errorlevel_number();
 			return 0;
 		}
+#else
+		/* Add this COMMAND bug as someone tries to use:
+			IF ERRORLEVEL H<upper-case_letter>
+			-or-
+			IF ERRORLEVEL x<lower-case_letter>
+
+			to match the errorlevel against drive letters.
+			NOT supported by 4dos or WinNT.
+
+			HA --> maps to errorlevel 1
+			xa --> same
+
+			HB & xb --> to 2
+			a.s.o.
+		*/
+
+		if(!*param) {
+			error_if_errorlevel();
+			return 0;
+		}
+		pp = param;
+		do  n = n * 10 + (*pp - '0');
+		while(*++pp && !isargdelim(*pp));
+		n &= 255;
+		dprintf( ("IF: checking for ERRORLEVEL >= %u\n", n) );
+#endif
 
 		if(errorlevel >= n)
 			x_flag = X_EXEC;
