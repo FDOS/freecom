@@ -1,21 +1,15 @@
 .AUTODEPEND
 
 #		*Translator Definitions*
-CC_BASE_PATH = D:\TC101
-CC = tcc +FIXSTRS.CFG
-TASM = TASM
-TLIB = tlib
-TLINK = tlink
-LIBPATH = $(CC_BASE_PATH)\LIB
-INCLUDEPATH = $(CC_BASE_PATH)\INCLUDE
-MMODEL = c
+CFG = TCCDOS.CFG
 
+## Configuration parameters
+!include "..\config.mak"
+
+MMODEL = c
 
 #		*Implicit Rules*
 .c.obj:
-  $(CC) -c {$< }
-
-.cpp.obj:
   $(CC) -c {$< }
 
 #		*List Macros*
@@ -25,7 +19,7 @@ EXE_dependencies =  \
  fixstrs.obj
 
 #		*Explicit Rules*
-fixstrs.exe: fixstrs.cfg $(EXE_dependencies)
+fixstrs.exe: $(CFG) $(EXE_dependencies)
   $(TLINK) /s/c/d/L$(LIBPATH) @&&|
 c0$(MMODEL).obj+
 fixstrs.obj
@@ -35,10 +29,10 @@ c$(MMODEL).lib
 
 
 #		*Individual File Dependencies*
-fixstrs.obj: fixstrs.cfg fixstrs.c
+fixstrs.obj: $(CFG) fixstrs.c
 
 #		*Compiler Configuration File*
-fixstrs.cfg: fixstrs.mak
+$(CFG): fixstrs.mak
   copy &&|
 -m$(MMODEL)
 -a
@@ -53,9 +47,8 @@ fixstrs.cfg: fixstrs.mak
 -d
 -vi-
 -I$(INCLUDEPATH)
--L$(LIBPATH)
 -P-.C
-| fixstrs.cfg
+| $(CFG)
 
 
 #-H=FIXSTRS.SYM

@@ -170,6 +170,9 @@
  *
  * 2000/07/05 Ron Cemer
  *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
+ *
+ * 2000/08/16 Ron Cemer
+ *	bugfix: piping failure (esp. when SHARE is not loaded)
  */
 
 #include "config.h"
@@ -490,6 +493,9 @@ void parsecommandline(char *s)
 
     nextcmd = s + strlen(s) + 1;
     docommand(s);
+
+    close(1);
+    dup2(oldoutfd, 1);
 
     close(0);
     killtmpfn(fname1);          /* fname1 can by NULL */

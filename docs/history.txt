@@ -1,6 +1,23 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+2000/08/15 ska <ska-src@gmx.net>
+~~~~~~~~~~~~~~~~~~~~~~
+chg: layout of CVS:
+	+ removed all pre-compiled files but COMMAND.COM for English
+	+ pre-compiled files can be downloaded from
+		ftp://freedos.sourceforge.net/pub/freedos/freecom/
+		See DOWNLOAD.TXT
+	+ created a "localizer" package
+add: FIXSTRS.EXE now creates a third file STRINGS.LOG to help
+	to localize the strings; see DOCS\LOCALIZE.TXT
+
+2000/08/15 Ron Cemer
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: Piping, when the tempfile is opened for read-only access for the
+	2nd command it's still opened for write-only for the 1st one.
+	This may fail, see DOCS\PIPING.TXT
+
 2000/07/24 Ron Cemer
 ~~~~~~~~~~~~~~~~~~~~~~
 fix: COPY

@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.3  2000/08/15 21:31:38  skaus
+# chg: binary packages on FTP\nbugfix: piping
+#
 # Revision 1.2  2000/07/09 21:57:25  skaus
 # + Support for international strings without recompiling
 # + Useage of TC++1
@@ -25,7 +28,9 @@ MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 # Sources of this make target
 
 #	Default target
-all: ptchldrv.exe
+all: 
+
+everything: ptchldrv.exe
 
 
 .INIT : $(CFG) __errl

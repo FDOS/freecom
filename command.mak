@@ -1,13 +1,11 @@
 .AUTODEPEND
 
+CFG = TCCDOS.CFG
+
 #		*Translator Definitions*
-CC_BASE_PATH = D:\TC101
-CC = tcc +COMMAND.CFG
-TASM = TASM
-TLIB = tlib
-TLINK = tlink
-LIBPATH = $(CC_BASE_PATH)\LIB
-INCLUDEPATH = $(CC_BASE_PATH)\INCLUDE;.\SUPPL
+##>> Modify this file with your local settings
+!include "config.mak"
+
 
 all: command.com
 
@@ -15,12 +13,7 @@ all: command.com
 .c.obj:
   $(CC) -c {$< }
 
-.cpp.obj:
-  $(CC) -c {$< }
-
 #		*List Macros*
-
-
 EXE_dependencies =  \
  alias.obj \
  batch.obj \
@@ -81,10 +74,10 @@ EXE_dependencies =  \
  lh.obj \
  lowexec.obj \
  spawn.obj \
- suppl\suppl_s.lib
+ $(SUPPL_LIB_PATH)\suppl_s.lib
 
 #		*Explicit Rules*
-command.exe: command.cfg $(EXE_dependencies)
+command.exe: $(CFG) $(EXE_dependencies)
   $(TLINK) /x /c /d @&&|
 $(LIBPATH)\c0s.obj+
 alias.obj+
@@ -148,7 +141,7 @@ lowexec.obj+
 spawn.obj
 command
 		# no map file
-suppl\suppl_s.lib+
+$(SUPPL_LIB_PATH)\suppl_s.lib+
 $(LIBPATH)\cs.lib
 |
 
@@ -156,126 +149,126 @@ command.com : command.exe
 	copy /b command.exe + strings.dat command.com
 
 #		*Individual File Dependencies*
-alias.obj: command.cfg alias.c
+alias.obj: $(CFG) alias.c
 
-batch.obj: command.cfg batch.c
+batch.obj: $(CFG) batch.c
 
-beep.obj: command.cfg beep.c
+beep.obj: $(CFG) beep.c
 
-break.obj: command.cfg break.c
+break.obj: $(CFG) break.c
 
-call.obj: command.cfg call.c
+call.obj: $(CFG) call.c
 
-cls.obj: command.cfg cls.c
+cls.obj: $(CFG) cls.c
 
-cmdinput.obj: command.cfg cmdinput.c
+cmdinput.obj: $(CFG) cmdinput.c
 
-cmdline.obj: command.cfg cmdline.c
+cmdline.obj: $(CFG) cmdline.c
 
-cmdtable.obj: command.cfg cmdtable.c
+cmdtable.obj: $(CFG) cmdtable.c
 
-command.obj: command.cfg command.c
+command.obj: $(CFG) command.c
 
-copy.obj: command.cfg copy.c
+copy.obj: $(CFG) copy.c
 
-ctty.obj: command.cfg ctty.c
+ctty.obj: $(CFG) ctty.c
 
-date.obj: command.cfg date.c
+date.obj: $(CFG) date.c
 
-datefunc.obj: command.cfg datefunc.c
+datefunc.obj: $(CFG) datefunc.c
 
-debug.obj: command.cfg debug.c
+debug.obj: $(CFG) debug.c
 
-del.obj: command.cfg del.c
+del.obj: $(CFG) del.c
 
-dir.obj: command.cfg dir.c
+dir.obj: $(CFG) dir.c
 
-dstack.obj: command.cfg dstack.c
+dstack.obj: $(CFG) dstack.c
 
-echo.obj: command.cfg echo.c
+echo.obj: $(CFG) echo.c
 
-environ.obj: command.cfg environ.c
+environ.obj: $(CFG) environ.c
 
-error.obj: command.cfg error.c
+error.obj: $(CFG) error.c
 
-err_hand.obj: command.cfg err_hand.c
+err_hand.obj: $(CFG) err_hand.c
 
-exec.obj: command.cfg exec.c
+exec.obj: $(CFG) exec.c
 
-fddebug.obj: command.cfg fddebug.c
+fddebug.obj: $(CFG) fddebug.c
 
-filecomp.obj: command.cfg filecomp.c
+filecomp.obj: $(CFG) filecomp.c
 
-for.obj: command.cfg for.c
+for.obj: $(CFG) for.c
 
-goto.obj: command.cfg goto.c
+goto.obj: $(CFG) goto.c
 
-history.obj: command.cfg history.c
+history.obj: $(CFG) history.c
 
-if.obj: command.cfg if.c
+if.obj: $(CFG) if.c
 
-init.obj: command.cfg init.c
+init.obj: $(CFG) init.c
 
-internal.obj: command.cfg internal.c
+internal.obj: $(CFG) internal.c
 
-loadhigh.obj: command.cfg loadhigh.c
+loadhigh.obj: $(CFG) loadhigh.c
 
-messages.obj: command.cfg messages.c
+messages.obj: $(CFG) messages.c
 
-misc.obj: command.cfg misc.c
+misc.obj: $(CFG) misc.c
 
-nls.obj: command.cfg nls.c
+nls.obj: $(CFG) nls.c
 
-openf.obj: command.cfg openf.c
+openf.obj: $(CFG) openf.c
 
-parsenum.obj: command.cfg parsenum.c
+parsenum.obj: $(CFG) parsenum.c
 
-path.obj: command.cfg path.c
+path.obj: $(CFG) path.c
 
-pause.obj: command.cfg pause.c
+pause.obj: $(CFG) pause.c
 
-prompt.obj: command.cfg prompt.c
+prompt.obj: $(CFG) prompt.c
 
-redir.obj: command.cfg redir.c
+redir.obj: $(CFG) redir.c
 
-ren.obj: command.cfg ren.c
+ren.obj: $(CFG) ren.c
 
-session.obj: command.cfg session.c
+session.obj: $(CFG) session.c
 
-set.obj: command.cfg set.c
+set.obj: $(CFG) set.c
 
-shift.obj: command.cfg shift.c
+shift.obj: $(CFG) shift.c
 
-swapexec.obj: command.cfg swapexec.c
+swapexec.obj: $(CFG) swapexec.c
 
-tempfile.obj: command.cfg tempfile.c
+tempfile.obj: $(CFG) tempfile.c
 
-time.obj: command.cfg time.c
+time.obj: $(CFG) time.c
 
-timefunc.obj: command.cfg timefunc.c
+timefunc.obj: $(CFG) timefunc.c
 
-tmpnam.obj: command.cfg tmpnam.c
+tmpnam.obj: $(CFG) tmpnam.c
 
-truename.obj: command.cfg truename.c
+truename.obj: $(CFG) truename.c
 
-type.obj: command.cfg type.c
+type.obj: $(CFG) type.c
 
-ver.obj: command.cfg ver.c
+ver.obj: $(CFG) ver.c
 
-verify.obj: command.cfg verify.c
+verify.obj: $(CFG) verify.c
 
-where.obj: command.cfg where.c
+where.obj: $(CFG) where.c
 
-cb_catch.obj: command.cfg cb_catch.asm
+cb_catch.obj: $(CFG) cb_catch.asm
 	$(TASM) /MX /ZI /O CB_CATCH.ASM,CB_CATCH.OBJ
 
-lh.obj: command.cfg lh.asm
+lh.obj: $(CFG) lh.asm
 	$(TASM) /MX /ZI /O LH.ASM,LH.OBJ
 
-lowexec.obj: command.cfg lowexec.asm
+lowexec.obj: $(CFG) lowexec.asm
 	$(TASM) /MX /ZI /O LOWEXEC.ASM,LOWEXEC.OBJ
 
-spawn.obj: command.cfg spawn.asm
+spawn.obj: $(CFG) spawn.asm
 	$(TASM) /MX /ZI /O SPAWN.ASM,SPAWN.OBJ
 
 strings.h:
@@ -286,9 +279,10 @@ strings.h:
 #-Vf
 #-Ff
 #-C
+#-L$(LIBPATH)
 
-# added strings.h here because command.cfg is included everywhere already
-command.cfg: command.mak strings.h
+# added strings.h here because $(CFG) is included everywhere already
+$(CFG): command.mak strings.h
   copy &&|
 -a
 -f-
@@ -301,7 +295,6 @@ command.cfg: command.mak strings.h
 -d
 -b-
 -I$(INCLUDEPATH)
--L$(LIBPATH)
 -D_NO__DOS_DATE
 -D_NO__DOS_TIME
-| command.cfg
+| $(CFG)

@@ -36,7 +36,7 @@
 #include "strings.h"
 #include "cmdline.h"
 
-const char shellver[] = "version 0.79c [" __DATE__ "]";
+const char shellver[] = "version 0.79dá [" __DATE__ "]";
 const char shellname[] = "FreeCom";
 
 void short_version(void)

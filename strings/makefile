@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.5  2000/08/15 21:31:37  skaus
+# chg: binary packages on FTP\nbugfix: piping
+#
 # Revision 1.4  2000/07/24 23:00:20  skaus
 # fix: DIR & COPY, envSize, Makefiles
 #
@@ -76,6 +79,7 @@ clobber : clean
 
 clean :
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) strings.h strings.dat
+	$(RM) $(RMFLAGS) *.log
 
 
 .IF $(CFG) != $(NULL)

@@ -7,9 +7,8 @@ license.txt     GNU license - applies to all files named here
 readme.txt      General shell info
 todo.txt        What I have to do
 
-command.dsk     Borland C desktop file
-command.prj     Borland C project file
 command.mak     Borland C make file
+config.mak      Makefile configuration
 model.def       Model definition for make file
 
 alias.c         Alias code
@@ -72,9 +71,6 @@ verify.c        Implements verify command
 28.com          program to switch to 28-line mode
 50.com          program to switch to 43/50-line mode
 command.com     COMMAND.COM executable
-
-makecom.bat     Make com file from exe
-clean.bat       Deletes the .bak and .obj files (cleans up)
 
 TESTS/          Test files and documents
 STRINGS/	Strings file and program(s) to deal with them

@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.6  2000/08/15 21:31:37  skaus
+# chg: binary packages on FTP\nbugfix: piping
+#
 # Revision 1.5  2000/07/24 23:00:19  skaus
 # fix: DIR & COPY, envSize, Makefiles
 #
@@ -106,7 +109,7 @@ com.map com.exe .UPDATEALL : $(OBJ)
 
 com.com : com.exe strings.dat
 	@+copy /b com.exe com_tmp.exe >nul
-	@+tdstrip com_tmp.exe
+	@-+tdstrip com_tmp.exe
 	@+copy /b com_tmp.exe + strings.dat $@
 	@+del com_tmp.exe >nul
 

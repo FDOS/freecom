@@ -388,7 +388,7 @@ welcome to redistribute it under certain conditions; type "ver /d"
 for details.  Type "ver /c" for a listing of credits.
 
 Send bug reports to fd-freecom@topica.com.
-Updates are available from http://www.gcfl.net/FreeCom
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_WARRANTY
@@ -400,7 +400,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details.
 
 Send bug reports to fd-freecom@topica.com.
-Updates are available from http://www.gcfl.net/FreeCom
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
@@ -412,7 +412,7 @@ the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.
 
 Send bug reports to fd-freecom@topica.com.
-Updates are available from http://www.gcfl.net/FreeCom
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_DEVELOPERS
@@ -428,7 +428,7 @@ The FreeDOS Command Shell developed by:
 Currently maintained by Steffen Kaiser.
 
 Send bug reports to fd-freecom@topica.com.
-Updates are available from http://www.gcfl.net/FreeCom
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 

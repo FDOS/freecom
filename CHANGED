@@ -1,3 +1,8 @@
+bugfix: Piping
+chg: SUPPL as external ZIP at
+	ftp://freedos.sourceforge.net/pub/freedos/suppl.zip
+	to remove large binaries in the project tree
+chg: *.MAK: CONFIG.MAK
 add: _TC_EARLY_ / _TC_LATER_
 add: Spanish Strings
 fix: Makefiles COMMAND.MAK for TC++ v1.01

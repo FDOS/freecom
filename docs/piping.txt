@@ -1,0 +1,29 @@
+Piping -- 2000/08/16 ska
+
+
+Piping, e.g. "cmd1 | cmd2", is actually spawned as:
+
+	SET some_internal_variable=%TEMP%\non-existant-file
+	cmd1 >%some_internal_variable%
+	cmd2 <%some_internal_variable%
+	DEL %some_internal_variable%
+
+The original implementation failed because the file was left open
+for writing in statement 2 before the temporary file was tried to
+be opened for reading in statement 3.
+This served to deny accidential deletation of the temporary file,
+but could fail, esp. if SHARE is not loaded.
+
+The new implementation really behaves as shown above and closes
+the file during to step from statement 2 to 3. At exactly this time
+the file is no longer protected by the system to be removed or
+opened by another process, thus, blocking the operation of FreeCOM
+to re-open the file for statement 3.
+
+To open the temporary file in read-write mode -- which means that the file
+need not to be re-opened for statement #3 -- would open the Potential
+Problem that cmd1 or cmd2 could "work" with the temporary file, but
+the ">" stream is entitled to be a write-only and "<" a read-only stream.
+
+For now the possibility that the temporary file is removed seems to be
+less than the other, so the lesser devil was choosen to be implemented.
