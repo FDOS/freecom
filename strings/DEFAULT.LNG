@@ -1039,7 +1039,7 @@ ERASE [drive:][path]filename [/P]
   /P		Prompts for confirmation before deleting each file.
 .
 
-:TEXT_CMDHELP_DIR#1
+:TEXT_CMDHELP_DIR#2
 Displays a list of files and subdirectories in a directory.
 
 DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
@@ -1051,10 +1051,9 @@ DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
  /P         Pauses after each screenful of information.
  /W         Uses wide list format.
  /A         Displays files with specified attributes.
-            [ATTRIBUTE SELECTION NOT IMPLEMENTED, YET; /A is /ADRHS]
  attributes  D  Directories                R  Read-only files
              H  Hidden files               A  Files ready for archiving
-             S  System files               -  Prefix meaning not
+             S  System files               -  Prefix meaning not, + may
  /O         List by files in sorted order. [NOT IMPLEMENTED, YET]
  sortorder   N  By name (alphabetic)       S  By size (smallest first)
              E  By extension (alphabetic)  D  By date & time (earliest first)
@@ -1063,7 +1062,6 @@ DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
  /S         Displays files in specified directory and all subdirectories.
  /B         Uses bare format (no heading information or summary).
  /L         Uses lowercase.
- /V         Verbose mode.
  /Y         Display 4-digit year.
 
 Switches may be preset in the DIRCMD environment variable.  Override

@@ -181,12 +181,72 @@
 #define MEM_ERR error_out_of_memory(); return 1;
 
 #define WIDE_COLUMNS 5
+	/* FINDFIRST() file mask used if no /A has been given */
+#define ATTR_DEFAULT FA_RDONLY | FA_ARCH | FA_DIREC
+	/* FINDFIRST() file mask used if /A (no args) has been given */
+#define ATTR_ALL FA_RDONLY | FA_ARCH | FA_DIREC | FA_HIDDEN | FA_SYSTEM;
 
-static int optS, optP, optW, optB, optA, optL, longyear;
+
+
+static int optS, optP, optW, optB, optL, longyear;
+
+static unsigned attrMay, attrMust, attrMustNot;
+/* within/right after the parsing of the options:
+		what attributes "may" be on (but need not), which "must" be set
+		and which "must not" be set.
+	attrMay is just passed into FINDFIRST(),
+	attrMust and attrMustNot are aggregated so that
+		(<current attributes> ^ mustNot) & must == must
+	Selects all valid files (it is: must |= mustNot actually).
+	Therefore, attrMust is called "attrMask" below.
+*/
+#define attrMask attrMust
+
 
 char *path;
 unsigned line;
 int need_nl;
+
+/* The DIR command accepts more than one /A options, the later ones
+	replaces former ones */
+static scanAttr(const char *p, int bool)
+{	unsigned attr;
+
+	attrMust = attrMustNot = 0;	/* purge previous /A*** */
+
+	if(!p || !*p) {		/* no specifying arguments --> display all */
+		attrMay = ATTR_ALL;
+		return E_None;
+	}
+	attrMay = 0;
+
+	for(--p;;bool = *p) {
+		switch(toupper(*++p)) {
+		case 'R': attr = FA_RDONLY; break;
+		case 'A': attr = FA_ARCH; break;
+		case 'D': attr = FA_DIREC; break;
+		case 'H': attr = FA_HIDDEN; break;
+		case 'S': attr = FA_SYSTEM; break;
+		case '+': case '-': continue;
+		case '\0': return E_None;
+		default:	/* error */
+			error_illformed_option(p);
+			return E_Useage;
+		}
+		/* MS-DOS v6.22: /a-dd --> use -d --> first option superceeds
+			NT4: /a-dd --> use d --> latest option superceeds
+			we implement DOS6 behaviour as it is easier right here */
+		if((attrMay & attr) == 0) {	/* not seen, yet */
+			switch(bool) {
+			case '-': /* disable */ attrMustNot |= attr; break;
+			default: /* enable */ attrMust |= attr; break;
+			case '+': /* anyway */ break;
+			}
+			attrMay |= attr;	/* "mustNot" is dropped later, must need to
+									be ORed later anyway */
+		}
+	}
+}
 
 #pragma argsused
 optScanFct(opt_dir)
@@ -195,9 +255,16 @@ optScanFct(opt_dir)
   case 'P': return optScanBool(optP);
   case 'W': return optScanBool(optW);
   case 'B': return optScanBool(optB);
-  case 'A': return optScanBool(optA);
+  case 'A': return scanAttr(strarg, bool);
   case 'L': return optScanBool(optL);
   case 'Y': return optScanBool(longyear);
+  case 0:	/* Longname option, e.g. /A without argument sign */
+  	switch(*optstr) {
+  	case 'A': case 'a':		/* /A*** */
+  		if(!optHasArg())
+			return scanAttr(optstr + 1, bool);
+		break;
+	}
   }
   optErr();
   return E_Useage;
@@ -417,30 +484,37 @@ static int dir_list(int pathlen
   unsigned long filecount = 0;
   unsigned long dircount = 0;
   int count;
-  unsigned mode = FA_RDONLY | FA_ARCH | FA_DIREC;
   int rv = E_None;
 
   assert(path);
   assert(pattern);
   assert(pathlen >= 2);   /* at least root */
 
-  /* if the user wants all files listed */
-  if (optA)
-    mode |= FA_HIDDEN | FA_SYSTEM;
-
   /* Search for matching entries */
   path[pathlen - 1] = '\\';
   strcpy(&path[pathlen], pattern);
 
-  if (FINDFIRST(path, &file, mode) == 0) {
+  if (FINDFIRST(path, &file, attrMay) == 0) {
+  	int printDirectoryEntry = !optB;
+/* For counting columns of output */
+  count = WIDE_COLUMNS;
+  /* if optB && optS the path with trailing backslash is needed,
+  	also for optS below do {} while */
+  strcpy(&path[pathlen - 1], "\\");
+
+  if(rv == E_None) do
+  if(((file.ff_attrib ^ attrMustNot) & attrMask) == attrMask) {
+    assert(strlen(file.ff_name) < 13);
+
   /* moved down here because if we are recursively searching and
    * don't find any files, we don't want just to print
    * Directory of C:\SOMEDIR
    * with nothing else
+   * 2003-02-03 moved down even further to handle attribute selection.
    */
 
-  if (!optB)
-  {
+  if(printDirectoryEntry) {
+    printDirectoryEntry = 0;
     rv = flush_nl();
     if(rv == E_None) {
 	   	/* path without superflous '\' at its end */
@@ -449,21 +523,13 @@ static int dir_list(int pathlen
 	   else path[pathlen - 1] = '\0';
         displayString(optS ? TEXT_DIR_DIRECTORY: TEXT_DIR_DIRECTORY_WITH_SPACE
          , path);
+	    path[pathlen - 1] = '\\';	/* need this below */
         if((rv = incline()) == E_None) {
         putchar('\n');
         rv = incline();
     }
    }
   }
-
-/* For counting columns of output */
-  count = WIDE_COLUMNS;
-  /* if optB && optS the path with trailing backslash is needed,
-  	also for optS below do {} while */
-  strcpy(&path[pathlen - 1], "\\");
-
-  if(rv == E_None) do {
-    assert(strlen(file.ff_name) < 13);
 
     if (cbreak)
       rv = E_CBreak;
@@ -603,7 +669,8 @@ static int dir_list(int pathlen
       /* already set for optB && optS before do {} while above 
 		  path[pathlen - 1] = '\\';		*/
       strcpy(&path[pathlen], "*.*");
-      if (FINDFIRST(path, &file, mode) == 0) do {
+      	/* Import attributes S & H from "maybe" */
+      if (FINDFIRST(path, &file, attrMay | FA_DIREC) == 0) do {
         if((file.ff_attrib & FA_DIREC) != 0 /* is directory */
          && strcmp(file.ff_name, ".") != 0  /* not cur dir */
          && strcmp(file.ff_name, "..") != 0) {  /* not parent dir */
@@ -698,7 +765,9 @@ int cmd_dir(char *rest)
   unsigned long dircount;
 
   /* initialize options */
-  longyear = optS = optP = optW = optB = optA = optL = 0;
+  attrMust = attrMustNot
+   = longyear = optS = optP = optW = optB = optL = 0;
+  attrMay = ATTR_DEFAULT;
 
   /* read the parameters from env */
   if ((argv = scanCmdline(getEnv("DIRCMD"), opt_dir, 0, &argc, &opts))
@@ -710,6 +779,12 @@ int cmd_dir(char *rest)
   /* read the parameters */
   if ((argv = scanCmdline(rest, opt_dir, 0, &argc, &opts)) == 0)
     return 1;
+
+	/* Pre-process the stuff that it makes it easier to use the
+		values later on */
+/*	attrMay |= attrMust; */	/* ensure "must" attr are searched for */
+	attrMay &= ~attrMustNot;	/* no need to search for forbidden attrs */
+	attrMust |= attrMustNot;	/* forming the attrMask */
 
   dircount = 0;
   if(argc)

@@ -1,3 +1,6 @@
+bugfix: removed /V from CMDHELP_DIR
+add: DIR /A*** (selected attributes) {based on patch from Michael Devore}
+
 v0.83 Beta 54:
 bugfix: prevent from executing non-*.bat/com/exe files [part 1) BugID #966]
 bugfix: calling an external program: preserve leading spaces [BugID #752]
