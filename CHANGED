@@ -1,3 +1,5 @@
+bugfix: STRINGS resource length value counts 1. string twice
+sub: enumResources() won't check secondary files no longer
 fix: MKTOOLS must include $(CFG) into list
 add: command WHICH
 fix: BUILD.BAT and accompanying makefiles for TC++ v1.01

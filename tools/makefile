@@ -10,6 +10,10 @@
 #
 #
 # $Log$
+# Revision 1.2.4.4  2001/02/18 22:43:58  skaus
+# bugfix: STRINGS resource length value counts 1. string twice
+# sub: enumResources() won't check secondary files no longer
+#
 # Revision 1.2.4.3  2001/02/18 21:08:24  skaus
 # add: command WHICH
 # fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
@@ -63,7 +67,7 @@ error:
 
 icmd : load_icd.exe icmd_{1 2 3}.icd
 
-%.icd : %.nas ; nasm -f bin -o $@ $<
+%.icd : %.nas ; $(NASM) -f bin -o $@ $<
 
 icmd_1.icd : icmd_inc.inc icmd_1.nas
 

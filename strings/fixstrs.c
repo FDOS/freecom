@@ -295,7 +295,7 @@ breakLogFile:
 	/* 1. Adjust the offset and generate the overall size */
 	for(size = string[0].size, cnt = 1; cnt < maxCnt; ++cnt) {
 		string[cnt].index = string[cnt-1].index + string[cnt-1].size;
-		size += string[cnt-1].size;
+		size += string[cnt].size;
 	}
 
 	if(size >= 0x10000ul - sizeof(string_index_t) * maxCnt) {

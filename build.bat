@@ -1,4 +1,5 @@
 @echo off
+if exist lastmake.mk del lastmake.mk
 echo.
 echo Making basic utilities for build process
 echo.
