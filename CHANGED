@@ -1,3 +1,4 @@
+bugfix: CONFIG.H: enabled CHCP by default
 fix: typos
 bugfix: cached NLS data not flushed
 fix: DIR: correct attribute behaviour, no + syntax {Tom Ehlert}
