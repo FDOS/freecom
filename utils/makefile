@@ -4,6 +4,11 @@
 #
 #
 # $Log$
+# Revision 1.3  2001/04/01 21:05:44  skaus
+# bugfix: CALL doesn't reset options
+# add: PTCHSIZE to patch heap size
+# add: VSPAWN, /SWAP switch, .SWP resource handling
+#
 # Revision 1.2  2001/03/07 19:49:01  skaus
 # Merged in Swap Support changes
 #
@@ -33,7 +38,7 @@ MYASMFLAGS = $(null,$(NDEBUG) $(MYASMFLAGS_DBG) $(MYASMFLAGS_NDBG))
 # Sources of this make target
 
 #	Default target
-all: mkctxt.exe mktools.exe
+all: mkctxt.exe mktools.exe mkinfres.exe
 
 mkctxt.exe : mkctxt.c
 

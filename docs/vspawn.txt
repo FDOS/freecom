@@ -1,0 +1,40 @@
+Swap Support #2
+	-- 2001/04/01 ska
+
+This swapping is derived from KSSF (see k-swap.txt), but instead of
+let the user decide what shell to execute, this swap faker uses a fixed
+filename.
+
+Useage:	VSPAWN [{ argument }]
+
+VSpawn creates the filename of the shell to execute itself by replacing
+its own file extension by .SWP. All the arguments are passed to the
+invoked shell unchanged.
+
+Most useful installation:
+
+Make COMMAND.COM and TOOLS\VPSAWN.COM by running BUILD.BAT.
+
+Rename COMMAND.COM into COMMAND.SWP.
+
+Move TOOLS\VPSAWN.COM to COMMAND.COM.
+
+Run COMMAND.COM.
+VSpawn automatically invokes COMMAND.SWP;
+COMMAND.SWP determines that it has been invoked using the VSpawn
+feature and will maintain %COMSPEC%==*.COM, but will use *.SWP as
+resource file.
+
+Because the COMSPEC variable contains the *.COM filename, which is the
+VSpawn wrapper, all subsequent invocations of a secondary shell will
+use the VSpawn wrapper as well.
+
+===
+
+If FreeCOM detects the VSpawn feature beeing used, it defaults to
+swap when executing external commands.
+This can be suppressed by invoking external commands by:
+CALL /N prg
+or passing the option /SWAP to FreeCOM.
+
+If auto-swap is not active, /SWAP enables it.

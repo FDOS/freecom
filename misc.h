@@ -40,6 +40,8 @@ int chkCBreak(int mode);
 void beep(void);
 void beep_low(void);
 char *comFile(void);
+char *comResFile(void);
+#define comRespawnFile comResFile
 char *comPathFile(const char * fnam);
 void dispCount(int cnt, const char * const zero, const char * const one
  , const char * const multiple);

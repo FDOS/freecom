@@ -3,6 +3,11 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.12  2001/04/01 21:05:44  skaus
+# bugfix: CALL doesn't reset options
+# add: PTCHSIZE to patch heap size
+# add: VSPAWN, /SWAP switch, .SWP resource handling
+#
 # Revision 1.11  2001/03/10 12:26:06  skaus
 # chg: recover from merge with expRes
 #
@@ -105,7 +110,7 @@ LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib
 LDFLAGS += /msl
 NASM *= c:\TOOL\NASMW.EXE
 
-LD_TLINK != D:\BC5\BIN\TLINK.EXE
+# LD_TLINK != D:\BC5\BIN\TLINK.EXE
 
 # Project specific C compiler flags
 MYCFLAGS_DBG = -DNDEBUG=1 $(null,$(DEBUG) $(NULL) -DDEBUG=1)
@@ -178,8 +183,8 @@ com.exe ?= _OBJS := $(OBJ:s/c0.obj//)
 com.exe com.map .UPDATEALL : $(OBJ)
 	$(MAK_EXE)
 
-com.com : com.exe strings.dat criter
-	@+copy /b com.exe + criter.mod\\criter + criter.mod\\criter1 + strings.dat $@
+com.com : com.exe strings.dat criter infores 
+	@+copy /b com.exe + infores + criter.mod\\criter + criter.mod\\criter1 + strings.dat $@
 
 #	@+copy /b com.exe com_tmp.exe >nul
 #	@+tdstrip com_tmp.exe
@@ -248,6 +253,9 @@ criter_clobber .SETDIR=criter.mod :
 	@+echo ==Entering $(PWD)
 	$(MAKE) clobber
 	@+echo ==Leaving $(PWD)
+
+infores : config.h command.h com.map com.exe
+	utils\mkinfres.exe $@ com.map com.exe
 
 #MAKEDEP START
 lowexec.obj : lowexec.asm \
@@ -436,12 +444,12 @@ DYNSOURCES =
 #MAKEDEP STOP
 
 clobber : utils_clobber tools_clobber strings_clobber criter_clobber my_clean
-	$(RM) $(RMFLAGS) *.com *.cln
+	$(RM) $(RMFLAGS) *.com *.cln *.swp
 
 clean : utils_clean tools_clean strings_clean criter_clean my_clean
 
 my_clean :
-	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com
+	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com infores
 
 
 .IF $(CFG) != $(NULL)
@@ -488,7 +496,7 @@ CONF_NDBG =	$(MYCFLAGS_NDBG)
 #-w-pro	\
 
 command.mak : makefile command.m1 command.m2
-	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(TLINK) /x /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@
+	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(TLINK) /m /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@
 
 
 # Generate TDUMP files from OBJ files

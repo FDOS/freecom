@@ -222,6 +222,24 @@ char *comFile(void)
 }
 
 /*
+ *  Return the absolute filename of the resource file of FreeCOM
+ */
+char *comResFile(void)
+{	if(isSwapFile) {
+		static char *p = 0;
+
+		free(p);
+		if((p = strdup(comFile())) != 0) {
+			assert(strlen(p) == isSwapFile + 3);
+			memcpy(p + isSwapFile, "SWP", 3);
+			return p;
+		}
+	}
+
+	return comFile();
+}
+
+/*
  * Construct the path of a file to be located in the same directory
  *  as COMMAND.
  *  Dynamically allocated.

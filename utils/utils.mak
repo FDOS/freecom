@@ -7,7 +7,7 @@ CFG = TCCDOS.CFG
 !include "..\config.mak"
 
 
-all: $(CFG) mktools.exe mkctxt.exe
+all: $(CFG) mktools.exe mkctxt.exe mkinfres.exe
 
 #		*Implicit Rules*
 .c.exe:

@@ -526,6 +526,9 @@ Features available:
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL
 [kernel swap] 
 ,
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP
+[default to swap] 
+,
 :TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS
 [installable commands] 
 ,

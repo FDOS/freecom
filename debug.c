@@ -16,6 +16,7 @@
 
 FILE *dbg_logfile = stdout;
 char *dbg_logname = 0;
+unsigned firstMem = 0;
 
 void dbg_print(const char * const fmt, ...)
 {	va_list ap;

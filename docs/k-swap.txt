@@ -1,6 +1,8 @@
 Description of kernel-supoorted swapping of FreeCOM
 	-- 2001/01/21 ska
 
+===> Please also read VSPAWN.TXT.
+
 === Preface
 
 This technique is an experimental implementation of a general purpose

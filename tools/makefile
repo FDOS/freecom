@@ -10,6 +10,11 @@
 #
 #
 # $Log$
+# Revision 1.6  2001/04/01 21:05:44  skaus
+# bugfix: CALL doesn't reset options
+# add: PTCHSIZE to patch heap size
+# add: VSPAWN, /SWAP switch, .SWP resource handling
+#
 # Revision 1.5  2001/03/07 19:49:01  skaus
 # Merged in Swap Support changes
 #
@@ -97,6 +102,9 @@ __errl:
 
 
 ptchldrv.obj : ptchldrv.c
+
+vspawn.com : vspawn.asm
+	$(NASM) $(NASMFLAGS) -f bin -o $@ $(MYASMFLAGS) $<
 
 kssf.com : kssf.asm
 	$(NASM) $(NASMFLAGS) -f bin -o $@ $(MYASMFLAGS) $<

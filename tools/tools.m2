@@ -11,8 +11,10 @@ icmd : load_icd.exe icmd_1.icd icmd_2.icd icmd_3.icd
   $(CC) $(CFLAGS) $<  $(SUPPL_LIB_PATH)\SUPPL_S.LIB
 .c.obj:
   $(CC) $(CFLAGS) -c {$< }
-.asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj $<
+.asm.com:
+	$(NASM) $(NASMFLAGS) -f bin -o $*.com  $<
+#.asm.obj:
+#	$(NASM) $(NASMFLAGS) -f obj $<
 .nas.icd:
 	$(NASM) $(NASMFLAGS) -o $&.icd $<
 
@@ -21,9 +23,6 @@ icmd_1.icd : icmd_inc.inc icmd_1.nas
 icmd_2.icd : icmd_inc.inc icmd_2.nas
 
 icmd_3.icd : icmd_inc.inc icmd_3.nas
-
-kssf.com : kssf.asm
-	$(NASM) $(NASMFLAGS) -f bin -o kssf.com $<
 
 
 $(CFG): tools.mak

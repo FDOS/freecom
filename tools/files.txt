@@ -9,3 +9,4 @@ ICMD_TPL.NAS	template of samples of Installable Commands
 ICMD_INC.INC	command code shared by all samples of Installable Commands
 
 KSSF.ASM	Kernel Swap Support Faker
+VSPAWN.ASM	VSpawn - KSSF #2

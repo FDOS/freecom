@@ -1,3 +1,6 @@
+bugfix: CALL doesn't reset options
+add: PTCHSIZE to patch heap size
+add: VSPAWN, /SWAP switch, .SWP resource handling
 chg: resolved conflicts from merging expRes branch
 fix: showcmds(): displays all avilable features rather than selected ones
 chg: some more docs\html\commands

@@ -145,20 +145,23 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 	/* Update the shell name as maybe %COMSPEC% was changed */
 	/* COMSPEC is the central and traditionally the only place of the name of
 		the shell */
-	if((shellname = env_findVar(segm, "COMSPEC") + 8) == (unsigned)-1 + 8) {
+	if(isSwapFile || 
+		(shellname = env_findVar(segm, "COMSPEC") + 8) == (unsigned)-1 + 8) {
 		/* set the string #0 */
 		char *shell;
 
-		shell = comFile();
+		shell = comRespawnFile();
 		assert(shell);
 
 		env_strput(segm, shell, 0);
 		shellname = env_string(segm, 0);
 	}
 	kswapContext->shell = MK_FP(segm, shellname);
+	dprintf(("[KSWAP: Respawn shell filename: %Fs]\n", kswapContext->shell));
 
 	/* Update central settings of FreeCOM */
 	kswapContext->canexit = canexit;
+	kswapContext->dfltSwap = defaultToSwap;
 	kswapContext->debug = fddebug;
 
 	/* Create the dynamic portion of the context */
@@ -214,6 +217,7 @@ int kswapLoadStruc(void)
 	perform_exec_result(decode_exec_result(kswapContext->execErr));
 
 	canexit = kswapContext->canexit;
+	defaultToSwap = kswapContext->dfltSwap;
 	fddebug = kswapContext->debug;
 	grabComFilename(1, kswapContext->shell);
 	if(kswapContext->dyn_ctxt) {

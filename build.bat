@@ -1,5 +1,9 @@
 @echo off
 if exist lastmake.mk del lastmake.mk
+if exist *.cfg del *.cfg
+if exist strings\*.cfg del strings\*.cfg
+if exist tools\*.cfg del tools\*.cfg
+if exist utils\*.cfg del utils\*.cfg
 echo.
 echo Making basic utilities for build process
 echo.

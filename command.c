@@ -239,6 +239,7 @@ int forceLow = 0;               /* load resident copy into low memory */
 int oldinfd = -1;       /* original file descriptor #0 (stdin) */
 int oldoutfd = -1;        /* original file descriptor #1 (stdout) */
 int autofail = 0;				/* Autofail <-> /F on command line */
+int isSwapFile = 0;
 jmp_buf jmp_beginning;
 
 	/* FALSE: no swap this time
@@ -246,6 +247,7 @@ jmp_buf jmp_beginning;
 		ERROR: no swap avilable at all
 	*/
 int swapOnExec = FALSE;
+int defaultToSwap = FALSE;
 	/* if != 0, pointer to static context
 		NOT allowed to alter if swapOnExec == ERROR !!
 	*/
@@ -857,6 +859,8 @@ intBufOver:
 
     if (*parsedline)
     {
+    	if(swapOnExec != ERROR)
+    		swapOnExec = defaultToSwap;
       if(tracethisline)
       	++tracemode;
       parsecommandline(parsedline);
@@ -901,7 +905,6 @@ static void hangForever(void)
               with the keyboard */
   }
 }
-
 
 int main(void)
 {

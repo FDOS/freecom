@@ -34,11 +34,13 @@
 #include "kswap.h"
 
 static int optS = 0;		/* force to swap out FreeCOM during call */
+static int optN = 0;		/* deny swapping; superceeds /S */
 
 #pragma argsused
 optScanFct(opt_call)
 { switch(ch) {
   case 'S': return optScanBool(optS);
+  case 'N': return optScanBool(optN);
   }
   optErr();
   return E_Useage;
@@ -66,14 +68,16 @@ int cmd_call(char *param)
     return 1;
   }
 
+  optS = optN = 0;
   if((ec = leadOptions(&param, opt_call, 0)) != E_None)
       return ec;
 
-  if(optS)
+  if(optS && swapOnExec != ERROR)
   	swapOnExec = TRUE;
+  if(optN && swapOnExec != ERROR)
+  	swapOnExec = FALSE;
 
 	parsecommandline(param);
-	swapOnExec = FALSE;
 
   if (bc->bfile == 0
       && bc->bfnam == 0)     /* Wasn't a batch file so remove context */

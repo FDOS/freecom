@@ -9,6 +9,7 @@
 
 typedef  kswap_t _seg *kswap_p;
 extern int swapOnExec;
+extern int defaultToSwap;
 extern kswap_p kswapContext;		/* static context */
 
 /* Lock kswap feature within kernel and invalidate a previous external prg

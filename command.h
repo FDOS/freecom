@@ -47,7 +47,7 @@
 #include <dos.h>
 #include <stdio.h>
 #include "misc.h"
-#include "fmemory.h"
+#include <fmemory.h>
 
 /* transformed into constants
 	unsigned far *maxx = MK_FP(0x40, 0x4a);
@@ -116,6 +116,7 @@ extern int exitflag;
 extern int autofail;
 extern int canexit;
 extern int errorlevel;
+extern int isSwapFile;		/* if > 0: position of extension (dot) */
 extern int forceLow;
 extern unsigned far *maxx;
 extern unsigned char far *maxy;

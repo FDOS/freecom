@@ -76,7 +76,7 @@ command.exe : $(CFG) alias.obj \
 	ver.obj \
 	verify.obj \
 	where.obj 
-	$(TLINK) /x /c /d @&&|
+	$(TLINK) /m /c /d @&&|
 $(LIBPATH)\c0s.obj+
 alias.obj+
 batch.obj+
@@ -140,13 +140,16 @@ ver.obj+
 verify.obj+
 where.obj
 command
-		# no map file
+command.map
 $(SUPPL_LIB_PATH)\suppl_s.lib+
 $(LIBPATH)\cs.lib
 |
 
-command.com : command.exe
-	copy /b command.exe + criter.mod\criter + criter.mod\criter1 + strings.dat command.com
+infores : config.h command.h command.exe command.map
+	utils\mkinfres.exe infores command.map command.exe
+
+command.com : command.exe infores
+	copy /b command.exe + infores + criter.mod\criter + criter.mod\criter1 + strings.dat command.com
 
 #		*Compiler Configuration File*
 #-h
@@ -158,7 +161,7 @@ command.com : command.exe
 # added strings.h here because $(CFG) is included everywhere already
 $(CFG): command.mak strings.h
   copy &&|
--a
+-a-
 -f-
 -ff-
 -K
@@ -166,7 +169,6 @@ $(CFG): command.mak strings.h
 -O
 -Z
 -k-
--d
 -b-
 -I$(INCLUDEPATH)
 -D_NO__DOS_DATE

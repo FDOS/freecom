@@ -144,6 +144,10 @@ extern int canexit;
 static unsigned oldPSP;
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
+#ifdef DEBUG
+extern unsigned _heaplen;
+#endif
+
 #ifndef FDDEBUG_INIT_VALUE
 #define FDDEBUG_INIT_VALUE 0
 #endif
@@ -209,6 +213,9 @@ int showcmds(char *rest)
 #endif
 #ifdef FEATURE_KERNEL_SWAP_SHELL
 	displayString(TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL);
+	if(swapOnExec != ERROR && defaultToSwap == TRUE) {
+		displayString(TEXT_SHOWCMD_DEFAULT_TO_SWAP);
+	}
 #endif
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 	displayString(TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS);
@@ -313,6 +320,9 @@ optScanFct(opt_init)
       if(optLong("MSG"))
         return optScanBool(persistentMSGs);
       break;
+    case 'S':
+    	if(optLong("SWAP"))
+    		return optScanBool(defaultToSwap);
     }
     break;
   }
@@ -387,6 +397,17 @@ void grabComFilename(int warn, const char far * const fnam)
 
   free(ComPath);    /* Save the found file */
   ComPath = buf;
+  isSwapFile = 0;
+  buf = dfnfilename(ComPath);
+  assert(buf);
+  if((buf = strchr(buf, '.')) != 0
+   && stricmp(buf, ".swp") == 0) {
+  		dprintf(("[INIT: VSpawn file found: %s]\n", ComPath));
+  		memcpy(++buf, "COM", 3);
+  		isSwapFile = buf - ComPath;
+  		defaultToSwap = TRUE;
+  }
+
 }
 
 /*
@@ -457,6 +478,7 @@ int initialize(void)
 	}
 #endif
 
+	dprintf(("[MEM: internal heap size maximum: %u]\n", _heaplen));
   /* Some elder DOSs may not pass an initialzied environment segment */
   if (env_glbSeg && !isMCB(SEG2MCB(env_glbSeg)))
     env_setGlbSeg(0);       /* Disable the environment */

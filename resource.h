@@ -27,7 +27,8 @@ typedef enum {
 	RES_ID_NONE = -0x7ffe,
 	RES_ID_ANY = -0x7fff,
 	RES_ID_STRINGS = 0,
-	RES_ID_CRITER
+	RES_ID_CRITER,
+	RES_ID_INFO
 } res_majorid_t;
 #pragma -b.
 
