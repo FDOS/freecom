@@ -460,7 +460,7 @@ int initialize(void)
     displayString(TEXT_CMDHELP_COMMAND);
 
   if ((showhelp || exitflag) && canexit)
-    return E_None;
+    return E_Exit;		/* Terminate this session */
 
   /* Now the /P option can be processed */
 	if(!canexit) {

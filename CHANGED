@@ -1,3 +1,4 @@
+bugfix: FREECOM.COM /?: is to terminate unless /P is present [Andrew Sly]
 bugfix: Cleanup HTML docs to pass W3C validation
 fix: typo in HISTORY /? {Andrew Sly}
 chg: wilcard matching: COPY/REN *.TXT ???b.*: If length of source filename
