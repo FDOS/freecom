@@ -558,11 +558,11 @@ int initialize(void)
   if (showinfo)
   {
     short_version();
-#ifndef DEBUG
+/* #ifndef DEBUG		No more commands
     putchar('\n');
     showcmds(0);
     putchar('\n');
-#endif
+#endif */
   }
 
   return E_None;
