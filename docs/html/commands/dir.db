@@ -19,6 +19,9 @@ if two patterns are specified, first all entries matching the first one,
 then all entries matching the second one are displayed;
 <FONT SIZE=-1>instead of to display the matching entries intermixed</FONT>.
 
+<P>Before parsing its command line DIR parses any <EM>option</EM> specified
+by the environment variable <OPT>DIRCMD</OPT>.
+
 STD_OPTIONS:
 <UL>
 <LI><OPT>/A</OPT>: (All) Wildcards are matched against System and Hidden
@@ -56,11 +59,13 @@ letters rather than capitol ones.
 	<LI><OPT>G</OPT> <B>g</B>roup directories first
 	<LI><OPT>N</OPT> sort by file <B>n</B>ame
 	<LI><OPT>S</OPT> sort by size (smallest first)
-	<LI><OPT>U</OPT> do not sort
+	<LI><OPT>U</OPT> do not sort (<B>u</B>nsorted)
 	</UL>
 	<P>Each sort order, except <OPT>U</OPT>, may be prefixed by
 	a hyphen to reverse the sort order. <OPT>U</OPT> effectively
-	cancels any previous setting or specified sort order.
+	cancels any previous setting or specified sort order, e.g. to
+	override an <OPT>/O</OPT> option from the <OPT>DIRCMD</OPT>
+	environment variable.
 	<P>If the same sort order is specified twice within the same
 	<OPT>/O</OPT> option, the last one superceeds previous ones; if
 	more than one <OPT>/O</OPT> option is specified, the last one
