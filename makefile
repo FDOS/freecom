@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.11  2001/03/10 12:26:06  skaus
+# chg: recover from merge with expRes
+#
 # Revision 1.10  2001/03/07 19:48:59  skaus
 # Merged in Swap Support changes
 #
@@ -137,10 +140,9 @@ OBJ = alias.obj batch.obj beep.obj break.obj call.obj cb_catch.obj cls.obj \
 	res.obj res_r.obj res_w.obj set.obj shift.obj tempfile.obj time.obj \
 	timefunc.obj tmpnam.obj truename.obj type.obj ver.obj verify.obj \
 	where.obj
-HDR = alias.h batch.h cmdline.h command.h config.h criter.mod\context.h_c \
-	crossjmp.h datefunc.h debug.h kswap.h misc.h model.inc module.h mux_ae.h \
-	nls.h openf.h res.h resource.h small.inc strings.h strings.typ stuff.inc \
-	tempfile.h timefunc.h
+HDR = alias.h batch.h cmdline.h command.h config.h crossjmp.h datefunc.h \
+	debug.h kswap.h misc.h model.inc module.h mux_ae.h nls.h openf.h res.h \
+	resource.h small.inc strings.typ stuff.inc tempfile.h timefunc.h
 
 
 .INCLUDE .IGNORE : lastmake.mk
@@ -250,135 +252,186 @@ criter_clobber .SETDIR=criter.mod :
 #MAKEDEP START
 lowexec.obj : lowexec.asm \
 	 .\model.inc .\small.inc .\stuff.inc
-date.obj : date.c \
-	 cmdline.h command.h config.h datefunc.h debug.h misc.h nls.h \
-	strings.h
-dir.obj : dir.c \
-	 cmdline.h command.h config.h debug.h misc.h nls.h strings.h
-command.obj : command.c \
-	 batch.h cmdline.h command.h config.h criter.mod/context.h_c \
-	crossjmp.h debug.h kswap.h misc.h mux_ae.h nls.h openf.h strings.h
-ctty.obj : ctty.c \
-	 command.h config.h debug.h misc.h openf.h strings.h
-ren.obj : ren.c \
-	 cmdline.h command.h config.h debug.h misc.h
-module.obj : module.c \
-	 command.h criter.mod/context.h_c debug.h kswap.h misc.h module.h \
-	res.h resource.h
-cb_catch.obj : cb_catch.asm \
-	 .\model.inc .\small.inc .\stuff.inc
-res.obj : res.c \
-	 command.h debug.h misc.h resource.h
-alias.obj : alias.c \
-	 alias.h cmdline.h command.h config.h debug.h misc.h tempfile.h
-parsenum.obj : parsenum.c \
-	 cmdline.h command.h config.h debug.h misc.h
-ver.obj : ver.c \
-	 cmdline.h command.h config.h debug.h misc.h strings.h
-path.obj : path.c \
-	 cmdline.h command.h config.h debug.h misc.h strings.h
-if.obj : if.c \
-	 batch.h cmdline.h command.h config.h debug.h misc.h
-timefunc.obj : timefunc.c \
-	 config.h debug.h timefunc.h
-cmdtable.obj : cmdtable.c \
-	 command.h config.h debug.h misc.h strings.h
-call.obj : call.c \
-	 batch.h cmdline.h command.h config.h criter.mod/context.h_c debug.h \
-	kswap.h misc.h
-mux_ae.obj : mux_ae.c \
-	 command.h config.h crossjmp.h debug.h misc.h mux_ae.h
-type.obj : type.c \
-	 cmdline.h command.h config.h debug.h misc.h openf.h strings.h
-prompt.obj : prompt.c \
-	 cmdline.h command.h config.h datefunc.h debug.h misc.h
-cls.obj : cls.c \
-	 command.h config.h debug.h misc.h
-debug.obj : debug.c \
-	 command.h config.h debug.h misc.h
-time.obj : time.c \
-	 cmdline.h command.h config.h debug.h misc.h nls.h strings.h \
-	timefunc.h
-verify.obj : verify.c \
-	 command.h config.h debug.h misc.h strings.h
-redir.obj : redir.c \
-	 command.h config.h debug.h misc.h
 openf.obj : openf.c \
 	 openf.h
 messages.obj : messages.c \
-	 command.h config.h debug.h misc.h res.h resource.h strings.h \
-	strings.typ
+	 /freedos/src/include/fmemory.h /freedos/src/include/suppl.h command.h \
+	config.h debug.h misc.h res.h resource.h strings.h strings.typ
 goto.obj : goto.c \
-	 batch.h cmdline.h command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h batch.h cmdline.h command.h config.h \
+	debug.h misc.h strings.h
 dstack.obj : dstack.c \
-	 command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/dfn.h /freedos/src/include/fmemory.h command.h \
+	config.h debug.h misc.h strings.h
 where.obj : where.c \
-	 cmdline.h command.h config.h debug.h misc.h
+	 /freedos/src/include/dfn.h /freedos/src/include/fmemory.h cmdline.h \
+	command.h config.h debug.h misc.h
 res_r.obj : res_r.c \
 	 resource.h
 copy.obj : copy.c \
-	 cmdline.h command.h config.h debug.h misc.h openf.h strings.h
+	 /freedos/src/include/dfn.h /freedos/src/include/fmemory.h \
+	/freedos/src/include/supplio.h cmdline.h command.h config.h debug.h \
+	misc.h openf.h strings.h
 internal.obj : internal.c \
-	 cmdline.h command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h strings.h
 shift.obj : shift.c \
-	 batch.h command.h config.h debug.h misc.h
+	 /freedos/src/include/fmemory.h batch.h command.h config.h debug.h \
+	misc.h
 pause.obj : pause.c \
-	 batch.h command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h batch.h command.h config.h debug.h \
+	misc.h strings.h
+date.obj : date.c \
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h \
+	datefunc.h debug.h misc.h nls.h strings.h
+dir.obj : dir.c \
+	 /freedos/src/include/dfn.h /freedos/src/include/fmemory.h cmdline.h \
+	command.h config.h debug.h misc.h nls.h strings.h
+command.obj : command.c \
+	 /freedos/src/include/fmemory.h /freedos/src/include/p-bc.h \
+	/freedos/src/include/p-pac.h /freedos/src/include/p-watcom.h \
+	/freedos/src/include/portable.h batch.h cmdline.h command.h config.h \
+	criter.mod/context.h_c crossjmp.h debug.h kswap.h misc.h mux_ae.h nls.h \
+	openf.h strings.h
 res_w.obj : res_w.c \
 	 resource.h
 truename.obj : truename.c \
-	 command.h config.h debug.h misc.h
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h
+ctty.obj : ctty.c \
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h \
+	openf.h strings.h
 cmdinput.obj : cmdinput.c \
-	 batch.h command.h config.h debug.h misc.h
-exec.obj : exec.c \
-	 command.h config.h debug.h misc.h
-break.obj : break.c \
-	 command.h config.h debug.h misc.h strings.h
-kswap.obj : kswap.c \
-	 alias.h command.h config.h criter.mod/context.h_c debug.h kswap.h \
+	 /freedos/src/include/fmemory.h batch.h command.h config.h debug.h \
 	misc.h
+ren.obj : ren.c \
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h
+exec.obj : exec.c \
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h
+break.obj : break.c \
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h \
+	strings.h
+module.obj : module.c \
+	 /freedos/src/include/fmemory.h /freedos/src/include/p-bc.h \
+	/freedos/src/include/p-pac.h /freedos/src/include/p-watcom.h \
+	/freedos/src/include/portable.h command.h criter.mod/context.h_c debug.h \
+	kswap.h misc.h module.h res.h resource.h
+kswap.obj : kswap.c \
+	 /freedos/src/include/fmemory.h /freedos/src/include/p-bc.h \
+	/freedos/src/include/p-pac.h /freedos/src/include/p-watcom.h \
+	/freedos/src/include/portable.h alias.h command.h config.h \
+	criter.mod/context.h_c debug.h kswap.h misc.h
 for.obj : for.c \
-	 batch.h cmdline.h command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h batch.h cmdline.h command.h config.h \
+	debug.h misc.h strings.h
+cb_catch.obj : cb_catch.asm \
+	 .\model.inc .\small.inc .\stuff.inc
+res.obj : res.c \
+	 /freedos/src/include/fmemory.h command.h debug.h misc.h resource.h
+alias.obj : alias.c \
+	 /freedos/src/include/fmemory.h alias.h cmdline.h command.h config.h \
+	debug.h misc.h tempfile.h
+parsenum.obj : parsenum.c \
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h
 set.obj : set.c \
-	 cmdline.h command.h config.h debug.h misc.h
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h
 misc.obj : misc.c \
-	 batch.h command.h config.h datefunc.h debug.h misc.h nls.h strings.h \
-	timefunc.h
+	 /freedos/src/include/fmemory.h batch.h command.h config.h datefunc.h \
+	debug.h misc.h nls.h strings.h timefunc.h
+ver.obj : ver.c \
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h strings.h
 tmpnam.obj : tmpnam.c \
-	 command.h config.h debug.h misc.h
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h
+path.obj : path.c \
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h strings.h
+if.obj : if.c \
+	 /freedos/src/include/fmemory.h batch.h cmdline.h command.h config.h \
+	debug.h misc.h
 history.obj : history.c \
-	 command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h \
+	strings.h
 init.obj : init.c \
-	 batch.h cmdline.h command.h config.h criter.mod/context.h_c debug.h \
-	kswap.h misc.h module.h strings.h timefunc.h
+	 /freedos/src/include/dfn.h /freedos/src/include/environ.h \
+	/freedos/src/include/fmemory.h /freedos/src/include/mcb.h \
+	/freedos/src/include/p-bc.h /freedos/src/include/p-pac.h \
+	/freedos/src/include/p-watcom.h /freedos/src/include/portable.h batch.h \
+	cmdline.h command.h config.h criter.mod/context.h_c debug.h kswap.h \
+	misc.h module.h strings.h timefunc.h
 tempfile.obj : tempfile.c \
-	 command.h config.h debug.h misc.h tempfile.h
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h \
+	tempfile.h
+timefunc.obj : timefunc.c \
+	 config.h debug.h timefunc.h
+cmdtable.obj : cmdtable.c \
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h \
+	strings.h
 cmdline.obj : cmdline.c \
-	 cmdline.h command.h config.h debug.h misc.h
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h
+call.obj : call.c \
+	 /freedos/src/include/fmemory.h /freedos/src/include/p-bc.h \
+	/freedos/src/include/p-pac.h /freedos/src/include/p-watcom.h \
+	/freedos/src/include/portable.h batch.h cmdline.h command.h config.h \
+	criter.mod/context.h_c debug.h kswap.h misc.h
 beep.obj : beep.c \
-	 batch.h command.h config.h debug.h misc.h
+	 /freedos/src/include/fmemory.h batch.h command.h config.h debug.h \
+	misc.h
+mux_ae.obj : mux_ae.c \
+	 /freedos/src/include/fmemory.h command.h config.h crossjmp.h debug.h \
+	misc.h mux_ae.h
 echo.obj : echo.c \
-	 batch.h cmdline.h command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h batch.h cmdline.h command.h config.h \
+	debug.h misc.h strings.h
 loadhigh.obj : loadhigh.c \
-	 cmdline.h command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h strings.h
 environ.obj : environ.c \
-	 command.h config.h debug.h misc.h
+	 /freedos/src/include/environ.h /freedos/src/include/fmemory.h \
+	command.h config.h debug.h misc.h
+type.obj : type.c \
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h openf.h strings.h
+prompt.obj : prompt.c \
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h \
+	datefunc.h debug.h misc.h
+cls.obj : cls.c \
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h
 batch.obj : batch.c \
-	 batch.h cmdline.h command.h config.h debug.h misc.h
+	 /freedos/src/include/dfn.h /freedos/src/include/fmemory.h batch.h \
+	cmdline.h command.h config.h debug.h misc.h
+debug.obj : debug.c \
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h
 error.obj : error.c \
-	 command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h \
+	strings.h
 datefunc.obj : datefunc.c \
 	 config.h datefunc.h debug.h
 nls.obj : nls.c \
-	 cmdline.h command.h config.h debug.h misc.h nls.h strings.h
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h nls.h strings.h
+time.obj : time.c \
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h nls.h strings.h timefunc.h
 filecomp.obj : filecomp.c \
-	 command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h \
+	strings.h
 fddebug.obj : fddebug.c \
-	 cmdline.h command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/fmemory.h cmdline.h command.h config.h debug.h \
+	misc.h strings.h
 dummies.obj : dummies.asm \
 	 .\model.inc .\small.inc
+verify.obj : verify.c \
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h \
+	strings.h
 del.obj : del.c \
-	 cmdline.h command.h config.h debug.h misc.h strings.h
+	 /freedos/src/include/dfn.h /freedos/src/include/fmemory.h cmdline.h \
+	command.h config.h debug.h misc.h strings.h
+redir.obj : redir.c \
+	 /freedos/src/include/fmemory.h command.h config.h debug.h misc.h
 DYNSOURCES =
 #MAKEDEP STOP
 

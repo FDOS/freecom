@@ -1,1 +1,1 @@
-	FreeCom version 0.81 beta 1 [Mar 07 2001]
+	FreeCom version 0.82 [Mar 10 2001]

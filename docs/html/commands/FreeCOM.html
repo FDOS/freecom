@@ -1,0 +1,488 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META HTTP-EQUIV="Content-Language" CONTENT="en">
+<META NAME="GENERATOR" CONTENT="VI">
+<META NAME="DESCRIPTION" CONTENT="Description of features and implementation status of FreeCOM, the COMMAND.COM replacement">
+<META NAME="AUTHOR" CONTENT="Steffen Kaiser">
+<META NAME="KEYWORDS" CONTENT="DOS, FreeDOS, FreeCOM, COMMAND.COM, CLI">
+<META NAME="DATE" CONTENT="2001-02-06">
+<TITLE>Description of Features and Implementation Status of FreeCOM</TITLE>
+</HEAD>
+
+<BODY>
+<OL>
+<LI><A HREF="#intro">Introduction</A>
+<LI><A HREF="#cmdline">Command Line Syntax</A>
+<LI><A HREF="#envvars">Environment Variables</A>
+<LI><A HREF="#icmds">Internal Commands</A>
+<LI><A HREF="#userprompt">User prompt</A>
+<LI><A HREF="#appendix">Appendix</A>
+	<OL>
+	<LI><A HREF="#cvs-tags">CVS Resources</A>
+	<LI><A HREF="#ebnf">EBNF</A>
+	</OL>
+</OL>
+
+<P><HR><P>
+<H1><A NAME="intro">Introduction</A></H1>
+
+FreeCOM is a:
+<UL>
+<LI><B>C</B>ommand <B>L</B>ine <B>I</B>nterface,
+<LI>(user) shell and/or
+<LI>COMMAND.COM replacement
+</UL>for DOS. It has been spawned as part of
+<A HREF="http://www.freedos.org">FreeDOS</A>, a project that aims to implement
+a GNU GPL'ed DOS.
+
+<P>The main duty of FreeCOM is to prompt the user <A HREF="#userprompt">to enter
+commands</A>, which
+are interpreted, processed directly by FreeCOM or executed as executable
+files.
+
+<P>Those commands processed by FreeCOM directly are called
+<A HREF="#icmds"><EM>Internal Commands</EM></A>.
+
+<P>Non-internal commands, which cannot be processed by FreeCOM directly,
+are called <EM>External Commands</EM>,
+because FreeCOM will search for files equally named as typed-in.
+
+<P>Besides to implement certain commands FreeCOM offers some
+<A HREF="#features">features</A>.
+
+<P><HR><P>
+<H1><A NAME="cmdline">Command Line Syntax</A></H1>
+
+EBNF: COMMAND.COM [ path [ console ] ] [{ option }] [ '/' ( K | C ) <<commandline>> ]
+
+<P>If present, the first non-option argument specifies the location in which
+FreeCOM resides. This location is later stored in the environment variable
+COMSPEC. Since DOS3+ this option is no longer necessary to find the shell
+invoked during the boot process, but it may be used to let the system boot
+a primary shell from one location, but use a shell of the same version from
+a different location later on.
+<BR>One shallt not point to a RAMdisk at this time, because FreeCOM needs to reload
+certain information relatively early during execution, before AUTOEXEC.BAT had
+been executed, in which, normally, FreeCOM is copied into the RAMdisk.
+<BR>For convinience FreeCOM checks, if at the given location a FreeCOM exists
+<STRONG>and</STRONG> is accessable, if not, the given location is ignored.
+Also, the standard requires to specify a path only, but FreeCOM accepts
+an absolute filename, so accepting that FreeCOM is not necessarily named
+<TT>COMMAND.COM</TT>.
+
+<P>The second non-option argument, if present, specifies the console FreeCOM
+shall enable. This setting is system-wide and is not limited to FreeCOM or
+just this particular process tree. In its result, this argument is identical
+to the CTTY command.
+
+<P>FreeCOM knows the following options:
+<UL>
+<LI><OPT>/?</OPT>: Issues a help screen, then exists.
+<LI><OPT>/!</OPT>: Enable/disable debugging support, if compiled to FreeCOM.
+<LI><OPT>/Y</OPT>: Enables trace/single step mode. This mode is deaktivated
+when the user prompt has been reached.
+<LI><OPT>/F</OPT>: Enables autofail of Critical Errors; then instead of displaying
+the Abort/Retry/Ignore/Fail dialog, Critical Errors are automatically answered
+with Fail.
+<LI><OPT>/P</OPT>: Installs a primary copy of FreeCOM. Such instance:
+	<OL>
+	<LI>cannot be terminated with the EXIT command.
+	<LI>executes the <CMD>AUTOEXEC.BAT</CMD> script before any other command.
+	</OL>
+The <OPT>/P</OPT> option may have an argument to specify an alternate name for the
+AUTOEXEC script, e.g.: <OPT>/P:FDAUTO.BAT</OPT>.
+<LI><OPT>/E</OPT>: Sets another size of the environment segment, in which all the
+environment variables are stored, e.g.: <OPT>/E:1024</OPT>.
+<LI><OPT>/L</OPT>: Sets the size of the internal command buffer. <EM>Note</EM>:
+This option is ignored currently, the internal buffer always defaults to 512 bytes.
+<LI><OPT>/U</OPT> Sets the size of the internal user input buffer. <EM>Note</EM>:
+This option is ignored currently. The input buffer always defaults to 255 bytes,
+which is the maximum.
+<LI><OPT>/LOW</OPT>: Forces to load FreeCOM low. <EM>Note</EM>: Currently this option
+has no effect, because no part of FreeCOM is loaded high.
+<LI><OPT>/MSG</OPT>: Installs the message server. <EM>Note</EM>: Because the message
+server is not used nowadays, this option forces to permanently load FreeCOM's
+messages into memory.
+</UL>
+
+The options <OPT>/K</OPT> and <OPT>/C</OPT> are special cases and do not behave as normal
+options does. They are exclusive and all characters at the right side of 
+such option <FONT SIZE=-2>(except an optional argument sign)</FONT> specify a
+command to execute, e.g.: <CMD>/C DIR /s</CMD>, <CMD>/C=DIR /s</CMD>, and <CMD>/CDIR /s</CMD>
+do behave exactly the same and execuate the command <CMD>DIR /s</CMD>.
+<BR>If these options are used in conjunction with the <OPT>/P</OPT> option, the AUTOEXEC.BAT
+script is executed prior executing the specified command.
+<BR>In opposite to <OPT>/C</OPT> the <OPT>/K</OPT> option enters the interactive shell
+prompt after executing the specified command.
+
+<P><HR><P>
+<H1><A NAME="envvars">Environment Variables</A></H1>
+
+Environment variables can be freely assigned using the SET command,
+e.g. executing:<BR>
+CMD: SET var1=tecxsgk;jsdgsdflfsjdflkasjf/lasjflas
+<BR>assigns this nonsense to the variable <TT>var1</TT>. Later on, the
+value of the variable can be used by writing: <CMD>%var1%</CMD>, thus, writing
+the name of the variable enclosed without whitespace by two percent
+signs.
+<STRONG>Warning</STRONG>: Environment variables are expanded fully into plain
+text before the command line is furtherly parsed. If a variable contains
+an odd number of quotes, the remaining command line must contain the closing quote
+in order to operate properly. Also see this:<BR>
+CMD: SET var=text del
+CMD: IF text==%var% GOTO label
+<BR>The second line looks uninteresting, but once the environment variable
+has been expanded the line has morphed into:<BR>
+CMD: IF text==text del GOTO label
+<BR>not that funny anymore, because the IF command
+interpretes only the string <CMD>text==text</CMD> as condition, but <CMD>del GOTO label</CMD>
+is executed as command.
+
+<P>FreeCOM uses a number of environment variables for its own purpose.
+
+<UL>
+<LI><B>COMSPEC</B>: FreeCOM loads some information on demand, these data
+are stored in the FreeCOM executable. The value of this environment variable
+contains the filename FreeCOM shall use. The contents can be changed with the
+SET command.
+<LI><B>DIRCMD</B>: The user may define default values for the
+DIR command. Any options specified within <TT>DIRCMD</TT> are prefixing any
+entered ones, so to say FreeCOM behaves as if the user always types:<BR>
+CMD: DIR %DIRCMD% &laquo;other arguments&raquo;
+<BR>This variable must be changed using the SET command.
+<LI><B>COPYCMD</B>: This variable contains default options for the COPY command.
+<LI><B>PROMPT</B>: FreeCOM prompts the user to enter commands to run, the prompt can be
+customized by changing the contents of this variable.
+<BR>This variable can be changed using the SET or the PROMPT commands. Latter one includes
+a detailed description of the format of the prompt string.
+<LI><B>PATH</B>: When FreeCOM is to execute an external command and this one does not
+contain no path, FreeCOM searched for the command in a number of paths. These ones
+are enumerated by the PATH environment variable.
+<BR>This variable can be changed using the SET or the PATH commands. Latter one includes
+a detailed description of the format of the search path.
+</UL>
+
+
+<P>There are a number of automatic variables that do not follow the above mentioned
+syntax and which contents is automatically generated. Unlike the normal
+variables these automatic variables are constructed of exactly two characters,
+the first one is a single percent sign and the second one the variable identifier:
+<UL>
+<LI><B>%?</B>: expands to the current errorlevel, which is the exit code of
+the previously executed external command.
+<LI><B>%0</B>: in batch scripts only: is the name of the script currently
+executed.
+<LI><B>%1</B> through <B>%9</B>: in batch scripts only: are the first through nineth
+argument passed to the currently executed batch script. If less than nine arguments
+had been passed to the script, they return an empty string. To access the
+tenth argument please refer to the SHIFT command.
+<LI> <CMD>FOR <B>%v</B> IN (...) DO &laquo;any command&raquo;</CMD>: <B>%v</B> may use
+any letter, the FOR command creates a new
+variable, which is valid in the &laquo;any command&raquo; following the <CMD>DO</CMD>
+keyword.
+<LI><B>%%</B>: Is no real variable, but expands to a single percent sign.
+</UL>
+<P>Because automatic variables have one percent sign only, it sometimes lead to
+confusion within the FOR command, e.g. in:<BR>
+CMD: SET adam=eva
+CMD: FOR %a in (*.*) DO echo %adam% %a
+<BR><CMD>%adam</CMD> is interpreted as [<CMD>%a</CMD>]dam.
+
+<P><HR><P>
+<H1><A NAME="icmds">Internal Commands</A></H1>
+Internal commands will be processed by FreeCOM directly, they are available
+to the user without presence of any external files, in fact they hide
+External Commands named equally.
+
+<P>The synopsises of the <A HREF="cmd.html">internal commands</A>
+are described in a style derived from <A HREF="#ebnf">EBNF</A>.
+
+<P><HR><P>
+<H1><A NAME="userprompt">User Prompt</A></H1>
+
+FreeCOM knows two modes:
+<OL>
+<LI>Interactive, and
+<LI>batch processing.
+</OL>
+
+The second one performs batch scripts, which are more or less a sequence of
+commands written to a file. Such files may contain any external commands,
+internal commands and calls to other batch files as well.
+
+<P>In interactive mode FreeCOM prompts the user to enter a command, the line is
+interpreted, parsed and, finally, either rejected because of an error or executed.
+
+<H2>Command Line Syntax</H2>
+
+FreeCOM accepts the following command line:<BR>
+EBNF: [ ':' ] [ '?' ] [ '@' ] { command [{ argument | redirection }] : '|' }
+EBNF: redirection ::= ( '<' | '>' | '>>' ) filename
+
+<P>The first optional <CMD>?</CMD> must not be mixed up with the command <CMD>?</CMD>!
+
+<H3>Description:</H3>
+<P>The colon marks the line as label, which causes to let FreeCOM ignore the line
+completely as no interpretation is tried on this line, neiter are any redirections
+created.
+<P>The <CMD>?</CMD> forces FreeCOM to enable the trace mode for this line. In trace mode
+FreeCOM prompts the user wether to execute the resulting command.
+<P>The optional <CMD>@</CMD> disables the echo status for this line. If the echo status
+is enabled, the line is displayed right before it is executed; see ECHO for more details.
+<P>If commands are chained with the <CMD>|</CMD> symbols, those commands are to be executed
+as a <EM>pipe</EM>. For instance the command line:<BR>
+CMD: cmd1 | cmd2 | cmd3
+<BR>forms a pipe consisting of the three individual commands <CMD>cmd1</CMD>, <CMD>cmd2</CMD>, and
+<CMD>cmd3</CMD>, where the standard output stream of <CMD>cmd1</CMD> is connected to the
+standard input stream of <CMD>cmd2</CMD> and the output of <CMD>cmd2</CMD> to the input
+of <CMD>cmd3</CMD>. <EM>Note:</EM> Because DOS is no multitasking environment, pipes are
+simulated with file and the three-command pipe will look like this:<BR>
+CMD: cmd1 >%TEMP%\cmd###1.tmp
+CMD: cmd2 <%TEMP%\cmd###1.tmp >%TEMP%\cmd###2.tmp
+CMD: cmd3 <%TEMP%\cmd###2.tmp
+<BR>The files are temporary ones and will be removed as soon as they are
+no longer required, meaning the tempfile #1 is removed after <CMD>cmd2</CMD>
+terminates and tempfile #2 upon termination of <CMD>cmd3</CMD>.
+<P>Redirections tie the standard input or output stream to a file or device,
+for instance:<BR>
+CMD: cmd arg <infile >>outfile
+<BR>redirects the standard input stream of <CMD>cmd</CMD> to the file <TT>infile</TT> and the
+standard output stream to <TT>outfile</TT>. The double output redirection specifies to append
+to an existing file rather than overwriting it.
+
+<H2>Command Line Editing</H2>
+FreeCOM offers two methods to interactively enter command lines:
+<OL>
+<LI>standard input, and
+<LI>enhanced input.
+</OL>
+The first one just calls a DOS function, whereas the second one processes each
+key for its own. Which method FreeCOM uses is defined at compile time.
+
+<P>If the echo state is enabled, the user is <EM>prompted</EM> with the
+PROMPT string; otherwise no visible or audible prompt is issued to
+indicate an user activity request.
+
+<P>In either mode the <TT>ENTER</TT> key terminates the editing and
+lets FreeCOM start to interprete the entered line.
+
+<P>The <STRONG>standard input</STRONG> mode does neither support command line
+history, except the last command line in some circumstances, nor file completion.
+The following keys have a special meaning:
+<BR><TABLE WIDTH=100% BORDER>
+<TR>	<TH>Key</TH>
+		<TH>Meaning</TH>
+<TR>	<TD ALIGN=CENTER>F1</TD>
+		<TD>Get next character from last line, if available</TD>
+<TR>	<TD ALIGN=CENTER>F3</TD>
+		<TD>Get last line, if available</TD>
+<TR>	<TD ALIGN=CENTER>F5</TD>
+		<TD>Place current line in last-line buffer and restart editing on a blank line</TD>
+<TR>	<TD ALIGN=CENTER>F6</TD>
+		<TD>Insert the pseudo-character <EM>End-of-file</EM></TD>
+<TR>	<TD ALIGN=CENTER>backspace</TD>
+		<TD>delete character to the left</TD>
+<TR>	<TD ALIGN=CENTER>cursor left</TD>
+		<TD>delete character to the left</TD>
+<TR>	<TD ALIGN=CENTER>cursor right</TD>
+		<TD>Get next character from last line, if available</TD>
+</TABLE>
+
+
+<P>The <STRONG>enhanced input</STRONG> mode does support command line history and
+file completion.  The following keys have a special meaning:
+<BR><TABLE WIDTH=100% BORDER>
+<TR>	<TH>Key</TH>
+		<TH>Meaning</TH>
+<TR>	<TD ALIGN=CENTER>F1</TD>
+		<TD>Get next character from last line, if available</TD>
+<TR>	<TD ALIGN=CENTER>F3</TD>
+		<TD>Get last line, if available</TD>
+<TR>	<TD ALIGN=CENTER>F5</TD>
+		<TD>Place current line in last-line buffer and restart editing on a blank line</TD>
+<TR>	<TD ALIGN=CENTER>backspace</TD>
+		<TD>delete character to the left</TD>
+<TR>	<TD ALIGN=CENTER>cursor down</TD>
+		<TD>Replace the current input line with the previous line from the history</TD>
+<TR>	<TD ALIGN=CENTER>cursor left</TD>
+		<TD>move cursor one character one position to the left</TD>
+<TR>	<TD ALIGN=CENTER>cursor right</TD>
+		<TD>Move cursor one position to the right; at the end of the line
+			get next character from last line, if available</TD>
+<TR>	<TD ALIGN=CENTER>cursor up</TD>
+		<TD>Replace the current input line with the next line from the history</TD>
+<TR>	<TD ALIGN=CENTER>delete</TD>
+		<TD>Deletes the character on the cursor</TD>
+<TR>	<TD ALIGN=CENTER>end</TD>
+		<TD>Moves the cursor to the end of the line</TD>
+<TR>	<TD ALIGN=CENTER>ESC</TD>
+		<TD>Clear current line</TD>
+<TR>	<TD ALIGN=CENTER>home</TD>
+		<TD>moves the cursor to the beginning of the line</TD>
+<TR>	<TD ALIGN=CENTER>insert</TD>
+		<TD>Switch between insert and overwrite mode</TD>
+<TR>	<TD ALIGN=CENTER>TAB</TD>
+		<TD>Take the current word for a file and try to complete it</TD>
+<TR>	<TD ALIGN=CENTER>^C</TD>
+		<TD>Clear current line and enable echo state. <FONT SIZE=-1>The echo state is
+			enabled to ensure the user gets to know he is on the command line of
+			FreeCOM rather than stuck in a non-interruptable program.</FONT></TD>
+</TABLE>
+
+<P><HR><P>
+<H1><A NAME="appendix">Appendix</A></H1>
+
+<H2><A NAME="cvs-tags">CVS Resources</A></H2>
+
+On <A HREF="http://sourceforge.net/project/?group_id=5109">SourceForge</A>
+a short description of how to access the CVS reository is located. Following those
+instructions will download the main trunk of the specified module of the repository,
+e.g.: <PRE>cvs -z6 co freecom</PRE> downloads the <TT>MAIN</TT> trunk, also
+called <TT>HEAD</TT>, of FreeCOM.
+
+<P>However, CVS allows branch the development of a module at some point from the
+main trunk into side trees. On these branches the module can be developed further,
+new features can be added etc., without disturbing the main trunk (and therefore the
+primary release) of the module. When the side development proved its worthiness, the
+changes are merged into the main trunk and, hence, becomes part of the primary release.
+
+<P>Branches are marked by tags, though, unlike normal tags branch tags automatically
+evolve with the file, what means that when a file from a specific branch is updated,
+the branch tag automatically move from the current version of the file to the new one.
+<BR>To check out a branch, create a new directory, change within it and execute:
+<PRE>cvs -z6 co -r tag freecom</PRE>, where <TT>tag</TT> is the name of the branch you
+want to download. <EM>Note</EM>: It is not advisable to use the same directory to
+manage files for two different branches.
+
+<P>The FreeCOM module has the following <EM>active</EM> branches:
+<CENTER><TABLE BORDER WIDTH=100%>
+<TR>	<TH ALIGN=CENTER>Tag</TH>
+		<TH>Meaning</TH>
+<TR>	<TD ALIGN=CENTER>expSpawn</TD>
+		<TD>Module based FreeCOM, bases on expRes branch</TD>
+</TABLE></CENTER>
+
+<P>The FreeCOM module has the following <EM>obsoleted</EM> branches:
+<CENTER><TABLE BORDER WIDTH=100%>
+<TR>	<TH ALIGN=CENTER>Tag</TH>
+		<TH>Meaning</TH>
+<TR>	<TD ALIGN=CENTER>expRes</TD>
+		<TD>Resource management implementation.
+			<BR>Finally merged into trunk as of 2001/03/10</TD>
+</TABLE></CENTER>
+
+<HR>
+<H2><A NAME="ebnf">EBNF</A></H2>
+
+Documents encode the synopsis of the commands with operators derived from
+EBNF (<B>E</B>xtended <B>B</B>ackus-<B>N</B>aur <B>F</B>ormula).
+
+<H3>Type setting</H3>
+
+Depending on different meanings characters are set into various shapes:
+
+<TABLE BORDER WIDTH=100%>
+<TR>
+	<TH>Name
+	<TH>Meaning
+	<TH>Example
+<TR>
+	<TD ALIGN=CENTER><TT>terminal</TT>
+	<TD>characters to be enterred on command line or displayed by
+		the computer;EBNF: &quot;terminal symbols&quot;
+	<TD><TT>ECHO</TT>
+<TR>
+	<TD ALIGN=CENTER><TT>'string'</TT>
+	<TD>The quotes remove the metafunction of the enclosed characters
+		in order to specify EBNF operators as terminal symbols.
+		EBNF: &quot;terminal symbols&quot;
+	<TD><TT>'|'</TT>
+<TR>
+	<TD ALIGN=CENTER><B>bold</B>
+	<TD>operators that constructs portions together;
+		EBNF: &quot;operators&quot;
+	<TD><B>|</B>
+<TR>
+	<TD ALIGN=CENTER><I>italian</I>
+	<TD>placeholders for arguments, which are explained in the description;
+		EBNF: &quot;non-terminal symbols&quot;
+	<TD><I>varname</I>
+</TABLE>
+
+<H3>Operators</H3>
+
+The EBNF  uses the following operators:
+<TABLE BORDER WIDTH=100%>
+<TR>
+	<TH>Symbol
+	<TH>Meaning
+<TR>
+	<TD ALIGN=CENTER><B>|</B>
+	<TD>alternative; use either left or right token
+<TR>
+	<TD ALIGN=CENTER><B>()</B> 
+	<TD>parenthizes enclose tokens limiting the range of <B>|</B>
+<TR>
+	<TD ALIGN=CENTER><B>[]</B>
+	<TD>brackets enclose optional tokens, thus, they may appear zero or
+		one time; they also limit the range of <B>|</B>
+<TR>
+	<TD ALIGN=CENTER><B>{}</B>
+	<TD>curly brackets enclose repitive tokens, which may appear one or
+		more times; they also limit the range of <B>|</B>
+<TR>
+	<TD ALIGN=CENTER><B>{ : }</B>
+	<TD>as the normal curly brackets, but any repitive tokens are delimited
+	by the token(s) right of the colon; for instance:
+	<BLOCKQUOTE>
+	<B>{</B> <I>file</I> <B>:</B> <TT>'+'</TT> <B>}</B>
+	</BLOCKQUOTE>
+	is the same as:
+	<BLOCKQUOTE>
+	<I>file</I> <B>[{</B> <TT>'+'</TT> <I>file</I> <B>}]</B>
+	</BLOCKQUOTE>
+	and applies to:
+	<UL>
+	<LI><I>file</I>
+	<LI><I>file</I> + <I>file</I>
+	<LI><I>file</I> + <I>file</I> + <I>file</I>
+	<LI><I>file</I> + <I>file</I> + <I>file</I> + <I>file</I>
+	<LI>...
+	</UL>
+<TR>
+	<TD ALIGN=CENTER><B>&laquo;   &raquo;
+	<TD>is a placeholder for an arbitary string of terminal symbols, which
+		further syntax is described by the enclosed text in English
+		natural language.
+<TR>
+	<TD ALIGN=CENTER><B>::=</B>
+	<TD>assigns a meaning (right side) to a non-terminal symbol (left side);
+		for instance<PRE>
+	<TT>DIR</TT> <B>[ {</B> <I>option</I> <B>|</B> <I>filespec</I> <B>} ]</B>
+	<I>option</I> <B>::=</B> <TT>/</TT> <B>(</B> <TT>A</TT> <B>|</B> <TT>B</TT> <B>|</B> <TT>C</TT> <B>)</B><BR></PRE>
+		Any occurance -- only one here -- of <I>option</I> on the right
+		side of an <B>::=</B> or where no <B>::=</B> is present at all is
+		to be replaced by the right side of <I>option</I><B>::=</B>.
+
+</TABLE>
+
+<P>Unless modified by above mentioned operators a sequence of tokens specifies
+that each token must be present exactly one time in exactly that order.<BR>
+Note: For the sake of clearness, spaces are inserted between tokens. These
+spaces do <STRONG>not</STRONG> mean that a space is allowed at this place!
+Also, the fact that no <B>_</B> is present does <STRONG>not</STRONG> mean that
+at this place is none allowed. It is assumed that the reader will find
+the places where optional spaces are valid either by "doing" or by reading the
+examples.
+<HR>
+
+
+<HR WIDTH=50%><HR WIDTH=25%><HR WIDTH=5%><P ALIGN=CENTER>
+Copyright 2000-2001 &copy; Steffen Kaiser - current maintainer of FreeCOM
+<P>
+<FONT SIZE=1>
+<A HREF="ftp://ftp.cs.pdx.edu/pub/elvis/"><IMG SRC="../images/vi.gif" ALT="Elvis - The VI clone"></A>
+</FONT>
+</BODY>
+</HTML>

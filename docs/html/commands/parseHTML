@@ -1,0 +1,25 @@
+#!perl
+
+# Parse additional *.html files useing parse.pl
+
+require 'parse.pl';
+
+&readCmdList;
+
+sub htmlCommandRef {
+	my($cmd) = @_;
+
+	return '<A HREF="cmd.html#' . lc($cmd) . "\">$cmd</A>";
+}
+
+
+foreach $file ('FreeCOM.html') {
+	die "Cannot open '$file': $!\n"
+		unless open(IN, $file);
+	die "Cannot creare '../$file': $!\n"
+		unless open(HTML, ">../$file");
+	&parseEBNF;
+	close HTML;
+	close IN;
+}
+

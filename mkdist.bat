@@ -2,6 +2,9 @@
 : Prepare binary distribution
 : set DBG=Yes
 
+: don't forget to pass on the default rather than mine
+copy config.mak.default config.mak
+
 set _DBG=REM
 if NOT "%DBG%"=="" set _DBG=
 
@@ -106,6 +109,7 @@ rm -frd old
 pushd docs\html\commands || quit
 echo Updating HTML documents
 perl db2html
+perl parseHTML
 popd
 
 :ende

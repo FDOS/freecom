@@ -1,3 +1,4 @@
+chg: resolved conflicts from merging expRes branch
 fix: showcmds(): displays all avilable features rather than selected ones
 chg: some more docs\html\commands
 fix: criter.asm: DEBUG does no longer compile to .COM (for consistency)
