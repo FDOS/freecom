@@ -1,0 +1,1419 @@
+# $Id$
+#
+# FreeCOM national customization file
+#
+#	Language: Dutch
+#	Author:   Bernd Blaauw, bblnews@hotmail.com
+# 
+# This file is used to generate all the messages that command.com
+# outputs.  This file is the input to the fixstrs program, and it
+# outputs strings.h and strings.dat.  The .DAT file is appended to
+# the command.exe file, and then renamed to command.com.  The .H
+# file contains all the info for the program to retreive the
+# messages.
+#
+# The format of this file is simple.  Blank lines and lines starting
+# with "#" are ignored.
+# Each message starts with a label name that will be used to refer to
+# the message in the program.  A label starts with a colon ":".
+# A label has a version ID attached to it delimited by a hash sign, e.g.:
+#	:TEXT_LABEL#1
+# This version is incremented each time the contents of the string has
+# undergo a larger change. The same language definition may contain the
+# same label up to one time, regardless of the version. FIXSTRS compares
+# both the label and the version ID and both must match.
+# A missing version is assumed as "#0".
+#
+# All lines after the label are the message until a line with a
+# single "." or "," in the first column.  The difference is the
+# period (".") signifies that there will be a final carrage return when
+# the message is displayed, but a comma does not.
+#
+# The body may contain backslash escape sequences as known from C; there
+# are the usual \# (where '#' is a lowercase letter except 'x' or one of
+# "[]{}?"), \\ (to embed a backslash itself)
+# \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
+# character), \, and \. (to specify a period or comma in the first column
+# of a line) and the single \ at the end of the line to suppress to append
+# a newline character. Note: There is NO octal sequence except the short \0!
+# There is a known bug (or feature): [ignore the very first hash mark]
+#:TEXT_LABEL#2
+#
+#\
+#,
+# Although the first data line appends the newline, the second does not,
+# though the comma removes the newline from the first line.
+
+# Defining prompts
+# Some prompts may cause an user interaction. Those ones should be in sync
+# with the issued text. To define how to interprete a pressed key, they
+# are mapped into metakeys like that: [ignore first hash sign]
+
+## Return value: a -> Yes; else -> No
+#:PROMPT_YES_NO#1
+#YyNn\n\r{CBREAK}
+#aabb b b       b
+# (Yes/No) ? \
+#.
+
+# All strings, which label start with "PROMPT_", are parsed as prompts.
+# The first two lines of the body are special; the first one enumerates all
+# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# range from 'a' through 'z'; spaces are ignored; everything else cause
+# an error. The comment preceeding the prompt definition associates the
+# metakeys with their meaning.
+# The remaining lines of the body contain the text to be displayed.
+#
+# Above example defines a native Yes/No prompt with a space behind the
+# question mark and no appended newline.
+# The metakey 'a' means "User answered with 'Yes'" and 'b' means no.
+# The keys 'Y' and 'y' are mapped to metakey 'a' (aka Yes) and the keys
+# 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
+# The spaces between the 'b's in the second line had been inserted to
+# align them with the corresponding keys of the first line, hence in order
+# to enhance readibility of the association between the pressed keys and their
+# mapping into a metakey.
+#
+# The first line (pressed keys) has to enumerate the ASCII value as returned
+# by DOS or BIOS (INT-10); special keys normally expressed with ASCII code zero,
+# but a non-zero scancode are NOT supported; this limit includes for instance
+# the function keys F1 through F12 and the cursor keys and it is not possible
+# to differ between the number pad and normal keys.
+# The keys may be enumerated by their ASCII character, by a backslash sequence,
+# or a symbolic name enclosed in curly brackets (see FIXSTRS.C "symkeys[]"
+# array about the supported symnames).
+
+
+#
+#  These are error messages
+#
+## Issued if a single character option is unknown
+:TEXT_ERROR_INVALID_SWITCH
+Ongeldige schakeloptie. - /%c
+.
+
+## Issued if a longname option is unknown
+:TEXT_ERROR_INVALID_LSWITCH
+Ongeldige schakeloptie. - /%s
+.
+
+## Issued if the context, the type of argument etc. is invalid
+:TEXT_ERROR_ILLFORMED_OPTION
+Slecht-gevormde optie: '%s'
+.
+
+:TEXT_ERROR_OPT_ARG
+Optie '%s' kan geen parameter hebben
+.
+
+:TEXT_ERROR_OPT_NOARG
+Optie '%s' dient een parameter te hebben
+.
+
+:TEXT_INVALID_NUMBER
+Ongeldig nummer opgegeven in '%s'
+.
+
+:TEXT_ERROR_CLOSE_QUOTE
+Sluit-quote-teken mist ("): %c
+.
+
+:TEXT_ERROR_TEMPFILE
+Kan geen tijdelijk bestand aanmaken
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR
+Te veel parameters. - '%s'
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS
+Te veel parameters.
+.
+
+:TEXT_ERROR_INVALID_PARAMETER
+Ongeldige parameter. - '%s'
+.
+
+:TEXT_ERROR_PATH_NOT_FOUND
+Pad niet gevonden.
+.
+
+:TEXT_ERROR_FILE_NOT_FOUND
+Bestand niet gevonden.
+.
+
+:TEXT_ERROR_SFILE_NOT_FOUND
+Bestand niet gevonden. - '%s'
+.
+
+:TEXT_ERROR_REQ_PARAM_MISSING
+Vereiste parameter ontbreekt.
+.
+
+:TEXT_ERROR_INVALID_DRIVE
+Ongeldige schijf %c:.
+.
+
+:TEXT_ERROR_BADCOMMAND
+Ongeldige opdracht of bestandsnaam.
+.
+
+:TEXT_ERROR_OUT_OF_MEMORY
+Geheugengebrek-fout.
+.
+
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+Toewijzing van DOS geheugen is mislukt.
+.
+
+:TEXT_ERROR_CANNOTPIPE
+Kan geen pijp maken! Kan tijdelijk bestand niet openen!
+.
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE
+Regel #%ld in batch-bestand '%s' is te lang.
+.
+
+:TEXT_ERROR_BFILE_VANISHED
+Batch-bestand '%s' niet gevonden.
+.
+
+:TEXT_ERROR_BFILE_LABEL
+Batch-bestand '%s' draagt niet het label '%s'.
+.
+
+:TEXT_ERROR_DIRFCT_FAILED#1
+%s mislukt voor '%s'.
+.
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ENV_VAR
+Kan omgevingsvariable '%s' niet aanmaken.
+Omgevingsruimte vol?
+.
+:TEXT_ERROR_ENV_VAR_NOT_FOUND
+Omgevingsvariabele '%s' niet gevonden.
+.
+:TEXT_ERROR_NO_ENVIRONMENT
+Geen omgevingsruimte. Wellicht geheugentekort. Geef de /E optie op.
+.
+
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1
+Kan alias '%s' niet maken. Alias ruimte vol?
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1
+Alias '%s' niet gevonden.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+Geen alias ruimte. Waarschijnlijk geheugen tekort.
+.
+
+:TEXT_ERROR_SYNTAX_STR
+Syntax fout. - '%s'
+.
+
+:TEXT_ERROR_SYNTAX
+Syntax fout.
+.
+
+:TEXT_ERROR_FILENAME_TOO_LONG
+Bestandsnaam te lang. - '%s'
+.
+
+:TEXT_ERROR_SELFCOPY
+Kan '%s' niet naar zichzelf kopieren
+.
+
+:TEXT_ERROR_COMMAND_TOO_LONG
+Opdrachtregel te lang na ALIAS uitbreiding!
+.
+
+:TEXT_ERROR_LINE_TOO_LONG
+Regel te lang.  Kan opdracht niet uitvoeren.
+.
+
+:TEXT_ERROR_HISTORY_SIZE#1
+Ongeldige geschiedenisgrootte '%s'.
+.
+
+:TEXT_HISTORY_EMPTY#1
+Geschiedenis van opdrachtregel is leeg.
+.
+
+
+:TEXT_ERROR_BAD_MCB_CHAIN
+MCB keten corrupt, of MS-DOS incompatibel systeem.
+.
+
+:TEXT_ERROR_UNDEFINED_ERROR
+Ongedefinieerde fout %d.
+.
+
+:TEXT_ERROR_REGION_WARNING
+Illegaal geheugenmemorybereik %d - achterwege gelaten.
+.
+
+:TEXT_ERROR_ON_OR_OFF
+U dient ON of OFF op te geven.
+.
+
+:TEXT_ERROR_BAD_VERABLE
+Slechte variabele definitie.
+.
+
+:TEXT_ERROR_IN_MISSING#1
+FOR: IN ontbreekt.
+.
+
+:TEXT_ERROR_MISSING_PARENTHESES#1
+Een of beide haakjes missen "(" ")".
+.
+
+:TEXT_ERROR_DO_MISSING#1
+FOR: DO ontbreekt.
+.
+
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+FOR: geen opdracht na DO statement opgegeven.
+.
+
+:TEXT_ERROR_REDIRECT_FROM_FILE
+Kan invoer van bestand '%s' niet omleiden.
+.
+
+:TEXT_ERROR_REDIRECT_TO_FILE
+Kan uitvoer niet omleiden naar bestand '%s'.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+Lege omleiding.
+.
+
+:TEXT_ERROR_INVALID_DATE
+Ongeldige datum.
+.
+
+:TEXT_ERROR_INVALID_TIME
+Ongeldige tijd.
+.
+
+:TEXT_ERROR_NO_GOTO_LABEL
+Geen label opgegeven voor opdracht GOTO.
+.
+
+:TEXT_CTTY_NOTIMPLEMENTED
+De CTTY opdracht is uit deze versie van COMMAND.COM weggelaten.
+.
+
+:TEXT_ERROR_NORW_DEVICE
+Apparaat '%s' is een ongeldig of niet leesbaar/schrijfbaar apparaat.
+.
+
+:TEXT_ERROR_CTTY_DUP
+Het veranden van de bestandsbeschrijvingen naar TTY '%s' is mislukt.
+.
+
+:TEXT_ERROR_L_NOTIMPLEMENTED
+/L is nog niet geimplementeerd.
+.
+
+:TEXT_ERROR_U_NOTIMPLEMENTED
+/U is nog niet geimplementeerd.
+.
+
+:TEXT_ERROR_WRITING_DEST
+Fout bij het schrijven naar de bestemming.
+.
+
+:TEXT_ERROR_CANNOT_OPEN_SOURCE
+Niet in staat om de bron te openen. - '%s'
+.
+
+:TEXT_ERROR_OPEN_FILE
+Niet in staat om bestand '%s' te openen
+.
+
+:TEXT_ERROR_READ_FILE
+Niet in staat om te lezen van bestand '%s'
+.
+
+:TEXT_ERROR_WRITE_FILE
+Niet in staat om te schrijven naar bestand '%s'
+.
+
+:TEXT_ERROR_LEADING_PLUS
+Het concatenatieteken '+' kan niet geplaatst worden voor de argumenten.
+.
+
+:TEXT_ERROR_TRAILING_PLUS
+Het concatenatie teken '+' kan niet achter de argumenten geplaatst worden.
+.
+
+:TEXT_ERROR_NOTHING_TO_DO
+Er valt niets te doen.
+.
+
+:TEXT_ERROR_COPY
+Kopieren is mislukt
+.
+
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: ontbrekende bestandsnaam
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: ontbrekend getal
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: ongeldig nummer
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: uit te voeren opdracht ontbreekt
+.
+
+:TEXT_NOT_IMPLEMENTED_YET
+Sorry...nog niet geimplementeerd.
+.
+
+:TEXT_FAILED_LOAD_STRINGS
+Het laden van de berichten in het systeemgeheugen is mislukt.
+.
+
+:TEXT_MSG_NOTIMPLEMENTED
+De /MSG optie is weggelaten uit deze COMMAND.COM.
+.
+
+:TEXT_MSG_ITEMS_DISPLAYED#1
+%u items weergegeven.
+.
+
+:TEXT_CORRUPT_COMMAND_LINE
+Corrupte opdrachtregel. Dit is een interne fout en heeft te maken met het
+systeem waarop COMMAND.COM draait. Rapporteer deze fout alstublieft.
+.
+
+:TEXT_QUOTED_C_OR_K#1
+De /C en /K opties kunnen niet gequote worden, en worden genegeerd.
+.
+
+:TEXT_INIT_FULLY_QUALIFIED#1
+Het pad naar COMMAND.COM dient volledig opgegeven te worden!
+Dat betekent inclusief schijfletter en beginnend met een backslash.
+Bijvoorbeeld: C:\\FDOS
+
+COMMAND.COM veronderstelt nu als pad:
+%s
+.
+
+:TEXT_ERROR_RESTORE_SESSION
+De sessie-informatie kon niet hersteld worden, en alle lokale instellingen
+zijn verloren gegaan. Kijk alstublieft bij bovenstaande foutberichten voor
+de oorzaak van dit probleem.
+.
+
+:TEXT_ERROR_SAVE_SESSION
+De huidige gegevens konden niet behouden blijven gedurende de aanroep van het 
+programma. Kijk alstublieft bij bovenstaande foutberichten voor de oorzaak
+van dit probleem.
+.
+
+:TEXT_ERROR_CWD_FAILED
+Schijf %c: reageert niet, of er is een gebrek aan intern geheugen.
+.
+
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+Swappen mislukt: Aliassen hebben teveel geheugenruimte toegewezen gekregen.
+.
+
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+Swappen mislukt: Kan geen ver/afgelegen geheugen toewijzen.
+.
+
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+Geen ALIAS ruimte meer.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1
+Geen dergelijke alias aanwezig: '%s'
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+Toevoegen van alias is mislukt.
+.
+
+:TEXT_ALIAS_INVALID_NAME#1
+Ongeldige aliasnaam '%s'.
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+Kan Context module of Kritieke Fouten afhandeling niet laden.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+Context geheugentekort.
+Als u deze fout blijft houden, overweeg dan om een interne buffer,
+zoals geschiedenis, directory stack, etc te verhogen.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1
+Grootte van context is in totaal %lu bytes en overschrijdt
+de maximale limiet. Context wordt aangepast tot %u bytes.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+De poging om status-informatie aan de context toe te voegen is mislukt.
+Deze fout kan geheugencorruptie of een onjuist vastgestelde minimumgrootte
+van de context aangeven. Informeer alstublieft de beheerder van FreeCOM op:
+freecom@freedos.org
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+De context ontbreekt na swap. De context wordt opnieuw aangemaakt,
+maar alle aliassen en dergelijke gaan hierbij verloren.
+.
+
+#
+# Informational messages
+#
+
+:TEXT_MSG_PAUSE#1
+Druk op een toets zoals bv spatie om door te gaan . . .\
+.
+
+:TEXT_MSG_HISTORY_SIZE
+Geschiedenis grootte is %d bytes.
+.
+
+:TEXT_MSG_DOSKEY
+DOSKEY mogelijkheden zijn al in werking in de schil.
+.
+
+:TEXT_MSG_ECHO_STATE
+ECHO staat ingesteld op %s
+.
+
+:TEXT_MSG_VERIFY_STATE
+VERIFY staat ingesteld op %s
+.
+
+:TEXT_MSG_FDDEBUG_STATE
+DEBUG uitvoer staat ingesteld op %s.
+.
+:TEXT_MSG_FDDEBUG_TARGET
+DEBUG uitvoer wordt geprint naar '%s'.
+.
+
+:TEXT_MSG_BREAK_STATE
+BREAK staat ingesteld op %s
+.
+
+:TEXT_MSG_CURRENT_DATE
+De huidige datum is %s
+.
+
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN#1
+Geef nieuwe datum op (mm%sdd%sjjjj): \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1
+Geef nieuwe datum op (dd%smm%sjjjj): \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1
+Geef nieuwe datum op (jjjj%smm%sdd): \
+.
+
+:TEXT_MSG_CURRENT_TIME
+Het is nu %s
+.
+
+:TEXT_STRING_PM#1
+ pm\
+.
+:TEXT_STRING_AM#1
+ am\
+.
+
+:TEXT_MSG_ENTER_TIME#1
+Geef nieuwe tijd op: \
+.
+
+# src-file <operation> target-file
+:TEXT_MSG_COPYING
+%s %s %s
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (Y/N) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1
+JjNn{CR}{LF}{CBREAK}
+aabb   b   b       b
+Alle bestanden in '%s' zullen worden verwijderd!
+Weet u dit zeker (J/N)? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+JjNn{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Ja=ENTER, Nee=ESC] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+#	by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1
+JjNnAaQq{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Control-Break of Control-C ingedrukt.\r
+Wilt u batchbestand '%s' be-eindigen (Ja/Nee/Alles) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1
+JjNnAaSs{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Wilt u '%s' overschrijven (Ja/Nee/Alles/Stoppen) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1
+JjNnAaSs{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Bestand '%s' verwijderen (Ja/Nee/Alles/Stoppen) ? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<onbekend>>\
+.
+
+:TEXT_DIRSTACK_EMPTY
+Directory stack leeg.
+.
+
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME#1
+ Volume van drive %c \
+.
+:TEXT_DIR_HDR_VOLUME_STRING
+is %s
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+heeft geen label
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER
+ Volume Serienummer is %04X-%04X
+.
+:TEXT_DIR_FTR_FILES#1
+%10s bestand(en)\
+.
+:TEXT_DIR_FTR_BYTES
+   %12s bytes
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+Totaal aantal genoemde bestanden:
+.
+:TEXT_DIR_FTR_DIRS#1
+%10s dir(s)\
+.
+:TEXT_DIR_FTR_BYTES_FREE
+ %15s bytes vrij
+.
+:TEXT_DIR_DIRECTORY
+Directory van %s
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE
+ Directory van %s
+.
+:TEXT_DIR_LINE_FILENAME_WIDE#1
+%-15s\
+.
+:TEXT_DIR_LINE_FILENAME_BARE
+%-13s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE#1
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <DIR> \
+.
+:TEXT_DIR_LINE_SIZE#1
+   %10s \
+.
+
+:TEXT_FILE_COMPLATION_DISPLAY#1
+%-14s\
+.
+
+:TEXT_MSG_PATH
+PATH=%s
+.
+:TEXT_MSG_PATH_NONE#1
+Geen zoekpad gedefinieerd.
+.
+
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+Zo\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+Ma\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+Di\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+Woe\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+Do\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+Vr\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+Za\
+.
+
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+geen bestand verwijderd.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+Een bestand verwijderd.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1
+%u bestanden verwijderen.
+.
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+Interne beschikbare opdrachten:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+Beschikbare voorzieningen:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[aliassen] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[uitgebreide invoer] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[geschiedenis] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[bestandsnaam aanvulling] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[swapping] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[start loggen] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+       [laatste directory] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[kernel swap] \
+.
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[XMS swap] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[default to swap] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[installeerbare commando's] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+  [DOS NLS] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[directory stack (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[FreeCOM debugging] \
+.
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
+
+Druk op F8 voor traceermodus, of op F5 om %s te omzeilen... \
+.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC
+'%s' wordt omzeild.
+.
+
+:TEXT_MSG_VER_DOS_VERSION
+DOS versie %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+FreeDOS kernel (bouwversie 1933 of eerder)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS
+FreeDOS kernel versie %d.%d.%d
+.
+
+
+:TEXT_MSG_VER_WARRANTY
+Copyright (C) 1994-2001 Tim Norman en anderen.
+
+Dit programma wordt verspreid in de hoop dat het bruikbaar zal zijn, 
+maar ZONDER ENIGE GARANTIE; zelfs zonder de veronderstelde garantie op
+MERCHANTABILITY of BRUIKBAARHEID VOOR EEN BEPAALDE DOEL(STELLING). 
+Raadpleeg de GNU General Public License (GPL) voor meer details hierover.
+
+Stuur foutmeldingsberichten naar fd-freecom@topica.com.
+Nieuwere versies zijn verkrijgbaar van http://freedos.sourceforge.net/freecom
+.
+
+:TEXT_MSG_VER_REDISTRIBUTION
+Copyright (C) 1994-2001 Tim Norman en anderen.
+
+Dit programma is vrije programmatuur; u kunt het herverpreiden en/of wijzigen
+met inachtneming van de voorwaarden van de GNU General Public License zoals
+die beschikbaar wordt gesteld door de Free Software Foundation;
+of versie 2 van de Licentie, of (zo u wilt) enige latere versie.
+
+Stuur foutmeldingsberichten naar fd-freecom@topica.com.
+Nieuwere versies zijn verkrijgbaar van http://freedos.sourceforge.net/freecom
+.
+
+:TEXT_MSG_VER_DEVELOPERS
+
+De FreeDOS opdrachtverwerker is ontwikkeld door vele ontwikkelaars,
+zie het bijgevoegde HISTORY.TXT bestand.
+
+Tegenwoordig beheerd door Steffen Kaiser mailto:freecom@freedos.org
+
+Stuur foutmeldingsberichten naar fd-freecom@topica.com.
+Nieuwere versies zijn verkrijgbaar van http://freedos.sourceforge.net/freecom
+.
+
+
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+De opdrachtverwerker staat op het punt beeindigd te worden, ook al\r
+is dit niet toegestaan (meestal door de "/P" optie te gebruiken).\r
+U dient het systeem te herstarten, of, als deze schil draait in een\r
+multitasking omgeving, dit proces/deze taak handmatig te beeindigen.\r
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+FreeCOM uitvoerbaar bestand niet gevonden.
+U dient het complete pad naar COMMAND.COM op te geven 
+als eerste argument van COMMAND.COM, bijvoorbeeld:
+C:\\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1
+Omgevings-segment    : max %5u bytes; beschikbaar %5u bytes
+.
+:TEXT_MEMORY_CONTEXT#1
+Context segment        : max %5u bytes; beschikbaar %5u bytes
+.	
+:TEXT_MEMORY_HEAP#1
+Heap                   : beschikbaar %5lu bytes
+.
+:TEXT_MEMORY_CTXT_ALIAS#1
+\tAliassen        : limiet %5u bytes, huidig %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_HISTORY#1
+\tHistory        : limiet %5u bytes, huidig %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1
+\tDirectory stack: limiet %5u bytes, huidig %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1
+\tLaatste directory cache : gebruikt %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_BATCH#1
+\tBatch nesten  : gebruikt %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1
+\tSwapinfo       : gebruikt %5u bytes, %5u items
+.
+
+
+#
+# Command help text
+#
+
+:TEXT_CMDHELP_ALIAS
+Toont, maakt, of verwijdert aliassen.
+
+ALIAS [variabele[=][tekenreeks]]
+
+	variabele   is de te gebruiken alias-naam.
+	tekenreeks  een aantal op te geven letters die
+                    toegewezen worden aan de alias.
+
+
+Typ ALIAS zonder parameters om de huidige aliassen te tonen.
+.
+
+:TEXT_CMDHELP_BEEP
+Maak een klikgeluid.
+.
+
+:TEXT_CMDHELP_BREAK
+Zet uitgebreide CTRL+C controle aan of uit.
+
+BREAK [ON | OFF]
+
+Typ BREAK zonder parameters om de huidige instelling te tonen.
+.
+
+:TEXT_CMDHELP_CALL#1
+Roept tijdelijk een batchprogramma vanuit een ander batchprogramma aan.
+
+CALL [/S | /N] [drive:][pad]bestandsnaam [batch-parameters]
+
+  batch-parameters   Duidt mogelijke opdrachtregel-informatie aan die het 
+		     batchprogramma kan vereisen.
+/S forceert, /N weigert het swappen van FreeCOM.
+.
+
+:TEXT_CMDHELP_CD
+Toont de naam van de huidige directory of verandert deze.
+
+CHDIR [drive:][pad]
+CHDIR[..]
+CD [drive:][pad]
+CD[..]
+CD -
+
+  ..   Duidt aan dat u naar de bovenliggende directory wilt gaan.
+  -    springt, indien "laatste directory" optie is aangezet, naar
+       de laatst onthouden directory.
+
+Typ CD drive: om de huidige directory in de opgegeven schijf weer te geven.
+Typ CD zonder parameters om de huidige schijf en directory weer te geven.
+Zie ook: CDD
+.
+
+:TEXT_CMDHELP_CDD
+Toont de naam van de huidige schijf en directory of verandert deze.
+
+CDD [drive:][pad]
+CDD[..]
+
+  ..   Geeft aan dat u naar de bovenliggende directory wilt gaan.
+  -    springt, indien "laaatste directory" optie is aangezet, naar
+       de laatste onthouden directory.
+
+Indien drive: opgegeven is, wordt de huidige werkdirectory veranderd; dit
+is het enige waarmee "CDD" zich onderscheidt van "CHDIR".
+Typ CDD zonder parameters om de huidige schijf en directory weer te geven.
+
+.
+
+:TEXT_CMDHELP_CHCP
+Geeft het nummer van de actieve codepagina weer of verandert deze.
+
+CHCP [nnn]
+
+  nnn   Duidt het nummer van een codepagina aan.
+
+Typ CHCP zonder parameter om het nummer van de actieve codepagina te tonen.
+.
+
+:TEXT_CMDHELP_CLS
+Wist de scherminhoud.
+
+CLS
+.
+
+:TEXT_CMDHELP_COMMAND
+Start een nieuwe kopie van de FreeDOS opdrachtschil.
+
+COMMAND [[drive:]pad] [apparaat] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+                       [/LOW] [/Y [/[C|K] opdracht]]
+  [drive:]pad     Duidt de directory aan waarin COMMAND.COM zich bevindt.
+  device          Duidt het voor in- en uitvoer te gebruiken apparaat aan.
+  /E:nnnnn        Stelt de aanvankelijke omgevingsgrootte in op nnnnn bytes.
+                  (nnnnn dient een waarde tussen 256 en 32.768 te zijn).
+  /L:nnnn         Duidt de interne bufferlengte aan (vereist eveneens /P ).
+                  (nnnn dient te liggen tussen 128 en 1.024).
+  /U:nnn          Duidt de invoer-bufferlengte aan (vereist ook /P ).
+                  (nnn dient te liggen tussen 128 and 255).
+  /P              Maakt de nieuwe opdrachtschil permanent (niet te verlaten).
+  /MSG            Bewaart alle foutmeldingen in het systeemgeheugen (vereist /P).
+  /LOW            Forceert plaatsing van residente data in het lage geheugen.
+  /Y              Stapt per regel door het mbv /C or /K opgegeven batbestand.
+  /C opdracht     Voert de opgegeven opdracht uit en komt weer terug.
+  /K opdracht     Voert de opgegeven opdracht uit en blijft draaien.
+.
+
+:TEXT_CMDHELP_COPY
+Kopieert een of meer bestanden naar een andere locatie.
+
+COPY [/A | /B] bron [/A | /B] [+ bron [/A | /B] [+ ...]] [bestemming
+  [/A | /B]] [/V] [/Y | /-Y]
+
+  bron         Duidt de te kopieren bestand(en) aan.
+  /A           Geeft een ASCII tekstbestand aan.
+  /B           Geeft een binair bestand aan.
+  bestemming   Duidt de bestemming en/of naam aan voor het nieuwe bestand(en).
+  /V           Verifieert dat bestanden wel juist geschreven zijn.
+  /Y           Onderdrukt het vragen naar of u een bestaand (bestemmings-)
+               bestand wilt overschrijven door uw kopieeractie.
+  /-Y          Vraagt of u het doelbestand wilt overschrijven
+
+De schakeloptie /Y mag alvast ingesteld worden in de COPYCMD omgevings-
+variabele. Dit kan genegeerd worden door /-Y op de opdrachtregel.
+
+Geef, om bestanden achter elkaar te plakken (laatste bestand achteraan),
+slechts een bestemmingsbestand op, maar meerdere bestanden als bron
+(gebruikmakend van jokertekens of bestand1+bestand2+bestand3 formaat).
+.
+
+:TEXT_CMDHELP_CTTY
+Verandert het terminal apparaat dat gebruikt wordt om uw pc te bedienen.
+
+CTTY apparaat
+
+  apparaat   Het te gebruiken terminal apparaat, zoals bijvoorbeeld COM1.
+.
+
+:TEXT_CMDHELP_DATE#1
+Toont de datum of stelt deze in.
+
+DATE [/D] [datum]
+
+Typ DATE zonder parameters om de huidige datum weer te geven en te vragen om 
+een nieuwe. Druk op ENTER om de huidig ingestelde datum te behouden.
+
+/D voorkomt dat DATE u vraagt om een nieuwe datum op te geven.
+.
+
+:TEXT_CMDHELP_DEL
+Verwijdert een of meer bestanden.
+
+DEL [drive:][pad]bestandsnaam [/P]
+ERASE [drive:][pad]bestandsnaam [/P]
+
+ [drive:][pad]bestandnaam  Duidt de te verwijderen bestand(en) aan. Geef meer 
+                           bestanden op door jokertekens (*, ?) te gebruiken.
+ /P                        Vraagt u steeds om bevestiging alvorens elk
+                           bestand afzonderlijk te verwijderen.
+.
+
+:TEXT_CMDHELP_DIR#1
+Toont een lijst van bestanden en directories in een directory.
+
+DIR [drive:][pad][bestandsnaam] [/P] [/W] [/A[[:]attributen]]
+  [/O[[:]sorteervolgorde]] [/S] [/B] [/L] [/V]
+
+  [drive:][pad][bestandsnaam]
+            Duidt de weer te geven schijf, directorie, en/of bestanden aan.
+            (Kan uitgebreide bestandskeuze zijn of opgave meerdere bestanden.)
+ /P         Pauzeert na ieder volgeschreven scherm met informatie.
+ /W         Gebruikt het brede-lijst formaat.
+ /A         Toont bestanden met aangeduide kenmerken.
+            [ATTRIBUUTKEUZE NOG NIET GEIMPLEMENTEERD; /A houdt in /ADRHS]
+ attributen  D  Directories                R  Alleen-lezen bestanden
+             H  Verborgen bestanden        A  Archiveringsbestanden
+             S  Systeembestanden           -  Voorkomt tonen op basis van het
+                                              opgegeven attribuut
+ /O         Geef bestanden weer op gesorteerde volgorde [NOG NIET INGEBOUWD]
+ sortorder   N  Op naam (alphabetisch)       S  Op grootte (smalste eerst)
+             E  Op extensie (alphabetisch)   D  Op datum en tijd (vroegste 1st)
+             G  Directories eerst groeperen  -  Prefix v. omgekeerde volgorde
+             A  Op laatste toegangsdatum (vroegste eerst)   
+ /S         Toont bestanden in de opgegeven en onderliggende directories
+ /B         Gebruik gestript formaat (geen extra informatie of opsomming).
+ /L         Toon bestandsnamen in kleine letters.
+ /V         Verbale mode - geeft extra informatie.
+ /Y         Geeft het jaartal viercijferig weer.
+
+Schakelopties mogen vooraf ingesteld worden in de DIRCMD omgevingsvariabele.
+Negeer deze vooraf ingestelde schakelopties door een optie te voorzien van
+een - (streepje) -- bijvoorbeeld /-W of /-P
+
+.
+
+:TEXT_CMDHELP_DOSKEY#1
+Het losse programma DOSKEY zit ingebouwd in FreeCOM.
+Gebruik de pijltoetsen OMHOOG en OMLAAG om de geschiedenis terug te roepen
+en HISTORY om deze weer te geven.
+Gebruik de pijltoetsen LINKS en RECHTS en de toetsen END en HOME om te
+navigeren binnen de opdrachtregel en gebruik INSERT om te schakelen tussen
+de invoeg- en de overschrijfmodus(standaard).
+Gebruikt de TAB toets om het huidige woord als bestandsnaam aan te vullen;
+gebruik het tweemaal om alle gevonden bestanden te tonen.
+.
+
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
+Bewerkt opdrachtregels, roept opdrachtregels terug, en maakt macro's aan
+
+DOSKEY [/schakeloptie ...] [macronaam=[tekst]]
+
+  /BUFSIZE:grootte Stelt grootte van macro en opdrachtbuffer in (standaard:512)
+  /ECHO:on|off     Stelt weergave van macro-expansie in of uit  (default:ON)
+  /FILE:bestand    Duidt bestand met lijst van macro's aan
+  /HISTORY         Toont alle in geheugen opgeslagen opdrachten
+  /INSERT          Voegt nieuwe tekens tussen woorden in bij typen
+  /KEYSIZE:grootte Bepaalt grootte v keyboard type-ahead buffer (standaard:15)
+  /LINE:grootte    Bepaalt max grootte van regelbewerkinsbuffer (standaard:128)
+  /MACROS          Geeft alle DOSKey macro's weer
+  /OVERSTRIKE      Overschrijft nieuwe tekens bij het typen (standaard)
+  /REINSTALL       Installeert een nieuwe kopie van DOSKey
+  macronaam        Duidt de voor de macro te gebruiken naam aan
+  tekst            Duidt de aan de macro toe te wijzen opdrachten aan
+
+  OMHOOG,OMLAAG pijlen roepen opdrachten terug
+       Esc wist het huidige commando
+        F7 toont de lijst van reeds gegeven opdrachten
+    Alt+F7 wist de hierboven genoemde opdrachtgeschiedenis
+[tekens]F8 zoekt naar opdrachten beginnend met [tekens]
+        F9 selecteert een opdracht op geschiedenisnummer
+   Alt+F10 wist alle macro definities
+
+De volgende tekens zijn speciale codes die u kunt gebruiken bij het
+opgeven van DOSKey macro definities:
+  $T     Opdracht-scheiding: staat meerder opdrachten in een regel toe
+  $1-$9  Batch parameters: equivalent van %1-%9 in batch programma's
+  $*     Symbool dat vervangen wordt door alle volgende aan de macro
+         opgegeven parameters op de opdrachtregel
+.
+
+:TEXT_CMDHELP_ECHO
+Geeft berichten weer, of zet opdracht-echo aan of uit.
+
+  ECHO [ON | OFF]
+  ECHO [bericht]
+
+Typ ECHO zonder parameters om de huidige instelling te laten zien.
+.
+
+:TEXT_CMDHELP_EXIT
+Stopt de FreeDOS opdrachtverwerkings-schil.
+
+EXIT
+.
+
+:TEXT_CMDHELP_FOR
+Voert de opgegeven opdracht uit voor elk bestand in een verzameling bestanden
+
+FOR %variabele IN (verzameling) DO opdracht [opdrachtparameters]
+
+ %variabele  Duidt een vervangbare parameter aan.
+ (set)       Duidt een verzameling bestanden aan(1+). Jokertekens toegestaan
+ opdracht    Voert de op elk bestand uit te voeren opdracht uit.
+ opdrachtparameters
+             Duidt parameters of schakelopties voor de opgegeven opdracht aan
+
+Om de opdracht FOR te gebruiken in een batchprogramma,
+moet u %%variabele opgeven in plaats van %variable.
+.
+
+:TEXT_CMDHELP_GOTO
+Stuurt de opdrachtverwerker naar een gelabelde regel in een batchprogramma.
+
+GOTO label
+
+  label   Duidt een tekenreeks aan welke als label wordt gebruikt
+
+Een label is een woord op een regel voorafgegaan door een dubbele punt (":").
+.
+
+:TEXT_CMDHELP_HISTORY#1
+History opdracht.
+
+HISTORY [grootte]
+
+Zonder "grootte" wordt de huidige inhoud van de opdrachtregelhistorie-
+buffer weergegeven.
+Als grootte is aangegeven, wordt de historiebuffer op deze waarde ingesteld.
+.
+
+:TEXT_CMDHELP_IF
+Voert conditionele verwerking uit binnen batchprogramma's.
+
+IF [NOT] ERRORLEVEL nummer opdracht
+IF [NOT] reeks1==reeks2 opdracht
+IF [NOT] EXIST bestandsnaam opdracht
+
+  NOT                Geeft aan dat de opdrachtverwerker de opdracht alleen
+                     mag uit voeren als de voorwaarde vals/ongeldig is.
+  ERRORLEVEL getal   Duidt een bepaalde conditie aan als het laatst
+                     uitgevoerde programma een afsluitwaarde retourneert
+                     groter dan of gelijk aan het opgegeven getal.                                   
+  opdracht           Duidt de uit te voeren opdracht uit indien aan de
+                     voorwaarde wordt voldaan.
+  reeks1==reeks2     Duidt een geldige voorwaarde aan als de opgegeven
+                     tekenreeksen overeenkomen.
+  EXIST bestandnaam  Duidt een geldige voorwaarde aan als het opgegeven
+                     bestand bestaat.
+.
+
+:TEXT_CMDHELP_LH
+Laadt een programma in het upper memory area.
+
+LOADHIGH [drive:][pad]bestandsnaam [parameters]
+LOADHIGH [/L:gebied1[,mingrootte1][;regio2[,mingrootte2]...] [/S]]
+         [drive:][pad]bestandsnaam [parameters]
+
+/L:regio1[,mingrootte1][;regio2[,mingrootte2]]...
+            Duidt de geheugengebieden aan waarin u een programma wilt laden.
+            Regio1 duidt het nummer van het eerste geheugengebied aan
+            mingrootte1 duidt de minimale grootte, indien enige, voor regio1.
+            aan. Regio2 en mingrootte2 duiden het nummer en minimale grootte 
+	    van het tweede geheugengebied aan, indien opgegeven. U kunt zoveel 
+            gebieden opgeven als u wilt.
+
+/S          Dwingt een UMB te krimpen naar minimale grootte terwijl het
+            programma aan het laden is.
+
+[drive:][pad]bestandsnaam
+            Duidt de locatie en naam van het programma aan
+.
+
+:TEXT_CMDHELP_LOADFIX
+Laadt een programma boven de eerste 64K geheugen, en voert het programma uit.
+
+LOADFIX [drive:][pad]bestandsnaam
+
+Gebruik LOADFIX om een programma te laden indien u het bericht "Packed
+file corrupt" hebt gekregen terwijl u het programma poogde te laden in
+het lage systeemgeheugen.
+.
+
+:TEXT_CMDHELP_MD
+Maakt een directory.
+
+MKDIR [drive:]pad
+MD [drive:]pad
+.
+
+:TEXT_CMDHELP_PATH
+Toont of stelt het zoekpad voor uitvoerbare bestanden in.
+
+PATH [[drive:]pad[;...]]
+PATH ;
+
+Typ PATH ; om alle zoekpad instellingen te wissen en om de opdrachtschil
+te dwingen alleen te zoeken in de huidige directory.
+Typ PATH zonder parameters om het huidige pad weer te geven.
+.
+
+:TEXT_CMDHELP_PAUSE
+Onderbreekt het verwerken van een batchprogramma tijdelijk en toont 
+het bericht: "Druk op een toets om door te gaan...." of een eigen melding.
+
+PAUSE [bericht]
+.
+
+:TEXT_CMDHELP_PROMPT
+Wijzigt de opdracht prompt .
+
+PROMPT [tekst]
+
+  tekst    De te gebruiken nieuwe opdrachtprompt.
+
+Prompt kan worden opgebouwd uit gewonen tekens en de volgende speciale codes:
+
+  $Q   = (is-teken)
+  $$   $ (dollar teken)
+  $T   Huidige tijd
+  $D   Huidige datum
+  $P   Huidige schijf en pad
+  $V   Het versienummer van de FreeDOS opdrachtverwerker
+  $N   Huidige schijf(-letter)
+  $G   > (groter-dan teken)
+  $L   < (kleiner-dan teken)
+  $B   | (pijpsymbool)
+  $H   Backspace (wist vorige teken)
+  $E   Escape code (ASCII code 27)
+  $_   Carriage return en linefeed
+
+Typ alleen PROMPT om de prompt in te stellen op de standaardinstellingen.
+.
+
+:TEXT_CMDHELP_PUSHD
+Gooit de huidige directorie op de directory stack, met de optie om de 
+huidige werkdirectory te wijzigen.
+
+PUSHD [[drive:]pad]
+  Waarbij [drive:]pad het pad waarna u wilt overschakelen is.
+.
+
+:TEXT_CMDHELP_POPD
+Gooit een directory van de directory stack, en schakelt ernaar over.
+
+POPD [*]
+  De '*' parameter maakt de directory stack leeg.
+.
+
+:TEXT_CMDHELP_DIRS
+Toont de inhoud van de directory stack.
+
+DIRS
+.
+
+:TEXT_CMDHELP_RD
+Verwijdert een directory.
+
+RMDIR [drive:]pad
+RD [drive:]pad
+.
+
+:TEXT_CMDHELP_REM
+Legt commentaarberichten (opmerkingen) vast in een batchbestand of CONFIG.SYS
+
+REM [commentaarbericht]
+.
+
+:TEXT_CMDHELP_REN
+Hernoemt een bestand/directory of bestanden/directories.
+
+RENAME [drive:][pad][dirnaam1 | bestandnaam1] [directorynaam2 | bestandnaam2]
+REN [drive:][pad][dirnaam1 | bestandnaam1] [directorynaam2 | bestandnaam2]
+
+Merk op dat u geen nieuwe schijf of pad als bestemming kunt opgeven.
+Gebruik voor dat doeleinde de opdracht MOVE.
+.
+
+:TEXT_CMDHELP_SET#1
+Toont, stelt in, of verwijdert omgevingsvariabelen.
+
+SET [/C] [variabele=[tekenreeks]]
+
+  variabele   Duidt de naam van de omgevingsvariabele aan.
+  tekenreeks  Een reeks karakters die u toewijst aan de variabele.
+
+* Als geen tekenreeks wordt opgegeven wordt de variabele gewist.
+
+Typ SET zonder parameters om de huidige omgevingsvariabelen weer te geven.
+
+/C dwingt om kleine letters te behouden; standaard wordt de naam van de
+variabele naar hoofdletters omgezet indien nog niet in de omgevingsruimte
+aanwezig.
+.
+
+:TEXT_CMDHELP_SHIFT#1
+Verandert de positie van vervangbare parameters in een batchbestand.
+
+SHIFT [DOWN]
+
+DOWN schuift de argumenten volgorde vanaf het begin (%0); anders
+naar het einde.
+.
+
+:TEXT_CMDHELP_TIME#1
+Geeft de huidige tijd aan of stelt deze in.
+
+TIME [/T] [tijd]
+
+Typ TIME zonder parameters om de huidige tijd op te geven en om te vragen
+naar een nieuwe tijd. Druk op ENTER om dezelfde tijd te behouden.
+
+/T voorkomt dat TIME u vraagt een nieuwe tijd op te geven.
+.
+
+:TEXT_CMDHELP_TRUENAME
+Geeft de volledige padnaam weer van het opgegeven pad.
+
+TRUENAME [drive:][pad][bestandsnaam]
+.
+
+:TEXT_CMDHELP_TYPE
+Toont de inhoud van een tekstbestand.
+
+TYPE [drive:][pad]bestandsnaam
+.
+
+:TEXT_CMDHELP_VER
+Toont de versie van de FreeDOS opdrachtverwerker en andere informatie.
+
+VER [/R] [/W] [/D] [/C]
+
+ /R         Toont kernel versie en andere informatie.
+ /W         FreeDOS opdrachtverwerker garantiebepalingen.
+ /D         FreeDOS opdrachtverwerker verspreidingsinformatie.
+ /C         FreeDOS opdrachtverwerker medewerkers.
+.
+
+:TEXT_CMDHELP_VERIFY
+Vertelt het FreeDOS bestandssysteem of er uitgebreid gecontroleerd
+dient te worden of bestanden juist naar schijf zijn geschreven.
+
+VERIFY [ON | OFF]
+
+Typ VERIFY zonder parameters om de huidige instelling te tonen.
+.
+
+:TEXT_CMDHELP_FDDEBUG
+Als debuggen is gecompileerd binnen FreeDOS zal deze opdracht debug uitvoer
+aan of uitzetten, of u vertellen of deze aan of uit staat.
+
+FDDEBUG [ON | OFF | bestand]
+
+Typ FDDEBUG zonder parameters om de huidige instelling te zien.
+Als een bestand wordt opgegeven zal alle uitvoer naar dat bestand gestuurd
+worden; Als het bestand al bestaat, wordt de uitvoer eraan toegevoegd.
+De speciale namen "stdout" en "stderr" mogen gebruikt worden om de uitvoer
+te verwijzen naar de standaard uitvoer of standaard foutmeldingsstroom.
+.
+
+:TEXT_CMDHELP_VOL
+Toont het schijf volume label en serienummer indien deze bestaan.
+
+VOL [schijf:]
+.
+
+:TEXT_CMDHELP_QUESTION#1
+Toont een lijst van opdrachten en voorzieningen beschikbaar binnenin de schil
+
+?
+?opdracht [argument]
+
+De eerste variant toont elke beschikbare interne opdracht en voorzieningen.
+De tweede zal u vragen of een opgegeven opdracht al dan niet moet worden
+uitgevoerd, net zoals dat gebeurt als traceer-modus actief is.
+.
+
+:TEXT_CMDHELP_WHICH
+Zoekt en toont het uitvoerbare bestand voor elke opgegeven opdracht.
+
+WHICH {opdracht}
+.
+
+:TEXT_CMDHELP_MEMORY#1
+Geeft het binnen FreeCOM gebruikte interne systeemgeheugen aan
+
+MEMORY
+.
