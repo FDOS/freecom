@@ -257,7 +257,7 @@ Nevazece memorijsko podrucje %d - ignorisano.
 Morate navesti ON ili OFF.
 .
 
-:TEXT_ERROR_BAD_VERABLE
+:TEXT_ERROR_BAD_FOR_VAR
 Lose navedena promenljiva.
 .
 

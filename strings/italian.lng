@@ -125,7 +125,7 @@
 (i) Deve essere specificato come parametro ON oppure OFF.
 .
 
-:TEXT_ERROR_BAD_VERABLE
+:TEXT_ERROR_BAD_FOR_VAR
 (!) Specificazione mal definita di variabile.
 .
 

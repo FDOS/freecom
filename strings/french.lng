@@ -172,7 +172,7 @@ Region de memoire invalide %d - ignor‚.
 Vous devez sp‚cifier ON ou OFF.
 .
 
-:TEXT_ERROR_BAD_VERABLE
+:TEXT_ERROR_BAD_FOR_VAR
 Mauvaise sp‚cification de variable.
 .
 

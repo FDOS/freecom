@@ -258,8 +258,8 @@ Illegal memory region %d - ignored.
 Must specify ON or OFF.
 .
 
-:TEXT_ERROR_BAD_VERABLE
-Bad varable specification.
+:TEXT_ERROR_BAD_FOR_VAR
+Bad variable specification.
 .
 
 :TEXT_ERROR_IN_MISSING#1

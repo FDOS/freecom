@@ -179,7 +179,7 @@ Ogiltig minnesregion %d - ignoreras.
 ON eller OFF måste anges.
 .
 
-:TEXT_ERROR_BAD_VERABLE
+:TEXT_ERROR_BAD_FOR_VAR
 Felaktig variabel angiven.
 .
 
