@@ -109,15 +109,14 @@
 #include "fmemory.h"
 #include <suppl.h>
 
-//#include "err_hand.h"
 #include "batch.h"
 #include "timefunc.h"
 #include "cmdline.h"
-#include "context.h"
 #include "command.h"
 #include "module.h"
 
 #include "strings.h"
+#include "kswap.h"
 
         /* Check for an argument; ch may be evaluated multiple times */
 #define isargsign(ch)           \
@@ -132,24 +131,16 @@ extern int canexit;
 static unsigned oldPSP;
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
-int fddebug = 0;    /* debug flag */
-
-static context_t far* far* criterCtxt = 0;
-static context_t far* oldCriterCtxt = 0;
+#ifndef FDDEBUG_INIT_VALUE
+#define FDDEBUG_INIT_VALUE 0
+#endif
+int fddebug = FDDEBUG_INIT_VALUE;    /* debug flag */
 
 /* Without resetting the owner PSP, the program is not removed
    from memory */
 void exitfct(void)
 {
   unloadMsgs();        /* free the message strings segment */
-  if(oldCriterCtxt) {
-  	*criterCtxt = oldCriterCtxt;
-  } else {
-  	freeBlk(FP_SEG(criterCtxt));
-  	*(BYTE far*)MK_FP(SEG2MCB(FP_SEG(criterCtxt)), 8 + 4) = '-';
-  	dprintf(("[Critical Error handler deallocated (0x%04x).]\n"
-  	 , FP_SEG(criterCtxt)));
-  }
   OwnerPSP = oldPSP;
 }
 
@@ -199,6 +190,9 @@ int showcmds(char *rest)
 #endif
 #ifdef FEATURE_LAST_DIR
   printf("[last dir] ");
+#endif
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	printf("[kernel swap] ");
 #endif
   putchar('\n');
 
@@ -270,7 +264,7 @@ optScanFct(opt_init)
   case '?': showhelp = 1; return E_None;
   case '!': return optScanBool(fddebug);
   case 'Y': return optScanBool(tracemode);
-  case 'F': return optScanBool((unsigned)autofail);
+  case 'F': return optScanBool(autofail);
   case 'P':
     if(arg)     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
@@ -311,7 +305,7 @@ optScanFct(opt_init)
  *  If warn != 0, warnings can be issued; otherwise this functions
  *  is silent.
  */
-void grabComFilename(int warn, char far *fnam)
+void grabComFilename(int warn, const char far * const fnam)
 {
   char *buf;
   size_t len;
@@ -421,6 +415,14 @@ int initialize(void)
   oldPSP = OwnerPSP;
   atexit(exitfct);
   OwnerPSP = _psp;
+
+
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	if(kswapInit()) {		/* re-invoked */
+		if(kswapLoadStruc())
+			return E_None;
+	}
+#endif
 
   /* Some elder DOSs may not pass an initialzied environment segment */
   if (env_glbSeg && !isMCB(SEG2MCB(env_glbSeg)))
@@ -566,8 +568,7 @@ int initialize(void)
     /* If a new valid size is specified, use that */
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE;
   if(newEnvSize > 16 && newEnvSize < 32767)
-    env_setsize(0, newEnvSize); // SUPPL27+
-    //env_newsize(0, newEnvSize);   // SUPPL26-
+    env_setsize(0, newEnvSize);
 
   /* Otherwise the path is placed into the environment */
   if (chgEnv("COMSPEC", ComPath)) {
@@ -579,16 +580,24 @@ int initialize(void)
     error_env_var("COMSPEC");
   }
 
-  /* Install INT 24 Critical error handler */
-  /* Needs the ComPath variable */
-  //init_error_handler();
-  if((criterCtxt = modCriter()) == 0) {
-	puts("Cannot load Critical Error handler.");
-	return E_NoMem;
+
+	/* Install INT 24 Critical error handler */
+	/* Needs the ComPath variable, eventually */
+	if(!kswapContext) {
+		/* Load the module/context into memory */
+		if((kswapContext = modContext()) == 0) {
+			puts("Cannot load Context module or Critical Error handler.");
+			return E_NoMem;
+		}
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+		if(swapOnExec != ERROR)
+			kswapRegister(kswapContext);
+#endif
 	}
-	oldCriterCtxt = *criterCtxt;
-	*criterCtxt = (context_t far*)&context;
-	setvect(0x24, (void interrupt(*)())(criterCtxt + 1));
+
+	/* re-use the already loaded Module */
+	setvect(0x24, (void interrupt(*)())
+	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter));
 
   if(internalBufLen)
     error_l_notimplemented();

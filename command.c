@@ -198,10 +198,8 @@
 #endif
 #include "openf.h"
 #include "session.h"
+#include "kswap.h"
 
-#ifdef FEATURE_SWAP_EXEC
-#include "swapexec.h"
-#endif
 extern struct CMD cmds[];       /* The internal command table */
 
 int exitflag = 0;               /* indicates EXIT was typed */
@@ -211,8 +209,18 @@ int errorlevel = 0;             /* Errorlevel of last launched external prog */
 int forceLow = 0;               /* load resident copy into low memory */
 int oldinfd = -1;       /* original file descriptor #0 (stdin) */
 int oldoutfd = -1;        /* original file descriptor #1 (stdout) */
+int autofail = 0;				/* Autofail <-> /F on command line */
 
-context_t context;				/* standard global & shared context */
+	/* FALSE: no swap this time
+		TRUE: swap this time
+		ERROR: no swap avilable at all
+	*/
+int swapOnExec = FALSE;
+	/* if != 0, pointer to static context
+		NOT allowed to alter if swapOnExec == ERROR !!
+	*/
+kswap_p kswapContext = 0;
+
 
 void fatal_error(char *s)
 {
@@ -243,6 +251,21 @@ static int is_delim(int c)
   return c <= ' ' || c == 0x7f || strchr(".\"/\\[]:|<>+=;,", c);
 #endif
 }
+
+void perform_exec_result(int result)
+{
+	dprintf(("result of (do_)exec(): %d\n", result));
+	if (result == -1)
+		perror("executing spawnl function");
+	else
+		errorlevel = result;
+
+	if(!restoreSession()) {
+		error_restore_session();
+		exit_all_batch();
+	}
+}
+
 
 static void execute(char *first, char *rest)
 {
@@ -309,22 +332,21 @@ static void execute(char *first, char *rest)
       return;   /* Don't invoke the program in this case */
     }
 
-#ifdef FEATURE_SWAP_EXEC
-    result = do_exec(fullname, rest, USE_ALL, 0xFFFF, environ);
-#else
-    result = exec(fullname, rest, 0);
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+    if(swapOnExec == TRUE
+	 && kswapMkStruc(fullname, rest)) {
+	 	dprintf(("[EXEC: exiting to kernel swap support]\n"));
+	 	exit(123);		/* Let the kernel swap support do the rest */
+	}
+#ifdef DEBUG
+	if(swapOnExec == TRUE)
+		dprintf(("KSWAP: failed to save context, proceed without swapping\n"));
 #endif
-  dprintf(("result of (do_)exec(): %d\n", result));
-    if (result == -1)
-      perror("executing spawnl function");
-    else
-      errorlevel = result;
-  }
+#endif
+    result = exec(fullname, rest, 0);
 
-    if(!restoreSession()) {
-      error_restore_session();
-      exit_all_batch();
-    }
+    perform_exec_result(result);
+  }
 }
 
 static void docommand(char *line)
@@ -802,6 +824,10 @@ int main(void)
 
   if(!canexit)
     hangForever();
+
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	kswapDeRegister(kswapContext);
+#endif
 
   return 0;
 }

@@ -43,7 +43,6 @@
 
 #include <dos.h>
 #include "misc.h"
-#include "context.h"
 
 #define MAX_INTERNAL_COMMAND_SIZE 256
 #define MAX_EXTERNAL_COMMAND_SIZE 128
@@ -74,16 +73,24 @@ extern const char shellname[];
 #define FA_NORMAL 0
 #endif
 
+/* Useage:
+	FALSE: no, false etc.
+	TRUE: yes, OK, etc.
+	ERROR: only used in tri-state flags, in binary flags same as TRUE
+*/
 enum
 {
-  FALSE, TRUE
+  FALSE, TRUE, ERROR
 };
 
 /* prototypes for INIT.C */
+void grabComFilename(int warn, const char far * const fnam);
 
 /* prototypes for COMMAND.C */
 extern int ctrlBreak;
 extern int exitflag;
+extern int autofail;
+extern int canexit;
 extern int errorlevel;
 extern int forceLow;
 extern unsigned far *maxx;
@@ -99,6 +106,7 @@ void parsecommandline(char *);
 int initialize(void);
 void short_version(void);
 int process_input(int xflg, char *cmdline);
+void perform_exec_result(int rc);
 
 /* prototypes for INTERNAL.C */
 int cmd_break(char *);
@@ -158,6 +166,7 @@ int _getch(void);
 char *find_which(char *);
 
 /* prototypes for EXEC.C */
+int decode_exec_result(int rc);
 int exec(const char *, char *, const unsigned);
 
 /* prototypes for REDIR.C */
@@ -229,6 +238,8 @@ void error_ctty_dup(const char * const);
 void error_no_cwd(int drive);
 void dispCopy(const char src[], const char dst[], int append);
 void msg_pause(void);
+void error_kswap_alias_size(void);
+void error_kswap_allocmem(void);
 
 #define D_ON         "on"
 #define D_OFF        "off"

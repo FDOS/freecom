@@ -52,7 +52,7 @@ int enumFileResources(const char *const fnam
 			get the first resource */
 	} else if(fseek(f, -(long)sizeof(res), SEEK_END) == 0) do {
 		pos = ftell(f);
-		assert(pos != -1ul);
+		assert(pos != (unsigned long)-1l);
 	} while(fread(&res, sizeof(res), 1, f) == 1
 		 && memcmp(res.res_cookie, RES_COOKIE, sizeof(res.res_cookie)) == 0
 		 && pos >= res.res_length

@@ -8,10 +8,10 @@
 #ifndef MODULE_H
 #define MODULE_H
 
-#include "context.h"
+#include "kswap.h"
 
 	/* Retruns the pointer of the context pointer of the
 		Critical Error handler */
-extern context_t far* far* modCriter(void);
+extern kswap_p modContext(void);
 
 #endif

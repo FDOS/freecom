@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.3.4.2  2001/01/28 21:23:55  skaus
+# add: Kernel Swap Support
+#
 # Revision 1.3.4.1  2000/07/19 20:28:30  skaus
 # Experimental Resources, Modules, Context
 #
@@ -45,10 +48,11 @@ OBJ :=
 
 
 #	Default target
-all: strings.h strings.dat  strings.err
+all: strings.h strings.dat
+#	strings.err
 	+copy strings.h .. >nul
 	+copy strings.dat .. >nul
-	+copy strings.err .. >nul
+#	+copy strings.err .. >nul
 
 
 .INIT : $(CFG) __errl

@@ -249,6 +249,14 @@ void error_no_cwd(int drive)
 {	displayString(TEXT_ERROR_CWD_FAILED, drvNum(drive) + 'A');
 }
 
+void error_kswap_alias_size(void)
+{	displayString(TEXT_ERROR_KSWAP_ALIAS_SIZE);
+}
+
+void error_kswap_allocmem(void)
+{	displayString(TEXT_ERROR_KSWAP_ALLOCMEM);
+}
+
 //void newperror(unsigned error_id)
 //{
 //

@@ -68,6 +68,8 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <dfn.h>
+#include <mcb.h>
+#include <suppl.h>
 
 #include "command.h"
 #include "batch.h"
@@ -332,4 +334,39 @@ size_t farread(void far*buf, size_t length, FILE *f)
 		return 0;
 
 	return r.r_ax;
+}
+
+
+unsigned allocSysBlk(const unsigned size, const unsigned mode)
+{	unsigned segm;
+	struct MCB _seg *mcb;
+
+	if((segm = allocBlk(size, mode)) != 0) {
+		mcb = (struct MCB _seg*)SEG2MCB(segm);
+		mcb->mcb_ownerPSP = 8;
+		dprintf(("[MEM: allocated system memory block: %04x/%u]\n"
+		 , segm, size));
+	}
+
+	return segm;
+}
+
+
+void freeSysBlk(unsigned segm)
+{	
+	struct MCB _seg *mcb;
+
+	assert(segm);
+
+	mcb = (struct MCB _seg *)SEG2MCB(segm);
+	mcb->mcb_ownerPSP = _psp;
+	freeBlk(segm);
+	dprintf(("[MEM: deallocated system memory block: %04x]\n", segm));
+}
+
+char far *_fstpcpy(char far *dst, const char far *src)
+{	
+	while((*dst++ = *src++) != 0);
+
+	return dst - 1;
 }

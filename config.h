@@ -42,9 +42,6 @@
 /* Define to enable DOS NLS */
 //#define FEATURE_NLS
 
-/* Define to enable swapping to XMS/EMS/disk */
-//#define FEATURE_SWAP_EXEC
-
 /* Command line logging feature */
 //#define FEATURE_CALL_LOGGING
 
@@ -64,8 +61,16 @@
    Undefine to remove this feature */
 #define FEATURE_AUTO_REDIRECT_TO_CON 5
 
+/* Define to support kernel-supported swapout of FreeCOM
+	see DOCS\K-SWAP.TXT
+*/
+#define FEATURE_KERNEL_SWAP_SHELL
+
 /* Define the size of the buffer used to store old paths for PUSHD/POPD */
 #define DIR_STACK_LEN 256
+
+/* Define this value to select the initialization value of fddebug */
+#define FDDEBUG_INIT_VALUE 1
 
 /* Define if your compiler does not have 'dosdate_t' or 'dostime_t' */
 #if defined(__TURBOC__) && __TURBOC__ <= 0x297
@@ -129,4 +134,8 @@
 #define	INCLUDE_CMD_CDD
 #endif
 
- #include "debug.h"
+#if defined(FEATURE_KERNEL_SWAP_SHELL) && defined(FEATURE_SWAP_EXEC)
+#error "You must not define both FEATURE_KERNEL_SWAP_SHELL && FEATURE_SWAP_EXEC"
+#endif
+
+#include "debug.h"

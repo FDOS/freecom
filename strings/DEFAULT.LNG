@@ -318,6 +318,15 @@ this problem.
 Drive %c: not responding or out of internal memory.
 .
 
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+Swapping failed: Aliases allocate too much memory.
+.
+
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+Swapping failed: Cannot allocate far memory.
+.
+
 #
 # Informational messages
 #
