@@ -240,8 +240,14 @@ int initialize(void)
     This has the advantage that the string area is accessable
     very early in the run.
     The name of the current file is string #0. */
-  if((offs = env_string(0, 0)) != 0)    /* OK, environment filled */
+  if((offs = env_string(0, 0)) != 0) {    /* OK, environment filled */
+		/* this fails for MSDOS, if the environment is empty: passed one:
+		   00 00 01 00 a:command.com 00 */   
+//    if (*(char far *)MK_FP(env_glbSeg, offs) == 0)
+    if (peekb(env_glbSeg, offs) == 0)	/* empty ergv[0] assume broken */
+      offs++;							/* MSDOS environment */
     grabComFilename(0, (char far *)MK_FP(env_glbSeg, offs));
+  }
 #ifdef DEBUG
   else dprintf(("[ENV: No argv[0]!]\n"));
 #endif

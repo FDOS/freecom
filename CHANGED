@@ -1,3 +1,4 @@
+bugfix: init.c: invalid empty MSDOS environment [Tom Ehlert]
 fix: appendDisable(): should disable APPEND [Eduardo Casino]
 fix: /LOW option
 upd: ITALIAN.LNG {Roberto Mariottini}
