@@ -88,7 +88,7 @@ copy /b com.exe + criter.mod\criter + criter.mod\criter1 command.cln
 ren com.com command.com
 if exist com.com goto ende
 
-.\command.com /c get_ver.bat
+perl get_ver.pl .\command.com
 
 : %_DBG echo on %+ setdos /y1
 

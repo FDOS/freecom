@@ -216,7 +216,7 @@ void beep_low(void)
 char *comFile(void)
 { char *fnam;
 
-  if((fnam = getEnv("COMSPEC")) == NULL)
+  if((fnam = getEnv("COMSPEC")) == 0)
     return ComPath;
   return fnam;
 }
@@ -232,12 +232,12 @@ char *comPathFile(const char * fnam)
 
   assert(fnam);
 
-  if((com = comFile()) == NULL)
+  if((com = comFile()) == 0)
     return strdup(fnam);
 
   h = malloc((pathLen = dfnfilename(com) - com) + strlen(fnam) + 1);
   if(!h)
-    return NULL;
+    return 0;
 
   memcpy(h, com, pathLen);
   strcpy(h + pathLen, fnam);
@@ -274,14 +274,14 @@ int drvNum(int drive)
 char *cwd(int drive)
 {	char *h;
 
-	if((h = dfnpath(drive)) != NULL)
+	if((h = dfnpath(drive)) != 0)
 		return h;
 
 	if(drive)
 		error_no_cwd(drive);
 	else error_out_of_memory();
 
-	return NULL;
+	return 0;
 }
 
 int changeDrive(int drive)
@@ -383,13 +383,13 @@ char far *_fstpcpy(char far *dst, const char far *src)
 char *textlineEnd(const char * const buf, const size_t buflen)
 {	const char *p, *end;
 
-	if(!buf)	return NULL;
+	if(!buf)	return 0;
 	end = buflen + (p = buf - 1);
 	do { if(++p == end)		/* The very last byte of the buffer is
 								hit ==> there ougth to be a '\0' there
 								==> no '\n' AND no place for further
 								character ==> overflow */
-		return NULL;
+		return 0;
 	} while(*p && *p != '\n');
 
 	return (char *)p;
@@ -466,7 +466,7 @@ char *curDateLong(void)
 
 	_dos_getdate(&d);
 
-	if((date = nls_makedate(0, d.year, d.month, d.day)) == NULL) {
+	if((date = nls_makedate(0, d.year, d.month, d.day)) == 0) {
 		error_out_of_memory();
 		return 0;
 	}

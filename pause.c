@@ -44,7 +44,7 @@ int cmd_pause(char *param)
   else {
     char *p;
 
-    if(( p = getMessage(TEXT_MSG_PAUSE)) == NULL) {
+    if(( p = getMessage(TEXT_MSG_PAUSE)) == 0) {
       error_out_of_memory();
       return E_NoMem;
     }

@@ -221,7 +221,7 @@ struct CMD cmds[] =
 #endif
 
 
-        {NULL, 0, NULL, 0}
+        {0, 0, 0, 0}
 };
 
 /*    append,                             $$    */

@@ -37,7 +37,7 @@ int cmd_shift(char *param)
  *   parameters backwards.
  */
 
-  if (bc == NULL)
+  if (bc == 0)
   {
     /*!! not in batch - error */
 

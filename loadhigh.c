@@ -146,10 +146,10 @@ static int initialise(void)
 
   /* Save the UMB link state and the DOS malloc strategy, to restore them later */
   /* Allocate dynamic memory for some arrays */
-  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == NULL)
+  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == 0)
     return err_out_of_memory;
 
-  if ((block = malloc(256 * sizeof(*block))) == NULL)
+  if ((block = malloc(256 * sizeof(*block))) == 0)
     return err_out_of_memory;
 
   /* find the UMB regions */
@@ -403,7 +403,7 @@ static int loadhigh_prepare(void)
   dosSetUMBLinkState(1);
   dosSetAllocStrategy(0);
 
-  if ((availBlock = malloc(256 * sizeof(*availBlock))) == NULL)
+  if ((availBlock = malloc(256 * sizeof(*availBlock))) == 0)
     return err_out_of_memory;
 
   /* Call to force DOS to catenate any successive free memory blocks */
@@ -559,12 +559,12 @@ static int parseArgs(char *cmdline, char **fnam, char **rest)
 
   /* initialize options */
   optS = 0;
-  optL = NULL;
+  optL = 0;
 
-  if(leadOptions(&cmdline, loadfix_flag? NULL: opt_lh, NULL) != E_None)
+  if(leadOptions(&cmdline, loadfix_flag? 0: opt_lh, 0) != E_None)
       return err_silent;
 
-  if((c = optL) != NULL) {
+  if((c = optL) != 0) {
     int i, r;
 
     /* Disable access to all UMB regions not listed here */
@@ -615,7 +615,7 @@ static int parseArgs(char *cmdline, char **fnam, char **rest)
   /* The next argument is the file name. The rest of the command line
    * are passed as parameters to the new program. */
 
-  if((*fnam = unquote(cmdline, c = skip_word(cmdline))) == NULL)
+  if((*fnam = unquote(cmdline, c = skip_word(cmdline))) == 0)
     return err_out_of_memory;
 
   *rest = skipdm(c);

@@ -35,7 +35,7 @@ static resource_t res = {
 void startResource(FILE *f, res_majorid_t major, res_minorid_t minor)
 {
 
-	assert(f != NULL);
+	assert(f != 0);
 		/* none resource is currently opened */
 	assert(res.res_majorID == RES_ID_NONE);
 
@@ -50,7 +50,7 @@ void startResource(FILE *f, res_majorid_t major, res_minorid_t minor)
 void endResource(FILE *f)
 {	unsigned long pos;
 
-	assert(f != NULL);
+	assert(f != 0);
 	assert(res.res_majorID != RES_ID_NONE);
 
 	pos = ftell(f);

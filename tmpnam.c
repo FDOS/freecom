@@ -60,12 +60,12 @@ char *mktempfile(char *path, char *ext)
     fd;
 
   if (!path)                    /* to simplify the caller function */
-    return NULL;
+    return 0;
 
-  if ((fn = dfnexpand(path, NULL)) == NULL)
+  if ((fn = dfnexpand(path, 0)) == 0)
   {                             /* out-of-mem */
     nomem();
-    return NULL;
+    return 0;
   }
 
   if (!ext)                     /* make sure it's a legal string */
@@ -78,7 +78,7 @@ char *mktempfile(char *path, char *ext)
      + the user-supplied extension
      + the '\0' terminator byte
    */
-  if ((path = realloc(fn, strlen(fn) + strlen(ext) + 10)) == NULL)
+  if ((path = realloc(fn, strlen(fn) + strlen(ext) + 10)) == 0)
   {
     /* out of mem */
     nomem();
@@ -124,10 +124,10 @@ char *mktempfile(char *path, char *ext)
 
 errRet:
   free(path);
-  return NULL;
+  return 0;
 }
 
-#define probefn(path) mktempfile(path, NULL)
+#define probefn(path) mktempfile(path, 0)
 
 char *tmpfn(void)
 {
@@ -135,8 +135,8 @@ char *tmpfn(void)
   static char buf[] = "?:\\";
 
   /* normally I'd write something like:
-     if((pa = getEnv("TEMP")) == NULL
-     && (pa = getEnv("TMP")) == NULL)
+     if((pa = getEnv("TEMP")) == 0
+     && (pa = getEnv("TMP")) == 0)
      ... )
      pa = ".";
      But if the found 'pa' (path) is not writeble the next
@@ -144,13 +144,13 @@ char *tmpfn(void)
      moved into a sub-function.
    */
 
-  if ((fn = probefn(getEnv("TEMP"))) == NULL
-      && (fn = probefn(getEnv("TMP"))) == NULL
-      && (fn = probefn(getEnv("TEMPDIR"))) == NULL
-      && (fn = probefn(getEnv("TMPDIR"))) == NULL
-      && (fn = probefn("\\TEMP")) == NULL
-      && (fn = probefn("\\TMP")) == NULL
-      && (fn = probefn(".")) == NULL)
+  if ((fn = probefn(getEnv("TEMP"))) == 0
+      && (fn = probefn(getEnv("TMP"))) == 0
+      && (fn = probefn(getEnv("TEMPDIR"))) == 0
+      && (fn = probefn(getEnv("TMPDIR"))) == 0
+      && (fn = probefn("\\TEMP")) == 0
+      && (fn = probefn("\\TMP")) == 0
+      && (fn = probefn(".")) == 0)
   {
     /* everything failed --> probe the boot drive */
 

@@ -78,7 +78,7 @@ int cmd_for(char *rest)
 
   /* Folowed by a '(', find also matching ')' */
 
-  if (*rest != '(' || NULL == (pp = strchr(rest, ')')))
+  if (*rest != '(' || 0 == (pp = strchr(rest, ')')))
   {
     displayString(TEXT_ERROR_MISSING_PARENTHESES);
     return 1;
@@ -114,7 +114,7 @@ int cmd_for(char *rest)
     if (!new)
       return 1;
 
-    if ((bc->forproto = strdup(pp)) == NULL)
+    if ((bc->forproto = strdup(pp)) == 0)
     {
       error_out_of_memory();
       exit_batch();   /* remove the newly created batch context */

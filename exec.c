@@ -88,7 +88,7 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
   execBlock.fcb2 = (struct fcb far *)&fcb2;
 
   /* fill FCBs */
-  if ((cmdLine = parsfnm(cmdLine, &fcb1, 1)) != NULL)
+  if ((cmdLine = parsfnm(cmdLine, &fcb1, 1)) != 0)
     parsfnm(cmdLine, &fcb2, 1);
 
 	return decode_exec_result(

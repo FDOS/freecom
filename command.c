@@ -480,7 +480,7 @@ static void docommand(char *line)
         }
 
         /* else syntax error */
-        error_syntax(NULL);
+        error_syntax(0);
         return;
       }
 
@@ -533,10 +533,10 @@ static void docommand(char *line)
  */
 void parsecommandline(char *s)
 {
-  char *in = NULL;
-  char *out = NULL;
-  char *fname0 = NULL;
-  char *fname1 = NULL;
+  char *in = 0;
+  char *out = 0;
+  char *fname0 = 0;
+  char *fname1 = 0;
   char *nextcmd;
 
   int of_attrib = O_CREAT | O_TRUNC | O_TEXT | O_WRONLY;
@@ -593,7 +593,7 @@ void parsecommandline(char *s)
   while (num-- > 1)
   {
     close(1);                   /* Close current output file */
-    if ((fname0 = tmpfn()) == NULL)
+    if ((fname0 = tmpfn()) == 0)
       goto abort;
     open(fname0, O_CREAT | O_TRUNC | O_TEXT | O_WRONLY, S_IREAD | S_IWRITE);
 
@@ -606,7 +606,7 @@ void parsecommandline(char *s)
     close(0);
     killtmpfn(fname1);          /* fname1 can by NULL */
     fname1 = fname0;
-    fname0 = NULL;
+    fname0 = 0;
     open(fname1, O_TEXT | O_RDONLY, S_IREAD);
 
     s = nextcmd;
@@ -695,15 +695,15 @@ int process_input(int xflag, char *commandline)
   	echothisline = tracethisline = 0;
     if(commandline) {
       ip = commandline;
-      readline = commandline = NULL;
+      readline = commandline = 0;
     } else {
-    if ((readline = malloc(MAX_INTERNAL_COMMAND_SIZE + 1)) == NULL)
+    if ((readline = malloc(MAX_INTERNAL_COMMAND_SIZE + 1)) == 0)
     {
       error_out_of_memory();
       return 1;
     }
 
-      if (NULL == (ip = readbatchline(&echothisline, readline,
+      if (0 == (ip = readbatchline(&echothisline, readline,
                       MAX_INTERNAL_COMMAND_SIZE)))
       { /* if no batch input then... */
       if (xflag   /* must not go interactive */
@@ -762,7 +762,7 @@ int process_input(int xflag, char *commandline)
       /* Assume that at least one character is added, place the
         test here to simplify the switch() statement */
       if(cp >= parsedMax(1)) {
-        cp = NULL;    /* error condition */
+        cp = 0;    /* error condition */
         break;
       }
       if (*ip == '%')
@@ -787,10 +787,10 @@ int process_input(int xflag, char *commandline)
           case '7':
           case '8':
           case '9':
-            if (NULL != (tp = find_arg(*ip - '0')))
+            if (0 != (tp = find_arg(*ip - '0')))
             {
               if(cp >= parsedMax(strlen(tp))) {
-                cp = NULL;
+                cp = 0;
                 goto intBufOver;
               }
               cp = stpcpy(cp, tp);
@@ -814,13 +814,13 @@ int process_input(int xflag, char *commandline)
               *cp++ = '%';			/* let the var be copied in next cycle */
               break;
             }
-            if ((tp = strchr(ip, '%')) != NULL)
+            if ((tp = strchr(ip, '%')) != 0)
             {
               *tp = '\0';
 
-              if ((evar = getEnv(ip)) != NULL) {
+              if ((evar = getEnv(ip)) != 0) {
                 if(cp >= parsedMax(strlen(evar))) {
-                  cp = NULL;
+                  cp = 0;
                   goto intBufOver;
                 }
                 cp = stpcpy(cp, evar);
@@ -910,7 +910,7 @@ int main(void)
    */
 
   if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
-    process_input(0, NULL);
+    process_input(0, 0);
 
   if(!canexit)
     hangForever();

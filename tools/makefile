@@ -10,6 +10,11 @@
 #
 #
 # $Log$
+# Revision 1.2.4.6  2001/02/27 18:27:06  skaus
+# fix: criter.asm: DEBUG does no longer compile to .COM (for consistency)
+# chg: removed all NULLs to prevent NULL problematic, functions must be
+# 	used fully prototyped now
+#
 # Revision 1.2.4.5  2001/02/21 01:07:01  skaus
 # bugfix: _fstrchr() doesnot find '\0'
 # bugfix: NULL problematic
@@ -52,10 +57,12 @@ LDFLAGS += /msl
 # Project specific C compiler flags
 MYCFLAGS_DBG = -DNDEBUG=1 $(null,$(DEBUG) $(NULL) -DDEBUG=1)
 MYCFLAGS_NDBG =
-MYASMFLAGS_DBG = $(null,$(DEBUG) $(NULL) -DDEBUG=1)
-MYASMFLAGS_NDBG =
 MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
-MYASMFLAGS = $(null,$(NDEBUG) $(MYASMFLAGS_DBG) $(MYASMFLAGS_NDBG))
+# Project specific NASM compiler flags
+NASMFLAGS_DBG = $(null,$(DEBUG) $(NULL) -DDEBUG=1) -s
+NASMFLAGS_NDBG = -s
+NASMFLAGS = $(null,$(NDEBUG) $(NASMFLAGS_DBG) $(NASMFLAGS_NDBG))
+
 
 .SOURCE.h := . ..
 .SOURCE.lib := $(LIBDIR:s/;/ /:u)

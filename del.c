@@ -96,7 +96,7 @@ int cmd_del(char *rest)
   /* initialize options */
   optP = 0;
 
-  if((arg = scanCmdline(rest, opt_del, NULL, &argc, &optc)) == NULL)
+  if((arg = scanCmdline(rest, opt_del, 0, &argc, &optc)) == 0)
     return E_Other;
 
   if(!argc) {
@@ -113,7 +113,7 @@ int cmd_del(char *rest)
        A:\\
        --> It's always three bytes long at minimum
        and always contains a backslash */
-    p = dfnexpand(arg[i], NULL);
+    p = dfnexpand(arg[i], 0);
     assert(strlen(p) >= 3);
     if ((len = strlen(p)) >= MAXPATH)
     {
@@ -146,7 +146,7 @@ int cmd_del(char *rest)
 
     /* make sure user is sure if all files are to be
      * deleted */
-    if (!optP && *p == '*' && ((q = strchr(p, '.')) == NULL || q[1] == '*'))
+    if (!optP && *p == '*' && ((q = strchr(p, '.')) == 0 || q[1] == '*'))
     {
     displayString(TEXT_MSG_DELETE_ALL);
     if (vcgetcstr("YN\n\r") != 'Y')

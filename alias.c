@@ -156,7 +156,7 @@ int aliasadd(char *name, char *subst)
   	assert(ptr->subst);
     if (!strcmp(ptr->name, name))
     {
-      if((s = strdup(subst)) == NULL)
+      if((s = strdup(subst)) == 0)
         return -1;
       free(ptr->subst);
       ptr->subst = s;
@@ -166,16 +166,16 @@ int aliasadd(char *name, char *subst)
   }
 
 	/* newly create the alias */
-  if((ptr = (TAlias *) malloc(sizeof(TAlias))) == NULL)
+  if((ptr = (TAlias *) malloc(sizeof(TAlias))) == 0)
     return -1;
-  ptr->next = NULL;
+  ptr->next = 0;
 
-  if((ptr->name = strdup(name)) == NULL) {
+  if((ptr->name = strdup(name)) == 0) {
     free(ptr);
     return -1;
   }
 
-  if((ptr->subst = strdup(subst)) == NULL)
+  if((ptr->subst = strdup(subst)) == 0)
   {
     free(ptr->name);
     free(ptr);
@@ -247,10 +247,10 @@ void aliasexpand(char *cmd, int maxlen)
                                    To avoid to clear the flag each time when
                                    to expand a string a different flag value
                                    is used each time. */
-    if((ptr = first) != NULL)
+    if((ptr = first) != 0)
                         /* reset all values to be sure we hit no old one */
       do ptr->used = 0;
-      while((ptr = ptr->next) != NULL);
+      while((ptr = ptr->next) != 0);
     useFlag = 1;
   }
 
@@ -302,7 +302,7 @@ void aliasexpand(char *cmd, int maxlen)
           expanded = 1;
         }
       }
-    } while((ptr = ptr->next) != NULL);
+    } while((ptr = ptr->next) != 0);
   } while(expanded);
 }
 
@@ -397,11 +397,11 @@ void alias_streamfrom(char far *p)
 	last = 0;
 	while(*p) {
 		/* newly create the alias */
-		if((ptr = (TAlias *) malloc(sizeof(TAlias))) == NULL)
+		if((ptr = (TAlias *) malloc(sizeof(TAlias))) == 0)
 			break;
 
 		len = _fstrlen(p) + 1;
-		if((ptr->name = malloc(len)) == NULL) {
+		if((ptr->name = malloc(len)) == 0) {
 			free(ptr);
 			break;
 		}
@@ -409,7 +409,7 @@ void alias_streamfrom(char far *p)
 		p += len;
 
 		len = _fstrlen(p) + 1;
-		if((ptr->subst = malloc(len)) == NULL) {
+		if((ptr->subst = malloc(len)) == 0) {
 			free(ptr->name);
 			free(ptr);
 			break;
@@ -424,7 +424,7 @@ void alias_streamfrom(char far *p)
 		if(last)	last = last->next = ptr;
 		else		last = first = ptr;
 	}
-	if(last)		last->next = NULL;
+	if(last)		last->next = 0;
 	dprintf(("[KSWAP: %u alias(es) read from dynamic context]\n", cnt));
 }
 #endif

@@ -198,7 +198,7 @@ int cmd_date(char *rest)
 	refreshNLS();
 #endif
 
-  if((ec = leadOptions(&rest, opt_date, NULL)) != E_None)
+  if((ec = leadOptions(&rest, opt_date, 0)) != E_None)
       return ec;
 
   if (!*rest)
@@ -211,7 +211,7 @@ int cmd_date(char *rest)
     displayString(TEXT_MSG_CURRENT_DATE, date);
 	free(date);
 
-    rest = NULL;
+    rest = 0;
   }
 
   while (1)                     /*forever loop */
@@ -243,7 +243,7 @@ int cmd_date(char *rest)
     }
     displayString(TEXT_ERROR_INVALID_DATE);
     // force input the next time around.
-    rest = NULL;
+    rest = 0;
   }
 }
 #endif

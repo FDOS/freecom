@@ -41,7 +41,7 @@ int cmd_type(char *rest)
   int argc, opts, ec = E_None;
   FILE *f;
 
-  if((argv = scanCmdline(rest, NULL, NULL, &argc, &opts)) == NULL)
+  if((argv = scanCmdline(rest, 0, 0, &argc, &opts)) == 0)
     return 1;
 
   /* Because no option was passed into scanCmdline() no
@@ -55,7 +55,7 @@ int cmd_type(char *rest)
   }
 
   for(argc = 0; argv[argc]; ++argc) {
-    if ((f = fdevopen(rest, "rt")) == NULL)
+    if ((f = fdevopen(rest, "rt")) == 0)
     {
     error_sfile_not_found(rest);
     ec = E_Other;

@@ -54,7 +54,7 @@ int cmd_goto(char *rest)
   while(bc && bc->forvar)   /* is FOR context */
     exit_batch();       /* remove it */
 
-  if (bc == NULL)
+  if (bc == 0)
   {
     /*!! not in batch error */
 

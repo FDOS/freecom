@@ -83,7 +83,7 @@ int cmd_ver(char *rest)
 
 	optR = optW = optD = optC = 0;
 
-  if((argv = scanCmdline(rest, opt_ver, NULL, &argc, &opts)) == NULL)
+  if((argv = scanCmdline(rest, opt_ver, 0, &argc, &opts)) == 0)
     return 1;
 
   /* arguments are simply ignored */

@@ -252,14 +252,14 @@ char *defaultMessage(unsigned id)
 
   /* Allocate 5 bytes for the numerical ID itself */
   if(id != ERR_ID_OUTOFMEMORY
-   && (h = malloc(sizeof(DFL_MSG_PATTERN) + 5)) != NULL) {
+   && (h = malloc(sizeof(DFL_MSG_PATTERN) + 5)) != 0) {
     /* Got enough memory to allocate the stuff */
     sprintf(h, DFL_MSG_PATTERN, id);
     return h;
   }
 
   puts(DFL_MSG_OUTOFMEMORY);
-  return NULL;
+  return 0;
 }
 
 char *fetchString(unsigned id)
@@ -279,7 +279,7 @@ char *fetchString(unsigned id)
 		return defaultMessage(id);
 
 	/* pointer to id's control data */
-	if((thisstr = malloc(idx->size)) == NULL)
+	if((thisstr = malloc(idx->size)) == 0)
 		return defaultMessage(ERR_ID_OUTOFMEMORY);
 
 	_fmemcpy((char far*)thisstr, MK_FP(segm, idx->index), idx->size);
@@ -297,7 +297,7 @@ char *getMessage(unsigned id)
 {
   char *h;
 
-  if ((h = fetchString(id)) != NULL && *h)
+  if ((h = fetchString(id)) != 0 && *h)
     strchr(h, '\0')[-1] = '\0';
   return h;
 }
@@ -307,7 +307,7 @@ void displayString(unsigned id,...)
   char *thisstr;
   va_list argptr;
 
-  if ((thisstr = fetchString(id)) == NULL)
+  if ((thisstr = fetchString(id)) == 0)
     return;
 
   va_start(argptr, id);

@@ -61,12 +61,12 @@ int cmd_call(char *param)
    *n = newBatchContext();
   int ec;
 
-  if (n == NULL)
+  if (n == 0)
   {
     return 1;
   }
 
-  if((ec = leadOptions(&param, opt_call, NULL)) != E_None)
+  if((ec = leadOptions(&param, opt_call, 0)) != E_None)
       return ec;
 
   if(optS)
@@ -75,8 +75,8 @@ int cmd_call(char *param)
 	parsecommandline(param);
 	swapOnExec = FALSE;
 
-  if (bc->bfile == NULL
-      && bc->bfnam == NULL)     /* Wasn't a batch file so remove context */
+  if (bc->bfile == 0
+      && bc->bfnam == 0)     /* Wasn't a batch file so remove context */
   {
     bc = bc->prev;
     free(n);

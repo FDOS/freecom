@@ -45,7 +45,7 @@ int enumFileResources(const char *const fnam
 
 	assert(fct);
 	rc = 0;
-	if((f = fopen(fnam, "r+b")) == NULL) {
+	if((f = fopen(fnam, "r+b")) == 0) {
 	 	rc = -1;
 
 		/* resource file could be opened --> seek to its end to

@@ -257,7 +257,7 @@ int WaitForFkeys(void)
 int showhelp = 0, internalBufLen = 0, inputBufLen = 0;
 int spawnAndExit = E_None;
 int newEnvSize = 0;          /* Min environment table size */
-char *user_autoexec = NULL;
+char *user_autoexec = 0;
 
 optScanFct(opt_init)
 { int ec = E_None;
@@ -319,11 +319,11 @@ void grabComFilename(int warn, const char far * const fnam)
   if(len >= INT_MAX || len < 1) {
     /* no filename specified */
     if(warn)
-      error_syntax(NULL);
+      error_syntax(0);
     return;
   }
 
-  if((buf = malloc(len + 1)) == NULL) {
+  if((buf = malloc(len + 1)) == 0) {
     if(warn) error_out_of_memory();
     return ;
   }
@@ -334,9 +334,9 @@ void grabComFilename(int warn, const char far * const fnam)
     { char *p;
 
         /* expand the string for the user */
-      p = dfnexpand(buf, NULL);
+      p = dfnexpand(buf, 0);
       free(buf);
-      if((buf = p) == NULL) {
+      if((buf = p) == 0) {
 		  if(warn) error_out_of_memory();
 		  return;
       }
@@ -349,7 +349,7 @@ void grabComFilename(int warn, const char far * const fnam)
         COMMAND.COM with the standard name in there */
       char *p;
 
-      if((p = realloc(buf, len + sizeof(COM_NAME) + 1)) == NULL) {
+      if((p = realloc(buf, len + sizeof(COM_NAME) + 1)) == 0) {
         if(warn) error_out_of_memory();
         free(buf);
         return;
@@ -443,7 +443,7 @@ int initialize(void)
 
 /* Now parse the command line parameters passed to COMMAND.COM */
   /* Preparations */
-  newTTY = NULL;
+  newTTY = 0;
   comPath = tracemode = 0;
   showinfo = 1;
 
@@ -470,7 +470,7 @@ int initialize(void)
     cmdlen = 0;
   }
     /* duplicate the command line into the local address space */
-  if((cmdline = malloc(cmdlen + 1)) == NULL) {
+  if((cmdline = malloc(cmdlen + 1)) == 0) {
     error_out_of_memory();  /* Cannot recover from this problem */
     return E_NoMem;
   }
@@ -478,7 +478,7 @@ int initialize(void)
   cmdline[cmdlen] = '\0';
 #ifdef FEATURE_CALL_LOGGING
 #ifndef INCLUDE_CMD_FDDEBUG
-  if((f = fopen(logFilename, "at")) == NULL) {
+  if((f = fopen(logFilename, "at")) == 0) {
     fprintf(stderr, "Cannot open logfile: \"%s\"\n", logFilename);
   } else {
 
@@ -506,12 +506,12 @@ int initialize(void)
   canexit = 1;
   p = cmdline;    /* start of the command line */
   do {
-  ec = leadOptions(&p, opt_init, NULL);
+  ec = leadOptions(&p, opt_init, 0);
   if(ec == E_NoOption) {    /* /C or /K */
     assert(p && *p);
     if(!isoption(p)) {
       error_quoted_c_k();
-      p = NULL;
+      p = 0;
       break;
     }
     assert(p[1] && strchr("kKcC", p[1]));
@@ -519,20 +519,20 @@ int initialize(void)
     break;
   } else if(ec != E_None) {
         showhelp = 1;
-    p = NULL;
+    p = 0;
     break;
   }
 
   assert(p && !isoption(p) && !isspace(*p));
   if(!*p) {
-    p = NULL;
+    p = 0;
     break;      /* end of line reached */
   }
   q = unquote(p, h = skip_word(p));
   p = h;      /* Skip this word */
   if(!q) {
     error_out_of_memory();
-    p = NULL;
+    p = 0;
     break;
   }
   if(!comPath) {      /* 1st argument */
@@ -673,10 +673,10 @@ int initialize(void)
       if(user_autoexec)
       	displayString(TEXT_ERROR_SFILE_NOT_FOUND, user_autoexec);
 #ifdef INCLUDE_CMD_DATE
-      cmd_date(NULL);
+      cmd_date(0);
 #endif
 #ifdef INCLUDE_CMD_TIME
-      cmd_time(NULL);
+      cmd_time(0);
 #endif
     }
 
@@ -684,7 +684,7 @@ int initialize(void)
   }
   else
   {
-    assert(user_autoexec == NULL);
+    assert(user_autoexec == 0);
   }
 
   /* Now the /C or /K option can be processed */
@@ -700,7 +700,7 @@ int initialize(void)
   {
     short_version();
     putchar('\n');
-    showcmds(NULL);
+    showcmds(0);
     putchar('\n');
   }
 

@@ -25,7 +25,7 @@ int cmd_rename(char *rest)
 { char **argv;
   int argc, opts, ec = E_None;
 
-  if((argv = scanCmdline(rest, NULL, NULL, &argc, &opts)) == NULL)
+  if((argv = scanCmdline(rest, 0, 0, &argc, &opts)) == 0)
     return 1;
 
   if(argc < 2) {

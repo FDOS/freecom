@@ -3,6 +3,11 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.4.4.7  2001/02/27 18:27:04  skaus
+# fix: criter.asm: DEBUG does no longer compile to .COM (for consistency)
+# chg: removed all NULLs to prevent NULL problematic, functions must be
+# 	used fully prototyped now
+#
 # Revision 1.4.4.6  2001/02/21 01:07:01  skaus
 # bugfix: _fstrchr() doesnot find '\0'
 # bugfix: NULL problematic
@@ -101,7 +106,7 @@ MYCFLAGS_DBG = -DNDEBUG=1 $(null,$(DEBUG) $(NULL) -DDEBUG=1)
 MYCFLAGS_NDBG =
 MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 
-# Project specific C compiler flags
+# Project specific NASM compiler flags
 NASMFLAGS_DBG = $(null,$(DEBUG) $(NULL) -DDEBUG=1) -s
 NASMFLAGS_NDBG = -s
 NASMFLAGS = $(null,$(NDEBUG) $(NASMFLAGS_DBG) $(NASMFLAGS_NDBG))

@@ -28,8 +28,8 @@
 #include "tempfile.h"
 #include "command.h"
 
-static char *tfn = NULL;
-static FILE *tfp = NULL;
+static char *tfn = 0;
+static FILE *tfp = 0;
 
 void rmtmpfile(void)
 {
@@ -38,11 +38,11 @@ void rmtmpfile(void)
     if (tfp)
     {
       fclose(tfp);
-      tfp = NULL;
+      tfp = 0;
     }
     remove(tfn);
     free(tfn);
-    tfn = NULL;
+    tfn = 0;
   }
 }
 
@@ -53,7 +53,7 @@ FILE *tempfile(void)
   tfn = tmpfn();
   if (!tfn)
   {
-    return NULL;
+    return 0;
   }
 
   return tfp = fopen(tfn, "w+b");

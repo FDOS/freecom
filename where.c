@@ -78,10 +78,10 @@
  */
 char *find_which(char *fname)
 {
-  static char *buf = NULL;
+  static char *buf = 0;
 
   free(buf);
-  return buf = dfnsearch(fname, NULL, NULL);
+  return buf = dfnsearch(fname, 0, 0);
 }
 
 #ifdef INCLUDE_CMD_WHICH
@@ -91,7 +91,7 @@ int cmd_which(char *rest)
 	char **arg, *p;
 	int argc, optc, i;
 
-	if((arg = scanCmdline(rest, NULL, NULL, &argc, &optc)) == NULL)
+	if((arg = scanCmdline(rest, 0, 0, &argc, &optc)) == 0)
 		return E_Other;
 
 	for(i = 0; i < argc; ++i) {
@@ -116,21 +116,21 @@ int main(int argc, char **argv)
 {
   char *fullname;
 
-  if ((fullname = find_which("deltree.exe")) != NULL)
+  if ((fullname = find_which("deltree.exe")) != 0)
   {
     printf("deltree.exe found at %s\n", fullname);
   }
   else
     printf("deltree.exe not found.\n");
 
-  if ((fullname = find_which("deltree")) != NULL)
+  if ((fullname = find_which("deltree")) != 0)
   {
     printf("deltree found at %s\n", fullname);
   }
   else
     printf("deltree not found.\n");
 
-  if ((fullname = find_which("c:\windows\command\deltree")) != NULL)
+  if ((fullname = find_which("c:\windows\command\deltree")) != 0)
   {
     printf("deltree found at %s\n", fullname);
   }

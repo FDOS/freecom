@@ -1,3 +1,7 @@
+fix: criter.asm: DEBUG does no longer compile to .COM (for consistency)
+chg: removed all NULLs to prevent NULL problematic, functions must be
+	used fully prototyped now
+v0.81 beta 1:
 bugfix: _fstrchr() doesnot find '\0'
 bugfix: NULL problematic
 v0.81 beta 0:

@@ -72,7 +72,7 @@ int cmd_set(char *rest)
   if(!rest)
     rest = "";
 
-  if(leadOptions(&rest, opt_set, NULL) != E_None)
+  if(leadOptions(&rest, opt_set, 0) != E_None)
     return 1;
 
   /* if no parameters, show the environment */
@@ -83,8 +83,8 @@ int cmd_set(char *rest)
   }
 
   /* make sure there is an = in the command */
-  if ((p = strpbrk(rest, "= ")) == NULL) {
-      error_syntax(NULL);
+  if ((p = strpbrk(rest, "= ")) == 0) {
+      error_syntax(0);
       return 1;
     }
 

@@ -1,5 +1,16 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2001/02/27 ska
+~~~~~~~~~~~~~~~~~~~~~~
+fix: criter.asm: DEBUG does no longer compile to .COM (for consistency)
+chg: removed all NULLs to prevent NULL problematic, functions must be
+	used fully prototyped now
+
+2001/02/20 ska
+~~~~~~~~~~~~~~~~~~~~~~
+release v0.81 beta 1
+bugfix: _fstrchr() doesnot find '\0'
+bugfix: NULL problematic
 
 2001/02/16 ska
 ~~~~~~~~~~~~~~~~~~~~~~

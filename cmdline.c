@@ -205,15 +205,15 @@ char *unquote(const char *str, const char * const end)
   assert(end);
   assert(end >= str);
 
-  if((h = newStr = malloc(end - str + 1)) == NULL)
-    return NULL;
+  if((h = newStr = malloc(end - str + 1)) == 0)
+    return 0;
 
-  while((q = strpbrk(str, QUOTE_STR)) != NULL && q < end) {
+  while((q = strpbrk(str, QUOTE_STR)) != 0 && q < end) {
   /* there is a quote at *q */
     /* copy the portion before q */
     memcpy(h, str, len = q++ - str);
     h += len;
-    if((str = strchr(q, q[-1])) == NULL || str >= end) {
+    if((str = strchr(q, q[-1])) == 0 || str >= end) {
       /* no right quote */
       str = q;
       break;
@@ -230,7 +230,7 @@ char *unquote(const char *str, const char * const end)
     assert(h);
     return h;
       -or- if you assume that to shrink can fail
-    return (h = realloc(newStr, strlen(newStr) + 1)) != NULL
+    return (h = realloc(newStr, strlen(newStr) + 1)) != 0
       ? h: newStr;
   */
   return newStr;
@@ -250,12 +250,12 @@ int addArg(char ***Xarg, int *argc, char *sBeg, char **sEnd)
     assert(*sEnd > sBeg);
 
       /* add new entry for new argument */
-      if((arg = realloc(*Xarg, (*argc + 2) * sizeof(char *))) ==  NULL) {
+      if((arg = realloc(*Xarg, (*argc + 2) * sizeof(char *))) ==  0) {
         freep(*Xarg);
         return 1;
       }
       /* create new entry */
-      if((arg[(*argc)++] = unquote(sBeg, *sEnd)) == NULL) {
+      if((arg[(*argc)++] = unquote(sBeg, *sEnd)) == 0) {
         freep(arg);
         return 1;
       }
@@ -281,17 +281,17 @@ char **split(char *s, int *args)
 
   arg = malloc(sizeof(char *));
   if (!arg)
-    return NULL;
+    return 0;
   ac = 0;
 
     /* skip to next argument */
   if(s) while (*(start = skipdm(s)) != '\0')
   {
     if(addArg(&arg, &ac, start, &s))
-      return NULL;
+      return 0;
   }
 
-  arg[*args = ac] = NULL;
+  arg[*args = ac] = 0;
   return arg;
 }
 
@@ -303,7 +303,7 @@ void freep(char **p)
 {
   char **q;
 
-  if((q = p) != NULL) {
+  if((q = p) != 0) {
     while (*q)
     free(*q++);
     free(p);
@@ -378,7 +378,7 @@ int optScanString_(const char * const optstr, int bool, const char *arg, char **
     return E_Useage;
   }
   free(*value);
-  if((*value = strdup(arg)) == NULL) {
+  if((*value = strdup(arg)) == 0) {
     error_out_of_memory();
     return E_NoMem;
   }
@@ -411,10 +411,10 @@ int scanOption(optScanner fct, void * const ag, char *rest)
     return E_Useage;
   }
 
-  if((optend = strpbrk(line, "=:")) != NULL) {  /* option has argument */
+  if((optend = strpbrk(line, "=:")) != 0) {  /* option has argument */
     arg = optend + 1;
   } else {
-    arg = NULL;
+    arg = 0;
     optend = strchr(line, '\0');
   }
 
@@ -485,14 +485,14 @@ static int parseOptions(optScanner fct, void * const arg, char **argv, int *argc
 
   *optcnt = 0;
   argp = argv;
-  while((*argp++ = a = *argv++) != NULL)
+  while((*argp++ = a = *argv++) != 0)
     if(isoption(a))
       if((ec = scanOption(fct, arg, a)) == E_None) {
         free(*--argp);  /* ignore (overwrite) it */
         ++*optcnt;
       } else if(ec != E_Ignore) { /* the entry caused an error */
         /* Copy the remaining entries */
-        while((*argp++ = *argv++) != NULL);
+        while((*argp++ = *argv++) != 0);
         break;
       }
 
@@ -520,14 +520,14 @@ char **scanCmdline(char *line, optScanner fct, void * const arg
   assert(argc);
   assert(opts);
 
-  if((argv = split(line, argc)) == NULL) {
+  if((argv = split(line, argc)) == 0) {
     error_out_of_memory();
-    return NULL;
+    return 0;
   }
 
   if(parseOptions(fct, arg, argv, argc, opts) != E_None) {
     freep(argv);
-    return NULL;
+    return 0;
   }
 
   return argv;

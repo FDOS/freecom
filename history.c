@@ -33,7 +33,7 @@
 
 unsigned history_size = 256;    /* make this configurable later */
 
-char *historyptr = NULL;
+char *historyptr = 0;
 unsigned int curline = 0;
 unsigned int numlines = 0;
 unsigned int maxpos = 0;
@@ -120,7 +120,7 @@ int cmd_history(char *rest)
     history_size = x;
 
     free(historyptr);
-    historyptr = NULL;
+    historyptr = 0;
     curline = 0;
     numlines = 0;
     maxpos = 0;
