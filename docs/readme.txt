@@ -13,7 +13,7 @@ The command.com web site is at
 
 Please send any bug reports, comments or other info to:
 
-   fd-command@topica.com  (command.com development mailing list)
+   freedos-freecom@lists.sourceforge.net   (command.com development mailing list)
 
 This software has been developed by many people, which are enlisted
 within HISTORY.TXT now.

@@ -11,7 +11,7 @@ How to contribute to the FreeCOM project
 
 The maintainer(s) of FreeCOM can be reached by:
 a) E-Mail: freecom@freedos.org,
-b) mailling list: fd-command@topica.com, and
+b) mailling list: freedos-freecom@lists.sourceforge.net, and
 c) bug report form: http://www.freedos.org/bugs.
 
 Bug reports should be entered into the bug tracking database using the
