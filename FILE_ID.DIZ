@@ -1,5 +1,7 @@
-This is the FreeDOS Command Shell (command.com).
-For the latest version and information, visit
-http://www.gcfl.net/FreeDOS/command.com
+This is an experimental branch of
+the FreeDOS command shell (FreeCOM).
 
-See LICENSE.TXT for license information.
+To check out the normal branch, simply
+do not specify any "-r" option at all or
+use the official version named "comXXX?",
+e.g. com079a
