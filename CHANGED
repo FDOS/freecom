@@ -1,3 +1,5 @@
+add: Russian/CP866 language file {Sandul}
+bugfix: dfnstat(): Use DOS-44-09 for "X:" {Bart Oldeman}
 fix: memory leak (newname) in REN
 add: MS COMMAND-style wildcards for REN {Wolf Bergenheim}
 add: Serbian language files {Strbac Dejan}
