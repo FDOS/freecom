@@ -517,20 +517,24 @@ int expandEnvVars(char *ip, char * const line)
 
 			break;
 
+#if 0
+		  	/* Caused conflicts with some batches,
+		  		see %ERRORLEVEL% */
 		  case '?':
 			/* overflow check: parsedline has that many character
 			  "on reserve" */
 			cp += sprintf(cp, "%u", errorlevel);
 			ip++;
 			break;
+#endif
 
 		  default:
-	#if 0
+#if 0
 			if(forvar == toupper(*ip)) {    /* FOR hack */
 			  *cp++ = '%';			/* let the var be copied in next cycle */
 			  break;
 			}
-	#endif
+#endif
 			if((tp = strchr(ip, '%')) != 0) {
 				char *evar;
 			  *tp = '\0';
@@ -539,7 +543,20 @@ int expandEnvVars(char *ip, char * const line)
 				if(cp >= parsedMax(strlen(evar)))
 				  return 0;
 				cp = stpcpy(cp, evar);
-			   }
+			  } else if(matchtok(ip, "ERRORLEVEL")) {
+				/* overflow check: parsedline has that many character
+				  "on reserve" */
+				cp += sprintf(cp, "%u", errorlevel);
+			  } else if(matchtok(ip, "_CWD")) {
+			  	if(0 == (evar = cwd(0))) {
+				    return 0;
+			  	} else {
+					if(cp >= parsedMax(strlen(evar)))
+					  return 0;
+					cp = stpcpy(cp, evar);
+					free(evar);
+			  	}
+			  }
 
 			  ip = tp + 1;
 			}
