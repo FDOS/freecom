@@ -477,7 +477,7 @@ char *readbatchline(int *eflag, char *textline, int size)
       continue;
     }
 
-    /* Strip leading spaces and trailing space/control chars */
+    /* Strip leading spaces and \n chars */
 /*    rtrimsp(textline);	must not remove trailing spaces */
 	first = strchr(textline, '\0');
 	while(first >= textline && *--first == '\n');
@@ -486,12 +486,17 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     assert(first);
 
+    if(*first == '@') {	/* don't echo this line */
+		first = ltrimcl(first + 1);
+		*eflag = 0;
+    } else
+		*eflag = echo;
+
     /* ignore empty lines */
-    if (!*first)
+    if(!*first)
       continue;
 
-    if (*first == ':')
-    {
+    if(*first == ':') {
       /* if a label is searched for test if we reached it */
       if(bc->blabel) {
         /* label: the 1st word immediately following the colon ':' */
@@ -507,17 +512,10 @@ char *readbatchline(int *eflag, char *textline, int size)
       continue;                 /* ignore label */
     }
 
-    if (bc->blabel)
+    if(bc->blabel)
       continue;                 /* we search for a label! */
 
-    if (*first == '@')          /* don't echo this line */
-    {
-    	first = ltrimcl(first + 1);
-      *eflag = 0;
-    }
-    else
-      *eflag = echo;
-
+    /* Got a line to execute */
     break;
   }
 

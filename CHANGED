@@ -1,3 +1,4 @@
+bugfix: readbatchline(): permit @ before labels [#1747]
 bugfix: onoffStr(): do not ignore leading argument delimiters [#1736]
 add/upd: CVS $id$ keywords to/of files
 bugfix: misidentifying unspecific failures from within SUPPL [#1616]
