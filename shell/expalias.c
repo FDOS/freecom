@@ -30,7 +30,7 @@ void aliasexpand(char * const cmd, const int maxlen)
 
 	if((hbuf = malloc(maxlen)) == 0) {
 		error_out_of_memory();
-		goto errRet;
+		return;
 	}
 	numExpanded = 0;
 	expanded = 0;
@@ -40,8 +40,7 @@ redo:						/* iteration to expand all aliases */
 
 	/* Check if the user disabled alias expansion */
 	if(*cp == '*') {
-		++cp;
-		memmove(cmd, cp, strlen(cp) + 1);
+		memmove(cmd, cp + 1, strlen(cp));
 		goto errRet;
 	}
 
@@ -77,6 +76,7 @@ redo:						/* iteration to expand all aliases */
 		/* prepend alias value to remaining command line */
 		_fstrcpy(TO_FP(hbuf), MK_FP(ctxtAlias, ofs));
 		strcat(hbuf, cp);
+		assert(strlen(hbuf) < maxlen);
 		strcpy(cmd, hbuf);
 		goto redo;				/* next expansion */
 	}

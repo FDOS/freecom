@@ -1,3 +1,4 @@
+bugfix: expalias: if malloc() fails, random expanded is free'ed
 bugfix: nls_maketime(): 12hour display does not free AM/PM id
 fix: dbg_printmem() if compiled in Large memory model, near is invalid
 v0.83 Beta 14:
