@@ -30,7 +30,7 @@
  * acting is reflected by the PSP fields.
  * NO function upper-case the variable name. That's different to
  * common DOS implementations.
- * 
+ *
  * The environment segment must be a stand-alone segment allocated with
  * the DOS API function "Allocate Memory", DOS-48. The standard environment
  * is of that type.
@@ -263,7 +263,7 @@ int env_ovrVarOffset(word segm, word ofs, const char *varname
 
 int env_insVarOffset(word segm, word ofs, const char varname[]
 	, const char value[]);
-/*	
+/*
  *	Insert the variable _before_ the byte pointed to by segm:ofs
  *	Therefore the pair should point to the byte following the '\0'
  *	character of the preceeding variable.
@@ -387,7 +387,7 @@ word env_resize(word segm, int delta);
  		0: no environment at all or resize failed
  		else:	if delta == 0: size of the environment block
  				if delta != 0: the (possibly new) segment address
- 
+
 */
 
 word env_newsize(word segm, unsigned length);

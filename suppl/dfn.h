@@ -61,7 +61,7 @@ int memcmpFI(const byte *buf1, const byte *buf2, unsigned len);
 	If (buf1==NULL) || (buf2==NULL), the behaviour is undefined.
 	If len == 0, memcmpFI() returns 0.
 
-	Return:	
+	Return:
 		 <0: buf1 is less then buf2
 		==0: buf1 is equal to buf2
 		 >0: buf1 is greater than buf2
@@ -80,7 +80,7 @@ int _fmemcmpFI(const byte far * dest, const byte * src, unsigned length);
 	If (buf1==NULL) || (buf2==NULL), the behaviour is undefined.
 	If len == 0, _fmemcmpFI() returns 0.
 
-	Return:	
+	Return:
 		 <0: buf1 is less then buf2
 		==0: buf1 is equal to buf2
 		 >0: buf1 is greater than buf2

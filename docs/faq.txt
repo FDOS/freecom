@@ -1,0 +1,72 @@
+$Id$
+
+Frequently Asked Questions about FreeCOM
+	Copyright (C) 2000 Steffen Kaiser <ska-src@gmx.net>
+
+current version v0.79b
+
+-------------------- Glossar
+FreeCOM: COMMAND.COM clone
+
+--------------------
+Q: There is an error message like "Cannot open STRINGS.DAT"?
+	There is no text for error messages.
+
+A: The actual string (or text) of messages has been outsourced from
+	the program image to:
+	a) save space and
+	b) better support various languages.
+	The strings are appended to the FreeCOM executable and are read from
+	there each time a message is to be displayed.
+
+	When you load FreeCOM from floppy, remove the floppy and an error
+	occurs, FreeCOM tries to reload the messages from the FreeCOM
+	executable, but because it is no longer there, the actual text
+	cannot be loaded.
+
+	If you invoke FreeCOM with the /MSG switch, the messages are
+	permanently loaded into memory, in order to skip to reload them.
+
+	Note: The messages are loaded on demand and are purged from memory
+	when an external program is called, therefore problems show up
+	at an unregular base.
+
+	To visualize how loading and purging of messages work, compile FreeCOM
+	with debug option enabled or grab the precompiled COM_DBG.COM, then
+ 	run:
+
+ 	Example 1
+
+	Step #1) COM_DBG.COM /k FDDEBUG ON
+
+	[The "FDDEBUG ON" enables the debug output.]
+
+	Step #2) Now try to invoke a _non_existing_ command. Among others
+	you should see "[Messages successfully loaded to segment 0xeb7a]"
+	(the actual segment will vary) and below the error message that had
+	been loaded: "Bad command or filename.".
+
+	Step #3) Now run an _external_ command, which produces as less output
+	as possible (one line is best). You should see information
+	"[Message segment deallocated.]" immediately preceeding the line, the
+	program had produced.
+
+	Step 4) Now try to invoke the _non_existing_ command again, the
+	messages are reloaded.
+
+	Step 5) Immediately try to invoke the _non_existing_ one again,
+	the messages are _NOT_ loaded. This is as long you do not terminate
+	the FreeCOM instance nor call an external command, the message remain
+	in memory.
+
+	Step 6) Exit the current copy of FreeCOM, the "deallocated" info will
+	appear.
+
+	====
+
+	Example 2
+
+	Step #1) COM_DBG.COM /MSG /k FDDEBUG ON
+
+	Now re-run Steps 2 through 6. You will see that the message stay
+	in memory, except in step 6.

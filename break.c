@@ -13,8 +13,6 @@
 #ifdef INCLUDE_CMD_BREAK
 
 #include <assert.h>
-#include <stdio.h>
-#include <string.h>
 #include <dos.h>
 
 #include "command.h"
@@ -42,14 +40,16 @@ void setbreak(int OnOff)        /* Off = 0, On = 1 */
 #pragma argsused
 int cmd_break(char *param)
 {
-  if (!param || !*param)
-    displayString(TEXT_MSG_BREAK_STATE, getbreak()? D_ON : D_OFF);
-  else if (stricmp(param, D_OFF) == 0)
-    setbreak(0);
-  else if (stricmp(param, D_ON) == 0)
-    setbreak(1);
-  else
-    displayString(TEXT_ERROR_ON_OR_OFF);
+  switch(onoffStr(param)) {
+  	default:
+		displayString(TEXT_ERROR_ON_OR_OFF);
+		return 1;
+	case OO_Null:	case OO_Empty:
+		displayString(TEXT_MSG_BREAK_STATE, getbreak() ? D_ON : D_OFF);
+		break;
+  	case OO_Off:	setbreak(0);	break;
+  	case OO_On:		setbreak(1);	break;
+	}
 
   return 0;
 }

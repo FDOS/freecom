@@ -223,6 +223,7 @@ int flush_nl(void)
  */
 int dir_print_header(int drive)
 {
+#pragma -a-
   struct media_id
   {
     int info_level;
@@ -232,9 +233,9 @@ int dir_print_header(int drive)
     char file_sys[8];
   }
   media;
+#pragma -a.
+  struct REGPACK r;
   struct ffblk f;
-  struct SREGS s;
-  union REGS r;
   int disk;
   int rv;
 
@@ -245,13 +246,8 @@ int dir_print_header(int drive)
     return 0;
 
   disk = getdisk();
-  setdisk(drive);
-  if (getdisk() != drive)
-  {
-    setdisk(disk);
-    error_invalid_drive();
-    return 1;
-  }
+  if(changeDrive(drive + 1) != 0)
+  	return 1;
 
   /* get the media ID of the drive */
 /*
@@ -264,11 +260,11 @@ int dir_print_header(int drive)
 
  */
 
-  r.x.ax = 0x6900;
-  r.x.bx = drive + 1;
-  s.ds = FP_SEG(&media);
-  r.x.dx = FP_OFF(&media);
-  int86x(0x21, &r, &r, &s);
+  r.r_ax = 0x6900;
+  r.r_bx = 0;
+  r.r_ds = FP_SEG(&media);
+  r.r_dx = FP_OFF(&media);
+  intr(0x21, &r);
 
   /* print drive info */
   printf("\n Volume in drive %c", drive + 'A');
@@ -285,13 +281,13 @@ int dir_print_header(int drive)
   setdisk(disk);
 
   if ((rv = incline()) == 0) {
-
-  /* print the volume serial number if the return was successful */
-  if (!r.x.cflag)
-  {
-    printf(" Volume Serial Number is %04X-%04X\n", media.serial2, media.serial1);
-    rv = incline();
-  }
+	  /* print the volume serial number if the return was successful */
+	  if (!r.r_flags & 1)
+	  {
+		printf(" Volume Serial Number is %04X-%04X\n"
+		 , media.serial2, media.serial1);
+		rv = incline();
+	  }
   }
 
   return rv;

@@ -8,9 +8,7 @@ you get garbage.
 Reported Bugs
 ~~~~~~~~~~~~~
 
-From: Steffan
- o The DEL access()/stat() stuff is still broken (included in my last
-   buglist report)
+From: Steffen
  o in FOR command redirects are lost.
 
 From: John P. Price
@@ -23,15 +21,3 @@ From: John P. Price
  o make filename completion search for exe and com files that match if
    you press tab while typing the first word (the command).  Make
    this a compile-time option.
-
-
-From: Charles Dye
- o DIR displays incorrect year values for dates 1-1-2000 or later.
-   Perhaps it would be better to always display years as four
-   digits?
-
- o CD followed by a drive letter (but no directory name) should
-   display the current directory for the specified drive.
-
-      ****  Please report bugs to command-bugs@gcfl.net!  ****
-

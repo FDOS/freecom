@@ -13,7 +13,7 @@ The command.com web site is at
 
 Please send any bug reports, comments or other info to:
 
-   command@gcfl.net  (command.com development mailing list)
+   fd-command@topica.com  (command.com development mailing list)
 
 This software has been developed by the following people:
 (listed in approximate chronological order of contributions)
@@ -21,7 +21,7 @@ This software has been developed by the following people:
    normat@rpi.edu (Tim Norman)
    mrains@apanix.apana.org.au (Matt Rains)
    ejeffrey@iastate.edu (Evan Jeffrey)
-   Steffen.Kaiser@Informatik.TU-Chemnitz.DE (Steffen Kaiser)
+   ska-src@gmx.net (Steffen Kaiser (ska))
    Svante Frey (sfrey@kuai.se)
    Oliver Mueller (ogmueller@t-online.de)
    Aaron Kaufman (morgan@remarque.berkeley.edu)
@@ -29,6 +29,9 @@ This software has been developed by the following people:
    Rob Lake (rlake@cs.mun.ca)
    John P. Price <linux-guru@gcfl.net>
    Hans B Pufal <hansp@digiweb.com>
+	D. Lucas Parker <fuerve@yahoo.com>
+	Henry Voigt <Henry.Voigt@gmx.de>
+	James Tabor <jimtabor@infohwy.com>
 
 Please note that this software is separate from the DOS-C kernel and
 may or may not work properly under it.  Of course I am making every

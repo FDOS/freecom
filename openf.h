@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 /*
- *      Check if the passed file descriptor is connected to a 
+ *      Check if the passed file descriptor is connected to a
  *      character device rather than a block device
  *
  *      Return:

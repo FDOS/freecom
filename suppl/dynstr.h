@@ -63,7 +63,7 @@ int MemiCmp(const byte *buf1, const byte *buf2, unsigned len);
 	If (buf1==NULL) || (buf2==NULL), the behaviour is undefined.
 	If len == 0, MemiCmp() returns 0.
 
-	Return:	
+	Return:
 		 <0: buf1 is less then buf2
 		==0: buf1 is equal to buf2
 		 >0: buf1 is greater than buf2
@@ -82,7 +82,7 @@ int _fMemiCmp(const byte far * dest, const byte far * src, unsigned length);
 	If (buf1==NULL) || (buf2==NULL), the behaviour is undefined.
 	If len == 0, _fMemiCmp() returns 0.
 
-	Return:	
+	Return:
 		 <0: buf1 is less then buf2
 		==0: buf1 is equal to buf2
 		 >0: buf1 is greater than buf2
@@ -95,7 +95,7 @@ int StriCmp(const char *s1, const char *s2);
 
 	If (s1==NULL) || (s2==NULL), the behaviour is undefined.
 
-	Return:	
+	Return:
 		 <0: s1 is less then s2
 		==0: s1 is equal to s2
 		 >0: s1 is greater than s2

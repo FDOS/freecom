@@ -17,7 +17,11 @@
  * 30-Jan-1999 (John P Price <linux-guru@gcfl.net>)
  * - changed /r to show FreeDOS kernel version
  *
+ * 1-Apr-2000 0.79 Henry Voigt <Henry.Voigt@gmx.de>
+ * bugfix: ver.c : options uninitilized
  *
+ * 2000/06/22 ska
+ *	new version: v0.79b
  */
 
 #include "config.h"
@@ -32,8 +36,8 @@
 #include "strings.h"
 #include "cmdline.h"
 
-char *shellver = "version 0.79a [" __DATE__ "]";
-char *shellname = "FreeCom";
+const char shellver[] = "version 0.79b [" __DATE__ "]";
+const char shellname[] = "FreeCom";
 
 void short_version(void)
 {

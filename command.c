@@ -264,11 +264,7 @@ static void execute(char *first, char *rest)
   /* check for a drive change */
   if ((strcmp(first + 1, ":") == 0) && isalpha(*first))
   {
-    setdisk(toupper(*first) - 'A');
-
-    if (getdisk() != toupper(*first) - 'A')
-      displayString(TEXT_ERROR_INVALID_DRIVE);
-
+  	changeDrive(*first);
     return;
   }
 
@@ -278,7 +274,6 @@ static void execute(char *first, char *rest)
     return;
   }
 
-  /* get the PATH environment variable and parse it */
   /* search the PATH environment variable for the binary */
   fullname = find_which(first);
   dprintf(("[find_which(%s) returned %s]\n", first, fullname));
@@ -357,10 +352,12 @@ static void docommand(char *line)
     }
 
   /* Copy over 1st word as lower case */
-    while (!is_delim(*(unsigned char*)rest))
+  /* Internal commands are constructed out of alphabetic
+  	characters; ? had been parsed already */
+    while (isalpha(*rest))
       *cp++ = tolower(*rest++);
 
-    if(*rest && strchr(QUOTE_STR, *rest))
+    if(*rest && (!is_delim(*rest) || strchr(QUOTE_STR, *rest)))
       /* If the first word is quoted, it is no internal command */
       cp = com;   /* invalidate it */
     *cp = '\0';                 /* Terminate first word */
@@ -574,10 +571,12 @@ int process_input(int xflag, char *commandline)
   char *ip;
   char *cp;
   char forvar;
-  int echothisline = 0;
+  int echothisline;
+  int tracethisline;
 
   do
   {
+  	echothisline = tracethisline = 0;
     if(commandline) {
       ip = commandline;
       readline = commandline = NULL;
@@ -599,12 +598,25 @@ int process_input(int xflag, char *commandline)
         break;
       }
 
+      /* Go Interactive */
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
       tracemode = 0;          //reset trace mode
-
-      echothisline = 0;
       }
     }
+
+    if(*(ip = trim(ip)) == '?') {
+    	 ip = trim(ip + 1);
+    	 if(!*ip) {		/* is short help command */
+#ifdef INCLUDE_CMD_QUESTION
+    	 	showcmds(ip);
+#endif
+			free(readline);
+			continue;
+		}
+		/* this-line-tracemode */
+		echothisline = 0;
+		tracethisline = 1;
+	}
 
   /* The FOR hack
     If the line matches /^\s*for\s+\%[a-z]\s/, the FOR hack
@@ -613,7 +625,7 @@ int process_input(int xflag, char *commandline)
     When the percent (%) expansion is made later on, any
     sequence "%<ch>" is retained.
   */
-  cp = ip = trim(ip);
+  cp = ip;
   if(matchtok(cp, "for") && *cp == '%' && isalpha(cp[1])
    && isspace(cp[2]))   /* activate FOR hack */
     forvar = toupper(cp[1]);
@@ -720,7 +732,11 @@ intBufOver:
 
     if (*parsedline)
     {
+      if(tracethisline)
+      	++tracemode;
       parsecommandline(parsedline);
+      if(tracethisline)
+      	--tracemode;
       if (echothisline || echo)
         putchar('\n');
     }

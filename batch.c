@@ -124,7 +124,7 @@ char *find_arg(int n)
  */
 int setBatchParams(char *s)
 {
-  if((bc->params = split(s, &bc->numParams)) == NULL) 
+  if((bc->params = split(s, &bc->numParams)) == NULL)
   {
     error_out_of_memory();
     return 0;

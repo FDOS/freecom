@@ -1,5 +1,24 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2000/06/22 ska <ska-src@gmx.net>
+~~~~~~~~~~~~~~~~~~~~~~
+released version v0.79b
+
+2000/06/22 ska <ska-src@gmx.net>
+~~~~~~~~~~~~~~~~~~~~~~
+o add: CDD - changes drive and directory
+o add: FEATURE_LAST_DIR - "CD -" as in 4/Ndos
+o bugfix: "CD C:" has to display cwd of drive C:
+
+01-Jun-2000 (D. Lucas Parker <fuerve@yahoo.com>)
+~~~~~~~~~~~~~~~~~~~~~~
+o Added PUSHD, POPD, and DIRS commands similar to 4/NDOS, in file DSTACK.C
+
+1-Apr-2000 0.79 Henry Voigt <Henry.Voigt@gmx.de>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bugfix: ver.c : options uninitilized - every second output of ver with the
+               same option is empty (except FreeCom-string)
+
 19-May-2000      James Tabor <jimtabor@infohwy.com>
 ~~~~~~~~~~~~~~~~~~~~~~
 Import FreeCom from John Price CVS at gcfl.net to the new CVS at

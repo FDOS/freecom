@@ -16,6 +16,10 @@
  * 2000/01/15 ska
  * add: FEATURE_AUTOREDIRECT_TO_CON: Number of loops after the output is
  *	redirected to CON, if FreeCom hangs in "hangForever()" in COMMAND.C
+ *
+ * 2000/06/22 ska
+ *	add: DIR_STACK_LEN, commands: DIRS, POPD, PUSHD, CDD
+ *	add: FEATURE_LAST_DIR
  */
 
 /* define DEBUG to add debugging code */
@@ -42,7 +46,11 @@
 //#define FEATURE_SWAP_EXEC
 
 /* Command line logging feature */
-#define FEATURE_CALL_LOGGING
+//#define FEATURE_CALL_LOGGING
+
+/* Preserves last directory (CD, CHDIR, CDD, PUSHD, POPD);
+	"CD -" chdir's there */
+#define FEATURE_LAST_DIR
 
 /* Name of the executable */
 #define COM_NAME "COMMAND.COM"
@@ -56,22 +64,29 @@
    Undefine to remove this feature */
 #define FEATURE_AUTO_REDIRECT_TO_CON 5
 
+/* Define the size of the buffer used to store old paths for PUSHD/POPD */
+#define DIR_STACK_LEN 256
+
 
 #define INCLUDE_CMD_BEEP
 #define INCLUDE_CMD_BREAK
 #define INCLUDE_CMD_CHDIR
+#define INCLUDE_CMD_CDD
 #define INCLUDE_CMD_CLS
 #define INCLUDE_CMD_COPY
 #define INCLUDE_CMD_CTTY
 #define INCLUDE_CMD_DATE
 #define INCLUDE_CMD_DEL
 #define INCLUDE_CMD_DIR
+#define INCLUDE_CMD_DIRS
 #define INCLUDE_CMD_LOADFIX
 #define INCLUDE_CMD_LOADHIGH
 #define INCLUDE_CMD_MKDIR
 #define INCLUDE_CMD_PATH
 #define INCLUDE_CMD_PAUSE
 #define INCLUDE_CMD_PROMPT
+#define INCLUDE_CMD_PUSHD
+#define INCLUDE_CMD_POPD
 #define INCLUDE_CMD_REM
 #define INCLUDE_CMD_RENAME
 #define INCLUDE_CMD_RMDIR
@@ -98,5 +113,13 @@
    shift
 
  */
+
+/********
+	***** Resolve dependencies
+	***** Don't change without change the appropriate sources!
+	************/
+#if defined(INCLUDE_CMD_PUSHD) || defined(INCLUDE_CMD_POPD)
+#define	INCLUDE_CMD_CDD
+#endif
 
  #include "debug.h"

@@ -38,23 +38,25 @@ int cmd_echo(char *param)
 
   dprintf( ("[ECHO: %s]\n", param) );
 
-  if(!param)
-    param = "";
-  else if(*param) {
-    nostatus = !isspace(*param);
-    param = ltrim(param + 1);
-  } else nostatus = 0;
+	if(param && *param) {
+		nostatus = !isspace(*param);
+		param = ltrim(param + 1);
+	} else nostatus = 0;
 
-  if (stricmp(param, D_OFF) == 0)
-    echo = 0;
-  else if (stricmp(param, D_ON) == 0)
-    echo = 1;
-  else if (*param)
-    puts(param);
-  else if(nostatus)
-    putchar('\n');
-  else
-    displayString(TEXT_MSG_ECHO_STATE, echo ? D_ON : D_OFF);
+	switch(onoffStr(param)) {
+	case OO_Null:	case OO_Empty:
+	default:
+	  if(nostatus)
+		putchar('\n');
+	  else
+		displayString(TEXT_MSG_ECHO_STATE, echo ? D_ON : D_OFF);
+	  break;
+
+	case OO_Off:	echo = 0; break;
+	case OO_On:		echo = 1; break;
+    case OO_Other:
+		puts(param);
+	}
 
   return 0;
 }

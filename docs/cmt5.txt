@@ -54,7 +54,7 @@ single_character_option ::= character .
 longname_options  ::= character character
 	| character longname_option .
 
-character ::= <<any character except unquoted whitespaces, 
+character ::= <<any character except unquoted whitespaces,
 	boolean_signs or argument_signs, the case is not
 	significant>> .
 
