@@ -1,3 +1,5 @@
+bugfix: split(): out-of-mem condition during building argument array
+
 v0.83 Beta 56:
 add: DIR: /O (single sort order) {Tom Ehlert}
 bugfix: CONFIG.H: enabled CHCP by default

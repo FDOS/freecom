@@ -9,6 +9,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2003/03/09 12:09:40  skaus
+	bugfix: split(): out-of-mem condition during building argument array
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -61,10 +64,12 @@ static int addArg(char ***Xarg, int *argc, char *sBeg, char **sEnd)
         return 1;
       }
       /* create new entry */
-      if((arg[(*argc)++] = unquote(sBeg, *sEnd)) == 0) {
+      if((arg[*argc] = unquote(sBeg, *sEnd)) == 0) {
         freep(arg);
         return 1;
       }
+      arg[++*argc] = 0;		/* keep it a correct argv[] array if a freep()
+      							is triggered above */
       *Xarg = arg;
 
     return 0;
