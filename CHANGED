@@ -1,3 +1,4 @@
+bugfix: INIT: FreeCOM-path and TTY can be in any order
 chg: SCRIPTS\MAKECMD.BAT: replaces MAKE_LNG.BAT, make localized FreeCOMs
 add: SCRIPTS\MAKE_LNG.BAT: Make language-specific FreeCOM from *.LNG files {Bernd Blaauw}
 add: SPANISH.LNG/ERR {Aitor Santamar¡a Merino}

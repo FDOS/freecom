@@ -124,6 +124,10 @@ optScanFct(opt_init)
 }
 
 
+#ifndef INCLUDE_CMD_CTTY
+#define cmd_ctty(q) error_ctty_excluded()
+#endif
+
 /*
  * set up global initializations and process parameters
  *
@@ -146,7 +150,7 @@ int initialize(void)
 {
   //int rc;
   int comPath;                /* path to COMMAND.COM (for COMSPEC/reload) */
-  char *newTTY;                 /* what to change TTY to */
+  int newTTY;                 /* what to change TTY to */
   int showinfo;                 /* show initial info only if no command line options */
 
   int ec;           /* error code */
@@ -325,23 +329,26 @@ int initialize(void)
     p = 0;
     break;
   }
-  if(!comPath) {      /* 1st argument */
-    grabComFilename(1, (char far*)q);
-    comPath = 1;
-    free(q);
-  } else if(!newTTY) {  /* 2nd argument */
-#ifdef INCLUDE_CMD_CTTY
-    newTTY = q;
-#else
-      error_ctty_excluded();
-    free(q);
-#endif
-      } else {
-        error_too_many_parameters(q);
-        showhelp = 1;
-        free(q);
-        break;
-      }
+  if(!comPath || !newTTY) {
+  	int rc = grabComFilename(0, (char far*)q);
+
+  	if(rc == 2 && !newTTY) {
+		cmd_ctty(q);
+		newTTY = 1;
+	} else if(!comPath) {
+		if(rc)		/* Display the error mesg */
+			grabComFilename(1, (char far*)q);
+		else
+			comPath = 1;
+	} else {			/* has to be CTTY */
+		cmd_ctty(q);
+		newTTY = 1;
+	}
+  } else {
+	error_too_many_parameters(q);
+	showhelp = 1;
+  }
+   free(q);
    } while(1);
 
    /*
@@ -366,14 +373,6 @@ int initialize(void)
 		dprintf(("[INIT: Activate AutoFail handler]\n"));
 		setvect(0x24, autofail_err_handler);
 	}
-#endif
-
-#ifdef INCLUDE_CMD_CTTY
-  if (newTTY) {      /* change TTY as early as possible so the caller gets
-                          the messages into the correct channel */
-    cmd_ctty(newTTY);
-    free(newTTY);
-  }
 #endif
 
   if(!ComPath) {

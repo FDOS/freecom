@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.9  2003/12/09 20:25:35  skaus
+# bugfix: INIT: FreeCOM-path and TTY can be in any order
+#
 # Revision 1.8  2002/04/02 23:36:37  skaus
 # add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 #
@@ -75,7 +78,7 @@ strings_lib .SETDIR=strings :
 	+copy strings.lst ..
 
 strings_lib_clean :
-	$(RM) -fr strings
+	-$(RM) -fr strings
 
 strings.err : critstrs.exe default.err $(_ELNG)
 	critstrs.exe $(LNG)

@@ -125,6 +125,7 @@ freecom_deps :  \
 	realnum.obj \
 	res.obj \
 	res_r.obj \
+	res_vald.obj \
 	res_w.obj \
 	resfile.obj \
 	rmtmpfil.obj \
@@ -134,10 +135,10 @@ freecom_deps :  \
 	samefile.obj \
 	scancmd.obj \
 	scanopt.obj \
-	session.obj \
 	chunk1
 
 chunk1 :  \
+	session.obj \
 	showcmds.obj \
 	skqwd.obj \
 	split.obj \
@@ -237,7 +238,9 @@ chunk1 :  \
 	err81.obj \
 	err82.obj \
 	err83.obj \
-	err84.obj
+	err84.obj \
+	err85.obj \
+	err86.obj
 
 
 freecom.lib : $(CFG) freecom_deps 
@@ -358,6 +361,7 @@ freecom.lib : $(CFG) freecom_deps
 +-realnum.obj &
 +-res.obj &
 +-res_r.obj &
++-res_vald.obj &
 +-res_w.obj &
 +-resfile.obj &
 +-rmtmpfil.obj &
@@ -467,7 +471,9 @@ freecom.lib : $(CFG) freecom_deps
 +-err81.obj &
 +-err82.obj &
 +-err83.obj &
-+-err84.obj
++-err84.obj &
++-err85.obj &
++-err86.obj
 | , freecom.lst 
 	if not exist freecom.lib $(AR) freecom.lib /c @&&|
 +alprmblk.obj &
@@ -586,6 +592,7 @@ freecom.lib : $(CFG) freecom_deps
 +realnum.obj &
 +res.obj &
 +res_r.obj &
++res_vald.obj &
 +res_w.obj &
 +resfile.obj &
 +rmtmpfil.obj &
@@ -695,6 +702,8 @@ freecom.lib : $(CFG) freecom_deps
 +err81.obj &
 +err82.obj &
 +err83.obj &
-+err84.obj
++err84.obj &
++err85.obj &
++err86.obj
 | , freecom.lst 
 

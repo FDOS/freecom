@@ -59,6 +59,7 @@ char *comFile(void);
 char *comPathFile(const char * fnam);
 char *comResFile(void);
 #define comRespawnFile comResFile
+int validResFile(const char * const fnam);
 void dispCount(int cnt, unsigned base_id);
 int drvNum(int drive);
 char *cwd(int drive);
@@ -120,7 +121,7 @@ int parsetime(const char * s, struct dostime_t * const timep);
 void displayPrompt(const char *pr);
 void printprompt(void);
 int showcmds(char *rest);
-void grabComFilename(const int warn, const char far * const fnam);
+int grabComFilename(const int warn, const char far * const fnam);
 
 void displayString(unsigned id,...);
 void displayError(unsigned id,...);

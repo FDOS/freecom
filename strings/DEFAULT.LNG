@@ -1452,3 +1452,11 @@ copied %luKB/???KB\r\
 :TEXT_COPY_COPIED#0%
 copied %luKB/%luKB\r\
 .
+
+:TEXT_ERROR_FCOM_IS_DEVICE#0%
+FreeCOM cannot be a device: "%s"
+.
+:TEXT_ERROR_FCOM_INVALID#0%
+This file is no valid FreeCOM or of an incompatible version:
+%s
+.

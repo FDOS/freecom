@@ -8,10 +8,19 @@
 
 	This file bases on INIT.C of FreeCOM v0.81 beta 1.
 
+	0 -> is valid
+	1 -> no such file
+	2 -> is a device
+	3 -> not valid
+	4 -> out of memory / syntax error ... .
+
 	$Log$
+	Revision 1.3  2003/12/09 20:25:34  skaus
+	bugfix: INIT: FreeCOM-path and TTY can be in any order
+
 	Revision 1.2  2002/11/05 19:29:21  skaus
 	bugfix: FreeCOM should accept relative path as argv[0]
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -52,10 +61,11 @@
 #include "../err_fcts.h"
 #include "../include/misc.h"
 
-void grabComFilename(const int warn, const char far * const fnam)
+int grabComFilename(const int warn, const char far * const fnam)
 {
   char *buf;
   size_t len;
+  int rc;
 
   assert(fnam);
 
@@ -65,12 +75,12 @@ void grabComFilename(const int warn, const char far * const fnam)
     /* no filename specified */
     if(warn)
       error_syntax(0);
-    return;
+    return 4;
   }
 
   if((buf = malloc(len + 1)) == 0) {
     if(warn) error_out_of_memory();
-    return ;
+    return 4;
   }
   _fmemcpy((char far*)buf, fnam, len);
   buf[len] = '\0';
@@ -83,7 +93,7 @@ void grabComFilename(const int warn, const char far * const fnam)
       free(buf);
       if((buf = p) == 0) {
 		  if(warn) error_out_of_memory();
-		  return;
+		  return 4;
       }
       if(warn)
           error_init_fully_qualified(buf);
@@ -103,18 +113,27 @@ void grabComFilename(const int warn, const char far * const fnam)
       if((p = realloc(buf, len + sizeof(COM_NAME) + 1)) == 0) {
         if(warn) error_out_of_memory();
         free(buf);
-        return;
+        return 4;
       }
       buf = p;
       strcpy(&buf[len], "\\" COM_NAME);
     }
 
-    if(!(dfnstat(buf) & DFN_FILE)) {
-      /* not found */
-      if(warn) error_open_file(buf);
-      free(buf);
-      return;
-    }
+
+	if(0 != (rc = validResFile(buf))) {
+		if(warn) switch(rc) {
+		default:
+	#ifdef NDEBUG
+			assert(0);
+	#endif
+		case 1: error_open_file(buf); break;
+		case 2: error_fcom_is_device(buf); break;
+		case 3: error_fcom_invalid(buf); break;
+		}
+
+		free(buf);
+		return rc;
+	}
 
   free(ComPath);    /* Save the found file */
   ComPath = buf;
@@ -129,4 +148,6 @@ void grabComFilename(const int warn, const char far * const fnam)
        memcpy(++buf, "COM", 3);
        isSwapFile = buf - ComPath;
   }
+
+  return 0;
 }
