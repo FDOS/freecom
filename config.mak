@@ -3,8 +3,8 @@ CC_BASE_PATH = D:\TC101
 
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
-SUPPL_INC_PATH = D:\FREEDOS\SRC\INCLUDE
-SUPPL_LIB_PATH = D:\FREEDOS\SRC\LIB\TC101
+SUPPL_INC_PATH = .\SUPPL
+SUPPL_LIB_PATH = $(SUPPL_INC_PATH)
 
 ## Program locations
 BINPATH = $(CC_BASE_PATH)\BIN
@@ -26,10 +26,6 @@ CFLAGS =
 ## Memory model of FreeCOM
 SHELL_MMODEL=s
 
-!if $(XMS_SWAP)
-__XMS_SWAP = -DXMS_SWAP=1
-!endif
-
 # Default configuration
 # added strings.h here because $(CFG) is included everywhere already
 ## Add -D_NO__DOS_DATE if your compiler does not have no dosdate_t (*)
@@ -43,20 +39,16 @@ __XMS_SWAP = -DXMS_SWAP=1
 $(CFG): $(CFG_DEPENDENCIES)
   copy &&|
 -a
--Z
--b-
--O
--1-
 -f-
 -ff-
--w+
 -K
+-w+
+-O
+-Z
+-b-
 -I$(INCLUDEPATH)
 -L$(LIBPATH)
 -m$(SHELL_MMODEL)
--DNDEBUG
--UDEBUG
-$(__XMS_SWAP)
 | $(CFG)
 
 

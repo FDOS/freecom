@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.17  2002/05/11 22:10:36  skaus
+# v0.83 Beta 40:
+# bugfix: ^Break detection after XMS-Swapping
+#
 # Revision 1.16  2001/07/27 22:37:34  skaus
 # bugfix: pre-compiled package BINARY.ZIP without command-line editing
 # chg: FreeCOM archive (== executable) is opened read-only.
@@ -46,40 +50,42 @@
 #
 
 .IMPORT : FREEDOS
-.IMPORT .IGNORE : LNG DEBUG NDEBUG
+# # .IMPORT .IGNORE : LNG DEBUG NDEBUG
 
-INCDIR+=;$(FREEDOS)\SRC\INCLUDE;$(PWD:u)\\INCLUDE
-LIBDIR+=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
-LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib CMD\\CMDS.LIB LIB\\FREECOM.LIB STRINGS\\STRINGS.LIB
-LDFLAGS += /msl
-NASM *= c:\TOOL\NASMW.EXE
+# # INCDIR+=;$(FREEDOS)\SRC\INCLUDE;$(PWD:u)\\INCLUDE
+# # LIBDIR+=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
+# # LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib CMD\\CMDS.LIB LIB\\FREECOM.LIB STRINGS\\STRINGS.LIB
+# # LDFLAGS += /msl
+# # NASM *= c:\TOOL\NASMW.EXE
 
 # Use BC5 linker in order to use TD of BC5
-LD_TLINK != D:\BC5\BIN\TLINK.EXE
+# # LD_TLINK != D:\BC5\BIN\TLINK.EXE
 
 # Project specific C compiler flags
-MYCFLAGS_DBG = -UNDEBUG $(null,$(DEBUG) $(NULL) -DDEBUG=1)
-MYCFLAGS_NDBG = -DNDEBUG=1 -UDEBUG
-MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
+# # MYCFLAGS_DBG = -UNDEBUG $(null,$(DEBUG) $(NULL) -DDEBUG=1)
+# # MYCFLAGS_NDBG = -DNDEBUG=1 -UDEBUG
+# # MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 
 # Project specific NASM compiler flags
-NASMFLAGS_DBG = $(null,$(DEBUG) $(NULL) -DDEBUG=1) -s
-NASMFLAGS_NDBG = -s
-NASMFLAGS = $(null,$(NDEBUG) $(NASMFLAGS_DBG) $(NASMFLAGS_NDBG))
+# # NASMFLAGS_DBG = $(null,$(DEBUG) $(NULL) -DDEBUG=1) -s
+# # NASMFLAGS_NDBG = -s
+# # NASMFLAGS = $(null,$(NDEBUG) $(NASMFLAGS_DBG) $(NASMFLAGS_NDBG))
 
-RUNMAKE = $(MAKE) LNG=$(LNG) NASM=$(NASM) DEBUG=$(DEBUG) NDEBUG=$(NDEBUG) MODEL=$(MODEL)
+# # RUNMAKE = $(MAKE) LNG=$(LNG) NASM=$(NASM) DEBUG=$(DEBUG) NDEBUG=$(NDEBUG) MODEL=$(MODEL)
+
+.INCLUDE : _config.mk
 
 GLOBAL_DEPS = err_fcts.h
 
-.SOURCE.lib := $(LIBDIR:s/;/ /:u)
+# # .SOURCE.lib := $(LIBDIR:s/;/ /:u)
 
 # Sources of this make target
 SRC = 
 
 
-.INCLUDE .IGNORE : lastmake.mk
+# # .INCLUDE .IGNORE : lastmake.mk
 
-THISMAKE !:= $(_COMPILER):$(_MODEL):$(LNG):$(null,$(NDEBUG) DBG NDBG):$(LNG)
+# # THISMAKE !:= $(_COMPILER):$(_MODEL):$(LNG):$(null,$(NDEBUG) DBG NDBG):$(LNG)
 
 #	Default target
 all: com.com tools

@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.9  2002/05/11 22:10:40  skaus
+# v0.83 Beta 40:
+# bugfix: ^Break detection after XMS-Swapping
+#
 # Revision 1.8  2002/05/11 20:10:59  skaus
 # bugfix: ^Break detection after XMS-Swapping
 #
@@ -53,11 +57,10 @@
 .INCLUDE : ../_config.mk
 
 # Sources of this make target
-SRC = batch.c cmdtable.c command.c dummies.asm expalias.c \
-	init.c kswap.c loadhigh.c module.c redir.c ver.c
-OBJ = batch.obj cmdtable.obj command.obj dummies.obj \
-	expalias.obj init.obj kswap.obj loadhigh.obj module.obj redir.obj \
-	ver.obj
+SRC = batch.c cmdtable.c command.c dummies.asm expalias.c init.c kswap.c \
+	loadhigh.c module.c redir.c ver.c
+OBJ = batch.obj cmdtable.obj command.obj dummies.obj expalias.obj init.obj \
+	kswap.obj loadhigh.obj module.obj redir.obj ver.obj
 HDR = ..\config.h ..\include/batch.h ..\include/cmdline.h \
 	..\include/command.h ..\include/context.h ..\include/crossjmp.h \
 	..\include/cswap.h ..\include/datefunc.h ..\include/debug.h \
@@ -65,13 +68,16 @@ HDR = ..\config.h ..\include/batch.h ..\include/cmdline.h \
 	..\include/module.h ..\include/mux_ae.h ..\include/nls.h \
 	..\include/openf.h ..\include/res.h ..\include/resource.h \
 	..\include/timefunc.h ..\include\large.inc ..\include\model.inc \
-	..\include\small.inc ..\include\stuff.inc
+	..\include\small.inc
 
 XMS_SWAP_PRE_OBJ = cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj
 XMS_SWAP_ADD_OBJ = cswapc.obj
 
-.IF $(XMS_SWAP) == yes
-SRC += cswap.asm cswapc.c xms_crit.asm xms_brk.asm
+.IF $(XMS_SWAP) == $(NULL)
+SRC += cb_catch.asm
+OBJ += cb_catch.obj
+.ELSE
+SRC += cswap.asm cswapc.c xms_crit.asm xms_brk.asm cb_catch.asm
 HDR += ../include/cswapc.h
 OBJ += $(XMS_SWAP_ADD_OBJ)
 PRE_OBJ = $(XMS_SWAP_PRE_OBJ)
@@ -129,9 +135,6 @@ kswap.obj : kswap.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/kswap.h ../include/misc.h ../include/timefunc.h
-cb_catch.obj : cb_catch.asm \
-	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc \
-	.\..\include\stuff.inc
 ver.obj : ver.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \

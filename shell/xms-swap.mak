@@ -19,7 +19,7 @@ command.exe : $(CFG) batch.obj \
 	module.obj \
 	redir.obj \
 	ver.obj \
-	cswapc.obj cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj
+	cb_catch.obj cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj
 	$(LD) /m/s/l /c /d @&&|
 $(LIBPATH)\c0s.obj+
 cb_catch.obj xms_crit.obj xms_brk.obj cswap.obj+
@@ -34,7 +34,7 @@ loadhigh.obj+
 module.obj+
 redir.obj+
 ver.obj+
-cswapc.obj
+cb_catch.obj
 command
 		# no map file
 $(SUPPL_LIB_PATH)\suppl_s.lib +
