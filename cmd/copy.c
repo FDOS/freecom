@@ -129,28 +129,33 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   size_t len;
   FLAG keepFTime;
   struct ftime fileTime;
-  char *singleFile;
+  char *srcFile;
+  FLAG wildcarded;
 
   assert(dst);
   assert(pattern);
   assert(src);
 
   if(strpbrk(pattern, "*?") == 0) {
-  	singleFile = dfnfilename(pattern);
+  	srcFile = dfnfilename(pattern);
+  	wildcarded = 0;
   } else if(FINDFIRST(pattern, &ff, FA_RDONLY | FA_ARCH) != 0) {
     error_sfile_not_found(pattern);
     return 0;
-  } else singleFile = &ff.ff_name;
+  } else {
+  	srcFile = ff.ff_name;
+  	wildcarded = 1;
+  }
 
   mode[2] = '\0';
 
   do {
-    if((rDest = fillFnam(dst, singleFile)) == 0)
+    if((rDest = fillFnam(dst, srcFile)) == 0)
       return 0;
     h = src;
     do {  /* to prevent to open a source file for writing, e.g.
           for COPY *.c *.?    */
-      if((rSrc = fillFnam(h->fnam, singleFile)) == 0) {
+      if((rSrc = fillFnam(h->fnam, srcFile)) == 0) {
         free(rDest);
         return 0;
       }
@@ -203,7 +208,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     h = src;
     keepFTime = (h->app == 0);
     do {
-      if((rSrc = fillFnam(h->fnam, singleFile)) == 0) {
+      if((rSrc = fillFnam(h->fnam, srcFile)) == 0) {
         fclose(fout);
         free(rDest);
         return 0;
@@ -286,6 +291,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       free(rSrc);
       if(!rc) {
         fclose(fout);
+        unlink(rDest);		/* if device -> no removal, ignore error */
         free(rDest);
         return 0;
       }
@@ -300,11 +306,12 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     fclose(fout);
     if(rc) {
       error_write_file(rDest);
+      unlink(rDest);		/* if device -> no removal, ignore error */
       free(rDest);
       return 0;
     }
     free(rDest);
-  } while(!singleFile && FINDNEXT(&ff) == 0);
+  } while(wildcarded && FINDNEXT(&ff) == 0);
 
   return 1;
 }

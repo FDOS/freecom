@@ -1,8 +1,10 @@
+bugfix: COPY: remove created files on error
+fix: COPY: broken wildcarded source pattern
 add: COPY: colon'ed device names on command line, e.g. COPY CON: file
 fix: COPY: con: is misinterpreted as C:
 fix: DIR: /O: endless loop /OU; ignored /OG; /OE: return 0 if no extension
 add: DIR: /O: multiple /O** conditions {Tom Ehlert}
-bugfix: COPY: process directories as if "*.*" is appended
+bugfix: COPY: process directories as if "*.*" were appended
 bugfix: split(): out-of-mem condition during building argument array
 
 v0.83 Beta 56:
