@@ -72,7 +72,9 @@ struct CMD internalCommands[] =
 	{"CDD", CMD_SPECIAL_DIR, cmd_cdd, TEXT_CMDHELP_CDD},
 #endif
 
-/*    { "CHCP",     0,             cmd_chcp, TEXT_CMDHELP_CHCP},    !!    */
+#ifdef INCLUDE_CMD_CHCP
+    { "CHCP",     0,             cmd_chcp, TEXT_CMDHELP_CHCP},
+#endif
 
 #ifdef INCLUDE_CMD_CLS
   {"CLS", 0, cmd_cls, TEXT_CMDHELP_CLS},

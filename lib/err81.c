@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_get_codepage
-void error_get_codepage(void)
-{	displayError(TEXT_ERROR_GET_CODEPAGE);
+#undef error_set_codepage
+void error_set_codepage(void)
+{	displayError(TEXT_ERROR_SET_CODEPAGE);
 }

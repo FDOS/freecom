@@ -114,6 +114,7 @@ int expandEnvVars(char *ip, char * const line);
 /* prototypes for INTERNAL.C */
 int cmd_break(char *);
 int cmd_chdir(char *);
+int cmd_chcp(char *);
 int cmd_cdd(char *);
 int cmd_cls(char *);
 int cmd_copy(char *);
