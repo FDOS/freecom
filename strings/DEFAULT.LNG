@@ -420,8 +420,8 @@ program. Please refer to above error messages for the reason of
 this problem.
 .
 
-:TEXT_ERROR_CWD_FAILED#0%
-Drive %c: not responding or out of internal memory.
+:TEXT_ERROR_CWD_FAILED#1%
+Drive %c: not responding.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE

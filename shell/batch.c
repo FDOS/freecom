@@ -1,4 +1,4 @@
-/*
+/* $Id$
  *  BATCH.C - batch file processor for COMMAND.COM.
  *
  *  Comments:
@@ -258,11 +258,8 @@ int batch(char *fullname, char *firstword, char *param)
    assert(firstword);
    assert(param);
 
-  if ((fullname = dfnexpand(fullname, 0)) == 0)
-  {
-    error_out_of_memory();
+  if((fullname = abspath(fullname, 1)) == 0)
     return 1;
-  }
 
   dprintf(("batch ('%s', '%s', '%s')\n", fullname, firstword,
            param));

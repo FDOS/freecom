@@ -27,6 +27,9 @@
 	This file bases on TMPNAM.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2004/02/01 13:24:22  skaus
+	bugfix: misidentifying unspecific failures from within SUPPL
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -50,7 +53,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 #include "../config.h"
 
@@ -88,11 +91,8 @@ char *mktempfile(const char * const path, const char *ext)
   if (!path)                    /* to simplify the caller function */
     return 0;
 
-  if ((fn = dfnexpand(path, 0)) == 0)
-  {                             /* out-of-mem */
-    nomem();
+  if((fn = abspath(path, 0)) == 0)  /* out-of-mem */
     return 0;
-  }
 
   if (!ext)                     /* make sure it's a legal string */
     ext = "";

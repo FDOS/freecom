@@ -1,3 +1,5 @@
+bugfix: misidentifying unspecific failures from within SUPPL
+
 v0.82 pl 3:
 bugfix: Ask for FreeCOM location when STRINGS are missing [#687]
 bugfix: INIT: FreeCOM-path and TTY can be in any order

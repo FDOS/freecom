@@ -47,6 +47,8 @@ extern FILE *errStream;
 #define outStream stdout
 extern int swapOnExec, defaultToSwap, swapContext;
 
+void display_errno_fnam_error(const char * const fnam);
+
 int cgetchar(void);
 int vcgetchar(void);
 int vcgetcstr(const char *const legalCh);
@@ -63,6 +65,8 @@ int validResFile(const char * const fnam);
 void dispCount(int cnt, unsigned base_id);
 int drvNum(int drive);
 char *cwd(int drive);
+char *abspath(const char * const fnam, const int warn);
+char *truepath(const char * const fnam);
 int changeDrive(int drive);
 int mk_rd_dir(char *param, int (*func) (const char *), char *fctname);
 void cutBackslash(char * const s);

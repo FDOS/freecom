@@ -105,11 +105,9 @@ int cmd_del(char *param)
 				A:\\
 				--> It's always three bytes long at minimum
 				and always contains a backslash */
-			p = dfnexpand(arg[i], 0);
-			if(!p) {
-				error_out_of_memory();
-				return E_NoMem;
-			}
+			p = abspath(arg[i], 1);
+			if(!p)
+				return E_Other;
 			assert(strlen(p) >= 3);
 
 			if((len = strlen(p)) >= MAXPATH) {

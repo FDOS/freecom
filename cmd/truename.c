@@ -32,12 +32,10 @@ int cmd_truename(char *param)
 {
 	char *p;
 
-	if((p = dfntruename((param && *param)? param: ".")) == 0) {
-		error_out_of_memory();
-		return 0;
+	if(0 != (p = truepath((param && *param)? param: "."))) {
+		puts(p);
+		free(p);
+		return 1;
 	}
-	puts(p);
-	free(p);
-
-	return 1;
+	return 0;
 }

@@ -7,9 +7,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2004/02/01 13:24:22  skaus
+	bugfix: misidentifying unspecific failures from within SUPPL
+
 	Revision 1.2  2002/11/05 19:27:37  skaus
 	bugfix: FreeCOM is to pass the fully-qualified path to DOS-4B-00
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -39,21 +42,28 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <errno.h>
 #include <stdlib.h>
 
 #include <dfn.h>
 
+#include "../err_fcts.h"
 #include "../include/misc.h"
 
 char *find_which(const char * const fname)
 {	char *p;
   static char *buf = 0;
 
-	if(0 == (p = dfnsearch(fname, 0, 0)))
+	if(0 == (p = dfnsearch(fname, 0, 0))) {
+		if(errno == ENOMEM) {
+			error_out_of_memory();
+		}
+		/* No other error is of interest! */
 		return 0;
+	}
 
   free(buf);
-  buf = dfnfullpath(p);
+  buf = abspath(p, 1);
   free(p);
   return buf;
 }

@@ -15,9 +15,12 @@
 	4 -> out of memory / syntax error ... .
 
 	$Log$
+	Revision 1.4  2004/02/01 13:24:22  skaus
+	bugfix: misidentifying unspecific failures from within SUPPL
+
 	Revision 1.3  2003/12/09 20:25:34  skaus
 	bugfix: INIT: FreeCOM-path and TTY can be in any order
-
+	
 	Revision 1.2  2002/11/05 19:29:21  skaus
 	bugfix: FreeCOM should accept relative path as argv[0]
 	
@@ -89,12 +92,10 @@ int grabComFilename(const int warn, const char far * const fnam)
     { char *p;
 
         /* expand the string for the user */
-      p = dfnexpand(buf, 0);
+      p = abspath(buf, warn);
       free(buf);
-      if((buf = p) == 0) {
-		  if(warn) error_out_of_memory();
+      if((buf = p) == 0)
 		  return 4;
-      }
       if(warn)
           error_init_fully_qualified(buf);
 

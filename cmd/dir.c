@@ -904,8 +904,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		   be reallocated once dir_list() is called, because dir_list()
 		   is recursive.  This will also help to reduce memory
 		   fragmentation. */
-	if((p = dfnfullpath(arg)) == 0) {
-		error_out_of_memory();
+	if((p = abspath(arg, 1)) == 0) {
 		return E_NoMem;
 	}
 	if((path = realloc(p, 270*sizeof(char))) == 0) {

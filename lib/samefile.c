@@ -9,6 +9,9 @@
 	This file bases on COPY.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2004/02/01 13:24:22  skaus
+	bugfix: misidentifying unspecific failures from within SUPPL
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -52,8 +55,8 @@ int samefile(const char * const f1, const char * const f2)
   assert(f1);
   assert(f2);
 
-  t1 = dfntruename(f1);
-  t2 = dfntruename(f2);
+  t1 = truepath(f1);
+  t2 = truepath(f2);
 
   if(!t1 || !t2)
     differ = -1;
