@@ -108,6 +108,7 @@ int initialize(void);
 void short_version(void);
 int process_input(int xflg, char *cmdline);
 void perform_exec_result(int rc);
+int expandEnvVars(char *ip, char * const line);
 
 /* prototypes for INTERNAL.C */
 int cmd_break(char *);
@@ -191,6 +192,7 @@ char *find_arg(int);
 int cmd_call(char *);
 int cmd_echo(char *);
 int cmd_for(char *);
+int cmd_for_hackery(char *);
 int cmd_goto(char *);
 int cmd_if(char *);
 int cmd_pause(char *);

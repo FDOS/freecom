@@ -465,6 +465,105 @@ void readcommand(char * const str, int maxlen)
 #endif
 }
 
+/* line -- min size: MAX_INTERNAL_COMMAND_SIZE + sizeof(errorlevel) * 8
+ */
+int expandEnvVars(char *ip, char * const line)
+{	char *cp, *tp;
+
+	assert(ip);
+	assert(line);
+
+/* Return the maximum pointer into parsedline to add 'numbytes' bytes */
+#define parsedMax(numbytes)   \
+  (line + MAX_INTERNAL_COMMAND_SIZE - 1 - (numbytes))
+
+	cp = line;
+
+	while(*ip) {
+	  /* Assume that at least one character is added, place the
+		test here to simplify the switch() statement */
+	  if(cp >= parsedMax(1))
+		return 0;
+
+	  if(*ip == '%') {
+		switch(*++ip) {
+		  case '\0':
+			*cp++ = '%';
+			break;
+
+		  case '%':
+			*cp++ = *ip++;
+			break;
+
+		  case '0':
+		  case '1':
+		  case '2':
+		  case '3':
+		  case '4':
+		  case '5':
+		  case '6':
+		  case '7':
+		  case '8':
+		  case '9':
+			if(0 != (tp = find_arg(*ip - '0'))) {
+			  if(cp >= parsedMax(strlen(tp)))
+				return 0;
+			  cp = stpcpy(cp, tp);
+			  ip++;
+			}
+			else
+			  *cp++ = '%';
+			  /* Let the digit be copied in the cycle */
+
+			break;
+
+		  case '?':
+			/* overflow check: parsedline has that many character
+			  "on reserve" */
+			cp += sprintf(cp, "%u", errorlevel);
+			ip++;
+			break;
+
+		  default:
+	#if 0
+			if(forvar == toupper(*ip)) {    /* FOR hack */
+			  *cp++ = '%';			/* let the var be copied in next cycle */
+			  break;
+			}
+	#endif
+			if((tp = strchr(ip, '%')) != 0) {
+				char *evar;
+			  *tp = '\0';
+
+			  if((evar = getEnv(ip)) != 0) {
+				if(cp >= parsedMax(strlen(evar)))
+				  return 0;
+				cp = stpcpy(cp, evar);
+			   }
+
+			  ip = tp + 1;
+			}
+			break;
+		}
+		continue;
+	  }
+
+#if 0
+	  if(iscntrl(*ip)) {
+		*cp++ = ' ';
+		++ip;
+	  } else 
+#endif
+		*cp++ = *ip++;
+	}
+
+	assert(cp);
+	assert(cp < line + MAX_INTERNAL_COMMAND_SIZE);
+
+	*cp = 0;
+	return 1;
+}
+
 /*
  * do the prompt/input/process loop
  *
@@ -479,13 +578,15 @@ int process_input(int xflag, char *commandline)
      */
   char parsedline[MAX_INTERNAL_COMMAND_SIZE + sizeof(errorlevel) * 8]
     , *readline;
+#if 0
 /* Return the maximum pointer into parsedline to add 'numbytes' bytes */
 #define parsedMax(numbytes)   \
   (parsedline + MAX_INTERNAL_COMMAND_SIZE - 1 - (numbytes))
   char *evar;
   char *tp;
-  char *ip;
   char *cp;
+#endif
+  char *ip;
 #if 0
   char forvar;
 #endif
@@ -567,102 +668,14 @@ int process_input(int xflag, char *commandline)
 	}
 #endif
 
-  cp = parsedline;
-    while (*ip)
-    {
-      /* Assume that at least one character is added, place the
-        test here to simplify the switch() statement */
-      if(cp >= parsedMax(1)) {
-        cp = 0;    /* error condition */
-        break;
-      }
-      if (*ip == '%')
-      {
-        switch (*++ip)
-        {
-          case '\0':    /* FOR hack forvar == 0 if no FOR is active */
-            *cp++ = '%';
-            break;
-
-          case '%':
-            *cp++ = *ip++;
-            break;
-
-          case '0':
-          case '1':
-          case '2':
-          case '3':
-          case '4':
-          case '5':
-          case '6':
-          case '7':
-          case '8':
-          case '9':
-            if (0 != (tp = find_arg(*ip - '0')))
-            {
-              if(cp >= parsedMax(strlen(tp))) {
-                cp = 0;
-                goto intBufOver;
-              }
-              cp = stpcpy(cp, tp);
-              ip++;
-            }
-            else
-              *cp++ = '%';
-              /* Let the digit be copied in the cycle */
-
-            break;
-
-          case '?':
-            /* overflow check: parsedline has that many character
-              "on reserve" */
-            cp += sprintf(cp, "%u", errorlevel);
-            ip++;
-            break;
-
-          default:
-#if 0
-            if(forvar == toupper(*ip)) {    /* FOR hack */
-              *cp++ = '%';			/* let the var be copied in next cycle */
-              break;
-            }
-#endif
-            if ((tp = strchr(ip, '%')) != 0)
-            {
-              *tp = '\0';
-
-              if ((evar = getEnv(ip)) != 0) {
-                if(cp >= parsedMax(strlen(evar))) {
-                  cp = 0;
-                  goto intBufOver;
-                }
-                cp = stpcpy(cp, evar);
-               }
-
-              ip = tp + 1;
-            }
-            break;
-        }
-        continue;
-      }
-
-      if (iscntrl(*ip)) {
-        *cp++ = ' ';
-        ++ip;
-      } else 
-      	*cp++ = *ip++;
-    }
-
-intBufOver:
-    free(readline);
-
-  if(!cp) {     /* internal buffer overflow */
-    error_line_too_long();
-    continue;
-  }
-
-    *cp = '\0';   /* terminate copied string */
-
+	{	int rc = expandEnvVars(ip, parsedline);
+		free(readline);
+		if(!rc) {
+			error_line_too_long();
+			continue;
+		}
+	}
+  
     if (echothisline)           /* Echo batch file line */
     {
       printprompt();
