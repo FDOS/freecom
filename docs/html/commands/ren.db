@@ -4,11 +4,49 @@ see: RENAME
 req: CMD_RENAME
 
 SYNOPSIS:
-EBNF: REN source destination
+EBNF: REN <<source>> <<destination>>
 
+Renames the source file(s) into the target file(s). See also: \REF{wildcards}
+
+<P>The
+EBNF!: <<destination>>
+ must not contain any path specification, the
+EBNF!: <<source>>
+ file is renamed within the directory it is currently located in, see
+example 2 below. Any wildcards used within
+EBNF!: <<destination>>
+ are replaced by the corresponding character of the source filename,
+see example 4 below.
 
 STD_OPTIONS:
 
 EXAMPLES:
 EXAMPLE: 1
 
+CMD: REN file1.txt file2.txt
+
+Renames <CMD>file1.txt</CMD> into <CMD>file2.txt</CMD>
+
+EXAMPLE: 2
+
+CMD: REN path\file1.txt file2.txt
+
+Renames <CMD>path\file1.txt</CMD> into <CMD>path\file2.txt</CMD>
+
+EXAMPLE: 3
+
+CMD: REN path\file*.txt *.bak
+
+Renames all files located within directory <CMD>path</CMD> with extension
+<CMD>.txt</CMD> and which filename is beginning with <CMD>file</CMD>,
+such as <CMD>file.txt</CMD>, <CMD>filea.txt</CMD> and <CMD>file99xx.txt</CMD>,
+into <CMD>*.bak</CMD> files.
+
+EXAMPLE: 4
+
+CMD: REN *.DAT A*.*
+
+Renames all files located within the current directory with extension
+<CMD>.DAT</CMD> into files by replacing the very first character of
+the filename by the letter <CMD>A</CMD>, all other characters, the
+file extension and path are remain unchanged.
