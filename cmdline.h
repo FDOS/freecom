@@ -83,7 +83,7 @@ char *skipqword(const char *str, const char * const stop);
 #define matchtok(line,word) match_(&(line), word, sizeof(word) - 1)
 int match_(char ** const p, const char * const word, int len);
 
-char *skipwd(char *line);
+char *skip_word(char *line);
 char *skipdm(char *line);
 
 char *unquote(const char *str, const char * const strend);

@@ -3,15 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
-# Revision 1.1  2000/06/23 06:02:56  skaus
-# chg: ECHO, FDDEBUG, BREAK, VERIFY: share ON/OFF recognition code
-# chg: shellname & shellver: type change: * --> const[]
-# add: DIRS, PUSHD, POPD, CDD, FEATURE_LAST_DIR
-# add: MISC.C: changeDrive(), cwd(), drvNum()
-# chg: Display text: CMDHELP_CD, ERROR_INVALID_DRIVE
-# bugfix: option are peristent for VAR command
-# bugfix: "CD C:" must display current working directory of drive C:
-# bugfix: unquote(): calculation of portion before left quote
+# Revision 1.2  2000/07/09 21:57:25  skaus
+# + Support for international strings without recompiling
+# + Useage of TC++1
 #
 # Revision 1.1.1.1  2000/05/20 03:29:38  jimtabor
 # The GNU GPL FreeCom Command Shell
@@ -59,7 +53,7 @@ __errl:
 strings.h strings.dat .UPDATEALL : fixstrs.com strings.txt
 	+fixstrs.com
 
-fixstrs.com : fixstrs.c 
+fixstrs.com : fixstrs.c ../strings.typ
 
 #MAKEDEP START
 #MAKEDEP STOP
@@ -86,6 +80,21 @@ CONF_BASE =	\
 .IF $(_COMPILER)==BC5
 CONFIGURATION += -RT- -x-
 .ENDIF
+
+CONF_DBG =	$(MYCFLAGS_DBG)
+
+CONF_NDBG =	$(MYCFLAGS_NDBG)
+
+.ENDIF
+
+.IF $(_COMPTYPE) == TC
+CONF_BASE =	\
+-I$(INCDIR:s/;/ /:t";")	\
+-L$(LIBDIR:s/;/ /:t";")	\
+-w
+
+# The "-f-" causes that TCC passes option "/r" to the assembler, though
+# ASM chokes about it
 
 CONF_DBG =	$(MYCFLAGS_DBG)
 

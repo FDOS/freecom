@@ -99,6 +99,9 @@
  *
  *	2000/06/22 ska
  *	add: CDD (implies existance of CHDIR)
+ *
+ * 2000/06/07 Ron Cemer
+ * fix: TC++1 compatibly
  */
 
 #include "config.h"
@@ -106,7 +109,6 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <dos.h>
-#include <direct.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>

@@ -167,6 +167,9 @@
  * add: if the shell is about to terminate, but must not (/P switch),
  *  the output is redirected to CON after the infinite loop
  *  hanged ten times. see hangForever()
+ *
+ * 2000/07/05 Ron Cemer
+ *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  */
 
 #include "config.h"
@@ -274,7 +277,7 @@ static void execute(char *first, char *rest)
     return;
   }
 
-  /* search the PATH environment variable for the binary */
+  /* search through %PATH% for the binary */
   fullname = find_which(first);
   dprintf(("[find_which(%s) returned %s]\n", first, fullname));
 
@@ -403,7 +406,7 @@ static void docommand(char *line)
       } else {
         /* no internal command --> spawn an external one */
         free(com);
-        com = unquote(line, rest = skipwd(line));
+        com = unquote(line, rest = skip_word(line));
         if(!com) {
           error_out_of_memory();
           return;
@@ -600,10 +603,18 @@ int process_input(int xflag, char *commandline)
 
       /* Go Interactive */
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
-      tracemode = 0;          //reset trace mode
+      tracemode = 0;          /* reset trace mode */
       }
     }
 
+    /* 
+     * The question mark '?' has a double meaning:
+     *	C:\> ?
+     *		==> Display short help
+     *
+     *	C:\> ? command arguments
+     *		==> enable tracemode for just this line
+     */
     if(*(ip = trim(ip)) == '?') {
     	 ip = trim(ip + 1);
     	 if(!*ip) {		/* is short help command */

@@ -1,7 +1,8 @@
 @echo off
 : Prepare binary distribution
 
-set compiler=bc5
+set compiler=tc101
+: set compiler=bc5
 set lng=english
 
 if exist com_dbg.old del com_dbg.old >nul

@@ -32,6 +32,8 @@
  *
  */
 
+#include "config.h"
+
 #ifdef _NO__DOS_DATE
 
 #include <assert.h>
@@ -41,34 +43,35 @@
 
 unsigned _dos_setdate(struct dosdate_t *d)
 {
-  union REGPACK r;
+  struct REGPACK r;
+
   assert(d);
-  r.x.ax = 0x2B00;
-  r.x.cx = d->year;
-  r.x.dx = d->month << 8;
-  r.x.dx += d->day & 0xFF;
+  r.r_ax = 0x2B00;
+  r.r_cx = d->year;
+  r.r_dx = d->month << 8;
+  r.r_dx += d->day & 0xFF;
 
   intr(0x21, &r);
 
-  if (r.x.ax & 0x00FF)
+  if (r.r_ax & 0x00FF)
     return 1;
   return 0;
 }
 
 void _dos_getdate(struct dosdate_t *d)
 {
-  union REGPACK r;
+  struct REGPACK r;
 
   assert(d);
 
-  r.x.ax = 0x2A00;
+  r.r_ax = 0x2A00;
 
   intr(0x21, &r);
 
-  d->year = r.x.cx;
-  d->month = r.x.dx >> 8;
-  d->day = r.x.dx & 0xFF;
-  d->dayofweek = r.x.ax & 0xFF;
+  d->year = r.r_cx;
+  d->month = r.r_dx >> 8;
+  d->day = r.r_dx & 0xFF;
+  d->dayofweek = r.r_ax & 0xFF;
 }
 
 #ifdef DEBUG_STANDALONE

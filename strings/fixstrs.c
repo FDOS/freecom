@@ -6,159 +6,235 @@ strings.dat - contains all the strings. will be appended on the end
 
 strings.h - include file that contains all the defines.
 
+
+2000/07/09 ska
+chg: to read STRINGS.H to keep the same order of strings
+chg: to let STRINGS.TXT read only once (temporary binary file)
+chg: The format of STRINGS.DAT has been changed in order to support
+	different languages _without_ recompiling.
 */
 
+
+#include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 
+#include "../strings.typ"
 
-#define LOOKING_FOR_START  1
-#define GETTING_STRING     2
+#define fTMP "STRINGS.TMP"
+#define fDAT "STRINGS.DAT"
+#define fTXT "STRINGS.TXT"
+#define fH "STRINGS.H"
+#define fBAK "STRINGS.BAK"
+
+typedef enum STATE {
+	 LOOKING_FOR_START
+	,GETTING_STRING
+} read_state;
 
 #define MAXSTRINGS       256
 
-#define STRINGS_ID "FreeDOS"
+const char id[]="FreeDOS STRINGS.DAT v2";
 
+string_index_t string[MAXSTRINGS];
+char *order[MAXSTRINGS];
+char temp[256];
 
-void main(void)
+int main(void)
 {
-  FILE *in, *dat, *inc;
-  char temp[128];
+  FILE *in, *dat, *inc, *tmp;
 
-  struct
-  {
-    unsigned index;
-    unsigned size;
-  } ptr[MAXSTRINGS];
-  unsigned offset;
-  unsigned datsize;
-  unsigned state = LOOKING_FOR_START;
-  unsigned define_count = 0,x;
+  read_state state = LOOKING_FOR_START;
   int firstline;
-  char *id = STRINGS_ID;
+  char *p;
+  unsigned long linenr;
+  string_size_t size;
+  string_count_t cnt, maxCnt;
+  string_count_t oldCnt = 0;
+  string_count_t prvCnt = STRING_NONE;
+  	/* oldCnt := number of strings read from STRINGS.H
+  		cnt := number of current string
+  		prvCnt := number of previous string to correct .size member;
+  				== (unsigned)-1 if first string
+  		maxCnt := total number of strings, including new ones
+  	*/
 
 
-  if ((in = fopen("strings.txt","r")) == NULL)
+
+  if ((in = fopen(fTXT,"r")) == NULL)
   {
-    perror("opening strings.txt");
-    return;
+    perror("opening " fTXT);
+    return 40;
   }
 
-  if ((dat = fopen("strings.dat","wb")) == NULL)
+  if ((dat = fopen(fDAT,"wb")) == NULL)
   {
-    fclose(in);
-    perror("creating strings.dat");
-    return;
+    perror("creating " fDAT);
+    return 41;
+  }
+  if((tmp = fopen(fTMP, "w+b")) == NULL) {
+  	perror("creating " fTMP);
+  	return 43;
   }
 
-  if ((inc = fopen("strings.h","w")) == NULL)
+
+	if((inc = fopen(fH, "rt")) == NULL)
+		fputs("Warning: No STRINGS.H file <-> Possible strings order hazard\n"
+		 , stderr);
+	else {
+		char *q;
+
+		while (fgets(temp,sizeof(temp),inc)) {
+			p = strchr(temp, '\0');
+			if(p[-1] != '\n') {
+				fputs("Line too long in " fH "\n", stderr);
+				return 70;
+			}
+			if(memcmp(temp, "#define ", 8) != 0)
+				break;
+			p = temp + 7;
+			while(isspace(*++p));
+			q = p;
+			while(*++q && !isspace(*q));
+			if(!*q) {
+				fputs("Syntax error in " fH "\n", stderr);
+				return 71;
+			}
+			*q = '\0';
+			if((order[oldCnt++] = strdup(p)) == NULL) {
+				fputs("Out of memory\n", stderr);
+				return 72;
+			}
+		}
+		fclose(inc);
+		remove(fBAK);
+		if(rename(fH, fBAK)) {
+			fputs("Failed to backup " fH "\n", stderr);
+			return 75;
+		}
+	}
+	maxCnt = oldCnt;
+  if ((inc = fopen(fH,"w")) == NULL)
   {
-    fclose(in);
-    fclose(dat);
-    perror("creating strings.h");
-    return;
+    perror("creating " fH);
+    return 42;
   }
 
-  while (fgets(temp,sizeof(temp),in))
-  {
-    switch (state)
-    {
-      case LOOKING_FOR_START:
-        if (*temp == ':')
-        {
-          while (*temp && temp[strlen(temp)-1] < ' ') temp[strlen(temp)-1] = '\0';
-          state = GETTING_STRING;
-          ptr[define_count].index = ftell(dat);
-          if (define_count)
-          {
-            ptr[define_count-1].size = ptr[define_count].index - ptr[define_count-1].index;
-          }
-//          printf("%-40s  0x%02X   @ %ld\n",temp+1,define_count+1,index[define_count]);
-//          fprintf(inc,"#define  %-40s  0x%02X\n",temp+1,define_count+1);
-          define_count++;
-          firstline = 1;
-        }
-        break;
+	linenr = 0;
+	while (fgets(temp,sizeof(temp),in)) {
+		++linenr;
+		p = strchr(temp, '\0');
+		if(p[-1] != '\n') {
+			fprintf(stderr, "Line %lu too long\n", linenr);
+			return 30;
+		}
+			/* Cut trailing control characters */
+		while (--p >= temp && *p < ' ');
+		p[1] = '\0';
 
-      case GETTING_STRING:
-        while (*temp && temp[strlen(temp)-1] < ' ') temp[strlen(temp)-1] = '\0';
-        if ((*temp == '.' || *temp == ',') && (temp[1] == '\0'))
-        {
-          if (*temp == '.') fputc('\n',dat);
-          fputc('\0',dat);
-          state = LOOKING_FOR_START;
-        }
-        else
-        {
-          if (!firstline) fputc('\n',dat);
-          firstline = 0;
-          fputs(temp,dat);
-        }
-    }
-  }
+		switch (state) {
+		case LOOKING_FOR_START:
+			switch(*temp) {
+			case ':':
+				state = GETTING_STRING;
+				if(ftell(tmp) >= 0x10000l) {
+					fputs("The overall size of the strings exceeds 64KB\n"
+					 , stderr);
+					return 35;
+				}
+				/* Locate the string name */
+				for(cnt = 0; cnt < oldCnt; ++cnt)
+					if(strcmp(order[cnt], temp + 1) == 0)
+						goto strnameFound;
+				/* string name not found --> create a new one */
+				cnt = maxCnt++;
+			strnameFound:
+				string[cnt].index = (string_count_t)ftell(tmp);
+				if (prvCnt != STRING_NONE)
+					string[prvCnt].size = string[cnt].index
+					 - string[prvCnt].index;
+				fprintf(inc, "#define  %-34s 0x%02X /* @ 0x%04X */\n"
+				 , temp+1, cnt, string[cnt].index);
+				prvCnt = cnt;
+				firstline = 1;
+			break;
+			default:
+				while(p >= temp && isspace(*p)) --p;
+				if(p >= temp) {
+					fprintf(stderr, "Syntax error in line #%lu\n", linenr);
+					return 36;
+				}
+				/** fall through **/
+			case '\0': case '#':
+				break;
+			}
+		break;
 
-  ptr[define_count].size = ftell(dat) - ptr[define_count].index;
-//  datsize = ftell(dat);
+		case GETTING_STRING:
+			if ((*temp == '.' || *temp == ',') && (temp[1] == '\0')) {
+				if (*temp == '.') fputc('\n', tmp);
+				fputc('\0', tmp);
+				state = LOOKING_FOR_START;
+			} else {
+				if (!firstline) fputc('\n', tmp);
+				firstline = 0;
+				fputs(temp, tmp);
+			}
+		break;
+		}
+	}
 
-  fprintf(inc,"#define  STRINGS_ID         \"%s\"\n\n",STRINGS_ID);
-  fprintf(inc,"#define  NUMBER_OF_STRINGS  0x%02X\n\n",define_count);
-  fprintf(inc,"#define  SIZE_OF_STRINGS    0x%04X\n\n",ftell(dat));
+	if(prvCnt == STRING_NONE) {
+		fputs("No string defined\n", stderr);
+		return 37;
+	}
+	string[prvCnt].size = (string_size_t)ftell(tmp) - string[prvCnt].index;
 
-  rewind(in);
-  rewind(dat);
+	if(ftell(tmp) >= 0x10000l) {
+		fputs("The overall size of the strings exceeds 64KB\n"
+		 , stderr);
+		return 35;
+	}
 
-  fputs(id,dat);
+	fflush(tmp);
+	if(ferror(tmp)) {
+		fputs("Unspecified write error to " fTMP "\n", stderr);
+		return 50;
+	}
 
-//  fwrite(&define_count,sizeof(define_count),1,dat);
+	fputs("\n\n", inc);
+	fprintf(inc,"#define  STRINGS_ID         \"%s\"\n",id);
+	fprintf(inc,"#define  NUMBER_OF_STRINGS  0x%02X\n",maxCnt);
+	fprintf(inc,"#define  SIZE_OF_STRINGS    0x%04X\n"
+	 , size = (unsigned)ftell(tmp));
 
-//  offset = define_count * sizeof(unsigned)
-//           + sizeof(define_count)
-//           + sizeof(datsize);
+	rewind(tmp);
 
-//  datsize += offset;
+	fwrite(id, sizeof(id) - 1, 1, dat);
+	fwrite("\n\x1a", 3, 1, dat);
+	fputs("#define  STRINGS_ID_TRAILER 3\n", inc);	/* 3 additional bytes */
 
-//  for (x=0; x < define_count; x++)
-//    index[x] += offset;
+	fwrite(&maxCnt, sizeof(maxCnt), 1, dat);
+	fwrite(&size, sizeof(size), 1, dat);
+	fwrite(string, sizeof(string[0]), maxCnt, dat);
+	/* append the strings */
+	while((cnt = fread(temp, 1, sizeof(temp), tmp)) >= 1) {
+		if(fwrite(temp, 1, cnt, dat) != cnt) {
+			fputs("Write error into " fDAT "\n", stderr);
+			return 53;
+		}
+	}
+	fflush(dat);
+	if(ferror(dat)) {
+		fputs("Unspecified write error into " fDAT "\n", stderr);
+		return 54;
+	}
 
-  fwrite(ptr,sizeof(ptr[0]),define_count,dat);
+	fclose(in);
+	fclose(dat);
+	fclose(inc);
+	fclose(tmp);
+	unlink(fTMP);
 
-//  fwrite(&datsize,sizeof(datsize),1,dat);
-
-  define_count = 0;
-
-  while (fgets(temp,sizeof(temp),in))
-  {
-    switch (state)
-    {
-      case LOOKING_FOR_START:
-        if (*temp == ':')
-        {
-          while (*temp && temp[strlen(temp)-1] < ' ') temp[strlen(temp)-1] = '\0';
-          state = GETTING_STRING;
-//          index[define_count] = ftell(dat);
-          fprintf(inc,"#define  %-34s 0x%02X /* @ 0x%04X */\n",temp+1,define_count,ptr[define_count].index);
-          define_count++;
-          firstline = 1;
-        }
-        break;
-
-      case GETTING_STRING:
-        while (*temp && temp[strlen(temp)-1] < ' ') temp[strlen(temp)-1] = '\0';
-        if ((*temp == '.' || *temp == ',') && (temp[1] == '\0'))
-        {
-          if (*temp == '.') fputc('\n',dat);
-          fputc('\0',dat);
-          state = LOOKING_FOR_START;
-        }
-        else
-        {
-          if (!firstline) fputc('\n',dat);
-          firstline = 0;
-          fputs(temp,dat);
-        }
-    }
-  }
-
-  fclose(in);
-  fclose(dat);
-  fclose(inc);
+	return 0;
 }

@@ -33,7 +33,12 @@
  *	add: CDD
  *	chg: shellver & shellname: from pointer --> const[]
  *	add: enum OnOff, onoffStr()
+ *
+ * 2000/07/05 Ron Cemer
+ * fix: TC++1 compatibly: FA_NORMAL macro
  */
+
+#include <dos.h>
 
 #define MAX_INTERNAL_COMMAND_SIZE 256
 #define MAX_EXTERNAL_COMMAND_SIZE 128
@@ -76,6 +81,9 @@ extern const char shellname[];
 #define FINDFIRST(path,attrib,ffblk) findfirst(path,attrib,ffblk)
 #define FINDNEXT(ffblk)  findnext(ffblk)
 #define FINDSTOP(ffblk)
+#ifndef FA_NORMAL
+#define FA_NORMAL 0
+#endif
 
 enum
 {

@@ -48,6 +48,9 @@
  *	2000/06/22 ska
  *	add: cwd(int drive); changeDrive(int drive), drvNum(int drive)
  *	add: onoffStr()
+ *
+ * 2000/06/07 Ron Cemer
+ * fix: TC++1 compatibly
  */
 
 #include "config.h"
@@ -56,7 +59,6 @@
 #include <conio.h>
 #include <ctype.h>
 #include <dir.h>
-#include <direct.h>
 #include <dos.h>
 #include <fcntl.h>
 #include <io.h>
@@ -281,7 +283,7 @@ int changeDrive(int drive)
 
     setdisk(drive);
 
-    if (getdisk() == drive)
+    if (getdisk() == drive) 
     	return 0;
 
   displayString(TEXT_ERROR_INVALID_DRIVE, drive + 'A');

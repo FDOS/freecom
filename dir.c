@@ -135,7 +135,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <dir.h>
-#include <dirent.h>
 #include <dos.h>
 #include <io.h>
 #include <conio.h>
@@ -145,6 +144,7 @@
 #include <sys/stat.h>
 
 #include "dfn.h"
+#include "dynstr.h"
 
 #include "command.h"
 #include "cmdline.h"
@@ -596,12 +596,23 @@ int dir_print_body(char *arg)
   unsigned long dircount, filecount, bytecount;
   char *pattern, *cachedPattern;
 
+dprintf( ("[DIR: path=\"%s\"]\n", arg) );
     if((path = dfnexpand(arg, NULL)) == NULL) {
       error_out_of_memory();
       return E_NoMem;
     }
 
   dircount = filecount = bytecount = 0;
+  pattern = strchr(path, '\0');
+  if(pattern[-1] == '\\') {
+  	/* trailing backslash means that this has to be a directory */
+  	if(!StrAppChr(path, '.')) {
+      error_out_of_memory();
+      return E_NoMem;
+    }
+   }
+
+dprintf( ("[DIR: absolute path=\"%s\"]\n", path) );
 
   /* print the header */
   if ((rv = dir_print_header(toupper(path[0]) - 'A')) == 0) {
@@ -661,7 +672,7 @@ int cmd_dir(char *rest)
      ; ++opts)
       ;
   else
-    rv = dir_print_body("*.*");
+    rv = dir_print_body(".");
 
   if(!rv)
     rv = dir_print_free();

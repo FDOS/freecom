@@ -24,7 +24,7 @@
 
 /* define DEBUG to add debugging code */
 #ifndef DEBUG			/* possibly already defined via command line */
-#define DEBUG
+//#define DEBUG
 #endif
 
 /* Define to enable the alias command, and aliases. */
@@ -66,6 +66,13 @@
 
 /* Define the size of the buffer used to store old paths for PUSHD/POPD */
 #define DIR_STACK_LEN 256
+
+/* Define if your compiler does not have 'dosdate_t' or 'dostime_t' */
+#if defined(__TURBOC__) && __TURBOC__ <= 0x297
+	/* TC++1 */
+#define _NO__DOS_DATE
+#define _NO__DOS_TIME
+#endif
 
 
 #define INCLUDE_CMD_BEEP

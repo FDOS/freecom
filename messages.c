@@ -38,6 +38,12 @@
  * add: Invalid message IDs or if the message file is absent, a default
  *  message is generated, "Error #<ID>\n". Will work for most of the
  *  current uses
+ *
+ * 2000/07/07 Ron Cemer
+ * fix: add typecast to local variables for _fmemcpy()
+ *
+ * 2000/07/09 ska
+ * add: Support for STRINGS.DAT without re-compiling FreeCOM
  */
 
 //#define READ_FROM_FILE
@@ -54,6 +60,7 @@
 #include <io.h>
 
 #include "config.h"
+#include "strings.typ"
 #include "command.h"
 #include "strings.h"
 #include "suppl.h"
@@ -66,13 +73,9 @@
 #define DFL_MSG_OUTOFMEMORY "Out of memory!"
 #define ERR_ID_OUTOFMEMORY TEXT_ERROR_OUT_OF_MEMORY
 
-struct indextype
-{
-  unsigned index;
-  unsigned size;
-};
-
 static unsigned msgSegm = 0;    /* strings segment if loaded */
+static string_count_t strCnt = 0;		/* number of strings */
+static string_size_t firstStr = 0;	/* offset of first string in segment */
 
 void unloadMsgs(void)  /* called at exit */
 {
@@ -87,7 +90,6 @@ static FILE *openStrFile_(void)
 {
   FILE *f;
   char fdid[sizeof(STRINGS_ID)];
-  char *theid = STRINGS_ID;
   char *thisstr;
 #ifdef DEBUG
   char *fnam;
@@ -131,10 +133,10 @@ static FILE *openStrFile_(void)
   fseek(f, (long)segs * 512 + offs, SEEK_SET);
 
   dbg_printmem();
-  fread(fdid, strlen(theid), 1, f);
+  fread(fdid, sizeof(STRINGS_ID) - 1, 1, f);
 
-  if (strncmp(fdid, theid, strlen(STRINGS_ID)) == 0)
-    return f;
+  if (memcmp(fdid, STRINGS_ID, sizeof(STRINGS_ID) - 1) == 0)
+    goto returnOK;
 
   dprintf(("[Strings ID not valid!]\n"));
   fclose(f);
@@ -155,15 +157,20 @@ tryFile:
   }
   free(thisstr);
 
-  fread(fdid, strlen(theid), 1, f);
+  fread(fdid, sizeof(STRINGS_ID) - 1, 1, f);
 
-  if (strncmp(fdid, theid, strlen(STRINGS_ID)))
+  if (strncmp(fdid, STRINGS_ID, sizeof(STRINGS_ID) - 1))
   {
     dprintf(("[Strings ID not valid!]"));
     fclose(f);
     return NULL;
   }
 
+returnOK:
+	/* immediately after the ID, the three (3) character string:
+			"\n\x1a"
+		follows --> skip it */
+	fseek(f, (long)STRINGS_ID_TRAILER, 1);
   return f;
 }
 
@@ -185,7 +192,7 @@ static FILE *openStrFile(void)
 unsigned msgSegment(void)              /* load messages into memory */
 {
   FILE *f;
-  size_t len;
+  string_size_t len;
   struct REGPACK r;
 
   if(msgSegm)     /* already loaded */
@@ -194,10 +201,17 @@ unsigned msgSegment(void)              /* load messages into memory */
   if ((f = openStrFile()) == NULL)
     return 0;
 
+	if(fread(&strCnt, sizeof(strCnt), 1, f) != 1
+	 || fread(&len, sizeof(len), 1, f) != 1) {
+	 	/* Read error */
+	 	fclose(f);
+	 	return 0;
+	}
+
   /* At this point f is positioned at the very first string index
      the data area is NUMBER_OF_STRINGS * sizeof(index) +
      SIZE_OF_STRINGS   */
-  len = SIZE_OF_STRINGS + NUMBER_OF_STRINGS * sizeof(struct indextype);
+  len += firstStr = strCnt * sizeof(string_index_t);
   /* allocation mode: last fit, high first */
   if ((msgSegm = allocBlk(len, 0x82)) == 0)
   {
@@ -207,6 +221,8 @@ unsigned msgSegment(void)              /* load messages into memory */
 
   /* synchronize FILE* with file descriptor */
   lseek(fileno(f), ftell(f), SEEK_SET);
+  /* Use DOS API in order to read the strings directly to the
+  	far address */
   r.r_ax = 0x3f00;              /* read from file descriptor */
   r.r_bx = fileno(f);           /* file descriptor */
   r.r_cx = len;                 /* size of block to read */
@@ -248,19 +264,19 @@ char *fetchString(unsigned id)
 {
   char *thisstr;
   unsigned segm;
-    struct indextype far *idx;
+    string_index_t far *idx;
 
-  if (id >= NUMBER_OF_STRINGS
-   || (segm = msgSegment()) == 0)
+  if((segm = msgSegment()) == 0
+   || id >= strCnt
+   || (idx = MK_FP(msgSegm, id * sizeof(*idx)))->size == 0)
     return defaultMessage(id);
 
   /* pointer to id's control data */
-    idx = MK_FP(msgSegm, id * sizeof(*idx));
     if ((thisstr = malloc(idx->size)) == NULL)
       return defaultMessage(ERR_ID_OUTOFMEMORY);
 
-    _fmemcpy(thisstr
-     , MK_FP(segm, NUMBER_OF_STRINGS * sizeof(*idx) + idx->index)
+    _fmemcpy((char far*)thisstr
+     , MK_FP(segm, firstStr + idx->index)
      , idx->size);
 
     return thisstr;

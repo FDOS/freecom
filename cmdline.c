@@ -15,6 +15,9 @@
  *
  * 2000/06/22 ska
  *	bugfix: unquote() calculated portion preceeding left quote
+ *
+ * 2000/07/05 Ron Cemer
+ *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  */
 
 #include "config.h"
@@ -172,10 +175,10 @@ static char *find(char *p, int delim)
 }
 
 /*
- * skipwd - skip a word / find next word delimiter
+ * skip_word - skip a word / find next word delimiter
  *  word delimiters are whitespaces and non-leading option characters
  */
-char *skipwd(char *p)
+char *skip_word(char *p)
 { return find(p, 1);
 }
 
@@ -241,7 +244,7 @@ int addArg(char ***Xarg, int *argc, char *sBeg, char **sEnd)
   assert(sEnd);
   assert(sBeg);
 
-    *sEnd = skipwd(sBeg);   /* find end of argument */
+    *sEnd = skip_word(sBeg);   /* find end of argument */
 
     /* Because *start != '\0' && !isargdelim(*start) ==> s != start */
     assert(*sEnd > sBeg);
@@ -448,7 +451,7 @@ int leadOptions(char **Xline, optScanner fct, void * arg)
   p = *Xline;
 
   while(*(line = skipdm(p))) {
-    q = unquote(line, p = skipwd(line));
+    q = unquote(line, p = skip_word(line));
     if(!q) {
       error_out_of_memory();
       return E_NoMem;

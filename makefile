@@ -3,15 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
-# Revision 1.2  2000/06/23 06:02:56  skaus
-# chg: ECHO, FDDEBUG, BREAK, VERIFY: share ON/OFF recognition code
-# chg: shellname & shellver: type change: * --> const[]
-# add: DIRS, PUSHD, POPD, CDD, FEATURE_LAST_DIR
-# add: MISC.C: changeDrive(), cwd(), drvNum()
-# chg: Display text: CMDHELP_CD, ERROR_INVALID_DRIVE
-# bugfix: option are peristent for VAR command
-# bugfix: "CD C:" must display current working directory of drive C:
-# bugfix: unquote(): calculation of portion before left quote
+# Revision 1.3  2000/07/09 21:57:25  skaus
+# + Support for international strings without recompiling
+# + Useage of TC++1
 #
 # Revision 1.1.1.1  2000/05/20 03:29:38  jimtabor
 # The GNU GPL FreeCom Command Shell
@@ -57,7 +51,7 @@ OBJ = alias.obj batch.obj beep.obj break.obj call.obj cb_catch.obj cls.obj \
 	where.obj
 HDR = alias.h batch.h cmdline.h command.h compat.h config.h datefunc.h \
 	debug.h err_hand.h loadhigh.h model.def nls.h openf.h session.h \
-	strings.h swapexec.h tempfile.h timefunc.h
+	strings.h strings.typ swapexec.h tempfile.h timefunc.h
 
 
 
@@ -119,7 +113,7 @@ lowexec.obj : lowexec.asm \
 openf.obj : openf.c \
 	 openf.h
 messages.obj : messages.c \
-	 command.h config.h debug.h strings.h
+	 command.h config.h debug.h strings.h strings.typ
 goto.obj : goto.c \
 	 batch.h cmdline.h command.h config.h debug.h strings.h
 dstack.obj : dstack.c \
@@ -187,7 +181,7 @@ init.obj : init.c \
 tempfile.obj : tempfile.c \
 	 command.h config.h debug.h tempfile.h
 timefunc.obj : timefunc.c \
-	 timefunc.h
+	 config.h debug.h timefunc.h
 cmdtable.obj : cmdtable.c \
 	 command.h config.h debug.h strings.h
 cmdline.obj : cmdline.c \
@@ -205,7 +199,7 @@ environ.obj : environ.c \
 type.obj : type.c \
 	 cmdline.h command.h config.h debug.h openf.h strings.h
 prompt.obj : prompt.c \
-	 cmdline.h command.h config.h debug.h
+	 cmdline.h command.h config.h datefunc.h debug.h
 cls.obj : cls.c \
 	 command.h config.h debug.h
 batch.obj : batch.c \
@@ -216,7 +210,7 @@ spawn.obj : spawn.asm
 error.obj : error.c \
 	 command.h config.h debug.h strings.h
 datefunc.obj : datefunc.c \
-	 datefunc.h
+	 config.h datefunc.h debug.h
 nls.obj : nls.c \
 	 config.h debug.h nls.h
 time.obj : time.c \
@@ -257,6 +251,21 @@ CONF_BASE =	\
 .IF $(_COMPILER)==BC5
 CONFIGURATION += -RT- -x-
 .ENDIF
+
+CONF_DBG =	$(MYCFLAGS_DBG)
+
+CONF_NDBG =	$(MYCFLAGS_NDBG)
+
+.ENDIF
+
+.IF $(_COMPTYPE) == TC
+CONF_BASE =	\
+-I$(INCDIR:s/;/ /:t";")	\
+-L$(LIBDIR:s/;/ /:t";")	\
+-w
+
+# The "-f-" causes that TCC passes option "/r" to the assembler, though
+# ASM chokes about it
 
 CONF_DBG =	$(MYCFLAGS_DBG)
 

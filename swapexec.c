@@ -10,6 +10,9 @@
    Beusselstrasse 27
    D-1000 Berlin 21
    Germany
+
+  2000/06/07 Ron Cemer
+  fix: Prototype cleanup for TC++1 compatibly
  */
 
 #include "config.h"
@@ -31,24 +34,22 @@
 #define ERR_NOMEM       -8
 
 #ifdef __cplusplus
-extern "C" int
-#else
-extern int _cdecl
+extern "C" {
 #endif
-  do_spawn(int swapping,        /* swap if non-0 */
+
+int  do_spawn(int swapping,        /* swap if non-0 */
            char *xeqfn,         /* file to execute */
            char *cmdtail,       /* command tail string */
            unsigned envlen,     /* environment length */
            char *envp           /* environment pointer */
 );
 
-#ifdef __cplusplus
-extern "C" int
-#else
-extern int _cdecl
-#endif
-  prep_swap(int method,         /* swap method */
+int  prep_swap(int method,         /* swap method */
             char *swapfn);      /* swap file name and/or path */
+
+#ifdef __cplusplus
+};
+#endif
 
 void spawn_check(int swapping, char *execfn, char *progpars)
 {

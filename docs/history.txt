@@ -2,6 +2,10 @@ FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 2000/06/22 ska <ska-src@gmx.net>
 ~~~~~~~~~~~~~~~~~~~~~~
+Added TC++1 fix contributed by Ron Cemer
+
+2000/06/22 ska <ska-src@gmx.net>
+~~~~~~~~~~~~~~~~~~~~~~
 released version v0.79b
 
 2000/06/22 ska <ska-src@gmx.net>

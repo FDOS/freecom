@@ -18,6 +18,8 @@
  * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
  * - added config.h include
  *
+ * 2000/07/05 Ron Cemer
+ *	bugfix: renamed skipwd() -> skip_word() to prevent duplicate symbol
  */
 
 #include "config.h"
@@ -541,7 +543,7 @@ int parseArgs(char *cmdline, char **fnam, char **rest)
   /* The next argument is the file name. The rest of the command line
    * are passed as parameters to the new program. */
 
-  if((*fnam = unquote(cmdline, c = skipwd(cmdline))) == NULL)
+  if((*fnam = unquote(cmdline, c = skip_word(cmdline))) == NULL)
     return err_out_of_memory;
 
   *rest = skipdm(c);
