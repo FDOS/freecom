@@ -121,7 +121,7 @@ int cmd_if(char *param)
 		len = strlen(param);
 
 		if((pp - r) == len
-		 && memicmp(param, r, len) == 0) /* strings differ */
+		 && memcmp(param, r, len) == 0) /* strings differ */
 			x_flag = X_EXEC;
 	}
 
