@@ -1,6 +1,6 @@
 v0.83 Beta 48:
-bugfix: XMS-Swap/LOADHIGH: wrongly calculated UMBs if loaded into UMB
-fix: expand environment variables within FOR ()'s 
+bugfix: XMS-Swap/LOADHIGH: wrongly calculated UMBs if loaded into UMB {Tom Ehlert}
+fix: expand environment variables within FOR ()'s (utter hack, to be replaced)
 chg: do not strip control characters from command line
 bugfix: FOR: If a pattern fails to match, --> ignore {Tom Ehlert}
 bugfix: FOR and redirection [BugID #1050, #708, #1041]
