@@ -129,25 +129,28 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   size_t len;
   FLAG keepFTime;
   struct ftime fileTime;
+  char *singleFile;
 
   assert(dst);
   assert(pattern);
   assert(src);
 
-  if(FINDFIRST(pattern, &ff, FA_RDONLY | FA_ARCH) != 0) {
+  if(strpbrk(pattern, "*?") == 0) {
+  	singleFile = dfnfilename(pattern);
+  } else if(FINDFIRST(pattern, &ff, FA_RDONLY | FA_ARCH) != 0) {
     error_sfile_not_found(pattern);
     return 0;
-  }
+  } else singleFile = &ff.ff_name;
 
   mode[2] = '\0';
 
   do {
-    if((rDest = fillFnam(dst, ff.ff_name)) == 0)
+    if((rDest = fillFnam(dst, singleFile)) == 0)
       return 0;
     h = src;
     do {  /* to prevent to open a source file for writing, e.g.
           for COPY *.c *.?    */
-      if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
+      if((rSrc = fillFnam(h->fnam, singleFile)) == 0) {
         free(rDest);
         return 0;
       }
@@ -200,7 +203,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     h = src;
     keepFTime = (h->app == 0);
     do {
-      if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
+      if((rSrc = fillFnam(h->fnam, singleFile)) == 0) {
         fclose(fout);
         free(rDest);
         return 0;
@@ -301,7 +304,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       return 0;
     }
     free(rDest);
-  } while(FINDNEXT(&ff) == 0);
+  } while(!singleFile && FINDNEXT(&ff) == 0);
 
   return 1;
 }
@@ -487,7 +490,7 @@ int cmd_copy(char *rest)
 	struct CopySource *p = h;
   	do {
   		char *s = strchr(p->fnam, '\0') - 1;
-  		if(*s == '/' || *s == '\\' || *s == ':'	/* forcedly be directory */
+  		if(*s == '/' || *s == '\\'		/* forcedly be directory */
   		 || 0 != (dfnstat(p->fnam) & DFN_DIRECTORY)) {
 			char **buf;
 			char *q;
@@ -505,6 +508,11 @@ int cmd_copy(char *rest)
 			buf[argc] = p->fnam = q;
 			buf[++argc] = 0;
 //			p->flags |= IS_DIRECTORY;
+  		} else if(*s == ':') {		/* Device name?? */
+  			if(!isDeviceName(p->fnam)) {
+				error_invalid_parameter(p->fnam);
+				goto errRet1;
+			}
   		}
   	} while(0 != (p = p->app));
   } while(0 != (h = h->nxt));

@@ -79,3 +79,5 @@ error_for_no_command:=TEXT_ERROR_NO_COMMAND_AFTER_DO
 error_goto_label:=TEXT_ERROR_NO_GOTO_LABEL
 error_get_codepage:=TEXT_ERROR_GET_CODEPAGE
 error_set_codepage:=TEXT_ERROR_SET_CODEPAGE
+error_copy_plus_destination:=TEXT_ERROR_COPY_PLUS_DESTINATION
+error_invalid_parameter(const char * const str):=TEXT_ERROR_INVALID_PARAMETER, str
