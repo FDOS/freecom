@@ -9,8 +9,11 @@ all: $(CFG) freecom.lib
 !include "..\config.mak"
 
 freecom_deps :  \
+	absfile.obj \
 	alprmblk.obj \
 	alsysblk.obj \
+	app_get.obj \
+	app_set.obj \
 	beep_l.obj \
 	beep_n.obj \
 	brk_get.obj \
@@ -56,6 +59,7 @@ freecom_deps :  \
 	dbg_s.obj \
 	dbg_sn.obj \
 	devopen.obj \
+	dfn_err.obj \
 	dispcnt.obj \
 	drvnum.obj \
 	efct_001.obj \
@@ -131,17 +135,18 @@ freecom_deps :  \
 	resfile.obj \
 	rmtmpfil.obj \
 	rtrimcl.obj \
+	chunk1
+
+chunk1 :  \
 	rtrimsp.obj \
 	salloc.obj \
 	samefile.obj \
 	scancmd.obj \
-	chunk1
-
-chunk1 :  \
 	scanopt.obj \
 	session.obj \
 	showcmds.obj \
 	skqwd.obj \
+	spfnam.obj \
 	split.obj \
 	sumblink.obj \
 	tempfile.obj \
@@ -150,6 +155,7 @@ chunk1 :  \
 	tmpnam.obj \
 	trimcl.obj \
 	trimsp.obj \
+	truepath.obj \
 	truncate.obj \
 	txtlend.obj \
 	unquote.obj \
@@ -246,8 +252,11 @@ chunk1 :  \
 
 freecom.lib : $(CFG) freecom_deps 
 	if exist freecom.lib $(AR) freecom.lib /c @&&|
++-absfile.obj &
 +-alprmblk.obj &
 +-alsysblk.obj &
++-app_get.obj &
++-app_set.obj &
 +-beep_l.obj &
 +-beep_n.obj &
 +-brk_get.obj &
@@ -293,6 +302,7 @@ freecom.lib : $(CFG) freecom_deps
 +-dbg_s.obj &
 +-dbg_sn.obj &
 +-devopen.obj &
++-dfn_err.obj &
 +-dispcnt.obj &
 +-drvnum.obj &
 +-efct_001.obj &
@@ -376,6 +386,7 @@ freecom.lib : $(CFG) freecom_deps
 +-session.obj &
 +-showcmds.obj &
 +-skqwd.obj &
++-spfnam.obj &
 +-split.obj &
 +-sumblink.obj &
 +-tempfile.obj &
@@ -384,6 +395,7 @@ freecom.lib : $(CFG) freecom_deps
 +-tmpnam.obj &
 +-trimcl.obj &
 +-trimsp.obj &
++-truepath.obj &
 +-truncate.obj &
 +-txtlend.obj &
 +-unquote.obj &
@@ -478,8 +490,11 @@ freecom.lib : $(CFG) freecom_deps
 +-err86.obj
 | , freecom.lst 
 	if not exist freecom.lib $(AR) freecom.lib /c @&&|
++absfile.obj &
 +alprmblk.obj &
 +alsysblk.obj &
++app_get.obj &
++app_set.obj &
 +beep_l.obj &
 +beep_n.obj &
 +brk_get.obj &
@@ -525,6 +540,7 @@ freecom.lib : $(CFG) freecom_deps
 +dbg_s.obj &
 +dbg_sn.obj &
 +devopen.obj &
++dfn_err.obj &
 +dispcnt.obj &
 +drvnum.obj &
 +efct_001.obj &
@@ -608,6 +624,7 @@ freecom.lib : $(CFG) freecom_deps
 +session.obj &
 +showcmds.obj &
 +skqwd.obj &
++spfnam.obj &
 +split.obj &
 +sumblink.obj &
 +tempfile.obj &
@@ -616,6 +633,7 @@ freecom.lib : $(CFG) freecom_deps
 +tmpnam.obj &
 +trimcl.obj &
 +trimsp.obj &
++truepath.obj &
 +truncate.obj &
 +txtlend.obj &
 +unquote.obj &

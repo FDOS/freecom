@@ -1,3 +1,4 @@
+fix: DIR: disable APPEND.EXE during DIR processing {Eduardo Almao}
 bugfix: CLS: use BIOS, unless fd1 is file or NUL {Eric Auer}
 add: config.h: MUX_AE_MAX_REPEAT_CALL
 bugfix: MUX-AE: useage of DS:[SI] {Eduardo Almao}

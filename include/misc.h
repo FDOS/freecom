@@ -189,5 +189,7 @@ void histSet(const int num, const char * const str);
 void lastDirSet(void);
 void lastDirGet(char ** const buf);
 
+int appendDisable(void);
+void appendRestore(const int state);
 
 #endif
