@@ -479,6 +479,9 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     /* Strip leading spaces and trailing space/control chars */
 /*    rtrimsp(textline);	must not remove trailing spaces */
+	first = strchr(textline, '\0');
+	while(first >= textline && *--first == '\n');
+	first[1] = '\0';
     first = ltrimcl(textline);
 
     assert(first);
