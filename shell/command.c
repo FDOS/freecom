@@ -637,6 +637,9 @@ int process_input(int xflag, char *commandline)
 
       /* Go Interactive */
 		interactive_command = 1;		/* directly entered by user */
+		/* Ensure the prompt starts at column #0 */
+		if(echo)
+			putchar('\n');
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
       tracemode = 0;          /* reset trace mode */
       }
@@ -711,8 +714,10 @@ int process_input(int xflag, char *commandline)
       parsecommandline(parsedline, TRUE);
       if(tracethisline)
       	--tracemode;
+#if 0 	// Why do this here -- shallt be done before display the prompt
       if (echothisline || echo)
         putchar('\n');
+#endif
     }
   }
   while (!canexit || !exitflag);
