@@ -76,6 +76,7 @@ int newEnvSize = 0;          /* Min environment table size */
 char *user_autoexec = 0;
 int skipAUTOEXEC = 0;
 
+#pragma argsused
 optScanFct(opt_init)
 { int ec = E_None;
 
