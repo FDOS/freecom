@@ -937,7 +937,7 @@ COMMAND [[drive:]path] [device] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
   /L:nnnn         Specifies internal buffers length (requires /P as well).
                   (nnnn should be between 128 and 1,024).
   /U:nnn          Specifies the input buffer length (requires /P as well).
-									(nnn should be between 128 and 255).
+                  (nnn should be between 128 and 255).
   /P              Makes the new command shell permanent (can't exit).
   /MSG            Stores all error messages in memory (requires /P as well).
   /LOW            Forces the command shell to keep its resident data in
@@ -1000,7 +1000,7 @@ ERASE [drive:][path]filename [/P]
   /P		Prompts for confirmation before deleting each file.
 .
 
-:TEXT_CMDHELP_DIR
+:TEXT_CMDHELP_DIR#1
 Displays a list of files and subdirectories in a directory.
 
 DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
@@ -1012,10 +1012,11 @@ DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
  /P         Pauses after each screenful of information.
  /W         Uses wide list format.
  /A         Displays files with specified attributes.
+            [ATTRIBUTE SELECTION NOT IMPLEMENTED, YET; /A is /ADRHS]
  attributes  D  Directories                R  Read-only files
              H  Hidden files               A  Files ready for archiving
              S  System files               -  Prefix meaning not
- /O         List by files in sorted order.
+ /O         List by files in sorted order. [NOT IMPLEMENTED, YET]
  sortorder   N  By name (alphabetic)       S  By size (smallest first)
              E  By extension (alphabetic)  D  By date & time (earliest first)
              G  Group directories first    -  Prefix to reverse order
@@ -1030,14 +1031,23 @@ Switches may be preset in the DIRCMD environment variable.  Override
 preset switches by prefixing any switch with - (hyphen)--for example, /-W.
 .
 
-:TEXT_CMDHELP_DOSKEY
+:TEXT_CMDHELP_DOSKEY#1
+The external DOSKEY utility had been incorporated into FreeCOM.
+Use cursor UP,& DOWN keys to recall the history and HISTORY to display it.
+Use cursor LEFT,& RIGHT and the END and HOME keys to navigate within
+the command line and toggle INSERT between overstrike and insert mode.
+Use the TAB key to complete the current word as filename; use it twice
+to show all matching files.
+.
+
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
 Edits command lines, recalls command lines, and creates macros
 
 DOSKEY [/switch ...] [macroname=[text]]
 
   /BUFSIZE:size Sets size of macro and command buffer            (default:512)
   /ECHO:on|off  Enables/disables echo of macro expansions        (default:on)
-	/FILE:file    Specifies file containing a list of macros
+  /FILE:file    Specifies file containing a list of macros
   /HISTORY      Displays all commands stored in memory
   /INSERT       Inserts new characters into line when typing
   /KEYSIZE:size Sets size of keyboard type-ahead buffer          (default:15)
@@ -1360,7 +1370,7 @@ command as if trace mode would be active.
 .
 
 :TEXT_CMDHELP_WHICH
-Searches and displays the executable file for each specified file.
+Searches and displays the executable file for each specified command.
 
 WHICH {command}
 .
