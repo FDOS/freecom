@@ -51,7 +51,7 @@ argument_sign ::= ':' | '=' .
 
 single_character_option ::= character .
 
-longname_options  ::= character character
+longname_option  ::= character character
 	| character longname_option .
 
 character ::= <<any character except unquoted whitespaces,
@@ -80,7 +80,7 @@ After the syntactical check of the option a semantical check is
 performed. Unlike the syntactical one the semantical check is initiated
 by the command the options are scanned for.
 
-Currently, there are three semantical context an option can be
+Currently, there are three semantical contexts an option can be
 interepreted as:
 1) string,
 2) integer, and
