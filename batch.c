@@ -90,7 +90,7 @@
 #include "cmdline.h"
 #include "batch.h"
 
-struct bcontext *bc = NULL;     /* The stack of current batch contexts.
+struct bcontext *bc = 0;     /* The stack of current batch contexts.
                                  * NULL when no batch is active
                                  */
 
@@ -106,8 +106,8 @@ char *find_arg(int n)
 {
   dprintf(("[find_arg (%d)]\n", n));
 
-  if (bc == NULL)
-    return NULL;
+  if (bc == 0)
+    return 0;
 
   n += bc->shiftlevel;
   if(n == 0)
@@ -124,7 +124,7 @@ char *find_arg(int n)
  */
 int setBatchParams(char *s)
 {
-  if((bc->params = split(s, &bc->numParams)) == NULL)
+  if((bc->params = split(s, &bc->numParams)) == 0)
   {
     error_out_of_memory();
     return 0;
@@ -212,7 +212,7 @@ struct bcontext *newBatchContext(void)
   if (!b)
   {
     error_out_of_memory();
-    return NULL;
+    return 0;
   }
 
   initBatchContext(b);
@@ -243,7 +243,7 @@ int batch(char *fullname, char *firstword, char *param)
    assert(firstword);
    assert(param);
 
-  if ((fullname = dfnexpand(fullname, NULL)) == NULL)
+  if ((fullname = dfnexpand(fullname, 0)) == 0)
   {
     error_out_of_memory();
     return 1;
@@ -255,7 +255,7 @@ int batch(char *fullname, char *firstword, char *param)
   while (bc && bc->forvar)      /* Kill any and all FOR contexts */
     exit_batch();
 
-  if (bc == NULL)               /* No current batch file, create new context */
+  if (bc == 0)               /* No current batch file, create new context */
   {
     if (!newBatchContext()) {
     	free(fullname);
@@ -316,8 +316,8 @@ char *readbatchline(int *eflag, char *textline, int size)
   char *first;
   char *ip;
 
-  if (bc == NULL)               /* No batch */
-    return NULL;
+  if (bc == 0)               /* No batch */
+    return 0;
 
   dprintf(("readbatchline ()\n"));
   assert(textline);
@@ -328,7 +328,7 @@ char *readbatchline(int *eflag, char *textline, int size)
   									iteration of the loop */
   while (bc)
   {
-    first = NULL;               /* by default return "no file" */
+    first = 0;               /* by default return "no file" */
 
     if (bc->forvar)             /* If its a FOR context... */
     {
@@ -350,7 +350,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 	if (bc->ffind) {          /* First already done fo do next */
 		if(FINDNEXT(bc->ffind) != 0) {		/* no next file */
           free(bc->ffind);      /* free the buffer */
-          bc->ffind = NULL;
+          bc->ffind = 0;
           bc->shiftlevel++;     /* On to next list element */
           continue;
         }
@@ -365,7 +365,7 @@ char *readbatchline(int *eflag, char *textline, int size)
       {
 	  /*  For first find, allocate a find first block */
           if ((bc->ffind = (struct ffblk *)malloc(sizeof(struct ffblk)))
-           == NULL)
+           == 0)
           {
             error_out_of_memory();
             exit_batch();		/* kill this FOR context */
@@ -413,7 +413,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     if (!bc->bfile)
     {                           /* modifyable batchfiles */
-      if ((bc->bfile = fopen(bc->bfnam, "rt")) == NULL)
+      if ((bc->bfile = fopen(bc->bfnam, "rt")) == 0)
       {
         error_bfile_vanished(bc->bfnam);
         exit_batch();
@@ -438,11 +438,11 @@ char *readbatchline(int *eflag, char *textline, int size)
     	bc->blinecnt = 0;
     }
 
-    assert(ip != NULL);
+    assert(ip != 0);
     ++bc->blinecnt;
     if (chkCBreak(BREAK_BATCHFILE)      /* User break */
-        || fgets(textline, size, bc->bfile) == NULL     /* End of file.... */
-        || (ip = textlineEnd(textline, size)) == NULL)  /* line too long */
+        || fgets(textline, size, bc->bfile) == 0     /* End of file.... */
+        || (ip = textlineEnd(textline, size)) == 0)  /* line too long */
     {
       if (!ip)
         error_long_batchline(bc->bfnam, bc->blinecnt);
@@ -473,7 +473,7 @@ char *readbatchline(int *eflag, char *textline, int size)
         if (stricmp(first + 1, bc->blabel) == 0)
         {                       /* OK found */
           free(bc->blabel);
-          bc->blabel = NULL;
+          bc->blabel = 0;
         }
       }
       continue;                 /* ignore label */
@@ -497,7 +497,7 @@ char *readbatchline(int *eflag, char *textline, int size)
   {                             /* modifyable batchfiles - ska */
     fgetpos(bc->bfile, &bc->bpos);
     fclose(bc->bfile);
-    bc->bfile = NULL;
+    bc->bfile = 0;
     bc->bclose = 0;
   }
 

@@ -16,6 +16,7 @@
 <LI><A HREF="#cmdline">Command Line Syntax</A>
 <LI><A HREF="#envvars">Environment Variables</A>
 <LI><A HREF="#icmds">Internal Commands</A>
+<LI><A HREF="#userprompt">User prompt</A>
 <LI><A HREF="#appendix">Appendix</A>
 	<OL>
 	<LI><A HREF="#ebnf">EBNF</A>
@@ -34,7 +35,7 @@ FreeCOM is a:
 <A HREF="http://www.freedos.org">FreeDOS</A>, a project that aims to implement
 a GNU GPL'ed DOS.
 
-<P>The main duty of FreeCOM is to prompt the user <A HREF="#cmdline">to enter
+<P>The main duty of FreeCOM is to prompt the user <A HREF="#userprompt">to enter
 commands</A>, which
 are interpreted, processed directly by FreeCOM or executed as executable
 files.
@@ -76,6 +77,7 @@ to the <TT><A HREF="cmd.html#ctty">CTTY</A></TT> command.
 <P>FreeCOM knows the following options:
 <UL>
 <LI><TT>/?</TT>: Issues a help screen, then exists.
+<LI><TT>/!</TT>: Enable/disable debugging support, if compiled to FreeCOM.
 <LI><TT>/Y</TT>: Enables trace/single step mode. This mode is deaktivated
 when the user prompt has been reached.
 <LI><TT>/F</TT>: Enables autofail of Critical Errors; then instead of displaying
@@ -115,8 +117,9 @@ prompt after executing the specified command.
 <H1><A NAME="envvars">Environment Variables</A></H1>
 
 Environment variables can be freely assigned using the <TT><A HREF="cmd.html#set">SET</A></TT> command,
-e.g. executing: <TT>SET var1=tecxsgk;jsdgsdflfsjdflkasjf"lasjflas</TT>
-<BR>assigns this nonsense to the variable <TT>var1</TT>. Later on, the
+e.g. executing: <TT>
+<PRE>SET var1=tecxsgk;jsdgsdflfsjdflkasjf/lasjflas</PRE></TT>
+assigns this nonsense to the variable <TT>var1</TT>. Later on, the
 value of the variable can be used by writing: <TT>%var1%</TT>, thus, writing
 the name of the variable enclosed without whitespace by two percent
 signs.
@@ -182,9 +185,10 @@ keyword.
 <LI><B>%%</B>: Is no real variable, but expands to a single percent sign.
 </UL>
 <P>Because automatic variables have one percent sign only, it sometimes lead to
-confusion within the <TT>FOR</TT> command, e.g.:
-<BR><TT>SET adam=eva
-<BR>FOR %a in (*.*) DO echo %adam% %a</TT>
+confusion within the <TT>FOR</TT> command, e.g. in:
+<TT><PRE>SET adam=eva
+<BR>FOR %a in (*.*) DO echo %adam% %a</PRE></TT>
+<TT>%adam</TT> is interpreted as [<TT>%a</TT>]dam.
 
 <H1><A NAME="icmds">Internal Commands</A></H1>
 Internal commands will be processed by FreeCOM directly, they are available

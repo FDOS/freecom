@@ -134,28 +134,24 @@ int parsetime(char *s)
 #pragma argsused
 int cmd_time(char *rest)
 {
-  struct dostime_t t;
   char s[40];
   int ec;
 
   noPrompt = 0;
 
-  if((ec = leadOptions(&rest, opt_date, NULL)) != E_None)
+  if((ec = leadOptions(&rest, opt_date, 0)) != E_None)
       return ec;
 
   if (!*rest)
   {
 	char *time;
-    _dos_gettime(&t);
 
-    time = nls_maketime(0, t.hour, t.minute, t.second, t.hsecond);
-    if(!time) {	
-    	error_out_of_memory();
+    if((time = curTime()) == 0)
     	return 1;
-    }
+
     displayString(TEXT_MSG_CURRENT_TIME, time);
     free(time);
-    rest = NULL;
+    rest = 0;
   }
 
   while (1)
@@ -167,7 +163,7 @@ int cmd_time(char *rest)
     } else {
 		if(noPrompt) return 0;
 
-      if ((rest = getMessage(TEXT_MSG_ENTER_TIME)) == NULL)
+      if ((rest = getMessage(TEXT_MSG_ENTER_TIME)) == 0)
         return 1;
 
       fputs(rest, stdout);
@@ -180,7 +176,7 @@ int cmd_time(char *rest)
     }
     displayString(TEXT_ERROR_INVALID_TIME);
     // force input the next time around.
-    rest = NULL;
+    rest = 0;
   }
 }
 

@@ -56,15 +56,15 @@ static void devAttr(int fd)
     dprintf(("[Failed to read attributes of fd #%d]\n", fd));
 	}
   else {
-    printf("[fd #%d is", fd);
+    dbg_print("[fd #%d is", fd);
     if(attr & 0x80) {
       if(attr & 7) {
-        if(attr & 1) fputs(" STDIN", stdout);
-        if(attr & 2) fputs(" STDOUT", stdout);
-        if(attr & 4) fputs(" NUL", stdout);
-      } else fputs(" a device", stdout);
-    } else fputs(" a file", stdout);
-    puts("]");
+        if(attr & 1) dbg_outs(" STDIN");
+        if(attr & 2) dbg_outs(" STDOUT");
+        if(attr & 4) dbg_outs(" NUL");
+      } else dbg_outs(" a device");
+    } else dbg_outs(" a file");
+    dbg_outsn("]");
   }
 }
 #endif

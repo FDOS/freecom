@@ -3,11 +3,51 @@ de: Repeat a command
 req: CMD_FOR
 
 SYNOPSIS:
-EBNF: FOR '%' variable IN '(' { word | pattern } ')' DO command
+EBNF: FOR '%' letter IN '(' { word | pattern } ')' DO <<any command>>
 
-
-STD_OPTIONS:
+Executes <EBNF><<any command>></EBNF> for several values assigned to
+the variable <ARG>letter</ARG>. The values are read strictly left to right
+from the <ARG>word</ARG>s and <ARG>pattern</ARG>s enclosed in
+parenthises; where <ARG>pattern</ARG>s are words containing
+wildcards and are replaced by all matching filenames.
+<P>Any occurence of a percent sign <TT>%</TT> and the specified letter
+is replaced by the current value of the FOR loop.
 
 EXAMPLES:
 EXAMPLE: 1
+CMD: FOR %z IN (*.*) DO copy %a a:
 
+Performs a <CMD>COPY xyz A:</CMD> command for each file in the current
+directory. Its behaviour is equal to <CMD>COPY *.* A:</CMD>
+
+EXAMPLE: 2
+CMD: FOR %z IN (a?b*.TXT) DO CALL batch arg %z
+
+Executes the batch script <CMD>batch.bat</CMD> for each file matching
+the pattern <TT>A?B*.TXT</TT> located in the current directory. Within the
+script, the automatic variable <ARG>%1</ARG> always expands to the constant
+argument <ARG>arg</ARG>, whereas <ARG>%2</ARG> expands to the filename
+of the current loop.
+
+EXAMPLE: 3
+CMD: FOR %a IN (1 2 3 4 5) DO ECHO %a
+
+Is equal to the command sequence:<BR>
+CMD: ECHO 1
+CMD: ECHO 2
+CMD: ECHO 3
+CMD: ECHO 4
+CMD: ECHO 5
+
+Because these words do <EM>not</EM> contain no wildcards, they are <EM>not</EM>
+matched as filenames.
+
+EXAMPLE: 4
+CMD: FOR %g IN (1 2 3*) DO ECHO %g
+
+Performs the commands:<BR>
+CMD: ECHO 1
+CMD: ECHO 2
+
+and the ECHO command for each file in the current directory, that has no
+extension and which name starts with the digit three.

@@ -16,6 +16,10 @@
  *
  * 2000/07/24 Ron Cemer
  * bugfix: Suppress "Overwrite..." prompt if destination is device
+ *
+ * 2001/02/17 ska
+ * add: interactive command flag
+ * bugfix: copy 1 + 2 + 3 <-> only first and last file is stored
  */
 
 #include <assert.h>
@@ -94,7 +98,7 @@ optScanFct(opt_copy1)
 void initContext(void)
 {
   appFile = 0;
-  last = lastApp = NULL;
+  last = lastApp = 0;
 }
 
 void killContext(void)
@@ -102,7 +106,7 @@ void killContext(void)
   if(last) {
     assert(head);
     do {
-      if((lastApp = head->app) != NULL) do {
+      if((lastApp = head->app) != 0) do {
         lastApp = (last = lastApp)->app;
         free(last);
       } while(lastApp);
@@ -173,24 +177,24 @@ char *fillFnam(char *fnam, char *pattern)
   assert(fnam);
   assert(pattern);
 
-  if(strchr(fnam, '?') == NULL && strchr(fnam, '*') == NULL)
+  if(strchr(fnam, '?') == 0 && strchr(fnam, '*') == 0)
     return strdup(fnam);
 
   if(!dfnsplit(fnam, &dr, &pa, &fn, &ex))
-    return NULL;
+    return 0;
 
-  if(!dfnsplit(pattern, NULL, NULL, &pfn, &pex)) {
+  if(!dfnsplit(pattern, 0, 0, &pfn, &pex)) {
     free(fn);
     free(ex);
     free(dr);
     free(pa);
-    return NULL;
+    return 0;
   }
 
   fillComp(dfn, fn, pfn, MAXFILE);
   fillComp(dex, ex, pex, MAXEXT);
 
-  p = dfnmerge(NULL, dr, pa, dfn, dex);
+  p = dfnmerge(0, dr, pa, dfn, dex);
 
   free(pfn);
   free(pex);
@@ -225,12 +229,12 @@ int copy(char *dst, char *pattern, struct CopySource *src
   mode[2] = '\0';
 
   do {
-    if((rDest = fillFnam(dst, ff.ff_name)) == NULL)
+    if((rDest = fillFnam(dst, ff.ff_name)) == 0)
       return 0;
     h = src;
     do {  /* to prevent to open a source file for writing, e.g.
           for COPY *.c *.?    */
-      if((rSrc = fillFnam(h->fnam, ff.ff_name)) == NULL) {
+      if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
         free(rDest);
         return 0;
       }
@@ -245,9 +249,10 @@ int copy(char *dst, char *pattern, struct CopySource *src
         free(rDest);
         return 0;
       }
-    } while((h = h->app) != NULL);
+    } while((h = h->app) != 0);
 
-    if(openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != NULL) {
+    if(interactive_command		/* Suppress prompt if in batch file */
+     && openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != 0) {
     	int destIsDevice = isadev(fileno(fout));
 
       fclose(fout);
@@ -274,7 +279,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
     }
     mode[0] = openMode;
     mode[1] = 'b';
-    if((fout = fdevopen(rDest, mode)) == NULL) {
+    if((fout = fdevopen(rDest, mode)) == 0) {
       error_open_file(rDest);
       free(rDest);
       return 0;
@@ -282,14 +287,14 @@ int copy(char *dst, char *pattern, struct CopySource *src
     mode[0] = 'r';
     h = src;
     do {
-      if((rSrc = fillFnam(h->fnam, ff.ff_name)) == NULL) {
+      if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
         fclose(fout);
         free(rDest);
         return 0;
       }
       mode[1] = (asc = h->flags & ASCII) != 0? 't': 'b';
     reOpenIn:
-      if((fin = fdevopen(rSrc, mode)) == NULL) {
+      if((fin = fdevopen(rSrc, mode)) == 0) {
         error_open_file(rSrc);
         fclose(fout);
         free(rSrc);
@@ -362,7 +367,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
         free(rDest);
         return 0;
       }
-    } while((h = h->app) != NULL);
+    } while((h = h->app) != 0);
     if(asc) {   /* append the ^Z as we copied in ASCII mode */
       putc(0x1a, fout);
     }
@@ -384,11 +389,11 @@ int copyFiles(struct CopySource *h)
   int differ, rc;
 
   if(destIsDir) {
-    if(!dfnsplit(h->fnam, NULL, NULL, &fnam, &ext)) {
+    if(!dfnsplit(h->fnam, 0, 0, &fnam, &ext)) {
       error_out_of_memory();
       return 0;
     }
-    dst = dfnmerge(NULL, NULL, destFile, fnam, ext);
+    dst = dfnmerge(0, 0, destFile, fnam, ext);
     free(fnam);
     free(ext);
     if(!dst) {
@@ -434,7 +439,7 @@ int addSource(char *p)
       return 0;
     }
   } else {      /* New entry */
-    if((h = malloc(sizeof(struct CopySource))) == NULL) {
+    if((h = malloc(sizeof(struct CopySource))) == 0) {
       error_out_of_memory();
       return 0;
     }
@@ -443,10 +448,10 @@ int addSource(char *p)
     else
       last = lastApp = last->nxt = h;
 
-    h->nxt = h->app = NULL;
+    h->nxt = h->app = 0;
     h->fnam = q;
     h->flags = cpyFlags();
-    if((q = strtok(NULL, "+")) == NULL)   /* no to-append file */
+    if((q = strtok(0, "+")) == 0)   /* no to-append file */
       return 1;
   }
 
@@ -454,15 +459,15 @@ int addSource(char *p)
   assert(q);
   assert(lastApp);
   do {
-    if((h = malloc(sizeof(struct CopySource))) == NULL) {
+    if((h = malloc(sizeof(struct CopySource))) == 0) {
       error_out_of_memory();
       return 0;
     }
-    lastApp->app = h;
     h->fnam = q;
     h->flags = cpyFlags();
-    h->app = NULL;
-  } while((q = strtok(NULL, "+")) != NULL);
+    h->app = 0;
+    lastApp = lastApp->app = h;
+  } while((q = strtok(0, "+")) != 0);
 
   return 1;
 }
@@ -478,18 +483,18 @@ int cmd_copy(char *rest)
   optA = optB = optV = optY = 0;
 
   /* read the parameters from env */
-  if ((argv = scanCmdline(getEnv("COPYCMD"), opt_copy, NULL, &argc, &opts))
-   == NULL)
+  if ((argv = scanCmdline(getEnv("COPYCMD"), opt_copy, 0, &argc, &opts))
+   == 0)
     return 1;
   freep(argv);    /* ignore any parameter from env var */
 
-  if((argv = scanCmdline(rest, opt_copy, NULL, &argc, &opts)) == NULL)
+  if((argv = scanCmdline(rest, opt_copy, 0, &argc, &opts)) == 0)
     return 1;
 
   /* scan the trailing '/a' and '/b' options */
   while(argc > 0 && isoption(argv[argc - 1])) {
     p = argv[--argc];     /* argv[] must not be changed */
-    if(leadOptions(&p, opt_copy1, NULL) != E_None) {
+    if(leadOptions(&p, opt_copy1, 0) != E_None) {
       freep(argv);
       return 1;
     }
@@ -501,7 +506,7 @@ int cmd_copy(char *rest)
     structure */
   for(argi = 0; argi < argc; ++argi)
     if(isoption(p = argv[argi])) {    /* infix /a or /b */
-      if(leadOptions(&p, opt_copy1, NULL) != E_None) {
+      if(leadOptions(&p, opt_copy1, 0) != E_None) {
         killContext();
         freep(argv);
         return 1;
@@ -543,7 +548,7 @@ int cmd_copy(char *rest)
 
   /* Now test if a destination was specified */
   if(head != last && !last->app) {  /* Yeah */
-    destFile = dfnexpand(last->fnam, NULL);
+    destFile = dfnexpand(last->fnam, 0);
     if(!destFile) {
       error_out_of_memory();
       goto errRet;
@@ -555,7 +560,7 @@ int cmd_copy(char *rest)
       h = h->nxt;
     }
     free(last);
-    (last = h)->nxt = NULL;
+    (last = h)->nxt = 0;
     p = strchr(destFile, '\0') - 1;
     if(*p == '\\' || *p == '/')		/* must be a directory */
     	destIsDir = 1;
@@ -567,7 +572,7 @@ int cmd_copy(char *rest)
 
   /* Now copy the files */
   h = head;
-  while(copyFiles(h) && (h = h->nxt) != NULL);
+  while(copyFiles(h) && (h = h->nxt) != 0);
 
   if(freeDestFile)
     free(destFile);

@@ -37,7 +37,8 @@
  * 2000/07/05 Ron Cemer
  * fix: TC++1 compatibly: FA_NORMAL macro
  *
- * 2000/09
+ * 2000/07/13 ska
+ * chg: Moved into MISC.H: OnOff, BREAK_* macros
  */
 
 #ifndef FREECOM_COMMAND_H
@@ -45,6 +46,7 @@
 
 #include <dos.h>
 #include <stdio.h>
+#include "misc.h"
 #include "fmemory.h"
 
 /* transformed into constants
@@ -53,7 +55,6 @@
 */
 #define MAX_X (*(unsigned int  far*)MK_FP(0x40, 0x4a))
 #define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84))
-
 
 #define MAX_INTERNAL_COMMAND_SIZE 256
 #define MAX_EXTERNAL_COMMAND_SIZE 125
@@ -79,24 +80,8 @@ enum InternalErrorCodes {
 	E_Ignore			/* Error that can be ignored */
 };
 
-enum OnOff {		/* ON/OFF tester */
-	OO_Empty = 0,		/* Empty line */
-	OO_Null,			/* NULL line */
-	OO_On,				/* "ON" */
-	OO_Off,				/* "OFF" */
-	OO_Other			/* else */
-};
-
 #define EnvSeg (*(unsigned far*)MK_FP(_psp, 0x2c))
 #define OwnerPSP (*(unsigned far *)MK_FP(_psp, 0x16))
-
-#define BREAK_BATCHFILE 1
-#define BREAK_ENDOFBATCHFILES 2
-#define BREAK_INPUT 3
-#define BREAK_IGNORE 4
-#define BREAK_FORCMD 5
-
-#define cbreak chkCBreak(0)
 
 extern const char shellver[];
 extern const char shellname[];
@@ -108,25 +93,28 @@ extern const char shellname[];
 #define FA_NORMAL 0
 #endif
 
+/* Useage:
+	FALSE: no, false etc.
+	TRUE: yes, OK, etc.
+	ERROR: only used in tri-state flags, in binary flags same as TRUE
+*/
 enum
 {
-  FALSE, TRUE
+  FALSE, TRUE, ERROR
 };
 
 /* prototypes for INIT.C */
-extern unsigned char fddebug;
-
-/* prototypes for COMPAT.H */
-#ifdef _NO_FMEMCHR
-//char far *_fmemchr(const char far * p, int ch, size_t length);
-#endif
-#ifdef _NO_FMEMCMP
-//int _fmemcmp(const char far *s1, const char far *s2, size_t length);
-#endif
+void grabComFilename(int warn, const char far * const fnam);
+extern void interrupt dummy_criter_handler();
+extern void interrupt cbreak_handler();
+extern void initCBreak(void);
 
 /* prototypes for COMMAND.C */
+extern int interactive_command;
 extern int ctrlBreak;
 extern int exitflag;
+extern int autofail;
+extern int canexit;
 extern int errorlevel;
 extern int forceLow;
 extern unsigned far *maxx;
@@ -142,6 +130,7 @@ void parsecommandline(char *);
 int initialize(void);
 void short_version(void);
 int process_input(int xflg, char *cmdline);
+void perform_exec_result(int rc);
 
 /* prototypes for INTERNAL.C */
 int cmd_break(char *);
@@ -175,6 +164,7 @@ int internal_exit(char *);
 int cmd_pushd(char *);          /*DLP 06/01/2000 */
 int cmd_popd(char *);           /*DLP 06/01/2000 */
 int cmd_dirs(char *);           /*DLP 06/01/2000 */
+int cmd_which(char *);
 
 /* prototypes for ENVIRON.C */
 char *getEnv(char *);
@@ -201,6 +191,7 @@ int _getch(void);
 char *find_which(char *);
 
 /* prototypes for EXEC.C */
+int decode_exec_result(int rc);
 int exec(const char *, char *, const unsigned);
 
 /* prototypes for REDIR.C */
@@ -211,32 +202,8 @@ int aliasswapout(void);
 int aliasswapin(void);
 int cmd_alias(char *);
 
-/* Prototypes for ERR_HAND.C */
-void init_error_handler(void);
-void printstring(char *);
-char *get_err(unsigned);
-void interrupt far dos_critical_error(unsigned, unsigned, unsigned, unsigned,
-                       unsigned, unsigned, unsigned, unsigned, unsigned);
-
 /* Prototypes for MISC.C */
-#define MAXARGS 20
-#define MAXLEN  256
-// int exist(const char *);
-#define exist dfnstat
-int chkCBreak(int);
-int cgetchar(void);
-int vcgetchar(void);
-int vcgetcstr(const char *const legalCh);
-char *parse_firstarg(char *);
-char *comFile(void);
-char *comPathFile(const char * const fname);
-void dispCount(int cnt, const char * const zero, const char * const one
- , const char * const multiple);
-char *cwd(int drive);
-int changeDrive(int drive);
-int drvNum(int drive);
-enum OnOff onoffStr(char *line);
-char *textlineEnd(const char * const buf, const size_t buflen);
+/* Moved to MISC.H */
 
 /* Prototypes for ERROR.C */
 void error_no_pipe(void);
@@ -287,6 +254,8 @@ void error_ctty_dup(const char * const);
 void error_no_cwd(int drive);
 void dispCopy(const char src[], const char dst[], int append);
 void msg_pause(void);
+void error_kswap_alias_size(void);
+void error_kswap_allocmem(void);
 
 #define D_ON         "on"
 #define D_OFF        "off"

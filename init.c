@@ -93,6 +93,10 @@
  * 2000/12/10 ska
  *	chg: enable canexit within initialize() in order to catch abort-style
  *		errors within main()
+ *
+ * 2001/02/16 ska
+ * chg: using STRINGS resource
+ * fix: if FEATURE_CALL_LOGGING cannot open file, don't terminate
  */
 
 #include "config.h"
@@ -107,25 +111,32 @@
 #include <signal.h>
 #include <alloc.h>
 #include <limits.h>   /* INT_MAX */
+#include <conio.h>
 
 #include "mcb.h"
 #include "environ.h"
 #include "dfn.h"
+#define _TC_EARLY
 #include "fmemory.h"
+#include <suppl.h>
 
-#include "err_hand.h"
 #include "batch.h"
 #include "timefunc.h"
 #include "cmdline.h"
+#include "command.h"
+#include "module.h"
 
 #include "strings.h"
+#include "kswap.h"
 
         /* Check for an argument; ch may be evaluated multiple times */
 #define isargsign(ch)           \
         ((ch) == ':' || (ch) == '=')
 
 #ifdef FEATURE_CALL_LOGGING
+#ifndef INCLUDE_CMD_FDDEBUG
 static char logFilename[] = LOG_FILE;
+#endif
 #endif
 
 extern int canexit;
@@ -133,7 +144,10 @@ extern int canexit;
 static unsigned oldPSP;
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
-unsigned char fddebug = 0;    /* debug flag */
+#ifndef FDDEBUG_INIT_VALUE
+#define FDDEBUG_INIT_VALUE 0
+#endif
+int fddebug = FDDEBUG_INIT_VALUE;    /* debug flag */
 
 /* Without resetting the owner PSP, the program is not removed
    from memory */
@@ -154,7 +168,7 @@ int showcmds(char *rest)
   unsigned char y;
   extern struct CMD cmds[];     /* The internal command table */
 
-  puts("Internal commands available:");
+  displayString(TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS);
   y = 0;
   cmdptr = cmds;
   while (cmdptr->name)
@@ -171,33 +185,36 @@ int showcmds(char *rest)
   }
   if (y != 0)
     putchar('\n');
-  printf("\nFeatures available: ");
+  displayString(TEXT_MSG_SHOWCMD_FEATURES);
 #ifdef FEATURE_ALIASES
-  printf("[aliases] ");
+	displayString(TEXT_SHOWCMD_FEATURE_ALIASES);
 #endif
 #ifdef FEATURE_ENHANCED_INPUT
-  printf("[enhanced input] ");
+	displayString(TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT);
 #endif
 #ifdef FEATURE_HISTORY
-  printf("[history] ");
+	displayString(TEXT_SHOWCMD_FEATURE_HISTORY);
 #endif
 #ifdef FEATURE_FILENAME_COMPLETION
-  printf("[filename completion] ");
+	displayString(TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION);
 #endif
 #ifdef FEATURE_SWAP_EXEC
-  printf("[swapping] ");
+	displayString(TEXT_SHOWCMD_FEATURE_SWAP_EXEC);
 #endif
 #ifdef FEATURE_CALL_LOGGING
-  printf("[start logging] ");
+	displayString(TEXT_SHOWCMD_FEATURE_CALL_LOGGING);
 #endif
 #ifdef FEATURE_LAST_DIR
-  printf("[last dir] ");
+	displayString(TEXT_SHOWCMD_FEATURE_LAST_DIR);
+#endif
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	displayString(TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL);
 #endif
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-	printf("[installable commands] ");
+	displayString(TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS);
 #endif
 #ifdef FEATURE_NLS
-	printf("[DOS NLS] ");
+	displayString(TEXT_SHOWCMD_FEATURE_NLS);
 #endif
   putchar('\n');
 
@@ -259,14 +276,15 @@ int WaitForFkeys(void)
 
 int showhelp = 0, internalBufLen = 0, inputBufLen = 0;
 int spawnAndExit = E_None;
-int envSize = 256;          /* Min environment table size */
-char *user_autoexec = NULL;
+int newEnvSize = 0;          /* Min environment table size */
+char *user_autoexec = 0;
 
 optScanFct(opt_init)
 { int ec = E_None;
 
   switch(ch) {
   case '?': showhelp = 1; return E_None;
+  case '!': return optScanBool(fddebug);
   case 'Y': return optScanBool(tracemode);
   case 'F': return optScanBool(autofail);
   case 'P':
@@ -274,7 +292,7 @@ optScanFct(opt_init)
       ec = optScanString(user_autoexec);
     canexit = 0;
     return ec;
-  case 'E': return optScanInteger(envSize);
+  case 'E': return optScanInteger(newEnvSize);
   case 'L': return optScanInteger(internalBufLen);
   case 'U': return optScanInteger(inputBufLen);
   case 'C': /* spawn command, then exit */
@@ -309,7 +327,7 @@ optScanFct(opt_init)
  *  If warn != 0, warnings can be issued; otherwise this functions
  *  is silent.
  */
-void grabComFilename(int warn, char far *fnam)
+void grabComFilename(int warn, const char far * const fnam)
 {
   char *buf;
   size_t len;
@@ -321,11 +339,11 @@ void grabComFilename(int warn, char far *fnam)
   if(len >= INT_MAX || len < 1) {
     /* no filename specified */
     if(warn)
-      error_syntax(NULL);
+      error_syntax(0);
     return;
   }
 
-  if((buf = malloc(len + 1)) == NULL) {
+  if((buf = malloc(len + 1)) == 0) {
     if(warn) error_out_of_memory();
     return ;
   }
@@ -336,9 +354,9 @@ void grabComFilename(int warn, char far *fnam)
     { char *p;
 
         /* expand the string for the user */
-      p = dfnexpand(buf, NULL);
+      p = dfnexpand(buf, 0);
       free(buf);
-      if((buf = p) == NULL) {
+      if((buf = p) == 0) {
 		  if(warn) error_out_of_memory();
 		  return;
       }
@@ -351,7 +369,7 @@ void grabComFilename(int warn, char far *fnam)
         COMMAND.COM with the standard name in there */
       char *p;
 
-      if((p = realloc(buf, len + sizeof(COM_NAME) + 1)) == NULL) {
+      if((p = realloc(buf, len + sizeof(COM_NAME) + 1)) == 0) {
         if(warn) error_out_of_memory();
         free(buf);
         return;
@@ -403,17 +421,17 @@ int initialize(void)
   char *cmdline;        /* command line duplicated into heap */
   char *p, *h, *q;
 #ifdef FEATURE_CALL_LOGGING
+#ifndef INCLUDE_CMD_FDDEBUG
   FILE *f;
+#endif
 #endif
 
 /* Set up the host environment of COMMAND.COM */
 
-  /* Install the ^Break handler (see chkCBreak() for more details) */
-  extern void initCBreakCatcher(void);
-  initCBreakCatcher();
-
-  /* Install INT 24 Critical error handler */
-  init_error_handler();
+	/* Install the dummy handlers for Criter and ^Break */
+	initCBreak();
+	setvect(0x23, cbreak_handler);
+	setvect(0x24, dummy_criter_handler);
 
   /* DOS shells patch the PPID to the own PID, how stupid this is, however,
     because then DOS won't terminate them, e.g. when a Critical Error
@@ -423,13 +441,29 @@ int initialize(void)
   atexit(exitfct);
   OwnerPSP = _psp;
 
+
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	if(kswapInit()) {		/* re-invoked */
+		if(kswapLoadStruc()) {
+			/* OK, on success we need not really keep the shell trick
+				(pretend we are our own parent), which might cause
+				problems with beta-software-bugs ;-)
+				In fact, KSSF will catch up our crashes and re-invoke
+				FreeCOM, probably with the loss of any internal
+				settings. */
+			  OwnerPSP = oldPSP;
+			return E_None;
+		}
+	}
+#endif
+
   /* Some elder DOSs may not pass an initialzied environment segment */
   if (env_glbSeg && !isMCB(SEG2MCB(env_glbSeg)))
     env_setGlbSeg(0);       /* Disable the environment */
 
 /* Now parse the command line parameters passed to COMMAND.COM */
   /* Preparations */
-  newTTY = NULL;
+  newTTY = 0;
   comPath = tracemode = 0;
   showinfo = 1;
 
@@ -456,17 +490,17 @@ int initialize(void)
     cmdlen = 0;
   }
     /* duplicate the command line into the local address space */
-  if((cmdline = malloc(cmdlen + 1)) == NULL) {
+  if((cmdline = malloc(cmdlen + 1)) == 0) {
     error_out_of_memory();  /* Cannot recover from this problem */
     return E_NoMem;
   }
   _fmemcpy((char far*)cmdline, MK_FP(_psp, 0x81), cmdlen);
   cmdline[cmdlen] = '\0';
 #ifdef FEATURE_CALL_LOGGING
-  if((f = fopen(logFilename, "at")) == NULL) {
+#ifndef INCLUDE_CMD_FDDEBUG
+  if((f = fopen(logFilename, "at")) == 0) {
     fprintf(stderr, "Cannot open logfile: \"%s\"\n", logFilename);
-    exit(125);
-  }
+  } else {
 
   putc('"', f);
   if(ComPath)   /* path to command.com already known */
@@ -477,17 +511,27 @@ int initialize(void)
   fputs(cmdline, f);
   putc('\n', f);
   fclose(f);
+  }
+#else
+	cmd_fddebug(logFilename);
+
+	dbg_outc('"');
+	dbg_outs(ComPath);
+	dbg_outc('"');
+	dbg_outc(':');
+	dbg_outsn(cmdline);
+#endif
 #endif
 
   canexit = 1;
   p = cmdline;    /* start of the command line */
   do {
-  ec = leadOptions(&p, opt_init, NULL);
+  ec = leadOptions(&p, opt_init, 0);
   if(ec == E_NoOption) {    /* /C or /K */
     assert(p && *p);
     if(!isoption(p)) {
       error_quoted_c_k();
-      p = NULL;
+      p = 0;
       break;
     }
     assert(p[1] && strchr("kKcC", p[1]));
@@ -495,20 +539,20 @@ int initialize(void)
     break;
   } else if(ec != E_None) {
         showhelp = 1;
-    p = NULL;
+    p = 0;
     break;
   }
 
   assert(p && !isoption(p) && !isspace(*p));
   if(!*p) {
-    p = NULL;
+    p = 0;
     break;      /* end of line reached */
   }
   q = unquote(p, h = skip_word(p));
   p = h;      /* Skip this word */
   if(!q) {
     error_out_of_memory();
-    p = NULL;
+    p = 0;
     break;
   }
   if(!comPath) {      /* 1st argument */
@@ -565,17 +609,13 @@ int initialize(void)
   }
 
   /* First of all, set up the environment */
+    /* If a new valid size is specified, use that */
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE;
-  if (envSize < 0)
-    envSize = 32767;        /* Numeric overflow (number > 32767 specified) */
-  else if (envSize < 256)
-    envSize = 256;          /* Minimum size of 256. */
-	if(envSize > env_resize(0, 0))	/* Test if to enlarge environment */
-		env_setsize(0, envSize);
+  if(newEnvSize > 16 && newEnvSize < 32767)
+    env_setsize(0, newEnvSize);
+
+  /* Otherwise the path is placed into the environment */
     /* Set the COMSPEC variable. */
-#if 0
-  if (chgEnv("COMSPEC", ComPath)) error_env_var("COMSPEC");
-#else
   if (chgEnv("COMSPEC", ComPath)) {
     /* Failed to add this variable, the most likely problem should be that
       the environment is too small --> it is increased and the
@@ -584,7 +624,24 @@ int initialize(void)
     if (chgEnv("COMSPEC", ComPath))
     error_env_var("COMSPEC");
   }
+
+	/* Install INT 24 Critical error handler */
+	/* Needs the ComPath variable, eventually */
+	if(!kswapContext) {
+		/* Load the module/context into memory */
+		if((kswapContext = modContext()) == 0) {
+			puts("Cannot load Context module or Critical Error handler.");
+			return E_NoMem;
+		}
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+		if(swapOnExec != ERROR)
+			kswapRegister(kswapContext);
 #endif
+	}
+
+	/* re-use the already loaded Module */
+	setvect(0x24, (void interrupt(*)())
+	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter));
 
   if(internalBufLen)
     error_l_notimplemented();
@@ -615,7 +672,7 @@ int initialize(void)
      */
     if (exist(autoexec))
     {
-      printf("\nPress F8 for trace mode, or F5 to bypass %s... ", autoexec);
+      displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
       key = WaitForFkeys();
       putchar('\n');
 
@@ -626,7 +683,7 @@ int initialize(void)
 
       if (key == KEY_F5)
       {
-        printf("Bypassing %s\n", autoexec);
+		  displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
       }
       else
         process_input(1, autoexec);
@@ -634,12 +691,12 @@ int initialize(void)
     else
     {
       if(user_autoexec)
-        printf("%s not found.\n", autoexec);
+      	displayString(TEXT_ERROR_SFILE_NOT_FOUND, user_autoexec);
 #ifdef INCLUDE_CMD_DATE
-      cmd_date(NULL);
+      cmd_date(0);
 #endif
 #ifdef INCLUDE_CMD_TIME
-      cmd_time(NULL);
+      cmd_time(0);
 #endif
     }
 
@@ -647,7 +704,7 @@ int initialize(void)
   }
   else
   {
-    assert(user_autoexec == NULL);
+    assert(user_autoexec == 0);
   }
 
   /* Now the /C or /K option can be processed */
@@ -663,7 +720,7 @@ int initialize(void)
   {
     short_version();
     putchar('\n');
-    showcmds(NULL);
+    showcmds(0);
     putchar('\n');
   }
 

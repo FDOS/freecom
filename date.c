@@ -65,8 +65,6 @@ const char *day_strings[] =
   "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"
 };
 
-#else
-extern const char *day_strings[];
 #endif
 
 
@@ -196,25 +194,24 @@ int cmd_date(char *rest)
 
   noPrompt = 0;
 
-  if((ec = leadOptions(&rest, opt_date, NULL)) != E_None)
+#ifdef FEATURE_NLS
+	refreshNLS();
+#endif
+
+  if((ec = leadOptions(&rest, opt_date, 0)) != E_None)
       return ec;
 
   if (!*rest)
   {
-    struct dosdate_t d;
     char *date;
 
-    _dos_getdate(&d);
-
-    if((date = nls_makedate(0, d.year, d.month, d.day)) == NULL) {
-    	error_out_of_memory();
+    if((date = curDateLong()) == 0)
     	return 1;
-    }
 
-    displayString(TEXT_MSG_CURRENT_DATE, day_strings[d.dayofweek], date);
+    displayString(TEXT_MSG_CURRENT_DATE, date);
 	free(date);
 
-    rest = NULL;
+    rest = 0;
   }
 
   while (1)                     /*forever loop */
@@ -224,11 +221,15 @@ int cmd_date(char *rest)
     {
 		if(noPrompt) return 0;
 
-      if ((rest = getMessage(TEXT_MSG_ENTER_DATE)) == NULL)
-        return 1;               /* failed, error message on screan already */
-
-      fputs(rest, stdout);      /* put onto screen */
-      free(rest);
+		assert(0 <= nlsBuf->datefmt && nlsBuf->datefmt <= 2);
+		assert(nlsBuf->dateSep);
+		displayString(TEXT_MSG_ENTER_DATE_AMERICAN
+#ifdef FEATURE_NLS
+			+ nlsBuf->datefmt, nlsBuf->dateSep, nlsBuf->dateSep
+#else
+			, "-", "-"
+#endif
+		);
       fgets(s, sizeof(s), stdin);
       if (cbreak)
         return 1;
@@ -242,7 +243,7 @@ int cmd_date(char *rest)
     }
     displayString(TEXT_ERROR_INVALID_DATE);
     // force input the next time around.
-    rest = NULL;
+    rest = 0;
   }
 }
 #endif

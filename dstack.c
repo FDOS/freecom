@@ -54,7 +54,7 @@ int cmd_pushd(char *rest)
    char *curdir;
    int i = 1;
 
-   if((curdir = cwd(0)) == NULL) {
+   if((curdir = cwd(0)) == 0) {
    	return 1;
    }
 

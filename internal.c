@@ -144,7 +144,7 @@ static int directory_handler(char *rest,
 
   assert(func);
 
-  if((argv = scanCmdline(rest, NULL, NULL, &argc, &opts)) == NULL)
+  if((argv = scanCmdline(rest, 0, 0, &argc, &opts)) == 0)
     return 1;
 
 	cdd = freeDir = 0;
@@ -158,7 +158,7 @@ static int directory_handler(char *rest,
   /* if doing a CD and no parameters given, print out current directory */
   if (func == chdir && argc == 0)
   {
-    if((dir = cwd(0)) == NULL)
+    if((dir = cwd(0)) == 0)
       goto errRet;
     else {
       puts(dir);
@@ -178,7 +178,7 @@ static int directory_handler(char *rest,
 	dir = argv[0];
 	if(func == chdir) {
 #ifdef FEATURE_LAST_DIR
-		static char *lastdir = NULL;
+		static char *lastdir = 0;
 
 		if(strcmp(dir, "-") == 0) {
 			/* change to last directory */
@@ -200,7 +200,7 @@ static int directory_handler(char *rest,
 					goto okRet;
 			} else if(!dir[2]) {	/* Real CHDIR displays CWD of specified drive */
 				assert(freeDir == 0);
-				if((dir = cwd(*dir)) != NULL) {
+				if((dir = cwd(*dir)) != 0) {
 					puts(dir);
 					freeDir = 1;
 					goto okRet;

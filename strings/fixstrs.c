@@ -60,6 +60,7 @@ chg: To use STRINGS.H to keep up the order becomes problematic, as this
 #include <stdlib.h>
 
 #include "../strings.typ"
+#include "../resource.h"
 
 #define logfile "STRINGS.LOG"
 #define fDAT "STRINGS.DAT"
@@ -74,7 +75,8 @@ typedef enum STATE {
 
 #define MAXSTRINGS       256
 
-const char id[]="FreeDOS STRINGS v2.02";
+const char id[]="FreeDOS STRINGS v";
+
 
 /*
 	Implementation details about to cache the strings within memory:
@@ -101,6 +103,9 @@ string_count_t maxCnt = 0;	/* number of strings within array */
 #endif
 
 char temp[256];
+
+	/* keep it a single-file project */
+#include "../res_w.c"
 
 /*
  * Append the passed in string onto strg[cnt].text
@@ -290,7 +295,7 @@ breakLogFile:
 	/* 1. Adjust the offset and generate the overall size */
 	for(size = string[0].size, cnt = 1; cnt < maxCnt; ++cnt) {
 		string[cnt].index = string[cnt-1].index + string[cnt-1].size;
-		size += string[cnt-1].size;
+		size += string[cnt].size;
 	}
 
 	if(size >= 0x10000ul - sizeof(string_index_t) * maxCnt) {
@@ -313,14 +318,17 @@ breakLogFile:
 		" * Any modifications will be lost next time this tool\n"
 		" * is invoked.\n"
 		" */\n\n", inc);
-	fprintf(inc,"#define  STRINGS_ID         \"%s\"\n",id);
+	fprintf(inc,"#define  STRINGS_ID         \"%s%u\"\n"
+	 , id, STRING_RESOURCE_MINOR_ID);
 #if 0		/* Note: Superceeded by embedded parameters */
 	fprintf(inc,"#define  NUMBER_OF_STRINGS  0x%02X\n",maxCnt);
 	fprintf(inc,"#define  SIZE_OF_STRINGS    0x%04X\n", (unsigned)size);
 #endif
 
+	startResource(dat, RES_ID_STRINGS, STRING_RESOURCE_MINOR_ID);
 		/* Preamble of STRINGS.DAT file */
-	fwrite(id, sizeof(id) - 1, 1, dat);		/* file contents ID */
+	fprintf(dat, "%s%u", id, STRING_RESOURCE_MINOR_ID);
+/*	fwrite(id, sizeof(id) - 1, 1, dat);		*//* file contents ID */
 	fwrite("\r\n\x1a", 4, 1, dat);			/* text file full stop */
 	fputs("#define  STRINGS_ID_TRAILER 4\n", inc);	/* 4 additional bytes */
 	fputs("\n\n", inc);						/* delimiter */
@@ -339,6 +347,7 @@ breakLogFile:
 		 , strg[cnt].name, cnt, string[cnt].index);
 	}
 	fputs("\n/* END OF FILE */\n", inc);
+	endResource(dat);
 
 	fflush(dat);
 	if(ferror(dat)) {

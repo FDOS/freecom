@@ -79,7 +79,7 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
           int len;
 
           /* If there is no closing quote, then go to end of line. */
-          if ((p = strchr(sp, ch)) == NULL)
+          if ((p = strchr(sp, ch)) == 0)
           {
             p = sp + strlen(sp) - 1;
           }
@@ -116,7 +116,7 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
           free(*op);            /* ignore any previous one */
           ch = *sp;
           *sp = '\0';
-          if ((*op = strdup(p)) == NULL)
+          if ((*op = strdup(p)) == 0)
           {                     /* out of mem */
             error_out_of_memory();
             return -1;

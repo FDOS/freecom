@@ -67,11 +67,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <dfn.h>
+#include <mcb.h>
+#include <suppl.h>
+
 #include "command.h"
 #include "batch.h"
-#include <dfn.h>
-
+#include "misc.h"
+#include "nls.h"
 #include "strings.h"
+#include "datefunc.h"
+#include "timefunc.h"
 
 /*
  * get a character out-of-band and honor Ctrl-Break characters
@@ -210,7 +216,7 @@ void beep_low(void)
 char *comFile(void)
 { char *fnam;
 
-  if((fnam = getEnv("COMSPEC")) == NULL)
+  if((fnam = getEnv("COMSPEC")) == 0)
     return ComPath;
   return fnam;
 }
@@ -226,12 +232,12 @@ char *comPathFile(const char * fnam)
 
   assert(fnam);
 
-  if((com = comFile()) == NULL)
+  if((com = comFile()) == 0)
     return strdup(fnam);
 
   h = malloc((pathLen = dfnfilename(com) - com) + strlen(fnam) + 1);
   if(!h)
-    return NULL;
+    return 0;
 
   memcpy(h, com, pathLen);
   strcpy(h + pathLen, fnam);
@@ -268,14 +274,14 @@ int drvNum(int drive)
 char *cwd(int drive)
 {	char *h;
 
-	if((h = dfnpath(drive)) != NULL)
+	if((h = dfnpath(drive)) != 0)
 		return h;
 
 	if(drive)
 		error_no_cwd(drive);
 	else error_out_of_memory();
 
-	return NULL;
+	return 0;
 }
 
 int changeDrive(int drive)
@@ -309,6 +315,65 @@ return OO_Other;
 }
 
 /*
+ *	Read a block of data from a FILE* into far memory
+ *	Return 0 on failure, otherwise the number of read bytes
+ */
+size_t farread(void far*buf, size_t length, FILE *f)
+{	struct REGPACK r;
+
+	/* synchronize FILE* with file descriptor in order to be able to
+		call the DOS API */
+	lseek(fileno(f), ftell(f), SEEK_SET);
+	/* Use DOS API in order to read the strings directly to the
+		far address */
+	r.r_ax = 0x3f00;              /* read from file descriptor */
+	r.r_bx = fileno(f);           /* file descriptor */
+	r.r_cx = length;              /* size of block to read */
+	r.r_ds = FP_SEG(buf);         /* segment of buffer to read block to */
+	r.r_dx = FP_OFF(buf);         /* offset of buffer to read block to */
+	intr(0x21, &r);               /* perform DOS API */
+	if ((r.r_flags & 1) != 0)     /* read failed */
+		return 0;
+
+	return r.r_ax;
+}
+
+
+unsigned allocSysBlk(const unsigned size, const unsigned mode)
+{	unsigned segm;
+	struct MCB _seg *mcb;
+
+	if((segm = allocBlk(size, mode)) != 0) {
+		mcb = (struct MCB _seg*)SEG2MCB(segm);
+		mcb->mcb_ownerPSP = 8;
+		dprintf(("[MEM: allocated system memory block: %04x/%u]\n"
+		 , segm, size));
+	}
+
+	return segm;
+}
+
+
+void freeSysBlk(unsigned segm)
+{	
+	struct MCB _seg *mcb;
+
+	assert(segm);
+
+	mcb = (struct MCB _seg *)SEG2MCB(segm);
+	mcb->mcb_ownerPSP = _psp;
+	freeBlk(segm);
+	dprintf(("[MEM: deallocated system memory block: %04x]\n", segm));
+}
+
+char far *_fstpcpy(char far *dst, const char far *src)
+{	
+	while((*dst++ = *src++) != 0);
+
+	return dst - 1;
+}
+
+/*
  *	Returns the position of the first '\n' or '\0' character;
  *		or NULL if the line overflows the buffer.
  *	"overflow" means that no '\n' character was found and the line
@@ -318,14 +383,109 @@ return OO_Other;
 char *textlineEnd(const char * const buf, const size_t buflen)
 {	const char *p, *end;
 
-	if(!buf)	return NULL;
+	if(!buf)	return 0;
 	end = buflen + (p = buf - 1);
 	do { if(++p == end)		/* The very last byte of the buffer is
 								hit ==> there ougth to be a '\0' there
 								==> no '\n' AND no place for further
 								character ==> overflow */
-		return NULL;
+		return 0;
 	} while(*p && *p != '\n');
 
 	return (char *)p;
+}
+
+/****************
+ ************* Imported from LH.ASM
+ ************* Function names changed to enforce changed content.
+ ***************************************************/
+
+
+int dosGetUMBLinkState(void)
+{	USEREGS
+
+	_AX = 0x5802;			/* get UMB link */
+	geninterrupt(0x21);
+	return _FLAGS & 1 ? 0 : _AX;
+}
+
+void dosSetUMBLinkState(int newState)
+{	USEREGS
+
+	_BX = newState;
+	_AX = 0x5803;			/* set UMB link */
+	geninterrupt(0x21);		/* result ignored */
+}
+
+int dosGetAllocStrategy(void)
+{	USEREGS
+
+	_AX = 0x5800;			/* get allocation strategy */
+	geninterrupt(0x21);
+	return _FLAGS & 1 ? 0 : _AX;
+}
+
+void dosSetAllocStrategy(int newState)
+{	USEREGS
+
+	_BX = newState;
+	_AX = 0x5801;			/* set allocation strategy */
+	geninterrupt(0x21);		/* result ignored */
+}
+
+/* Get start of MCB chain, from word ptr SYSVARS[-2]
+ */
+word GetFirstMCB(void)
+{	USEREGS
+
+	_AH = 0x52;
+	geninterrupt(0x21);
+	return peekw(_ES, _BX - 2);
+}
+
+
+
+
+char *curTime(void)
+{	char *time;
+	struct dostime_t t;
+
+    _dos_gettime(&t);
+
+    time = nls_maketime(0, t.hour, t.minute, t.second, t.hsecond);
+    if(!time)
+    	error_out_of_memory();
+
+    return time;
+}
+
+char *curDateLong(void)
+{
+	struct dosdate_t d;
+	char *date, *h, *p;
+
+	_dos_getdate(&d);
+
+	if((date = nls_makedate(0, d.year, d.month, d.day)) == 0) {
+		error_out_of_memory();
+		return 0;
+	}
+
+	if((h = fetchString(TEXT_WEEKDAY_SHORT_NAME_SUNDAY + d.dayofweek)) == 0) {
+		free(date);
+		error_out_of_memory();
+		return 0;
+	}
+
+	if((p = realloc(h, strlen(h) + strlen(date) + 2)) == 0) {
+		free(h);
+		free(date);
+		error_out_of_memory();
+		return 0;
+	}
+
+	strcpy(stpcat(p, " "), date);
+	free(date);
+
+	return p;
 }

@@ -6,10 +6,26 @@ req: CMD_DELETE
 SYNOPSIS:
 EBNF: DEL [{ options | pattern }]
 
-
+Deletes files, if <ARG>pattern</ARG> matches a directory, all files within
+this directory are deleted.
+<P>When all files are to be deleted, a warning prompt is issued.
 
 STD_OPTIONS:
 
+<UL>
+<LI><OPT>/P</OPT>: Prompts the user before delete a file.
+</UL>
+
 EXAMPLES:
 EXAMPLE: 1
+CMD: DEL FILE1.EXT FILE2.EXT
+Deletes the files <CMD>FILE1.EXT</CMD> and <CMD>FILE2.EXT</CMD>.
 
+EXAMPLE: 2
+CMD: DEL /P *.bak
+Deletes all files with extension <CMD>BAK</CMD>, but prompts the
+user for each single file before deleting it.
+
+EXAMPLE: 3
+CMD: DEL.
+Deletes all files within the current directory.

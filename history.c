@@ -33,7 +33,7 @@
 
 unsigned history_size = 256;    /* make this configurable later */
 
-char *historyptr = NULL;
+char *historyptr = 0;
 unsigned int curline = 0;
 unsigned int numlines = 0;
 unsigned int maxpos = 0;
@@ -89,15 +89,6 @@ void history(int dir, char *commandline)
         lines[count] = lines[count + 1] - length;
 
       numlines--;
-#ifdef DEBUG
-			if (fddebug)
-			{
-				printf("Reduced size:  %ld lines\n", numlines);
-
-	      for (count = 0; count < numlines; count++)
-	        printf("%d: %s\n", count, lines[count]);
-			}
-#endif
     }
 
     strcpy(lines[numlines], commandline);
@@ -129,7 +120,7 @@ int cmd_history(char *rest)
     history_size = x;
 
     free(historyptr);
-    historyptr = NULL;
+    historyptr = 0;
     curline = 0;
     numlines = 0;
     maxpos = 0;

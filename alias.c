@@ -61,6 +61,10 @@
 
 #ifdef FEATURE_ALIASES
 
+#ifdef DEBUG
+// #define DEBUG_ALIASES
+#endif
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
@@ -72,6 +76,7 @@
 #include "cmdline.h"
 #include "tempfile.h"
 #include "alias.h"
+#include "misc.h"
 
 typedef struct TAlias
 {
@@ -151,7 +156,7 @@ int aliasadd(char *name, char *subst)
   	assert(ptr->subst);
     if (!strcmp(ptr->name, name))
     {
-      if((s = strdup(subst)) == NULL)
+      if((s = strdup(subst)) == 0)
         return -1;
       free(ptr->subst);
       ptr->subst = s;
@@ -161,16 +166,16 @@ int aliasadd(char *name, char *subst)
   }
 
 	/* newly create the alias */
-  if((ptr = (TAlias *) malloc(sizeof(TAlias))) == NULL)
+  if((ptr = (TAlias *) malloc(sizeof(TAlias))) == 0)
     return -1;
-  ptr->next = NULL;
+  ptr->next = 0;
 
-  if((ptr->name = strdup(name)) == NULL) {
+  if((ptr->name = strdup(name)) == 0) {
     free(ptr);
     return -1;
   }
 
-  if((ptr->subst = strdup(subst)) == NULL)
+  if((ptr->subst = strdup(subst)) == 0)
   {
     free(ptr->name);
     free(ptr);
@@ -242,10 +247,10 @@ void aliasexpand(char *cmd, int maxlen)
                                    To avoid to clear the flag each time when
                                    to expand a string a different flag value
                                    is used each time. */
-    if((ptr = first) != NULL)
+    if((ptr = first) != 0)
                         /* reset all values to be sure we hit no old one */
       do ptr->used = 0;
-      while((ptr = ptr->next) != NULL);
+      while((ptr = ptr->next) != 0);
     useFlag = 1;
   }
 
@@ -297,7 +302,7 @@ void aliasexpand(char *cmd, int maxlen)
           expanded = 1;
         }
       }
-    } while((ptr = ptr->next) != NULL);
+    } while((ptr = ptr->next) != 0);
   } while(expanded);
 }
 
@@ -329,5 +334,99 @@ int cmd_alias(char *rest)
   aliasdel(rest);
   return 0;
 }
+
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+int alias_streamsize(void)
+{	int size = 1;			/* end-of-array marker */
+  TAlias *ptr = first;
+  while (ptr)
+  {
+  	assert(ptr->name);
+  	assert(ptr->subst);
+    if((size += strlen(ptr->name) + strlen(ptr->subst) + 2) <= 0)
+    	return 0;		/* error */
+    ptr = ptr->next;
+  }
+  return size;
+}
+void alias_streamto(char far *p)
+{ TAlias *ptr = first;
+#ifdef DEBUG
+	unsigned cnt = 0;
+#endif
+
+  while (ptr)
+  {
+  	assert(ptr->name);
+  	assert(ptr->subst);
+    p = _fstpcpy(p, ptr->name) + 1;
+    p = _fstpcpy(p, ptr->subst) + 1;
+    ptr = ptr->next;
+#ifdef DEBUG
+    ++cnt;
+#endif
+  }
+  *p = 0;
+  dprintf(("[KSWAP: %u alias(es) dumped to dynamic context]\n", cnt));
+}
+void alias_streamfrom(char far *p)
+{	TAlias *ptr;
+	size_t len;
+#ifdef DEBUG
+	unsigned cnt = 0;
+#endif
+
+#ifdef DEBUG_ALIASES
+	dbg_print("[Alias dump %Fp]\n", p);
+	for(len = 0; len < 4; ++len) {
+		dbg_print("%04x ", len * 8);
+		for(cnt = 0; cnt < 8; ++cnt)
+			dbg_print("%02X ", (unsigned char)p[len * 8 + cnt]);
+		dbg_outs("     ");
+		for(cnt = 0; cnt < 8; ++cnt) {
+			unsigned char ch = (unsigned char)p[len * 8 + cnt];
+			if(isprint(ch))
+				dbg_outc(ch);
+			else dbg_outc('.');
+		}
+		dbg_outc('\n');
+	}
+	cnt = 0;
+#endif
+
+	last = 0;
+	while(*p) {
+		/* newly create the alias */
+		if((ptr = (TAlias *) malloc(sizeof(TAlias))) == 0)
+			break;
+
+		len = _fstrlen(p) + 1;
+		if((ptr->name = malloc(len)) == 0) {
+			free(ptr);
+			break;
+		}
+		_fmemcpy(ptr->name, p, len);
+		p += len;
+
+		len = _fstrlen(p) + 1;
+		if((ptr->subst = malloc(len)) == 0) {
+			free(ptr->name);
+			free(ptr);
+			break;
+		}
+		_fmemcpy(ptr->subst, p, len);
+		p += len;
+
+#ifdef DEBUG
+		++cnt;
+#endif
+
+		if(last)	last = last->next = ptr;
+		else		last = first = ptr;
+	}
+	if(last)		last->next = 0;
+	dprintf(("[KSWAP: %u alias(es) read from dynamic context]\n", cnt));
+}
+#endif
 
 #endif

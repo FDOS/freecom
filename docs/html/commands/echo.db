@@ -4,11 +4,48 @@ see: TYPE
 req: CMD_ECHO
 
 SYNOPSIS:
+<OL>
+<LI>
+EBNF: ECHO [ ON | OFF ]
+<LI>
 EBNF: ECHO <<string>>
+<LI>
+EBNF: ECHO.
+</OL>
 
+When executing a batch script each line is displayed to the console
+before executing it by default. The first variant of ECHO enables or
+disables this behaviour. To disable echoing the commands is equal to
+prefix each line of a batch script with the Ad-symbol <TT>@</TT>.
+<BR>If ECHO is invoked with no argument at all, the current echo status
+is displayed.
+<BR>When entered on an interactive command line the echo status controls
+whether or not the PROMPT string is displayed.
 
-STD_OPTIONS:
+<P>The second variant displays the specified <EBNF><<string>></EBNF>.
+<BR>Note: Because of variant 1 <EBNF><<string>></EBNF> may not expand
+to the single words <CMD>ON</CMD> or <CMD>OFF</TT> without another
+character.
+
+<P>The third variant displays an empty line. No space must be
+placed between the dot and ECHO.
 
 EXAMPLES:
 EXAMPLE: 1
+CMD: ECHO
 
+Displays the current echo status, e.g. responding:
+<PRE>ECHO is on</PRE>
+
+EXAMPLE: 2
+CMD: @ECHO OFF
+
+Disables the echo status. Because the Ad-sign <TT>@</TT> disables the
+echo status right for this line, this command disable echoing all the
+next lines of a batch script and is not echoed to the console itself.
+It is, therefore, best placed in the first line of a batch script.
+
+EXAMPLE: 3
+CMD: ECHO Just a text
+
+Displays <TT>Just a text</TT>

@@ -145,6 +145,9 @@
  * Changed formatting to exactly match DOS's formatting as much as possible,
  * except that the "bytes free" count is still printed in bytes instead of
  * KB or MB.
+ *
+ * 2001/02/16 ska
+ * chg: using STRINGS resource
  */
 
 #include "config.h"
@@ -210,7 +213,7 @@ optScanFct(opt_dir)
  */
 int pause(void)
 {
-  cmd_pause(NULL);
+  cmd_pause(0);
 
   return 0;
 }
@@ -300,39 +303,39 @@ int dir_print_header(int drive)
   int86x(0x21, &r, &r, &s);
 
   /* print drive info */
-  printf("\n Volume in drive %c", drive + 'A');
+ 	displayString(TEXT_DIR_HDR_VOLUME, drive + 'A');
+
 
   if (FINDFIRST("\\*.*", &f, FA_LABEL) == 0)
   {
         /* Added to remove "." from labels which are longer than
                8 characters (as DOS does). */
     char *dotptr = strchr(f.ff_name, '.');
-    if (dotptr != NULL)
+    if (dotptr != 0)
     	if(strlen(dotptr + 1))
 			memmove(dotptr, dotptr + 1, strlen(dotptr));
 		else *dotptr = '\0';		/* dot at end of name */
-    printf(" is %s\n", f.ff_name);
+    displayString(TEXT_DIR_HDR_VOLUME_STRING, f.ff_name);
   }
   else
   {
-    printf(" has no label\n");
+    displayString(TEXT_DIR_HDR_VOLUME_NONE);
   }
 
   setdisk(currDisk);
 
   if ((rv = incline()) == 0) {
-
   /* print the volume serial number if the return was successful */
-  if (!r.x.cflag)
-  {
-    printf(" Volume Serial Number is %04X-%04X\n", media.serial2, media.serial1);
-    rv = incline();
-  }
+	  if (!r.x.cflag) {
+		displayString(TEXT_DIR_HDR_SERIAL_NUMBER
+		 , media.serial2, media.serial1);
+		rv = incline();
+	  }
   }
 
         /* Added to exactly match DOS's formatting. */
   if ( (optS) && (rv == 0) ) {
-      printf("\n");
+      putchar('\n');
       rv = incline();
   }
 
@@ -385,9 +388,9 @@ int print_summary(unsigned long files
     return 0;
 
   convert(files, buffer);
-  printf("%10s file(s)", buffer);
+  displayString(TEXT_DIR_FTR_FILES, buffer);
   convert(bytes, buffer);
-  printf("   %12s bytes\n", buffer);
+  displayString(TEXT_DIR_FTR_BYTES, buffer);
   need_nl = 1;
   return incline();
 }
@@ -402,7 +405,7 @@ int print_total
 
   rv = flush_nl();
   if(rv == E_None) {
-    printf("Total files listed:\n");
+    displayString(TEXT_DIR_FTR_TOTAL_NUMBER);
     if((rv = incline()) == E_None)
       return print_summary(files, bytes);
   }
@@ -421,13 +424,13 @@ int dir_print_free(unsigned long dirs)
   /* print number of dirs and bytes free */
 
   convert(dirs, buffer);
-  printf("%10s dir(s)", buffer);
+  displayString(TEXT_DIR_FTR_DIRS, buffer);
 
   r.h.ah = 0x36;
   r.h.dl = toupper(*path) - 'A' + 1;
   int86(0x21, &r, &r);
   convert((unsigned long)r.x.ax * r.x.bx * r.x.cx, buffer);
-  printf(" %15s bytes free\n", buffer);
+  displayString(TEXT_DIR_FTR_BYTES_FREE, buffer);
 
   return incline();
 }
@@ -479,8 +482,8 @@ int dir_list(int pathlen
 	   if(pathlen == 3)     /* root directory */
 		 path[pathlen] = '\0';    /* path := path w/o filename */
 	   else path[pathlen - 1] = '\0';
-            /* /// Changed to exactly match DOS's formatting.  - Ron Cemer */
-        printf("%sDirectory of %s\n", (optS ? "" : " "), path);
+        displayString(optS ? TEXT_DIR_DIRECTORY: TEXT_DIR_DIRECTORY_WITH_SPACE
+         , path);
         if((rv = incline()) == E_None) {
         putchar('\n');
         rv = incline();
@@ -517,9 +520,9 @@ int dir_list(int pathlen
       {
         strcpy(buffer, file.ff_name);
         filecount++;
-      bytecount += file.ff_fsize;
+		  bytecount += file.ff_fsize;
       }
-      printf("%-15s", buffer);
+      displayString(TEXT_DIR_LINE_FILENAME_WIDE, buffer);
       if (!--count)
       {
         /* outputted 5 columns */
@@ -534,7 +537,7 @@ int dir_list(int pathlen
         continue;
       if (optS)
         fputs(path, stdout);
-      printf("%-13s\n", file.ff_name);
+      displayString(TEXT_DIR_LINE_FILENAME_BARE, file.ff_name);
       if (file.ff_attrib & FA_DIREC)
         dircount++;
       else {
@@ -548,7 +551,7 @@ int dir_list(int pathlen
       char buffer[sizeof(long) * 4 + 2], *ext;
 
       if (file.ff_name[0] == '.')
-        printf("%-13s", file.ff_name);
+        displayString(TEXT_DIR_LINE_FILENAME_SINGLE, file.ff_name);
       else
       {
         ext = strrchr(file.ff_name, '.');
@@ -557,18 +560,18 @@ int dir_list(int pathlen
         else
           *ext++ = '\0';
 
-        printf("%-8s %-3s ", file.ff_name, ext);
+        displayString(TEXT_DIR_LINE_FILENAME, file.ff_name, ext);
       }
 
       if (file.ff_attrib & FA_DIREC)
       {
-        printf("%-14s", "  <DIR>");
+        displayString(TEXT_DIR_LINE_SIZE_DIR);
         dircount++;
       }
       else
       {
         convert(file.ff_fsize, buffer);
-        printf("   %10s ", buffer);
+        displayString(TEXT_DIR_LINE_SIZE, buffer);
         bytecount += file.ff_fsize;
         filecount++;
       }
@@ -668,11 +671,11 @@ int dir_print_body(char *arg, unsigned long *dircount)
 		   be reallocated once dir_list() is called, because dir_list()
 		   is recursive.  This will also help to reduce memory
 		   fragmentation. */
-	if((p = dfnfullpath(arg)) == NULL) {
+	if((p = dfnfullpath(arg)) == 0) {
 		error_out_of_memory();
 		return E_NoMem;
 	}
-	if((path = realloc(p, 270*sizeof(char))) == NULL) {
+	if((path = realloc(p, 270*sizeof(char))) == 0) {
 		free(p);
 		error_out_of_memory();
 		return E_NoMem;
@@ -694,7 +697,7 @@ int dir_print_body(char *arg, unsigned long *dircount)
 			 , &bytecount
 			 );
 		} else {
-			if((cachedPattern = strdup(pattern)) == NULL) {
+			if((cachedPattern = strdup(pattern)) == 0) {
 				error_out_of_memory();
 				rv = E_NoMem;
 			} else {
@@ -734,14 +737,14 @@ int cmd_dir(char *rest)
   longyear = optS = optP = optW = optB = optA = optL = 0;
 
   /* read the parameters from env */
-  if ((argv = scanCmdline(getEnv("DIRCMD"), opt_dir, NULL, &argc, &opts))
-   == NULL)
+  if ((argv = scanCmdline(getEnv("DIRCMD"), opt_dir, 0, &argc, &opts))
+   == 0)
     return 1;
   freep(argv);    /* ignore any parameter from env var */
 
   line = 0;
   /* read the parameters */
-  if ((argv = scanCmdline(rest, opt_dir, NULL, &argc, &opts)) == NULL)
+  if ((argv = scanCmdline(rest, opt_dir, 0, &argc, &opts)) == 0)
     return 1;
 
   dircount = 0;

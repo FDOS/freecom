@@ -1,5 +1,28 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2001/02/27 ska
+~~~~~~~~~~~~~~~~~~~~~~
+fix: criter.asm: DEBUG does no longer compile to .COM (for consistency)
+chg: removed all NULLs to prevent NULL problematic, functions must be
+	used fully prototyped now
+
+2001/02/20 ska
+~~~~~~~~~~~~~~~~~~~~~~
+release v0.81 beta 1
+bugfix: _fstrchr() doesnot find '\0'
+bugfix: NULL problematic
+
+2001/02/16 ska
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: "copy 1 + 2 + 3 target" copies first & last file only
+add: interactive command flag
+add: FDDEBUG: redirect output into file
+add: command WHICH
+chg: moved all assembly sources to NASM
+chg: using STRINGS resources for all non-interactive strings
+bugfix: if ENHANCED_INPUT && !HISTORY, CurRight falls through to CurLeft
+bugfix: CB_CATCH: In DEBUG mode: recursive test fails always
+bugfix: KSSF: restore parentPSP on exit
 
 2001/02/14 ska
 ~~~~~~~~~~~~~~~~~~~~~~

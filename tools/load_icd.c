@@ -6,6 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../config.h"
+
+#ifdef _TC_EARLY_
+#include "fmemory.h"
+#endif
+
 #define BUFFER_SIZE 10*1024
 const char id[] = "INSTALLABLE COMMAND - ICD v1.0";
 
@@ -15,9 +21,8 @@ main(int argc, char **argv)
 	unsigned *p;
 	FILE *f;
 	char *q;
-	void interrupt ( *oldMUX)();
 	struct REGPACK r;
-	unsigned char __seg *icmd;
+	unsigned char _seg *icmd;
 
 	if(argc != 2) {
 		puts("Load Installable Commands (FreeCOM shell extensions)");

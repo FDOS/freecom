@@ -96,6 +96,9 @@
  *	chg: F3 == complete string
  *	add: cur-right at end of string == F1
  *	fix: F5 removes cursor sometimes
+ *
+ * 2001/02/16 ska
+ *	bugfix: If ENHANCED_INPUT && !HISTORY, Cur-Right falls through CurLeft
  */
 
 #include "config.h"
@@ -178,16 +181,6 @@ void history(int, char *);      /* prototype for the command-line history */
 #ifdef FEATURE_FILENAME_COMPLETION
 void complete_filename(char *str, unsigned charcount);
 int show_completion_matches(char *str, unsigned charcount);
-#endif
-
-#if 0
-/*
- * maxx, maxy
- *
- * pointers into BIOS for the size of the screen
- */
-unsigned far *maxx = MK_FP(0x40, 0x4a);
-unsigned char far *maxy = MK_FP(0x40, 0x84);
 #endif
 
 unsigned orgx, orgy;		/* start of current line */
@@ -448,12 +441,14 @@ void readcommand(char *str, int maxlen)
         	from the previous line */
         /* FALL THROUGH */
 
-#ifdef FEATURE_HISTORY
+#ifndef FEATURE_HISTORY
+		break;
+#else
       case D_F1:               // OCR: get character from last command buffer
 			history(-1, tmpstr);
           if (current < strlen(tmpstr)) {
 			 outc(str[current] = tmpstr[current]);
-             charcount = ++current;
+			 charcount = ++current;
           }
           break;
           

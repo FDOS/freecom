@@ -37,9 +37,6 @@
 
 #define CBREAK_ERRORLEVEL 3
 
-typedef unsigned char byte;
-typedef unsigned word;
-
 /* align one byte */
 #pragma option -a-
 struct ExecBlock
@@ -54,14 +51,28 @@ struct ExecBlock
 
 int lowLevelExec(char far * cmd, struct ExecBlock far * bl);
 
+int decode_exec_result(int rc)
+{	struct REGPACK rp;
+	if (!rc) {
+		rp.r_ax = 0x4d00;           /* get return code */
+		intr(0x21, &rp);
+		rc = rp.r_ax & 0xFF;
+		if ((rp.r_ax & 0xFF00) == 0x100) {
+			ctrlBreak = 1;
+			if (!rc)
+				rc = CBREAK_ERRORLEVEL;
+		}
+	}
+
+	return rc;
+}
+
 int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 {
   unsigned char buf[128];
   struct fcb fcb1,
     fcb2;
   struct ExecBlock execBlock;
-  int rc;
-  struct REGPACK rp;
 
   assert(cmd);
   assert(cmdLine);
@@ -77,22 +88,9 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
   execBlock.fcb2 = (struct fcb far *)&fcb2;
 
   /* fill FCBs */
-  if ((cmdLine = parsfnm(cmdLine, &fcb1, 1)) != NULL)
+  if ((cmdLine = parsfnm(cmdLine, &fcb1, 1)) != 0)
     parsfnm(cmdLine, &fcb2, 1);
 
-  rc = lowLevelExec((char far *)cmd, (struct ExecBlock far *)&execBlock);
-  if (!rc)
-  {
-    rp.r_ax = 0x4d00;           /* get return code */
-    intr(0x21, &rp);
-    rc = rp.r_ax & 0xFF;
-    if ((rp.r_ax & 0xFF00) == 0x100)
-    {
-      ctrlBreak = 1;
-      if (!rc)
-        rc = CBREAK_ERRORLEVEL;
-    }
-  }
-
-  return rc;
+	return decode_exec_result(
+	 lowLevelExec((char far *)cmd, (struct ExecBlock far *)&execBlock));
 }

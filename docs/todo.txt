@@ -1,14 +1,40 @@
 Things to do
 ~~~~~~~~~~~~
-Fix bugs :)
 
-Support the DOS=HIGH directive in CONFIG.SYS
+(#) is the suggested priority, the lower the more urgent.
 
-Optimize the code!  For size and speed.  There are numerous places
+
+
+(0) Fix bugs :)
+
+(2) Support the DOS=HIGH directive in CONFIG.SYS
+
+(3) Optimize the code!  For size and speed.  There are numerous places
 where the code is hardly optimal for either.
 
-^S and ^Q to pause/resume displays.
+(1) Swap out when exec'ing? YES! Unless running from a floppy?
 
-Add wildcard support to REN.
+(4) ^S and ^Q to pause/resume displays.
 
-Add support for Win95 long filenames.
+(1) Add wildcard support to REN.
+
+(4) Add support for Win95 long filenames.
+
+(1) Make the permanent command.com (/p) store the messages in memory
+(this is already implemented) and have some way for other instances
+of command.com to use these same messages in memory.  Maybe the
+Multiplexor interrupt (2Fh)?  Does command.com have a MSDOS reserved
+mux handler number?
+
+(1) Move everything to freely available tools (TC++ v1.01, NASM)
+
+(1) Critical Error handler: Conditions and rules must be defined
+in which cases what action has to be done in order to prevent
+accidently kill FreeCOM on INT-24. Some recover mechanism must be
+implemented in hopeless situations, where the normal processing
+can not proceed.
+
+(2) Move all strings into *.LNG files.
+
+(2) Use all information available through DOS NLS API in all places
+they apply to.

@@ -6,9 +6,4 @@ req: CMD_DIRS
 SYNOPSIS:
 EBNF: DIRS
 
-
-STD_OPTIONS:
-
-EXAMPLES:
-EXAMPLE: 1
-
+Displays all directories stacked with the PUSHD command.

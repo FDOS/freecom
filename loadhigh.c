@@ -44,12 +44,14 @@
 #include "command.h"            /* command shell interface functions */
 #include "strings.h"
 #include "cmdline.h"
+#include "misc.h"
 
 /* Macro to convert bytes to paragraphs */
 #define topara(x) (((x) + 0xf) >> 4)
 #define mcbAssign(mcb,wordValue)	(mcb = (struct MCB _seg *)(wordValue))
 	/* skip to next MCB in chain */
 #define mcbNext(mcb)	mcbAssign(mcb, nxtMCB((word)mcb))
+#define DosAlloc(value)	DOSalloc((value), 0xF)
 
 enum error_codes
 {
@@ -72,13 +74,6 @@ static int loadfix_prepare(void);
 static int findUMBRegions(void);
 static int parseArgs(char *cmdline, char **fnam, char **rest);
 static void lh_error(int errcode);
-
-/* Prototypes for the assembler functions */
-/*word DosAlloc(word paragraphs); / * DOS func. 48h */
-#define DosAlloc(para)	DOSalloc((para), 0xF)
-word DosSetStrategy(word strat);  /* DOS func. 5801h */
-int DosSetUMBLink(int value);   /* DOS func. 5803h */
-word GetFirstMCB(void);
 
 
 /* This array will contain the memory blocks that the new program can't use */
@@ -151,10 +146,10 @@ static int initialise(void)
 
   /* Save the UMB link state and the DOS malloc strategy, to restore them later */
   /* Allocate dynamic memory for some arrays */
-  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == NULL)
+  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == 0)
     return err_out_of_memory;
 
-  if ((block = malloc(256 * sizeof(*block))) == NULL)
+  if ((block = malloc(256 * sizeof(*block))) == 0)
     return err_out_of_memory;
 
   /* find the UMB regions */
@@ -172,8 +167,10 @@ static int lh_lf(char *args)
   char *fullname, *fnam;
 	int i;	
 
-  int old_link = DosSetUMBLink(1);
-  int old_strat = DosSetStrategy(0);
+  int old_link = dosGetUMBLinkState();
+  int old_strat = dosGetAllocStrategy();
+  dosSetUMBLinkState(1);
+  dosSetAllocStrategy(0);
 
   assert(args);
 
@@ -219,8 +216,8 @@ static int lh_lf(char *args)
   /* Restore UMB link state and DOS malloc strategy to their
    * original values. */
 
-  DosSetUMBLink(old_link);
-  DosSetStrategy(old_strat);
+  dosSetUMBLinkState(old_link);
+  dosSetAllocStrategy(old_strat);
 
 
   /* if any error occurred, rc will hold the error code */
@@ -284,7 +281,7 @@ static int findUMBRegions(void)
   /* First, find the end of the conventional memory:
    * Turn UMB link off, and track the MCB chain to the end. */
 
-  DosSetUMBLink(0);
+  dosSetUMBLinkState(0);
 
   while (mcb->mcb_type == 'M')
     mcbNext(mcb);
@@ -308,7 +305,7 @@ static int findUMBRegions(void)
   /* Turn UMB link on. If MS-DOS UMBs are available, the signature of
    * the last conventional memory block will change from 'Z' to 'M'. */
 
-  DosSetUMBLink(1);
+  dosSetUMBLinkState(1);
 
   if (mcb->mcb_type == 'M')
   {                             /* UMBs are available */
@@ -403,10 +400,10 @@ static int loadhigh_prepare(void)
   word availBlocks = 0;
 
   /* Set the UMB link and malloc strategy */
-  DosSetUMBLink(1);
-  DosSetStrategy(0);
+  dosSetUMBLinkState(1);
+  dosSetAllocStrategy(0);
 
-  if ((availBlock = malloc(256 * sizeof(*availBlock))) == NULL)
+  if ((availBlock = malloc(256 * sizeof(*availBlock))) == 0)
     return err_out_of_memory;
 
   /* Call to force DOS to catenate any successive free memory blocks */
@@ -496,7 +493,7 @@ static int loadhigh_prepare(void)
   /* If the program is to be loaded in upper memory, set the malloc
    * strategy to 'first fit high', otherwise to 'first fit low'. */
 
-  DosSetStrategy(upper_flag ? 0x80 : 0);
+  dosSetAllocStrategy(upper_flag ? 0x80 : 0);
   return OK;
 }
 
@@ -508,7 +505,7 @@ static int loadfix_prepare(void)
 
   mcbAssign(mcb, umbRegion[0].start);
 
-  DosSetStrategy(0);
+  dosSetAllocStrategy(0);
 
   while (FP_SEG(mcb) < 0x1000)
   {
@@ -562,12 +559,12 @@ static int parseArgs(char *cmdline, char **fnam, char **rest)
 
   /* initialize options */
   optS = 0;
-  optL = NULL;
+  optL = 0;
 
-  if(leadOptions(&cmdline, loadfix_flag? NULL: opt_lh, NULL) != E_None)
+  if(leadOptions(&cmdline, loadfix_flag? 0: opt_lh, 0) != E_None)
       return err_silent;
 
-  if((c = optL) != NULL) {
+  if((c = optL) != 0) {
     int i, r;
 
     /* Disable access to all UMB regions not listed here */
@@ -618,7 +615,7 @@ static int parseArgs(char *cmdline, char **fnam, char **rest)
   /* The next argument is the file name. The rest of the command line
    * are passed as parameters to the new program. */
 
-  if((*fnam = unquote(cmdline, c = skip_word(cmdline))) == NULL)
+  if((*fnam = unquote(cmdline, c = skip_word(cmdline))) == 0)
     return err_out_of_memory;
 
   *rest = skipdm(c);

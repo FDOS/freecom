@@ -30,6 +30,20 @@
 
 #include "command.h"
 #include "batch.h"
+#include "cmdline.h"
+#include "kswap.h"
+
+static int optS = 0;		/* force to swap out FreeCOM during call */
+
+#pragma argsused
+optScanFct(opt_call)
+{ switch(ch) {
+  case 'S': return optScanBool(optS);
+  }
+  optErr();
+  return E_Useage;
+}
+
 
 #pragma argsused
 int cmd_call(char *param)
@@ -45,16 +59,24 @@ int cmd_call(char *param)
 
   struct bcontext
    *n = newBatchContext();
+  int ec;
 
-  if (n == NULL)
+  if (n == 0)
   {
     return 1;
   }
 
-  parsecommandline(param);
+  if((ec = leadOptions(&param, opt_call, 0)) != E_None)
+      return ec;
 
-  if (bc->bfile == NULL
-      && bc->bfnam == NULL)     /* Wasn't a batch file so remove context */
+  if(optS)
+  	swapOnExec = TRUE;
+
+	parsecommandline(param);
+	swapOnExec = FALSE;
+
+  if (bc->bfile == 0
+      && bc->bfnam == 0)     /* Wasn't a batch file so remove context */
   {
     bc = bc->prev;
     free(n);

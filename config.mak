@@ -12,8 +12,13 @@ LIBPATH = $(CC_BASE_PATH)\LIB
 INCLUDEPATH = $(CC_BASE_PATH)\INCLUDE;$(SUPPL_INC_PATH)
 
 ## Which programs to use
-TASM = TASM
-ASMFLAGS = /MX /ZI /O
 CC = $(BINPATH)\TCC +$(CFG)
 TLIB = $(BINPATH)\Tlib
 TLINK = $(BINPATH)\Tlink
+NASM = nasm.exe
+
+## Add -DDEBUG=1 below to enable debug support for assembly files
+NASMFLAGS =
+## Add -DDEBUG=1 below to enable FreeCOM-debug support for C files
+## Add -DNDEBUG=1 below to disable any debug (even assert)
+CFLAGS =

@@ -3,11 +3,43 @@ de: Goto label
 req: CMD_GOTO
 
 SYNOPSIS:
-EBNF: GOTO label
+EBNF: GOTO [ ':' ] label
 
+Normally all commands of a batch script are executed in the sequence
+in which they are appear with the script. GOTO controls the command flow
+by unconditionally jumping to the specified <ARG>label</ARG>; the commands following that label
+will be executed then. A label is written as a colon in the first
+column of a line and the name of the label immediately behind. If FreeCOM
+hits a label in the normal flow, it is ignored completely, even any redirection
+characters are ignored.
 
-STD_OPTIONS:
+<P>The <ARG>label</ARG> must be located in the same script file as the
+GOTO itself, if it appears more than once, the first occurance takes
+precedence.
+
+<P>Conditional jumps can be contructed with help of the IF command, see
+example 2.
+
 
 EXAMPLES:
 EXAMPLE: 1
+CMD: GOTO ende
 
+Jumps the to label <CMD>:ende</CMD>
+
+EXAMPLE: 2
+CMD: IF "%1"=="" GOTO emptyCommandLine
+
+Jumps to label <CMD>:emptyCommandLine</TT>, if no argument had been
+passed to the batch script.
+For instance:
+<PRE>@ECHO OFF
+IF "%1"=="" GOTO error
+REM do something sane here
+GOTO ende
+
+:error
+ECHO You must pass an argument to me!
+
+:ende
+</PRE>

@@ -25,6 +25,10 @@
  *
  * 2000/12/10 ska
  *	new minor version: v0.80
+ *
+ * 2001/02/16 ska
+ * bugfix: VER (without option) displays too much information
+ * chg: using strings (except FreeCOM's own name)
  */
 
 #include "config.h"
@@ -39,7 +43,7 @@
 #include "strings.h"
 #include "cmdline.h"
 
-const char shellver[] = "version 0.80b [" __DATE__ "]";
+const char shellver[] = "version 0.81 beta 1 [" __DATE__ "]";
 const char shellname[] = "FreeCom";
 
 void short_version(void)
@@ -79,32 +83,27 @@ int cmd_ver(char *rest)
 
 	optR = optW = optD = optC = 0;
 
-  if((argv = scanCmdline(rest, opt_ver, NULL, &argc, &opts)) == NULL)
+  if((argv = scanCmdline(rest, opt_ver, 0, &argc, &opts)) == 0)
     return 1;
 
   /* arguments are simply ignored */
 
-  if(!opts)      /* Basic copyright notice */
-    displayString(TEXT_MSG_VER_BASIC);
-  else {
-  if(optR)
-      {                         /* version information */
+  if(optR) {                         /* version information */
         union REGS regs;
         regs.h.ah = 0x30;
         intdos(&regs, &regs);
-        printf("DOS version %u.%u\n", regs.h.al, regs.h.ah);
+        displayString(TEXT_MSG_VER_DOS_VERSION, regs.h.al, regs.h.ah);
 
         if (regs.h.bh == 0xfd)
         {
           if (regs.h.bl == 0xff)
           {
-            printf("FreeDOS kernel (build 1933 or prior)\n",
-                   regs.h.ch, regs.h.cl, regs.h.bl);
+          	displayString(TEXT_MSG_VER_EARLY_FREEDOS);
           }
           else
           {
-            printf("FreeDOS kernel version %d.%d.%d\n",
-                   regs.h.ch, regs.h.cl, regs.h.bl);
+            displayString(TEXT_MSG_VER_LATER_FREEDOS
+             , regs.h.ch, regs.h.cl, regs.h.bl);
           }
         }
       }
@@ -120,7 +119,6 @@ int cmd_ver(char *rest)
       {                         /* Developer listing */
         displayString(TEXT_MSG_VER_DEVELOPERS);
       }
-  }
 
   freep(argv);
   return ec;

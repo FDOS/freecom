@@ -1,6 +1,5 @@
-;
+; $Id$
 ;  LOWEXEC.ASM
-;
 ;
 ;
 ;  Comments:
@@ -16,45 +15,48 @@
 ;
 ;  08/07/96 (Steffen Kaiser)
 ;    made argument handling independent of memory model
+; $Log$
+; Revision 1.2  2001/03/07 19:48:59  skaus
+; Merged in Swap Support changes
+;
+; Revision 1.1.1.1.4.1  2001/02/18 17:59:36  skaus
+; bugfix: KSSF: restore parentPSP on exit
+; chg: Using STRINGS resource for all non-interactive messages
+; chg: moving all assembly files to NASM
 ;
 
-	INCLUDE MODEL.DEF
-	CODESEG
+%include "model.inc"
+%include "stuff.inc"
 
-	PUBLIC lowLevelExec
+segment _TEXT
+	GLOBAL _lowLevelExec
 
-lowLevelExec PROC
+_lowLevelExec:
 	push    bp
 	mov     bp, sp
-	push    si
-	push    di
-	push    ds
+	push    si, di, ds
 
 	lds     dx, [bp+4+2*@CodeSize]      ; load file name
 	les     bx, [bp+8+2*@CodeSize]      ; load parameter block
 	mov     ax, 4b00h
 
-	mov     Word Ptr cs:[saveSP], sp
-	mov     Word Ptr cs:[saveSS], ss
+	mov     Word [cs:saveSP], sp
+	mov     Word [cs:saveSS], ss
 	int     21h
 	cli						;; Can be removed for post-8086 CPUs
-	mov     ss, Word Ptr cs:[saveSS]
-	mov     sp, Word Ptr cs:[saveSP]
+	mov     ss, [cs:saveSS]
+	mov     sp, [cs:saveSP]
 	sti
 
 	jc      exec_error   ; if there was an error, the error code is in AX
 	xor     ax, ax       ; otherwise, clear AX
 
 exec_error:
-	pop     ds
-	pop     di
-	pop     si
+	pop    si, di, ds
 	pop     bp
 	ret
 
-saveSP dw ?
-saveSS dw ?
-
-lowLevelExec endp
+saveSP dw 0
+saveSS dw 0
 
 	end

@@ -27,7 +27,7 @@
 
 #ifdef FEATURE_NLS
 
-Country *nlsBuf = NULL;
+Country *nlsBuf = 0;
 
 void refreshNLS(void)
 { if(!nlsBuf)

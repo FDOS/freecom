@@ -10,6 +10,35 @@
 #
 #
 # $Log$
+# Revision 1.5  2001/03/07 19:49:01  skaus
+# Merged in Swap Support changes
+#
+# Revision 1.2.4.6  2001/02/27 18:27:06  skaus
+# fix: criter.asm: DEBUG does no longer compile to .COM (for consistency)
+# chg: removed all NULLs to prevent NULL problematic, functions must be
+# 	used fully prototyped now
+#
+# Revision 1.2.4.5  2001/02/21 01:07:01  skaus
+# bugfix: _fstrchr() doesnot find '\0'
+# bugfix: NULL problematic
+#
+# Revision 1.2.4.4  2001/02/18 22:43:58  skaus
+# bugfix: STRINGS resource length value counts 1. string twice
+# sub: enumResources() won't check secondary files no longer
+#
+# Revision 1.2.4.3  2001/02/18 21:08:24  skaus
+# add: command WHICH
+# fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
+#
+# Revision 1.2.4.2  2001/02/18 17:59:37  skaus
+# bugfix: KSSF: restore parentPSP on exit
+# chg: Using STRINGS resource for all non-interactive messages
+# chg: moving all assembly files to NASM
+#
+# Revision 1.2.4.1  2001/02/06 16:30:14  skaus
+# chg: FreeCOM no longer uses the shell hack if kswap is active
+# bugfix: aliases were read back incorrectly
+#
 # Revision 1.4  2000/12/10 04:16:12  skaus
 # add: Installable Commands FEATURE_INSTALLABLE_COMMANDS
 # add: F1, F3, F5, cur-right command line editing
@@ -25,13 +54,18 @@
 
 INCDIR +=;$(FREEDOS)\SRC\INCLUDE;..
 LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
-# LDLIBS = suppl_$(_MODEL).lib
+LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib
 LDFLAGS += /msl
 
 # Project specific C compiler flags
-MYCFLAGS_DBG = -DDEBUG=1
+MYCFLAGS_DBG = -DNDEBUG=1 $(null,$(DEBUG) $(NULL) -DDEBUG=1)
 MYCFLAGS_NDBG =
 MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
+# Project specific NASM compiler flags
+NASMFLAGS_DBG = $(null,$(DEBUG) $(NULL) -DDEBUG=1) -s
+NASMFLAGS_NDBG = -s
+NASMFLAGS = $(null,$(NDEBUG) $(NASMFLAGS_DBG) $(NASMFLAGS_NDBG))
+
 
 .SOURCE.h := . ..
 .SOURCE.lib := $(LIBDIR:s/;/ /:u)
@@ -40,13 +74,14 @@ MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 # Sources of this make target
 
 #	Default target
-all: 
-
-everything: ptchldrv.exe icmd
+.INCLUDE : default.mk
+## all: ptchldrv.exe kssf.com icmd
+error:
+	errlvl 127
 
 icmd : load_icd.exe icmd_{1 2 3}.icd
 
-%.icd : %.nas ; nasm -f bin -o $@ $<
+%.icd : %.nas ; $(NASM) -f bin -o $@ $<
 
 icmd_1.icd : icmd_inc.inc icmd_1.nas
 
@@ -63,15 +98,12 @@ __errl:
 
 ptchldrv.obj : ptchldrv.c
 
+kssf.com : kssf.asm
+	$(NASM) $(NASMFLAGS) -f bin -o $@ $(MYASMFLAGS) $<
+
 load_icd.obj : load_icd.c
 
-
-clobber : clean
-	$(RM) $(RMFLAGS) *.exe *.com *.icd
-
-clean :
-	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) *.dmp
-
+.INCLUDE : makefile.1
 
 .IF $(CFG) != $(NULL)
 

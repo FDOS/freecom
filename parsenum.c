@@ -52,7 +52,7 @@ char *parsenum(char *s, int maxCnt, int *cnt, int nums[])
 { int n;
 
   if(!s || !cnt || !nums || maxCnt <= 0)
-    return NULL;
+    return 0;
 
   *cnt = 0;
 
@@ -64,7 +64,7 @@ char *parsenum(char *s, int maxCnt, int *cnt, int nums[])
     n = 0;
     do {
       if(n >= 10000)
-        return NULL;
+        return 0;
       n = n * 10 + *s - '0';
     } while(isdigit(*++s));
     nums[(*cnt)++] = n;

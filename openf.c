@@ -83,7 +83,7 @@ int isDeviceName(char *const fnam)
 
   assert(fnam);
 
-  if ((p = strpbrk(fnam, ":\\/")) != NULL /* has a colon or path component */
+  if ((p = strpbrk(fnam, ":\\/")) != 0 /* has a colon or path component */
       && *p == ':'              /* has colon --> no path component */
       && p[1] == '\0'           /* at end of string */
       && p >= fnam + 2)

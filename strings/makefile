@@ -3,6 +3,20 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.6  2001/03/07 19:49:00  skaus
+# Merged in Swap Support changes
+#
+# Revision 1.3.4.3  2001/02/18 17:59:37  skaus
+# bugfix: KSSF: restore parentPSP on exit
+# chg: Using STRINGS resource for all non-interactive messages
+# chg: moving all assembly files to NASM
+#
+# Revision 1.3.4.2  2001/01/28 21:23:55  skaus
+# add: Kernel Swap Support
+#
+# Revision 1.3.4.1  2000/07/19 20:28:30  skaus
+# Experimental Resources, Modules, Context
+#
 # Revision 1.5  2000/08/15 21:31:37  skaus
 # chg: binary packages on FTP\nbugfix: piping
 #
@@ -39,7 +53,7 @@ LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
 LDFLAGS += /m/s/l
 _MODEL !:= c
 ## Disable debugging
-NDEBUG !:= Yes
+#NDEBUG !:= Yes
 
 # Project specific C compiler flags
 MYCFLAGS_DBG = -DDEBUG=1
@@ -55,9 +69,11 @@ OBJ :=
 
 
 #	Default target
-all: strings.h strings.dat 
+all: strings.h strings.dat
+#	strings.err
 	+copy strings.h .. >nul
 	+copy strings.dat .. >nul
+#	+copy strings.err .. >nul
 
 
 .INIT : $(CFG) __errl
@@ -67,19 +83,24 @@ __errl:
 	-ctags *.c
 
 strings.h strings.dat .UPDATEALL : fixstrs.exe default.lng
-	+fixstrs.exe $(LNG)
+	fixstrs.exe $(LNG)
+
+strings.err : critstrs.exe default.err
+	critstrs.exe $(LNG)
 
 fixstrs.exe : fixstrs.c ../strings.typ
+
+critstrs.exe : critstrs.c
 
 #MAKEDEP START
 #MAKEDEP STOP
 
 clobber : clean
-	$(RM) $(RMFLAGS) *.exe *.com ..\strings.h ..\strings.dat
+	$(RM) $(RMFLAGS) *.exe *.com ..\strings.h ..\strings.dat ..\string.err
 
 clean :
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) strings.h strings.dat
-	$(RM) $(RMFLAGS) *.log
+	$(RM) $(RMFLAGS) *.log string.err
 
 
 .IF $(CFG) != $(NULL)

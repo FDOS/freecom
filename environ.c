@@ -59,7 +59,7 @@
  */
 char *getEnv(char var[])
 {
-  static char *lastVal = NULL;
+  static char *lastVal = 0;
 
   assert(var);
 
@@ -70,7 +70,7 @@ char *getEnv(char var[])
      However, the caller will know the correct variable name, if
      you don't. */
   if (env_matchVar(0, var) & 7) /* found? */
-    return NULL;                /* no match found */
+    return 0;                /* no match found */
 
   /* var now contains the correct variable name and we can be
      sure that's there */
@@ -110,7 +110,7 @@ chgEnv(const char name[], const char value[])
 /*  as chgEnv(), but value == "" deletes variable, too */
 chgEnv1(const char name[], const char value[])
 {
-  return chgEnv(name, *value ? value : NULL);
+  return chgEnv(name, *value ? value : 0);
 }
 
 #ifdef INCLUDE_CMD_SET
@@ -133,7 +133,7 @@ int putEnv(char var[])
 
   assert(var);
 
-  if ((sign = strchr(var, '=')) == NULL)
+  if ((sign = strchr(var, '=')) == 0)
     return -1;
 
   *sign = '\0';                 /* delimit varname from varvalue */

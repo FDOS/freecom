@@ -2,11 +2,7 @@ name: EXIT
 de: Termiate shell
 
 SYNOPSIS:
-EBNF: EXIT [ number ]
+EBNF: EXIT
 
-
-STD_OPTIONS:
-
-EXAMPLES:
-EXAMPLE: 1
-
+Terminates the currently running shell, unless it had been started with
+the <OPT>/P</OPT> option.

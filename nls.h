@@ -6,6 +6,14 @@
 	add: nls_makedate / nls_maketime
 
 	$Log$
+	Revision 1.3  2001/03/07 19:49:00  skaus
+	Merged in Swap Support changes
+
+	Revision 1.1.1.1.4.1  2001/02/18 17:59:36  skaus
+	bugfix: KSSF: restore parentPSP on exit
+	chg: Using STRINGS resource for all non-interactive messages
+	chg: moving all assembly files to NASM
+	
 	Revision 1.2  2001/02/14 23:50:05  skaus
 	add: DIR /Y to display 4digit year
 	fix: DIR displays "bytes free" at the very end, but if more than one
@@ -21,7 +29,7 @@
 	chg: made all global functions & variables static to LOADHIGH.C
 	sub: LH.ASM/LOADHIGH.C: duplicate functions (memory API, farmemcmp)
 	fix: doc of DATE, TIME, FreeCOM
-
+	
 */
 
 #ifndef __NLS_H

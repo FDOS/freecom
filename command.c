@@ -186,6 +186,9 @@
  *
  * 2000/12/10 ska
  *	add: Installable COMMAND extensions
+ *
+ * 2001/02/16 ska
+ * add: interactive command flag
  */
 
 #include "config.h"
@@ -213,18 +216,20 @@
 #include "nls.h"
 #endif
 #include "openf.h"
-#include "session.h"
+#include "kswap.h"
+
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 #include "mux_ae.h"
 #endif
 #include "crossjmp.h"
 
 
-#ifdef FEATURE_SWAP_EXEC
-#include "swapexec.h"
-#endif
 extern struct CMD cmds[];       /* The internal command table */
 
+  /* Shall the message block remain in memory when an external
+    program is executed */
+int persistentMSGs = 0;
+int interactive_command = 0;	/* command directly entered by user */
 int exitflag = 0;               /* indicates EXIT was typed */
 int canexit = 0;                /* indicates if this shell is exitable
 									enable within initialize() */
@@ -233,8 +238,19 @@ int errorlevel = 0;             /* Errorlevel of last launched external prog */
 int forceLow = 0;               /* load resident copy into low memory */
 int oldinfd = -1;       /* original file descriptor #0 (stdin) */
 int oldoutfd = -1;        /* original file descriptor #1 (stdout) */
-
+int autofail = 0;				/* Autofail <-> /F on command line */
 jmp_buf jmp_beginning;
+
+	/* FALSE: no swap this time
+		TRUE: swap this time
+		ERROR: no swap avilable at all
+	*/
+int swapOnExec = FALSE;
+	/* if != 0, pointer to static context
+		NOT allowed to alter if swapOnExec == ERROR !!
+	*/
+kswap_p kswapContext = 0;
+
 
 void fatal_error(char *s)
 {
@@ -265,6 +281,17 @@ static int is_delim(int c)
   return c <= ' ' || c == 0x7f || strchr(".\"/\\[]:|<>+=;,", c);
 #endif
 }
+
+void perform_exec_result(int result)
+{
+	dprintf(("result of (do_)exec(): %d\n", result));
+	if (result == -1)
+		perror("executing spawnl function");
+	else
+		errorlevel = result;
+
+}
+
 
 static void execute(char *first, char *rest)
 {
@@ -299,9 +326,6 @@ static void execute(char *first, char *rest)
   errno = 0;
   fullname = find_which(first);
   dprintf(("[find_which(%s) returned %s]\n", first, fullname));
-#ifdef DEBUG
-  if(fddebug) perror("find_which()");
-#endif
 
   if (!fullname)
   {
@@ -330,28 +354,33 @@ static void execute(char *first, char *rest)
 		return;
 	}
 
-    if(!saveSession()) {
-      error_save_session();
-      exit_all_batch();
-      return;   /* Don't invoke the program in this case */
-    }
+/* Prepare to call an external program */
 
-#ifdef FEATURE_SWAP_EXEC
-    result = do_exec(fullname, rest, USE_ALL, 0xFFFF, environ);
-#else
-    result = exec(fullname, rest, 0);
+	/* Unload the message block if not loaded persistently */
+	if(!persistentMSGs)
+		unloadMsgs();
+
+/* Execute the external program */
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+    if(swapOnExec == TRUE
+	 && kswapMkStruc(fullname, rest)) {
+	 	/* The Criter and ^Break handlers has been installed within
+	 		the PSP in kswapRegister() --> nothing to do here */
+	 	dprintf(("[EXEC: exiting to kernel swap support]\n"));
+	 	exit(123);		/* Let the kernel swap support do the rest */
+	}
+#ifdef DEBUG
+	if(swapOnExec == TRUE)
+		dprintf(("KSWAP: failed to save context, proceed without swapping\n"));
 #endif
-  dprintf(("result of (do_)exec(): %d\n", result));
-    if (result == -1)
-      perror("executing spawnl function");
-    else
-      errorlevel = result;
-  }
+#endif
+		/* Install the dummy (always abort) handler */
+	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
+    result = exec(fullname, rest, 0);
+	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
 
-    if(!restoreSession()) {
-      error_restore_session();
-      exit_all_batch();
-    }
+    perform_exec_result(result);
+  }
 }
 
 static void docommand(char *line)
@@ -451,7 +480,7 @@ static void docommand(char *line)
         }
 
         /* else syntax error */
-        error_syntax(NULL);
+        error_syntax(0);
         return;
       }
 
@@ -504,10 +533,10 @@ static void docommand(char *line)
  */
 void parsecommandline(char *s)
 {
-  char *in = NULL;
-  char *out = NULL;
-  char *fname0 = NULL;
-  char *fname1 = NULL;
+  char *in = 0;
+  char *out = 0;
+  char *fname0 = 0;
+  char *fname1 = 0;
   char *nextcmd;
 
   int of_attrib = O_CREAT | O_TRUNC | O_TEXT | O_WRONLY;
@@ -564,7 +593,7 @@ void parsecommandline(char *s)
   while (num-- > 1)
   {
     close(1);                   /* Close current output file */
-    if ((fname0 = tmpfn()) == NULL)
+    if ((fname0 = tmpfn()) == 0)
       goto abort;
     open(fname0, O_CREAT | O_TRUNC | O_TEXT | O_WRONLY, S_IREAD | S_IWRITE);
 
@@ -577,7 +606,7 @@ void parsecommandline(char *s)
     close(0);
     killtmpfn(fname1);          /* fname1 can by NULL */
     fname1 = fname0;
-    fname0 = NULL;
+    fname0 = 0;
     open(fname1, O_TEXT | O_RDONLY, S_IREAD);
 
     s = nextcmd;
@@ -662,18 +691,19 @@ int process_input(int xflag, char *commandline)
 
   do
   {
+  	interactive_command = 0;		/* not directly entered by user */
   	echothisline = tracethisline = 0;
     if(commandline) {
       ip = commandline;
-      readline = commandline = NULL;
+      readline = commandline = 0;
     } else {
-    if ((readline = malloc(MAX_INTERNAL_COMMAND_SIZE + 1)) == NULL)
+    if ((readline = malloc(MAX_INTERNAL_COMMAND_SIZE + 1)) == 0)
     {
       error_out_of_memory();
       return 1;
     }
 
-      if (NULL == (ip = readbatchline(&echothisline, readline,
+      if (0 == (ip = readbatchline(&echothisline, readline,
                       MAX_INTERNAL_COMMAND_SIZE)))
       { /* if no batch input then... */
       if (xflag   /* must not go interactive */
@@ -685,6 +715,7 @@ int process_input(int xflag, char *commandline)
       }
 
       /* Go Interactive */
+		interactive_command = 1;		/* directly entered by user */
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
       tracemode = 0;          /* reset trace mode */
       }
@@ -731,7 +762,7 @@ int process_input(int xflag, char *commandline)
       /* Assume that at least one character is added, place the
         test here to simplify the switch() statement */
       if(cp >= parsedMax(1)) {
-        cp = NULL;    /* error condition */
+        cp = 0;    /* error condition */
         break;
       }
       if (*ip == '%')
@@ -756,10 +787,10 @@ int process_input(int xflag, char *commandline)
           case '7':
           case '8':
           case '9':
-            if (NULL != (tp = find_arg(*ip - '0')))
+            if (0 != (tp = find_arg(*ip - '0')))
             {
               if(cp >= parsedMax(strlen(tp))) {
-                cp = NULL;
+                cp = 0;
                 goto intBufOver;
               }
               cp = stpcpy(cp, tp);
@@ -783,13 +814,13 @@ int process_input(int xflag, char *commandline)
               *cp++ = '%';			/* let the var be copied in next cycle */
               break;
             }
-            if ((tp = strchr(ip, '%')) != NULL)
+            if ((tp = strchr(ip, '%')) != 0)
             {
               *tp = '\0';
 
-              if ((evar = getEnv(ip)) != NULL) {
+              if ((evar = getEnv(ip)) != 0) {
                 if(cp >= parsedMax(strlen(evar))) {
-                  cp = NULL;
+                  cp = 0;
                   goto intBufOver;
                 }
                 cp = stpcpy(cp, evar);
@@ -879,10 +910,14 @@ int main(void)
    */
 
   if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
-    process_input(0, NULL);
+    process_input(0, 0);
 
   if(!canexit)
     hangForever();
+
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+	kswapDeRegister(kswapContext);
+#endif
 
   return 0;
 }

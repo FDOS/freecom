@@ -109,7 +109,7 @@ int cmd_if(char *rest)
     pp = ltrim(skipqword(rest, "=="));
 
   if(*pp != '=' || pp[1] != '=') {
-    error_syntax(NULL);
+    error_syntax(0);
     return 0;
   }
 
@@ -117,7 +117,7 @@ int cmd_if(char *rest)
 
       /* skip over the '==' and subsquent spaces and
         assign the end of the right operator to pp */
-    pp = skipqword(r = ltrim(pp + 2), NULL);
+    pp = skipqword(r = ltrim(pp + 2), 0);
 
     /* now: rest := beginning of the left operand
         r := beginning of the right operand
