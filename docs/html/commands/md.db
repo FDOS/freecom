@@ -1,6 +1,6 @@
 name: MD
 de: make directory
-see: MKDIR RMDIR CHDIR
+see: MKDIR RD CD
 req: CMD_MKDIR
 
 SYNOPSIS:

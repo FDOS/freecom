@@ -1,7 +1,7 @@
 name: RD
 de: Remove directory
-see: MD CD
-req: CMD_RKDIR
+see: MD CD RMDIR
+req: CMD_RMDIR
 
 SYNOPSIS:
 EBNF: RD path

@@ -35,7 +35,7 @@ STD_OPTIONS:
 	after the last character has been written.
 	</UL>
 	By default, files are copied in binary mode, whereas devices, e.g.
-	<CMD>CON:<CMD>, are copied in ASCII mode, but no end-of-file is appended.
+	<CMD>CON:</CMD>, are copied in ASCII mode, but no end-of-file is appended.
 </UL>
 
 ARGUMENTS:
@@ -44,7 +44,7 @@ ARGUMENTS:
 	<BR>If more than one source file is specified, the target must be
 	a directory.
 
-<LI><ARG>target</ARG>: The target of the <CMD>COPY<CMD> process.
+<LI><ARG>target</ARG>: The target of the COPY process.
 	<BR>If target is a directory, the destination file is placed into this
 	directory, but with the same filename as the source file.
 	<BR>If exactly one source is specified, but no target, target defaults

@@ -13,7 +13,7 @@ working directory is displayed. The actual information displayed
 depends on the specified options and is explained below.
 <P>A <ARG>pattern</ARG> may contain <A HREF="!:wildcards">wildcards</A>,
 which are expanded against both files and directories. To specify a
-directory is essentially equal to write: <CMD>directory\*.*<CMD>.
+directory is essentially equal to write: <CMD>directory\*.*</CMD>.
 <P>Unlike options patterns are performed in sequence, that means that
 if two patterns are specified, first all entries matching the first one,
 then all entries matching the second one are displayed;

@@ -1,6 +1,6 @@
 name: CDD
 de: Changes the current working directory
-see: CD CHDIR MKDIR RMDIR DIR RD MD PUSHD
+see: CD DIR RD MD PUSHD
 req: CMD_CDD
 
 SYNOPSIS:

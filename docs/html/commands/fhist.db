@@ -30,6 +30,6 @@ if any.
 OPTIONS:
 Compile-time options:
 <UL>
-<LI><TT>HISTORY_DEFAULT_SIZE<TT>: The amount of bytes reserved initially.
+<LI><TT>HISTORY_DEFAULT_SIZE</TT>: The amount of bytes reserved initially.
 Default: 256
 </UL>

@@ -1,6 +1,6 @@
 name: CD
 de: Change current directory of a drive
-see: MKDIR, RMDIR, DIR, CDD, PUSHD, DIRS MD RD CHDIR
+see: DIR, CDD, PUSHD, DIRS MD RD CHDIR
 req: CMD_CHDIR
 opt: FEATURE_LAST_DIR
 

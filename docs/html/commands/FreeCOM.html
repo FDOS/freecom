@@ -44,17 +44,16 @@ FreeCOM is a:
 <A HREF="http://www.freedos.org">FreeDOS</A>, a project that aims to implement
 a GNU GPL'ed DOS.
 
-<P>The main duty of FreeCOM is to prompt the user <A HREF="!!:userprompt">to enter
-commands</A>, which
-are interpreted, processed directly by FreeCOM or executed as executable
-files.
+<P>The main duty of FreeCOM is to prompt the user
+<A HREF="!!:userprompt">to enter commands</A>, which are interpreted,
+processed directly by FreeCOM or executed as executable files.
 
 <P>Those commands processed by FreeCOM directly are called
 <A HREF="!!:icmds"><EM>Internal Commands</EM></A>.
 
 <P>Non-internal commands, which cannot be processed by FreeCOM directly,
-are called <EM>External Commands</EM>,
-because FreeCOM will search for files equally named as typed-in.
+are called <EM>External Commands</EM>, because FreeCOM will search for
+files equally named as typed-in.
 
 <P>Besides to implement certain commands FreeCOM offers some
 <A HREF="!!:features">features</A>.
@@ -64,20 +63,21 @@ because FreeCOM will search for files equally named as typed-in.
 
 EBNF: COMMAND.COM [ path [ console ] ] [{ option }] [ '/' ( K | C ) <<commandline>> ]
 
-<P>If present, the first non-option argument specifies the location in which
-FreeCOM resides. This location is later stored in the environment variable
-COMSPEC. Since DOS3+ this option is no longer necessary to find the shell
-invoked during the boot process, but it may be used to let the system boot
-a primary shell from one location, but use a shell of the same version from
-a different location later on.
-<BR>One shallt not point to a RAMdisk at this time, because FreeCOM needs to reload
-certain information relatively early during execution, before AUTOEXEC.BAT had
-been executed, in which, normally, FreeCOM is copied into the RAMdisk.
-<BR>For convinience FreeCOM checks, if at the given location a FreeCOM exists
-<STRONG>and</STRONG> is accessable, if not, the given location is ignored.
-Also, the standard requires to specify a path only, but FreeCOM accepts
-an absolute filename, so accepting that FreeCOM is not necessarily named
-<TT>COMMAND.COM</TT>.
+<P>If present, the first non-option argument specifies the location in
+which FreeCOM resides. This location is later stored in the environment
+variable COMSPEC. Since DOS3+ this option is no longer necessary to find
+the shell invoked during the boot process, but it may be used to let the
+system boot a primary shell from one location, but use a shell of the
+same version from a different location later on.
+<BR>One shallt not point to a RAMdisk at this time, because FreeCOM
+needs to reload certain information relatively early during execution,
+before AUTOEXEC.BAT had been executed, in which, normally, FreeCOM is
+copied into the RAMdisk.
+<BR>For convinience FreeCOM checks, if at the given location a FreeCOM
+exists <STRONG>and</STRONG> is accessable, if not, the given location is
+ignored. Also, the standard requires to specify a path only, but
+FreeCOM accepts an absolute filename, so accepting that FreeCOM is not
+necessarily named <TT>COMMAND.COM</TT>.
 
 <P>The second non-option argument, if present, specifies the console FreeCOM
 shall enable. This setting is system-wide and is not limited to FreeCOM or
@@ -90,12 +90,12 @@ to the CTTY command.
 <LI><OPT>/!</OPT>: Enable/disable debugging support, if compiled to FreeCOM.
 <LI><OPT>/Y</OPT>: Enables trace/single step mode. This mode is deaktivated
 when the user prompt has been reached.
-<LI><OPT>/D</OPT>: Disables to parse AUTOEXEC.BAT, even if the <OPT>/P</OPT> option
-	is present. This switch is usually set by the kernel, when F% had been pressed
-	during bootup.
-<LI><OPT>/F</OPT>: Enables autofail of Critical Errors; then instead of displaying
-the Abort/Retry/Ignore/Fail dialog, Critical Errors are automatically answered
-with Fail.
+<LI><OPT>/D</OPT>: Disables to parse AUTOEXEC.BAT, even if the
+<OPT>/P</OPT> option is present. This switch is usually set by the
+kernel, when F% had been pressed during bootup.
+<LI><OPT>/F</OPT>: Enables autofail of Critical Errors; then instead of
+displaying the Abort/Retry/Ignore/Fail dialog, Critical Errors are
+automatically answered with Fail.
 <LI><OPT>/P</OPT>: Installs a primary copy of FreeCOM. Such instance:
 	<OL>
 	<LI>cannot be terminated with the EXIT command.
@@ -470,7 +470,12 @@ FreeCOM can be downloaded from SourceForge in several ways and packages:
 
 <H3><A NAME="-download-ftp">Resources accessable via anonymous FTP</A></H2>
 
-SourceForge closed the FTP - Services. Please use the HTTP services below.
+SourceForge closed the FTP - Services, therefore an alternate
+location had been created at:
+<A HREF="ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/FreeCOM">
+ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/FreeCOM</A>.
+It contains the very same packages available at the HTTP location
+below.
 
 <H3><A NAME="-download-http">Resources accessable via HTTP</A></H2>
 
@@ -523,27 +528,33 @@ Unlike the FTP space, old versions are kept, but no Beta versions or side branch
 <H2><A NAME="-cvs-tags">CVS Resources</A></H2>
 
 On <A HREF="http://sourceforge.net/project/?group_id=5109">SourceForge</A>
-a short description of how to access the CVS repository is located. Following those
-instructions will download the main trunk of the specified module of the repository,
+a short description of how to access the CVS repository is located.
+Following those instructions will download the main trunk of the
+specified module of the repository,
 e.g.: <PRE>cvs -z6 co freecom</PRE> downloads the <TT>MAIN</TT> trunk, also
 called <TT>HEAD</TT>, of FreeCOM.
 
-<P>Alternatively the WebCVS -- follow the <TT>Browse CVS</TT> link there --
-might be helpful in order to download a handful of files.
+<P>Alternatively the WebCVS -- follow the <TT>Browse CVS</TT> link there
+-- might be helpful in order to download a handful of files.
 
-<P>However, CVS allows to branch the development of a module at some point from the
-main trunk into side trees. On these branches the module can be developed further,
-new features can be added etc., without disturbing the main trunk (and therefore the
-primary release) of the module. When the side development proved its worthiness, the
-changes are merged into the main trunk and, hence, becomes part of the primary release.
+<P>However, CVS allows to branch the development of a module at some
+point from the main trunk into side trees. On these branches the module
+can be developed further, new features can be added etc., without
+disturbing the main trunk (and therefore the primary release) of the
+module. When the side development proved its worthiness, the changes are
+merged into the main trunk and, hence, becomes part of the primary
+release.
 
-<P>Branches are marked by tags, though, unlike normal tags branch tags automatically
-evolve with the file, what means that when a file from a specific branch is updated,
-the branch tag automatically move from the current version of the file to the new one.
-<BR>To check out a branch, create a new directory, change within it and execute:
-<PRE>cvs -z6 co -r tag freecom</PRE>, where <TT>tag</TT> is the name of the branch you
-want to download. <EM>Note</EM>: It is not advisable to use the same directory to
-manage files for two different branches.
+<P>Branches are marked by tags, though, unlike normal tags branch tags
+automatically evolve with the file, what means that when a file from a
+specific branch is updated, the branch tag automatically move from the
+current version of the file to the new one.
+<BR>To check out a branch, create a new directory, change within it and
+execute:
+<PRE>cvs -z6 co -r tag freecom</PRE>,
+where <TT>tag</TT> is the name of the branch you want to download.
+<EM>Note</EM>: It is not advisable to use the same directory to manage
+files for two different branches.
 
 <P>The FreeCOM module has the following <EM>active</EM> branches:
 <CENTER><TABLE BORDER WIDTH=100%>
@@ -596,7 +607,7 @@ Depending on different meanings characters are set into various shapes:
 		EBNF: &quot;operators&quot;
 	<TD><B>|</B>
 <TR>
-	<TD ALIGN=CENTER><I>italian</I>
+	<TD ALIGN=CENTER><I>italic</I>
 	<TD>placeholders for arguments, which are explained in the description;
 		EBNF: &quot;non-terminal symbols&quot;
 	<TD><I>varname</I>
@@ -659,14 +670,16 @@ The EBNF  uses the following operators:
 
 </TABLE>
 
-<P>Unless modified by above mentioned operators a sequence of tokens specifies
-that each token must be present exactly one time in exactly that order.<BR>
-Note: For the sake of clearness, spaces are inserted between tokens. These
-spaces do <STRONG>not</STRONG> mean that a space is allowed at this place!
-Also, the fact that no <B>_</B> is present does <STRONG>not</STRONG> mean that
-at this place is none allowed. It is assumed that the reader will find
-the places where optional spaces are valid either by "doing" or by reading the
+<P>Unless modified by above mentioned operators a sequence of tokens
+specifies that each token must be present exactly one time in exactly
+that order.<BR> Note: For the sake of clearness, spaces are inserted
+between tokens. These spaces do <STRONG>not</STRONG> mean that a space
+is allowed at this place!  Also, the fact that no <B>_</B> is present
+does <STRONG>not</STRONG> mean that at this place is none allowed. It is
+assumed that the reader will find the places where optional spaces are
+valid either by "doing" or by reading the
 examples.
+
 <HR>
 
 
