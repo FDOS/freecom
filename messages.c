@@ -227,13 +227,13 @@ unsigned msgSegment(void)              /* load messages into memory */
 								be displayed */
 			case STRINGS_OUT_OF_MEMORY:
 				assert(msgSegm == 0);
-				dbg_outsn("[Out of memory loading STRINGS.]");
+				puts("[Out of memory loading STRINGS.]");
 				break;
 			default:	
 				assert(msgSegm == 0);
 				if(!displayed) {
 					displayed = 1;
-					dbg_outsn("\n\a[Could not load STRINGS resource.]");
+					puts("\n\a[Could not load STRINGS resource.]");
 				}
 				break;
 #endif
