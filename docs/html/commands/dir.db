@@ -23,6 +23,27 @@ STD_OPTIONS:
 <UL>
 <LI><OPT>/A</OPT>: (All) Wildcards are matched against System and Hidden
 files, too.
+<LI><OPT>/A**</OPT>: (Attribute) Wildcards are matched against files
+with selected attributes set, clear or not interesting. The argument
+of the <OPT>/A</OPT> option is a sequence of:
+	<UL>
+	<LI><OPT>+?</OPT> meaning: attribute <OPT>?</OPT> may be set or clear,
+	<LI><OPT>?</OPT> meaning: attribute <OPT>?</OPT> must be set, or
+	<LI><OPT>-?</OPT> meaning: attribute <OPT>?</OPT> must not be set.
+	</UL>
+	The <OPT>+?</OPT> is an extension of the standard syntax.
+	<P>The following attributes, the <OPT>?</OPT> above, are supported:
+	<UL>
+	<LI><OPT>R</OPT> for: read-only,
+	<LI><OPT>H</OPT> for: hidden,
+	<LI><OPT>S</OPT> for: system,
+	<LI><OPT>D</OPT> for: directory, and
+	<LI><OPT>A</OPT> for: archive.
+	</UL>
+	<P>If the same attribute is specified twice within the same
+	<OPT>/A</OPT> option, the first superceeds the later ones; if
+	more than one <OPT>/A</OPT> options are specified, the last one
+	superceeds all previous ones.
 <LI><OPT>/B</OPT>: (Bare) Displays the lines with the information of
 files and directories only. The ones displaying the volume label,
 the serial number, totals etc. are suppressed. In combination with
