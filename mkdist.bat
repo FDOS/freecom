@@ -45,23 +45,8 @@ if exist com.exe goto ende
 : echo on %+ setdos /y1
 
 copy cmddebug.new cmddebug.exe
-pushd packages || quit 20
-rm -f *.zip
-for %pk in (*.fil) do (
-	set pkg=%@name[%pk]
-	set zip=%pkg.zip
-	rm -frd 1
-	mkdir 1
-	if not isdir 1 (echo Cannot create temp dir 1 %+ cancel 123)
-	copy /q %pkg.std\*.* 1
-	for %file in (@%pk) (copy /q ..\%file 1 || cancel 120)
-	pushd 1 || cancel 121
-	zip -9 %zip *.* || cancel 122
-	move /q %zip .. || cancel 124
-	popd
-)
-rm -frd 1
-popd
+call mkpkgs.bat
+
 
 dmake clean || quit
 
