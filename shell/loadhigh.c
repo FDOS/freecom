@@ -42,6 +42,7 @@
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
+#include "../include/cswap.h"
 #include "../err_fcts.h"
 #include "../include/misc.h"
 #include "../strings.h"
@@ -166,6 +167,10 @@ static int lh_lf(char *args)
 
   int old_link = dosGetUMBLinkState();
   int old_strat = dosGetAllocStrategy();
+
+#ifdef FEATURE_XMS_SWAP
+	assert(_CS < 0xa000);
+#endif
 
   assert(args);
   assert(umbRegion == 0);

@@ -189,10 +189,30 @@ exec_error:
         mov ds, cx
 		mov [execRetval],ax
 							; we need some memory
+
+		;; First ensure that FreeCOM is reloaded in low memory
+		;; so that LOADHIGH would come into problems
+		mov ax, 5800h		; Get current allocation strategy
+		int 21h
+		mov dx, ax
+
+		mov ax, 5801h		; Set current allocation strategy
+		mov bx, 0			; low memory / first fit
+		int 21h
+		; ignore any errors
+
 		mov ah,48h
 		mov bx,[_SwapTransientSize]
 		int 21h
 
+		pushf
+
+		; Restore Alloc Strat
+		mov ax, 5801h		; Set current allocation strategy
+		mov bx, dx
+		int 21h
+
+		popf
 		jc DOS_trouble_while_swapping_in
 
                                 ; calculate relocation factor
