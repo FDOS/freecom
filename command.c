@@ -281,8 +281,10 @@ static void execute(char *first, char *rest)
   }
 
   /* search through %PATH% for the binary */
+  errno = 0;
   fullname = find_which(first);
   dprintf(("[find_which(%s) returned %s]\n", first, fullname));
+  if(fddebug) perror("find_which()");
 
   if (!fullname)
   {

@@ -39,6 +39,7 @@
  */
 
 #include <dos.h>
+#include <stdio.h>
 
 #define MAX_INTERNAL_COMMAND_SIZE 256
 #define MAX_EXTERNAL_COMMAND_SIZE 128
@@ -205,6 +206,7 @@ char *cwd(int drive);
 int changeDrive(int drive);
 int drvNum(int drive);
 enum OnOff onoffStr(char *line);
+char *textlineEnd(const char * const buf, const size_t buflen);
 
 /* Prototypes for ERROR.C */
 void error_no_pipe(void);

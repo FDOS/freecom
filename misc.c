@@ -308,3 +308,24 @@ enum OnOff onoffStr(char *line)
 return OO_Other;
 }
 
+/*
+ *	Returns the position of the first '\n' or '\0' character;
+ *		or NULL if the line overflows the buffer.
+ *	"overflow" means that no '\n' character was found and the line
+ *	is completely full, so, if the very last line has no newline character,
+ *	it is still considered "not overflowed".
+ */
+char *textlineEnd(const char * const buf, const size_t buflen)
+{	const char *p, *end;
+
+	if(!buf)	return NULL;
+	end = buflen + (p = buf - 1);
+	do { if(++p == end)		/* The very last byte of the buffer is
+								hit ==> there ougth to be a '\0' there
+								==> no '\n' AND no place for further
+								character ==> overflow */
+		return NULL;
+	} while(*p && *p != '\n');
+
+	return (char *)p;
+}

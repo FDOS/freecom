@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.7  2000/09/11 20:34:10  skaus
+# bugfix: "line too long" error if last line of batch files has no newline
+# bugfix: root path not recognized, e.g. in "C:\PATH> \program"
+#
 # Revision 1.6  2000/08/15 21:31:37  skaus
 # chg: binary packages on FTP\nbugfix: piping
 #
@@ -36,9 +40,12 @@
 # Steffen Kaiser patches
 #
 
+.IMPORT : FREEDOS
+.IMPORT .IGNORE : LNG
+
 INCDIR +=;$(FREEDOS)\SRC\INCLUDE
 LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
-LDLIBS = suppl_$(_MODEL).lib
+LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib
 LDFLAGS += /m/s/l
 
 # Project specific C compiler flags
@@ -47,8 +54,6 @@ MYCFLAGS_NDBG =
 MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 
 .SOURCE.lib := $(LIBDIR:s/;/ /:u)
-.IMPORT : FREEDOS
-.IMPORT .IGNORE : LNG
 
 # Sources of this make target
 SRC = alias.c batch.c beep.c break.c call.c cb_catch.asm cls.c cmdinput.c \

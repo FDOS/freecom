@@ -438,10 +438,11 @@ char *readbatchline(int *eflag, char *textline, int size)
     	bc->blinecnt = 0;
     }
 
+    assert(ip != NULL);
     ++bc->blinecnt;
     if (chkCBreak(BREAK_BATCHFILE)      /* User break */
         || fgets(textline, size, bc->bfile) == NULL     /* End of file.... */
-        || (ip = strchr(textline, '\n')) == NULL)       /* line too long */
+        || (ip = textlineEnd(textline, size)) == NULL)  /* line too long */
     {
       if (!ip)
         error_long_batchline(bc->bfnam, bc->blinecnt);

@@ -1,21 +1,2 @@
-bugfix: Piping
-chg: SUPPL as external ZIP at
-	ftp://freedos.sourceforge.net/pub/freedos/suppl.zip
-	to remove large binaries in the project tree
-chg: *.MAK: CONFIG.MAK
-add: _TC_EARLY_ / _TC_LATER_
-add: Spanish Strings
-fix: Makefiles COMMAND.MAK for TC++ v1.01
-fix: environment size between 256..32767
-fix: COPY (to be tested)
-bugfix: DIR /S; output formatting to match MS COMMAND.COM
-chg: PTCHLDRV: gone into TOOLS section
-sub: the *.prj (IDE project) files are no longer maintained
-chg: ECHO, FDDEBUG, BREAK, VERIFY: share ON/OFF recognition code
-chg: shellname & shellver: type change: * --> const[]
-add: DIRS, PUSHD, POPD, CDD, FEATURE_LAST_DIR
-add: MISC.C: changeDrive(), cwd(), drvNum()
-chg: Display text: CMDHELP_CD, ERROR_INVALID_DRIVE
-bugfix: option are peristent for VAR command
-bugfix: "CD C:" must display current working directory of drive C:
-bugfix: unquote(): calculation of portion before left quote
+bugfix: "line too long" error if last line of batch files has no newline
+bugfix: root path not recognized, e.g. in "C:\PATH> \program"
