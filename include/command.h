@@ -41,6 +41,7 @@ enum InternalErrorCodes {
 	E_Syntax,
 	E_Range,				/* Numbers out of range */
 	E_NoItems,
+	E_Help,		/* Help screen */
 	E_User		/* MUST be the last one */
 };
 

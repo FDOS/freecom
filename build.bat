@@ -2,8 +2,12 @@
 
 set SWAP=YES-DXMS-SWAP____________________
 if NOT "%SWAP%"=="YES-DXMS-SWAP____________________" goto err1
+: BEGIN Internal stuff for ska -- If one of these three commands
+:       fail for you, your distribution is broken! Please report.
 for %%a in (lib\lib.mak cmd\cmd.mak shell\command.mak) do if not exist %%a set SWAP=NO
-if "%SWAP"=="NO" call dmake dist
+if "%SWAP%"=="NO" set XMS_SWAP=
+if "%SWAP%"=="NO" call dmake dist
+: END
 set SWAP=
 
 if exist lastmake.mk call clean.bat

@@ -1,3 +1,15 @@
+v0.83 Beta 50:
+bugfix: /?: found on all the command line
+fix: %0 to return batchfilename as typed on cmd line (bug: maybe upcased)
+chg: enumResources(): handle fnam == 0 (file open error)
+bugfix: FreeCOM should accept relative path as argv[0]
+bugfix: FreeCOM is to pass the fully-qualified path to DOS-4B-00
+bugfix: use %1 (and assoc) in FOR commands (activeBatchContext())
+add: auto-vars ERRORLEVEL and _CWD (current working directory)
+bugfix: removed %? because of incompatibly with existing scripts
+bugfix: none-working LOADFIX {Tom Ehlert}
+bugfix: XMS-Swap/LOADHIGH: crashes {Tom Ehlert}
+
 v0.83 Beta 48:
 bugfix: XMS-Swap/LOADHIGH: wrongly calculated UMBs if loaded into UMB {Tom Ehlert}
 fix: expand environment variables within FOR ()'s (utter hack, to be replaced)
