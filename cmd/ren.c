@@ -95,6 +95,7 @@ int cmd_rename(char *param)
 				ec = E_Other;
 				break;
 			}
+			free(newname); newname = 0;
 		} while(FINDNEXT(&ff) == 0);
 
 	errRet:
