@@ -59,7 +59,6 @@ static struct CopySource {
 
 static int appendToFile; /* Append the next file rather than new source */
 static char *destFile;     /* destination file/directory/pattern */
-// static int destIsDir;      /* destination is directory */
 
 static int optY, optV, optA, optB;
 
@@ -317,25 +316,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 }
 
 static int copyFiles(struct CopySource *h)
-{ //char *fnam, *ext, *dst;
-  int differ, rc;
-
-#if 0
-  if(destIsDir) {
-    if(!dfnsplit(h->fnam, 0, 0, &fnam, &ext)) {
-      error_out_of_memory();
-      return 0;
-    }
-    dst = dfnmerge(0, 0, destFile, fnam, ext);
-    free(fnam);
-    free(ext);
-    if(!dst) {
-      error_out_of_memory();
-      return 0;
-    }
-  } else
-    dst = destFile;
-#endif
+{ int differ, rc;
 
   rc = 0;
 
@@ -350,10 +331,6 @@ static int copyFiles(struct CopySource *h)
     error_selfcopy(dst);
 #undef dst
 
-#if 0
-  if(destIsDir)
-    free(dst);
-#endif
   return rc;
 }
 
@@ -419,7 +396,6 @@ static int addSource(char *p)
 int cmd_copy(char *rest)
 { char **argv, *p;
   int argc, opts, argi;
-//  int freeDestFile = 0;
   struct CopySource *h;
   char **argBuffer = 0;
 
@@ -514,7 +490,6 @@ int cmd_copy(char *rest)
 			argBuffer = buf;
 			buf[argc] = p->fnam = q;
 			buf[++argc] = 0;
-//			p->flags |= IS_DIRECTORY;
   		} else if(*s == ':') {		/* Device name?? */
   			if(!isDeviceName(p->fnam)) {
 				error_invalid_parameter(p->fnam);
@@ -538,30 +513,8 @@ int cmd_copy(char *rest)
 		}
 		free(last);
 		(last = h)->nxt = 0;
-#if 0
-  /* Now test if a destination was specified */
-  if(head != last && !last->app) {  /* Yeah */
-    destFile = dfnexpand(last->fnam, 0);
-    if(!destFile) {
-      error_out_of_memory();
-      goto errRet;
-    }
-    freeDestFile = 1;
-    h = head;         /* remove it from argument list */
-    while(h->nxt != last) {
-      assert(h->nxt);
-      h = h->nxt;
-    }
-    free(last);
-    (last = h)->nxt = 0;
-    p = strchr(destFile, '\0') - 1;
-    if(*p == '\\' || *p == '/')		/* must be a directory */
-    	destIsDir = 1;
-    else destIsDir = dfnstat(destFile) & DFN_DIRECTORY;
-#endif
   } else {              /* Nay */
     destFile = ".\\*.*";
-//    destIsDir = 1;
   }
 
   /* Now copy the files */
@@ -569,10 +522,6 @@ int cmd_copy(char *rest)
   while(copyFiles(h) && (h = h->nxt) != 0);
 
 errRet1:
-#if 0
-  if(freeDestFile)
-    free(destFile);
-#endif
 errRet:
   killContext();
   freep(argv);
