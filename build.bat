@@ -1,10 +1,16 @@
 @echo off
+
+set SWAP=YES-DXMS-SWAP____________________
+if NOT "%SWAP%"=="YES-DXMS-SWAP____________________" goto err1
+for %%a in (lib\lib.mak cmd\cmd.mak shell\command.mak) do if not exist %%a set SWAP=NO
+if "%SWAP"=="NO" call dmake dist
+set SWAP=
+
 if exist lastmake.mk call clean.bat
 if "%1"=="-r" call clean.bat
 if "%1"=="-r" shift
 if "%1"=="clean" clean.bat
 if "%1"=="clean" goto ende
-set SWAP=
 if "%1"=="xms-swap" set SWAP=-DXMS_SWAP
 if "%1"=="xms-swap" shift
 if not "%1"=="-h" goto run
@@ -96,8 +102,15 @@ tools\ptchsize.exe command.com +6KB
 echo.
 echo All done. COMMAND.COM is ready for useage!
 echo.
-if "%SWAP%"=="" echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
-if "%SWAP%"=="" echo %0 -r xms-swap
+if NOT "%SWAP%"=="" goto ende
+
+echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
+echo %0 -r xms-swap
+goto ende
+
+:err1
+echo Environment full (cannot add environment variables)
+echo Cannot proceed
 
 :ende
 set SWAP=
