@@ -1,3 +1,4 @@
+add: DIR: /O: multiple /O** conditions {Tom Ehlert}
 bugfix: COPY: process directories as if "*.*" is appended
 bugfix: split(): out-of-mem condition during building argument array
 

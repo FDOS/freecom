@@ -187,14 +187,18 @@
 #define ATTR_ALL FA_RDONLY | FA_ARCH | FA_DIREC | FA_HIDDEN | FA_SYSTEM;
 
 /* Definitions for optO */
-#define ORDER_BY_SIZE 1
-#define ORDER_BY_DATE 2
-#define ORDER_BY_NAME 4
-#define ORDER_BY_EXT  8
-#define ORDER_INVERSE 0x10
+#define ORDER_BY_SIZE 2
+#define ORDER_BY_DATE 4
+#define ORDER_BY_NAME 8
+#define ORDER_BY_EXT  0x10
+#define ORDER_INVERSE 0x01
 #define ORDER_DIRS_FIRST 0x20
 #define ORDER_DIRS_LAST 0x40
-#define ORDER_BY_MASK 0xF
+#define ORDER_BY_MASK 0x1e    
+
+unsigned char optOdir = 0;
+char optOorderby[5];
+
 
 struct currDir {
 	unsigned linecount; /* for /B */
@@ -257,37 +261,59 @@ done:
 
 	return E_None;
 }
+    
 
+    
+    
 static scanOrder(const char *p)
 {
 	int dir = ORDER_DIRS_FIRST;
-	optO = ORDER_BY_NAME;
+
+
+restart:	
+	memset(optOorderby,0,sizeof(optOorderby));
+	optOdir = 0;
 
 	if(p && *p) {
 		dir = 0;
-		for(--p;;) {
-			int inverse = *p == '-';
-			switch(toupper(*++p)) {
+		for(;;p++) {
+			int inverse = p[-1] == '-';
+			int option;
+			int i,j;
+			
+			switch(toupper(*p)) {
 			case '-': continue;
-			case 'S': optO = ORDER_BY_SIZE; break;
-			case 'D': optO = ORDER_BY_DATE; break;
-			case 'N': optO = ORDER_BY_NAME; break;
-			case 'E': optO = ORDER_BY_EXT; break;
-			case 'G': dir = inverse? ORDER_DIRS_LAST: ORDER_DIRS_FIRST;
+			case 'S': option = ORDER_BY_SIZE; break;
+			case 'D': option = ORDER_BY_DATE; break;
+			case 'N': option = ORDER_BY_NAME; break;
+			case 'E': option = ORDER_BY_EXT; break;
+			case 'G': optOdir = inverse? ORDER_DIRS_LAST: ORDER_DIRS_FIRST;
 						continue;
-			case 'U': optO = dir = 0; continue;
+			case 'U': goto restart;
 			case '\0': goto done;
 			default:	/* error */
 				error_illformed_option(p);
 				return E_Useage;
 			}
-			if(inverse)
-				optO |= ORDER_INVERSE;
+			
+			for (i = 0; i < sizeof(optOorderby); )
+				{
+				if (optOorderby[i] == 0)
+					break;
+				if ((optOorderby[i] & ORDER_BY_MASK) == option)
+					{
+					memcpy(optOorderby+i, optOorderby+i+1,(sizeof(optOorderby)-1-i)*sizeof(optOorderby[0]));
+					}        
+				else
+					i++;
+				}		
+			optOorderby[i] = option | inverse;		
+
 		}
 done:;
 	}
 
-	optO |= dir;
+	optO = optOorderby[0];
 	return E_None;
 }
 
@@ -626,49 +652,61 @@ int _Cdecl orderFunction(const void *p1, const void *p2)
   int i1 = *(int*)p1;
   int i2 = *(int*)p2;
   int rv = 0;
+  int i;
 
   struct ffblk f1, f2;
 
   _fmemcpy(&f1, orderArray + i1 , sizeof(f1));
   _fmemcpy(&f2, orderArray + i2 , sizeof(f2));
   
-  if((optO & (ORDER_DIRS_FIRST | ORDER_DIRS_LAST))
+  if((optOdir & (ORDER_DIRS_FIRST | ORDER_DIRS_LAST))
    && (f1.ff_attrib & FA_DIREC) != (f2.ff_attrib & FA_DIREC))
-  	return (optO & ORDER_DIRS_FIRST ? f1.ff_attrib: f2.ff_attrib)
-  	         & FA_DIREC ? -1 : 1;
+  	return (optOdir & ORDER_DIRS_FIRST ? f1.ff_attrib: f2.ff_attrib)
+  	         & FA_DIREC ? -1 : 1;  
+  	         
   
-  switch(optO & ORDER_BY_MASK) {
-  case ORDER_BY_SIZE:
-	if(f1.ff_fsize > f2.ff_fsize) rv = 1;
-	else if(f1.ff_fsize < f2.ff_fsize) rv = -1;
-	break;
+  for (i = 0; rv == 0 && i < sizeof(optOorderby); i++)
+  	{
+  	int opt = optOorderby[i];
+  	
+	switch(opt & ORDER_BY_MASK) {
+	
+	  case 0:
+	  	break;
+	
+	  case ORDER_BY_SIZE:
+		if(f1.ff_fsize > f2.ff_fsize) rv = 1;
+		else if(f1.ff_fsize < f2.ff_fsize) rv = -1;
+		break;
+	
+	  case ORDER_BY_DATE:
+	    rv = f1.ff_fdate - f2.ff_fdate;
+	    if(!rv)
+	    	 rv = f1.ff_ftime - f2.ff_ftime;
+		break;
+	
+	  case ORDER_BY_EXT:
+		{ char *x1 = strchr(f1.ff_name, '.');
+		char *x2 = strchr(f2.ff_name, '.');
+		
+		
+		if(!x1 && !x2)	/* both are equal */
+			return 0;
+		
+		if (x1 && x2) rv = strcmp(x1, x2);
+		else if (!x1 && x2) rv = -1;
+		else rv = 1;			/* x1 && !x2 */
+	    }
+	    break;
+		
+	  case ORDER_BY_NAME:
+		rv = strcmp(f1.ff_name,f2.ff_name);
+		break;
+	  }
+	  if (opt & ORDER_INVERSE) rv = - rv;
+	}  
 
-  case ORDER_BY_DATE:
-    rv = f1.ff_fdate - f2.ff_fdate;
-    if(!rv)
-    	 rv = f1.ff_ftime - f2.ff_ftime;
-	break;
-
-  case ORDER_BY_EXT:
-	{ char *x1 = strchr(f1.ff_name, '.');
-	char *x2 = strchr(f2.ff_name, '.');
-	
-	
-	if(!x1 && !x2)	/* both are equal */
-		return 0;
-	
-	if (x1 && x2) rv = strcmp(x1, x2);
-	else if (!x1 && x2) rv = -1;
-	else rv = 1;			/* x1 && !x2 */
-    }
-    break;
-	
-  case ORDER_BY_NAME:
-	rv = strcmp(f1.ff_name,f2.ff_name);
-	break;
-  }
-
-  return optO & ORDER_INVERSE? -rv: rv;
+  return rv;
 }    	
 
 
