@@ -91,6 +91,7 @@ typedef enum STATE {
 
 #define VERSION_MISMATCH 128
 #define VALIDATION_MISMATCH 64
+#define PERFORM_VALIDATION 32
 
 const char id[]="FreeDOS STRINGS v";
 	/* all prompts within *.LNG files start with */
@@ -127,8 +128,11 @@ FILE *log = 0;
 int in_file = 0;
 string_index_t string[MAXSTRINGS];
 struct {
-	int file;				/* bitfield: #0 -> DEFAULT, #1 -> special LNG file
-								meaning: present in particular file */
+	int flags;				/* bitfield: #0 -> DEFAULT, #1 -> special LNG file
+								meaning: present in particular file
+								#5: perform printf() validation
+								#6: printf() validation failed
+								#7: Version mismatch */
 	char *name;				/* name of string */
 	char *text;				/* text of this string */
 	int version;
@@ -240,7 +244,7 @@ int appMem_(dynstring *vs, char *s, int length)
 		char *p;
 
 		p = vs->text + vs->length;
-		memcpy(p, s, length);
+		if(length) memcpy(p, s, length);
 		p[length] = 0;
 		vs->length += length;
 		return 1;
@@ -400,6 +404,8 @@ printf("FIXSTRS: loading file %s\n", fnam);
 				}
 				vstring.length = text.length = 0;
 				version = (vers && *++vers)? atoi(vers): 0;
+				if(strchr(vers, '%'))
+					strg[cnt].flags |= PERFORM_VALIDATION;
 				if(memcmp(strg[cnt].name, promptID, promptIDlen) == 0)
 					state = GETTING_PROMPT_LINE_1;
 				else
@@ -544,12 +550,15 @@ printf("FIXSTRS: loading file %s\n", fnam);
 				 	text.text[--text.length] = '\0';
 				}
 				state = LOOKING_FOR_START;
+				appMem(vstring, "", 0);		/* ensure vstring.text is != NULL */
+				assert(vstring.text);
+				assert((strg[cnt].flags & 3) == 0		/* New string */
+				 || strg[cnt].vstring);
 				/* Apply the cached text */
-				strg[cnt].file |= in_file;
-				if((!strg[cnt].version || strg[cnt].version == version)
-				 && (!strg[cnt].vstring		/* no old string */
-				  || (vstring.text
-				      && strcmp(strg[cnt].vstring, vstring.text) == 0))) {
+				if((strg[cnt].flags & 3) == 0		/* New string */
+				 || (strg[cnt].version == version
+				     && ((strg[cnt].flags & PERFORM_VALIDATION) == 0
+				      || strcmp(strg[cnt].vstring, vstring.text) == 0))) {
 					/* OK -> replace it */
 					strg[cnt].version = version;
 					free(strg[cnt].text);
@@ -557,20 +566,17 @@ printf("FIXSTRS: loading file %s\n", fnam);
 					string[cnt].size = text.length + 1;
 					free(strg[cnt].vstring);
 					strg[cnt].vstring = vstring.text;
-					/* Mark where this entry has been found */
-					text.text = vstring.text = 0;
 				} else {
-					if(strg[cnt].version && strg[cnt].version != version)
-						strg[cnt].file |= VERSION_MISMATCH;
-					if(strg[cnt].vstring
-					  && (!vstring.text
-					   || strcmp(strg[cnt].vstring, vstring.text) != 0))
-						strg[cnt].file |= VALIDATION_MISMATCH;
+					if(strg[cnt].version != version)
+						strg[cnt].flags |= VERSION_MISMATCH;
+					if(strcmp(strg[cnt].vstring, vstring.text) != 0)
+						strg[cnt].flags |= VALIDATION_MISMATCH;
 					/* Failed -> ignore the read text */
 					free(text.text);
 					free(vstring.text);
-					text.text = vstring.text = 0;
 				}
+				text.text = vstring.text = 0;
+				strg[cnt].flags |= in_file;
 			} else {
 				char *p, *q, ch;
 				/* Fetch the '%' format sequences */
@@ -656,7 +662,7 @@ int main(int argc, char **argv)
 	if(argc > 1) {		/* Only if a local LNG file was specified */
 		log = NULL;			/* No LOG entry til this time */
 		for(cnt = 0; cnt < maxCnt; ++cnt) {
-			switch(strg[cnt].file & 3) {
+			switch(strg[cnt].flags & 3) {
 			case 0:		/* Er?? */
 				fputs("Internal error assigned string has no origin?!\n"
 				 , stderr);
@@ -682,23 +688,23 @@ int main(int argc, char **argv)
 			case 3:		/* OK */
 				break;
 			}
-			if(strg[cnt].file & VERSION_MISMATCH) {
+			if(strg[cnt].flags & VERSION_MISMATCH) {
 				if(!log && (log = fopen(logfile, "wt")) == NULL) {
 					fprintf(stderr, "Cannot create logfile: '%s'\n"
 					 , logfile);
 					goto breakLogFile;
 				}
-				fprintf(log, "%s: Version mismatch\n"
-				 , strg[cnt].name);
+				fprintf(log, "%s: Version mismatch, current is: %u\n"
+				 , strg[cnt].name, strg[cnt].version);
 			}
-			if(strg[cnt].file & VALIDATION_MISMATCH) {
+			if(strg[cnt].flags & VALIDATION_MISMATCH) {
 				if(!log && (log = fopen(logfile, "wt")) == NULL) {
 					fprintf(stderr, "Cannot create logfile: '%s'\n"
 					 , logfile);
 					goto breakLogFile;
 				}
-				fprintf(log, "%s: Validation mismatch\n"
-				 , strg[cnt].name);
+				fprintf(log, "%s: printf() format string mismatch, should be: %s\n"
+				 , strg[cnt].name, strg[cnt].vstring);
 			}
 		}
 

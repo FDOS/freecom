@@ -24,6 +24,9 @@
 # same label up to one time, regardless of the version. FIXSTRS compares
 # both the label and the version ID and both must match.
 # A missing version is assumed as "#0".
+# If there is a percent sign (%) appended to the version, the printf()
+# format string %-style placeholders are compared for the strings. The
+# sign need to be set in DEFAULT.LNG only.
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
@@ -89,33 +92,33 @@
 #  These are error messages
 #
 ## Issued if a single character option is unknown
-:TEXT_ERROR_INVALID_SWITCH
+:TEXT_ERROR_INVALID_SWITCH#0%
 Invalid switch. - /%c
 .
 
 ## Issued if a longname option is unknown
-:TEXT_ERROR_INVALID_LSWITCH
+:TEXT_ERROR_INVALID_LSWITCH#0%
 Invalid switch. - /%s
 .
 
 ## Issued if the context, the type of argument etc. is invalid
-:TEXT_ERROR_ILLFORMED_OPTION
+:TEXT_ERROR_ILLFORMED_OPTION#0%
 Ill-formed option: '%s'
 .
 
-:TEXT_ERROR_OPT_ARG
+:TEXT_ERROR_OPT_ARG#0%
 Option '%s' cannot have an argument
 .
 
-:TEXT_ERROR_OPT_NOARG
+:TEXT_ERROR_OPT_NOARG#0%
 Option '%s' must have an argument
 .
 
-:TEXT_INVALID_NUMBER
+:TEXT_INVALID_NUMBER#0%
 Invalid number specified in '%s'
 .
 
-:TEXT_ERROR_CLOSE_QUOTE
+:TEXT_ERROR_CLOSE_QUOTE#0%
 Missing closing quote: %c
 .
 
@@ -123,7 +126,7 @@ Missing closing quote: %c
 Cannot create temporary file
 .
 
-:TEXT_ERROR_TOO_MANY_PARAMETERS_STR
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
 Too many parameters. - '%s'
 .
 
@@ -131,7 +134,7 @@ Too many parameters. - '%s'
 Too many parameters.
 .
 
-:TEXT_ERROR_INVALID_PARAMETER
+:TEXT_ERROR_INVALID_PARAMETER#0%
 Invalid parameter. - '%s'
 .
 
@@ -143,19 +146,19 @@ Path not found.
 File not found.
 .
 
-:TEXT_ERROR_SFILE_NOT_FOUND
+:TEXT_ERROR_SFILE_NOT_FOUND#0%
 File not found. - '%s'
 .
 
-:TEXT_ERROR_REQ_PARAM_MISSING
+:TEXT_ERROR_REQ_PARAM_MISSING#0%
 Required parameter missing.
 .
 
-:TEXT_ERROR_INVALID_DRIVE
+:TEXT_ERROR_INVALID_DRIVE#0%
 Invalid drive %c:.
 .
 
-:TEXT_ERROR_BADCOMMAND#2
+:TEXT_ERROR_BADCOMMAND#2%
 Bad command or filename - "%s".
 .
 
@@ -171,27 +174,27 @@ Allocation of DOS memory failed.
 Cannot pipe!  Cannot open temporary file!
 .
 
-:TEXT_ERROR_LONG_LINE_BATCHFILE
+:TEXT_ERROR_LONG_LINE_BATCHFILE#0%
 Line #%ld in batchfile '%s' too long.
 .
 
-:TEXT_ERROR_BFILE_VANISHED
+:TEXT_ERROR_BFILE_VANISHED#0%
 Batchfile '%s' not found.
 .
 
-:TEXT_ERROR_BFILE_LABEL
+:TEXT_ERROR_BFILE_LABEL#0%
 Batchfile '%s' does not contain label '%s'.
 .
 
-:TEXT_ERROR_DIRFCT_FAILED#1
+:TEXT_ERROR_DIRFCT_FAILED#1%
 %s failed for '%s'.
 .
 # The next three errors must remain in this order!
-:TEXT_ERROR_SET_ENV_VAR
+:TEXT_ERROR_SET_ENV_VAR#0%
 Can not set environment variable '%s'.
 Environment full?
 .
-:TEXT_ERROR_ENV_VAR_NOT_FOUND
+:TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
 Environment variable '%s' not found.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
@@ -199,17 +202,17 @@ No environment. Maybe memory short. Specify /E option.
 .
 
 # The next three errors must remain in this order!
-:TEXT_ERROR_SET_ALIAS#1
+:TEXT_ERROR_SET_ALIAS#1%
 Can not set alias '%s'. Alias space full?
 .
-:TEXT_ERROR_ALIAS_NOT_FOUND#1
+:TEXT_ERROR_ALIAS_NOT_FOUND#1%
 Alias '%s' not found.
 .
 :TEXT_ERROR_NO_ALIAS_SEGMENT#1
 No alias space. Maybe memory short.
 .
 
-:TEXT_ERROR_SYNTAX_STR
+:TEXT_ERROR_SYNTAX_STR#0%
 Syntax error. - '%s'
 .
 
@@ -217,11 +220,11 @@ Syntax error. - '%s'
 Syntax error.
 .
 
-:TEXT_ERROR_FILENAME_TOO_LONG
+:TEXT_ERROR_FILENAME_TOO_LONG#0%
 Filename too long. - '%s'
 .
 
-:TEXT_ERROR_SELFCOPY
+:TEXT_ERROR_SELFCOPY#0%
 Cannot copy '%s' to itself
 .
 
@@ -233,7 +236,7 @@ Command line too long after alias expansion!
 Line too long.  Can not execute command.
 .
 
-:TEXT_ERROR_HISTORY_SIZE#1
+:TEXT_ERROR_HISTORY_SIZE#1%
 Invalid history size '%s'.
 .
 
@@ -246,11 +249,11 @@ Command line history empty.
 MCB chain corrupt, or MS-DOS incompatible system.
 .
 
-:TEXT_ERROR_UNDEFINED_ERROR
+:TEXT_ERROR_UNDEFINED_ERROR#0%
 Undefined error %d.
 .
 
-:TEXT_ERROR_REGION_WARNING
+:TEXT_ERROR_REGION_WARNING#0%
 Illegal memory region %d - ignored.
 .
 
@@ -278,11 +281,11 @@ FOR: DO missing.
 FOR: No command after DO statement.
 .
 
-:TEXT_ERROR_REDIRECT_FROM_FILE
+:TEXT_ERROR_REDIRECT_FROM_FILE#0%
 Can not redirect input from file '%s'.
 .
 
-:TEXT_ERROR_REDIRECT_TO_FILE
+:TEXT_ERROR_REDIRECT_TO_FILE#0%
 Can not redirect output to file '%s'.
 .
 
@@ -306,11 +309,11 @@ No label specified for GOTO.
 The CTTY command has been excluded from this COMMAND.COM.
 .
 
-:TEXT_ERROR_NORW_DEVICE
+:TEXT_ERROR_NORW_DEVICE#0%
 Invalid or no read-write device '%s'.
 .
 
-:TEXT_ERROR_CTTY_DUP
+:TEXT_ERROR_CTTY_DUP#0%
 Failed to change file descriptors to TTY '%s'.
 .
 
@@ -326,19 +329,19 @@ Failed to change file descriptors to TTY '%s'.
 Error writing to destination.
 .
 
-:TEXT_ERROR_CANNOT_OPEN_SOURCE
+:TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
 Unable to open source. - '%s'
 .
 
-:TEXT_ERROR_OPEN_FILE
+:TEXT_ERROR_OPEN_FILE#0%
 Unable to open file '%s'
 .
 
-:TEXT_ERROR_READ_FILE
+:TEXT_ERROR_READ_FILE#0%
 Unable to read from file '%s'
 .
 
-:TEXT_ERROR_WRITE_FILE
+:TEXT_ERROR_WRITE_FILE#0%
 Unable to write to file '%s'
 .
 
@@ -383,7 +386,7 @@ Failed to load messages into memory.
 The /MSG option has been excluded from this COMMAND.COM.
 .
 
-:TEXT_MSG_ITEMS_DISPLAYED#1
+:TEXT_MSG_ITEMS_DISPLAYED#1%
 %u items displayed.
 .
 
@@ -396,7 +399,7 @@ the system COMMAND.COM runs in. Please report this error.
 The /C and /K options cannot be quoted, they are ignored.
 .
 
-:TEXT_INIT_FULLY_QUALIFIED#1
+:TEXT_INIT_FULLY_QUALIFIED#1%
 The path to COMMAND.COM must be fully qualified!
 That means including drive letter and beginning with a backslash.
 For example: C:\\FDOS
@@ -417,7 +420,7 @@ program. Please refer to above error messages for the reason of
 this problem.
 .
 
-:TEXT_ERROR_CWD_FAILED
+:TEXT_ERROR_CWD_FAILED#0%
 Drive %c: not responding or out of internal memory.
 .
 
@@ -434,7 +437,7 @@ Swapping failed: Cannot allocate far memory.
 Out of alias space.
 .
 
-:TEXT_ERROR_ALIAS_NO_SUCH#1
+:TEXT_ERROR_ALIAS_NO_SUCH#1%
 No such alias: '%s'
 .
 
@@ -442,7 +445,7 @@ No such alias: '%s'
 Failed to insert alias.
 .
 
-:TEXT_ALIAS_INVALID_NAME#1
+:TEXT_ALIAS_INVALID_NAME#1%
 Invalid alias name '%s'.
 .
 
@@ -456,7 +459,7 @@ If this error persists, consider to increase some internal buffer,
 such as history, direcory stack etc.
 .
 
-:TEXT_ERROR_CONTEXT_LENGTH#1
+:TEXT_ERROR_CONTEXT_LENGTH#1%
 Size of context totals %lu bytes exceeding maximal limit.
 Resizing context to %u bytes.
 .
@@ -481,7 +484,7 @@ but all aliases etc. are lost.
 Press any key to continue . . .\
 .
 
-:TEXT_MSG_HISTORY_SIZE
+:TEXT_MSG_HISTORY_SIZE#0%
 History size is %d bytes.
 .
 
@@ -489,41 +492,41 @@ History size is %d bytes.
 DOSKEY features are already enabled in the shell.
 .
 
-:TEXT_MSG_ECHO_STATE
+:TEXT_MSG_ECHO_STATE#0%
 ECHO is %s
 .
 
-:TEXT_MSG_VERIFY_STATE
+:TEXT_MSG_VERIFY_STATE#0%
 VERIFY is %s
 .
 
-:TEXT_MSG_FDDEBUG_STATE
+:TEXT_MSG_FDDEBUG_STATE#0%
 DEBUG output is %s.
 .
-:TEXT_MSG_FDDEBUG_TARGET
+:TEXT_MSG_FDDEBUG_TARGET#0%
 DEBUG output is printed to '%s'.
 .
 
-:TEXT_MSG_BREAK_STATE
+:TEXT_MSG_BREAK_STATE#0%
 BREAK is %s
 .
 
-:TEXT_MSG_CURRENT_DATE
+:TEXT_MSG_CURRENT_DATE#0%
 Current date is %s
 .
 
 ## The three DATE prompts MUST be in this order!
-:TEXT_MSG_ENTER_DATE_AMERICAN#1
+:TEXT_MSG_ENTER_DATE_AMERICAN#1%
 Enter new date (mm%sdd%s[cc]yy): \
 .
-:TEXT_MSG_ENTER_DATE_EUROPE#1
+:TEXT_MSG_ENTER_DATE_EUROPE#1%
 Enter new date (dd%smm%s[cc]yy): \
 .
-:TEXT_MSG_ENTER_DATE_JAPANESE#1
+:TEXT_MSG_ENTER_DATE_JAPANESE#1%
 Enter new date ([cc]yy%smm%sdd): \
 .
 
-:TEXT_MSG_CURRENT_TIME
+:TEXT_MSG_CURRENT_TIME#0%
 Current time is %s
 .
 
@@ -539,7 +542,7 @@ Enter new time: \
 .
 
 # src-file <operation> target-file
-:TEXT_MSG_COPYING
+:TEXT_MSG_COPYING#0%
 %s %s %s
 .
 
@@ -548,7 +551,7 @@ Enter new time: \
 # keep interactive prompt & user-interaction in sync.
 # Used by Delete all (Y/N) --> let ENTER default to NO
 # Return value: a -> Yes; else -> No
-:PROMPT_DELETE_ALL#1
+:PROMPT_DELETE_ALL#1%
 YyNn{CR}{LF}{CBREAK}
 aabb   b   b       b
 All files in '%s' will be deleted!
@@ -571,7 +574,7 @@ aabb   a   a       b    b
 # Attention: This prompt is issued via BIOS; any newline MUST be prefixed
 #	by \r!
 # Return value: a -> Yes; b -> No; c -> All; else -> Undefined
-:PROMPT_CANCEL_BATCH#1
+:PROMPT_CANCEL_BATCH#1%
 YyNnAaQq{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
 Control-Break pressed.\r
@@ -582,7 +585,7 @@ Terminate batch file '%s' (Yes/No/All) ? \
 # Note: This prompt ignores DOS NLS intentionally in order to
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
-:PROMPT_OVERWRITE_FILE#1
+:PROMPT_OVERWRITE_FILE#1%
 YyNnAaQq{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
 Overwrite '%s' (Yes/No/All/Quit) ? \
@@ -592,7 +595,7 @@ Overwrite '%s' (Yes/No/All/Quit) ? \
 # Note: This prompt ignores DOS NLS intentionally in order to
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
-:PROMPT_DELETE_FILE#1
+:PROMPT_DELETE_FILE#1%
 YyNnAaQq{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
 Delete '%s' (Yes/No/All/Quit) ? \
@@ -607,63 +610,63 @@ Directory stack empty.
 .
 
 ## Strings to construct the DIR output
-:TEXT_DIR_HDR_VOLUME#1
+:TEXT_DIR_HDR_VOLUME#1%
  Volume in drive %c \
 .
-:TEXT_DIR_HDR_VOLUME_STRING
+:TEXT_DIR_HDR_VOLUME_STRING#0%
 is %s
 .
 :TEXT_DIR_HDR_VOLUME_NONE
 has no label
 .
-:TEXT_DIR_HDR_SERIAL_NUMBER
+:TEXT_DIR_HDR_SERIAL_NUMBER#0%
  Volume Serial Number is %04X-%04X
 .
-:TEXT_DIR_FTR_FILES#1
+:TEXT_DIR_FTR_FILES#1%
 %10s file(s)\
 .
-:TEXT_DIR_FTR_BYTES
+:TEXT_DIR_FTR_BYTES#0%
    %12s bytes
 .
 :TEXT_DIR_FTR_TOTAL_NUMBER
 Total files listed:
 .
-:TEXT_DIR_FTR_DIRS#1
+:TEXT_DIR_FTR_DIRS#1%
 %10s dir(s)\
 .
-:TEXT_DIR_FTR_BYTES_FREE
+:TEXT_DIR_FTR_BYTES_FREE#0%
  %15s bytes free
 .
-:TEXT_DIR_DIRECTORY
+:TEXT_DIR_DIRECTORY#0%
 Directory of %s
 .
-:TEXT_DIR_DIRECTORY_WITH_SPACE
+:TEXT_DIR_DIRECTORY_WITH_SPACE#0%
  Directory of %s
 .
-:TEXT_DIR_LINE_FILENAME_WIDE#1
+:TEXT_DIR_LINE_FILENAME_WIDE#1%
 %-15s\
 .
-:TEXT_DIR_LINE_FILENAME_BARE
+:TEXT_DIR_LINE_FILENAME_BARE#0%
 %-13s
 .
-:TEXT_DIR_LINE_FILENAME_SINGLE#1
+:TEXT_DIR_LINE_FILENAME_SINGLE#1%
 %-13s\
 .
-:TEXT_DIR_LINE_FILENAME#1
+:TEXT_DIR_LINE_FILENAME#1%
 %-8s %-3s \
 .
 :TEXT_DIR_LINE_SIZE_DIR#1
         <DIR> \
 .
-:TEXT_DIR_LINE_SIZE#1
+:TEXT_DIR_LINE_SIZE#1%
    %10s \
 .
 
-:TEXT_FILE_COMPLATION_DISPLAY#1
+:TEXT_FILE_COMPLATION_DISPLAY#1%
 %-14s\
 .
 
-:TEXT_MSG_PATH
+:TEXT_MSG_PATH#0%
 PATH=%s
 .
 :TEXT_MSG_PATH_NONE#1
@@ -701,7 +704,7 @@ no file removed.
 :TEXT_MSG_DEL_CNT_FILES_1#1
 one file removed.
 .
-:TEXT_MSG_DEL_CNT_FILES_2#1
+:TEXT_MSG_DEL_CNT_FILES_2#1%
 %u files removed.
 .
 
@@ -763,11 +766,11 @@ Features available:
 
 Press F8 for trace mode, or F5 to bypass %s... \
 .
-:TEXT_MSG_INIT_BYPASSING_AUTOEXEC
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
 Bypassing '%s'.
 .
 
-:TEXT_MSG_VER_DOS_VERSION
+:TEXT_MSG_VER_DOS_VERSION#0%
 DOS version %u.%u
 .
 
@@ -775,7 +778,7 @@ DOS version %u.%u
 FreeDOS kernel (build 1933 or prior)
 .
 
-:TEXT_MSG_VER_LATER_FREEDOS
+:TEXT_MSG_VER_LATER_FREEDOS#0%
 FreeDOS kernel version %d.%d.%d
 .
 
@@ -839,31 +842,31 @@ C:\\FDOS
 .
 
 
-:TEXT_MEMORY_ENVIRONMENT#1
+:TEXT_MEMORY_ENVIRONMENT#1%
 Environment segment    : max %5u bytes; free %5u bytes
 .
-:TEXT_MEMORY_CONTEXT#1
+:TEXT_MEMORY_CONTEXT#1%
 Context segment        : max %5u bytes; free %5u bytes
 .	
-:TEXT_MEMORY_HEAP#1
+:TEXT_MEMORY_HEAP#1%
 Heap                   : free %5lu bytes
 .
-:TEXT_MEMORY_CTXT_ALIAS#1
+:TEXT_MEMORY_CTXT_ALIAS#1%
 \tAliases        : limit %5u bytes, current %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_HISTORY#1
+:TEXT_MEMORY_CTXT_HISTORY#1%
 \tHistory        : limit %5u bytes, current %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_DIRSTACK#1
+:TEXT_MEMORY_CTXT_DIRSTACK#1%
 \tDirectory stack: limit %5u bytes, current %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_LASTDIR#1
+:TEXT_MEMORY_CTXT_LASTDIR#1%
 \tLast dir cache : used  %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_BATCH#1
+:TEXT_MEMORY_CTXT_BATCH#1%
 \tBatch nesting  : used  %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_SWAPINFO#1
+:TEXT_MEMORY_CTXT_SWAPINFO#1%
 \tSwapinfo       : used  %5u bytes, %5u items
 .
 
@@ -875,7 +878,7 @@ Failed to aquire current code page from system.
 :TEXT_ERROR_SET_CODEPAGE#1
 Failed to change current code page.
 .
-:TEXT_DISPLAY_CODEPAGE#1
+:TEXT_DISPLAY_CODEPAGE#1%
 The current codepage is %u.
 The system codepage (properly) is: %u.
 .
@@ -1431,11 +1434,11 @@ MEMORY
 The COPY destination must not contain plus ('+') characters.
 .
 
-:TEXT_DELETE_FILE#1
+:TEXT_DELETE_FILE#1%
 Deleting file "%s".
 .
 
-:TEXT_ERROR_WRITE_FILE_DISC_FULL
+:TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
 Unable to write to file '%s';
 probably disc full? (%lu bytes required)
 .
