@@ -1,0 +1,12 @@
+Implementation of the Criter, Dummy CBreak and Context module
+
+This implementation is a spin-off of two other on-going implementations:
++ KSS - Kernel Swap Support, which is included in this release,&
++ modules - which is available on CVS by tag expSpawn.
+
+
+CONTEXT.X		Shared context between C and Assembly
+criter.asm		Combined Criter, dummy CBreak and Context modules
+dmy_cbrk.asm	Dummy CBreak hamdler
+RESOURCE.ID		Resource IDs understood by this implementation
+RESOURCE.INC	Resource block understood by this implementation

@@ -1,0 +1,35 @@
+Critical Error & Dummy ^Break handler & Kernel Swap Context
+
+Compile:
+	nasm -f bin criter.asm
+
+Result is CRITER, the memory image which must be installed permanently
+into memory.
+
+Entry offsets:
+
+Performed actions:
+
+The Dummy ^Break handler simply returns "Terminate", hence its name.
+It is assumed that this handler gets activated only, if FreeCOM is NOT
+active itself -> ergo, FreeCOM must install its own Ctrl-Break handler.
+
+The Criter handler displays the known menu Abort/Retry/Ignore/Fail.
+The handler does NOT pop to the program directly, but returns to the
+caller, usually the DOS kernel.
+
+Useage:
+1) allocate a block of memory (--> segm)
+2) invalidate owner's ID of segm
+3) store the compiled CRITER module into segm
+4) interrupt vector 0x24 := MK_FP(segm, *(word far*)MK_FP(segm, 0))
+5) interrupt vector 0x23 := MK_FP(segm, 2)
+*) Module needs not be patched/updated in any way. It's standalone.
+
+Tested:
++ with MS DOS 6
++ compiled: NASM -f bin -o criter.com -DDEBUG=1 criter.asm
++ ran: .\criter.com
+--> 1x fault because of non-responding drive A:
+--> 1x fault because of non-responding character device AUX:
+(see DEBUG switch within criter.asm)
