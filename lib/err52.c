@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_if_errorlevel_number
-void error_if_errorlevel_number(void)
-{	displayError(TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER);
+#undef error_if_command
+void error_if_command(void)
+{	displayError(TEXT_ERROR_IF_MISSING_COMMAND);
 }

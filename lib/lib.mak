@@ -37,6 +37,7 @@ freecom_deps :  \
 	ctxt_get.obj \
 	ctxt_inf.obj \
 	ctxt_mk.obj \
+	ctxt_mkb.obj \
 	ctxt_mkn.obj \
 	ctxt_pop.obj \
 	ctxt_psh.obj \
@@ -133,11 +134,12 @@ freecom_deps :  \
 	samefile.obj \
 	scancmd.obj \
 	scanopt.obj \
-	showcmds.obj \
-	skqwd.obj \
+	session.obj \
 	chunk1
 
 chunk1 :  \
+	showcmds.obj \
+	skqwd.obj \
 	split.obj \
 	sumblink.obj \
 	tempfile.obj \
@@ -229,8 +231,7 @@ chunk1 :  \
 	err76.obj \
 	err77.obj \
 	err78.obj \
-	err79.obj \
-	err80.obj
+	err79.obj
 
 
 freecom.lib : $(CFG) freecom_deps 
@@ -263,6 +264,7 @@ freecom.lib : $(CFG) freecom_deps
 +-ctxt_get.obj &
 +-ctxt_inf.obj &
 +-ctxt_mk.obj &
++-ctxt_mkb.obj &
 +-ctxt_mkn.obj &
 +-ctxt_pop.obj &
 +-ctxt_psh.obj &
@@ -359,6 +361,7 @@ freecom.lib : $(CFG) freecom_deps
 +-samefile.obj &
 +-scancmd.obj &
 +-scanopt.obj &
++-session.obj &
 +-showcmds.obj &
 +-skqwd.obj &
 +-split.obj &
@@ -452,8 +455,7 @@ freecom.lib : $(CFG) freecom_deps
 +-err76.obj &
 +-err77.obj &
 +-err78.obj &
-+-err79.obj &
-+-err80.obj
++-err79.obj
 | , freecom.lst 
 	if not exist freecom.lib $(AR) freecom.lib /c @&&|
 +alprmblk.obj &
@@ -484,6 +486,7 @@ freecom.lib : $(CFG) freecom_deps
 +ctxt_get.obj &
 +ctxt_inf.obj &
 +ctxt_mk.obj &
++ctxt_mkb.obj &
 +ctxt_mkn.obj &
 +ctxt_pop.obj &
 +ctxt_psh.obj &
@@ -580,6 +583,7 @@ freecom.lib : $(CFG) freecom_deps
 +samefile.obj &
 +scancmd.obj &
 +scanopt.obj &
++session.obj &
 +showcmds.obj &
 +skqwd.obj &
 +split.obj &
@@ -673,7 +677,6 @@ freecom.lib : $(CFG) freecom_deps
 +err76.obj &
 +err77.obj &
 +err78.obj &
-+err79.obj &
-+err80.obj
++err79.obj
 | , freecom.lst 
 

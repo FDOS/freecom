@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_ctty_dup
-void error_ctty_dup(const char * const devname)
-{	displayError(TEXT_ERROR_CTTY_DUP, devname);
+#undef error_no_cwd
+void error_no_cwd(int drive)
+{	displayError(TEXT_ERROR_CWD_FAILED, drvNum(drive) + 'A');
 }

@@ -33,7 +33,6 @@ void error_read_file(const char * const fnam);
 void error_write_file(const char * const fnam);
 void error_copy(void);
 void error_nothing_to_do(void);
-void dispCopy(const char src[], const char dst[], int append);
 void error_invalid_number(const char * const s);
 void error_init_fully_qualified(const char * const s);
 void error_corrupt_command_line(void);

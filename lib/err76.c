@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_for_in
-void error_for_in(void)
-{	displayError(TEXT_ERROR_IN_MISSING);
+#undef error_for_parens
+void error_for_parens(void)
+{	displayError(TEXT_ERROR_MISSING_PARENTHESES);
 }

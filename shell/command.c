@@ -39,6 +39,11 @@
 #endif
 #include "../include/crossjmp.h"
 
+#ifdef I_AM_TOM
+#ifndef DEBUG
+void suppl_testMemChain() {}
+#endif
+#endif
 
   /* Shall the message block remain in memory when an external
     program is executed */

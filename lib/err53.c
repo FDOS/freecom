@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_if_command
-void error_if_command(void)
-{	displayError(TEXT_ERROR_IF_MISSING_COMMAND);
+#undef error_alias_out_of_memory
+void error_alias_out_of_memory(void)
+{	displayError(TEXT_ERROR_ALIAS_OUT_OF_MEM);
 }

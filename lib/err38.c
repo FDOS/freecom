@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_corrupt_command_line
-void error_corrupt_command_line(void)
-{	displayError(TEXT_CORRUPT_COMMAND_LINE);
+#undef error_quoted_c_k
+void error_quoted_c_k(void)
+{	displayError(TEXT_QUOTED_C_OR_K);
 }

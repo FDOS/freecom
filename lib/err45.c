@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_no_rw_device
-void error_no_rw_device(const char * const devname)
-{	displayError(TEXT_ERROR_NORW_DEVICE, devname);
+#undef error_ctty_dup
+void error_ctty_dup(const char * const devname)
+{	displayError(TEXT_ERROR_CTTY_DUP, devname);
 }

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_no_cwd
-void error_no_cwd(int drive)
-{	displayError(TEXT_ERROR_CWD_FAILED, drvNum(drive) + 'A');
+#undef error_kswap_alias_size
+void error_kswap_alias_size(void)
+{	displayError(TEXT_ERROR_KSWAP_ALIAS_SIZE);
 }

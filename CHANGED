@@ -1,3 +1,8 @@
+bugfix: COPY: additional output to honor redirection {Eric Auer} [bugID #1313]
+bugfix: onOffStr(): zaps trailing argument delimiters, e.g. ECHO set=
+add: save/restore session (swap context) {Tom Ehlert}
+bugfix: CTTY CON -> missing CR's {Eric Auer} [bugID #1441]
+
 v0.83 Beta 50:
 bugfix: /?: found on all the command line
 fix: %0 to return batchfilename as typed on cmd line (bug: maybe upcased)

@@ -7,14 +7,18 @@
 	and restores it later
 
 	$Log$
+	Revision 1.2  2002/11/12 19:48:48  skaus
+	bugfix: COPY: additional output to honor redirection {Eric Auer} [bugID #1313]
+
 	Revision 1.1  2002/11/12 18:31:57  skaus
 	add: save/restore session (swap context) {Tom Ehlert}
-
+	
 */
 
 #include "../config.h"
 
-#include <stdlib.h>
+#include <assert.h>
+//#include <stdlib.h>
 #include <string.h>
 
 #include <suppl.h>

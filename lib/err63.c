@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_out_of_dos_memory
-void error_out_of_dos_memory(void)
-{	displayError(TEXT_ERROR_OUT_OF_DOS_MEMORY);
+#undef error_context_length
+void error_context_length(unsigned long islen, unsigned maxlen)
+{	displayError(TEXT_ERROR_CONTEXT_LENGTH, islen, maxlen);
 }
