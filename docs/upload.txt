@@ -36,10 +36,10 @@ space and mail the location to the maintainer.
 Most often you can make the patches remarkable smaller by using the
 "diff" utility; a GNU port is to be found on every SimTel(.Net)
 mirror out there.
-Just run this command:
-	diff -dsNrU 5 --ignore-space-change	old_file new_file >patch
+Just run this command **):
+	diff -dsbBU 5 old_file new_file >patch
 -or-
-	diff -dsNrU 5 --ignore-space-change	old_freecom_dir new_freecom_dir >patch
+	diff -dsbBNrU 5 old_freecom_dir new_freecom_dir >patch
 
 The file "patch" will contain the "patch".
 
@@ -58,6 +58,20 @@ Then compress the file, e.g. using Info-Zip:
 
 Once the patch has been incorporated into FreeCOM your name and the
 description of the patch will be added to the DOCS\HISTORY.TXT file.
+
+**) The meaning of the options used:
+-d	Change the algorithm to perhaps find a smaller set of changes. This
+	makes diff slower (sometimes much slower).
+-s	Report when two files are the same.
+-b	Ignore changes in amount of white space.
+-B	Ignore changes that just insert or delete blank lines.
+-N	In directory comparison, if a file is found in only one directory,
+	treat it as present but empty in the other directory.
+-r	When comparing directories, recursively compare any subdirectories
+	found.
+-U 5	Use the unified output format, showing lines (an integer) lines of
+	context, or three if lines is not given. For proper operation, patch
+	typically needs at least two lines of context.
 
 ===
 
