@@ -36,6 +36,21 @@
 #include "command.h"
 #include "timefunc.h"
 #include "strings.h"
+#include "cmdline.h"
+
+static int noPrompt = 0;
+
+#pragma argsused
+optScanFct(opt_date)
+{ switch(ch) {
+  case 'D':
+  case 'T': return optScanBool(noPrompt);
+  }
+  optErr();
+  return E_Useage;
+}
+
+
 
 int parsetime(char *s)
 {
@@ -116,11 +131,17 @@ int parsetime(char *s)
 int cmd_time(char *rest)
 {
   struct dostime_t t;
-  char ampm;
   char s[40];
+  int ec;
 
-  if (!rest || !*rest)
+  noPrompt = 0;
+
+  if((ec = leadOptions(&rest, opt_date, NULL)) != E_None)
+      return ec;
+
+  if (!*rest)
   {
+	char ampm;
     _dos_gettime(&t);
 
     if (t.hour > 12)
@@ -147,6 +168,8 @@ int cmd_time(char *rest)
       if (parsetime(rest))
         return 0;
     } else {
+		if(noPrompt) return 0;
+
       if ((rest = getMessage(TEXT_MSG_ENTER_TIME)) == NULL)
         return 1;
 

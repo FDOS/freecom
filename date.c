@@ -42,6 +42,8 @@
 #include "command.h"
 #include "datefunc.h"
 #include "strings.h"
+#include "cmdline.h"
+
 
 static unsigned char months[2][13] =
 {
@@ -58,6 +60,21 @@ const char *day_strings[] =
 #else
 extern const char *day_strings[];
 #endif
+
+
+static int noPrompt = 0;
+
+#pragma argsused
+optScanFct(opt_date)
+{ switch(ch) {
+  case 'D':
+  case 'T': return optScanBool(noPrompt);
+  }
+  optErr();
+  return E_Useage;
+}
+
+
 
 int parsedate(char *s)
 {
@@ -94,7 +111,9 @@ int parsedate(char *s)
   }
 
   /* if only entered two digits for year, assume 1900's */
-  if (d.year <= 99)
+  if (d.year < 80)
+    d.year += 2000;
+  else if (d.year < 100)
     d.year += 1900;
 
   leap = (!(d.year % 4) && (d.year % 100)) || !(d.year % 400);
@@ -114,8 +133,14 @@ int parsedate(char *s)
 int cmd_date(char *rest)
 {
   char s[40];
+  int ec;
 
-  if (!rest || !*rest)
+  noPrompt = 0;
+
+  if((ec = leadOptions(&rest, opt_date, NULL)) != E_None)
+      return ec;
+
+  if (!*rest)
   {
     struct dosdate_t d;
 
@@ -132,6 +157,8 @@ int cmd_date(char *rest)
   {
     if (!rest)
     {
+		if(noPrompt) return 0;
+
       if ((rest = getMessage(TEXT_MSG_ENTER_DATE)) == NULL)
         return 1;               /* failed, error message on screan already */
 

@@ -359,7 +359,7 @@ Enter new date (mm-dd-[yy]yy):
 .
 
 :TEXT_MSG_CURRENT_TIME
-Current time is %2d:%02d:%02d.%02d%c
+Current time is %2d:%02d:%02d.%02d %cm
 .
 
 :TEXT_MSG_ENTER_TIME
