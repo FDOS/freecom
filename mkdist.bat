@@ -89,6 +89,7 @@ if exist com.com goto ende
 : pause
 
 
+del /q shell\*.exe lastmake.mk
 touch config.h
 %_DBG setdos /y0 %+ %_DBG echo off
 dmake -W config.h || quit

@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.16  2001/07/27 22:37:34  skaus
+# bugfix: pre-compiled package BINARY.ZIP without command-line editing
+# chg: FreeCOM archive (== executable) is opened read-only.
+#
 # Revision 1.15  2001/04/29 11:33:50  skaus
 # chg: default heap size (tools\ptchsize) set to 6KB
 # chg: error displaying functions centralized into lib\err_fcts.src
@@ -44,8 +48,8 @@
 .IMPORT : FREEDOS
 .IMPORT .IGNORE : LNG DEBUG NDEBUG
 
-INCDIR +=;$(FREEDOS)\SRC\INCLUDE;$(PWD)\\INCLUDE
-LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
+INCDIR+=;$(FREEDOS)\SRC\INCLUDE;$(PWD:u)\\INCLUDE
+LIBDIR+=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
 LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib CMD\\CMDS.LIB LIB\\FREECOM.LIB STRINGS\\STRINGS.LIB
 LDFLAGS += /msl
 NASM *= c:\TOOL\NASMW.EXE

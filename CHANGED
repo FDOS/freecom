@@ -1,3 +1,7 @@
+v0.83 Beta 25:
+bugfix: pre-compiled package BINARY.ZIP without command-line editing
+chg: FreeCOM archive (== executable) is opened read-only.
+
 v0.83 Beta 21:
 bugfix: process_input(): iscntrl() does not advance ip
 possible bugfix: force to default to _unsigned_ char as built-in
