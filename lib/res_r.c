@@ -28,10 +28,13 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2002/11/05 19:34:38  skaus
+	chg: enumResources(): handle fnam == 0 (file open error)
+
 	Revision 1.3  2001/07/27 22:37:35  skaus
 	bugfix: pre-compiled package BINARY.ZIP without command-line editing
 	chg: FreeCOM archive (== executable) is opened read-only.
-
+	
 	Revision 1.2  2001/06/10 15:20:39  skaus
 	add: error message if debugging when to open the resource file failed
 	
@@ -81,7 +84,8 @@ int enumFileResources(const char *const fnam
 	FILE *f;
 
 	assert(fct);
-	assert(fnam);
+	if(!fnam)
+		return -1;
 
 	rc = 0;
 	if((f = fopen(fnam, "rb")) == 0) {
