@@ -193,7 +193,7 @@ int kswapLoadStruc(void)
 
 	/* kswapContext->prg had been disabled in kswapInit() */
 	assert(!kswapContext->prg);
-	perform_exec_result(decode_exec_result(kswapContext->execErr));
+	setErrorLevel(kswapContext->execErr);
 
 	canexit = kswapContext->canexit;
 	defaultToSwap = kswapContext->dfltSwap;

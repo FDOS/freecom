@@ -78,17 +78,6 @@ int defaultToSwap = FALSE;
 	*/
 int swapContext = TRUE;					/* may destroy external context */
 
-void perform_exec_result(int result)
-{
-	dprintf(("result of (do_)exec(): %d\n", result));
-	if (result == -1)
-		perror("executing spawnl function");
-	else
-		errorlevel = result;
-
-}
-
-
 static void execute(char *first, char *rest)
 {
   /*
@@ -178,7 +167,7 @@ static void execute(char *first, char *rest)
 	/* The external command might has killed the string area. */
 	env_nullStrings(0);
 
-    perform_exec_result(result);
+    setErrorLevel(result);
   } else
     error_bad_command(first);
 }

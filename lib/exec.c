@@ -4,10 +4,15 @@
 
 	This file bases on EXEC.C of FreeCOM v0.81 beta 1.
 
+	Returns: DOS error code of DOS-4B
+
 	$Log$
+	Revision 1.6  2004/10/25 19:37:34  skaus
+	fix: LH: Errorlevel of program effects LH's error reporting {Eric Auer}
+
 	Revision 1.5  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.4  2003/03/05 17:43:52  skaus
 	bugfix: cached NLS data not flushed
 	
@@ -122,5 +127,5 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 
   restoreSession();
 				
-  return decode_exec_result(retval);
+  return retval;
 }

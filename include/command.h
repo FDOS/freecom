@@ -102,7 +102,7 @@ void parsecommandline(char *, int);
 int initialize(void);
 void short_version(void);
 int process_input(int xflg, char *cmdline);
-void perform_exec_result(int rc);
+/* void perform_exec_result(int rc); */
 int expandEnvVars(char *ip, char * const line);
 
 /* prototypes for INTERNAL.C */

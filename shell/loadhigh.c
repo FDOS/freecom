@@ -211,8 +211,10 @@ static int lh_lf(char *args)
             rc = loadhigh_prepare();
 
           /* finally, execute the file */
-          if (!rc)
+          if (!rc) {
             rc = exec(fullname, args, 0);
+            setErrorLevel(rc);
+          }
 
         }
         else

@@ -76,8 +76,8 @@
 #define DIRSTACK_DEFAULT_SIZE 256
 
 /* Use this errorlevel if an external program was terminated by
-	^C or ^Break */
-#define CBREAK_ERRORLEVEL 3
+	^C or ^Break --> DOS error code interrupted system call */
+#define CBREAK_ERRORLEVEL 0x5F
 
 /* Use these filemode while searching for file completion */
 #define FILE_SEARCH_MODE FA_RDONLY | FA_ARCH | FA_DIREC

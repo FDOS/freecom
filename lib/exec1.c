@@ -1,16 +1,19 @@
 /*	$Id$
 
 	Decode the return code of the execution of an external program:
-		return := input? input
+		errorlevel := input? input
 					   : normal exit? errorlevel
 					                : ^CBreak errorlevel
 
 	This file bases on EXEC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2004/10/25 19:37:34  skaus
+	fix: LH: Errorlevel of program effects LH's error reporting {Eric Auer}
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -44,19 +47,31 @@
 
 #include "../include/command.h"
 
-int decode_exec_result(int rc)
+void setErrorLevel(int rc)
 {	struct REGPACK rp;
 
-	if (!rc) {
+	dprintf(("[exec: DOS error code of exec(): %d]\n", rc));
+
+	if(!rc) {
+		int exitReason;
 		rp.r_ax = 0x4d00;           /* get return code */
 		intr(0x21, &rp);
 		rc = rp.r_ax & 0xFF;
-		if ((rp.r_ax & 0xFF00) == 0x100) {
+		exitReason = (rp.r_ax >> 8) & 0xFF;
+			/*	0 -> normal
+				1 -> ^Break / ^C
+				2 -> Critical Error
+				3 -> TSR
+			*/
+		dprintf(("[exec: exit code: %u:%u]\n", exitReason, rc));
+		if(exitReason == 0x1)
 			ctrlBreak = 1;
-			if (!rc)
-				rc = CBREAK_ERRORLEVEL;
-		}
+		if(exitReason == 0x2)	/* Shallt change in the future */
+			ctrlBreak = 1;
+		if(exitReason && !rc)	/* Make sure this condition is reflected */
+			rc = CBREAK_ERRORLEVEL;
 	}
 
-	return rc;
+	errorlevel = rc;	/* assign DOS error code, if the call failed itself */
 }
+

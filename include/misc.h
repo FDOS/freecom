@@ -98,7 +98,7 @@ void goxy(const unsigned char x, const unsigned char y);
 void clrcmdline(char * const str, const int maxlen
  , const unsigned orgx, const unsigned orgy);
 
-int decode_exec_result(int rc);
+void setErrorLevel(int rc);
 int exec(const char *, char *, const unsigned);
 void restoreSession(void);
 void saveSession(void);

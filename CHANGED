@@ -1,3 +1,5 @@
+fix: LH: Errorlevel of program effects LH's error reporting {Eric Auer}
+chg: BUILD.BAT: Removed CONFIG.MAK and add the warning concering CONFIG.STD
 fix: CONFIG.MAK: changes of CONFIG.MAK propagate to all make's 
 chg: SUPPL: integrate a stripoped down variant of SUPPL into CVS {Tom Ehlert} [#1794]
 add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
