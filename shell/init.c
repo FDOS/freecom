@@ -398,6 +398,7 @@ int initialize(void)
 
 	if(skipAUTOEXEC) {
 		showinfo = 0;
+		displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
 	} else {
     if (exist(autoexec)) {
       displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
