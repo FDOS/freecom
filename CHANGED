@@ -1,3 +1,5 @@
+bugfix: "CD." and analogeous commands
+v0.79dá1:
 add: FEATURE_ENHANCED_INPUT and it's non-defined variant
 bugfix: "%1" could writer behind end of string
 bugfix: check of length of external command line was considered too long

@@ -1,9 +1,12 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2000/10/09 Michael Kj”rling <michael@kjorling.com>
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: directory commands now support periods without leading space
 
 2000/09/26 ska <ska-src@gmx.net>
 ~~~~~~~~~~~~~~~~~~~~~~
-bugfix: #("%1#(" expansion could overwrite end of string
+bugfix: "%1" expansion could overwrite end of string
 bugfix: length of external command line was assumed too long
 chg: moved check of length of ext cmdline before exec() in order
 	to allow batch files use the internal length

@@ -180,6 +180,9 @@
  *	chg: check for lenght of external command line moved before the
  *		exec(), in order to allow batch files to use the internal
  *		length of the command line
+ *
+ * 2000/10/09 Michael Kj”rling <michael@kjorling.com>
+ *      bugfix: directory commands now support periods without leading space
  */
 
 #include "config.h"
@@ -390,8 +393,8 @@ static void docommand(char *line)
       switch(cmdptr->flags & (CMD_SPECIAL_ALL | CMD_SPECIAL_DIR)) {
       case CMD_SPECIAL_ALL: /* pass everything into command */
         break;
-      case CMD_SPECIAL_DIR: /* pass '\\' too */
-        if(*rest == '\\') break;
+      case CMD_SPECIAL_DIR: /* pass '\\' & '.' too */
+        if(*rest == '\\' || *rest == '.') break;
       default:        /* pass '/', ignore ',', ';' & '=' */
         if(*rest == '/') break;
         if(!*rest || isspace(*rest)) {  /* normal delimiter */
