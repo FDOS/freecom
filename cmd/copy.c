@@ -126,6 +126,8 @@ int copy(char *dst, char *pattern, struct CopySource *src
   int rc, asc;
   char *buf;
   size_t len;
+  FLAG keepFTime;
+  struct ftime fileTime;
 
   assert(dst);
   assert(pattern);
@@ -195,6 +197,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
     }
     mode[0] = 'r';
     h = src;
+    keepFTime = (h->app == 0);
     do {
       if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
         fclose(fout);
@@ -210,14 +213,19 @@ int copy(char *dst, char *pattern, struct CopySource *src
         free(rDest);
         return 0;
       }
-      if(isadev(fileno(fin)) && mode[1] != 't'
-       && (h->flags & BINARY) == 0) {
-        /* character devices are opened in textmode
-          by default */
-        fclose(fin);
-        mode[1] = 't';
-        goto reOpenIn;
+      if(isadev(fileno(fin))) {
+		keepFTime = 0;		/* Cannot keep file time of devices */
+      	if(mode[1] != 't'					/* in binary mode currently */
+		   && (h->flags & BINARY) == 0) {	/* no forced binary mode */
+			/* character devices are opened in textmode by default */
+			fclose(fin);
+			mode[1] = 't';
+			goto reOpenIn;
+		  }
       }
+      if(keepFTime)
+        if(getftime(fileno(fin) , &fileTime))
+          keepFTime = 0; /* if error: turn it off */
 
       dispCopy(rSrc, rDest, openMode == 'a' || h != src);
       if(cbreak) {
@@ -280,6 +288,9 @@ int copy(char *dst, char *pattern, struct CopySource *src
     if(asc) {   /* append the ^Z as we copied in ASCII mode */
       putc(0x1a, fout);
     }
+    fflush(fout);
+    if(keepFTime)
+      setftime(fileno(fout), &fileTime);
     rc = ferror(fout);
     fclose(fout);
     if(rc) {
