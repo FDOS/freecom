@@ -59,7 +59,7 @@
  *      KillDir and _Kill_Dir.  do_recurse does what PrintDir did
  *      and _Read_Dir did what it did before along with what _Print_Dir
  *      did.  Makes /s a lot faster!
- *  - Reports 2 more files/dirs that MS-DOS actually reports
+ *  - Reports 2 more files/dirs that DOS actually reports
  *      when used in root directory(is this because dir defaults
  *      to look for read only files?)
  *      - Added support for /b, /a and /l
@@ -124,6 +124,27 @@
  *    still display a 2-digit year rather than a 4-digit one.
  *    A four-digit year would break all batch files scanning the
  *    output of DIR.
+ *
+ * 2000/07/07 Ron Cemer
+ * Added code to detect a pattern of "." or "" and convert to ".\*.*",
+ * to prevent "file not found" errors from command.com when executed
+ * from the root of drive C: and "DIR" is typed without any arguments,
+ * or if you type "DIR C:" and the current directory on drive C: is \.
+ * Also added code to convert \.\ in paths to \ (eliminate the .\ when
+ * not needed).  Hopefully this will help to bypass any findfirst/findnext
+ * bugs which may exist in the kernel.
+ *
+ * 2000/07/16 Ron Cemer
+ * Fixed "DIR .." or "DIR C:\FREEDOS\COM079\..".
+ * Fixed "DIR /S".
+ * No longer reallocate the "path" variable in dir_list().  This would break
+ * "DIR /S" because dir_list() is recursive and simply tacks on additional
+ * subdirectories to the end of the "path" variable.  So the "path" variable
+ * must NOT be moving around in memory, so I pre-allocate it to 270 characters
+ * to allow plenty of room to tack on subdirectories while recursing.
+ * Changed formatting to exactly match DOS's formatting as much as possible,
+ * except that the "bytes free" count is still printed in bytes instead of
+ * KB or MB.
  */
 
 #include "config.h"
@@ -135,6 +156,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <dir.h>
+
+/* Not available with TURBOC++ 1.0 or earlier: */
+#if ( (!defined(__TURBOC__)) || (__TURBOC__ > 0x297) )
+#include <dirent.h>
+#endif
+
 #include <dos.h>
 #include <io.h>
 #include <conio.h>
@@ -144,7 +171,6 @@
 #include <sys/stat.h>
 
 #include "dfn.h"
-#include "dynstr.h"
 
 #include "command.h"
 #include "cmdline.h"
@@ -223,6 +249,7 @@ int flush_nl(void)
  */
 int dir_print_header(int drive)
 {
+	/* one byte alignment */
 #pragma -a-
   struct media_id
   {
@@ -233,10 +260,12 @@ int dir_print_header(int drive)
     char file_sys[8];
   }
   media;
+	/* standard alignment */
 #pragma -a.
-  struct REGPACK r;
   struct ffblk f;
-  int disk;
+  struct SREGS s;
+  union REGS r;
+  int currDisk;
   int rv;
 
   if (cbreak)
@@ -245,9 +274,11 @@ int dir_print_header(int drive)
   if (optB)
     return 0;
 
-  disk = getdisk();
-  if(changeDrive(drive + 1) != 0)
-  	return 1;
+  currDisk = getdisk();
+  if(changeDrive(drive+1) != 0) {
+    setdisk(currDisk);
+    return 1;
+  }
 
   /* get the media ID of the drive */
 /*
@@ -260,17 +291,24 @@ int dir_print_header(int drive)
 
  */
 
-  r.r_ax = 0x6900;
-  r.r_bx = 0;
-  r.r_ds = FP_SEG(&media);
-  r.r_dx = FP_OFF(&media);
-  intr(0x21, &r);
+  r.x.ax = 0x6900;
+  r.x.bx = drive + 1;
+  s.ds = FP_SEG(&media);
+  r.x.dx = FP_OFF(&media);
+  int86x(0x21, &r, &r, &s);
 
   /* print drive info */
   printf("\n Volume in drive %c", drive + 'A');
 
   if (FINDFIRST("\\*.*", &f, FA_LABEL) == 0)
   {
+        /* Added to remove "." from labels which are longer than
+               8 characters (as DOS does). */
+    char *dotptr = strchr(f.ff_name, '.');
+    if (dotptr != NULL)
+    	if(strlen(dotptr + 1))
+			memmove(dotptr, dotptr + 1, strlen(dotptr));
+		else *dotptr = '\0';		/* dot at end of name */
     printf(" is %s\n", f.ff_name);
   }
   else
@@ -278,16 +316,22 @@ int dir_print_header(int drive)
     printf(" has no label\n");
   }
 
-  setdisk(disk);
+  setdisk(currDisk);
 
   if ((rv = incline()) == 0) {
-	  /* print the volume serial number if the return was successful */
-	  if (!r.r_flags & 1)
-	  {
-		printf(" Volume Serial Number is %04X-%04X\n"
-		 , media.serial2, media.serial1);
-		rv = incline();
-	  }
+
+  /* print the volume serial number if the return was successful */
+  if (!r.x.cflag)
+  {
+    printf(" Volume Serial Number is %04X-%04X\n", media.serial2, media.serial1);
+    rv = incline();
+  }
+  }
+
+        /* Added to exactly match DOS's formatting. */
+  if ( (optS) && (rv == 0) ) {
+      printf("\n");
+      rv = incline();
   }
 
   return rv;
@@ -330,9 +374,7 @@ int convert(unsigned long num, char *des)
 /*
  * print_summary: prints dir summary
  */
-#pragma argsused
 int print_summary(unsigned long files
-  , unsigned long dirs
   , unsigned long bytes)
 {
   char buffer[32];
@@ -341,15 +383,16 @@ int print_summary(unsigned long files
     return 0;
 
   convert(files, buffer);
-  printf("   %6s file%c", buffer, files == 1 ? ' ' : 's');
+  printf("%10s file(s)", buffer);
   convert(bytes, buffer);
-  printf("   %12s byte%c\n", buffer, bytes == 1 ? ' ' : 's');
+  printf("   %12s bytes\n", buffer);
   need_nl = 1;
-//  printf("%9d dirs", dirs);
   return incline();
 }
 
-int print_total(unsigned long files, unsigned long dirs, unsigned long bytes)
+int print_total
+    (unsigned long files,
+     unsigned long bytes)
 { int rv;
 
   if(optB)
@@ -357,15 +400,15 @@ int print_total(unsigned long files, unsigned long dirs, unsigned long bytes)
 
   rv = flush_nl();
   if(rv == E_None) {
-    printf("\tTotal of %s\n", path);
+    printf("Total files listed:\n");
     if((rv = incline()) == E_None)
-      return print_summary(files, dirs, bytes);
+      return print_summary(files, bytes);
   }
 
   return rv;
 }
 
-int dir_print_free(void)
+int dir_print_free(unsigned long dirs)
 {
   char buffer[32];
   union REGS r;
@@ -374,11 +417,16 @@ int dir_print_free(void)
     return 0;
 
   /* print number of dirs and bytes free */
+
+  convert(dirs, buffer);
+  printf("%10s dir(s)", buffer);
+
   r.h.ah = 0x36;
   r.h.dl = toupper(*path) - 'A' + 1;
   int86(0x21, &r, &r);
   convert((unsigned long)r.x.ax * r.x.bx * r.x.cx, buffer);
   printf(" %15s bytes free\n", buffer);
+
   return incline();
 }
 
@@ -391,7 +439,8 @@ int dir_list(int pathlen
   , char *pattern
   , unsigned long *dcnt
   , unsigned long *fcnt
-  , unsigned long *bcnt)
+  , unsigned long *bcnt
+  )
 {
   struct ffblk file;
   unsigned long bytecount = 0;
@@ -400,52 +449,51 @@ int dir_list(int pathlen
   int time;
   int count;
   unsigned mode = FA_RDONLY | FA_ARCH | FA_DIREC;
-  char *p;
   int rv = E_None;
 
   assert(path);
   assert(pattern);
   assert(pathlen >= 2);   /* at least root */
 
-  if((p = realloc(path, pathlen + sizeof(file.ff_name) + 1)) == NULL) {
-    error_out_of_memory();
-    return E_NoMem;
-  }
-  path = p;
-
-  /* if the user wants all files listed RL 06/17/98 */
+  /* if the user wants all files listed */
   if (optA)
     mode |= FA_HIDDEN | FA_SYSTEM;
 
   /* Search for matching entries */
   path[pathlen - 1] = '\\';
   strcpy(&path[pathlen], pattern);
+
   if (FINDFIRST(path, &file, mode) == 0) {
   /* moved down here because if we are recursively searching and
    * don't find any files, we don't want just to print
    * Directory of C:\SOMEDIR
    * with nothing else
    */
-   if(pathlen == 3)     /* root directory */
-     path[pathlen] = '\0';    /* path := path w/o filename */
-   else path[pathlen - 1] = '\0';
+
   if (!optB)
   {
     rv = flush_nl();
     if(rv == E_None) {
-    printf(" Directory of %s\n", path);
-    if((rv = incline()) == E_None) {
-    putchar('\n');
-    rv = incline();
-  }
+	   	/* path without superflous '\' at its end */
+	   if(pathlen == 3)     /* root directory */
+		 path[pathlen] = '\0';    /* path := path w/o filename */
+	   else path[pathlen - 1] = '\0';
+            /* /// Changed to exactly match DOS's formatting.  - Ron Cemer */
+        printf("%sDirectory of %s\n", (optS ? "" : " "), path);
+        if((rv = incline()) == E_None) {
+        putchar('\n');
+        rv = incline();
+    }
    }
   }
 
 /* For counting columns of output */
   count = WIDE_COLUMNS;
+  /* if optB && optS the path with trailing backslash is needed,
+  	also for optS below do {} while */
+  strcpy(&path[pathlen - 1], "\\");
 
-  if(rv == E_None) do
-  {
+  if(rv == E_None) do {
     assert(strlen(file.ff_name) < 13);
 
     if (cbreak)
@@ -513,7 +561,7 @@ int dir_list(int pathlen
 
       if (file.ff_attrib & FA_DIREC)
       {
-        printf("%-14s", "<DIR>");
+        printf("%-14s", "  <DIR>");
         dircount++;
       }
       else
@@ -524,10 +572,10 @@ int dir_list(int pathlen
         filecount++;
       }
 
-      printf("%.2d-%.2d-%02d", ((file.ff_fdate >> 5) & 0x000f),
+      printf(" %.2d-%.2d-%02d", ((file.ff_fdate >> 5) & 0x000f),
              (file.ff_fdate & 0x001f), ((file.ff_fdate >> 9) + 80) % 100);
       time = file.ff_ftime >> 5 >> 6;
-      printf("  %2d:%.2u%c\n",
+      printf(" %2d:%.2u%c\n",
              (time == 0 ? 12 : (time <= 12 ? time : time - 12)),
              ((file.ff_ftime >> 5) & 0x003f),
              (time <= 11 ? 'a' : 'p'));
@@ -539,7 +587,6 @@ int dir_list(int pathlen
   while (rv == E_None && FINDNEXT(&file) == 0);
   }
 
-/* Rob Lake, need to make clean output */
   if (rv == E_None && optW && (count != 0))
   {
     putchar('\n');
@@ -550,7 +597,7 @@ int dir_list(int pathlen
     if(filecount || dircount)
     {
     /* The code that was here is now in print_summary */
-    rv = print_summary(filecount, dircount, bytecount);
+    rv = print_summary(filecount, bytecount);
     }
     else if(!optS)
     {
@@ -559,10 +606,9 @@ int dir_list(int pathlen
     }
 
   if(rv == E_None       /* no error */
-   && optS            /* do recursively */
-   && (pathlen == 3       /* root directory */
-    || dircount > 2)) {     /* at least dir except . & .. */
-      path[pathlen - 1] = '\\';
+   && optS) {            /* do recursively */
+      /* already set for optB && optS before do {} while above 
+		  path[pathlen - 1] = '\\';		*/
       strcpy(&path[pathlen], "*.*");
       if (FINDFIRST(path, &file, mode) == 0) do {
         if((file.ff_attrib & FA_DIREC) != 0 /* is directory */
@@ -572,16 +618,10 @@ int dir_list(int pathlen
           strlwr(file.ff_name);
           strcpy(&path[pathlen], file.ff_name);
           rv = dir_list(pathlen + strlen(file.ff_name) + 1, pattern
-           , &dircount, &filecount, &bytecount);
+           , &dircount, &filecount, &bytecount
+           );
         }
       } while (rv == E_None && FINDNEXT(&file) == 0);
-
-    if(rv == E_None) {
-       if(pathlen == 3)     /* root directory */
-         path[pathlen] = '\0';    /* path := path w/o filename */
-       else path[pathlen - 1] = '\0';
-      rv = print_total(filecount, dircount, bytecount);
-     }
   }
 
     *dcnt += dircount;
@@ -591,52 +631,58 @@ int dir_list(int pathlen
   return rv;
 }
 
-int dir_print_body(char *arg)
-{ int rv;
-  unsigned long dircount, filecount, bytecount;
-  char *pattern, *cachedPattern;
+int dir_print_body(char *arg, unsigned long *dircount)
+{	int rv;
+	unsigned long filecount, bytecount;
+	char *pattern, *cachedPattern;
+	char *p;
 
-dprintf( ("[DIR: path=\"%s\"]\n", arg) );
-    if((path = dfnexpand(arg, NULL)) == NULL) {
-      error_out_of_memory();
-      return E_NoMem;
-    }
+		/* Modified to pre-allocate path to 270 bytes so that
+		   we don't have to realloc() it later.  That was causing
+		   "DIR /S" not to work properly.  The path variable cannot
+		   be reallocated once dir_list() is called, because dir_list()
+		   is recursive.  This will also help to reduce memory
+		   fragmentation. */
+	if((p = dfnfullpath(arg)) == NULL) {
+		error_out_of_memory();
+		return E_NoMem;
+	}
+	if((path = realloc(p, 270*sizeof(char))) == NULL) {
+		free(p);
+		error_out_of_memory();
+		return E_NoMem;
+	}
 
-  dircount = filecount = bytecount = 0;
-  pattern = strchr(path, '\0');
-  if(pattern[-1] == '\\') {
-  	/* trailing backslash means that this has to be a directory */
-  	if(!StrAppChr(path, '.')) {
-      error_out_of_memory();
-      return E_NoMem;
-    }
-   }
+	filecount = bytecount = 0;
 
-dprintf( ("[DIR: absolute path=\"%s\"]\n", path) );
+	/* print the header */
+	if((rv = dir_print_header(toupper(path[0]) - 'A')) == 0) {
+		/* There are some directory specs that are not detected by
+			dfnstat() as they are no part of the filesystem in DOS */
+		pattern = dfnfilename(path);
+		assert(p);
+		if(!*pattern || (dfnstat(path) & DFN_DIRECTORY) != 0) {
+			pattern = strchr(pattern, '\0');
+			if(pattern[-1] != '\\')
+				++pattern;
+			rv = dir_list(pattern - path, "*.*", dircount, &filecount
+			 , &bytecount
+			 );
+		} else {
+			if((cachedPattern = strdup(pattern)) == NULL) {
+				error_out_of_memory();
+				rv = E_NoMem;
+			} else {
+				rv = dir_list(pattern - path, cachedPattern, dircount
+				 , &filecount, &bytecount
+				 );
+				free(cachedPattern);
+			}
+		}
+	}
 
-  /* print the header */
-  if ((rv = dir_print_header(toupper(path[0]) - 'A')) == 0) {
-    if(dfnstat(path) & DFN_DIRECTORY) {
-      pattern = strchr(path, '\0');
-      if(pattern[-1] != '\\')
-        ++pattern;
-      rv = dir_list(pattern - path, "*.*", &dircount, &filecount
-     , &bytecount);
-    } else {
-    if((cachedPattern = strdup(pattern = dfnfilename(path))) == NULL) {
-      error_out_of_memory();
-      rv = E_NoMem;
-    }
-    else {
-       rv = dir_list(pattern - path, cachedPattern, &dircount, &filecount
-        , &bytecount);
-       free(cachedPattern);
-    }
-   }
-  }
-
-  free(path);
-  return rv;
+	free(path);
+	return rv || (optS? print_total(filecount, bytecount): 0);
 }
 
 
@@ -646,11 +692,13 @@ dprintf( ("[DIR: absolute path=\"%s\"]\n", path) );
  * internal dir command
  */
 #pragma argsused
+
 int cmd_dir(char *rest)
 {
   char **argv;
   int argc, opts;
   int rv;                       /* return value */
+  unsigned long dircount;
 
   /* initialize options */
   optS = optP = optW = optB = optA = optL = 0;
@@ -666,16 +714,17 @@ int cmd_dir(char *rest)
   if ((argv = scanCmdline(rest, opt_dir, NULL, &argc, &opts)) == NULL)
     return 1;
 
+  dircount = 0;
   if(argc)
     for(opts = 0
-     ; opts < argc && (rv = dir_print_body(argv[opts])) == 0
+     ; opts < argc && (rv = dir_print_body(argv[opts], &dircount)) == 0
      ; ++opts)
       ;
   else
-    rv = dir_print_body(".");
+    rv = dir_print_body(".", &dircount);
 
   if(!rv)
-    rv = dir_print_free();
+    rv = dir_print_free(dircount);
 
   freep(argv);
   return rv;

@@ -7,4 +7,4 @@ ftp://ftp-fd.inf.fh-rhein-sieg.de/pub/freedos/local/ALPHA
 -or-
 http://www2.inf.fh-rhein-sieg.de/~skaise2a/ska/sources.html#suppl
 
->>SUPPL_S.LIB is precompiled for TC++ v1.<<
+>>SUPPL_S.LIB is precompiled for TC++ v1.01<<

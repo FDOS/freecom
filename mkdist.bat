@@ -5,10 +5,13 @@ set compiler=tc101
 : set compiler=bc5
 set lng=english
 
-if exist cmddebug.old del cmddebug.old >nul
-if exist command.old del command.old >nul
-if exist cmddebug.com ren cmddebug.com *.old >nul
-if exist command.com ren command.com *.old >nul
+iff not isdir old then
+	mkdir old
+	if not isdir old (echo Cannot create OLD %+ quit 10)
+else
+	del /y old\*.*
+endiff
+for %stem in (cmddebug command) do for %ext in (new exe com cln) do (set file=%stem.%ext %+ if exist %file move %file old\%file)
 
 dmake clobber || quit
 : pause
@@ -17,16 +20,12 @@ dmake clobber || quit
 set ndebug=
 set debug=1
 
-dmake || quit
+dmake com.exe || quit
 : pause
 
-if not exist com.com goto ende
-ren com.com cmddebug.com
-ren com.exe cmddebug.cln
+if not exist com.exe goto ende
+ren com.exe cmddebug.new
 if exist com.com goto ende
-: pause
-
-dmake clean || quit
 : pause
 
 : Disable all debug stuff
@@ -42,7 +41,8 @@ if exist com.com goto ende
 
 dmake clean || quit
 
-if exist cmddebug.old del cmddebug.old >nul
-if exist command.old del command.old >nul
+ren cmddebug.new cmddebug.exe
+
+rm -frd old
 
 :ende

@@ -3,6 +3,16 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.4  2000/07/24 23:00:20  skaus
+# fix: DIR & COPY, envSize, Makefiles
+#
+# Revision 1.3.2.1  2000/07/24 22:38:10  skaus
+# add: Spanish Strings
+# fix: Makefiles COMMAND.MAK for TC++ v1.01
+# fix: environment size between 256..32767
+# fix: COPY (to be tested)
+# bugfix: DIR /S; output formatting to match MS COMMAND.COM
+#
 # Revision 1.3  2000/07/10 22:26:56  skaus
 # Change internal strings without re-compiling FreeCOM
 #
@@ -23,7 +33,7 @@
 INCDIR +=;$(FREEDOS)\SRC\INCLUDE
 LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
 #LDLIBS = suppl_$(_MODEL).lib
-LDFLAGS += /msl
+LDFLAGS += /m/s/l
 _MODEL !:= c
 ## Disable debugging
 NDEBUG !:= Yes
