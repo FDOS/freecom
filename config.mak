@@ -35,9 +35,9 @@ $(CFG): $(CFG_DEPENDENCIES)
 -O
 -Z
 -k-
--d
 -b-
 -I$(INCLUDEPATH)
+-L$(LIBPATH)
 -D_NO__DOS_DATE
 -D_NO__DOS_TIME
 | $(CFG)
