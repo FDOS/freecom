@@ -1,0 +1,19 @@
+name: POPD
+de: Change back to the last pushed directory
+see: POPD DIRS CD CDD
+req: CMD_CDD CMD_POPD
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: POPD
+<LI>
+EBNF: POPD '*'
+</OL>
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

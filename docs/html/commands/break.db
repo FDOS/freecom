@@ -1,0 +1,18 @@
+name: BREAK
+de: Display or Set Extended Break Checking
+req: CMD_BREAK
+
+SYNOPSIS:
+EBNF: BREAK [ ON | OFF ]
+
+DESCRIPTION:
+
+Displays or sets the Extended Break status.
+<P>By pressing ^Break or ^C (Control-Break or Control-C) an user
+may signal the currently running program to halt. Most programs will
+abort to the prompt, but some may decide to just cancel the current
+action, but remain active.
+<P>DOS checks for ^Break/^C (Control-Break or Crontrol-C) each time
+a program issues a console input/output request. When Extended Break
+checking is enabled (<EM>ON</EM>), DOS checks for ^Break each time
+a program issues a request.

@@ -1,0 +1,10 @@
+name: CLS
+de: Clear screen
+see: ECHO, TYPE
+req: CMD_CLS
+
+SYNOPSIS:
+EBNF: CLS
+
+Clears the screen and resets the character colours to
+white on black.

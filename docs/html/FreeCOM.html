@@ -1,0 +1,163 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META HTTP-EQUIV="Content-Language" CONTENT="en">
+<META NAME="GENERATOR" CONTENT="VI">
+<META NAME="DESCRIPTION" CONTENT="Description of features and implementation status of FreeCOM, the COMMAND.COM replacement">
+<META NAME="AUTHOR" CONTENT="Steffen Kaiser">
+<META NAME="KEYWORDS" CONTENT="DOS, FreeDOS, FreeCOM, COMMAND.COM, CLI">
+<META NAME="DATE" CONTENT="2001-02-06">
+<TITLE>Description of Features and Implementation Status of FreeCOM</TITLE>
+</HEAD>
+
+<BODY>
+<H1>Introduction</H1>
+
+FreeCOM is a:
+<UL>
+<LI><B>C</B>ommand <B>L</B>ine <B>I</B>nterface,
+<LI>(user) shell and/or
+<LI>COMMAND.COM replacement
+</UL>for DOS. It has been spawned as part of
+<A HREF="http://www.freedos.org">FreeDOS</A>, a project that aims to implement
+a GNU GPL'ed DOS.
+
+<P>The main duty of FreeCOM is to prompt the user <A HREF="#cmdline">to enter
+commands</A>, which
+are interpreted, processed directly by FreeCOM or executed as executable
+files.
+
+<P>Those commands processed by FreeCOM directly are called
+<A HREF="#icmds"><EM>Internal Commands</EM></A>.
+
+<P>Non-internal commands, which cannot be processed by FreeCOM directly,
+are called <EM>External Commands</EM>,
+because FreeCOM will search for files equally named as typed-in.
+
+<P>Besides to implement certain commands FreeCOM offers some
+<A HREF="#features">features</A>.
+
+<H1><A NAME="icmds">Internal Commands</A></H1>
+Internal commands will be processed by FreeCOM directly, they are available
+to the user without presence of any external files, in fact they hide
+External Commands named equally.
+
+<P>The synopsises of the <A HREF="cmd.html">internal commands</A>
+are described in a style derived from <A HREF="#ebnf">EBNF</A>.
+
+
+<P><HR><P>
+<H1>Appendix</H1>
+
+<H2><A NAME="#ebnf">EBNF</A></H2>
+
+Documents encode the synopsis of the commands with operators derived from
+EBNF (<B>E</B>xtended <B>B</B>ackus-<B>N</B>aur <B>F</B>ormula).
+
+<H3>Type setting</H3>
+
+Depending on different meanings characters are set into various shapes:
+
+<TABLE BORDER>
+<TR>
+	<TH>Name
+	<TH>Meaning
+	<TH>Example
+<TR>
+	<TD><TT>terminal</TT>
+	<TD>characters to be enterred on command line or displayed by
+		the computer;EBNF: &quot;terminal symbols&quot;
+	<TD><TT>ECHO</TT>
+<TR>
+	<TD><TT>'string'</TT>
+	<TD>The quotes remove the metafunction of the enclosed characters
+		in order to specify EBNF operators as terminal symbols.
+		EBNF: &quot;terminal symbols&quot;
+	<TD><TT>'|'</TT>
+<TR>
+	<TD><B>bold</B>
+	<TD>operators that constructs portions together;
+		EBNF: &quot;operators&quot;
+	<TD><B>|</B>
+<TR>
+	<TD><I>italian</I>
+	<TD>placeholders for arguments, which are explained in the description;
+		EBNF: &quot;non-terminal symbols&quot;
+	<TD><I>varname</I>
+</TABLE>
+
+<H3>Operators</H3>
+
+The EBNF  uses the following operators:
+<TABLE BORDER>
+<TR>
+	<TH>Symbol
+	<TH>Meaning
+<TR>
+	<TD><B>|</B>
+	<TD>alternative; use either left or right token
+<TR>
+	<TD><B>()</B> 
+	<TD>parenthizes enclose tokens limiting the range of <B>|</B>
+<TR>
+	<TD><B>[]</B>
+	<TD>brackets enclose optional tokens, thus, they may appear zero or
+		one time; they also limit the range of <B>|</B>
+<TR>
+	<TD><B>{}</B>
+	<TD>curly brackets enclose repitive tokens, which may appear one or
+		more times; they also limit the range of <B>|</B>
+<TR>
+	<TD><B>{ : }</B>
+	<TD>as the normal curly brackets, but any repitive tokens are delimited
+	by the token(s) right of the colon; for instance:
+	<BLOCKQUOTE>
+	<B>{</B> <I>file</I> <B>:</B> <TT>'+'</TT> <B>}</B>
+	</BLOCKQUOTE>
+	is the same as:
+	<BLOCKQUOTE>
+	<I>file</I> <B>[{</B> <TT>'+'</TT> <I>file</I> <B>}]</B>
+	</BLOCKQUOTE>
+	and applies to:
+	<UL>
+	<LI><I>file</I>
+	<LI><I>file</I> + <I>file</I>
+	<LI><I>file</I> + <I>file</I> + <I>file</I>
+	<LI><I>file</I> + <I>file</I> + <I>file</I> + <I>file</I>
+	<LI>...
+	</UL>
+<TR>
+	<TD><B>&laquo;   &raquo;
+	<TD>is a placeholder for an arbitary string of terminal symbols, which
+		further syntax is described by the enclosed text in English
+		natural language.
+<TR>
+	<TD><B>::=</B>
+	<TD>assigns a meaning (right side) to a non-terminal symbol (left side);
+		for instance<PRE>
+	<TT>DIR</TT> <B>[ {</B> <I>option</I> <B>|</B> <I>filespec</I> <B>} ]</B>
+	<I>option</I> <B>::=</B> <TT>/</TT> <B>(</B> <TT>A</TT> <B>|</B> <TT>B</TT> <B>|</B> <TT>C</TT> <B>)</B><BR></PRE>
+		Any occurance -- only one here -- of <I>option</I> on the right
+		side of an <B>::=</B> or where no <B>::=</B> is present at all is
+		to be replaced by the right side of <I>option</I><B>::=</B>.
+
+</TABLE>
+
+<P>Unless modified by above mentioned operators a sequence of tokens specifies
+that each token must be present exactly one time in exactly that order.<BR>
+Note: For the sake of clearness, spaces are inserted between tokens. These
+spaces do <STRONG>not</STRONG> mean that a space is allowed at this place!
+Also, the fact that no <B>_</B> is present does <STRONG>not</STRONG> mean that
+at this place is none allowed. It is assumed that the reader will find
+the places where optional spaces are valid either by "doing" or by reading the
+examples.
+
+
+<P><HL>
+Copyright 2000 &copy; Steffen Kaiser - current maintainer of FreeCOM
+<P><HL>
+<FONT SIZE=1>
+<A HREF="ftp://ftp.cs.pdx.edu/pub/elvis/"><IMG SRC="../images/vi.gif" ALT="Elvis - The VI clone"></A>
+</FONT>
+</BODY>
+</HTML>

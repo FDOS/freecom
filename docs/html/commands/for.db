@@ -1,0 +1,13 @@
+name: FOR
+de: Repeat a command
+req: CMD_FOR
+
+SYNOPSIS:
+EBNF: FOR '%' variable IN '(' { word | pattern } ')' DO command
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

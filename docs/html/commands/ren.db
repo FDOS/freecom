@@ -1,0 +1,14 @@
+name: REN
+de: Rename files
+see: RENAME
+req: CMD_RENAME
+
+SYNOPSIS:
+EBNF: REN source destination
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

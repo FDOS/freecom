@@ -1,0 +1,15 @@
+name: DEL
+de: Delete files
+see: DIR
+req: CMD_DELETE
+
+SYNOPSIS:
+EBNF: DEL [{ options | pattern }]
+
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

@@ -1,0 +1,13 @@
+name: GOTO
+de: Goto label
+req: CMD_GOTO
+
+SYNOPSIS:
+EBNF: GOTO label
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

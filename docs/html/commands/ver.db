@@ -1,0 +1,13 @@
+name: VER
+de: Display the version information about FreeCOM and DOS
+req: CMD_VER
+
+SYNOPSIS:
+EBNF: VER [{ option }]
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

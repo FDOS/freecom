@@ -1,0 +1,37 @@
+name: CALL
+de: Call a Nested Batchfile or Program
+see: LOADFIX LOADHIGH
+op: FEATURE_KERNEL_SWAP_SHELL
+
+SYNOPSIS:
+<OL>
+<LI>
+EBNF: CALL program [ <<arguments>> ]
+<LI>
+EBNF: CALL /S program [ <<arguments>> ]
+</OL>
+
+DESCRIPTION:
+
+Calls a program or batch script.
+
+<P>If the <ARG>program</ARG> is a <A HREF="!:batch">batch script</A>,
+that means it has the
+extension <CMD>.BAT</CMD>, <CMD>CALL</CMD> nests the batch script within
+the already running one. Without <CMD>CALL</CMD> the invoked batch
+script would terminate all already running batch scripts.
+<P>If present, the arguments are passed unchanged to the invoked program.
+
+STD_OPTIONS:
+<UL>
+<LI><OPT>/S</OPT>: If <ARG>program</ARG> is not a batch script, the external
+program is executed by swapping FreeCOM out of memory. This process will
+require more time, especially if FreeCOM is to be reloaded from a floppy,
+some internal settings are lost, e.g. command line history, but it will
+free as much memory as possible for the external program.
+<P>This option and, thereby, this function is available only, if FreeCOM
+had been compiled with some support for swapping.
+</UL>
+
+<P>Note: In the future to swap FreeCOM out of memory during the execution
+of an external program will be the default behaviour.

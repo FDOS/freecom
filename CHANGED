@@ -1,3 +1,6 @@
+v0.80a
+chg: two-digit year -> 2000 if less than 80
+add: DATE /D and TIME /T
 v0.80:
 chg: canexit disabled by default, allowed within initialize() 
 chg: command table uppercased as Installable Commands use uppercased names

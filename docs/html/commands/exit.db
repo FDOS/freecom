@@ -1,0 +1,12 @@
+name: EXIT
+de: Termiate shell
+
+SYNOPSIS:
+EBNF: EXIT [ number ]
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

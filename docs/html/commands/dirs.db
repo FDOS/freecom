@@ -1,0 +1,14 @@
+name: DIRS
+de: Display the directory stack
+see: PUSHD POPD CHDIR CD
+req: CMD_DIRS
+
+SYNOPSIS:
+EBNF: DIRS
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

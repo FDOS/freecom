@@ -81,4 +81,10 @@ ren cmddebug.new cmddebug.exe
 
 rm -frd old
 
+:: Make HTML documents
+pushd docs\html\commands || quit
+echo Updating HTML documents
+perl db2html
+popd
+
 :ende

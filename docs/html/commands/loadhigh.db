@@ -1,0 +1,13 @@
+name: LOADHIGH
+de: Load an external program into high memory
+see: LOADFIX CALL
+
+SYNOPSIS:
+EBNF: LOADHIGH [{ option }] program [{ argument }]
+
+Loads and executes an external program in high memory, also called UMB.
+This command is used to load TSRs, such mouse drivers, into the upper
+memory to conserve the conventional memory for programs.
+
+EXAMPLE:
+CMD: LOADHIGH lmouse.com

@@ -1,0 +1,13 @@
+name: VOL
+de: Display the volume label of a drive
+see: DIR
+
+SYNOPSIS:
+EBNF: VOL [ drive ]
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

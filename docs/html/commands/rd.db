@@ -1,0 +1,14 @@
+name: RD
+de: Remove directory
+see: MD CD
+req: CMD_RKDIR
+
+SYNOPSIS:
+EBNF: RD path
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

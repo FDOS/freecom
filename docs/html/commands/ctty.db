@@ -1,0 +1,55 @@
+name: CTTY
+de: Change TTY (console)
+req: CMD_CTTY
+
+SYNOPSIS:
+EBNF: CTTY device
+
+With this command the console device can be changed. A console device performs
+all basic input and output operations. This change is more complete
+than <A HREF="!:redirection">IO-redirections</A>, because they might
+not catch all output, for instance the error messages. See example 3 below.
+<BR>Because the console is a bidirectional virtual device, meaning it
+is to perform input <STRONG>and</STRONG> output, the specified
+<ARG>device</ARG> must not a unidirectional device, such as <CMD>PRN</CMD>.
+<P>To specify a second argument on the command line of FreeCOM has the
+same effect.
+<P><STRONG>Attention</STRONG>: This command is to effect the whole system,
+not only FreeCOM itself; so the effect of CTTY does not only depend on the
+implementation status of FreeCOM, but on the DOS kernel, too.
+<P>Also, some programs access the screen or keyboard directly, rather than
+using the DOS functions; these programs are <STRONG>not</STRONG> effected
+by CTTY.
+
+EXAMPLES:
+EXAMPLE: 1
+
+CMD: CTTY aux
+
+Changes the console to the <ARG>AUX:</ARG> device, which is usually the
+first serial communication port <CMD>COM1:</CMD>. If this line is connected
+to a terminal or a terminal emulator, the system can be controlled from the
+terminal by now.
+
+EXAMPLE: 2
+
+CMD: CTTY nul
+any command sequence<BR>
+CMD: CTTY con
+
+The first command discards any output. If a program attempts any input
+operation, it gets none. Some programs may not handle such situation
+correctly.
+<BR>So, any output, even error messages, are discarded during the command
+sequence.
+<BR>The second command changes the console back to the screen/keyboard pair.
+<BR>To display a string onto screen or read from keybord the usual
+<A HREF="!:redirection">I/O-redirections</A> may be used, for instance:
+<UL>
+<LI>
+CMD: ECHO This line appears on the screen &gt;CON
+<LI>
+CMD: PAUSE &lt;CON
+This PAUSE command will get its input even within the
+&quot;<CMD>CTTY nul</CMD>&quot; environment.
+</UL>

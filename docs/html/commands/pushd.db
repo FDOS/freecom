@@ -1,0 +1,14 @@
+name: PUSHD
+de: Push the current working directory onto the directory stack
+see: POPD DIRS CD CDD
+req: CMD_CDD CMD_PUSHD
+
+SYNOPSIS:
+EBNF: PUSHD directory
+
+
+STD_OPTIONS:
+
+EXAMPLES:
+EXAMPLE: 1
+

@@ -1,2 +1,2 @@
 
-FreeCom version 0.80 [Dec 13 2000]
+FreeCom version 0.80a [Feb 05 2001]
