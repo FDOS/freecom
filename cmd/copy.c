@@ -36,6 +36,7 @@
 /*#define DEBUG*/
 
 #include <dfn.h>
+#include <suppl.h>
 #include <supplio.h>
 
 #include "../include/command.h"
@@ -115,6 +116,123 @@ static void killContext(void)
     } while(head);
   }
 }
+
+/*
+	faster copy, using large (far) buffers
+*/
+
+static unsigned DOSread(int fd, void far *buffer, unsigned size)
+{
+	union REGS r; struct SREGS sr;
+
+	r.h.ah = 0x3f;
+	r.x.bx = fd;
+	r.x.cx = size;
+	r.x.dx = FP_OFF(buffer);
+	sr.ds  = FP_SEG(buffer);
+	int86x(0x21,&r,&r,&sr);
+	if (r.x.cflag)
+		return 0xffff;
+	return r.x.ax;		
+}
+static unsigned DOSwrite(int fd, void far *buffer, unsigned size)
+{
+	union REGS r; struct SREGS sr;
+
+	r.h.ah = 0x40;
+	r.x.bx = fd;
+	r.x.cx = size;
+	r.x.dx = FP_OFF(buffer);
+	sr.ds  = FP_SEG(buffer);
+	int86x(0x21,&r,&r,&sr);
+	if (r.x.cflag)
+		return 0xffff;
+	return r.x.ax;		
+}
+
+
+/*
+	a) this copies data, using a 60K buffer
+	b) if transfer is slow (or on a huge file),
+	   indicate some progress
+*/
+
+static int BIGcopy(FILE *fout, FILE *fin)
+{
+	int fdin  = fileno(fin);
+	int fdout = fileno(fout);
+
+	char far *buffer;
+	unsigned size;
+	unsigned rd;
+	int retval = 0;
+								/* stat stuff */
+	unsigned startTime, lastTime=0, now, doStat = 0;
+	unsigned long copied = 0, toCopy = filelength(fdin);
+	char *statString;
+	
+	
+	/* Fetch the largest available buffer */
+	for(size = 60*1024u; size != 0; size -= 4*1024) {
+		buffer = (void _seg*)DOSalloc(size/16,0);
+		if(buffer != NULL)
+			goto ok;
+	}
+	return 3;	/* out of memory error */
+
+ok:
+	dprintf( ("[MEM: BIGcopy() allocate %u bytes @ 0x%04x]\n"
+	 , size, FP_SEG(buffer)) );
+	statString = getString(isadev(fdin)
+		? TEXT_COPY_COPIED_NO_END
+		: TEXT_COPY_COPIED);
+	startTime = *(unsigned far *)MK_FP(0x40,0x6c);
+
+	while((rd = DOSread(fdin, buffer, size)) != 0) {
+		if(rd == 0xffff) {
+			retval = 1;
+			goto _exit;
+		}
+		
+		if(DOSwrite(fdout, buffer, rd) != rd) {
+			retval = 2;
+			goto _exit;
+		}
+			
+						/* statistics */
+		copied += rd;	
+			
+		now = *(unsigned far *)MK_FP(0x40,0x6c);
+		
+		if(!doStat
+		 && now - startTime > 15 * 18
+		 && isatty(fileno(stdout)))
+			doStat = TRUE;
+		
+		if(now - lastTime > 18) {
+			if(doStat)
+				printf(statString, copied/1024, toCopy/1024);
+				
+			if(cbreak) {
+				retval = 3;
+				goto _exit;
+			}	
+				
+			lastTime = now;
+		}
+	}	
+		
+_exit:		
+	if(doStat)
+		printf("%30s\r","");
+		
+	dprintf( ("[MEM: BIGcopy() release memory @ 0x%04x]\n"
+	 , FP_SEG(buffer)) );
+	DOSfree(FP_SEG(buffer));
+	free(statString);
+	return retval;
+}
+
 
 static int copy(char *dst, char *pattern, struct CopySource *src
   , int openMode)
@@ -210,6 +328,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     do {
       if((rSrc = fillFnam(h->fnam, srcFile)) == 0) {
         fclose(fout);
+        unlink(rDest);		/* if device -> no removal, ignore error */
         free(rDest);
         return 0;
       }
@@ -219,6 +338,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
         error_open_file(rSrc);
         fclose(fout);
         free(rSrc);
+        unlink(rDest);		/* if device -> no removal, ignore error */
         free(rDest);
         return 0;
       }
@@ -242,6 +362,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
         fclose(fin);
         fclose(fout);
         free(rSrc);
+        unlink(rDest);		/* if device -> no removal, ignore error */
         free(rDest);
         return 0;
       }
@@ -273,21 +394,19 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 		}
       
         if(rc != 0)
-			if(Fcopy(fout, fin) != 0) {
-			  if(ferror(fin)) {
-				error_read_file(rSrc);
-			  } else if(ferror(fout)) {
-				error_write_file(rDest);
-			  } else error_copy();
-			  rc = 0;
-			} else if(sizeChanged) {
-				/* probably the source file got truncated */
-				/* we silently ignore any failure here, because it is
-					assumed that we never extend, but truncate the file
-					only (or do not change the length at all) */
-				truncate(fileno(fout));
+			switch(BIGcopy(fout, fin)) {
+			case 0: 
+				if(sizeChanged)
+					/* probably the source file got truncated */
+					/* we silently ignore any failure here, because it is
+						assumed that we never extend, but truncate the file
+						only (or do not change the length at all) */
+					truncate(fileno(fout));
+				break;
+			case 1:  error_read_file(rSrc);   rc = 0; break;
+			case 2:  error_write_file(rDest); rc = 0; break;
+			default: error_copy();            rc = 0; break;
 			}
-
       } else {      /* text file, manually transform '\n' */
         if(Fmaxbuf((byte**)&buf, &len) == 0) {
           if(len > INT_MAX)

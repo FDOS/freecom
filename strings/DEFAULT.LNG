@@ -1443,3 +1443,12 @@ Unable to write to file '%s';
 probably disc full? (%lu bytes required)
 .
 
+# Displayed for BIGcopy(), when copying takes quite a long time.
+# **_NO_END if the input file size is unknown.
+# Both must end in \r rather than \n!!
+:TEXT_COPY_COPIED_NO_END#0%
+copied %luKB/???KB\r\
+.
+:TEXT_COPY_COPIED#0%
+copied %luKB/%luKB\r\
+.
