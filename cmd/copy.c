@@ -632,7 +632,7 @@ int cmd_copy(char *rest)
 				q = dfnmerge(0, p->fnam, 0, "*", "*");
 			else
 				q = dfnmerge(0, 0, p->fnam, "*", "*");
-			if(0 == (buf = realloc(argBuffer, (argc + 1) * sizeof(char*)))
+			if(0 == (buf = realloc(argBuffer, (argc + 2) * sizeof(char*)))
 			 || !q) {
 				free(q);
 				error_out_of_memory();
