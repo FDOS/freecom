@@ -215,4 +215,8 @@
 #pragma warn -sig
 #endif
 
+#if defined(FEATURE_XMS_SWAP) && defined(INCLUDE_CMD_LOADFIX)
+#undef INCLUDE_CMD_LOADFIX
+#endif
+
 #include "../include/debug.h"
