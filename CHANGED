@@ -1,3 +1,5 @@
+add: ALIAS HTML documentation
+bugfix: MEMORY displays batch nesting level, although, not implemented, yet
 bugfix: Single point of configuration CONFIG.MAK/.H:
 	CONFIG.MAK <-> Compiler specific settings, paths etc.
 	CONFIG.H <-> FreeCOM releated settings, included commands etc.
