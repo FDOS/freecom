@@ -4,8 +4,6 @@
 
 require 'parse.pl';
 
-&readCmdList;
-
 die "Cannot open TOC: $!\n"
 	unless open(TOC, "TOC");
 while(<TOC>) {
@@ -18,30 +16,44 @@ while(<TOC>) {
 }
 close TOC;
 
-sub htmlAppendixRef {
-	my($cmd) = @_;
-
-	return '<A HREF="cmd.html#_appendix' . $cmd . "\">";
-}
-sub htmlCommandRef {
-	my($cmd) = @_;
-
-	return '<A HREF="cmd.html#' . lc($cmd) . "\">$cmd</A>";
-}
-sub htmlFreeCOMRef {
-	my($cmd) = @_;
-	$cmd = $' if $cmd =~ /^[-_]+/;
-
-	return '<A HREF="#-' . $cmd . "\">";
-}
-
+$ref = {
+	'appendix' => sub { '<A HREF="appendix.html#' . lc($_[0]) . "\">"; }
+	, 'cmd' => sub { '<A HREF="cmd.html#' . lc($_[0].$_[1]) . '">'; }
+	, 'main' => sub { my $n = shift;
+		$n =~ s/^[_-]+//g;
+		return '<A HREF="#-' . lc($n) . "\">"; }
+	, 'section' => sub { "\n<H3>" . ucfirst(lc($_[0])) . "</H3>\n"; }
+	, 'subsection' => sub { "\n<H4>" . $_[0] . "</H4>\n"; }
+};
+readCmdList($ref);
 
 foreach $file ('FreeCOM.html') {
 	die "Cannot open '$file': $!\n"
 		unless open(IN, $file);
 	die "Cannot create '../$file': $!\n"
 		unless open(HTML, ">../$file");
-	&parseEBNF;
+	&parseEBNF($ref);
+	close HTML;
+	close IN;
+}
+
+$ref = {
+	'appendix' => sub { '<A HREF="#' . lc($_[0]) . "\">"; }
+	, 'cmd' => sub { '<A HREF="cmd.html#' . lc($_[0].$_[1]) . '">'; }
+	, 'main' => sub { my $n = shift;
+		$n =~ s/^[_-]+//g;
+		return '<A HREF="FreeCOM.html#-' . lc($n) . "\">"; }
+	, 'section' => sub { "\n<H3>" . ucfirst(lc($_[0])) . "</H3>\n"; }
+	, 'subsection' => sub { "\n<H4>" . $_[0] . "</H4>\n"; }
+};
+readCmdList($ref);
+
+foreach $file ('appendix.html') {
+	die "Cannot open '$file': $!\n"
+		unless open(IN, $file);
+	die "Cannot create '../$file': $!\n"
+		unless open(HTML, ">../$file");
+	&parseEBNF($ref);
 	close HTML;
 	close IN;
 }

@@ -31,6 +31,7 @@
 	<LI><A HREF="!!:compile">Compile FreeCOM - sample</A>
 	<LI><A HREF="!!:download">Download</A>
 	<LI><A HREF="!!:cvs-tags">CVS Resources</A>
+	<LI><A HREF="!!:bugzilla">Bug Tracking / Bugzilla</A>
 	<LI><A HREF="!!:ebnf">EBNF</A>
 	</OL>
 </OL>
@@ -192,9 +193,9 @@ the first one is a single percent sign and the second one the variable identifie
 <UL>
 <LI><B>%?</B>: expands to the current errorlevel, which is the exit code of
 the previously executed external command.
-<LI><B>%0</B>: in batch scripts only: is the name of the script currently
+<LI><B>%0</B>: in <A HREF="!:batch">batch scripts</A> only: is the name of the script currently
 executed.
-<LI><B>%1</B> through <B>%9</B>: in batch scripts only: are the first through nineth
+<LI><B>%1</B> through <B>%9</B>: in <A HREF="!:batch">batch scripts</A> only: are the first through nineth
 argument passed to the currently executed batch script. If less than nine arguments
 had been passed to the script, they return an empty string. To access the
 tenth argument please refer to the SHIFT command.
@@ -225,7 +226,7 @@ are described in a style derived from <A HREF="!!:ebnf">EBNF</A>.
 FreeCOM knows two modes:
 <OL>
 <LI>Interactive, and
-<LI>batch processing.
+<LI><A HREF="!:batch">batch processing</A>.
 </OL>
 
 The second one performs batch scripts, which are more or less a sequence of
@@ -594,6 +595,11 @@ files for two different branches.
 		<TD>Resource management implementation.
 			<BR>Finally merged into trunk as of 2001/03/10</TD>
 </TABLE></CENTER>
+
+<HR>
+<H2><A NAME="-bugzilla">Bug Tracking / Bugzilla</A></H2>
+
+FreeCOM uses <A HREF="http://www.freedos.org/bugs/bugzilla/query.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bugidtype=include&chfieldto=Now&product=Freecom&short_desc_type=allwordssubstr&long_desc_type=allwordssubstr&bug_file_loc_type=allwordssubstr&cmdtype=doit&order=Reuse+same+sort+as+last+time">FreeDOS's Bugzilla</A> for tracking bugs and the like.
 
 <HR>
 <H2><A NAME="-ebnf">EBNF</A></H2>

@@ -11,8 +11,8 @@ EBNF: SHIFT DOWN
 </OL>
 
 DESCRIPTION:
-Shifts the arguments of a batch script one position up (first
-variant) or down (second variant).
+Shifts the arguments of a <A HREF="!:batch">batch script</A> one
+position up (first variant) or down (second variant).
 
 <P>Within a batch script the automatic variables %0 through %9
 are replaced by the script name and the first nine arguments.

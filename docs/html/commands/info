@@ -36,6 +36,7 @@ The special object "!" refers to a central explanation location:
 	!:wildcards	Explains how wildcards are matched and their syntax
 	!:options	Explains how options are parsed standardly
 	!:path		Explains how path specification is formatted, abs/rel path
+The special object "!!" refers to the FreeCOM.html primary source.
 
 HREF's with a leading "ftp/http/about" are considered "absolute"
 hyperlinks and are not mangled.

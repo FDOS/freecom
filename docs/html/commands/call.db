@@ -13,7 +13,7 @@ EBNF: CALL [/Y] [ /S | /N ] program [ <<arguments>> ]
 
 DESCRIPTION:
 
-Calls a program or batch script.
+Calls a program or <A HREF="!:batch">batch script</A>.
 
 <P>If the <ARG>program</ARG> is a <A HREF="!:batch">batch script</A>,
 that means it has the

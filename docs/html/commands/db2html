@@ -17,6 +17,16 @@
 
 require 'parse.pl';
 
+$ref = {
+	'appendix' => sub { '<A HREF="appendix.html#' . lc($_[0]) . "\">"; }
+	, 'cmd' => sub { '<A HREF="#' . lc($_[0].$_[1]) . '">'; }
+	, 'main' => sub { my $n = shift;
+		$n =~ s/^[_-]+//g;
+		return '<A HREF="FreeCOM.html##-' . lc($n) . "\">"; }
+	, 'section' => sub { "\n<H3>" . ucfirst(lc($_[0])) . "</H3>\n"; }
+	, 'subsection' => sub { "\n<H4>" . $_[0] . "</H4>\n"; }
+};
+
 $file_toc = "TOC";
 $file_html = "../cmd.html";
 ## $file_cmd = "CMDLIST";	# List of commands to be automatically linked
@@ -52,7 +62,7 @@ for (@ARGV) {
 	&handle($_);
 }
 
-&dumpAppendix;
+# &dumpAppendix;
 &htmlCloseTOC;
 &htmlCloseHtml;
 
@@ -121,7 +131,7 @@ sub dumpEqual {
 	my($eq) = &mangleName(@_);
 
 	print HTML "This command is 100% compatible to ",
-	 &htmlCommandRef($eq), ", please see there\n";
+	 htmlCommandRef($ref, $eq), ", please see there\n";
 }
 
 ## Dump new command header
@@ -165,7 +175,7 @@ sub dumpHeaderEntry {
 	}
 }
 sub dumpBodyEntry {
-	&parseEBNF(lc($na));
+	&parseEBNF($ref, lc($na));
 }
 
 sub dumpFooter {
@@ -173,38 +183,11 @@ sub dumpFooter {
 }
 
 
-sub htmlAppendixRef {
-	my($cmd) = @_;
-
-	return '<A HREF="#_appendix' . $cmd . "\">";
-}
-sub htmlCommandRef {
-	my($cmd) = @_;
-
-	return '<A HREF="#' . lc($cmd) . "\">$cmd</A>";
-}
-sub htmlFreeCOMRef {
-	my($cmd) = @_;
-	$cmd = $' if $cmd =~ /^[-_]+/;
-
-	return '<A HREF="FreeCOM.html#-' . $cmd . "\">";
-}
 sub htmlRefWord {
 	my($cmd) = @_;
 
 	return $cmd unless defined($cmdlist{uc($cmd)});
-	return &htmlCommandRef($cmd);
-}
-
-sub htmlSection {
-	my($name) = @_;
-
-	return "\n<H3>" . ucfirst(lc($name)) . "</H3>\n";
-}
-sub htmlSubSection {
-	my($name) = @_;
-
-	return "\n<H4>$name</H4>\n";
+	return htmlCommandRef($ref, $cmd);
 }
 
 ## Dump the command footer
@@ -269,7 +252,7 @@ sub htmlCloseHtml {
 
 ##################3
 sub openCmdList {
-	&readCmdList;
+	&readCmdList($ref);
 	open(CMDLIST, ">$file_cmd")
 		or die "Cannot create command list file: $!\n";
 }

@@ -4,8 +4,8 @@
 
 $file_cmd = "CMDLIST";	# List of commands to be automatically linked
 
-sub parseEBNF {
-	my($ref_na) = @_;		# refernce name of this object
+sub parseEBNF ($;$) {
+	my($ref, $ref_na) = @_;		# reference makers & reference name of this object
 
 	while(<IN>) {
 		chomp;
@@ -16,11 +16,11 @@ sub parseEBNF {
 			$_ = "\n<CMD>" . &htmlXLat($l) . "</CMD><BR>";
 		} elsif(/^(SYNOPSIS):/ || /^(OPTIONS):/ || /^(EXAMPLES):/
 		 || /^(ARGUMENTS):/) {
-			$_ = &htmlSection($1);
+			$_ = $ref->{'section'}($1);
 		} elsif(/^STD_OPTIONS:/) {
-			$_ = &htmlSection('Options') . $htmlHowToFormatOptions;
+			$_ = $ref->{'section'}('Options') . $htmlHowToFormatOptions;
 		} elsif(/^EXAMPLE:\s*/) {
-			$_ = &htmlSubSection("Example: $'");
+			$_ = $ref->{'subsection'}("Example: $'");
 		} elsif(/^DESCRIPTION:/) {
 			$_ = "<P>\n";
 		} elsif(/^SKAUS_EVALUATE_PERL:/) {
@@ -96,11 +96,11 @@ sub parseEBNF {
 				$label = "_" . $label if $label;
 				$obj = $ref_na unless $obj;
 				if($obj eq '!') {	## command appendix	
-					$line .= &htmlAppendixRef($label);
+					$line .= $ref->{'appendix'}($label);
 				} elsif($obj eq '!!') {	## FreeCOM
-					$line .= &htmlFreeCOMRef($label);
+					$line .= $ref->{'main'}($label);
 				} else {
-					$line .= "<A HREF=\"#$obj$label\">";
+					$line .= $ref->{'cmd'}($obj, $label);
 				}
 			}
 			$_ = $post;
@@ -125,15 +125,26 @@ sub htmlXLat {
 	return $line;
 }
 
-sub readCmdList {
+sub htmlCommandRef ($$;$) {
+	my($ref, $cmd, $label) = @_;
+
+	my $s = '';
+	$s = " - $label" if $label;
+
+	return $ref->{'cmd'}($cmd,$label) . "$cmd$s</A>";
+}
+sub readCmdList ($) {
+	my $ref = shift;
+
 	if(open(CMDLIST, $file_cmd)) {
 		# Read them
 		$cmdExpr = '';
+		%cmdlist = ();
 		while(<CMDLIST>) {
 			chomp;
 			$cmdlist{$_} = 1;
 			$cmdExpr .=  ", s/\\b$_\\b/"
-			 . quotemeta("<CMD>" . &htmlCommandRef($_) . "</CMD>")
+			 . quotemeta("<CMD>" . htmlCommandRef($ref, $_) . "</CMD>")
 			 . "/g";
 		}
 		close CMDLIST;

@@ -13,10 +13,11 @@ EBNF: ECHO <<string>>
 EBNF: ECHO.
 </OL>
 
-When executing a batch script each line is displayed to the console
+When executing a <A HREF="!:batch">batch script</A>
+each line is displayed to the console
 before executing it by default. The first variant of ECHO enables or
 disables this behaviour. To disable echoing the commands is equal to
-prefix each line of a batch script with the Ad-symbol <TT>@</TT>.
+prefix each line of a batch script with the Ad-symbol <CMD>@</CMD>.
 <BR>If ECHO is invoked with no argument at all, the current echo status
 is displayed.
 <BR>When entered on an interactive command line the echo status controls
@@ -28,7 +29,7 @@ EBNF!: <<string>>
 <BR>Note: Because of variant 1
 EBNF!: <<string>>
  may not expand
-to the single words <CMD>ON</CMD> or <CMD>OFF</TT> without another
+to the single words <CMD>ON</CMD> or <CMD>OFF</CMD> without another
 character.
 
 <P>The third variant displays an empty line. No space must be
@@ -44,7 +45,7 @@ Displays the current echo status, e.g. responding:
 EXAMPLE: 2
 CMD: @ECHO OFF
 
-Disables the echo status. Because the Ad-sign <TT>@</TT> disables the
+Disables the echo status. Because the Ad-sign <CMD>@</CMD> disables the
 echo status right for this line, this command disable echoing all the
 next lines of a batch script and is not echoed to the console itself.
 It is, therefore, best placed in the first line of a batch script.

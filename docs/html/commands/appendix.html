@@ -1,4 +1,21 @@
-<H3><A NAME="currdir">Current Directory</A></H3>
+<!-- $Id$ -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META HTTP-EQUIV="Content-Language" CONTENT="en">
+<META NAME="GENERATOR" CONTENT="VI">
+<META NAME="DESCRIPTION" CONTENT="Appendix to the Description of Features and Implementation Status of FreeCOM, the COMMAND.COM Replacement">
+<META NAME="AUTHOR" CONTENT="Steffen Kaiser">
+<META NAME="KEYWORDS" CONTENT="DOS, FreeDOS, FreeCOM, COMMAND.COM, CLI">
+<META NAME="dATE" CONTENT="2004-03-22">
+<TITLE>Appendix to the Description of Features and Implementation Status of FreeCOM</TITLE>
+</HEAD>
+
+<BODY>
+<H1>Appendix to the Description of Features and Implementation Status of FreeCOM</H1>
+
+<H2><A NAME="currdir">Current Directory</A></H2>
 
 The current directory is the default directory of a drive.
 
@@ -7,14 +24,18 @@ specified with a drive specification only, such as <CMD>D:</CMD>,
 it is completed with this default directory of that drive to
 construct the <A HREF="!:abspath">absolute path</A> to be used.
 
-<H3><A NAME="cwd">Current Working Direcory</A></H3>
+<HR>
+
+<H2><A NAME="cwd">Current Working Direcory</A></H2>
 
 In opposite to the current directory the current <EM>working</EM>
 directory is the <A HREF="!:abspath">absolute path</A> constructed
-out of the <A HREF="chgdrive:">currently selected drive</A> and <A
-HREF="cd">current directory</A> of that drive.
+out of the <A HREF="chgdrive:">currently selected drive</A> and
+<A HREF="cd:">current directory</A> of that drive.
 
-<H3><A NAME="abspath">Path Specification</A></H3>
+<HR>
+
+<H2><A NAME="abspath">rath Specification</A></H2>
 
 In DOS an absolute path is constructed out of several components:
 <OL>
@@ -127,7 +148,9 @@ a valid file tree. Therefore a common assumption that a tripple dot
 <CMD>...</CMD> directory means <EM>parent-of-parent</EM> is incorrect,
 though, might be supported by certain programs.
 
-<H3><A NAME="options">Standard Rules for Options</A></H3>
+<HR>
+
+<H2><A NAME="options">Standard Rules for Options</A></H2>
 
 Options are prefixed by one forward slash &quot;<CMD>/</CMD>&quot;,
 the following character identifies the option and is called
@@ -142,32 +165,22 @@ one equal sign &quot;<CMD>=</CMD>&quot;, for instance: <OPT>/A:hr</OPT>
 or <OPT>/P=fdexec.bat</OPT>.
 
 <P>Multiple options <EM>without</EM> argument maybe merged together
-as a single option with or without embedded slashes, e.g. <OPT>/WS</OPT>
-or <OPT>/W/S</OPT>, instead of <OPT>/W /S</OPT>.
-<BR>However, because some commands do accept long option names, the
-way with embedded slashes is more secure and is recommended therefore.
+as a single option with embedded slashes, e.g.
+<OPT>/W/S</OPT>, instead of <OPT>/W /S</OPT>.
 <BR>An option with argument may be the last one of such merged options.
 
 <P>Options without arguments enable or disable certain features. Therefore,
 those options are sometimes called <EM>boolean</EM> options or flags.
-<BR>Boolean options may be optionally prefixed by a plus &quot;<CMD>+</CMD>&quot;
-or minus &quot;<CMD>-</CMD>&quot; sign. So, the boolean option <OPT>O</OPT>
-can be written in three ways:
-<OL>
-<LI><OPT>/+O</OPT>: The option is enabled.
-<LI><OPT>/-O</OPT>: The option is disabled.
-<LI><OPT>/O</OPT>: (<FONT SIZE=-1>neither plus nor minus sign</FONT>)
-The option is toggled or flipped; this means if the option is
-enabled currently, it is disabled; but if it is disabled currently,
-it is enabled.
-</OL>
-<BR>Without user invention a boolean option is disabled by default, so
-both <OPT>/+O</OPT> and <OPT>/O</OPT> behave the same most
-of the time. However, some commands allow the user to change the default
-settings of certain options, e.g. COPY and
-DIR.
+<BR>Boolean options may be prefixed by a minus &quot;<CMD>-</CMD>&quot;
+sign, in order to disable or turn off the option; otherwise, the option
+is enabled.
+<BR>Without user invention a boolean option is disabled by default.
+However, some commands allow the user to change the default settings of
+certain options, e.g. COPY and DIR.
 
-<H3><A NAME="redirection">I/O Redirection</A></H3>
+<HR>
+
+<H2><A NAME="redirection">I/O Redirection</A></H2>
 
 In DOS the standard input and output can be redirected to a file or
 another device; however, although it is common to use these I/O streams
@@ -189,7 +202,7 @@ error messages the user should not miss.
 
 <P>Redirections are specified on command line and effect exactly that
 command invoked herein, regardless if the command is an external or
-internal one, an alias or batch script. The utter exception is the FOR
+internal one, an alias or <A HREF="!:batch">batch script</A>. The utter exception is the FOR
 command, which requires that the redirection is to apply to the command
 specified behind the DO keyword rather than FOR itself.
 <BR>If more than one redirection is specified on the command line and
@@ -199,7 +212,10 @@ superceed any previous one.
 <P>Redirections are syntactically specified like this:
 <BR>
 EBNF: operator target
+<!--
 EBNF: operator ::= '<' | '>' [ '>' ] [ '&' [ '>' ] ]
+-->
+EBNF: operator ::= '<' | '>' [ '>' ]
 EBNF: target ::= file | device
 
 <BR>Although it is not relevant where the redirections are placed on the
@@ -218,6 +234,7 @@ command line, it is common praxis to place them at the end of it.
 <TR>	<TD><CMD>&gt;&gt;</CMD></TD>
 		<TD>Output stream; output is appended to target, if it already exists</TD>
 </TR>
+<!--
 <TR>	<TD><CMD>&gt;&amp;</CMD></TD>
 		<TD>Output and error stream; target file is overwritten</TD>
 </TR>
@@ -230,6 +247,7 @@ command line, it is common praxis to place them at the end of it.
 <TR>	<TD><CMD>&gt;&gt;&amp;&gt;</CMD></TD>
 		<TD>Error stream; output is appended to target, if it already exists</TD>
 </TR>
+-->
 </TABLE>
 
 EXAMPLES:
@@ -239,14 +257,14 @@ CMD: cmd <in1 <in2
 one.
 
 EXAMPLE: 2
-CMD: cmd <in >&out
-<BR>Input stream is redirected to file <CMD>IN</CMD>, output and error streams are
-joined together and redireced into file <CMD>OUT</CMD>.
+CMD: cmd <in >out
+<BR>Input stream is redirected to file <CMD>IN</CMD>, the output streams is
+redireced into file <CMD>OUT</CMD>.
 If the file <CMD>OUT</CMD> already exists, the old contents is discarded and
 replaced by the new one; otherwise, the <CMD>OUT</CMD> is created anew.
 
 EXAMPLE: 3
-CMD: cmd <in >>&out
+CMD: cmd <in >>out
 <BR>As example 2, but instead of replacing the contents of <CMD>OUT</CMD>, if the
 file already exists, the new information is appended to the end of the file.
 
@@ -265,7 +283,7 @@ CMD: FOR %a IN (*.*) DO ECHO %a >>out
 actually replace the file rather than appending the file list to the
 probably existent file.
 
-<H4>Pipes</H4>
+<H3><A NAME="pipe">Pipes</A></H3>
 
 <P>Another form of redirection is <STRONG>piping</STRONG>. Hereby, the output stream
 of one command is connected to the input stream of another command. Pipes can combine
@@ -325,7 +343,7 @@ and <CMD>cmd3</CMD> are issued to the screen.
 
 <H4>Nested redirections</H4>
 
-Batch scripts or when external programs invoke other programs or another shell,
+<A HREF="!:batch">Batch scripts</A> or when external programs invoke other programs or another shell,
 redirections may be nested, e.g.:
 
 <P>Consider the batch file <CMD>BATCH.BAT</CMD>:
@@ -349,7 +367,10 @@ the redirection is closed and the former one is restored.
 into <CMD>OUT_1</CMD> again.
 
 
-<H3><A NAME="hicmd">Hidden Internal Commands</A></H3>
+<!--
+<HR>
+
+<H2><A NAME="hicmd">Hidden Internal Commands</A></H2>
 
 There are some special internal commands, that are not directly visible
 nor accessable. They are hidden because of two main purposes:
@@ -371,3 +392,157 @@ the <CMD>::=</CMD>, hence, ignore those commands.
 CMD: C> ::=CANCEL 30
 <BR>cancels (terminates) all currently active batch files and assigns
 <ARG>30</ARG> to the current errorlevel.
+-->
+
+<HR>
+
+<H2><A NAME="wildcards">Wildcards</A></H2>
+
+DOS accepts certain placeholders instead of files, so you can specify
+one or more files with the same wildcard pattern. In opposite to other
+systems each program expands wildcards individually instead of let the
+shell do this; however, the shell must epxand wildcards for its internal
+commands.
+
+<P>FreeCOM supports the standard DOS wildcards as supported by the DOS
+kernel itself:
+
+<TABLE BORDER=1>
+<TR> <TH>Wildcard</TH> <TH>Meaning</TH> </TR>
+
+<TR> <TD><CMD>*</CMD></TD> <TD>Any remaining body, except a dot (<CMD>.</CMD>)</TD> </TR>
+<TR> <TD><CMD>?</CMD></TD> <TD>Any character, except the dos (<CMD>.</CMD>);
+	acts as <CMD>*</CMD>, if the last character</TD> </TR>
+
+</TABLE>
+
+<BR>Wildcards are allowed in the last portion of a qualified path, that means
+behind the last backslash (<CMD>\</CMD>) or colon (<CMD>:</CMD>).
+<BR>Wildcards match either before or behind the dot delimiting the
+filename and its extension.
+<BR>Whether or not directories or volume lables or hidden and system
+files do match a pattern depends on the command expanding it.
+<BR>Letters match case-insensitively.
+
+<P>Examples:
+<TABLE BORDER=1>
+<TR> <TH>Pattern</TH> <TH>Meaning</TH> </TR>
+
+<TR> <TD><CMD>*.*</CMD></TD> <TD>Any file in the current directory</TD> </TR>
+<TR> <TD><CMD>c:*.*</CMD></TD> <TD>Any file in the current
+working directory of drive C:</TD> </TR>
+<TR> <TD><CMD>*</CMD></TD> <TD>Any file without an extension. <FONT SIZE=-1>
+	Some commands, such as DIR, interprete a single <CMD>*</CMD>
+	as <CMD>*.*</CMD></FONT></TD> </TR>
+<TR> <TD><CMD>a*.*</CMD></TD> <TD>Any file, which first character is
+	an <CMD>A</CMD>, neither the remainder of the filename nor
+	the extension of the file matters</TD></TR>
+<TR> <TD><CMD>a?.*</CMD></TD> <TD>same as above</TD> </TR>
+<TR> <TD><CMD>a???.*</CMD></TD> <TD>same as above</TD> </TR>
+<TR> <TD><CMD>a*b.*</CMD></TD> <TD>same as above</TD> </TR>
+<TR> <TD><CMD>a?b.*</CMD></TD> <TD>Any file, which first character is
+	an <CMD>A</CMD> and the third one is a <CMD>B</CMD>; the remaining
+	characters nor the extension matter</TD> </TR>
+<TR> <TD><CMD>file?.txt</CMD></TD> <TD>All files, which first four characters
+	are <CMD>FILE</CMD> and which extension is equal to <CMD>TXT</CMD></TD> </TR>
+<TR> <TD><CMD>\scripts\*.pl</CMD></TD> <TD>Any perl file in the directory <CMD>\SCRIPTS</CMD> located in the root directory of the currently selected drive</TD> </TR>
+
+</TABLE>
+
+
+<P><STRONG>Warning:</STRONG> There are common mistakes about wildcards,
+as DOS has less functional wildcards than other systems, in particular:
+<UL>
+<LI><CMD>a*bc.*txt</CMD>: Any character right of an asterisk <CMD>*</CMD>
+up to the dot <CMD>.</CMD> or the end of the filename is ignored; this
+pattern is equal to: <CMD>a*.*</CMD>.
+<LI><CMD>a?.?</CMD>: A question mark <CMD>?</CMD> as the last character
+of either the filename or file extension has the same effect as an
+asterisk <CMD>*</CMD> and does <EM>not</EM> mean <EM>exactly one any
+character</EM>, in particular no character must be present; this pattern
+is equal to <CMD>a*.*</CMD>.
+</UL>
+
+<HR>
+
+<H2><A NAME="batch">Batch Scripts</A></H2>
+
+The shell lets to automate simple tasks by writing batch scripts.
+These are plain text files with one command is written at one line.
+Any command, both internal and external ones, can be used in batch
+scripts, along with <A HREF="!:redirection">redirections</A>,
+<A HREF="!:pipe">pipes</A>, <A HREF="!!:envvars">environment variable</A>
+substitions a.s.o. The script is performed line-by-line.
+
+<P>By default, before executing a line, it is displayed onto the screen,
+in order to prevent this, one can turn off this feature with the ECHO command
+or prefix each line with the Ad sign (<CMD>@</CMD>), e.g.:
+<BR>
+CMD: ECHO This line is displayed
+CMD: @ECHO This line is NOT displayed
+<BR>Commonly batch scripts start with the line:
+<BR>
+CMD: @ECHO OFF
+<BR> in order to turn off to echo each line furtherly in the script
+processing and to suppress to echo the line itself, too.
+
+<P>Lines starting with a colon (<CMD>:</CMD>) label this particular script
+line, in order to be jumped to with the GOTO command, e.g.:
+<BR>
+CMD: @ECHO OFF
+CMD: IF "%1"=="" GOTO useage
+CMD: ECHO argument1=%1
+CMD: ECHO argument2=%2
+CMD: ECHO argument3=%3
+CMD: GOTO ende
+CMD: :useage
+CMD: ECHO Useage: %0 {arguments}...
+CMD: :ende
+<BR><UL>
+<LI>If the script is invoked with no argument, line 2 performs the GOTO
+command and, thus, skips the lines 3 through 7 and proceeds with
+line 8.
+<LI>Otherwise the three ECHO commands are invoked and the GOTO command of
+line 6 skips the ECHO'ing of the error message in line 8 and proceeds in
+line 9.
+</UL>
+If the shell hits a line starting with a colon, it is silently skipped; not
+even redirections are evaluated in opposite to the REM command.
+
+<P>When the shell reaches the end of the file, the batch processing terminates.
+The errorlevel of the last spawned external command remains unchanged.
+Because the shell closes the batch script and re-opens it each time a
+command, for both internal and external ones, is invoked, one can savely
+replace floppy disks during a batch processing, e.g.:
+<BR>
+CMD: @ECHO OFF
+CMD: ECHO Copying disk1
+CMD: COPY files\*.* C:%1
+CMD: :disk2
+CMD: PAUSE Insert disk #2, then hit ENTER
+CMD: IF NOT EXIST disk2 GOTO disk2
+CMD: ECHO Copying disk2
+CMD: COPY files\*.* C:%1
+CMD: :disk3
+CMD: PAUSE Insert disk #3, then hit ENTER
+CMD: IF NOT EXIST disk2 GOTO disk3
+CMD: ECHO Copying disk3
+CMD: COPY files\*.* C:%1
+CMD: ECHO Copying done.
+
+<P>When a batch file is invoked within another batch file, the previous ones
+does <EM>not</EM> proceed once the called one terminates, regardless of the
+nesting level; this is called <EM>chaining</EM>, one chains to another
+program and does not intend to come back. To have a batch script behave
+like an external program in this regard, it must be invoke via the
+CALL command, e.g.:
+<BR>
+CMD: @ECHO OFF
+CMD: ECHO %0 - line 2
+CMD: CALL batch2
+CMD: ECHO %0 - line 4
+<BR>and <CMD>BATCH2.BAT</CMD>:<BR>
+CMD: ECHO %0 - line 1
+<BR>
+
+</BODY>

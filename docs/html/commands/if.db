@@ -35,7 +35,7 @@ This allows to use the so-called <EM>Benny levels</EM>, where you
 can specify <CMD>HA</CMD>, <CMD>HB</CMD>, ... , <CMD>HZ</CMD> or
 <CMD>xa</CMD>, <CMD>xb</CMD>, ... , <CMD>xz</CMD> instead of
 <CMD>1</CMD>, <CMD>2</CMD>, ... , <CMD>26</CMD>. Some malformed
-batch script use this syntax to make mapping of errorlevels to
+<A HREF="!:batch">batch script</A> use this syntax to make mapping of errorlevels to
 drive letters <EM>more visible</EM>. See example 5.
 
 <P>The third and four ones are true, when the left string is case-sensitively
