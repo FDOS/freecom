@@ -493,13 +493,12 @@ char *readbatchline(int *eflag, char *textline, int size)
     if (*first == ':')
     {
       /* if a label is searched for test if we reached it */
-      if (bc->blabel)
-      {
-        ip = first;
+      if(bc->blabel) {
         /* label: the 1st word immediately following the colon ':' */
-        while (isgraph(*++ip)) ;
+		for(ip = ++first; isgraph(*ip); ++ip)
+			;
         *ip = '\0';
-        if (stricmp(first + 1, bc->blabel) == 0)
+        if (stricmp(first, bc->blabel) == 0)
         {                       /* OK found */
           free(bc->blabel);
           bc->blabel = 0;
