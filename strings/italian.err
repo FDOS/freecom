@@ -1,0 +1,130 @@
+# $Id$
+#
+# Critical error national customization file
+#
+#       Language: Italian
+#       Codepage: CP850
+#       Author:   Roberto Mariottini
+# 
+# The critical error (criter) handler receives some information
+# from the kernel about what error condition happens, generates some
+# human friendly message from it, requests the user's opinion about
+# how to proceed and, finally, returns to the kernel.
+# 
+# The human friendly message is generated using one of the following
+# templates:
+# BLOCK_DEVICE (for criters on block devices)
+# 	Error %1 drive %A: %2 area: %3
+# -and- CHAR_DEVICE (for criters on character devices)
+# 	Error %1 device %A: %3
+# 
+# Two-character sequences, which first character is a percent sign '%',
+# are placeholders for other information:
+# %% -> a single percent sign
+# %1 -> either READ or WRITE, depending on what kind of operation
+# 	caused the criter
+# %2 -> the kind of area the criter took place on DOS, FAT, ROOT, or DATA
+# %3 -> the actual error string; these are the strings associated to
+# 	a number 0 through N, and must correspond to the number passed in
+# 	lowbyte(DI) to the criter handler (see RBIL INT-24 for details)
+# %A -> drive letter (for block devices); name of device (character devices)
+# 
+# Below the line describing the error the user is prompted for the action
+# to proceed. This line is dynamically constructed depending on which
+# action are available at all. The full line may look like this:
+# 	(A)bort, (I)gnore, (R)etry, (F)ail?_
+# 
+# The individual words are defined by ABORT, IGNORE, RETRY, FAIL. They
+# should indicate which user response keys is associated with them;
+# suggested is to use the first letter and enclose it in parenthesises.
+# The delimiter ", " can be defined with DELIMITER and is the same
+# for all slots.
+# The "? " sequence is defined by QUESTION.
+# The order of the actions is fixed and cannot be customized.
+# 
+# With each action a number of user response keys must be associated.
+# They can be enumerated with the KEYS_ABORT, KEYS_IGNORE, ...
+# strings. Because the key is searched in the same format as returned
+# by INT-16-00, both upper and lower case must be specified and
+# certain special keys cannot be used.
+# 
+# The individual error strings are defined by the #: lines, where
+# the hash sign '#' refers to the number the kernel passes to the
+# criter handler. The UNKNOWN string is displayed for all error
+# numbers not specified.
+#
+# NOTE #1: The percent rule applies to _all_ criter strings!
+# NOTE #2: Each string occupies exactly one line.
+# NOTE #3: Any leading or trailing whitespaces are removed. Prefix the
+#	first or suffix the last whitespace with '%.' (one percent sign and
+#	one dot). This sequence is removed from the string totally.
+# NOTE #4: To embed any character use: %&## (one percent sign,
+#		one ampersand and exactly two hexa-decimal digits)
+
+## Primary strings
+S2
+BLOCK_DEVICE: Errore di %1l'unit… %A: %2 area: %3
+S3
+CHAR_DEVICE: Errore di %1 dispositivo %A: %3
+
+## kind of operation
+S0
+READ: lettura dal
+S1
+WRITE: scrittura sul
+
+## kind of failed area of block devices
+S4
+DOS: DOS
+S5
+FAT: FAT
+S6
+ROOT: root
+S7
+DATA: dati
+
+## action strings
+S8
+IGNORE: (I)gnora
+S9
+RETRY: (R)iprova
+S10
+ABORT: (A)nnulla
+S11
+FAIL: (F)allisci
+## keys associated with the actions
+S14 (compacted)
+KEYS_IGNORE: iI
+KEYS_RETRY:  rR
+KEYS_ABORT:  aA
+KEYS_FAIL:   fF
+## embedded strings
+S12
+QUESTION:  ? %.
+S13
+DELIMITER: , %.
+
+## Error strings
+UNKNOWN: Codice di errore sconosciuto
+S15
+0: tentativo di violazione della protezione in scrittura
+1: unit… sconosciuta al driver
+2: unit… non pronta
+3: comando sconosciuto inviato al driver
+4: errore nei dati (errore CRC)
+5: errata dimensione della struttura di richiesta al driver
+6: erorre di posizionamento (seek)
+7: tipo di supporto (media) sconosciuto
+8: settore non trovato
+9: stampante senza carta
+10: scrittura fallita
+11: lettura fallita
+12: guasto generico
+13: violazione della condivisione
+14: violazione di blocco (lock)
+15: cambio di disco non valido
+16: FCB non disponibile
+17: sharing buffer overflow
+18: tabella di codici differente
+19: input esaurito
+20: spazio su disco insufficiente
