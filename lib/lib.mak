@@ -10,8 +10,8 @@ all: $(CFG) freecom.lib
 
 freecom_deps :  \
 	absfile.obj \
-	alprmblk.obj \
 	almemblk.obj \
+	alprmblk.obj \
 	alsysblk.obj \
 	app_get.obj \
 	app_set.obj \
@@ -33,6 +33,8 @@ freecom_deps :  \
 	cmdinput.obj \
 	comfile.obj \
 	compfile.obj \
+	critend.obj \
+	critrchk.obj \
 	ctxt.obj \
 	ctxt_adr.obj \
 	ctxt_as.obj \
@@ -133,12 +135,12 @@ freecom_deps :  \
 	res_r.obj \
 	res_vald.obj \
 	res_w.obj \
-	resfile.obj \
-	rmtmpfil.obj \
-	rtrimcl.obj \
 	chunk1
 
 chunk1 :  \
+	resfile.obj \
+	rmtmpfil.obj \
+	rtrimcl.obj \
 	rtrimsp.obj \
 	salloc.obj \
 	samefile.obj \
@@ -277,6 +279,8 @@ freecom.lib : $(CFG) freecom_deps
 +-cmdinput.obj &
 +-comfile.obj &
 +-compfile.obj &
++-critend.obj &
++-critrchk.obj &
 +-ctxt.obj &
 +-ctxt_adr.obj &
 +-ctxt_as.obj &
@@ -516,6 +520,8 @@ freecom.lib : $(CFG) freecom_deps
 +cmdinput.obj &
 +comfile.obj &
 +compfile.obj &
++critend.obj &
++critrchk.obj &
 +ctxt.obj &
 +ctxt_adr.obj &
 +ctxt_as.obj &
