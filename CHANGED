@@ -1,3 +1,4 @@
+add: DIR: /O (single sort order) {Tom Ehlert}
 bugfix: CONFIG.H: enabled CHCP by default
 fix: typos
 bugfix: cached NLS data not flushed

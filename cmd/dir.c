@@ -186,9 +186,22 @@
 	/* FINDFIRST() file mask used if /A (no args) has been given */
 #define ATTR_ALL FA_RDONLY | FA_ARCH | FA_DIREC | FA_HIDDEN | FA_SYSTEM;
 
+/* Definitions for optO */
+#define ORDER_BY_SIZE 1
+#define ORDER_BY_DATE 2
+#define ORDER_BY_NAME 4
+#define ORDER_BY_EXT  8
+#define ORDER_INVERSE 0x10
+#define ORDER_DIRS_FIRST 0x20
+#define ORDER_DIRS_LAST 0x40
+#define ORDER_BY_MASK 0xF
 
-
-static int optS, optP, optW, optB, optL, longyear;
+struct currDir {
+	unsigned linecount; /* for /B */
+	};          
+	
+static int optS, optP, optW, optB, optL, longyear, optO;
+static struct ffblk _seg *orderArray;
 
 static unsigned attrMay, attrMask, attrMatch;
 /* within/right after the parsing of the options:
@@ -245,6 +258,39 @@ done:
 	return E_None;
 }
 
+static scanOrder(const char *p)
+{
+	int dir = ORDER_DIRS_FIRST;
+	optO = ORDER_BY_NAME;
+
+	if(p && *p) {
+		dir = 0;
+		for(--p;;) {
+			int inverse = *p == '-';
+			switch(toupper(*++p)) {
+			case '-': continue;
+			case 'S': optO = ORDER_BY_SIZE; break;
+			case 'D': optO = ORDER_BY_DATE; break;
+			case 'N': optO = ORDER_BY_NAME; break;
+			case 'E': optO = ORDER_BY_EXT; break;
+			case 'G': dir = inverse? ORDER_DIRS_LAST: ORDER_DIRS_FIRST;
+						continue;
+			case 'U': optO = dir = 0; continue;
+			case '\0': goto done;
+			default:	/* error */
+				error_illformed_option(p);
+				return E_Useage;
+			}
+			if(inverse)
+				optO |= ORDER_INVERSE;
+		}
+done:;
+	}
+
+	optO |= dir;
+	return E_None;
+}
+
 #pragma argsused
 optScanFct(opt_dir)
 { switch(ch) {
@@ -252,6 +298,8 @@ optScanFct(opt_dir)
   case 'P': return optScanBool(optP);
   case 'W': return optScanBool(optW);
   case 'B': return optScanBool(optB);
+  case 'O': if(!bool) return scanOrder(strarg);
+  			break;
   case 'A': if(!bool) return scanAttr(strarg);
   			break;
   case 'L': return optScanBool(optL);
@@ -261,6 +309,10 @@ optScanFct(opt_dir)
   	case 'A': case 'a':		/* /A*** */
   		if(!bool && !optHasArg())
 			return scanAttr(optstr + 1);
+		break;
+  	case 'O': case 'o':		/* /O*** */
+  		if(!bool && !optHasArg())
+			return scanOrder(optstr + 1);
 		break;
 	}
   }
@@ -465,6 +517,183 @@ static int dir_print_free(unsigned long dirs)
   return incline();
 }
 
+int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
+{
+   int rv = E_None;
+
+    if (cbreak)
+      return E_CBreak;
+
+    if (optL)
+      strlwr(file->ff_name);
+
+    if (optW)
+    {
+      char buffer[sizeof(file->ff_name) + 3];
+
+      if (file->ff_attrib & FA_DIREC)
+      {
+        sprintf(buffer, "[%s]", file->ff_name);
+      }
+      else
+      {
+        strcpy(buffer, file->ff_name);
+      }
+      displayString(TEXT_DIR_LINE_FILENAME_WIDE, buffer);
+      if (++cDir->linecount == WIDE_COLUMNS)
+      {
+        /* outputted 5 columns */
+        putchar('\n');
+        rv = incline();
+        cDir->linecount = 0;
+      }
+    }
+    else if (optB)
+    {
+      if (strcmp(file->ff_name, ".") == 0 || strcmp(file->ff_name, "..") == 0)
+        return E_None;
+      if (optS)
+        fputs(path, stdout);
+      displayString(TEXT_DIR_LINE_FILENAME_BARE, file->ff_name);
+      rv = incline();
+    }
+    else
+    {
+      char buffer[sizeof(long) * 4 + 2], *ext;
+
+      if (file->ff_name[0] == '.')
+        displayString(TEXT_DIR_LINE_FILENAME_SINGLE, file->ff_name);
+      else
+      {
+        ext = strrchr(file->ff_name, '.');
+        if (!ext)
+          ext = "";
+        else
+          *ext++ = '\0';
+
+        displayString(TEXT_DIR_LINE_FILENAME, file->ff_name, ext);
+      }
+
+      if (file->ff_attrib & FA_DIREC)
+      {
+        displayString(TEXT_DIR_LINE_SIZE_DIR);
+      }
+      else
+      {
+        convert(file->ff_fsize, buffer);
+        displayString(TEXT_DIR_LINE_SIZE, buffer);
+      }
+
+	{ char *p;
+		int year, month, day;
+		int hour, minute;
+
+		year = (file->ff_fdate >> 9) + 80;
+		if(longyear)
+			year += 1900;
+		else	year %= 100;
+		day = file->ff_fdate & 0x001f;
+		month = (file->ff_fdate >> 5) & 0x000f;
+		hour = file->ff_ftime >> 5 >> 6;
+		minute = (file->ff_ftime >> 5) & 0x003f;
+
+		p = nls_makedate(0, year, month, day);
+		if(!p) {
+			error_out_of_memory();
+			return E_NoMem;
+		}
+		putchar(' ');
+		fputs(p, stdout);
+		free(p);
+		p = nls_maketime(NLS_MAKE_SHORT_AMPM, hour, minute, -1, 0);
+		if(!p) {
+			error_out_of_memory();
+			return E_NoMem;
+		}
+		putchar(' ');
+		fputs(p, stdout);
+		free(p);
+		putchar('\n');
+	 }
+
+      rv = incline();
+   }
+   return cbreak? E_CBreak: rv;
+}
+
+int _Cdecl orderFunction(const void *p1, const void *p2)
+{
+  int i1 = *(int*)p1;
+  int i2 = *(int*)p2;
+  int rv = 0;
+
+  struct ffblk f1, f2;
+
+  _fmemcpy(&f1, orderArray + i1 , sizeof(f1));
+  _fmemcpy(&f2, orderArray + i2 , sizeof(f2));
+  
+  if((optO & (ORDER_DIRS_FIRST | ORDER_DIRS_LAST))
+   && (f1.ff_attrib & FA_DIREC) != (f2.ff_attrib & FA_DIREC))
+  	return (optO & ORDER_DIRS_FIRST ? f1.ff_attrib: f2.ff_attrib)
+  	         & FA_DIREC ? -1 : 1;
+  
+  switch(optO & ORDER_BY_MASK) {
+  case ORDER_BY_SIZE:
+	if(f1.ff_fsize > f2.ff_fsize) rv = 1;
+	else if(f1.ff_fsize < f2.ff_fsize) rv = -1;
+	break;
+
+  case ORDER_BY_DATE:
+    rv = f1.ff_fdate - f2.ff_fdate;
+    if(!rv)
+    	 rv = f1.ff_ftime - f2.ff_ftime;
+	break;
+
+  case ORDER_BY_EXT:
+	{ char *x1 = strchr(f1.ff_name, '.');
+	char *x2 = strchr(f2.ff_name, '.');
+	
+	
+	if(!x1 && !x2)	/* both are equal */
+		return 0;
+	
+	if (x1 && x2) rv = strcmp(x1, x2);
+	else if (!x1 && x2) rv = -1;
+	else rv = 1;			/* x1 && !x2 */
+    }
+    break;
+	
+  case ORDER_BY_NAME:
+	rv = strcmp(f1.ff_name,f2.ff_name);
+	break;
+  }
+
+  return optO & ORDER_INVERSE? -rv: rv;
+}    	
+
+
+int flushOrder(struct ffblk _seg *orderArray,
+  		int *orderIndex,
+  		int  orderCount)
+{
+  int i;
+  struct ffblk file;
+  struct currDir cDir = {0};
+  
+  for (i = 0; i < orderCount; i++)
+  	orderIndex[i] = i;
+  	
+  qsort(orderIndex, orderCount, sizeof(orderIndex[0]), orderFunction);
+
+  for (i = 0; i < orderCount; i++) {
+  	int rv;
+    _fmemcpy(&file, &orderArray[orderIndex[i]], sizeof(file));
+    if((rv = DisplaySingleDirEntry(&file, &cDir)) != E_None)
+    	return rv;
+  }
+  return E_None;  
+}  		
+
 /*
  * dir_list
  *
@@ -481,13 +710,33 @@ static int dir_list(int pathlen
   unsigned long bytecount = 0;
   unsigned long filecount = 0;
   unsigned long dircount = 0;
-  int count;
   int rv = E_None;
+  struct currDir cDir = {0};
+  
+#define MAX_ORDER (0xffff / sizeof(struct ffblk))
+  int *orderIndex;
+  int  orderCount;
 
   assert(path);
   assert(pattern);
   assert(pathlen >= 2);   /* at least root */
 
+  if(optO)  {
+    orderIndex = malloc(MAX_ORDER * sizeof(unsigned));
+    if(!orderIndex) {
+    	error_out_of_memory();
+    	optO = 0;
+	} else {
+		orderArray = (void _seg*)DOSalloc(0x1000,0);
+		if(!orderArray) {
+			free(orderIndex);
+			error_out_of_dos_memory();
+			optO = 0;
+		}    	
+		orderCount = 0;
+  	}
+  }
+    
   /* Search for matching entries */
   path[pathlen - 1] = '\\';
   strcpy(&path[pathlen], pattern);
@@ -495,7 +744,7 @@ static int dir_list(int pathlen
   if (FINDFIRST(path, &file, attrMay) == 0) {
   	int printDirectoryEntry = !optB;
 /* For counting columns of output */
-  count = WIDE_COLUMNS;
+  cDir.linecount = 0;
   /* if optB && optS the path with trailing backslash is needed,
   	also for optS below do {} while */
   strcpy(&path[pathlen - 1], "\\");
@@ -531,136 +780,46 @@ static int dir_list(int pathlen
 
     if (cbreak)
       rv = E_CBreak;
-    else {
-
-    if (optL)
-      strlwr(file.ff_name);
-
-    if (optW)
-    {
-      char buffer[sizeof(file.ff_name) + 3];
-
-      if (file.ff_attrib & FA_DIREC)
-      {
-        sprintf(buffer, "[%s]", file.ff_name);
-        dircount++;
-      }
-      else
-      {
-        strcpy(buffer, file.ff_name);
-        filecount++;
-		  bytecount += file.ff_fsize;
-      }
-      displayString(TEXT_DIR_LINE_FILENAME_WIDE, buffer);
-      if (!--count)
-      {
-        /* outputted 5 columns */
-        putchar('\n');
-        rv = incline();
-        count = WIDE_COLUMNS;
-      }
-    }
-    else if (optB)
-    {
-      if (strcmp(file.ff_name, ".") == 0 || strcmp(file.ff_name, "..") == 0)
-        continue;
-      if (optS)
-        fputs(path, stdout);
-      displayString(TEXT_DIR_LINE_FILENAME_BARE, file.ff_name);
-      if (file.ff_attrib & FA_DIREC)
-        dircount++;
-      else {
-        filecount++;
-      bytecount += file.ff_fsize;
-      }
-      rv = incline();
-    }
-    else
-    {
-      char buffer[sizeof(long) * 4 + 2], *ext;
-
-      if (file.ff_name[0] == '.')
-        displayString(TEXT_DIR_LINE_FILENAME_SINGLE, file.ff_name);
-      else
-      {
-        ext = strrchr(file.ff_name, '.');
-        if (!ext)
-          ext = "";
-        else
-          *ext++ = '\0';
-
-        displayString(TEXT_DIR_LINE_FILENAME, file.ff_name, ext);
-      }
-
-      if (file.ff_attrib & FA_DIREC)
-      {
-        displayString(TEXT_DIR_LINE_SIZE_DIR);
-        dircount++;
-      }
-      else
-      {
-        convert(file.ff_fsize, buffer);
-        displayString(TEXT_DIR_LINE_SIZE, buffer);
-        bytecount += file.ff_fsize;
-        filecount++;
-      }
-
-	{ char *p;
-		int year, month, day;
-		int hour, minute;
-
-		year = (file.ff_fdate >> 9) + 80;
-		if(longyear)
-			year += 1900;
-		else	year %= 100;
-		day = file.ff_fdate & 0x001f;
-		month = (file.ff_fdate >> 5) & 0x000f;
-		hour = file.ff_ftime >> 5 >> 6;
-		minute = (file.ff_ftime >> 5) & 0x003f;
-
-		p = nls_makedate(0, year, month, day);
-		if(!p) {
-			error_out_of_memory();
-			return E_NoMem;
+    else if(rv == E_None) {
+		if(file.ff_attrib & FA_DIREC) {
+			dircount++;
+		} else {
+			filecount++;
+			bytecount += file.ff_fsize;
 		}
-		putchar(' ');
-		fputs(p, stdout);
-		free(p);
-		p = nls_maketime(NLS_MAKE_SHORT_AMPM, hour, minute, -1, 0);
-		if(!p) {
-			error_out_of_memory();
-			return E_NoMem;
-		}
-		putchar(' ');
-		fputs(p, stdout);
-		free(p);
-		putchar('\n');
-	 }
-
-      rv = incline();
+		if(optO) {  
+			_fmemcpy(&orderArray[orderCount], &file, sizeof(file));
+			orderCount++;
+			if(orderCount >= MAX_ORDER) {
+				rv = flushOrder(orderArray,orderIndex,orderCount);
+				orderCount = 0;
+			}
+		} else
+			rv = DisplaySingleDirEntry(&file, &cDir);
     }
-   }
   }
   while (rv == E_None && FINDNEXT(&file) == 0);
   }
 
-  if (rv == E_None && optW && (count != 0))
-  {
+  if(optO) {
+    if(rv == E_None)
+		rv = flushOrder(orderArray,orderIndex,orderCount);
+    free(orderIndex);
+    DOSfree(FP_SEG(orderArray));
+  }
+
+  if (rv == E_None && optW && (cDir.linecount != 0)) {
     putchar('\n');
     rv = incline();
   }
 
-  if (rv == E_None)
-    if(filecount || dircount)
-    {
-    /* The code that was here is now in print_summary */
-    rv = print_summary(filecount, bytecount);
-    }
-    else if(!optS)
-    {
-    error_file_not_found();
-    rv = E_Other;
-    }
+	if(rv == E_None)
+		if(filecount || dircount)
+			rv = print_summary(filecount, bytecount);
+		else if(!optS) {
+			error_file_not_found();
+			rv = E_Other;
+		}
 
   if(rv == E_None       /* no error */
    && optS) {            /* do recursively */
@@ -769,7 +928,7 @@ int cmd_dir(char *rest)
   unsigned long dircount;
 
   /* initialize options */
-  attrMask = attrMatch
+  attrMask = attrMatch = optO
    = longyear = optS = optP = optW = optB = optL = 0;
   attrMay = ATTR_DEFAULT;
 

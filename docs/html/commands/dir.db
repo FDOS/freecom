@@ -24,7 +24,7 @@ STD_OPTIONS:
 <LI><OPT>/A</OPT>: (All) Wildcards are matched against System and Hidden
 files, too.
 <LI><OPT>/A**</OPT>: (Attribute) Wildcards are matched against files
-with selected attributes set, clear or not interesting. The argument
+with selected attributes set or clear. The argument
 of the <OPT>/A</OPT> option is a sequence of:
 	<UL>
 	<LI><OPT>?</OPT> meaning: attribute <OPT>?</OPT> must be set, or
@@ -48,6 +48,30 @@ the serial number, totals etc. are suppressed. In combination with
 <OPT>/S</OPT> the absolute path of the files is displayed.
 <LI><OPT>/L</OPT>: (Lower-case) Filenames are displayed in lower-case
 letters rather than capitol ones.
+<LI><OPT>/O</OPT>: (Order) Sort the entries displayed in a specific order.
+	The following sort orders are supported:
+	<UL>
+	<LI><OPT>D</OPT> sort by last modification <B>d</B>ate (earliest first)
+	<LI><OPT>E</OPT> sort by file <B>e</B>xtension
+	<LI><OPT>G</OPT> <B>g</B>roup directories first
+	<LI><OPT>N</OPT> sort by file <B>n</B>ame
+	<LI><OPT>S</OPT> sort by size (smallest first)
+	<LI><OPT>U</OPT> do not sort
+	</UL>
+	<P>Each sort order, except <OPT>U</OPT>, may be prefixed by
+	a hyphen to reverse the sort order. <OPT>U</OPT> effectively
+	cancels any previous setting or specified sort order.
+	<P>If the same sort order is specified twice within the same
+	<OPT>/O</OPT> option, the last one superceeds previous ones; if
+	more than one <OPT>/O</OPT> option is specified, the last one
+	superceeds all previous ones.
+	<P><STRONG>Known bug:</STRONG> The current implementation cannot
+	combine two or more sort orders <OPT>D</OPT>, <OPT>E</OPT>,
+	<OPT>N</OPT>, and <OPT>S</OPT>; instead any of such sort order
+	cancells the effect of the other ones.
+	<P><STRONG>Warning</STRONG>: The entries are cached within memory
+	before displaying them; if FreeCOM runs short on memory, to sort is
+	disabled completely or the entries are sorted in chunks only.
 <LI><OPT>/P</OPT>: (Page) Page the output -- pause the display after
 	issuing one screen-full.
 <LI><OPT>/S</OPT>: (Subdirectories) Recursively display directories.
