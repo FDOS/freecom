@@ -413,7 +413,7 @@ int initialize(void)
 				intr(0x21, &r);
 				if(!tracemode	/* /Y --> F8 on CONFIG.SYS */
 				 || ((r.r_bx & 0xff00) == 0xfd00	/* FreeDOS >= build 2025 */
-				      && (r.r_cx > 0x101 || (r.r_bx & 0xff) > 24))) {
+				      && !(r.r_cx > 0x101 || (r.r_bx & 0xff) > 24))) {
 					displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
 					key = cgetchar_timed(3);
 					putchar('\n');
