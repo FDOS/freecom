@@ -44,6 +44,8 @@
 #define dfnexpand dfnuexpand
 #define dfnsqueeze dfnusqueeze
 #define dfnmatch dfnumatch
+#define dfnfullpath dfnufullpath
+#define dfnfullpath2 dfnufullpath2
 #endif
 
 #define DFN_FILE		0x4000
@@ -57,6 +59,8 @@
 #define DFN_READ		DFN_FILE	/* every file can be read */
 
 char *dfnexpand(const char * const fname, char * const path);
+char *dfnfullpath(const char * const fname);
+char *dfnfullpath2(const char * const fname);
 char *dfnmerge(char *fname, const char * const dr, const char * const path
  , const char * const name, const char * const ext);
 int dfnsplit(char * const fname, char ** const dr, char ** const path, char ** const name, char ** const ext);
