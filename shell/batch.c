@@ -478,7 +478,7 @@ char *readbatchline(int *eflag, char *textline, int size)
     }
 
     /* Strip leading spaces and trailing space/control chars */
-    rtrimsp(textline);
+/*    rtrimsp(textline);	must not remove trailing spaces */
     first = ltrimcl(textline);
 
     assert(first);
