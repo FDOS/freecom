@@ -6,6 +6,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2  2001/12/03 20:10:52  skaus
+	bugfix: if FREECOM.COM /P without AUTOEXEC.BAT --> assert() failure.
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -51,7 +54,7 @@ int leadOptions(char **Xline, optScanner fct, void * arg)
 
   p = *Xline;
   if(!p)
-  	*Xline = "";
+  	p = "";
 
   while(*(line = skipdm(p))) {
     q = unquote(line, p = skip_word(line));
