@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.4  2000/07/10 22:15:58  skaus
+# Change internal strings without re-compiling FreeCOM
+#
 # Revision 1.3  2000/07/09 21:57:25  skaus
 # + Support for international strings without recompiling
 # + Useage of TC++1
@@ -29,6 +32,7 @@ MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 
 .SOURCE.lib := $(LIBDIR:s/;/ /:u)
 .IMPORT : FREEDOS
+.IMPORT .IGNORE : LNG
 
 # Sources of this make target
 SRC = alias.c batch.c beep.c break.c call.c cb_catch.asm cls.c cmdinput.c \
@@ -77,9 +81,9 @@ com.com : com.exe strings.dat
 	@+copy /b com_tmp.exe + strings.dat $@
 	@+del com_tmp.exe >nul
 
-strings.h strings.dat .UPDATEALL .SETDIR=strings : strings.txt
+strings.h strings.dat .UPDATEALL .SETDIR=strings : default.lng
 	@+echo Entering $(PWD)
-	$(MAKE) all
+	$(MAKE) LNG=$(LNG) all
 	@+echo Leaving $(PWD)
 
 strings_clean .SETDIR=strings :

@@ -22,6 +22,7 @@ dmake || quit
 
 if not exist com.com goto ende
 ren com.com cmddebug.com
+ren com.exe cmddebug.cln
 if exist com.com goto ende
 : pause
 
@@ -36,6 +37,7 @@ dmake || quit
 
 if not exist com.com goto ende
 ren com.com command.com
+ren com.exe command.cln
 if exist com.com goto ende
 
 dmake clean || quit
