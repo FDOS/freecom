@@ -81,7 +81,7 @@ sub parseEBNF {
 		# Modify references
 		s:<A\s+NAME="([a-zA-Z].+?)"\s*>:<A NAME="${ref_na}_\1">:ig;
 		my $line = '';
-		while(m!<A\s+HREF=\"(.*?):(.*?)\"\s*>!i) {
+		while(m!<A\s+HREF=\"([^:\"]*?):([^\"]*?)\"\s*>!i) {
 			$line .= $`;
 			my $post = $';
 			my $all = $&;

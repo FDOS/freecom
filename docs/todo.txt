@@ -14,8 +14,6 @@ where the code is hardly optimal for either.
 
 (1) Swap out when exec'ing? YES! Unless running from a floppy?
 
-(4) ^S and ^Q to pause/resume displays. --> kernel thing
-
 (1) Add wildcard support to REN.
 
 (4) Add support for Win95 long filenames.
@@ -35,4 +33,3 @@ can not proceed.
 (2) Use all information available through DOS NLS API in all places
 they apply to.
 
-(9) Remove the WaitForKey() code on next FreeDOS release (> Beta 6).

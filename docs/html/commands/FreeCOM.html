@@ -92,7 +92,7 @@ to the CTTY command.
 when the user prompt has been reached.
 <LI><OPT>/D</OPT>: Disables to parse AUTOEXEC.BAT, even if the
 <OPT>/P</OPT> option is present. This switch is usually set by the
-kernel, when F% had been pressed during bootup.
+kernel, when F5 had been pressed during bootup.
 <LI><OPT>/F</OPT>: Enables autofail of Critical Errors; then instead of
 displaying the Abort/Retry/Ignore/Fail dialog, Critical Errors are
 automatically answered with Fail.
@@ -384,6 +384,12 @@ minimum, but probably at the cost of optimization and performance.
 <TR>	<TD><CMD>DIR /O</CMD> and <CMD>DIR /A</CMD></TD>
 		<TD ALIGN=CENTER><HELL>v0.93</HELL></TD>
 </TR>
+<TR>	<TD><CMD>IF ERRORLEVEL H<I>&lt;letter&gt;</I></CMD></TD>
+		<TD ALIGN=CENTER><HELL>v0.85</HELL></TD>
+</TR>
+<TR>	<TD><CMD>IF /I</CMD></TD>
+		<TD ALIGN=CENTER><HELL>v0.85</HELL></TD>
+</TR>
 <TR>	<TD>Input/output functions to replace <TT>&lt;stdio.h&gt;</TT> by
 			<TT>&lt;io.h&gt;</TT> (aka replace <TT>FILE*</TT>-based
 			I/O by handle-based one)</TD>
@@ -420,7 +426,7 @@ minimum, but probably at the cost of optimization and performance.
 <TR>	<TD>Aliases: ALIAS</TD>
 		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
 </TR>
-<TR>	<TD>History: HISTORY</TD>
+<TR>	<TD>Command line history: HISTORY</TD>
 		<TD ALIGN=CENTER><DIMM>done</DIMM></TD>
 </TR>
 <TR>	<TD>Directory stack: DIRS, PUSHD, and POPD</TD>
