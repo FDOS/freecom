@@ -244,6 +244,8 @@ fcom_cpy:
 	mov WORD [eb_cmdline], si	; DWORD eb_cmdline := DS:SI
 	mov WORD [eb_cmdline+2], ds
 
+	mov WORD [ds:16h], cs	; set our owner to ourselves <-> shell hack
+
 	;; DS:DX == command name
 	;; execBlock is filled
 	mov bx, (tsrend + STACK_SIZE + 15) / 16
