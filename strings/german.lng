@@ -1,3 +1,9 @@
+# FreeCOM national customization file
+#
+#	Language: German
+#	Codepage: 858
+#	Author: Clemens Lˆser (Cl.Loeser@web.de)
+# 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
 # outputs strings.h and strings.dat.  The .DAT file is appended to
@@ -9,15 +15,72 @@
 # with "#" are ignored.
 # Each message starts with a label name that will be used to refer to
 # the message in the program.  A label starts with a colon ":".
-# Please look at other messages to see the pattern, and try to
-# follow with new messages.
+# A label has a version ID attached to it delimited by a hash sign, e.g.:
+#	:TEXT_LABEL#1
+# This version is incremented each time the contents of the string has
+# undergo a larger change. The same language definition may contain the
+# same label up to one time, regardless of the version. FIXSTRS compares
+# both the label and the version ID and both must match.
+# A missing version is assumed as "#0".
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
-# period signifies that there will be a final carrage return when
+# period (".") signifies that there will be a final carrage return when
 # the message is displayed, but a comma does not.
 #
+# The body may contain backslash escape sequences as known from C; there
+# are the usual \# (where '#' is a lowercase letter except 'x' or one of
+# "[]{}?"), \\ (to embed a backslash itself)
+# \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
+# character), \, and \. (to specify a period or comma in the first column
+# of a line) and the single \ at the end of the line to suppress to append
+# a newline character. Note: There is NO octal sequence except the short \0!
+# There is a known bug (or feature): [ignore the very first hash mark]
+#:TEXT_LABEL#2
 #
+#\
+#,
+# Although the first data line appends the newline, the second does not,
+# though the comma removes the newline from the first line.
+
+# Defining prompts
+# Some prompts may cause an user interaction. Those ones should be in sync
+# with the issued text. To define how to interprete a pressed key, they
+# are mapped into metakeys like that: [ignore first hash sign]
+
+## Return value: a -> Yes; else -> No
+#:PROMPT_YES_NO#1
+#YyNn\n\r{CBREAK}
+#aabb b b       b
+# (Yes/No) ? \
+#.
+
+# All strings, which label start with "PROMPT_", are parsed as prompts.
+# The first two lines of the body are special; the first one enumerates all
+# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# range from 'a' through 'z'; spaces are ignored; everything else cause
+# an error. The comment preceeding the prompt definition associates the
+# metakeys with their meaning.
+# The remaining lines of the body contain the text to be displayed.
+#
+# Above example defines a native Yes/No prompt with a space behind the question
+# mark and no appended newline.
+# The metakey 'a' means "User answered with 'Yes'" and 'b' means no.
+# The keys 'Y' and 'y' are mapped to metakey 'a' (aka Yes) and the keys
+# 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
+# The spaces between the 'b's in the second line had been inserted to
+# align them with the corresponding keys of the first line, hence in order
+# to enhance readibility of the association between the pressed keys and their
+# mapping into a metakey.
+#
+# The first line (pressed keys) has to enumerate the ASCII value as returned
+# by DOS or BIOS (INT-10); special keys normally expressed with ASCII code zero,
+# but a non-zero scancode are NOT supported; this limit includes for instance
+# the function keys F1 through F12 and the cursor keys and it is not possible
+# to differ between the number pad and normal keys.
+# The keys may be enumerated by their ASCII character, by a backslash sequence,
+# or a symbolic name enclosed in curly brackets (see FIXSTRS.C "symkeys[]"
+# array about the supported symnames).
 
 
 #
@@ -35,31 +98,31 @@ Falscher Parameter. - /%s
 
 ## Issued if the context, the type of argument etc. is invalid
 :TEXT_ERROR_ILLFORMED_OPTION
-UngÅltige Option: '%s'
+Ung¸ltige Option: '%s'
 .
 
 :TEXT_ERROR_OPT_ARG
-Option "%s" erfordert kein Parameter.
+Option '%s' erfordert keine Parameter.
 .
 
 :TEXT_ERROR_OPT_NOARG
-Option "%s" erfordert einen Parameter.
+Option '%s' erfordert einen Parameter.
 .
 
 :TEXT_INVALID_NUMBER
-UngÅltige Nummer in "%s".
+Ung¸ltige Nummer in '%s'.
 .
 
 :TEXT_ERROR_CLOSE_QUOTE
-Fehlendes Abschlusszeichen: %c.
+Schlieﬂendes Anf¸hrungszeichen fehlt: %c
 .
 
 :TEXT_ERROR_TEMPFILE
-Kann temporÑre Datei nicht erstellen.
+Kann tempor‰re Datei nicht erstellen.
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS_STR
-Zu viele Parameter. - %s.
+Zu viele Parameter. - '%s'
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS
@@ -67,7 +130,7 @@ Zu viele Parameter.
 .
 
 :TEXT_ERROR_INVALID_PARAMETER
-UngÅltiger Parameter. - %s
+Ung¸ltiger Parameter. - '%s'
 .
 
 :TEXT_ERROR_PATH_NOT_FOUND
@@ -79,58 +142,76 @@ Datei nicht gefunden.
 .
 
 :TEXT_ERROR_SFILE_NOT_FOUND
-Datei nicht gefunden. - %s
+Datei nicht gefunden. - '%s'
 .
 
 :TEXT_ERROR_REQ_PARAM_MISSING
-Fehlender Parameter.
+Erforderlicher Parameter fehlt.
 .
 
 :TEXT_ERROR_INVALID_DRIVE
-UngÅltiges Laufwerk %c:.
+Ung¸ltiges Laufwerk %c:.
 .
 
-:TEXT_ERROR_BADCOMMAND
-Befehl oder Dateiname nicht gefunden.
+:TEXT_ERROR_BADCOMMAND#2
+Befehl oder Dateiname nicht gefunden. - "%s"
 .
 
 :TEXT_ERROR_OUT_OF_MEMORY
-Nicht genug Speicher.
+Nicht gen¸gend Speicher.
+.
+
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+Zuteilung von DOS-Speicher fehlgeschlagen.
 .
 
 :TEXT_ERROR_CANNOTPIPE
-Kann temporÑre Datei nicht îffnen.
+Kann keine Pipe erstellen!  Kann tempor‰re Datei nicht ˆffnen!
 .
 
 :TEXT_ERROR_LONG_LINE_BATCHFILE
-Zeile Nr.%ld in Stapeldatei '%s' zu lang.
+Zeile Nr. %ld in Stapeldatei '%s' zu lang.
 .
 
 :TEXT_ERROR_BFILE_VANISHED
-Stapeldatei "%s" nicht gefunden.
+Stapeldatei '%s' nicht gefunden.
 .
 
 :TEXT_ERROR_BFILE_LABEL
-In Stapeldatei "%s": Sprungmarke nicht gefunden "%s".
+Stapeldatei '%s' enth‰lt keine Sprungmarke '%s'.
 .
 
+:TEXT_ERROR_DIRFCT_FAILED#1
+%s ist f¸r '%s' fehlgeschlagen.
+.
+# The next three errors must remain in this order!
 :TEXT_ERROR_SET_ENV_VAR
-Fehler beim Setzen von Umgebungsvariable "%s".
-Umgebung voll? COMMAND /E:xxxx setzt die Umgebung auf xxxx Byte.
+Kann Umgebungsvariable '%s' nicht setzen.
+Umgebung voll?
 .
-
 :TEXT_ERROR_ENV_VAR_NOT_FOUND
-Umgebungsvariable "%s" nicht gefunden.
+Umgebungsvariable '%s' nicht gefunden.
+.
+:TEXT_ERROR_NO_ENVIRONMENT
+Keine Umgebung verf¸gbar.
+Mˆgliche Ursache: Nicht gen¸gend Speicher verf¸gbar.
+Setzen Sie die Umgebungsgrˆﬂe durch die COMMAND.COM Option '/E'.
 .
 
-:TEXT_ERROR_NO_ENVIRONMENT
-Keine Umgebung verfÅgbar. Mîgliche Ursache ist: Speicher voll.
-BenÅtzen Sie dazu die COMMAND.COM Option /E:xxxx, wobei xxxx die
-Grî·e in Byte ist.
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1
+Kann Alias '%s' nicht setzen. Aliasspeicher voll?
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1
+Alias '%s' nicht gefunden.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+Kein Aliasspeicher verf¸gbar.
+Mˆgliche Ursache: Nicht gen¸gend Speicher verf¸gbar.
 .
 
 :TEXT_ERROR_SYNTAX_STR
-Syntaxfehler. - %s
+Syntaxfehler. - '%s'
 .
 
 :TEXT_ERROR_SYNTAX
@@ -138,35 +219,40 @@ Syntaxfehler.
 .
 
 :TEXT_ERROR_FILENAME_TOO_LONG
-Dateiname zu lang. - %s
+Dateiname zu lang. - '%s'
 .
 
 :TEXT_ERROR_SELFCOPY
-Datei "%s" kann nicht in sich selbst kopiert werden.
+Datei '%s' kann nicht auf sich selbst kopiert werden.
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
-Kommandozeile zu lang!
+Befehlszeile nach Aliaserweiterung zu lang!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
-Kommandozeile zu lang. Kann Kommando nicht ausfÅhren.
+Befehlszeile zu lang. Kann Befehl nicht ausf¸hren.
 .
 
-:TEXT_ERROR_HISTORY_SIZE
-UngÅltige HISTORY Grî·e.
+:TEXT_ERROR_HISTORY_SIZE#1
+Ung¸ltige History-Grˆﬂe '%s'.
 .
+
+:TEXT_HISTORY_EMPTY#1
+Befehlszeilen-History ist leer.
+.
+
 
 :TEXT_ERROR_BAD_MCB_CHAIN
-UngÅltige MCB, oder MS-DOS inkompatibles System.
+Ung¸ltige MCB-Kette oder MS-DOS inkompatibles System.
 .
 
 :TEXT_ERROR_UNDEFINED_ERROR
-Unbekannter Fehler %d ist aufgetreten.
+Unbekannter Fehler %d aufgetreten.
 .
 
 :TEXT_ERROR_REGION_WARNING
-UngÅltiger Speicherblock %d. Wird ignoriert.
+Ung¸ltiger Speicherbereich %d. Wird ignoriert.
 .
 
 :TEXT_ERROR_ON_OR_OFF
@@ -174,62 +260,59 @@ Bitte verwenden Sie /ON oder /OFF.
 .
 
 :TEXT_ERROR_BAD_VARIABLE
-UngÅltige Variablenangaben.
+Ung¸ltige Variablenangabe.
 .
 
-:TEXT_ERROR_IN_MISSING
-IN fehlt in der FOR Anweisung.
-Syntax: FOR %%[x] in ( [y] ) DO [z]
+:TEXT_ERROR_IN_MISSING#1
+IN fehlt in der FOR-Anweisung.
 .
 
-:TEXT_ERROR_MISSING_PARENTHESES
-Sie haben eine oder mehrere Klammern vergessen.
+:TEXT_ERROR_MISSING_PARENTHESES#1
+Eine oder beide Klammern fehlen.
 .
 
-:TEXT_ERROR_DO_MISSING
-DO fehlt in der FOR Anweisung.
-Syntax: FOR %%[x] in ( [y] ) DO [z]
+:TEXT_ERROR_DO_MISSING#1
+DO fehlt in der FOR-Anweisung.
 .
 
-:TEXT_ERROR_NO_COMMAND_AFTER_DO
-DO fehlt in der FOR Anweisung.
-Syntax: FOR %%[x] in ( [y] ) DO [z]
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+FOR-Anweisung: Kein Befehl nach DO.
 .
 
 :TEXT_ERROR_REDIRECT_FROM_FILE
-Kann Eingabe nicht von der Datei %s umleiten.
+Kann Eingabe von Datei '%s' nicht umleiten.
 .
 
 :TEXT_ERROR_REDIRECT_TO_FILE
-Kann Eingabe nicht zu der Datei %s umleiten.
+Kann Eigabe in Datei '%s' nicht umleiten.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+Leere Umleitung.
 .
 
 :TEXT_ERROR_INVALID_DATE
-UngÅltiges Datum.
+Ung¸ltiges Datum.
 .
 
 :TEXT_ERROR_INVALID_TIME
-UngÅltige Zeit..
+Ung¸ltige Zeit.
 .
 
 :TEXT_ERROR_NO_GOTO_LABEL
-GOTO benîtigt eine Sprungmarkenangabe.
-.
-
-:TEXT_ERROR_NO_CTTY_CMD
-CTTY ist noch nicht implementiert.
+GOTO benˆtigt eine Sprungmarkenangabe.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
-Der CTTY Befehl wurde nicht in den COMMAND.COM mit eingebunden.
+Der CTTY-Befehl wurde nicht in diese COMMAND.COM implementiert.
 .
 
 :TEXT_ERROR_NORW_DEVICE
-UngÅltiges oder kein ReWrite GerÑt '%s'.
+‹ng¸ltiges oder kein Lese-/Schreib-Ger‰t '%s'.
 .
 
 :TEXT_ERROR_CTTY_DUP
-Kann Dateibeschreibung nicht an TTY '%s' Ñndern.
+ƒnderung der Dateibeschreibung zu TTY '%s' fehlgeschlagen.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
@@ -237,7 +320,7 @@ Parameter /L ist noch nicht implementiert.
 .
 
 :TEXT_ERROR_U_NOTIMPLEMENTED
-Parameter /L ist noch nicht implementiert.
+Parameter /U ist noch nicht implementiert.
 .
 
 :TEXT_ERROR_WRITING_DEST
@@ -245,27 +328,27 @@ Fehler beim Schreiben.
 .
 
 :TEXT_ERROR_CANNOT_OPEN_SOURCE
-Kann Quelle nicht îffnen. - %s
+Kann Quelle nicht ˆffnen. - '%s'
 .
 
 :TEXT_ERROR_OPEN_FILE
-Kann Datei nicht îffnen. - '%s'
+Kann Datei '%s' nicht ˆffnen.
 .
 
 :TEXT_ERROR_READ_FILE
-Kann nicht von Datei lesen. - '%s'
+Kann nicht von Datei '%s' lesen.
 .
 
 :TEXT_ERROR_WRITE_FILE
-Kann nicht auf Datei schreiben. - '%s'
+Kann nicht auf Datei '%s' schreiben.
 .
 
 :TEXT_ERROR_LEADING_PLUS
-Der Operator '+' kann in diesem Fall keine Parameter zusammenfÅgen.
+Der Verkettungsoperator '+' kann den Parametern nicht voranstehen.
 .
 
 :TEXT_ERROR_TRAILING_PLUS
-Der Operator '+' kann in diesem Fall keine Parameter zusammenfÅgen.
+Der Verkettungsoperator '+' kann den Parametern nicht nachstehen.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
@@ -273,7 +356,20 @@ Nichts zu tun.
 .
 
 :TEXT_ERROR_COPY
-COPY gescheitert.
+COPY fehlgeschlagen.
+.
+
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: Dateiname fehlt.
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: Nummer fehlt.
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: Ung¸ltige Nummer.
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: Befehl fehlt.
 .
 
 :TEXT_NOT_IMPLEMENTED_YET
@@ -281,56 +377,123 @@ Noch nicht implementiert.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
-Fehler beim Laden der Sprachendefinition.
+Fehler beim Laden der Sprachnachrichten.
 .
 
 :TEXT_MSG_NOTIMPLEMENTED
-Die /MSG wurde in COMMAND.COM deaktiviert.
+Die /MSG Option wurde in dieser COMMAND.COM deaktiviert.
+.
+
+:TEXT_MSG_ITEMS_DISPLAYED#1
+%u Elemente angezeigt.
 .
 
 :TEXT_CORRUPT_COMMAND_LINE
-Interner Fehler. Bitte melden Sie dies.
+Ein interner Fehler ist aufgetreten. Dies hat mit dem System zu tun
+auf dem COMMAND.COM l‰uft. Bitte melden Sie diesen Fehler.
 .
 
-:TEXT_QUOTED_C_OR_K
-Die Option /C kann nicht zusammen mit /K ausgefÅhrt werden.
+:TEXT_QUOTED_C_OR_K#1
+Die Optionen /C und /K kˆnnen nicht quotiert werden.
 Optionen werden ignoriert.
 .
 
-:TEXT_INIT_FULLY_QUALIFIED
-Der Pfad zu COMMAND.COM muss expliziet angegeben werden.
+:TEXT_INIT_FULLY_QUALIFIED#1
+Der Pfad zur COMMAND.COM muss vollst‰ndig angegeben werden.
+Das heiﬂt mit Laufwerksbuchstabe und f¸hrendem Backslash.
 Zum Beispiel: C:\FDOS
 
-COMMAND.COM schlÑgt folgenden Pfad vor:
+COMMAND.COM geht von folgendem Pfad aus:
 %s
 .
 
 :TEXT_ERROR_RESTORE_SESSION
-Einige Informationen konnten nicht widerhergestellt werden.
+Die Sitzungsinformationen konnten nicht wiederhergestellt werden.
+Alle lokalen Einstellungen sind verloren.
+Hinweise auf die Ursache dieses Problems entnehmen Sie bitte
+den vorangegangenen Fehlermeldungen.
 .
 
 :TEXT_ERROR_SAVE_SESSION
-Einige Informationen konnten nicht gesichert werden.
+Die aktuellen Informationen konnten w‰hrend des Programmaufrufs
+nicht gesichert werden.
+Hinweise auf die Ursache dieses Problems entnehmen Sie bitte
+den vorangegangenen Fehlermeldungen.
 .
 
 :TEXT_ERROR_CWD_FAILED
-Laufwerk %c: Keine Antwort oder Speicherfehler.
+Laufwerk %c: Keine Antwort oder interner Speicherfehler.
+.
+
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+Tausch fehlgeschlagen: Aliase reservieren zu viel Speicher.
+.
+
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+Tausch fehlgeschlagen: Kann keinen weiteren Speicherpatz
+reservieren.
+.
+
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+Kein weiterer Aliasspeicherpaltz verf¸gbar.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1
+Alias '%s' unbekannt.
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+Einf¸gen des Alias fehlgeschlagen.
+.
+
+:TEXT_ALIAS_INVALID_NAME#1
+Aliasname '%s' ung¸ltig.
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+Kontextmodul der Ausnahmefehlerroutine kann nicht geladen werden.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+Kein weiterer Kontextspeicher verf¸gbar.
+Falls dieser Fehler weiterhin auftritt ziehen Sie bitte in Erw‰gung
+die internen Puffer wie z.B. History, Dateiverzeichnis oder
+Stack zu vergrˆﬂern.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1
+Die Gesamtkontextgrˆﬂe %lu Bytes ¸berschreitet
+die Maximalgrenze. Der Kontext wird auf %u Bytes reduziert.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+Das Einf¸gen von Statusinformationen in den Kontext ist
+fehlgeschlagen. Dieser Fehler kann auf Speicherfehler oder
+eine falsch bestimmte Minimalgrˆﬂe des Kontexts hindeuten.
+Bitte benachrichtigen Sie die Verantwortlichen von FreeCOM:
+freecom@freedos.org
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+Der Kontext ging beim Tauschen verloren. Der Kontext wird
+neu erstellt, aber alle Aliase etc. sind verloren.
 .
 
 #
 # Informational messages
 #
 
-:TEXT_MSG_PAUSE
-Beliebige Taste drÅcken um fortzusetzen . . .
+:TEXT_MSG_PAUSE#1
+Dr¸cken Sie eine beliebige Taste, um fortzufahren...\
 .
 
 :TEXT_MSG_HISTORY_SIZE
-HISTORY Grî·e ist %d Bytes.
+Die Grˆﬂe der History betr‰gt %d Bytes.
 .
 
 :TEXT_MSG_DOSKEY
-DOSKEY ist schon in der Shell mit eingebunden.
+Die DOSKey F‰higkeiten sind bereits in der Shell freigegeben.
 .
 
 :TEXT_MSG_ECHO_STATE
@@ -342,7 +505,10 @@ VERIFY ist %s
 .
 
 :TEXT_MSG_FDDEBUG_STATE
-DEBUG Ausgabe ist %s
+DEBUG-Ausgabe ist %s.
+.
+:TEXT_MSG_FDDEBUG_TARGET
+DEBUG-Ausgabe wird nach '%s' geleitet.
 .
 
 :TEXT_MSG_BREAK_STATE
@@ -350,584 +516,983 @@ BREAK ist %s
 .
 
 :TEXT_MSG_CURRENT_DATE
-Aktuelles Datum ist %s %02d-%02d-%d
+Aktuelles Datum ist %s
 .
 
-:TEXT_MSG_ENTER_DATE
-Geben Sie das neue Datum ein (mm-dd-[yy]yy):
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN#1
+Geben Sie ein neues Datum (mm%sdd%s[cc]yy) ein: \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1
+Geben Sie ein neues Datum (dd%smm%s[cc]yy) ein: \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1
+Geben Sie ein neues Datum ([cc]yy%smm%sdd) ein: \
 .
 
 :TEXT_MSG_CURRENT_TIME
-Aktuelle Zeit ist %2d:%02d:%02d.%02d%c
+Aktuelle Zeit ist %s.
 .
 
-:TEXT_MSG_ENTER_TIME
-Geben Sie die neue Zeit ein:
+:TEXT_STRING_PM#1
+ PM\
+.
+:TEXT_STRING_AM#1
+ AM\
 .
 
+:TEXT_MSG_ENTER_TIME#1
+Geben Sie die neue Zeit ein: \
+.
+
+# src-file <operation> target-file
 :TEXT_MSG_COPYING
 %s %s %s
 .
 
-:TEXT_MSG_DELETE_ALL
-Alle Dateien in diesem Verzeichnis werden gelîscht!
-Sind Sie sicher (Y/N)?
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (Y/N) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1
+JjNn{CR}{LF}{CBREAK}
+aabb   b   b       b
+Alle Dateien in '%s' werden gelˆscht!
+Mˆchten Sie fortfahren (J/N) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+JjNn{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Ja=ENTER, Nein=ESC] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+#	by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1
+JjNnAaQq{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Steuerung+Pause gedr¸ckt.\r
+Verarbeitung der Stapeldatei '%s' abbrechen (Ja/Nein/Alle) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1
+JjNnAaSs{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+'%s' ¸berschreiben (Ja/Nein/Alle/Stoppen) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1
+JjNnAaSs{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+'%s' lˆschen (Ja/Nein/Alle/Stoppen) ? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<unbekannt>>\
 .
 
 :TEXT_DIRSTACK_EMPTY
-Verzeichnis Zwischenspeicher ist leer.
+Dateiverzeichnis-Stack ist leer.
 .
 
-:TEXT_MSG_VER_BASIC
-Copyright (C) 1994-2000 Tim Norman und anderen.
-
-Die FreeDOS Shell unterliegt ABSOLUT KEINER GARANTIE.
-FÅr weitere Informationen geben Sie "ver /w" ein.
-Dieses ist freie Software und Sie kînnen es unter den Bestimmungen
-der GNU General Public License verÑndern/vertreiben.
-FÅr weitere Details geben Sie "ver /d" ein.
-Geben Sie "ver /c" ein, um die beteiligten Programmierer anzuzeigen.
-
-Bitte melden Sie Bugs an fd-freecom@topica.com.
-Updates bekommen Sie bei http://freedos.sourceforge.net/freecom.
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME#1
+ Volumen in Laufwerk %c \
 .
+:TEXT_DIR_HDR_VOLUME_STRING
+ist %s
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+hat keine Bezeichnung
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER
+ Volumen-Seriennummer ist %04X-%04X
+.
+:TEXT_DIR_FTR_FILES#1
+%10s Datei(en)\
+.
+:TEXT_DIR_FTR_BYTES
+   %12s Bytes
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+Gesamtanzahl der aufgelisteten Dateien:
+.
+:TEXT_DIR_FTR_DIRS#1
+%10s Verzeichnis(se)\
+.
+:TEXT_DIR_FTR_BYTES_FREE
+ %15s Bytes frei
+.
+:TEXT_DIR_DIRECTORY
+Verzeichnis von %s
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE
+ Verzeichnis von %s
+.
+:TEXT_DIR_LINE_FILENAME_WIDE#1
+%-15s\
+.
+:TEXT_DIR_LINE_FILENAME_BARE
+%-13s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE#1
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <DIR> \
+.
+:TEXT_DIR_LINE_SIZE#1
+   %10s \
+.
+
+:TEXT_FILE_COMPLATION_DISPLAY#1
+%-14s\
+.
+
+:TEXT_MSG_PATH
+PATH=%s
+.
+:TEXT_MSG_PATH_NONE#1
+Kein Suchpfad angegeben.
+.
+
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+So\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+Mo\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+Di\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+Mi\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+Do\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+Fr\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+Sa\
+.
+
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+keine Datei entfernt.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+eine Datei entfernt.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1
+%u Dateien entfernt.
+.
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+Verf¸gbare interne Befehle:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+Verf¸gbare Befehle:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[Aliase] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[erweiterte Eingabe] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[History] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[Dateinamenerg‰nzung] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[Tauschen (Swapping)] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[Protokollierung starten] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+[vorheriges Verzeichnis] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[Kernel Tausch (Swap)] \
+.
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[XMS Tausch (Swap)] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[Swap als Voreinstelung] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[installierbare Befehle] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+[DOS NLS] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[Dateiverzeichnis-Stack (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[FreeCOM Fehlersuche (Debug)] \
+.
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
+
+Dr¸cken Sie F8 f¸r den Einzelschritt-Modus,
+oder F5 um %s zu ¸bergehen... \
+.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC
+‹bergehe '%s'.
+.
+
+:TEXT_MSG_VER_DOS_VERSION
+DOS Version %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+FreeDOS Kernel (build 1933 oder fr¸her)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS
+FreeDOS Kernel Version %d.%d.%d
+.
+
 
 :TEXT_MSG_VER_WARRANTY
-Copyright (C) 1994-2000 Tim Norman und anderen
+Copyright (C) 1994-2001 Tim Norman und andere.
 
-Dieses Programm wird vertrieben, in der Hoffnung, dass es viel Nutzen
-bringt, aber unterliegt ABSOLUT KEINER GARANTIE. Weitere Details finden
-Sie in der GNU General Public License.
+Dieses Programm wird in der Hoffnung vertrieben, dass es n¸tzlich ist,
+jedoch OHNE JEGLICHE GEWƒHR; ohne auch nur die implizierte
+Gew‰hr der MARKTGƒNGIGKEIT oder TAUGLICHKEIT F‹R EINEN
+BESTIMMTEN ZWECK.  Bitte lesen Sie die GNU General Public License
+f¸r n‰here Informationen hierzu.
 
-Bitte melden Sie Bugs an fd-freecom@topica.com.
-Updates bekommen Sie bei http://freedos.sourceforge.net/freecom.
+Bitte senden Sie Fehlerberichte an fd-freecom@topica.com.
+Updates sind unter http://freedos.sourceforge.net/freecom erh‰ltlich.
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
-Copyright (C) 1994-2000 Tim Norman and others.
+Copyright (C) 1994-2001 Tim Norman und andere.
 
-Dieses ist freie Software und Sie kînnen es unter den Bestimmungen
-der GNU General Public License verÑndern/vertreiben. Die GNU General
-Public License ( Version 2 oder hîher ) wurde von der Free Software
-Foundation ins Leben gerufen.
+Dieses Programm ist freie Software. Sie kˆnnen es unter den
+Bedingungen der GNU General Public License, wie von der
+Free Software Foundation verˆffentlicht, weitergeben und/oder
+modifizieren, entweder gem‰ﬂ Version 2 der Lizenz oder (nach
+Ihrer Option) jeder sp‰teren Version.
 
-Bitte melden Sie Bugs an fd-freecom@topica.com.
-Updates bekommen Sie bei http://freedos.sourceforge.net/freecom.
+Bitte senden Sie Fehlerberichte an fd-freecom@topica.com.
+Updates sind unter http://freedos.sourceforge.net/freecom erh‰ltlich.
 .
 
 :TEXT_MSG_VER_DEVELOPERS
 
-Die FreeDOS Command Shell wird / wurde entwickelt von:
-		Tim Norman      Matt Rains
-		Evan Jeffrey    Steffen Kaiser
-		Svante Frey     Oliver Mueller
-		Aaron Kaufman   Marc Desrochers
-		Rob Lake        John P Price
-		Hans B Pufal
+Die FreeDOS Command Shell wurde von vielen Entwicklern entwickelt,
+f¸r n‰here Informationen greifen Sie bitte auf die Datei
+HISTORY.TXT zur¸ck.
 
-Aktuelle Verwaltung liegt bei Steffen Kaiser.
+Momentan instandgehalten von Steffen Kaiser (freecom@freedos.org)
 
-Diese Sprachendefinition wird aktuell von RealDOS verwaltet.
-FÅr Fragen in Bezug auf diese Definition wenden Sie sich bitte an
-info@realdos.de.
-
-Bitte melden Sie Bugs an fd-freecom@topica.com.
-Updates bekommen Sie bei http://freedos.sourceforge.net/freecom.
+Bitte senden Sie Fehlerberichte an fd-freecom@topica.com.
+Updates sind unter http://freedos.sourceforge.net/freecom erh‰ltlich.
 .
 
+
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+Die Shell ist dabei, beendet zu werden, obwohl unerlaubt\r
+(¸blicherweise durch das Aktivieren der /P Option).\r
+Sie m¸ssen Ihr System neustarten oder beenden Sie, falls\r
+diese Shell in einer multitasking-Umgebung l‰uft, diesen\r
+Prozess manuell.\r
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+Ausf¸hrbare FreeCOM Datei nicht gefunden.
+Sie m¸ssen den vollen Pfad zur COMMAND.COM als ersten
+Parameter von COMMAND angeben, z.B. C:\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1
+Umgebungs-Segment    : max %5u Bytes; frei %5u Bytes
+.
+:TEXT_MEMORY_CONTEXT#1
+Kontext-Segment      : max %5u Bytes; frei %5u Bytes
+.
+:TEXT_MEMORY_HEAP#1
+Heap                 : frei %5lu Bytes
+.
+:TEXT_MEMORY_CTXT_ALIAS#1
+\tAliase         : Grenze %5u Bytes, momentan %5u Bytes, %5u Elemente
+.
+:TEXT_MEMORY_CTXT_HISTORY#1
+\tHistory        : Grenze %5u Bytes, momentan %5u Bytes, %5u Elemente
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1
+\tDateiverzeichnis-Stack: Grenze %5u Bytes, momentan %5u Bytes, %5u Elemente
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1
+\tVorheriges-Verzeichnis-Cache: gebraucht  %5u Bytes, %5u Elemente
+.
+:TEXT_MEMORY_CTXT_BATCH#1
+\tStapel-Verschachtelung      : gebraucht  %5u Bytes, %5u Elemente
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1
+\tSwapinfo                    : gebraucht  %5u Bytes, %5u Elemente
+.
+
+
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+Anlegen der aktuellen Codepage durch das System fehlgeschlagen.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+ƒnderung der aktuellen Codepage fehlgeschlagen.
+.
+:TEXT_DISPLAY_CODEPAGE#1
+Aktuelle Codepage ist %u.
+Die richtige System-Codepage ist %u.
+.
 
 #
 # Command help text
 #
 
 :TEXT_CMDHELP_ALIAS
-Zeigt, setzt oder entfernt ALIASE ( Befehlsnamenvereinfachung ).
+Zeigt an, setzt oder entfernt Aliase.
 
-ALIAS [Variable[=][Text]]
+ALIAS [Variable[=][Zeichenkette]]
 
-        Variable  Spezifiziert den ALIAS nahmen.
-        Text      Spezifiziert den Inhalt des Namens.
+	Variable     Spezifiziert den Aliasnamen.
+	Zeichenkette Spezifiziert eine Reihe von Zeichen,
+	             die dem Alias zugeordnet werden.
 
 
-Geben Sie ALIAS ohne Parameter ein um zu sehene welche ALIASE gesetzt worden
-sind.
+Geben Sie ALIAS ohne Parameter ein, um die aktuellen
+Aliase anzuzeigen.
 .
 
 :TEXT_CMDHELP_BEEP
-Erzeugt ein Piepton.
+Beep-Ton ausgeben.
 .
 
 :TEXT_CMDHELP_BREAK
-Schaltet die erweiterte STRG+C PrÅfung an bzw. aus.
+Setzt oder lˆscht die erweiterte STRG+C ‹berpr¸fung.
 
 BREAK [ON | OFF]
 
-Geben Sie BREAK ohne Parameter ein um den aktuellen Status zu ermitteln.
+Geben Sie BREAK ohne Parameter ein, um die aktuelle
+BREAK Einstellung anzuzeigen.
 .
 
-:TEXT_CMDHELP_CALL
-Ruft eine Stapeldatei von einer anderen auf.
+:TEXT_CMDHELP_CALL#1
+Ruft ein Stapelverarbeitungsprogramm von einem anderen aus auf.
 
-CALL [Laufwerk:][Pfad]Dateiname [Parameter]
+CALL [/S | /N] [/Y] [Laufwerk:][Pfad]Dateiname [Stapeldatei-Parameter]
 
-  Parameter          Spezifiziert Kommandozeilenargumente die an
-                     das jeweilige Stapelverarbeitungsprogram weitergegeben
-                     werden sollen
+  Stapeldatei-Parameter   Spezifiziert alle vom Stapelprogramm benˆtigten
+                          Befehlszeilen-Informationen.
+  /S erzwingt, /N verweigert das Swappen von FreeCOM.
+  /Y aktiviert den Einzelschritt-Modus w‰hrend der Ausf¸hrung des Befehls.
 .
 
 :TEXT_CMDHELP_CD
-Zeigt das aktuelle Verzeichnis an oder Ñndert dies.
+Zeigt den Namen oder wechselt das aktuelle Verzeichnis.
 
 CHDIR [Laufwerk:][Pfad]
-CHDIR [..]
+CHDIR[..]
 CD [Laufwerk:][Pfad]
-CD [..]
+CD[..]
 CD -
 
-  ..   Wechselt in das öbergeordnete Verzeichnis. 
-  -    Wechselt in das letzte Verzeichnis
+  ..   Spezifiziert, dass Sie zum ¸bergeordneten Verzeichnis wechseln mˆchten.
+  -    Falls das "vorheriges Verzeichnis"-Feature aktiviert ist, Wechsel zum
+       vorherigen Verzeichnis.
 
-Geben Sie CD Laufwerk: ein, um das aktuelle Verzeichnis auf Laufwerk zu sehen.
-Geben Sie CD ohne Parameter ein um das aktuelle Verzeichnis wiederzugeben.
+Geben Sie CD Laufwerk: ein, um das aktuelle Verzeichnis des angegebenen
+Laufwerks anzuzeigen.
+Geben Sie CD ohne Parameter ein, um das aktuelle Laufwerk und Verzeichnis
+anzuzeigen.
 Siehe auch: CDD
 .
 
 :TEXT_CMDHELP_CDD
-Zeigt das aktuelle Verzeichnis mit dem dazughîrigen Laufwerk an,
-oder Ñndert dies.
+Zeigt den Namen oder wechselt das aktuelle Verzeichnis und Laufwerk.
 
 CDD [Laufwerk:][Pfad]
-CDD [..]
+CDD[..]
 
-  ..   Wechselt in das öbergeordnete Verzeichnis. 
-  -    Wechselt in das letzte Verzeichnis
+  ..   Spezifiziert, dass Sie zum ¸bergeordneten Verzeichnis wechseln mˆchten.
+  -    Falls das "vorheriges Verzeichnis"-Feature aktiviert ist, Wechsel zum
+       vorherigen Verzeichnis.
 
-Geben Sie CDD Laufwerk: ein, um das aktuelle Verzeichnis auf Laufwerk zu sehen.
-Geben Sie CDD ohne Parameter ein um das aktuelle Verzeichnis mit dem dazu-
-gehîrigen Laufwerk wiederzugeben.
-Siehe auch: CD
+Falls Laufwerk: angegeben ist, wird das aktuelle Arbeitslaufwerk gewechselt;
+dies ist der einzige Unterschied zu "CHDIR".
+Geben Sie CDD ohne Parameter ein, um das aktuelle Laufwerk und
+Verzeichnis anzuzeigen.
 .
 
 :TEXT_CMDHELP_CHCP
-Zeigt die aktuelle Codeseite an, oder Ñndert diese.
+Zeigt oder setzt die Nummer der aktiven Codepage.
 
 CHCP [nnn]
 
-  nnn   Codeseiten Nummer.
+  nnn   Spezifiziert eine Codepage-Nummer.
 
-CHCP ohne Parameter zeigt die aktuelle Codeseite an.
+Geben Sie CHCP ohne Parameter ein, um die Nummer der aktiven Codepage
+anzuzeigen.
 .
 
 :TEXT_CMDHELP_CLS
-Lîscht den Bildschirm.
+Lˆscht den Bildschirm.
 
 CLS
 .
 
 :TEXT_CMDHELP_COMMAND
-Startet eine neue Kopie von COMMAND.COM
+Startet eine neue Instanz der FreeDOS Command Shell.
 
-COMMAND [[Laufwerk:]Pfad] [GerÑt] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
-                          [/LOW] [/Y [/[C|K] command]]
-  [Laufwerk:]Pfad    Gibt an wo sich COMMAND.COM befindet.
-  GerÑt              Gibt das GerÑt fÅr die Ein- und Ausgabe an.
-  /E:nnnnn           Setzt die Umgebungsgrî·e auf nnnn Bytes
-                     (nnnnn ist ein Wert zwischen 256 und 32,768).
-  /L:nnnn            Setzt die interne LÑnge auf nnnn Bytes
-                     (nnnn ist ein Wert zwischen 128 und 1,024).
-  /U:nnn             Setzt die LÑnge der Befehlszeile fest (Erfordert /P).
-                     (nnn ist ein Wert zwischen 128 und 255).
-  /P                 Startet eine neue Kopie des Kommandointerpreters.
-                     (Nicht beendbar)
-  /MSG               LÑdt die Sprachendefinition in den Speicher
-                     (Erfordert /P).
-  /LOW               COMMAND.COM wird in den niedrigen Speicherbereich geladen.
-  /Y                 Verarbeitet das mit /C oder /K angegebene Programm
-                     schrittweise.
-  /C Befehl          FÅhrt den Befehl aus und kehrt zurÅck.
-  /K Befehl          FÅhrt den Befehl aus und setzt fort.
+COMMAND [[Laufwerk:]Pfad] [Ger‰t] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+  [/LOW] [/Y [/[C|K] Befehl]]
+
+  [Laufwerk:]Pfad  Spezifiziert das Verzeichnis, das die COMMAND.COM enth‰lt.
+  Ger‰t            Spezifiziert das f¸r die Befehls - Ein- und Ausgabe zu
+                   benutzende Ger‰t.
+  /E:nnnnn         Setzt die anf‰ngiche Umgebungsgrˆﬂe auf nnnnn Bytes.
+                   (nnnnn sollte eine Zahl zwischen 256 und 32.768 sein.)
+  /L:nnnn          Spezifiziert die Grˆﬂe der internen Puffer (erfordert ebenso /P).
+                   (nnnn sollte eine Zahl zwischen 128 und 1.024 sein.)
+  /U:nnn           Spezifiziert die Eingabepuffergrˆﬂe (erfordert ebenso /P).
+                   (nnn sollte eine Zahl zwischen 128 und 255 sein.)
+  /P               Richtet die neue Command Shell Instanz dauerhaft ein (kann nicht
+                   beendet werden).
+  /MSG             Speichert alle Fehlermeldungen im Speicher (erfordert ebenso /P).
+  /LOW             Zwingt die Command Shell, bleibende Daten im LoMem zu speichern.
+  /Y               Arbeitet schrittweise die durch /C oder /K spezifizierten
+                   Stapelverarbeitungsdateien ab.
+  /C Befehl        F¸hrt den spezifizierten Befehl aus und kehrt zur¸ck.
+  /K Befehl        F¸hrt den spezifizierten Befehl aus und l‰uft weiter.
 .
 
 :TEXT_CMDHELP_COPY
-Kopiert eine oder mehrere Dateien zu einem Bestimmten Ziel.
+Kopiert eine oder mehrere Dateien an einen anderen Ort.
 
-COPY [/A | /B] Quelle [/A | /B] [+ Quelle [/A | /B] [+ ...]] [Ziel
-  [/A | /B]] [/V] [/Y | /-Y]
+COPY [/A | /B] Quelle [/A | /B] [+ Quelle [/A | /B] [+ ...]] [Ziel [/A | /B]]
+  [/V] [/Y | /-Y]
 
-  Quelle       Spezifiziert die Quelldatei(en).
-  /A           Kennzeichnet eine ASCII Textdatei.
-  /B           Kennzeichnet eine BinÑrdatei.
-  Ziel         Spezifiziert das Zielverzeichnis bzw. die Zieldatei.
-  /V           öberprÅft die Korrektheit der neuen Dateien.
-  /Y           Deaktiviert die BestÑtigung zum öberschreiben von
-               vorhandenen Dateien.
-  /-Y          Aktiviert die BestÑtigung zum öberschreiben von
-               vorhandenen Dateien.
+  Quelle  Spezifiziert die zu kopierende(n) Datei(en).
+  /A      Gibt an, dass es sich um eine ASCII Textdatei handelt.
+  /B      Gibt an, dass es sich um eine Bin‰rdatei handelt.
+  Ziel    Spezifiziert das Verzeichnis und/oder den Dateinamen f¸r
+          die neue(n) Datei(en).
+  /V      Verifiziert, dass neue Dateien korrekt geschrieben werden.
+  /Y      Unterdr¸ckt Best‰tigungsabfragen f¸r das ‹berschreiben bereits
+          existierender Zieldateien.
+  /-Y     Bewirkt, dass das ‹berschreiben bereits existierender
+          Zieldateien best‰tigt werden muss.
 
-Die Option kann in der COPYCMD Variable spezifiziert werden.
-Dieses wird dann mit der Option /-Y aufgehoben.
+Die /Y Option kann in der COPYCMD Umgebungsvariable voreingestellt sein.
+Dies kann mit /-Y in der Befehlszeile ¸bergangen werden.
 
-FÅr mehrere Dateien kînnen Sie den '+' Operator benÅtzen.
-( Datei.1 + Datei.2 + ... )
+Um Dateien hinzuzuf¸gen geben Sie eine einzelne Datei als Ziel und
+mehrere Dateien als Quelle ein. Benutzen Sie hierzu Wildcards oder
+das Format Datei1+Datei2+Datei3.
 .
 
 :TEXT_CMDHELP_CTTY
-Wechselt das Terminal fÅr die Ein- und Ausgabe
+Wechselt das Terminalger‰t, das zur Steuerung Ihres Systems verwendet wird.
 
-CTTY GerÑt
+CTTY Ger‰t
 
-  GerÑt   Das Terminal, das Sie benÅtzen wollen, z.B. COM1
+  Ger‰t   Das Terminalger‰t das Sie verwenden mˆchten, z.B. COM1.
 .
 
-:TEXT_CMDHELP_DATE
-Zeigt das aktuelle Datum an oder Ñndert dies.
+:TEXT_CMDHELP_DATE#1
+Zeigt oder setzt das Datum.
 
-DATE [Datum]
+DATE [/D] [Datum]
 
-DATE ohne Parameter zeigt das aktuelle Datum und fordert zur neuen Eingabe auf.
+Geben Sie DATE ohne Parameter ein, um die aktuelle Datumseinstellung und
+die Abfrage f¸r eine neue anzuzeigen.  Dr¸cken Sie ENTER, um das Datum
+beizubehalten.
+
+/D verhindert, dass DATE interaktiv wird.
 .
 
-:TEXT_CMDHELP_DEL
-Lîscht eine oder mehrere Dateien.
+:TEXT_CMDHELP_DEL#2
+Lˆscht eine oder mehrere Dateien.
 
-DEL [Laufwerk:][Pfad]Dateiname [/P]
-ERASE [Laufwerk:][Pfad]Dateiname [/P]
+DEL [Laufwerk:][Pfad]Dateiname [/P] [/V]
+ERASE [Laufwerk:][Pfad]Dateiname [/P] [/V]
 
-  [Laufwerk:][Pfad]Dateiname  Kennzeichnet die zu lîschende Datei.
-                              FÅr mehrere Dateien benÅtzen Sie bitte
-                              Platzhalter. (*.*, *.tmp, ...)
-  /P                          Fordert zur BestÑtigung jeder Datei auf.
+  [Laufwerk:][Pfad]Dateiname  Spezifiziert die zu lˆschende(n) Datei(en).
+                              Benutzen Sie Wildcards, um mehrere Dateien anzugeben.
+  /P                          Fragt f¸r jede zu lˆschende Datei nach Best‰tigung.
+  /V                          Zeigt alle gelˆschten Dateien an.
 .
 
-:TEXT_CMDHELP_DIR
-Zeigt den aktuellen Verzeichnisinhalt an.
+:TEXT_CMDHELP_DIR#4
+Zeigt eine Liste von Dateien und Unterverzeichnissen in einem Verzeichnis an.
 
 DIR [Laufwerk:][Pfad][Dateiname] [/P] [/W] [/A[[:]Attribute]]
-  [/O[[:]Sortierreihenfolge]] [/S] [/B] [/L] [/V]
+  [/O[[:]Reihenfolge]] [/S] [/B] [/L] [/V]
 
   [Laufwerk:][Pfad][Dateiname]
-            Kennzeichnet das Laufwerk/Verzeichnis, die Datei an das/die an-
-            gezeigt werden soll. Kann auch mit Platzhaltern variiert werden.
- /P         Wartet auf Tastendruck, wenn eine Bildschirmseite voll ist.
- /W         BenÅtzt grî·ere Verzeichnisansicht.
- /A         Zeigt Dateien mit speziellen Attributen an.
- Attribute   D  Verzeichnis                R  SchreibgeschÅtzte Dateien
-             H  Versteckte Dateien         A  Archiv
-             S  Systemdateien
- /O         BenÅtzt eine Sortierreihenfolge
- Sortieren   N  nach Name             S  nach Grî·e
-             E  nach Erwiterung       D  nach Datum und Zeit
-             G  nach Verzeichnisse    A  nach letzter Zufgriffszeit
- /S         Zeigt Verzeichnisse/Dateien in Unterverzeichnissen an.
- /B         Minimales Format, unterbindet Zusammenfassung.
- /L         BenÅtzt Kleinschreibung.
- /V         Erweiterte Informationen.
+               Spezifiziert Laufwerk, Verzeichnis, und/oder aufzulistende Dateien.
+               (Kˆnnen sowohl erweiterte als auch mehrere Dateispezifikationen
+               sein.)
+  /P           Legt nach jedem vollst‰ndigen Ausf¸llen des Bildschirms mit
+               Informationen eine Pause ein.
+  /W           Benutzt das ausf¸hrliche Listenformat.
+  /A           Zeigt nur Dateien mit den spezifizierten Attributen an.
+               (Grundeinstellung ist /ADHSRA)
+  Attribute    D  Verzeichnisse (Directories)
+               R  Schreibgesch¸tzte Dateien (Read-only)
+               H  Versteckte Dateien (Hidden)
+               A  Zur Archivierung bereite Dateien
+               S  Systemdateien
+               -  (Das Prefix invertiert die jeweilige Bedeutung)
+  /O           Listet Dateien in (Sortier-)Reihenfolge auf.
+  Reihenfolge  N  Nach Name (alphabetisch)
+               S  Nach Grˆﬂe (Size) (kleinste zuerst)
+               E  Nach Erweiterung (alphabetisch)
+               D  Nach Datum und Zeit (‰lteste zuerst)
+               G  Verzeichnisse zuerst
+               -  (Das Prefix kehrt die Reihenfolge um)
+               U  Unsortiert
+               (Grundeinstelung ist /ONG)
+  /S           Zeigt Dateien im spezifizierten Verzeichnis und allen
+               Unterverzeichnissen an.
+  /B           Benutzt das knappe Format (ohne Kopftext und Zusammenfasung).
+  /L           Benutzt Kleinbuchstaben.
+  /Y or /4     Zeigt vierstellige Jahreszahlen an.
 
-Parameter sind auch mit der Umgebungsvariable DIRCMD bestimmbar.
-Diese sind mit dem Vorzeichen '-' aufhebbar, z.B. /-W.
+Einstellungen kˆnnen in der DIRCMD Umgebungsvariable gespeichert werden.
+Grundeinstellungen kˆnnen durch das Voranstellen eines - (Bindestrich)
+¸bergangen werden; z.B. /-W.
 .
 
-:TEXT_CMDHELP_DOSKEY
-Komfort auf der Kommandozeilenebene.
+:TEXT_CMDHELP_DOSKEY#1
+Das externe DOSKey Dienstrogramm wurde in FreeCOM eingebunden.
+Benutzen Sie die Pfeiltasten HOCH und RUNTER, um die Befehls-History abzurufen
+und durch HISTORY anzeigen zu lassen.
+Benutzen Sie LINKS und RECHTS und die ENDE und POS1 Tasten, um innerhalb der
+Befehlszeile zu navigieren und schalten Sie mit der EINFG-Taste zwischen dem
+‹berschreibe- und Einf¸ge-Modus hin und her.
+Benutzen Sie die Tabulatortaste, um das aktuelle Wort als Dateinamen zu
+vervollst‰ndigen; dr¸cken Sie sie zweimal, um alle mˆglichen Treffer anzuzeigen.
+.
 
-DOSKEY [/Option ...] [Makro=[Text]]
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
+Editiert die Befehlszeile, ruft Befehlseingaben ab und erstellt Makros.
 
- /BUFSIZE:Grî·e  Setzt die Grî·e des Makro und Befehlsspeichers   (standard:512)
- /ECHO:An|Aus    Aktiviert/Deaktivier die Makroanzeige            (standard:on)
- /FILE:Datei     Spezifiziert die Makrodatei
- /HISTORY        Zeigt den Befehlsspeicher an
- /INSERT         Deaktiviert den öberschreibungsmodus
- /KEYSIZE:Grî·e  Setzt die Grî·e des Tastaturbuffers              (standard:15)
- /LINE:size      Sets maximum size of line edit buffer            (standard:128)
- /MACROS         Zeigt alle Makros an
- /OVERSTRIKE     öberschreibungsmodus aktivieren                  (standard)
- /REINSTALL      Startet ein neue Kopie von DOSKey
- Makro           Spezifiziert den Makronamen
- Text            Spezifiziert den auszufÅhrenden Befehl fÅr das Makro
+DOSKEY [/Switch ...] [Makroname=[Text]]
 
- Hoch, Runter Pfeiltasten  wechseln durch die ausgefÅhrten Befehle
- ESC                       lîscht die aktuelle Kommandozeile
- F7                        zeigt die ausgefÅhrten Befehle
- Alt+F7                    lîscht die Liste der ausgefÅhrten Befehle
+  /BUFSIZE:Grˆﬂe  Legt die Grˆﬂe des Makro- und Befehlspuffers fest
+                  (Voreinstellung: 512)
+  /ECHO:on|off    Aktiviert/deaktiviert das Echo f¸r Makroerweiterungen
+                  (Voreinstellung: on)
+  /FILE:Datei     Spezifiziert eine Datei, die eine Liste mit Makros
+                  enth‰lt
+  /HISTORY        Zeigt alle im Speicher abgelegten Befehle an
+  /INSERT         F¸gt neu getippte Buchstaben in die Zeile ein
+  /KEYSIZE:Grˆﬂe  Legt die Grˆﬂe des Tastatur-vortipp-Puffers fest
+                  (Voreinstellung: 15)
+  /LINE:Grˆﬂe     Legt die Grˆﬂe des Zeileneditionspuffers fest
+                  (Voreinstellung: 128)
+  /MACROS         Zeigt alle DOSKey Makros an
+  /OVERSTRIKE     ‹berschreibt Buchstaben in der Zeile mit neu getippten
+                  Buchstaben (Voreinstellung)
+  /REINSTALL      Richtet eine neue Instanz von DOSKey ein
+  Makroname       Spezifiziert den Namen des Makros den Sie erstellen
+  Text            Spezifiziert Befehle, die Sie dem Makro zuweisen mˆchten
 
- [x]F8 Sucht nach einem Befehlder mit [x] beginnt.
-    F9 WÑhlt ein Kommando mit einer Spezifizierten Nummer aus.
+   HOCH, RUNTER   Ruft Befehle ab
+            Esc   Lˆscht den aktuellen Befehl
+             F7   Zeigt die Befehls-History an
+         Alt+F7   Lˆscht die Befehls-History
+ [Buchstaben]F8   Sucht nach Befehlen, die mit [Buchstaben] beginnen
+             F9   W‰hlt einen Befehl durch seine Nummer aus
+        Alt+F10   Lˆscht Makrodefinitionen
 
- Alt+F10 lîscht Makrodefinitionen
-
-Folgende Makroplatzhalter sind verfÅgbar:
- $T     Kommandoteiler, ermîglicht mehrere Befehle in einer Zeile
- $1-$9  équivalent zu den Platzhaltern %1 - %9 in Stapeldateien
- $*     Symbol ersetzt folgende Makronamen an der Kommandozeilenebene
+Die folgenden Spezialcodes kˆnnen Sie in DOSKey Makrodefinitionen nutzen:
+  $T     Befehlstrennzeichen: ermˆglicht mehrere Befehle in einem Makro
+  $1-$9  Stapelparameter: gleichbedeutend mit %1-%9 in Stapelprogrammen
+  $*     Symbol wird durch alles, was in der Befehlszeile auf den
+         Makronamen folgt, ersetzt.
 .
 
 :TEXT_CMDHELP_ECHO
-Zeigt Texte an und/oder schaltet die Ausgabe von Befehen aus.
+Zeigt Nachrichten an oder schaltet das Befehls-Echoing an oder aus.
 
   ECHO [ON | OFF]
-  ECHO [Text]
+  ECHO [Nachricht]
 
-ECHO ohne Parameter zeigt den aktuellen Status an (ON | OFF)
+Geben Sie ECHO ohne Parameter ein, um die aktuelle Echoeinstellung anzuzeigen.
 .
 
 :TEXT_CMDHELP_EXIT
-Beendet den Kommandointerpreter.
+Beendet die FreeDOS Command Shell.
 
 EXIT
 .
 
 :TEXT_CMDHELP_FOR
-FÅhrt den angegebenen Befehl fÅr jede Datei einer Gruppe von Dateien aus.
+F¸hrt einen spezifizierten Befehl f¸r jede Datei eines Dateisatzes aus.
 
-FOR %Variable IN (Gruppe) DO Befehl [Befehlparameter]
+FOR %Variable IN (Dateisatz) DO Befehl [Befehlsparameter]
 
-  %Variable         Stellt eine ersetzbare Variable dar. Sie kann als
-                    Befehlsparameter verwendet werden.
-  (Gruppe)          Bezeichnet eine oder mehrere Dateien.
-  Befehl            Kennzeichnet den Befehl der AusgefÅhrt werden soll.
-  Befehlsparameter  Kennzeichnet die Parameter fÅr den Spezifizierten Befehl.
+  %Variable    Spezifiziert einen ersetzbaren Parameter.
+  (Dateisatz)  Spezifiziert einen Satz aus einer oder mehreren Dateien.
+               Wildcards kˆnnen benutzt werden.
+  Befehl       Spezifiziert einen auf jede Datei anzuwendenden Befehl.
+  Befehlsparameter
+               Spezifiziert Parameter oder Switches f¸r den angegebenen Befehl.
 
-FÅr Stapelverarbeitungsprogramme benÅtzen Sie bitte %%Variable
-anstatt %Variable.
+Um den FOR-Befehl in einem Stapelprogramm zu benutzen, geben Sie %%Variable
+anstelle von %Variable an.
 .
 
 :TEXT_CMDHELP_GOTO
-Leitet FreeCOM zu der durch eine Marke gekennzeichneten Zeile
-eines Stapelverarbeitungsprograms
+Setzt den Befehlszeileninterpreter auf eine Sprungmarke in einem
+Stapelverarbeitungsprogramm.
 
-GOTO Marke
+GOTO Sprungmarke
 
-  Marke   Bezeichnet die Zeile innerhalb eines Tapelverarbeitungsprogramms,
-          an der FreeCOM die AusfÅhrung fortsetzen soll.
+  Sprungmarke  Spezifiziert eine Zeichenkette, die in einem Stapelprogramm
+               als Sprungmarke verwendet wird.
 
-z.B.:
-
-:Marke           <--
-[andere Befehle]   |
-GOTO Marke       >--
-[andere Befehle]
+Geben Sie in eine extra Zeile einen Doppelpunkt gefolgt von der Sprungmarke ein.
 .
 
-:TEXT_CMDHELP_HISTORY
-HISTORY Kommando.
+:TEXT_CMDHELP_HISTORY#1
+History-Befehl.
+
+HISTORY [Grˆﬂe]
+
+Ohne "Grˆﬂe" wird der aktuelle Inhalt des Befehlszeilen-History-Puffers angezeigt.
+Bei Angabe einer Grˆﬂe wird die Grˆﬂe des History-Puffers ge‰ndert.
 .
 
 :TEXT_CMDHELP_IF
-Ermîglicht eine bedingte Verarbeitung von Befehlen in Stapelverarbeitungs-
-programmen.
+Bewirkt bedingungsabh‰ngige Verarbeitung in einem Stapelprogramm.
 
-IF [NOT] ERRORLEVEL [Zahl] [Befehl]
-IF [NOT] [Text1]==[Text2] [Befehl]
-IF [NOT] EXIST [Dateiname] [Befehl]
+IF [NOT] ERRORLEVEL Nummer Befehl
+IF [NOT] Zeichenkette1==Zeichenkette2 Befehl
+IF [NOT] EXIST Dateiname Befehl
 
-  NOT              Legt fest, dass FreeCOM den Befehl nur dann ausfÅhren soll,
-                   wenn die Bedingung nicht erfÅllt ist.
-  ERRORLEVEL Zahl  Ist wahr, wenn das vorher durch FreeCOM ausgefÅhrte Programm
-                   einen Beendigungscode geliefert hat, der grî·er oder gleich
-                   Zahl ist,
-  Befehl           Bezeichnet den beieiner wahren Bedingung von FreeCOM aus-
-                   zufÅhrenden Befehl.
-  Text1==Text2     Ist wahr, wenn Text1 gleich dem Inhalt von Text2 entspricht.
-  EXIST Dateiname  Ist wahr, wenn die durch Dateiname angegebene Datei
-                   existiert.
+  NOT                Gibt an, dass der Interpreter den Befehl nur dann ausf¸hren
+                     soll, wenn die Bedingung nicht zutrifft.
+  ERRORLEVEL Nummer  Ergibt eine wahre Bedingung, falls das zuletzt
+                     ausgef¸hrte Programm einen Ausgangscode zur¸ckgegeben hat,
+                     der gleich oder grˆﬂer als die spezifizierte Nummer ist.
+  Befehl             Spezifiziert den bei zutreffender Bedingung auszuf¸hrenden
+                     Befehl.
+  Zeichenkette1==Zeichenkette2
+                     Ergibt eine wahre Bedingung, falls die spezifizierten
+                     Zeichenketten ¸bereinstimmen.
+  EXIST Dateiname    Ergibt eine wahre Bedingung, falls die spezifizierte
+                     Datei existiert.
 .
 
 :TEXT_CMDHELP_LH
-LÑdt ein Programm in den hohen Speicherbereich.
+L‰dt ein Programm in den hˆheren Speicherbereich.
 
 LOADHIGH [Laufwerk:][Pfad]Dateiname [Parameter]
-LOADHIGH [/L:S1[,M1][;S2[,M2]...] [/S]]
+LOADHIGH [/L:Region1[,minGrˆﬂe1][;Region2[,minGrˆﬂe2]...] [/S]]
          [Laufwerk:][Pfad]Dateiname [Parameter]
 
-/L:S1[,M1][;S2[,M2]]
-            Sx Speicherregion
-            Mx minimale Speichergrî·e
+/L:Region1[,minGrˆﬂe1][;Region2[,minGrˆﬂe2]]...
+            Spezifiziert die Speicherregionen, in die das Programm geladen
+            werden soll.  Region1 spezifiziert die Nummer der ersten
+            Speicherregion; minGrˆﬂe1 spezifiziert, falls vorhanden, die
+            minimale Grˆﬂe f¸r Region1. Region2 und minGrˆﬂe2 spezifizieren,
+            falls erforderlich, Nummer und minimale Grˆﬂe f¸r die zweite Region.
+            Sie kˆnnen beliebig viele Regionen spezifizieren.
 
-/S          Reduziert ein Speicherblock zu der minimalen Grî·e, sowie das
-            Programm sich in den Speicher lÑdt.
+/S          Schrumpft ein UMB auf seine Minimalgrˆﬂe w‰hrend das Programm
+            geladen wird.
 
 [Laufwerk:][Pfad]Dateiname
-            Kennzeichnet den Ort Programmes.
+            Spezifiziert Pfad und Namen des zu ladenden Programms.
 .
 
 :TEXT_CMDHELP_LOADFIX
-LÑdt das Programm erst in den Bereich Åber 64KB und startet es dann.
+L‰dt ein Programm nach den ersten 64K des Speichers und f¸hrt es aus.
 
 LOADFIX [Laufwerk:][Pfad]Dateiname
 
-BenÅtzen Sie LOADFIX um einProgramm zu laden was folgenden Fehler anzeigt
-"Packed file corrupt"
+Benutzen Sie LOADFIX um ein Programm zu laden, wenn Ihnen beim Versuch, es im
+LoMem zu laden, die Nachricht "Packed file corrupt" (Gepackte Datei besch‰digt)
+angezeigt wurde.
 .
 
 :TEXT_CMDHELP_MD
-Erstellt ein Unterverzeichnis.
+Erstellt ein Verzeichnis.
 
 MKDIR [Laufwerk:]Pfad
 MD [Laufwerk:]Pfad
 .
 
 :TEXT_CMDHELP_PATH
-Legt einen Suchpfad fÅr ausfÅhrbare Dateien fest.
+Zeigt oder setzt einen Suchpfad f¸r ausf¸hrbare Dateien.
 
 PATH [[Laufwerk:]Pfad[;...]]
 PATH ;
 
-PATH ; Lîscht den Suchpfad
-PATH ohne Parameter zeigt den aktuellen Suchpfad an.
+Geben Sie PATH ; ein, um alle Suchpfadeinstelungen zu lˆschen und die
+Command Shell lediglich im jeweils aktuellen Verzeichnis suchen zu lassen.
+Geben Sie PATH ohne Parameter ein, um die aktuelle Suchpfadeinstellung
+anzuzeigen.
 .
 
 :TEXT_CMDHELP_PAUSE
-HÑlt ein Stapelverarbeitungsprogramm an und gibt folgende Nachricht aus.
-"Beliebige Taste drÅcken um fortzusetzen..." oder eine andere optionale
-Nachricht.
+Unterbricht die Verarbeitung eines Stapelprogramms und zeigt die
+Nachricht "Dr¸cken Sie eine beliebige Taste, um fortzufahren..."
+oder eine optional spezifizierte Nachricht an.
 
 PAUSE [Nachricht]
 .
 
 :TEXT_CMDHELP_PROMPT
-éndert die Eingabeaufforderung.
+ƒndert das Erscheinungsbild der Eingabeaufforderung.
 
-PROMPT [text]
+PROMPT [Text]
 
-  text    Spezifiziert die neue Eingabeaufforderung.
+  Text  Spezifiziert eine neue Eingabeaufforderung.
 
-Die folgenden Zeichen kînnen fÅr optionale Informationen genutzt werden:
 
-  $Q   =
-  $$   $
+Die Eingabeaufforderung kann aus normalen Zeichen sowie den folgenden
+Spezialcodes bestehen:
+
+  $Q   = (Gleichheitszeichen)
+  $$   $ (Dollarzeichen)
   $T   Aktuelle Zeit
   $D   Aktuelles Datum
-  $P   Aktuelles Laufwerk/Verzeichnis
-  $V   FreeCOM Version
+  $P   Aktuelles Laufwerk und Pfad
+  $V   Die FreeDOS Command Shell Versionsnummer
   $N   Aktuelles Laufwerk
-  $G   >
-  $L   <
-  $B   |
-  $H   Lîscht voriges Zeichen
-  $E   Escape Code (27)
-  $_   Neue Zeile
+  $G   > (grˆﬂer-als-Zeichen)
+  $L   < (kleiner-als-Zeichen)
+  $B   | (Pipe)
+  $H   Backspace (lˆscht das vorangehende Zeichen)
+  $E   Escape Code (ASCII Code 27)
+  $_   Wagenr¸cklauf und neue Zeile (CrLf)
 
-PROMPT ohne Parameter zeigt die aktuellen Einstellungen an.
+Geben Sie PROMPT ohne Parameter ein, um die Eingabeaufforderung auf
+Grundeinstellung zur¸ckzusetzen.
 .
 
 :TEXT_CMDHELP_PUSHD
-FÅgt das aktuelle Verzeichnis zum Verzeichnisspeicherhinzu
+Legt das aktuelle Verzeichnis mit der Option, das aktuelle Arbeitsverzeichnis
+zu wechseln, im Dateiverzeichnis-Stack ab.
 
 PUSHD [[Laufwerk:]Pfad]
+  Wobei [Laufwerk:]Pfad der Pfad ist, zu dem Sie wechseln mˆchten.
 .
 
 :TEXT_CMDHELP_POPD
-Holt ein Verzeichnis von dem Verzeichnisspeicher wieder zurÅck.
+Holt ein Verzeichnis vom Dateiverzeichnis-Stack und wechselt zu ihm.
 
 POPD [*]
-  [*] Lîscht den Verzeichnisspeicher
+  Der '*' Parameter leert den Dateiverzeichnis-Stack.
 .
 
 :TEXT_CMDHELP_DIRS
-Zeigt den Inhalt des Verzechnisspeichers.
+Zeigt den Inhalt des Dateiverzeichnis-Stacks an.
 
 DIRS
 .
 
 :TEXT_CMDHELP_RD
-Lîscht ein Unterverzeichnis.
+Lˆscht ein Verzeichnis.
 
 RMDIR [Laufwerk:]Pfad
 RD [Laufwerk:]Pfad
 .
 
 :TEXT_CMDHELP_REM
-Erlaubt das EinfÅgen von Kommentaren in die Stapeldateien und der CONFIG.SYS
+Weist Kommentare (Remarks) in einer Stapeldatei oder in CONFIG.SYS aus.
 
 REM [Kommentar]
 .
 
 :TEXT_CMDHELP_REN
-éndert den Namen eines Verzeichnises / einer Datei
+Benennt eine oder mehrere Datei(en)/Verzeichnis(se) um.
 
-RENAME [Laufwerk:][Pfad[Verzeichnisname1 | Dateiname1]
-                       [Verzeichnisname2 | Dateiname2] 
-REN    [Laufwerk:][Pfad[Verzeichnisname1 | Dateiname1]
-                       [Verzeichnisname2 | Dateiname2] 
+RENAME [Laufwerk:][Pfad][Verzeichnisname1 | Dateiname1]
+  [Verzeichnisname2 | Dateiname2]
+REN [Laufwerk:][Pfad][Verzeichnisname1 | Dateiname1]
+  [Verzeichnisname2 | Dateiname2]
 
-Sie kînnen beim Ziel nicht andere Laufwerksbezeichnungen angeben. BenÅtzen
-Sie dazu den Befehl MOVE.
+Bitte beachten Sie, dass Sie weder ein neues Laufwerk noch einen neuen Pfad
+als Zielelement spezifizieren kˆnnen. Benutzen Sie hierzu den MOVE-Befehl.
 .
 
-:TEXT_CMDHELP_SET
-Anzeigen oder Ñndern von Umgebungsvariablen
+:TEXT_CMDHELP_SET#1
+Zeigt, setzt oder lˆscht Umgebungsvariablen.
 
-SET [Variable[= | Frei][Text]]
+SET [/C] [/P] [Variable=[Zeichenkette]]
 
-  Variable  Kennzeichnet den Umgebugsvariablennamen
-  Text      Kennzeichnet den Inhalt von [Variable]
+  Variable      Spezifiziert den Namen der Umgebungsvariable.
+  Zeichenkette  Spezifiziert eine Zeichenkette, die der Variable
+                zugewiesen werden soll.
 
-  SET x=    Lîscht die Variable
+* Falls keine Zeichenkette spezifiziert wird, wird die Variable aus der
+Umgebung gelˆscht.
 
-SET ohne Parameter zeigt die aktuellen Umgebungsvariblen an.
+Geben Sie SET ohne Parameter ein, um die aktuellen Umgebungsvariablen anzuzeigen.
+
+/C erzwingt die Einhaltung der Groﬂ-/Kleinschreibung der Variable; die
+Voreinstellung ist, die Variable in Groﬂbuchstaben zu ¸bernehmen, falls
+sie nicht bereits in der Umgebung vorhanden ist. Andernfalls wird die
+Groﬂ-/Kleinschreibung beibehalten.
+
+/P Fragt den Benutzer mit Zeichenkette ab und weist die Benutzereingabe
+der Variable zu.
 .
 
-:TEXT_CMDHELP_SHIFT
-éndert die Position austauschbarer Parameter in einer Stapeldatei
+:TEXT_CMDHELP_SHIFT#1
+ƒndert die Position ersetzbarer Parameter einer Stapeldatei.
 
-SHIFT
+SHIFT [RUNTER]
+
+RUNTER verschiebt das Argumentfenster richtung Anfang (%0); andernfalls
+in Richtung Ende.
 .
 
-:TEXT_CMDHELP_TIME
-Zeigt oder Ñndert die aktuelle Zeit
+:TEXT_CMDHELP_TIME#1
+Zeigt oder setzt die Systemzeit.
 
-TIME [Zeit]
+TIME [/T] [Zeit]
 
-TIME ohne Parameter zeigt das aktuelle Datum und fordert zur neuen Eingabe auf.
+Geben Sie TIME ohne Parameter ein, um die aktuelle Zeiteinstellung anzuzeigen
+und nach der neuen Einstellung zu fragen.  Dr¸cken Sie ENTER, um die Zeit
+beizubehalten.
+
+/T verhindert, dass TIME interaktiv wird.
 .
 
 :TEXT_CMDHELP_TRUENAME
-Zeigt den vollstÑndigen Namen der angegebenen Datei an.
+Zeigt den vollen Pfadnamen des angegebenen Pfades an.
 
 TRUENAME [Laufwerk:][Pfad][Dateiname]
 .
 
 :TEXT_CMDHELP_TYPE
-Zeigt den Inhalt einer Textdatei an.
+Zeigt den Inhalt von Textdateien an.
 
-TYPE [Laufwerk:][Pfad][Dateiname]
+TYPE [Laufwerk:][Pfad]Dateiname
 .
 
 :TEXT_CMDHELP_VER
-Zeigt Informationen Åber FreeCOM
+Zeigt die Versionsnummer und andere Informationen ¸ber die FreeDOS
+Command Shell an.
 
 VER [/R] [/W] [/D] [/C]
 
- /R         Zeigt die Kernel Version.
- /W         FreeCOM Garantieinformationen.
- /D         FreeCOM Vertriebsinformationen.
- /C         FreeDOS Developer.
+  /R        Zeigt die Kernelversion und weitere Informationen.
+  /W        FreeDOS Command Shell Gew‰hrleistung.
+  /D        FreeDOS Command Shell Weitergabeinformationen.
+  /C        FreeDOS Command Shell Beteiligte.
 .
 
 :TEXT_CMDHELP_VERIFY
-Legt fest ob FreeDOS prÅfen soll eine Datei korrekt abggespeichert wurde.
+Legt fest, ob das FreeDOS Dateisystem verifizieren soll, dass Dateien
+erfolgreich abgelegt wurden.
 
 VERIFY [ON | OFF]
 
-VERIFY ohne Parameter zeigt den aktuellen Status an.
+Geben Sie VERIFY ohne Parameter ein, um die aktuelle VERIFY Einstellung
+anzuzeigen.
 .
 
 :TEXT_CMDHELP_FDDEBUG
-Wenn Debuginformationen eingebunden wurden, schaltet FDDEBUG diese an bzw. aus.
+Falls FreeDOS mit Fehlersuche (Debugging) kompiliert wurde, schaltet
+dieser Befehl die Ausgabe von Fehlerinformationen ein oder aus oder
+gibt die aktuelle Einstellung an.
 
-FDDEBUG [ON | OFF]
+FDDEBUG [ON | OFF | Datei]
 
-FDDEBUG ohne Parameter zeigt den aktuellen Status an.
+Geben Sie FDDEBUG ohne Parameter ein, um die aktuelle Einstellung anzuzeigen.
+Falls eine Datei spezifiziert wird, werden alle Fehlerinformationen in diese
+Datei umgeleitet; die Ausgabe wird an die Datei angeh‰ngt, falls sie schon
+existiert.  Die besonderen Namen "stdout" und "stderr" kˆnnen benutzt werden,
+um die Ausgabe zur Standartausgabe oder zum Standart-Fehler-Stream umzuleiten.
 .
 
 :TEXT_CMDHELP_VOL
-Zeigt die Laufwerksbezeichnung eines Laufwerkes an.
+Zeigt das Laufwerk-Volumelabel und, falls vorhanden, die
+Seriennummer an.
 
 VOL [Laufwerk:]
 .
 
-:TEXT_CMDHELP_QUESTION
-Zeigt die in FreeCOM enthaltenden Befehle an.
+:TEXT_CMDHELP_QUESTION#1
+Zeigt eine Liste der verf¸gbaren Befehle der Shell an.
 
-? [/?]
+?
+?Befehl [Parameter]
+
+Die erste Variante zeigt alle verf¸gbaren internen Befehle und F‰higkeiten an.
+Die zweite fragt ab, ob der spezifizierte Befehl wie im Einzelschrittmodus
+ausgef¸hrt werden soll oder nicht.
+.
+
+:TEXT_CMDHELP_WHICH
+Sucht und zeigt die zum jeweiligen Befehl gehˆrende ausf¸hrbare Datei an.
+
+WHICH {Befehl}
+.
+
+:TEXT_CMDHELP_MEMORY#1
+Zeigt den von FreeCOM intern verwendeten Speicher an
+
+MEMORY
+
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+Das COPY-Ziel darf keine Pluszeichen ('+') enthalten.
+.
+
+:TEXT_DELETE_FILE#1
+Lˆsche Datei '%s'.
 .

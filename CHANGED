@@ -1,3 +1,4 @@
+add: total update/rewrite GERMAN.LNG {Clemens Löser}
 bugfix: FIXSTRS: TEXT_CMDHELP_FOR: Invalid warning for %v {Bernd Blaauw}
 bugfix: CRITERR: to use DOS API {Tom Ehlert/Bart Oldeman}
 bugfix: LOADHIGH: deallocating context if /L is present {Tom Ehlert}
