@@ -1,6 +1,9 @@
 $Id$
 Command line parser
 
+Changes: single quotes and backticks are valid filename characters,
+	their meta function as quotes is dropped therefore -- 2003-03-11 ska
+
 Unless stated otherwise, double quotes shall mark the beginning and
 the end of strings in the following examples. If the quotes shall
 serve a special function, strings are enclosed in [..].
@@ -46,14 +49,12 @@ serve a special function, strings are enclosed in [..].
 
 + Quotes are removed from the arguments, but hide any metafunction
 	of enclosed characters. The current implemention knows only
-	paired quotes: double quotes ", single quotes ', back quotes `
-	However, all three quotes might serve other functions in the
-	future other than "just quote", except the double quote.
+	paired double quotes.
 
 	Quotes can appear within words.
 
 	In the following example any quotes are quotes written on command line:
-		"1 2'3"  `4 `567 '89/10'
+		"1 2'3"  "4 "567 "89/10"
 	-->
 		%1 == [1 2'3]
 		%2 == [4 567]
