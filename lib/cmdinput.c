@@ -64,6 +64,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 	unsigned charcount = 0;
 
 	assert(str);
+	assert(maxlen <= MAX_INTERNAL_COMMAND_SIZE);
 
 	/* if echo off, don't print prompt */
 	if(echo)
@@ -258,7 +259,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			if(histLevel) {
 				clrcmdline(str, maxlen, orgx, orgy);
 				strcpy(prvLine, str);
-				histGet(++histLevel, str, sizeof(str));
+				histGet(++histLevel, str, maxlen);
 				current = charcount = strlen(str);
 				outs(str);
 			}

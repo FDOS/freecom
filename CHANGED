@@ -1,3 +1,4 @@
+bugfix: cmdinput.c: histGet(,str,maxlen) (Tom Ehlert)
 bugfix: mux_ae.h: #ifdef --> #if (Tom Ehlert)
 bugfix: day/month read from ff_time reversed (John Price)
 bugfix: IF lower==LOWER bug; MS COMMAND compares case-sensitively
