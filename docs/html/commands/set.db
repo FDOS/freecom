@@ -41,9 +41,9 @@ bug report. Once this option has been encountered, all the remaining command
 line is ignored.
 <LI><OPT>/P</OPT>: Prompts the user with the specified 
 EBNF!: <<string>>
-and assigns the user's input to the 
+ and assigns the user's input to the 
 EBNF!: variable 
-. If the no input is made, hence,
+. If no input is made, hence,
 one taps just <TT>ENTER</TT>, an empty value is assigned to the
 EBNF!: variable 
 , which is then removed from the environment.

@@ -39,7 +39,7 @@ of the <OPT>/A</OPT> option is a sequence of:
 	<LI><OPT>A</OPT> for: archive.
 	</UL>
 	<P>If the same attribute is specified twice within the same
-	<OPT>/A</OPT> option, the last one superceeds the previous ones; if
+	<OPT>/A</OPT> option, the last one superceeds previous ones; if
 	more than one <OPT>/A</OPT> option is specified, the last one
 	superceeds all previous ones.
 <LI><OPT>/B</OPT>: (Bare) Displays the lines with the information of

@@ -33,7 +33,7 @@ void rtrimcl(char * const str);
 /*
  * Callback function invoked when an option is scanned
  *
- *  chstr := long option string
+ *  optstr := long option string
  *  ch := single character option (upcased) or 0 if none
  *  bool := -1: '-' found; +1: '+' found; 0: neither
  *  strarg := NULL: no argument; else: pointer to option argument
@@ -60,7 +60,7 @@ void rtrimcl(char * const str);
  *        add sp, 8
  *  One could say that no manual optimization is needed, couldn't one?
  */
-typedef int (* const optScanner)(const char * const chstr, int ch, int bool, const char *strarg, void * const arg);
+typedef int (* const optScanner)(const char * const optstr, int ch, int bool, const char *strarg, void * const arg);
 
 
 /*
