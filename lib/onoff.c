@@ -6,13 +6,16 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2002/11/12 18:56:48  skaus
+	bugfix: onOffStr(): zaps trailing argument delimiters, e.g. ECHO set=
+
 	Revision 1.2  2001/04/29 12:24:36  skaus
 	bugfix: >>PATH<< with empty %PATH% --> PATH=(null)
 	fix: BREAK/VERIFY ignore trailing spaces
 	fix: >>PATH ;<< remove PATH environment variable
 	fix: cache 3 environment variables to overcome nested useage (e.g. when
 		loading message segment to print environment variable)
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -49,16 +52,16 @@
 #include "../include/misc.h"
 
 enum OnOff onoffStr(char *line)
-{
+{	enum OnOff state = OO_Other;
+
 	if(!line)
 		return OO_Null;
-	line = trimcl(line);
+	line = ltrimcl(line);
 	if(!*line)
 		return OO_Empty;
-	if (stricmp(line, D_OFF) == 0)
-		return OO_Off;
-	if (stricmp(line, D_ON) == 0)
-		return OO_On;
-
-	return OO_Other;
+	if(matchtok(line, D_OFF))
+		state = OO_Off;
+	else if(matchtok(line, D_ON))
+		state = OO_On;
+	return *line? OO_Other: state;
 }
