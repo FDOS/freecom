@@ -18,7 +18,7 @@ int qecAction(char *param, FLAG * const flag)
 
 	if(param && *param) {
 		if(is_num(param, &ec))
-			F(errorlevel) = ec;
+			gflag_errorlevel = ec;
 		else
 			error_invalid_number(param);
 	}

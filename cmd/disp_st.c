@@ -4,9 +4,12 @@
 	Display all the internal status pages optionally into a file
 
 	$Log$
+	Revision 1.1.2.2  2001/07/25 19:59:27  skaus
+	Update #10
+
 	Revision 1.1.2.1  2001/07/16 20:28:38  skaus
 	Update #9
-
+	
  */
 
 #include "../config.h"
@@ -65,7 +68,7 @@ int cmd_dispStatus(char *param)
 	cmd_dispFlags(0);
 	displayString(TEXT_DISP_STATUS_IVARS);
 	cmd_dispIVars(0);
-	displayString(TEXT_DISP_STATUS_ARGS, F(base_shiftlevel), F(shiftlevel));
+	displayString(TEXT_DISP_STATUS_ARGS, gflag_base_shiftlevel, gflag_shiftlevel);
 	cmd_dispArgs(0);
 	displayString(TEXT_DISP_STATUS_EXEC);
 	cmd_dispEC(0);

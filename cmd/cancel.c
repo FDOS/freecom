@@ -10,5 +10,5 @@
 
 int cmd_cancel(char *param)
 {
-	return qecAction(param, &doCancel);
+	return qecAction(param, &lflag_doCancel);
 }

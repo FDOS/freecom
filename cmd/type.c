@@ -44,6 +44,7 @@ int cmd_type(char *param)
 
 		while(fgets(buf, sizeof(buf), f)) {
 			if(cbreak) {
+				dprintf(("[TYPE: Quit because of ^Break]\n"));
 				fclose(f);
 				ec = E_CBreak;
 				goto errRet;
@@ -52,6 +53,7 @@ int cmd_type(char *param)
 		}
 		fclose(f);
 		if(cbreak) {
+			dprintf(("[TYPE: Quit because of ^Break]\n"));
 			ec = E_CBreak;
 			break;
 		}

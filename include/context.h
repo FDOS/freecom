@@ -10,6 +10,7 @@
 #include <portable.h>
 #include <mcb.h>
 #include "../context.h_c"
+#include "../gflags.h_c"
 
 #define MAX_FNAME	89		/* max size of string for one filename */
 
@@ -46,6 +47,10 @@ typedef struct {	/* f context */
 	word ec_cmd;		/* displacement of command in F-context */
 	char ec_prefix[1];	/* argument prefix; dynamically extended */
 } ctxtEC_For_t;
+typedef struct {	/* C context */
+	unsigned ec_flags;
+	char ec_cmd[1];
+} ctxtEC_Cmd_t;
 #include <algndflt.h>
 #if sizeof(ctxtCB_t) != 16
 #error "The size of type ctxtCB_t must be equal to 16"
@@ -152,44 +157,22 @@ typedef enum ExecContext_Tags {
 	, EC_TAG_FOR_FIRST			/* F */
 	, EC_TAG_FOR_NEXT			/* f */
 	, EC_TAG_COMMAND			/* C */
-	, EC_TAG_COMMAND_IGNORE_EXIT	/* c */
 	, EC_TAG_KEEP_RUNNING		/* e */
 	, EC_TAG_TERMINATE			/* E */
 } ecTag_t;
 #define EC_LAST_TAG EC_TAG_TERMINATE
 	/* >= tags that may be considered end of the stack */
 #define EC_FINAL_TAGS EC_TAG_KEEP_RUNNING
-#define ecNames "IBFfCceE"
+#define ecNames "IBFfCeE"
 
-#if 0
-typedef struct {
-	FLAG f_dispPrompt;		/* display prompt on interactive cmdline */
-	FLAG f_echo;			/* batch script echo mode */
-	FLAG f_swap;			/* do swapping by default */
-/** flags below default to zero **/
-	FLAG f_canexit;			/* may allowed to exit this shell */
-	FLAG f_interactive;		/* set if the current command had been entered
-								interactively via command line */
-	FLAG f_call;			/* invoke via CALL by default */
-	FLAG f_trace;			/* batch script trace mode by default */
-	FLAG f_debug;			/* FreeCOM debugging */
-	FLAG f_persistentMSGs;	/* keep messages in memory */
-	unsigned f_errorlevel;
-	unsigned f_base_shiftlevel;
-	unsigned f_shiftlevel;	/* argument shift level */
-	unsigned f_batchlevel;	/* how many batch nesting levels */
-} ctxt_flags_t;
-#endif
 extern ctxt_flags_t far*ctxtFlagsP;
 extern ctxt_flags_t ctxtInitialFlags;
-#define ctxtFlags	(*ctxtFlagsP)
-#define F(flags)	ctxtFlags.CTXT_join(f_,flags)
+extern ctxt_shared_flags_t ctxtSharedFlags;
 
-extern FLAG swap, echoBatch, dispPrompt, rewindBatchFile, traceMode;
-extern FLAG interactive, called;
-extern FLAG doExit, doCancel, doQuit;
-extern char *gotoLabel;
-#define implicitVerbose (interactive? dispPrompt: echoBatch)
+extern FLAG lflag_doExit, lflag_doCancel, lflag_doQuit;
+extern FLAG lflag_rewindBatchFile;
+extern char *lflag_gotoLabel;
+#define implicitVerbose (lflag_echo)
 
 extern char* (*ecFunction[])(ctxtEC_t far * const);
 
@@ -225,6 +208,14 @@ void ecFreeIVar(char * const ivar);
 	/* Create a string that may enclose "str" with a %@VERBATIM() */
 char *ecMkVerbatimStr(const char * const str);
 
+	/** Mode parameters for ecMkvcmd() */
+#define EC_CMD_FORCE_INTERNAL 1
+#define EC_CMD_SILENT 2			/* disable local ECHO status */
+#define EC_CMD_IGNORE_EXIT 4	/* ignore doExit/Cancel/Quit */
+#define EC_CMD_NO_TRACE 4		/* disable local trace mode */
+#define EC_CMD_NONINTERACTIVE 8	/* disable local interactivity status */
+
+
 	/* Validate the TOS and return a pointer to it */
 ctxtEC_t far *ecValidateTOS(void);
 	/* Set a new TOS; return 0 if target is below LowestSegm() */
@@ -251,8 +242,6 @@ char *readFORfirst(ctxtEC_t far * const);
 char *readFORnext(ctxtEC_t far * const);
 	/* EC_TAG_COMMAND -- C-context */ 
 char *readCommand(ctxtEC_t far * const);
-	/* EC_TAG_COMMAND_IGNORE_EXIT -- c-context */ 
-char *readCommandIgnoreExit(ctxtEC_t far * const);
 	/* EC_TAG_KEEP_RUNNING -- e-context */ 
 char *keepMeRunning(ctxtEC_t far * const);
 	/* EC_TAG_TERMINATE -- E-context */ 

@@ -55,10 +55,9 @@ jmp_buf jmp_beginning;
 	*/
 kswap_p kswapContext = 0;
 
-FLAG swap, echoBatch, dispPrompt, rewindBatchFile, traceMode;
-FLAG interactive, called;
-FLAG doExit, doCancel, doQuit;
-char *gotoLabel;
+FLAG lflag_rewindBatchFile = FALSE;
+FLAG lflag_doExit = FALSE, lflag_doCancel = FALSE, lflag_doQuit = FALSE;
+char *lflag_gotoLabel = 0;
 
 void perform_exec_result(int result)
 {
@@ -66,7 +65,7 @@ void perform_exec_result(int result)
 	if (result == -1)
 		perror("executing spawnl function");
 	else
-		F(errorlevel) = result;
+		gflag_errorlevel = result;
 
 }
 
@@ -129,13 +128,13 @@ static void execute(char *first, char *rest)
 		/* Prepare to call an external program */
 
 		/* Unload the message block if not loaded persistently */
-		if(!F(persistentMSGs))
+		if(!gflag_persistentMSGs)
 			unloadMsgs();
 
 		chkHeap
 		/* Execute the external program */
 #ifdef FEATURE_KERNEL_SWAP_SHELL
-		if(swap == TRUE && F(swap) != ERROR
+		if(lflag_swap == TRUE && gflag_swap != ERROR
 		 && kswapMkStruc(name, rest)) {
 			/* The Criter and ^Break handlers has been installed within
 				the PSP in kswapRegister() --> nothing to do here */
@@ -143,7 +142,7 @@ static void execute(char *first, char *rest)
 			exit(123);		/* Let the kernel swap support do the rest */
 		}
 #ifdef DEBUG
-		if(swap == TRUE && F(swap) != ERROR)
+		if(lflag_swap == TRUE && gflag_swap != ERROR)
 			dprintf(("KSWAP: failed to save context, proceed without swapping\n"));
 #endif
 #endif
@@ -181,9 +180,10 @@ static void docommand(char *line)
 	/* delete leading spaces, but keep trailing whitespaces */
 	line = ltrimcl(line);
   	forceInternalCommand = 0;
-	if(memcmp(line, "::=", 3) == 0) {
+	if(memcmp(line, FORCE_INTERNAL_COMMAND_STRING
+	 , (sizeof(FORCE_INTERNAL_COMMAND_STRING)-1)) == 0) {
 		forceInternalCommand = 1;
-		line = ltrimcl(line + 3);
+		line = ltrimcl(line + (sizeof(FORCE_INTERNAL_COMMAND_STRING)-1));
 		dprintf(("[Force execution of internal command]\n"));
 	}
 
@@ -330,6 +330,9 @@ static int redirectJFTentry(int i
 	, void (*err_fct)(const char * const))
 {	int j;
 	byte far *jft;		/* pointer to FreeCOM's JFT */
+#ifdef DEBUG
+	unsigned old_fd;
+#endif
 
 	flushall();			/* messing around with file descriptors */
 
@@ -338,6 +341,9 @@ static int redirectJFTentry(int i
 	if(ecMkFD(i, jft[i]) != E_None)
 		return 0;
 
+#ifdef DEBUG
+	old_fd = jft[i];
+#endif
 	jft[i] = 255;		/* Mark the file descriptor as unused */
 	if((j = devopen(fnam, openmode, createmode)) < 0) {
 		err_fct(fnam);
@@ -350,9 +356,14 @@ static int redirectJFTentry(int i
 		}
 		close(j);
 	}
+	dprintf(("[Redirected fd#%u (SFT %u --> %u) to: %s]\n"
+	 , i, old_fd, jft[i], fnam));
 
 	/* Apply the other entries of this redirection */
 	for(j = i; j--;) if(jftUsed[i] == jftUsed[j]) {
+#ifdef DEBUG
+		old_fd = jft[j];
+#endif
 		if(ecMkFD(j, jft[j]) != E_None)
 			return 0;
 		/* is the same --> duplicate the fd here, too */
@@ -360,6 +371,8 @@ static int redirectJFTentry(int i
 			err_fct(fnam);
 			return 0;
 		}
+		dprintf(("[Redirected fd#%u (SFT %u --> %u) to duplicated fd#%u]\n"
+		 , j, old_fd, jft[j], i));
 	}
 	return 1;
 }
@@ -487,7 +500,7 @@ static int makePipeContext(char *** const Xout
 	p[0] = '>';		/* output redirection ID */
 	p[1] = 2;			/* overwrite, stdout */
 	if((q = strchr(pipe[0], 0))[-1] == '|') {
-		*q = 0;
+		q[-1] = 0;
 		p[1] = 6;			/* overwrite, stdout & stderr */
 	}
 	p = 0;
@@ -643,7 +656,7 @@ void parsecommandline(char *Xline)
 	dprintf(("[alias expanded to (%s)]\n", line));
 #endif
 
-	if(traceMode) {		/* Question after the variables expansion
+	if(lflag_trace) {		/* Question after the variables expansion
                                    and make sure _all_ executed commands will
                                    honor the mode */
 		fputs(line, stdout);
@@ -705,12 +718,7 @@ void run_exec_context(void)
 
 			/* as we are about to aquire a new command line, some
 				options are resetted to their defaults */
-			echoBatch = F(echo);
-			traceMode = F(trace);
-			swap = F(swap);
-			called = F(call);
-			interactive = F(interactive);
-			dispPrompt = F(dispPrompt);
+			_fmemcpy(&ctxtSharedFlags, ctxtFlagsP, sizeof(ctxtSharedFlags));
 
 			chkHeap
 			if((line = (ecFunction[ec->ctxt_type])(ec)) == 0)
@@ -720,6 +728,7 @@ void run_exec_context(void)
 				char *p, *q;
 
 				chkHeap
+				dprintf(("[CTXT: aquired line: %s]\n", line));
 				/* 
 				 * The question mark '?' has a double meaning:
 				 *	C:\> ?
@@ -730,8 +739,9 @@ void run_exec_context(void)
 				 */
 				if(*(p = ltrimcl(line)) == '?' && *(q = ltrimcl(p + 1))) {
 					/* something follows --> tracemode */
-					traceMode = 1;
+					lflag_trace = 1;
 					p = q;			/* skip the prefix */
+					dprintf(("[CTXT: Enable local TRACE status]\n"));
 				}
 
 				chkHeap
@@ -801,7 +811,7 @@ int main(void)
 	if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
 		run_exec_context();
 
-	if(!F(canexit))
+	if(!gflag_canexit)
 		hangForever();
 
 #ifdef FEATURE_KERNEL_SWAP_SHELL

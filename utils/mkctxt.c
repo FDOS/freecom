@@ -15,9 +15,12 @@
 			of the specific package
 
   	$Log$
+  	Revision 1.3.4.2  2001/07/25 20:01:18  skaus
+  	Update #10
+
   	Revision 1.3.4.1  2001/07/02 21:04:07  skaus
   	Update #4
-
+  	
   	Revision 1.3  2001/04/12 00:09:06  skaus
   	chg: New structure
   	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -73,7 +76,9 @@ static FILE *fincc, *finca, *fdefa, *fx;
 
 static char**types = 0;
 static int typenum = 0;
-
+static char**inits = 0;
+static int initnum = 0;
+static int init_firstval = 0, init_record = 0;
 
 static char *mkStruName(const char * const name)
 {	static char*last = 0;
@@ -120,9 +125,16 @@ static void indent(void)
 }
 static void endStru(void)
 {	if(stru) {
-		fprintf(fincc, "\t\t} %s;\n", stru);
-		free(stru);
+		char *p;
+		p = stru;
 		stru = NULL;
+		indent();
+		fprintf(fincc, "} %s;\n", p);
+		free(p);
+		if(init_record) {
+			++initnum;
+			init_firstval = init_record = 0;
+		}
 	}
 }
 static void endPkg(void)
@@ -151,6 +163,20 @@ static void endType(void)
 		typenum = 0;
 	}
 
+	if(inits && initnum) {
+		int i;
+
+		for(i = 0; i < initnum; ++i) {
+			fputs("#define init_", fincc);
+			fputs(inits[i], fincc);
+			fputs("}\n", fincc);
+			free(inits[i]);
+		}
+		free(inits);
+		inits = 0;
+		initnum = 0;
+	}
+
 	if(typename) {
 		fputs("#include <algndflt.h>\n", fincc);
 		free(typename);
@@ -158,11 +184,37 @@ static void endType(void)
 	}
 }
 
+static void dumpComment(char *comment)
+{	unsigned char *p;
+
+	if(!comment || !*(comment = skipws(comment)))
+		return;
+	p = (unsigned char*)strchr(comment, '\0');
+	while(--p >= (unsigned char*)comment && *p <= ' ');
+	p[1] = 0;
+	if(p == comment - 1)
+		return;
+	fprintf(fincc, "/* %s */\n", comment);
+	fprintf(fdefa, ";; %s\b", comment);
+	fprintf(finca, ";; %s\b", comment);
+}
 static void dumpItem(char *name, char *value, char *Ctype, char asmType)
 {	dumpEQU(name);
 	indent();
 	fprintf(fincc, "%s %s;\n", Ctype, name);
 	fprintf(fdefa, "\tD%c %s\n", asmType, value);
+	if(init_record) {
+		if((inits[initnum] = realloc(inits[initnum]
+		 , strlen(inits[initnum]) + strlen(value) + 5)) == 0) {
+		 	puts("Out of memory");
+		 	exit(121);
+		}
+		if(!init_firstval)
+			strcat(inits[initnum], ",\\\n\t");
+		else
+			init_firstval = 0;
+		strcat(inits[initnum], value);
+	}
 }
 #define word word_(&p)
 static char *word_(char **Xp)
@@ -265,8 +317,12 @@ main(int argc, char **argv)
 			endStru();
 			continue;
 		}
-		if(*p == '#')
+		if(*p == '#') {
+			if(memcmp(p, "###>", 4) == 0)
+				dumpComment(p + 4);
 			continue;
+		}
+
 		if(match("typedef")) {
 			endStru();
 			endPkg();
@@ -313,9 +369,16 @@ main(int argc, char **argv)
 					return 120;
 				}
 				types[typenum++] = typename;
-				types[typenum + 1] = 0;
 				fprintf(fincc, "struct %s {\t/* structure %s */\n"
 				 , mkStruName(typename), stru);
+				if((inits = realloc(inits, (initnum + 1) * sizeof(char*)))
+				 == 0
+				 || (inits[initnum] = malloc(strlen(stru) + 3)) == 0) {
+					puts("Out of memory");
+					return 120;
+				}
+				strcpy(stpcpy(inits[initnum], stru), " {");
+				init_record = init_firstval = 1;
 			} else {
 				fprintf(fincc, "struct {\t/* structure %s */\n", stru);
 			}

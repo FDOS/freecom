@@ -43,6 +43,7 @@ freecom_deps :  \
 	ctxt.obj \
 	ctxt_1.obj \
 	ctxt_2.obj \
+	ctxt_3.obj \
 	ctxt_adr.obj \
 	ctxt_as.obj \
 	ctxt_chg.obj \
@@ -134,10 +135,10 @@ freecom_deps :  \
 	is_icmd.obj \
 	is_ifct.obj \
 	is_ivar.obj \
-	is_num.obj \
 	chunk1
 
 chunk1 :  \
+	is_num.obj \
 	is_pch.obj \
 	is_pchr.obj \
 	is_quote.obj \
@@ -264,10 +265,10 @@ chunk1 :  \
 	err33.obj \
 	err34.obj \
 	err35.obj \
-	err36.obj \
 	chunk2
 
 chunk2 :  \
+	err36.obj \
 	err37.obj \
 	err38.obj \
 	err39.obj \
@@ -356,6 +357,7 @@ freecom.lib : $(CFG) freecom_deps
 +-ctxt.obj &
 +-ctxt_1.obj &
 +-ctxt_2.obj &
++-ctxt_3.obj &
 +-ctxt_adr.obj &
 +-ctxt_as.obj &
 +-ctxt_chg.obj &
@@ -661,6 +663,7 @@ freecom.lib : $(CFG) freecom_deps
 +ctxt.obj &
 +ctxt_1.obj &
 +ctxt_2.obj &
++ctxt_3.obj &
 +ctxt_adr.obj &
 +ctxt_as.obj &
 +ctxt_chg.obj &

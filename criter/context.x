@@ -16,7 +16,7 @@
 # "typedef" opens a new "typedef struct {".
 # "package" groups different values together, if the package
 # is a shared module, too, a pointer to this position is passed
-# to the module. Within C, they are represented by struct's
+# to the module. Within C, they are represented by struct's.
 # "structure" is more or less the same, but it is ensured that all
 # structures defined for one package are physically located in above the
 # pointer to the package
@@ -42,21 +42,25 @@ word execErr 0		# exit code of DOS-4B of external program
 pointer shell 0		# absolute path to shell to be executed 
 
 structure flags ctxt_flags_t
-byte f_dispPrompt  0	# display prompt on interactive cmdline
-byte f_echo 0		 	# batch script echo mode
-byte f_swap 0			# do swapping by default
-#* flags below default to zero
-byte f_canexit 0		# may allowed to exit this shell
+###> START OF FLAGS
+byte f_swap 2			# do swapping by default?
+byte f_echo	1			# current echo mode
 byte f_interactive 0	# set if the current command had been entered
 #							interactively via command line
-byte f_call 0			# invoke via CALL by default
+byte f_called 0			# invoke via CALL by default
 byte f_trace 0			# batch script trace mode by default
+byte f_ignoreCBreak 0	# cbreak() ignores ^Break && doExit/Cancel/Quit
+###> END OF SHARED FLAGS
+byte f_dispPrompt  1	# display prompt on interactive cmdline
+byte f_echoBatch 1		# initial batch script echo mode
 byte f_debug 0			# FreeCOM debugging
+byte f_canexit 0		# may allowed to exit this shell
 byte f_persistentMSGs 0	# keep messages in memory
 word f_errorlevel 0
 word f_base_shiftlevel 0
 word f_shiftlevel 0		# argument shift level
 word f_batchlevel 0		# how many batch nesting levels
+###> END OF FLAGS
 
 word ofs_criter _lowlevel_err_handler		# offset of criter module within this context 
 reference cbreak_hdlr	# start of dummy ^Break handler active if FreeCOM

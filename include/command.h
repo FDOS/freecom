@@ -18,7 +18,6 @@
 #define MAX_X (*(unsigned int  far*)MK_FP(0x40, 0x4a))
 #define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84))
 
-#define MAX_INTERNAL_COMMAND_SIZE 256
 #define MAX_EXTERNAL_COMMAND_SIZE 125
 	/* The maximal external command line is:
 		  128: overall space for the command line)
@@ -41,10 +40,11 @@ extern const char shellname[];
 	FALSE: no, false etc.
 	TRUE: yes, OK, etc.
 	ERROR: only used in tri-state flags, in binary flags same as TRUE
+	IGNORE: when copy flags, ignore this one
 */
 enum
 {
-  FALSE, TRUE, ERROR
+  IGNORE = (FLAG)-1, FALSE = 0, TRUE, ERROR
 };
 
 /* prototypes for INIT.C */

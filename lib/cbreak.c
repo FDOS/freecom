@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.7  2001/07/25 20:01:18  skaus
+	Update #10
+
 	Revision 1.1.4.6  2001/07/08 17:23:43  skaus
 	Update #7
-
+	
 	Revision 1.1.4.5  2001/07/07 20:37:17  skaus
 	Update #6
 	
@@ -65,7 +68,10 @@
 
 int chkCBreak(void)
 {
-	if(doExit || doCancel || doQuit) {
+	if(lflag_ignoreCBreak)
+		return 0;		/* completely ignore this call */
+
+	if(lflag_doExit || lflag_doCancel || lflag_doQuit) {
 		ctrlBreak = 0;                /* state processed */
 		return 1;
 	}
@@ -73,7 +79,7 @@ int chkCBreak(void)
 		return 0;
 	ctrlBreak = 0;                /* state processed */
 
-	if(F(batchlevel)) {
+	if(gflag_batchlevel) {
 		/* we need to be sure the string arrives on the screen!
 			Therefore userprompt() is not what we need. */
 
@@ -82,7 +88,7 @@ int chkCBreak(void)
 
 		if(!getPromptString(PROMPT_CANCEL_BATCH, &chars, &fmt)) {
 			/* Fatal error <-> Terminate all batches */
-			return doCancel = 1;
+			return lflag_doCancel = 1;
 		}
 		if((fnam = fct_batchname(0)) == 0
 		 && (fnam = getString(TEXT_UNKNOWN_FILENAME)) == 0)
@@ -101,12 +107,12 @@ int chkCBreak(void)
 
 		switch(ch) {
 		case 1:		/*	Yes --> leave this batch file */
-			doQuit = 1;
+			lflag_doQuit = 1;
 			break;
 		case 2:			/* No --> ignore */
 			return 0;
 		case 3:			/* leave All batchfiles */
-			doCancel = 1;
+			lflag_doCancel = 1;
 			break;
 		}
 	}

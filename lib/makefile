@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.3.2.9  2001/07/25 20:01:18  skaus
+# Update #10
+#
 # Revision 1.3.2.8  2001/07/16 20:28:38  skaus
 # Update #9
 #
@@ -77,19 +80,19 @@ SRC = act_qec.c add_arg.c alloc_e1.c alloc_ec.c alloc_ed.c alloc_em.c \
 	alloc_er.c alloc_es.c alprmblk.c alsysblk.c beep_l.c beep_n.c brk_get.c \
 	brk_set.c cbreak.c cbs.c cd_dir.c cgetch.c cgettime.c chgctxt.c chgdrv.c \
 	chgenv.c chgenvc.c chgenvr.c clrline.c cmdifile.c cmdinput.c comfile.c \
-	compfile.c corefar.c corenear.c ctxt.c ctxt_1.c ctxt_2.c ctxt_adr.c \
-	ctxt_as.c ctxt_chg.c ctxt_clr.c ctxt_get.c ctxt_inf.c ctxt_ini.c \
-	ctxt_mk.c ctxt_mkn.c ctxt_mks.c ctxt_pop.c ctxt_psh.c ctxt_rnu.c \
-	ctxt_ses.c ctxt_set.c ctxt_sp.c ctxt_ss.c ctxt_vw.c ctxtfree.c \
-	curdatel.c curtime.c cwd.c dateget.c dateset.c dbg_c.c dbg_free.c \
-	dbg_mem.c dbg_prnt.c dbg_s.c dbg_sn.c dbg_v1.c devopen.c dispcnt.c \
-	drvnum.c ecfrivar.c eclastb.c ecmk.c ecmk_c.c ecmk_f.c ecmkb.c ecmkf.c \
-	ecmkfd.c ecmkhc.c ecmki.c ecmkivar.c ecmksc.c ecmkv1c.c ecmkvcmd.c \
-	ecmkverb.c ecpop.c ecsettos.c ecshrink.c ecvalid.c efct_001.c efct_002.c \
-	efct_003.c esdec.c esenc.c exec.c exec1.c exp_ev.c farread.c fcompl1.c \
-	fcompl2.c fdattr.c fdevopen.c fillcomp.c find.c find_arg.c freep.c \
-	frsysblk.c fstpcpy.c gallstr.c get1mcb.c getcnam.c getenv.c goxy.c \
-	grabfcom.c gumblink.c hdlrctxt.c hist_get.c hist_set.c i_tty.c \
+	compfile.c corefar.c corenear.c ctxt.c ctxt_1.c ctxt_2.c ctxt_3.c \
+	ctxt_adr.c ctxt_as.c ctxt_chg.c ctxt_clr.c ctxt_get.c ctxt_inf.c \
+	ctxt_ini.c ctxt_mk.c ctxt_mkn.c ctxt_mks.c ctxt_pop.c ctxt_psh.c \
+	ctxt_rnu.c ctxt_ses.c ctxt_set.c ctxt_sp.c ctxt_ss.c ctxt_vw.c \
+	ctxtfree.c curdatel.c curtime.c cwd.c dateget.c dateset.c dbg_c.c \
+	dbg_free.c dbg_mem.c dbg_prnt.c dbg_s.c dbg_sn.c dbg_v1.c devopen.c \
+	dispcnt.c drvnum.c ecfrivar.c eclastb.c ecmk.c ecmk_c.c ecmk_f.c ecmkb.c \
+	ecmkf.c ecmkfd.c ecmkhc.c ecmki.c ecmkivar.c ecmksc.c ecmkv1c.c \
+	ecmkvcmd.c ecmkverb.c ecpop.c ecsettos.c ecshrink.c ecvalid.c efct_001.c \
+	efct_002.c efct_003.c esdec.c esenc.c exec.c exec1.c exp_ev.c farread.c \
+	fcompl1.c fcompl2.c fdattr.c fdevopen.c fillcomp.c find.c find_arg.c \
+	freep.c frsysblk.c fstpcpy.c gallstr.c get1mcb.c getcnam.c getenv.c \
+	goxy.c grabfcom.c gumblink.c hdlrctxt.c hist_get.c hist_set.c i_tty.c \
 	inputdos.c is_alias.c is_empty.c is_fnamc.c is_fnstr.c is_icmd.c \
 	is_ifct.c is_ivar.c is_num.c is_pch.c is_pchr.c is_quote.c isadev.c \
 	ivarset.c keyprsd.c lastdget.c lastdset.c leadopt.c lowexec.asm \
@@ -111,7 +114,7 @@ OBJ = act_qec.obj add_arg.obj alloc_e1.obj alloc_ec.obj alloc_ed.obj \
 	cd_dir.obj cgetch.obj cgettime.obj chgctxt.obj chgdrv.obj chgenv.obj \
 	chgenvc.obj chgenvr.obj clrline.obj cmdifile.obj cmdinput.obj \
 	comfile.obj compfile.obj corefar.obj corenear.obj ctxt.obj ctxt_1.obj \
-	ctxt_2.obj ctxt_adr.obj ctxt_as.obj ctxt_chg.obj ctxt_clr.obj \
+	ctxt_2.obj ctxt_3.obj ctxt_adr.obj ctxt_as.obj ctxt_chg.obj ctxt_clr.obj \
 	ctxt_get.obj ctxt_inf.obj ctxt_ini.obj ctxt_mk.obj ctxt_mkn.obj \
 	ctxt_mks.obj ctxt_pop.obj ctxt_psh.obj ctxt_rnu.obj ctxt_ses.obj \
 	ctxt_set.obj ctxt_sp.obj ctxt_ss.obj ctxt_vw.obj ctxtfree.obj \
@@ -144,15 +147,15 @@ OBJ = act_qec.obj add_arg.obj alloc_e1.obj alloc_ec.obj alloc_ed.obj \
 	split.obj splitfc.obj sumblink.obj tempfile.obj timeget.obj timeset.obj \
 	tmpnam.obj trimcl.obj trimsp.obj txtlend.obj unquote.obj vcgetch.obj \
 	vcgetstr.obj where.obj
-HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\include/cmdline.h \
-	..\include/command.h ..\include/context.h ..\include/crossjmp.h \
-	..\include/datefunc.h ..\include/debug.h ..\include/ierror.h \
-	..\include/keys.h ..\include/message.h ..\include/misc.h \
-	..\include/mux_ae.h ..\include/nls.h ..\include/openf.h \
-	..\include/output.h ..\include/res.h ..\include/resource.h \
-	..\include/strings.typ ..\include/timefunc.h ..\include\large.inc \
-	..\include\model.inc ..\include\small.inc ..\include\stuff.inc ec.h in.h \
-	out.h
+HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\gflags.h_c \
+	..\include/cmdline.h ..\include/command.h ..\include/context.h \
+	..\include/crossjmp.h ..\include/datefunc.h ..\include/debug.h \
+	..\include/ierror.h ..\include/keys.h ..\include/message.h \
+	..\include/misc.h ..\include/mux_ae.h ..\include/nls.h \
+	..\include/openf.h ..\include/output.h ..\include/res.h \
+	..\include/resource.h ..\include/strings.typ ..\include/timefunc.h \
+	..\include\large.inc ..\include\model.inc ..\include\small.inc \
+	..\include\stuff.inc ec.h in.h out.h
 
 
 #	Default target
@@ -199,9 +202,9 @@ onoff.obj : onoff.c \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 lastdget.obj : lastdget.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 gumblink.obj : gumblink.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -219,15 +222,16 @@ find.obj : find.c \
 o_init.obj : o_init.c \
 	 ../config.h ../include/debug.h ../include/output.h out.h
 ctxt_clr.obj : ctxt_clr.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
-ctxt.obj : ctxt.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
-lastdset.obj : lastdset.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
+ctxt.obj : ctxt.c \
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
+lastdset.obj : lastdset.c \
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 beep_l.obj : beep_l.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -235,12 +239,13 @@ is_fnstr.obj : is_fnstr.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 ctxt_ss.obj : ctxt_ss.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 cbreak.obj : cbreak.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h \
-	../strings.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h ../strings.h
 getenv.obj : getenv.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -252,7 +257,8 @@ res.obj : res.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/resource.h ../include/timefunc.h
 ecmkfd.obj : ecmkfd.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 parsenum.obj : parsenum.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -271,15 +277,16 @@ efct_002.obj : efct_002.c \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
 	../strings.h
 hist_get.obj : hist_get.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 fdevopen.obj : fdevopen.c \
 	 ../include/openf.h
 ctxt_rnu.obj : ctxt_rnu.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 o_blks.obj : o_blks.c \
 	 ../config.h ../include/debug.h ../include/output.h out.h
 chgenv.obj : chgenv.c \
@@ -309,12 +316,12 @@ skipquot.obj : skipquot.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 ecmk_c.obj : ecmk_c.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h \
-	ec.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h ec.h
 hist_set.obj : hist_set.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 get1mcb.obj : get1mcb.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -326,13 +333,13 @@ cd_dir.obj : cd_dir.c \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
 exp_ev.obj : exp_ev.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
-	../include/command.h ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/ierror.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/cmdline.h ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 ecmkv1c.obj : ecmkv1c.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/debug.h ../include/ierror.h ec.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/debug.h ../include/ierror.h ec.h
 trimcl.obj : trimcl.c \
 	 ../config.h ../include/cmdline.h ../include/debug.h
 dbg_mem.obj : dbg_mem.c \
@@ -346,22 +353,23 @@ msg_v1.obj : msg_v1.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 is_ivar.obj : is_ivar.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 hdlrctxt.obj : hdlrctxt.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 ctxt_ses.obj : ctxt_ses.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
+ctxt_psh.obj : ctxt_psh.c \
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
-ctxt_psh.obj : ctxt_psh.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
 optsi.obj : optsi.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
@@ -378,21 +386,26 @@ vcgetstr.obj : vcgetstr.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 ecmkivar.obj : ecmkivar.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 alloc_ec.obj : alloc_ec.c \
 	 ../err_fcts.h ../include/datefunc.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 ctxt_1.obj : ctxt_1.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 farread.obj : farread.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
+ctxt_3.obj : ctxt_3.c \
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 alprmblk.obj : alprmblk.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 is_pch.obj : is_pch.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -416,10 +429,10 @@ optss.obj : optss.c \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 ctxt_mk.obj : ctxt_mk.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/context.h ../include/crossjmp.h ../include/datefunc.h \
-	../include/debug.h ../include/ierror.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/crossjmp.h \
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 where.obj : where.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -441,7 +454,8 @@ alloc_es.obj : alloc_es.c \
 	 ../err_fcts.h ../include/datefunc.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 ctxt_ini.obj : ctxt_ini.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 skippath.obj : skippath.c \
 	 ../config.h ../include/cmdline.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
@@ -451,14 +465,15 @@ mktmpfil.obj : mktmpfil.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 cmdinput.obj : cmdinput.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/keys.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
-is_alias.obj : is_alias.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/keys.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
+is_alias.obj : is_alias.c \
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 fdattr.obj : fdattr.c
 exec.obj : exec.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
@@ -478,9 +493,9 @@ tmpnam.obj : tmpnam.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 esenc.obj : esenc.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 o_flush.obj : o_flush.c \
 	 ../config.h ../include/debug.h ../include/output.h out.h
 frsysblk.obj : frsysblk.c \
@@ -491,22 +506,24 @@ unquote.obj : unquote.c \
 freep.obj : freep.c \
 	 ../config.h ../include/cmdline.h ../include/debug.h
 ecfrivar.obj : ecfrivar.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 cgettime.obj : cgettime.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 realnum.obj : realnum.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 tempfile.obj : tempfile.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 inputdos.obj : inputdos.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 o_nsize.obj : o_nsize.c \
 	 ../config.h ../include/debug.h ../include/output.h out.h
 is_icmd.obj : is_icmd.c \
@@ -514,9 +531,9 @@ is_icmd.obj : is_icmd.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 chgenvc.obj : chgenvc.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/nls.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/nls.h ../include/timefunc.h
 dateget.obj : dateget.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h
 lwr1wd.obj : lwr1wd.c \
@@ -540,22 +557,22 @@ skipchrs.obj : skipchrs.c \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
 showcmds.obj : showcmds.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/output.h \
-	../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/output.h ../include/timefunc.h ../strings.h
 o_nl.obj : o_nl.c \
 	 ../config.h ../include/debug.h ../include/output.h out.h
 is_pchr.obj : is_pchr.c
 ecmki.obj : ecmki.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h \
-	../include/ierror.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h ../include/ierror.h
 is_empty.obj : is_empty.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 ecsettos.obj : ecsettos.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h \
-	../include/ierror.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h ../include/ierror.h
 dateset.obj : dateset.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h
 split.obj : split.c \
@@ -569,16 +586,16 @@ match.obj : match.c \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
 ctxt_mks.obj : ctxt_mks.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 timeget.obj : timeget.c \
 	 ../config.h ../include/debug.h ../include/timefunc.h
 ecmkverb.obj : ecmkverb.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 compfile.obj : compfile.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -600,7 +617,8 @@ lowexec.obj : lowexec.asm \
 o_ch.obj : o_ch.c \
 	 ../config.h ../include/debug.h ../include/output.h out.h
 ctxt_adr.obj : ctxt_adr.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 timeset.obj : timeset.c \
 	 ../config.h ../include/debug.h ../include/timefunc.h
 nls_time.obj : nls_time.c \
@@ -616,8 +634,8 @@ o_gcur.obj : o_gcur.c \
 dbg_s.obj : dbg_s.c \
 	 ../config.h ../include/debug.h
 ecmk.obj : ecmk.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/debug.h ../include/ierror.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/debug.h ../include/ierror.h
 is_fnamc.obj : is_fnamc.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/nls.h \
@@ -634,23 +652,23 @@ sumblink.obj : sumblink.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 set_arg.obj : set_arg.c \
-	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 msg_fstr.obj : msg_fstr.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/strings.typ \
 	../include/timefunc.h ../strings.h
 ctxt_sp.obj : ctxt_sp.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 ctxtfree.obj : ctxtfree.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 skqwd.obj : skqwd.c \
 	 ../config.h ../include/cmdline.h ../include/datefunc.h \
 	../include/debug.h ../include/message.h ../include/misc.h \
@@ -663,10 +681,10 @@ mk_rddir.obj : mk_rddir.c \
 	../include/debug.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
 act_qec.obj : act_qec.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 msg_gpt.obj : msg_gpt.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -683,8 +701,9 @@ curdatel.obj : curdatel.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/nls.h ../include/timefunc.h ../strings.h
 efct_003.obj : efct_003.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/debug.h ../include/message.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/debug.h ../include/message.h \
+	../strings.h
 reg_str.obj : reg_str.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -697,15 +716,15 @@ exec1.obj : exec1.c \
 ltrimcl.obj : ltrimcl.c \
 	 ../config.h ../include/cmdline.h ../include/debug.h
 ecvalid.obj : ecvalid.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/debug.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/debug.h
 corefar.obj : corefar.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 ctxt_get.obj : ctxt_get.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 txtlend.obj : txtlend.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -714,9 +733,10 @@ vcgetch.obj : vcgetch.c \
 	../include/keys.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
 ecmk_f.obj : ecmk_f.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 msg_get.obj : msg_get.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -744,7 +764,8 @@ cgetch.obj : cgetch.c \
 	../include/debug.h ../include/ierror.h ../include/keys.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 ctxt_set.obj : ctxt_set.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 corenear.obj : corenear.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -753,61 +774,67 @@ pr_time.obj : pr_time.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/nls.h ../include/timefunc.h
 ctxt_pop.obj : ctxt_pop.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 alloc_ed.obj : alloc_ed.c \
 	 ../err_fcts.h ../include/datefunc.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 ctxt_2.obj : ctxt_2.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 dispcnt.obj : dispcnt.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 ctxt_as.obj : ctxt_as.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 ecmksc.obj : ecmksc.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h \
-	ec.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h ec.h
 ecpop.obj : ecpop.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 ecshrink.obj : ecshrink.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 gallstr.obj : gallstr.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 find_arg.obj : find_arg.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 res_r.obj : res_r.c \
 	 ../config.h ../include/debug.h ../include/resource.h
 msg_mkey.obj : msg_mkey.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 cmdifile.obj : cmdifile.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
-ivarset.obj : ivarset.c \
-	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
+ivarset.obj : ivarset.c \
+	 ../config.h ../context.h_c ../gflags.h_c ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 brk_get.obj : brk_get.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 eclastb.obj : eclastb.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 ctxt_inf.obj : ctxt_inf.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 alloc_er.obj : alloc_er.c \
 	 ../err_fcts.h ../include/datefunc.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
@@ -821,11 +848,11 @@ brk_set.obj : brk_set.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 ecmkvcmd.obj : ecmkvcmd.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/debug.h ../include/ierror.h ec.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/debug.h ../include/ierror.h ec.h
 ecmkhc.obj : ecmkhc.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h \
-	ec.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h ec.h
 msg_dps.obj : msg_dps.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -846,11 +873,12 @@ chgdrv.obj : chgdrv.c \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
 	../strings.h
 ecmkb.obj : ecmkb.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/ierror.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 esdec.obj : esdec.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 alsysblk.obj : alsysblk.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
@@ -860,11 +888,13 @@ samefile.obj : samefile.c \
 o_modes.obj : o_modes.c \
 	 ../config.h ../include/debug.h ../include/output.h out.h
 ecmkf.obj : ecmkf.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 ctxt_mkn.obj : ctxt_mkn.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/debug.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/debug.h
 leadopt.obj : leadopt.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
@@ -882,9 +912,9 @@ chgenvr.obj : chgenvr.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h ../strings.h
 ctxt_vw.obj : ctxt_vw.c \
-	 ../config.h ../context.h_c ../include/context.h ../include/datefunc.h \
-	../include/debug.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 msg_dflt.obj : msg_dflt.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
@@ -896,15 +926,15 @@ pr_prmpt.obj : pr_prmpt.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 ctxt_chg.obj : ctxt_chg.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 chgctxt.obj : chgctxt.c \
-	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 fillcomp.obj : fillcomp.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \

@@ -10,5 +10,5 @@
 
 int cmd_quit(char *param)
 {
-	return qecAction(param, &doQuit);
+	return qecAction(param, &lflag_doQuit);
 }

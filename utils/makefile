@@ -4,6 +4,9 @@
 #
 #
 # $Log$
+# Revision 1.4.4.1  2001/07/25 20:01:18  skaus
+# Update #10
+#
 # Revision 1.4  2001/04/12 00:09:06  skaus
 # chg: New structure
 # chg: If DEBUG enabled, no available commands are displayed on startup
@@ -54,9 +57,11 @@ MYASMFLAGS = $(null,$(NDEBUG) $(MYASMFLAGS_DBG) $(MYASMFLAGS_NDBG))
 # Sources of this make target
 
 #	Default target
-all: mkctxt.exe mktools.exe chunk.exe mkinfres.exe
+all: mkctxt.exe mktools.exe chunk.exe mkinfres.exe mkgflags.exe
 
 mkctxt.exe : mkctxt.c
+
+mkgflags.exe : mkgflags.c
 
 chunk.exe : chunk.c
 
@@ -89,7 +94,8 @@ CONF_BASE =	\
 -f- \
 -I$(INCDIR:s/;/ /:t";")	\
 -L$(LIBDIR:s/;/ /:t";")	\
--w
+-w	\
+-K
 
 .IF $(_COMPILER)==BC5
 CONFIGURATION += -RT- -x-
@@ -105,6 +111,7 @@ CONF_NDBG =	$(MYCFLAGS_NDBG)
 CONF_BASE =	\
 -I$(INCDIR:s/;/ /:t";")	\
 -L$(LIBDIR:s/;/ /:t";")	\
+-K	\
 -w
 
 # The "-f-" causes that TCC passes option "/r" to the assembler, though

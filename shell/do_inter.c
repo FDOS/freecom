@@ -25,16 +25,16 @@ char *readInteractive(ctxtEC_t far * const ctxt)
 	assert(ctxt->ctxt_type == EC_TAG_INTERACTIVE);
 
 	cbreak;			/* Ignore a probably given ^Break */
-	doCancel = doQuit = 0;
+	lflag_doCancel = lflag_doQuit = 0;
 
-	if(doExit) {
+	if(lflag_doExit) {
 		dprintf(("!! EXIT flag active\n"));
 		return 0;
 	}
 
-	interactive = F(interactive) = iConsole();
+	lflag_interactive = gflag_interactive = iConsole();
 
-	if(!interactive)
+	if(!lflag_interactive)
 		return readcommandFromFile();
 
 #ifdef FEATURE_ENHANCED_INPUT

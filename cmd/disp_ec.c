@@ -4,9 +4,12 @@
 	Display the internal execution context
 
 	$Log$
+	Revision 1.1.2.2  2001/07/25 19:59:27  skaus
+	Update #10
+
 	Revision 1.1.2.1  2001/07/16 20:28:38  skaus
 	Update #9
-
+	
  */
 
 #include "../config.h"
@@ -96,11 +99,21 @@ int cmd_dispEC(char *param)
 				 , MK_FP(ctxtMain, fc->ec_cmd));
 			}
 			break;
-		case EC_TAG_COMMAND_IGNORE_EXIT:	/* command #2 */
-			displayString(TEXT_EC_DISP_CMD_IGNORE_EXIT, ecData(ec, char));
-			break;
 		case EC_TAG_COMMAND:	/* command */
-			displayString(TEXT_EC_DISP_CMD, ecData(ec, char));
+			{	ctxtEC_Cmd_t far*cc;
+
+				cc = ecData(ec, ctxtEC_Cmd_t);
+				displayString(TEXT_EC_DISP_CMD_1, cc->ec_flags);
+				if(cc->ec_flags & EC_CMD_IGNORE_EXIT)
+					displayString(TEXT_EC_DISP_CMD_IGNORE_EXIT);
+				if(cc->ec_flags & EC_CMD_FORCE_INTERNAL)
+					displayString(TEXT_EC_DISP_CMD_FORCE_INTERNAL);
+				if(cc->ec_flags & EC_CMD_SILENT)
+					displayString(TEXT_EC_DISP_CMD_SILENT);
+				if(cc->ec_flags & EC_CMD_NO_TRACE)
+					displayString(TEXT_EC_DISP_CMD_NO_TRACE);
+				displayString(TEXT_EC_DISP_CMD_2, cc->ec_cmd);
+			}
 			break;
 		}
 	}

@@ -6,6 +6,9 @@
 	This file bases on DEBUG.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/25 20:01:18  skaus
+	Update #10
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -39,5 +42,8 @@
 #include "../include/debug.h"
 
 void dbg_outc(int ch)
-{	putc(ch, dbg_logfile);
+{	if(dbg_logfile)
+		putc(ch, dbg_logfile);
+	if(dbg_logfile2)
+		putc(ch, dbg_logfile2);
 }

@@ -17,5 +17,5 @@
 #undef error_out_of_memory
 void error_out_of_memory(void)
 {	displayError(TEXT_ERROR_OUT_OF_MEMORY);
-	doCancel = 1;
+	lflag_doCancel = 1;
 }

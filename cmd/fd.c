@@ -30,7 +30,17 @@ int cmd_fd(char *param)
 		jft = getJFTp();
 		assert(jft);
 		if(fd < getJFTlen() && sft <= 255) {
-			close(fd);
+			dprintf(("[FD: Redirecting fd #%u (SFT %u --> %u)]\n"
+			 , fd, jft[fd], sft));
+#ifdef DEBUG
+		if(0 !=
+#endif
+			close(fd)
+#ifdef DEBUG
+		) dprintf(("[FD: Failed to close fd #%u]\n", fd));
+#else
+		;
+#endif
 			jft[fd] = sft;
 			/* in DOS redirections are text-mode */
 			/* without this call, Borland C does not expand '\n' */

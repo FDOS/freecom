@@ -15,9 +15,12 @@ void ecPop(void)
 
 	if((ec = ecValidateTOS()) != 0) {
 		if(ec->ctxt_type == EC_TAG_BATCH) {
-			if(F(batchlevel) > 0)
-				--F(batchlevel);
-			else dprintf(("!! Flag(Batchlevel) underflow\n"));
+			if(gflag_batchlevel > 0) {
+				if(--gflag_batchlevel == 0) {
+					/* Drop to interactive command line */
+					gflag_echo = gflag_dispPrompt;
+				}
+			} else dprintf(("!! GFlag(Batchlevel) underflow\n"));
 		}
 #ifdef DEBUG
 		if(ec->ctxt_length)

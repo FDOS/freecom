@@ -40,7 +40,10 @@ int ecMkB(const char * const name)
 	_fstpcpy(d->ec_fname, TO_FP(name));
 	assert(_fnormalize(q) == _fnormalize(&ecData(ec, byte)[length - 1]));
 
-	++F(batchlevel);
+	if(++gflag_batchlevel == 1) {
+		/* First batch level */
+		gflag_echo = gflag_echoBatch;
+	}
 
 	return E_None;
 }

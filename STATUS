@@ -50,7 +50,7 @@ var: (environment) variable
 	- Working
 	- Sets the local "called" flag.
 	- Handles options: /S and /N, which modify the local "swap" flag.
-	- Do work within FOR statements and pipes
+	- Does _intentionally_ work within FOR statements and pipes
 1.4. GOTO
 	- Working
 	- Sets the local flags "rewindBatchFile" and "gotoLabel".
@@ -95,6 +95,25 @@ var: (environment) variable
 	- Added: To change the lower limit of history buffer
 1.14. FD
 	- Working
+	- Used to reset a JFT entry to the state previous to the current
+		redirection
+1.15. DISPLAY_ARGS
+	- Working
+	- Newly added
+	- Displays the Batch script argument stack (tag #6)
+1.16. DISPLAY_IVARS
+	- Working
+	- Newly added
+	- Displays the Batch script argument stack (tag #7)
+1.17. DISPLAY_EXEC
+	- Working
+	- Newly added
+	- Displays the execution context stack
+1.18. DISPLAY_STATUS
+	- Working
+	- Newly added
+	- Displays the current status (includes the other DISPLAY_* functions,
+		MEMORY, ALIAS,& HISTORY)
 
 2. Internal functions
 2.0. General
@@ -138,8 +157,9 @@ var: (environment) variable
 
 5. Command line executor (aka parser)
 5.0. General
-- Working for internal commands; pipes and redirections are scanned OK, but
-	their working is not verified; external commands possibly work
+- Working & verified for internal & external commands and batch scripts;
+	pipes and redirections are verified for internal commands and batch
+	scripts; no swapping tested
 - Modified into a state-driven automaton; the state is storred into the
 	dynamic context, the "execution context" portion at its end.
 	The ec is organized as stack, to most current item (topmost) is located
@@ -150,7 +170,7 @@ var: (environment) variable
 	1) acquire current state and retreive a command line from the actual
 		ec handler
 	2) probe for hackery FOR statement
-	3) expand env vars (command line parser)
+	3) expand env vars (command line scanner)
 	-- parsecommandline()
 	4) expand aliases
 	5) apply trace mode
@@ -167,8 +187,7 @@ var: (environment) variable
 	13) Initiate batch file processing if absolute filename ends in ".BAT"
 	14) otherwise: call external command
 5.1. Redirections
-- Working verified for input, output and pipes with batchfiles (see
-	tests\recurs?.bat) and internal commands; no support for swapping
+- Working verified for input, output and pipes; no support for swapping
 - Supported redirections:
 	">>&>"	- stderr into file (append)
 	">>&"	- merging stderr & stdout into file (append)
@@ -183,6 +202,7 @@ var: (environment) variable
 6. Dynamic context
 - Working
 - Allows to change the boundaries of history etc. at run-time
+	[Though: Implemented for HISTORY only currently]
 - Layout:
 	-> start of DOS memory block
 		+ string-based information in env-style memory block
@@ -199,66 +219,78 @@ var: (environment) variable
 	flags, such as the global flags
 
 8. Global flags
-- Working not verified, though, they are used
+- Working & verified
 - storred as part of the static context
 - if there is a corresponding local flag, the global one holds the default
-	value of the local flag
+	value of the local flag, which is copied before the read-function of the
+	current item of the execution context is activated. So the read-function
+	can modify them.
 8.1. dispPrompt
 	- Working
-8.2. echo
-	- Working, but is not resetted when batch script ends
+	- see echo
+8.2. echoBatch
+	- Working
+	- see echo
 8.3. swap
 	- Not verified
 8.4. canexit
-	- Not verified
+	- Working
 8.5. interactive
-	- Not working
+	- Working, but not verified/used
 8.6. called
-	- Working, but not really used currently
+	- Working
 8.7. trace
-	- Not verified
+	- Working
 8.8. debug
 	- Working
 8.9. persistentMSGs
-	- Working, as its behaviour wasn't chnaged at all
+	- Working, as its behaviour wasn't changed at all
 8.10. errorlevel
-	- Not verified
+	- Working
 8.11. base_shiftlevel & shiftlevel
 	- Working, verified as part of batchfile processing
 8.12. batchlevel
 	- Working
+8.13. echo
+	- Working
+	- Its actual state depends on the current mode, if a batch file
+		is active or the interactive command line
+8.14. ignoreCBreak
+	- Working
+	- Newly added
+	- cbreak() function will always return "NONE", ignoring the
+		actual ^Break status and all the doExit/Cancel/Quit macros.
+		Used to let hidden commands ignore do* status and make sure
+		they are executed.
 
 9. Local flags
-- Working not verified, though, they are used
+- Working
 - Storred in global variables, their initial values are determined by the
 	internal status of FreeCOM or the value of certain global flags
 9.1. swap
 - Not verified
 - Defaults to global "swap", modified by CALL
-9.2. echoBatch
-- Working, but is not reset when batch execution ends
-- Defaults to global "echo", modified by a "@" preceeding input line
-9.3. dispPrompt
+9.2. echo
 - Working
-- Defaults to global "dispPrompt"
-9.4. rewindBatchFile & gotoLabl
+- Defaults to global "echo", modified by a "@" preceeding input line
+9.3. rewindBatchFile & gotoLabl
 - Working
 - Default to zero, modified by GOTO
-9.5. traceMode
-- Not verified
+9.4. traceMode
+- Working
 - Default to /Y, modified by a "?" preceeding input line
-9.6. interactive
-- Not working
+9.5. interactive
+- Working
 - Default to global "interactive"
-9.7. called
+9.6. called
 - Working
 - Default to global "called", modified by CALL
-9.8. doExit, doCancel, doQuit
+9.7. doExit, doCancel, doQuit
 - Working
 - Default to zero, synchroneously set by EXIT, CANCEL or QUIT respecfively,
 	asynchroneously set by ^Break handler, cleared by ec handlers.
-9.10. implicitVerbose
-- Not verified
+9.8. implicitVerbose
+- Working
 - derived flag
 
 10. External handlers

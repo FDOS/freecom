@@ -40,15 +40,16 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 	FILE *f;
 
 	dprintf(("readbatchline()\n"));
-	if(doExit || doCancel || doQuit) {
-		doQuit = FALSE;
+	if(lflag_doExit || lflag_doCancel || lflag_doQuit) {
+		dprintf(("[BATCH: Exit, Cancel, or Quit terminated script]\n"));
+		lflag_doQuit = FALSE;
 		return 0;
 	}
 
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_BATCH);
 
-	interactive = F(interactive) = 0;
+	lflag_interactive = gflag_interactive = 0;
 
 	bc = ecData(ctxt, ctxtEC_Batch_t);
 
@@ -57,6 +58,10 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 
 	dprintf(("[BATCH: pos=%lu, line=%lu: %Fs]\n"
 	 , bc->ec_pos, bc->ec_lnum, bc->ec_fname));
+#ifdef DEBUG
+	if(lflag_gotoLabel)
+		dprintf(("[BATCH: Searching for label: %s]\n", lflag_gotoLabel));
+#endif
 
 	 if((name = regStr(edupstr(bc->ec_fname))) == 0) {
 	 	return 0;
@@ -69,21 +74,25 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 
 	line = 0;
 
-	if(rewindBatchFile) {
+	if(lflag_rewindBatchFile) {
 		/* reset the statistics */
 		bc->ec_lnum = 0;
-		rewindBatchFile = 0;
+		lflag_rewindBatchFile = 0;
+		dprintf(("[BATCH: Script rewinded]\n"));
 	} else {
 		if(fseek(f, bc->ec_pos, SEEK_SET))
 			goto errRet;		/* silently ignore this error */
 	}
 
 	for(; !cbreak; chkp(line)) {
+		dprintf(("[BATCH: about to read line #%lu from @%lu]\n"
+		 , bc->ec_lnum + 1, ftell(f)));
 		if((line = Fgetline(f)) == 0) {
 			error_out_of_memory();
 			break;
 		}
 		if(!*line) {			/* End of file */
+			dprintf(("[BATCH: End of file reached]\n"));
 			line = 0;		/* Force ecPop() */
 			break;
 		}
@@ -111,26 +120,29 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 			continue;
 
 			/* ::= is a special internal quotation mechanism */
-		if(*p == ':' && memcmp(p, "::=", 3) != 0) {
+		if(*p == ':' && memcmp(p, FORCE_INTERNAL_COMMAND_STRING
+		 , (sizeof(FORCE_INTERNAL_COMMAND_STRING)-1)) != 0) {
 			/* if a label is searched for test if we reached it */
-			if(gotoLabel) {
+			if(lflag_gotoLabel) {
 				/* label: the 1st word immediately following the colon ':' */
-				int len = strlen(gotoLabel);
-				if(memcmpFI(p + 1, gotoLabel, len) == 0
+				int len = strlen(lflag_gotoLabel);
+				if(memcmpFI(p + 1, lflag_gotoLabel, len) == 0
 				 && !isgraph(line[len + 1]))
 					/* got it! -> proceed with next line */
 					chkPtr(line);
-					StrFree(gotoLabel);
+					StrFree(lflag_gotoLabel);
 			}
+			dprintf(("BATCH: Skipping label: %s]\n", line));
 			continue;			/* ignore label */
 		}
 
-		if(!gotoLabel) {
+		if(!lflag_gotoLabel) {
 			if(*p == '@') {			/* don't echo this line */
 				p = ltrimcl(p + 1);
 				if(!*p)				/* ignore empty lines */
 					continue;
-				echoBatch = 0;
+				lflag_echo = 0;
+				dprintf(("[CTXT: disable local ECHO status]\n"));
 			}
 
 			/* assume that clearing the space stepped over is

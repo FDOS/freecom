@@ -18,12 +18,12 @@ char *find_arg(int n)
 	char *buf;
 
 	dprintf(("[find_arg(%u), shift=%u, base=%u]\n", n
-	 , F(shiftlevel), F(base_shiftlevel)));
+	 , gflag_shiftlevel, gflag_base_shiftlevel));
 
-	assert((unsigned long)F(shiftlevel) + F(base_shiftlevel)
+	assert((unsigned long)gflag_shiftlevel + gflag_base_shiftlevel
 	 < INT_MAX);
 
-	num = F(shiftlevel) + F(base_shiftlevel);
+	num = gflag_shiftlevel + gflag_base_shiftlevel;
 	/* Because a base == 0 means that there is absolutely no arg[] string
 		registered so far, because the very first argument string always
 		is 1 (one), return 0 to indicate this situation */

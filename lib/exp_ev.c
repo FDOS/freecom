@@ -168,7 +168,7 @@ char *expEnvVars(char * const line)
 			case '?':
 				{	char hbuf[sizeof(unsigned) * 8 + 2];
 
-					sprintf(hbuf, "%u", F(errorlevel));
+					sprintf(hbuf, "%u", gflag_errorlevel);
 					appStr(hbuf);
 				}
 				break;

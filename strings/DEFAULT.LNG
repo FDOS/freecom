@@ -1471,6 +1471,7 @@ Filename characters:
 :TEXT_FLAGS_DISPLAY#1
 Default value of flags / global flags:
 Display prompt: %u\tDisplay command line: %u
+                  \tDefault echo status : %u
 Swap mode     : %u\tCall mode           : %u
 Can exit      : %u\tInteractive command : %u
 Trace mode    : %u\tDebug mode          : %u
@@ -1479,7 +1480,7 @@ Error level   : %u\tPersistent messages : %u
 Batch level   : %u
 
 Current values of flags / local flags:
-Display prompt: %u\tDisplay command line: %u
+Echo status   : %u
 Swap mode     : %u\tCall mode           : %u
 Verbose       : %u\tInteractive command : %u
 Trace mode    : %u\tRewind batch file   : %u
@@ -1521,12 +1522,24 @@ FOR#1: var: %Fs, remaining pattern: %Fs
 FOR#2: var: %Fs, prefix: %Fs
      : %Fs
 .
-:TEXT_EC_DISP_CMD_IGNORE_EXIT#1
-CMD#1: executed even if EXIT, CANCEL or QUIT are active
-     : %Fs
+:TEXT_EC_DISP_CMD_1#1
+CMD  : flags: 0x%02x\
 .
-:TEXT_EC_DISP_CMD#1
-CMD#2: %Fs
+:TEXT_EC_DISP_CMD_FORCE_INTERNAL#1
+ [internal]\
+.
+:TEXT_EC_DISP_CMD_SILENT#1
+ [silent]\
+.
+:TEXT_EC_DISP_CMD_IGNORE_EXIT#1
+ [ignore exit]\
+.
+:TEXT_EC_DISP_CMD_NO_TRACE#1
+ [no trace]\
+.
+:TEXT_EC_DISP_CMD_2#1
+
+     : %Fs
 .
 
 :TEXT_DISP_STATUS_HDR#1

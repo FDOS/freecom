@@ -71,7 +71,7 @@ int cmd_if(char *param)
 			return 0;
 		}
 
-		if(F(errorlevel) >= n)
+		if(gflag_errorlevel >= n)
 			x_flag = X_EXEC;
 	}
 

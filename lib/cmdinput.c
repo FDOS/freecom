@@ -7,7 +7,6 @@
 #include <assert.h>
 #include <conio.h>
 #include <dir.h>
-//#include <stdlib.h>
 #include <string.h>
 
 #include <dynstr.h>
@@ -56,7 +55,7 @@ static void recalcOrgXY(unsigned charcount)
 	while(orgy > 1 && orgy + lines - 1 > MAX_Y)
 		--orgy;
 }
-static void gochar(unsigned char current)
+static void gochar(unsigned current)
 {	div_t x;
 
 	x = div(current + orgx - 1, MAX_X);
@@ -67,7 +66,7 @@ static void gochar(unsigned char current)
 #pragma argsused
 char *readcommandEnhanced(void)
 {
-	unsigned char insert = 1;
+	FLAG insert = 1;
 	unsigned ch;
 #ifdef FEATURE_FILENAME_COMPLETION
 	unsigned lastch = 0;
@@ -81,8 +80,12 @@ char *readcommandEnhanced(void)
 	char *str = 0;
 
 redo:
+#ifdef DEBUG
+	if(wherey() == 1)
+		putchar('\n');
+#endif
 	/* if echo off, don't print prompt */
-	if(dispPrompt)
+	if(lflag_echo)
 		printprompt();
 
 	orgx = wherex();
@@ -95,6 +98,16 @@ redo:
 #endif
 
 	do {
+#ifdef DEBUG
+		{	int x,y;
+		gochar(current);
+		x = wherex();
+		y = wherey();
+		goxy(1,1);
+		cprintf(">> cur: %4u count: %4u orgX: %2u orgY: %2u curX: %2u curY: %2u echo: %c  <<"
+		 , current, charcount, orgx, orgy, x, y, lflag_echo? 'Y': 'N');
+		}
+#endif
 		gochar(current);
 		ch = cgetchar();
 		assert(current <= charcount);
@@ -141,11 +154,13 @@ redo:
 #ifdef DEBUG
 		case KEY_CTL_T:
 			chkPtr(str);
-			if(!StrCat(str, "::=display_status")) {
+			//if(!StrCat(str, "€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷ùúûüýþÿ")) {
+			if(!StrCat(str, "echo 1 |& echo 2 |& echo 3")) {
 				error_out_of_memory();
 				break;
 			}
 			charcount = strlen(str);
+			recalcOrgXY(charcount);
 			/** FALL THROUGH **/
 #endif
 		case KEY_END:              /* goto end of string */
@@ -201,8 +216,8 @@ redo:
 					memmove(end, &p[MAXPATH], len);
 					end[len] = 0;
 				}
-				charcount = strlen(str);
 				current = end - str;
+				charcount = strlen(str);
 
 				goxy(orgx, orgy);
 				outs(str);
@@ -227,10 +242,10 @@ redo:
 			clrcmdline(str, orgx, orgy);
 			current = charcount = 0;
 
-			if(ch == KEY_CTL_C && !dispPrompt) {
+			if(ch == KEY_CTL_C && !lflag_echo) {
 			  /* enable echo to let user know that's this
 				is the command line */
-			  dispPrompt = F(dispPrompt) = 1;
+			  gflag_echo = lflag_echo = gflag_dispPrompt = 1;
 			  goto redo;
 			}
 			break;

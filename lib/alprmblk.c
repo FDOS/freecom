@@ -6,9 +6,12 @@
 	otherwise "normal" ones.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/25 20:01:18  skaus
+	Update #10
+
 	Revision 1.1.4.1  2001/07/01 22:04:31  skaus
 	Update #3
-
+	
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -47,7 +50,7 @@
 
 unsigned allocPermBlk(const unsigned size, const unsigned mode)
 {	assert(size);
-	if(F(swap) == ERROR)
+	if(gflag_swap == ERROR)
 		return allocBlk(size, mode);
 	return allocSysBlk(size, mode);
 }

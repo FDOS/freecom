@@ -27,9 +27,12 @@
 	This file bases on TMPNAM.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.4  2001/07/25 20:01:18  skaus
+	Update #10
+
 	Revision 1.1.4.3  2001/07/16 20:28:38  skaus
 	Update #9
-
+	
 	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
 	Update #5
 	
@@ -91,8 +94,8 @@
 char *mktempfile(const char * const path, const char *ext)
 {
   char *fn, *newpath;
-  int cnt,
-    fd;
+  int fd;
+  int cnt;
 
   if (!path)                    /* to simplify the caller function */
     return 0;

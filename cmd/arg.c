@@ -41,8 +41,8 @@ int cmd_arg(char *param)
 	 			while(to_del <= CTXT_INFO(CTXT_TAG_ARG, nummax))
 	 				ctxtPop(CTXT_TAG_ARG, (char*)0);
 	 		}
-			F(shiftlevel) = shiftlevel;
-			F(base_shiftlevel) = base;
+			gflag_shiftlevel = shiftlevel;
+			gflag_base_shiftlevel = base;
 			freep(argv);
 			return 0;
 	}

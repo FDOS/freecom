@@ -61,11 +61,13 @@ char *readFORfirst(ctxtEC_t far * const ctxt)
 
 	char *param;				/* current argument */
 
-	doQuit = cbreak;
+	lflag_doQuit = cbreak;
 
 	dprintf(("readFORfirst()\n"));
-	if(doExit || doCancel || doQuit)
+	if(lflag_doExit || lflag_doCancel || lflag_doQuit) {
+		dprintf(("[FOR#1: Exit, Cancel, or Quit terminated script]\n"));
 		return 0;
+	}
 
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_FOR_FIRST);
@@ -81,7 +83,7 @@ char *readFORfirst(ctxtEC_t far * const ctxt)
 	assert(_fstrlen(pattern) + _fstrlen(varname) + _fstrlen(cmd)
 	 == ctxt->ctxt_length - 3);
 
-	dprintf(("[FOR_FIRST: %Fs (%Fs) %Fs]\n", varname, pattern, cmd));
+	dprintf(("[FOR#1: %Fs (%Fs) %Fs]\n", varname, pattern, cmd));
 
 	if(!*pattern)						/* nothing to do */
 		return 0;
@@ -127,11 +129,13 @@ char *readFORnext(ctxtEC_t far * const ctxt)
 
 	char *param;				/* current argument */
 
-	doQuit = cbreak;
+	lflag_doQuit = cbreak;
 
 	dprintf(("readFORnext()\n"));
-	if(doExit || doCancel || doQuit)
+	if(lflag_doExit || lflag_doCancel || lflag_doQuit) {
+		dprintf(("[FOR#2: Exit, Cancel, or Quit terminated script]\n"));
 		return 0;
+	}
 
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_FOR_NEXT);
@@ -149,8 +153,10 @@ char *readFORnext(ctxtEC_t far * const ctxt)
 
 		/* necessary information to let findnext() do some good */
 	_fmemcpy(TO_FP(&f), fc->ec_ffblk, sizeof(fc->ec_ffblk));
-	if(findnext(&f) != 0)		/* f-context used up */
+	if(findnext(&f) != 0) {		/* f-context used up */
+		dprintf(("[FOR#2: No further match]\n"));
 		return 0;
+	}
 
 	param = _fdupstr(fc->ec_prefix);
 	chkPtr(param);
@@ -162,7 +168,7 @@ char *readFORnext(ctxtEC_t far * const ctxt)
 
 		/* save the info for next run */
 	_fmemcpy(fc->ec_ffblk, TO_FP(&f), sizeof(fc->ec_ffblk));
-	dprintf(("[FOR_NEXT: %Fs (%s) %Fs]\n", varname, param, cmd));
+	dprintf(("[FOR#2: %Fs (%s) %Fs]\n", varname, param, cmd));
 
 	return forPatchCmdline(varname, cmd, param);
 }

@@ -40,9 +40,9 @@ int cmd_goto(char *param)
 		return 1;
 	}
 
-	chkPtr(gotoLabel);
-	StrRepl(gotoLabel, tmp);
-	rewindBatchFile = 1;
+	chkPtr(lflag_gotoLabel);
+	StrRepl(lflag_gotoLabel, tmp);
+	lflag_rewindBatchFile = 1;
 
 	return 0;
 }

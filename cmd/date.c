@@ -84,8 +84,10 @@ int cmd_date(char *param)
 #endif
 			);
 			fgets(s, sizeof(s), stdin);
-			if(cbreak)
+			if(cbreak) {
+				dprintf(("[DATE: Quit because of ^Break]\n"));
 				return 1;
+			}
 			param = s;
 		}
 

@@ -23,10 +23,10 @@ int cmd_shift(char *param)
 {
 	assert(param);
 	if(matchtok(param, "down")) {
-		if(F(shiftlevel))
-			F(shiftlevel)--;
+		if(gflag_shiftlevel)
+			gflag_shiftlevel--;
 	} else                          /* shift up */
-		F(shiftlevel)++;
+		gflag_shiftlevel++;
 
 	return 0;
 }

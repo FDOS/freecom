@@ -137,6 +137,7 @@ int cmd_del(char *param)
 					}
 				}
 				else if(cbreak) {  /* is also probed for in vcgetstr() */
+					dprintf(("[DEL: Quit because of ^Break]\n"));
 					ec = E_CBreak;
 					goto errRet;
 				}
@@ -146,9 +147,14 @@ int cmd_del(char *param)
 				puts(fullname);
 #else
 				if(unlink(fullname) != 0) {
+					dprintf(("[DEL: Failed to delete file: %s]\n", fullname));
 					perror(fullname);   /* notify the user */
 				} else
 					++count;
+#ifdef DEBUG
+				if(exist(fullname))
+					dprintf(("[DEL: Failed to delete file: %s]\n", fullname));
+#endif
 #endif
 
 			} while(findnext(&f) == 0);

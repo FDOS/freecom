@@ -47,7 +47,7 @@ static void fetchNumber(const char * const line, unsigned * const num)
 	disp = 0;
 	if(*(p = line) == '+') {
 		++p;
-		disp = F(shiftlevel);
+		disp = gflag_shiftlevel;
 	}
 
 	if(is_num(p, num) && !addu(num, disp))
@@ -74,9 +74,9 @@ char *fct_argv(char *param)
 	} else
 		first = 1;
 
-	if(addu(&first, F(base_shiftlevel)))
+	if(addu(&first, gflag_base_shiftlevel))
 		return 0;
-	if(addu(&last, F(base_shiftlevel)))
+	if(addu(&last, gflag_base_shiftlevel))
 		last = (unsigned)-1;
 
 	if(last > CTXT_INFO(CTXT_TAG_ARG, nummax))

@@ -37,11 +37,11 @@ int cmd_call(char *param)
 		return ec;
 
 	if(param) {
-		called = 1;
+		lflag_called = 1;
 		if(optS)
-			swap = TRUE;
+			lflag_swap = TRUE;
 		if(optN)
-			swap = FALSE;
+			lflag_swap = FALSE;
 		parsecommandline(param);
 		return 0;
 	}

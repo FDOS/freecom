@@ -6,9 +6,12 @@
 	This file bases on INIT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.3  2001/07/25 20:01:18  skaus
+	Update #10
+
 	Revision 1.1.4.2  2001/07/11 21:46:26  skaus
 	Update #8
-
+	
 	Revision 1.1.4.1  2001/07/01 22:04:31  skaus
 	Update #3
 	
@@ -93,7 +96,7 @@ int showcmds(char *rest)
 #endif
 #ifdef FEATURE_KERNEL_SWAP_SHELL
 	printID(TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL);
-	if(F(swap) != ERROR && F(swap) == TRUE)
+	if(gflag_swap != ERROR && gflag_swap == TRUE)
 		printID(TEXT_SHOWCMD_DEFAULT_TO_SWAP);
 #endif
 #ifdef FEATURE_INSTALLABLE_COMMANDS

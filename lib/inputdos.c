@@ -8,9 +8,12 @@
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.4  2001/07/25 20:01:18  skaus
+	Update #10
+
 	Revision 1.1.4.3  2001/07/16 20:28:38  skaus
 	Update #9
-
+	
 	Revision 1.1.4.2  2001/07/01 22:04:31  skaus
 	Update #3
 	
@@ -70,7 +73,7 @@ char *readcommandDOS(void)
 		iobuf[1] = iobuf[0];
 
 	dprintf(("[CMDINPUT characters max:%u in:%u]\n", iobuf[0], iobuf[1]));
-	if(dispPrompt)
+	if(lflag_echo)
 		printprompt();
 
 	r.r_ax = 0xa00;

@@ -123,8 +123,10 @@ static int dir_print_header(int drive)
   int currDisk;
   int rv;
 
-  if (cbreak)
+  if (cbreak) {
+  	dprintf(("[DIR: Quit because of ^Break]\n"));
     return E_CBreak;
+  }
 
   if (optB)
     return 0;
@@ -318,9 +320,10 @@ static int dir_list(int pathlen
   if(rv == E_None) do {
     assert(strlen(file.ff_name) < 13);
 
-    if (cbreak)
+    if (cbreak) {
+		dprintf(("[DIR: Quit because of ^Break]\n"));
       rv = E_CBreak;
-    else {
+    } else {
 
     if (optL)
       strlwr(file.ff_name);

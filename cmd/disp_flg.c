@@ -14,19 +14,20 @@
 int cmd_dispFlags(char *param)
 {
 	displayString(TEXT_FLAGS_DISPLAY
-	 , F(dispPrompt), F(echo)
-	 , F(swap), F(call)
-	 , F(canexit), F(interactive)
-	 , F(trace), F(debug)
-	 , F(shiftlevel), F(base_shiftlevel)
-	 , F(errorlevel), F(persistentMSGs)
-	 , F(batchlevel)
+	 , gflag_dispPrompt, gflag_echoBatch
+	 , gflag_echo
+	 , gflag_swap, gflag_called
+	 , gflag_canexit, gflag_interactive
+	 , gflag_trace, gflag_debug
+	 , gflag_shiftlevel, gflag_base_shiftlevel
+	 , gflag_errorlevel, gflag_persistentMSGs
+	 , gflag_batchlevel
 
-	 , dispPrompt, echoBatch
-	 , swap, called
-	 , implicitVerbose, interactive
-	 , traceMode, rewindBatchFile
-	 , doExit, doCancel
-	 , doQuit, gotoLabel? gotoLabel: "");
+	 , lflag_echo
+	 , lflag_swap, lflag_called
+	 , implicitVerbose, lflag_interactive
+	 , lflag_trace, lflag_rewindBatchFile
+	 , lflag_doExit, lflag_doCancel
+	 , lflag_doQuit, lflag_gotoLabel? lflag_gotoLabel: "");
 	return ctxtView(CTXT_TAG_FLAG, TEXT_FLAG_CTXT_EMPTY);
 }

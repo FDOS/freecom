@@ -73,8 +73,10 @@ int cmd_time(char *param)
 
 			displayString(TEXT_MSG_ENTER_TIME);
 			fgets(s, sizeof(s), stdin);
-			if (cbreak)
+			if (cbreak) {
+				dprintf(("[TIME: Quit because of ^Break]\n"));
 				return 1;
+			}
 			param = s;
 		}
 		if(my_settime(param))

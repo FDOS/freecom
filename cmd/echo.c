@@ -18,7 +18,6 @@
 
 static int do_echo(char *param, void (*fct)(unsigned,...))
 {	int status;
-	byte far *echo;
 
 	if(param && *param) {
 		status = isspace(*param);
@@ -27,18 +26,18 @@ static int do_echo(char *param, void (*fct)(unsigned,...))
 		param = ltrimsp(param + 1);
 	} else status = 1;
 
-	echo = interactive
-	 ? &F(dispPrompt)
-	 : &F(echo);
-
 	switch(onoffStr(param)) {
-	case OO_Off:	*echo = 0; break;
-	case OO_On:		*echo = 1; break;
+	case OO_On:		gflag_echo = 1; goto chkGFlgPrompt;
+	case OO_Off:	gflag_echo = 0;
+	chkGFlgPrompt:
+		if(!gflag_batchlevel)
+			gflag_dispPrompt = gflag_echo;
+		break;
 
 	case OO_Null:	case OO_Empty:
 	default:
 		if(status) {
-			fct(TEXT_MSG_ECHO_STATE, *echo ? D_ON : D_OFF);
+			fct(TEXT_MSG_ECHO_STATE, gflag_echo ? D_ON : D_OFF);
 			break;
 		}
 		/**FALL THROUGH**/

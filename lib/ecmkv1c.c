@@ -33,7 +33,7 @@ int ecMkV1C(const char * const str, ...)
 
 	myfree(verbatim);
 	va_start(ap, str);
-	rv = ecMkvcmd(echoBatch? 0: EC_CMD_SILENT, line, ap);
+	rv = ecMkvcmd(lflag_echo? 0: EC_CMD_SILENT, line, ap);
 	myfree(line);
 	return rv;
 }

@@ -25,7 +25,7 @@ char *keepMeRunning(ctxtEC_t far * const ctxt)
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_KEEP_RUNNING);
 
-	doExit = doCancel = doQuit = 0;
+	lflag_doExit = lflag_doCancel = lflag_doQuit = 0;
 
 	if(feof(stdin))
 		return 0;

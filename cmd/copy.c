@@ -143,7 +143,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
       }
     } while((h = h->app) != 0);
 
-    if(interactive		/* Suppress prompt if in batch file */
+    if(lflag_interactive		/* Suppress prompt if in batch file */
      && openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != 0) {
     	int destIsDevice = isadev(fileno(fout));
 
@@ -165,6 +165,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
 	  }
     }
     if(cbreak) {
+    	dprintf(("[COPY: Quit because of ^Break]\n"));
       myfree(rDest);
       return 0;
     }
@@ -203,6 +204,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
 
       dispCopy(rSrc, rDest, openMode == 'a' || h != src);
       if(cbreak) {
+    	dprintf(("[COPY: Quit because of ^Break]\n"));
         fclose(fin);
         fclose(fout);
         myfree(rSrc);
@@ -249,8 +251,10 @@ int copy(char *dst, char *pattern, struct CopySource *src
           error_write_file(rDest);
           rc = 0;
         }
-      if(cbreak)
+      if(cbreak) {
+    	dprintf(("[COPY: Quit because of ^Break]\n"));
         rc = 0;
+      }
       fclose(fin);
       myfree(rSrc);
       if(!rc) {

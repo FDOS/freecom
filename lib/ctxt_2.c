@@ -15,8 +15,4 @@
 #include "../include/command.h"
 #include "../include/context.h"
 
-ctxt_flags_t ctxtInitialFlags = {
-	 TRUE				/* display prompt */
-	,TRUE				/* echo command line */
-	,ERROR				/* default to swap */
-};
+ctxt_flags_t ctxtInitialFlags = init_flags;

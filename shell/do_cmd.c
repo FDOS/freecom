@@ -13,53 +13,63 @@
 #include <assert.h>
 #include <string.h>
 
+#include <fmemory.h>
+
 #include "../include/context.h"
 #include "../include/misc.h"
 
-char *readCommandIgnoreExit(ctxtEC_t far * const ctxt)
-{	char far* cmd;	/* arg of ctxt */
-	char *line;
-
-	dprintf(("readCommandIgnoreExit()\n"));
-
-	assert(ctxt);
-	assert(ctxt->ctxt_type == EC_TAG_COMMAND_IGNORE_EXIT);
-	assert(ctxt->ctxt_length >= 1);
-
-	cmd = ecData(ctxt, char);
-	assert(_fstrlen(cmd) == ctxt->ctxt_length - 1);
-
-	if((line = edupstr(cmd)) != 0) {
-		ecPop();
-		if(*line == '@') {		/* prevent any echo'ing */
-			*line = ' ';		/* remove this character from string */
-								/* cannot use ++line as the caller will
-									free() the returned string */
-			echoBatch = 0;
-		}
-	}
-
-	return line;
-}
-
 char *readCommand(ctxtEC_t far * const ctxt)
 {
+	char *line;
+	ctxtEC_Cmd_t far *cc;
+	int mode;
+
 	dprintf(("readCommand()\n"));
 
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_COMMAND);
+	assert(ctxt->ctxt_length >= sizeof(ctxtEC_Cmd_t));
 
-	doQuit = cbreak;
+	lflag_doQuit = cbreak;
 
-	if(doExit || doCancel || doQuit) {
+	cc = ecData(ctxt, ctxtEC_Cmd_t);
+	assert(_fstrlen(cc->ec_cmd) == ctxt->ctxt_length - sizeof(ctxtEC_Cmd_t));
+
+	if(((mode = cc->ec_flags) & EC_CMD_IGNORE_EXIT) == 0) {
+		if(lflag_doExit || lflag_doCancel || lflag_doQuit) {
 #ifdef DEBUG
-		char far*cmd = ecData(ctxt, char);
-		dprintf(("[CTXT: Skipping command: %Fs]\n", cmd));
+			char far*cmd = ecData(ctxt, char);
+			dprintf(("[CTXT: Skipping command: %Fs]\n", cmd));
 #endif
-		return 0;
+			return 0;
+		}
+	} else {
+		dprintf(("[CTXT: Completely ignore ^Break status]\n"));
+		lflag_ignoreCBreak = 1;
 	}
 
-		/* to fake readCommndNoIgnore()'s asserts() */
-	assert((ctxt->ctxt_type = EC_TAG_COMMAND_IGNORE_EXIT) != 0);
-	return readCommandIgnoreExit(ctxt);
+	if((line = emalloc(_fstrlen(cc->ec_cmd) + 4)) != 0) {
+		char *q = line;
+
+		if(mode & EC_CMD_SILENT) {
+			dprintf(("[CTXT: disable local ECHO status]\n"));
+			lflag_echo = 0;
+		}
+		if(mode & EC_CMD_NO_TRACE) {
+			dprintf(("[CTXT: disable local TRACE status]\n"));
+			lflag_trace = 0;
+		}
+		if(mode & EC_CMD_NONINTERACTIVE) {
+			dprintf(("[CTXT: disable local INTERACTIVE status]\n"));
+			lflag_interactive = 0;
+		}
+		if(mode & EC_CMD_FORCE_INTERNAL)
+			q = stpcpy(line, FORCE_INTERNAL_COMMAND_STRING);
+		_fstrcpy(TO_FP(q), cc->ec_cmd);
+
+		ecPop();		/* Remove this context as it has been done
+							completely now */
+	}
+
+	return line;
 }

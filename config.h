@@ -15,6 +15,10 @@
 /* Define to enable enhanced input (prerequisite of History and Filename
 	completion */
 #define FEATURE_ENHANCED_INPUT
+/* If this feature is NOT used, DOS-0A is called, specify the internal
+	buffer for this API function below. */
+#define MAX_INTERNAL_COMMAND_SIZE 256
+
 
 /* Define to enable history (aka DOSKEY); requires: Enhanced Input */
 #define FEATURE_HISTORY
@@ -62,7 +66,6 @@
 	arguments, previous contents of FOR variables and internal
 	variables */
 #define EXEC_CONTEXT_MINIMUM_SIZE 512
-
 
 /* Define to support kernel-supported swapout of FreeCOM
 	see DOCS\K-SWAP.TXT
@@ -208,5 +211,7 @@
 	"Conversation may lose significant digits"	*/
 #pragma warn -sig
 #endif
+
+#define FORCE_INTERNAL_COMMAND_STRING "::="
 
 #include "../include/debug.h"

@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.15.4.3  2001/07/25 20:01:18  skaus
+# Update #10
+#
 # Revision 1.15.4.2  2001/07/16 20:28:36  skaus
 # Update #9
 #
@@ -106,13 +109,16 @@ __errl:
 	@+-if exist errlist del errlist >nul
 	-ctags cmd\*.c lib\*.c shell\*.c \freedos\src\lib\suppl\*.c include\*.h \freedos\src\lib\suppl\*.h
 
-com.com .SEQUENTIAL : utils strings criter lib cmd shell\\com.exe infores
+com.com .SEQUENTIAL : utils strings criter context lib cmd shell\\com.exe infores
 	@+copy /b shell\\com.exe + infores + criter\\criter + criter\\criter1 + strings\\strings.dat $@
 
 infores : config.h include/command.h shell\\com.exe shell/com.map
 	utils\mkinfres.exe /T$@.txt $@ shell\\com.map shell\\com.exe
 
-context : criter
+context : gflags.h_c
+
+gflags.h_c: context.h_c
+	utils\\mkgflags.exe <$< >$@
 
 shell\\com.exe : shell
 

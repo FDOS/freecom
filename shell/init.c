@@ -70,14 +70,14 @@ optScanFct(opt_init)
 
   switch(ch) {
   case '?': showhelp = 1; return E_None;
-  case '!': return optScanBoolB(F(debug));
-  case 'Y': return optScanBoolB(F(trace));
+  case '!': return optScanBoolB(gflag_debug);
+  case 'Y': return optScanBoolB(gflag_trace);
   case 'F': return optScanBoolI(autofail);
   case 'D': return optScanBoolI(skipAUTOEXEC);
   case 'P':
     if(arg)     /* change autoexec.bat */
       ec = optScanString(user_autoexec);
-    F(canexit) = 0;
+    gflag_canexit = 0;
     return ec;
   case 'E': return optScanInteger(newEnvSize);
   case 'L': return optScanInteger(internalBufLen);
@@ -98,11 +98,11 @@ optScanFct(opt_init)
       break;
     case 'M':
       if(optLong("MSG"))
-        return optScanBoolB(F(persistentMSGs));
+        return optScanBoolB(gflag_persistentMSGs);
       break;
     case 'S':
     	if(optLong("SWAP"))
-    		return optScanBoolB(F(swap));
+    		return optScanBoolB(gflag_swap);
       break;
     }
     break;
@@ -255,7 +255,7 @@ int initialize(void)
 #endif
 #endif
 
-  F(canexit) = 1;
+  gflag_canexit = 1;
   p = cmdline;    /* start of the command line */
   do {
   ec = leadOptions(&p, opt_init, 0);
@@ -354,7 +354,7 @@ int initialize(void)
 			return E_NoMem;
 		}
 #ifdef FEATURE_KERNEL_SWAP_SHELL
-		if(F(swap) != ERROR)
+		if(gflag_swap != ERROR)
 			kswapRegister(kswapContext);
 #endif
 	}
@@ -399,17 +399,17 @@ int initialize(void)
   if(inputBufLen)
     error_u_notimplemented();
 
-  if(F(trace))
+  if(gflag_trace)
     showinfo = 0;
 
   if (showhelp)
     displayString(TEXT_CMDHELP_COMMAND);
 
-  if (showhelp && F(canexit))
+  if (showhelp && gflag_canexit)
     return E_Exit;
 
 	/* Check if FreeCOM keeps interactively */
-	if(F(canexit)) {
+	if(gflag_canexit) {
 		/* the primary context is TERMINATE rather than KEEP_RUNNING */
 		ctxtEC_t far*ec;
 		assert(ctxtMain);
@@ -433,7 +433,7 @@ int initialize(void)
   }
 
   /* Now the /P option can be processed */
-	if(!F(canexit)) {
+	if(!gflag_canexit) {
 		char *autoexec;
 
 		autoexec = user_autoexec? user_autoexec: AUTO_EXEC;
@@ -448,7 +448,7 @@ int initialize(void)
 				struct REGPACK r;
 				r.r_ax = 0x3000;	/* Get DOS version & OEM ID */
 				intr(0x21, &r);
-				if(!F(trace)	/* /Y --> F8 on CONFIG.SYS */
+				if(!gflag_trace	/* /Y --> F8 on CONFIG.SYS */
 				 || ((r.r_bx & 0xff00) == 0xfd00	/* FreeDOS >= build 2025 */
 				      && (r.r_cx > 0x101 || (r.r_bx & 0xff) > 24))) {
 					displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
@@ -457,7 +457,7 @@ int initialize(void)
 				} else key = 0;
 
 				if(key == KEY_F8)
-					F(trace) = 1;
+					gflag_trace = 1;
 
 				if(key == KEY_F5)
 					displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);

@@ -74,7 +74,7 @@ int batch(char *name, char *first, char *line)
 	chkHeap
 	dprintf(("batch('%s', '%s', '%s')\n", name, first, line));
 
-	if(!called)			/* when this batch file terminates,
+	if(!lflag_called)			/* when this batch file terminates,
 							drop to interactive command line */
 		if(ecMkc("CANCEL", (char*)0) != E_None)
 			return 1;
@@ -85,9 +85,9 @@ int batch(char *name, char *first, char *line)
 		char buf[(sizeof(unsigned) * 8 + 1 + 1) * 3 + 1];
 
 		sprintf(buf, "%u %u %u"
-		 , F(base_shiftlevel)
+		 , gflag_base_shiftlevel
 		 , CTXT_INFO(CTXT_TAG_ARG, nummax) + 1
-		 , F(shiftlevel));
+		 , gflag_shiftlevel);
 		assert(strlen(buf) < sizeof(buf));
 		if(ecMkc("ARG ", buf, (char*)0) != E_None)
 			return 1;
@@ -98,8 +98,8 @@ int batch(char *name, char *first, char *line)
 	chkHeap
 		/* New base is the first non-used string */
 	ctxtPush(CTXT_TAG_ARG, first);	/* argv[0] <-> name of script */
-	F(base_shiftlevel) = CTXT_INFO(CTXT_TAG_ARG, nummax);
-	F(shiftlevel) = 0;		/* each script has its own sh-lvl */
+	gflag_base_shiftlevel = CTXT_INFO(CTXT_TAG_ARG, nummax);
+	gflag_shiftlevel = 0;		/* each script has its own sh-lvl */
 
 	chkHeap
 	if(setArguments(line))	 /* out of memory condition */

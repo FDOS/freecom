@@ -1,3 +1,9 @@
+Update 10 / Beta 23: verficiation of flag processing
+add: lflag_ignoreCBreak
+fix: makePipeContext(): Leave trailing '|' for pipe stdout & stderr of 1st cmd
+add: various debug messages
+add: Status (flag) settings during C context
+
 Update #9:
 add: on out-of-memory condition, doCancel is set to drop to prompt
 fix: if read command interactively, but stdin is not connected to the console
