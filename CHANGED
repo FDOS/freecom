@@ -1,3 +1,5 @@
+upd: german.lng [Eric Auer]
+bugfix: argv[1] and no ComPath stuff [#1761]
 fix: typo
 upd: documentation: batch processing, Bugzilla
 bugfix: documentation of wildcards [#1727]
