@@ -24,6 +24,7 @@
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
+#include "../include/misc.h"
 #include "../err_fcts.h"
 
 int cmd_rename(char *param)
@@ -31,10 +32,12 @@ int cmd_rename(char *param)
 	char **argv;
 	int argc, opts, ec = E_None;
 	struct ffblk ff;
-
+	int appState;
 
 	if((argv = scanCmdline(param, 0, 0, &argc, &opts)) == 0)
 		return 1;
+
+	appState = appendDisable();
 	if(argc < 2) {
 		error_req_param_missing();
 		ec = E_Useage;
@@ -42,19 +45,15 @@ int cmd_rename(char *param)
 	else if(argc > 2) {
 		error_too_many_parameters(param);
 		ec = E_Useage;
-	}
-	else {
-		char *s_drv = NULL, *s_dir = NULL, *s_fil = NULL, *s_ext = NULL;
-		char *d_drv = NULL, *d_dir = NULL, *d_fil = NULL, *d_ext = NULL;
-//		char sn[MAXPATH+13], dn[MAXPATH+13];
-		char *newname = 0, *sn = 0, *dn = 0;
-		char *oldFname;
-
-		if(FINDFIRST(argv[0], &ff
+	} else if(FINDFIRST(argv[0], &ff
 		 , FA_NORMAL|FA_DIREC|FA_ARCH|FA_SYSTEM|FA_RDONLY|FA_HIDDEN) != 0) {
 			error_sfile_not_found(argv[0]);
-			return 0;
-		}
+		/* ec == E_None */
+	} else {
+		char *s_drv = NULL, *s_dir = NULL, *s_fil = NULL, *s_ext = NULL;
+		char *d_drv = NULL, *d_dir = NULL, *d_fil = NULL, *d_ext = NULL;
+		char *newname = 0, *sn = 0, *dn = 0;
+		char *oldFname;
 
 #define p oldFname
 		if(!dfnsplit(argv[0], &s_drv, &s_dir, &s_fil, &s_ext)
@@ -106,6 +105,7 @@ int cmd_rename(char *param)
 		free(newname); free(sn); free(dn);
 	}
 	
+	appendRestore(appState);
 	freep(argv);
 	return ec;
 }
