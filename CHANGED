@@ -1,9 +1,15 @@
+bugfix: mux_ae.h: #ifdef --> #if (Tom Ehlert)
+bugfix: day/month read from ff_time reversed (John Price)
+bugfix: IF lower==LOWER bug; MS COMMAND compares case-sensitively
+fix: Several typos in documentation
+
 v0.83 Beta 32:
 bugfix: if FREECOM.COM /P without AUTOEXEC.BAT --> assert() failure.
 add: if DEBUG enabled: internal command EXIT!! that ignores /P
 chg: FEATURE_BOOT_KEYS: mandory boot keys (F5/F8) turned into
 	optional compile-time option; disabled by default now as the
 	kernel provides F5/F8 checking
+chg: some document updates
 
 v0.83 Beta 30:
 add: SET /I: To display the size and unused area in env segm

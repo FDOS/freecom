@@ -13,7 +13,7 @@
 /* minimal size of buffer passed into runExtension() for both
 	command and line. Also, command[-2] & command[-1] must be available as
 	well as line[-2], line[-1] and line[BUFFER_SIZE_MUX_AE] */
-#ifdef MAX_INTERNAL_COMMAND_SIZE > 255
+#if MAX_INTERNAL_COMMAND_SIZE > 255
 #define BUFFER_SIZE_MUX_AE 255
 #else
 #define BUFFER_SIZE_MUX_AE MAX_INTERNAL_COMMAND_SIZE
