@@ -5,3 +5,5 @@ cmt4.txt - How the COPY command works
 cmt5.txt - option parser
 cmt6.txt - MUX-AE handler
 cmt7.txt - Permanent data storage within external memory block
+cmt8.txt - Batch file processing
+cmt9.txt - Context - Description of Interface, Structure and Useage

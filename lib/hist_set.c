@@ -17,6 +17,6 @@
 #include "../include/misc.h"
 
 void histSet(const int num, const char * const str)
-{
-	ctxtSet(CTXT_TAG_HISTORY, realNum(CTXT_TAG_HISTORY, num), str);
+{	if(ctxtIsValid())
+		ctxtSet(CTXT_TAG_HISTORY, realNum(CTXT_TAG_HISTORY, num), str);
 }

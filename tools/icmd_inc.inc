@@ -1,6 +1,15 @@
 ;; Installable Command sample template
 ;;
+;; DS:BX :- command line buffer <max length><cur length><command line>
+;; DS:SI :- command name buffer <length><command name>
+;; DX == 0xFFFF :- magic number
 
+	cmp dx, 0ffffh	;; probe magic number
+	jne chain3
+	pusha		;; DI -4, SI -6, BP-8, SP-10, BX-12, DX-14, CX-16, AX-18
+	push ds		;; -2
+	push es		;; 0
+	mov bp, sp
 	cmp ah, 0aeh
 	jne chain
 	or al, al
@@ -8,33 +17,43 @@
 	cmp al, 1
 	je perform
 chain:
+chain2:
+	pop es
+	pop ds
+	popa
+chain3:
 	jmp word 0:0
 chain_addr:
 
-chain2:
-	popa
-	jmp short chain
-
 check:
-	pusha
 	mov di, sFctCheck
 	call amicalled
 	jc chain2
+	pop es
+	pop ds
 	popa
-	mov al, 0ffh			;; OK, it's me
+	dec al				;; AL := 0xFF :- OK, it's me
 	iret
 
 perform:
-	pusha
 	mov di, sFctPerform
 	call amicalled
 	jc chain2
-	popa
+	mov ds, [bp+2]
+	mov bx, [bp+12]
+	mov si, [bp+6]
 	icmdAction
+	mov ds, [bp+2]
+	mov bx, [bp+12]
+	mov si, [bp+6]
+	mov di, sFctReturn
+	call amicalled
+	pop es
+	pop ds
+	popa
 	iret
 
 amicalled:
-	push bx
 	mov bx, cs
 	mov es, bx
 	cld
@@ -42,34 +61,25 @@ amicalled:
 	call oASCIIZ
 	mov bx, sCmd
 	call oASCIIZ
-	push es
-	mov ax, ds
-	mov es, ax
+	mov es, [bp+2]
 	mov bx, si
-	call oPString
-	pop es
+	call oPStringAddr
+	mov bx, cs
+	mov es, bx
 	mov bx, sNL
 	call oASCIIZ
 	mov bx, sLine
 	call oASCIIZ
-	pop bx
-	push bx
+	mov bx, [bp+12]
 	inc bx
-	push es
-	mov ax, ds
-	mov es, ax
-	call oPString
-	pop es
+	mov es, [bp+2]
+	call oPStringAddr
 	mov bx, sNL
 	call oASCIIZ
-	pop bx
-	mov di, myName
-	xor ax, ax
-	mov al, [SI]
-	cmp al, [ES:myNameLen]
-	jne notme
-	mov cx, ax
-	inc si
+	mov di, myName-1
+	xor cx, cx
+	mov cl, [SI]
+	inc cx
 	repe cmpsb
 	jne notme
 	mov bx, sIsMe
@@ -93,6 +103,8 @@ oMyName:
 	pop cx
 	jmp short oStr1
 
+oPStringAddr:
+	call oESBX
 oPString:
 	mov cl, [ES:BX]
 	mov al, cl
@@ -137,6 +149,33 @@ oAL:
 	pop bx
 	ret
 
+oESBX:
+	push cx
+	push es
+	push bx
+	mov ax, es
+	mov bx, sAddr
+	call convAXtoBX
+	pop ax
+	push ax
+	mov bx, sAddr2
+	call convAXtoBX
+	mov cx, 9
+	mov ax, cs
+	mov es, ax
+	mov bx, sAddr
+	call oString
+	pop bx
+	pop es
+	pop cx
+	ret
+
+convAXtoBX:
+	push ax
+	mov al, ah
+	call convALtoBX
+	inc bx
+	pop ax
 convALtoBX:
 	push ax
 	shr al, 4
@@ -158,9 +197,12 @@ conv3:
 
 sFctCheck:	DB '>>', 1, ': check'
 sNL:	DB 13, 10, 0
+sAddr:	DB 0,0,0,0, ':'
+sAddr2: DB 0,0,0,0
 sByte:	DB '<'
 sB		DB 0, 0, '>'
 sFctPerform:	DB '>>', 1, ': perform', 13, 10, 0
+sFctReturn:	DB '>>', 1, ': return', 13, 10, 0
 sCmd:	DB '>>', 1, ': command name: ', 0
 sLine:	DB '>>', 1, ': command line: ', 0
 sIsMe:	DB '>>', 1, ': -- is me --', 13, 10, 0

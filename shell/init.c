@@ -148,7 +148,6 @@ optScanFct(opt_init)
 
 int initialize(void)
 {
-  //int rc;
   int comPath;                /* path to COMMAND.COM (for COMSPEC/reload) */
   int newTTY;                 /* what to change TTY to */
   int showinfo;                 /* show initial info only if no command line options */
@@ -167,6 +166,8 @@ int initialize(void)
 #ifdef DEBUG
 	int orig_env;
 #endif
+
+	dprintf( ("[INIT: initialise()]\n") );
 
 /* Set up the host environment of COMMAND.COM */
 
@@ -232,6 +233,7 @@ int initialize(void)
   comPath = tracemode = 0;
   showinfo = 1;
 
+	dprintf( ("[INIT: grab argv[0] ]\n") );
   /* Because FreeCom should be executed in a DOS3+ compatible
     environment most of the time, it is assumed that its path
     can be determined from the environment.
@@ -375,12 +377,18 @@ int initialize(void)
 	}
 #endif
 
-  if(!ComPath) {
-    /* FreeCom is unable to find itself --> print error message */
-    /* Emergency error */
+  if(!ComPath) {	/* Force interactive querying of the executable */
+  	inInit = 1;
+  	msgSegment();
+  	if(!ComPath) {
+		/* FreeCom is unable to find itself --> print error message */
+		/* Emergency error */
 #undef TEXT_MSG_FREECOM_NOT_FOUND
-	puts(TEXT_MSG_FREECOM_NOT_FOUND);
-    return E_Useage;
+		puts(TEXT_MSG_FREECOM_NOT_FOUND);
+#undef TEXT_TERMINATING
+		puts(TEXT_TERMINATING);
+		return E_Useage;
+	}
   }
 
   /* First of all, set up the environment */

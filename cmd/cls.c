@@ -19,6 +19,9 @@
  *   screen.
  *
  * $Log$
+ * Revision 1.5  2004/06/29 14:14:54  skaus
+ * fix: help screen of internal commands causes "Unknown command error" {Bernd Blaauw}
+ *
  * Revision 1.4  2004/06/15 19:27:43  skaus
  * bugfix: CLS: use BIOS, unless fd1 is file or NUL {Eric Auer}
  *
@@ -29,8 +32,9 @@
 #include <dos.h>
 #include <stdio.h>
 
-#include "../include/misc.h"
 #include "../include/command.h"
+#include "../include/openf.h"
+#include "../include/misc.h"
 
 #pragma argsused
 int cmd_cls(char *param)
@@ -46,7 +50,7 @@ int cmd_cls(char *param)
 		r.r_ax = 0x0600;	/* Scroll window up // entire window */
 		r.r_bx = 0x0700;	/* Attribute to write */
 		r.r_cx = 0x0000;	/* Upper left */
-		r.r_dx = (SCREEN_ROWS - 1) << 8 | (SCREEN_COLS - 1); /* Lower right */
+		r.r_dx = ((SCREEN_ROWS - 1) << 8) | (SCREEN_COLS - 1); /* Lower right */
 		intr(0x10, &r);
 		goxy(1, 1);			/* home the cursor */
 	}

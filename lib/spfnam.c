@@ -8,14 +8,15 @@
 
 #include "../config.h"
 
-#include "../include/misc.h"
+#include <assert.h>
 
+#include "../include/misc.h"
 
 char *skipfnam(const char * const fnam)
 {	const char *p;
 
 	assert(fnam);
 	p = fnam - 1;
-	while(is_fnam(*++p));
-	return p;
+	while(is_fnchar(*++p));
+	return (char*)p;
 }

@@ -14,9 +14,12 @@
 	4 -> out of memory / syntax error ... .
 
 	$Log$
+	Revision 1.6  2004/06/29 14:14:55  skaus
+	fix: help screen of internal commands causes "Unknown command error" {Bernd Blaauw}
+
 	Revision 1.5  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.4  2004/02/01 13:24:22  skaus
 	bugfix: misidentifying unspecific failures from within SUPPL
 	
@@ -72,7 +75,9 @@ int grabComFilename(const int warn, const char far * const fnam)
   size_t len;
   int rc;
 
-  assert(fnam);
+  dprintf( ("[INIT: grabComFilename(%s)]\n", fnam) );
+  if(!fnam)
+  	return 4;
 
   /* Copy the filename into the local heap */
   len = _fstrlen(fnam);

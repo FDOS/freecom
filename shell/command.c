@@ -320,8 +320,8 @@ static void docommand(char *line)
         } else {
           dprintf(("CMD '%s' : '%s'\n", cmdptr->name, rest));
           cmdptr->func(rest);
-          goto errRet;
         }
+        goto errRet;
 	}
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 	  }

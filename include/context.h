@@ -46,6 +46,7 @@ enum {
 #define ctxtEnvironment 0		/* the environment is the default
 									environment segment */
 
+#define ctxtIsValid()	(ctxt != CTXT_INVALID)
 
 typedef struct {
 	unsigned c_sizemax, c_sizecur;	/* total size of tag */

@@ -8,9 +8,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.6  2004/06/29 14:14:56  skaus
+	fix: help screen of internal commands causes "Unknown command error" {Bernd Blaauw}
+
 	Revision 1.5  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.4  2003/12/09 21:29:24  skaus
 	bugfix: Ask for FreeCOM location when STRINGS are missing [#687]
 	
@@ -162,9 +165,6 @@ static int loadStrings(res_majorid_t major
 unsigned msgSegment(void)              /* load messages into memory */
 {	static int recurs = 1;
 	loadStatus status;
-//#ifndef DEBUG		/* To ensure the error is displayed only once */
-	//static int displayed = 0;
-//#endif
 
 	if(msgSegm)
 		return msgSegm;
@@ -217,28 +217,22 @@ unsigned msgSegment(void)              /* load messages into memory */
 			assert(msgSegm == 0);
 			puts("[Out of memory loading STRINGS.]");
 			break;
-#if 0
-		default:	
-			assert(msgSegm == 0);
-			if(!displayed) {
-				displayed = 1;
-				puts("\n\a[Could not load STRINGS resource.]");
-			}
-			break;
-#endif
 #endif
 		}
 
 			if(msgSegm)
+				break;
+			if(inInit > 1)	/* Don't fetch the name interactively too early */
 				break;
 #undef TEXT_ERROR_OUT_OF_MEMORY
 #undef TEXT_ERROR_LOADING_STRINGS
 			puts(TEXT_ERROR_LOADING_STRINGS);
 			{	char *buf = malloc(128 + 1);
 
-				if(!buf)
+				if(!buf) {
 					fputs(TEXT_ERROR_OUT_OF_MEMORY, stderr);
-				else {
+					break;
+				} else {
 					int orgEcho = echo;
 
 					echo = 0;
@@ -248,9 +242,9 @@ unsigned msgSegment(void)              /* load messages into memory */
 						free(buf);
 						break;
 					}
-					if(0 == grabComFilename(0, (char far*)buf)) {
+					if(0 == grabComFilename(1, (char far*)buf)) {
 							/* Try to set the valid %COMSPEC% */
-						if(chgEnv("COMSPEC", ComPath))
+						if(!inInit && chgEnv("COMSPEC", ComPath))
 							chgEnv("COMSPEC", 0);	/* Zap the old one */
 					}
 					free(buf);
