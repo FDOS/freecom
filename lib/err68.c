@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_bad_mcb_chain
-void error_bad_mcb_chain(void)
-{	displayError(TEXT_ERROR_BAD_MCB_CHAIN);
+#undef error_redirect_to_file
+void error_redirect_to_file(const char * const fnam)
+{	displayError(TEXT_ERROR_REDIRECT_TO_FILE, fnam);
 }

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_history_size
-void error_history_size(const char s[])
-{	displayError(TEXT_ERROR_HISTORY_SIZE, s);
+#undef error_no_alias_name
+void error_no_alias_name(const char name[])
+{	displayError(TEXT_ALIAS_INVALID_NAME, name);
 }

@@ -31,6 +31,7 @@ void error_trailing_plus(void);
 void error_open_file(const char * const fnam);
 void error_read_file(const char * const fnam);
 void error_write_file(const char * const fnam);
+void error_write_file_disc_full(const char * const fnam, const unsigned long size);
 void error_copy(void);
 void error_nothing_to_do(void);
 void error_invalid_number(const char * const s);

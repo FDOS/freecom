@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_init_fully_qualified
-void error_init_fully_qualified(const char * const s)
-{	displayError(TEXT_INIT_FULLY_QUALIFIED, s);
+#undef error_invalid_number
+void error_invalid_number(const char * const s)
+{	displayError(TEXT_INVALID_NUMBER, s);
 }

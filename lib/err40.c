@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_l_notimplemented
-void error_l_notimplemented(void)
-{	displayError(TEXT_ERROR_L_NOTIMPLEMENTED);
+#undef error_ctty_excluded
+void error_ctty_excluded(void)
+{	displayError(TEXT_CTTY_NOTIMPLEMENTED);
 }

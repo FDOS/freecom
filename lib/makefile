@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.11  2003/09/01 14:14:30  skaus
+# bugfix: typo: bad varable specification [#1678]
+#
 # Revision 1.10  2002/11/12 19:48:47  skaus
 # bugfix: COPY: additional output to honor redirection {Eric Auer} [bugID #1313]
 #
@@ -86,8 +89,8 @@ SRC = alprmblk.c alsysblk.c beep_l.c beep_n.c brk_get.c brk_set.c cbreak.c \
 	pr_prmpt.c pr_time.c prprompt.c realnum.c res.c res_r.c res_w.c \
 	resfile.c rmtmpfil.c rtrimcl.c rtrimsp.c salloc.c samefile.c scancmd.c \
 	scanopt.c session.c showcmds.c skqwd.c split.c sumblink.c tempfile.c \
-	timeget.c timeset.c tmpnam.c trimcl.c trimsp.c txtlend.c unquote.c \
-	vcgetch.c vcgetstr.c where.c
+	timeget.c timeset.c tmpnam.c trimcl.c trimsp.c truncate.c txtlend.c \
+	unquote.c vcgetch.c vcgetstr.c where.c
 OBJ = alprmblk.obj alsysblk.obj beep_l.obj beep_n.obj brk_get.obj \
 	brk_set.obj cbreak.obj cbs.obj cd_dir.obj cgetch.obj cgettime.obj \
 	chgctxt.obj chgdrv.obj chgenv.obj chgenvc.obj chgenvr.obj clrline.obj \
@@ -111,8 +114,8 @@ OBJ = alprmblk.obj alsysblk.obj beep_l.obj beep_n.obj brk_get.obj \
 	realnum.obj res.obj res_r.obj res_w.obj resfile.obj rmtmpfil.obj \
 	rtrimcl.obj rtrimsp.obj salloc.obj samefile.obj scancmd.obj scanopt.obj \
 	session.obj showcmds.obj skqwd.obj split.obj sumblink.obj tempfile.obj \
-	timeget.obj timeset.obj tmpnam.obj trimcl.obj trimsp.obj txtlend.obj \
-	unquote.obj vcgetch.obj vcgetstr.obj where.obj
+	timeget.obj timeset.obj tmpnam.obj trimcl.obj trimsp.obj truncate.obj \
+	txtlend.obj unquote.obj vcgetch.obj vcgetstr.obj where.obj
 HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\include/batch.h \
 	..\include/cmdline.h ..\include/command.h ..\include/context.h \
 	..\include/crossjmp.h ..\include/cswap.h ..\include/datefunc.h \
@@ -184,6 +187,9 @@ ctxt.obj : ctxt.c \
 lastdset.obj : lastdset.c \
 	 ../config.h ../err_fcts.h ../include/context.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h
+truncate.obj : truncate.c \
+	 ../config.h ../include/datefunc.h ../include/debug.h \
+	../include/misc.h ../include/timefunc.h
 beep_l.obj : beep_l.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h
@@ -234,7 +240,7 @@ rtrimcl.obj : rtrimcl.c \
 mux_ae.obj : mux_ae.c \
 	 ../config.h ../include/command.h ../include/crossjmp.h \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/mux_ae.h ../include/timefunc.h
+	../include/mux_ae.h ../include/nls.h ../include/timefunc.h
 comfile.obj : comfile.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h
@@ -321,7 +327,7 @@ cmdinput.obj : cmdinput.c \
 exec.obj : exec.c \
 	 ../config.h ../include/command.h ../include/cswap.h \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/nls.h ../include/timefunc.h
 fdattr.obj : fdattr.c
 goxy.obj : goxy.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
@@ -531,8 +537,9 @@ curtime.obj : curtime.c \
 	../include/debug.h ../include/misc.h ../include/nls.h \
 	../include/timefunc.h
 ctxt_mkb.obj : ctxt_mkb.c \
-	 ../config.h ../err_fcts.h ../include/context.h ../include/crossjmp.h \
-	../include/debug.h
+	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
+	../include/crossjmp.h ../include/datefunc.h ../include/debug.h \
+	../include/misc.h ../include/timefunc.h
 chgdrv.obj : chgdrv.c \
 	 ../config.h ../err_fcts.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h ../strings.h

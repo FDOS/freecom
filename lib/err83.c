@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_invalid_parameter
-void error_invalid_parameter(const char * const str)
-{	displayError(TEXT_ERROR_INVALID_PARAMETER, str);
+#undef error_copy_plus_destination
+void error_copy_plus_destination(void)
+{	displayError(TEXT_ERROR_COPY_PLUS_DESTINATION);
 }

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_context_add_status
-void error_context_add_status(void)
-{	displayError(TEXT_ERROR_CONTEXT_ADD_STATUS);
+#undef error_context_length
+void error_context_length(unsigned long islen, unsigned maxlen)
+{	displayError(TEXT_ERROR_CONTEXT_LENGTH, islen, maxlen);
 }

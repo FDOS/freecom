@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_dirfct_failed
-void error_dirfct_failed(const char * const fctname, const char * const dirname)
-{	displayError(TEXT_ERROR_DIRFCT_FAILED, fctname, dirname);
+#undef error_invalid_parameter
+void error_invalid_parameter(const char * const str)
+{	displayError(TEXT_ERROR_INVALID_PARAMETER, str);
 }

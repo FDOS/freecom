@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_copy_plus_destination
-void error_copy_plus_destination(void)
-{	displayError(TEXT_ERROR_COPY_PLUS_DESTINATION);
+#undef error_set_codepage
+void error_set_codepage(void)
+{	displayError(TEXT_ERROR_SET_CODEPAGE);
 }

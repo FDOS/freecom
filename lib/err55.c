@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_alias_no_such
-void error_alias_no_such(const char * const name)
-{	displayError(TEXT_ERROR_ALIAS_NO_SUCH, name);
+#undef error_alias_insert
+void error_alias_insert(void)
+{	displayError(TEXT_ERROR_ALIAS_INSERT);
 }

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_invalid_date
-void error_invalid_date(void)
-{	displayError(TEXT_ERROR_INVALID_DATE);
+#undef error_on_off
+void error_on_off(void)
+{	displayError(TEXT_ERROR_ON_OR_OFF);
 }

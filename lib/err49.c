@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_if_exist
-void error_if_exist(void)
-{	displayError(TEXT_ERROR_IF_EXIST_NO_FILENAME);
+#undef error_kswap_allocmem
+void error_kswap_allocmem(void)
+{	displayError(TEXT_ERROR_KSWAP_ALLOCMEM);
 }

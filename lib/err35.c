@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_invalid_number
-void error_invalid_number(const char * const s)
-{	displayError(TEXT_INVALID_NUMBER, s);
+#undef error_nothing_to_do
+void error_nothing_to_do(void)
+{	displayError(TEXT_ERROR_NOTHING_TO_DO);
 }

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_kswap_allocmem
-void error_kswap_allocmem(void)
-{	displayError(TEXT_ERROR_KSWAP_ALLOCMEM);
+#undef error_kswap_alias_size
+void error_kswap_alias_size(void)
+{	displayError(TEXT_ERROR_KSWAP_ALIAS_SIZE);
 }

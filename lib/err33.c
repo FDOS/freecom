@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_copy
-void error_copy(void)
-{	displayError(TEXT_ERROR_COPY);
+#undef error_write_file_disc_full
+void error_write_file_disc_full(const char * const fnam, const unsigned long size)
+{	displayError(TEXT_ERROR_WRITE_FILE_DISC_FULL, fnam, size);
 }

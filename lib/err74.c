@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_for_bad_var
-void error_for_bad_var(void)
-{	displayError(TEXT_ERROR_BAD_VERABLE);
+#undef error_invalid_date
+void error_invalid_date(void)
+{	displayError(TEXT_ERROR_INVALID_DATE);
 }

@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_empty_redirection
-void error_empty_redirection(void)
-{	displayError(TEXT_ERROR_EMPTY_REDIRECTION);
+#undef error_context_add_status
+void error_context_add_status(void)
+{	displayError(TEXT_ERROR_CONTEXT_ADD_STATUS);
 }

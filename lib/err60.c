@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_context_out_of_memory
-void error_context_out_of_memory(void)
-{	displayError(TEXT_ERROR_CONTEXT_OUT_OF_MEMORY);
+#undef error_history_size
+void error_history_size(const char s[])
+{	displayError(TEXT_ERROR_HISTORY_SIZE, s);
 }

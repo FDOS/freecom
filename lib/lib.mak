@@ -148,6 +148,7 @@ chunk1 :  \
 	tmpnam.obj \
 	trimcl.obj \
 	trimsp.obj \
+	truncate.obj \
 	txtlend.obj \
 	unquote.obj \
 	vcgetch.obj \
@@ -235,7 +236,8 @@ chunk1 :  \
 	err80.obj \
 	err81.obj \
 	err82.obj \
-	err83.obj
+	err83.obj \
+	err84.obj
 
 
 freecom.lib : $(CFG) freecom_deps 
@@ -376,6 +378,7 @@ freecom.lib : $(CFG) freecom_deps
 +-tmpnam.obj &
 +-trimcl.obj &
 +-trimsp.obj &
++-truncate.obj &
 +-txtlend.obj &
 +-unquote.obj &
 +-vcgetch.obj &
@@ -463,7 +466,8 @@ freecom.lib : $(CFG) freecom_deps
 +-err80.obj &
 +-err81.obj &
 +-err82.obj &
-+-err83.obj
++-err83.obj &
++-err84.obj
 | , freecom.lst 
 	if not exist freecom.lib $(AR) freecom.lib /c @&&|
 +alprmblk.obj &
@@ -602,6 +606,7 @@ freecom.lib : $(CFG) freecom_deps
 +tmpnam.obj &
 +trimcl.obj &
 +trimsp.obj &
++truncate.obj &
 +txtlend.obj &
 +unquote.obj &
 +vcgetch.obj &
@@ -689,6 +694,7 @@ freecom.lib : $(CFG) freecom_deps
 +err80.obj &
 +err81.obj &
 +err82.obj &
-+err83.obj
++err83.obj &
++err84.obj
 | , freecom.lst 
 

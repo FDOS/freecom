@@ -11,7 +11,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-#undef error_invalid_drive
-void error_invalid_drive(int drive)
-{	displayError(TEXT_ERROR_INVALID_DRIVE, drive + 'A');
+#undef error_unknown
+void error_unknown(int err)
+{	displayError(TEXT_ERROR_UNDEFINED_ERROR, err);
 }
