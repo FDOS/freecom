@@ -224,7 +224,7 @@ int incline(void)
   if (!optP)
     return E_None;
 
-  if (++line >= *maxy)
+  if (++line >= MAX_Y)
   {
     line = 0;
     return pause();

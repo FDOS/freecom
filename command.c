@@ -173,6 +173,13 @@
  *
  * 2000/08/16 Ron Cemer
  *	bugfix: piping failure (esp. when SHARE is not loaded)
+ *
+ * 2000/09/26 ska
+ *	bugfix: "%0" expansions could overflow string end
+ *	bugfix: external command line test
+ *	chg: check for lenght of external command line moved before the
+ *		exec(), in order to allow batch files to use the internal
+ *		length of the command line
  */
 
 #include "config.h"
@@ -261,12 +268,6 @@ static void execute(char *first, char *rest)
   assert(first);
   assert(rest);
 
-  if (strlen(first) + strlen(rest) + 1 > MAX_EXTERNAL_COMMAND_SIZE)
-  {
-    error_line_too_long();
-    return;
-  }
-
   /* check for a drive change */
   if ((strcmp(first + 1, ":") == 0) && isalpha(*first))
   {
@@ -284,7 +285,9 @@ static void execute(char *first, char *rest)
   errno = 0;
   fullname = find_which(first);
   dprintf(("[find_which(%s) returned %s]\n", first, fullname));
+#ifdef DEBUG
   if(fddebug) perror("find_which()");
+#endif
 
   if (!fullname)
   {
@@ -306,6 +309,13 @@ static void execute(char *first, char *rest)
     int result;
 
     dprintf(("[EXEC: %s %s]\n", fullname, rest));
+
+	if (strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE)
+	{
+		error_line_too_long();
+		return;
+	}
+
     if(!saveSession()) {
       error_save_session();
       exit_all_batch();
@@ -683,7 +693,7 @@ int process_input(int xflag, char *commandline)
           case '9':
             if (NULL != (tp = find_arg(*ip - '0')))
             {
-              if(cp >= parsedMax(strlen(ip))) {
+              if(cp >= parsedMax(strlen(tp))) {
                 cp = NULL;
                 goto intBufOver;
               }
@@ -692,6 +702,7 @@ int process_input(int xflag, char *commandline)
             }
             else
               *cp++ = '%';
+              /* Let the digit be copied in the cycle */
 
             break;
 
@@ -704,8 +715,7 @@ int process_input(int xflag, char *commandline)
 
           default:
             if(forvar == toupper(*ip)) {    /* FOR hack */
-              *cp++ = '%';
-        *cp++ = *ip++;
+              *cp++ = '%';			/* let the var be copied in next cycle */
               break;
             }
             if ((tp = strchr(ip, '%')) != NULL)
@@ -728,9 +738,9 @@ int process_input(int xflag, char *commandline)
       }
 
       if (iscntrl(*ip))
-        *ip = ' ';
-
-      *cp++ = *ip++;
+        *cp = ' ';
+      else 
+      	*cp++ = *ip++;
     }
 
 intBufOver:

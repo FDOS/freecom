@@ -171,6 +171,9 @@ int showcmds(char *rest)
 #ifdef FEATURE_ALIASES
   printf("[aliases] ");
 #endif
+#ifdef FEATURE_ENHANCED_INPUT
+  printf("[enhanced input] ");
+#endif
 #ifdef FEATURE_HISTORY
   printf("[history] ");
 #endif

@@ -82,18 +82,62 @@
  *
  * 1999/04/23 ska
  * add: handle ^C on command line --> as ESC, also sets ECHO state ON
+ *
+ * 2000/09/26 ska
+ *	add: FEATURE_ENHANCED_INPUT (actually the non-defined variant of it)
  */
 
 #include "config.h"
 
 #include <assert.h>
-#include <conio.h>
-#include <stdio.h>
 #include <string.h>
 #include <dos.h>
 
 #include "command.h"
 #include "batch.h"
+
+#ifndef FEATURE_ENHANCED_INPUT
+
+/* Using traditional input via DOS-21-0A */
+
+#if MAX_INTERNAL_COMMAND_SIZE > 253
+#define CMD_SIZE 253
+#else
+#define CMD_SIZE MAX_INTERNAL_COMMAND_SIZE
+#endif
+
+unsigned char iobuf[CMD_SIZE + 2] = { CMD_SIZE, '\0'};
+
+void readcommand(char *str, int maxlen)
+{	struct REGPACK r;
+
+	assert(str);
+	assert(maxlen);
+
+	iobuf[0] = (maxlen < CMD_SIZE)? maxlen: CMD_SIZE;
+	if(iobuf[1] > iobuf[0])
+		iobuf[1] = iobuf[0];
+
+	dprintf(("[CMDINPUT characters max:%u in:%u]\n", iobuf[0], iobuf[1]));
+	if(echo)
+		printprompt();
+
+	r.r_ax = 0xa00;
+	r.r_ds = FP_SEG(iobuf);
+	r.r_dx = FP_OFF(iobuf);
+	intr(0x21, &r);
+
+	dprintf(("[CMDINPUT characters max:%u out:%u]\n", iobuf[0], iobuf[1]));
+	if(iobuf[1]) 		/* could bug if == 0 */
+		memcpy(str, &iobuf[2], iobuf[1]);
+	str[iobuf[1]] = 0;
+	putchar('\n');
+}
+
+#else
+
+#include <conio.h>
+#include <stdio.h>
 
 #define D_BS      8
 #define D_DELETE  256+83
@@ -118,6 +162,7 @@ void complete_filename(char *str, unsigned charcount);
 int show_completion_matches(char *str, unsigned charcount);
 #endif
 
+#if 0
 /*
  * maxx, maxy
  *
@@ -125,6 +170,7 @@ int show_completion_matches(char *str, unsigned charcount);
  */
 unsigned far *maxx = MK_FP(0x40, 0x4a);
 unsigned char far *maxy = MK_FP(0x40, 0x84);
+#endif
 
 /*
  * goxy
@@ -215,9 +261,9 @@ void readcommand(char *str, int maxlen)
               printf("\b \b");
             else
             {
-              goxy(*maxx, wherey() - 1);
+              goxy(MAX_X, wherey() - 1);
               putchar(' ');
-              goxy(*maxx, wherey() - 1);
+              goxy(MAX_X, wherey() - 1);
             }
           }
           else
@@ -227,7 +273,7 @@ void readcommand(char *str, int maxlen)
             if (wherex() != 1)
               goxy(wherex() - 1, wherey());
             else
-              goxy(*maxx, wherey() - 1);
+              goxy(MAX_X, wherey() - 1);
             curx = wherex();
             cury = wherey();
             printf("%s ", &str[current - 1]);
@@ -294,7 +340,7 @@ void readcommand(char *str, int maxlen)
 
             goxy(orgx, orgy);
             printf("%s", str);
-            if ((strlen(str) > (*maxx - orgx)) && (orgy == *maxy + 1))
+            if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
               orgy--;
           }
           else                  //if second TAB, list matches
@@ -362,7 +408,7 @@ void readcommand(char *str, int maxlen)
         {
           current--;
           if (wherex() == 1)
-            goxy(*maxx, wherey() - 1);
+            goxy(MAX_X, wherey() - 1);
           else
             goxy(wherex() - 1, wherey());
         }
@@ -377,7 +423,7 @@ void readcommand(char *str, int maxlen)
         if (current != charcount)
         {
           current++;
-          if (wherex() == *maxx)
+          if (wherex() == MAX_X)
             goxy(1, wherey() + 1);
           else
             goxy(wherex() + 1, wherey());
@@ -396,7 +442,7 @@ void readcommand(char *str, int maxlen)
             curx = wherex() + 1;
             cury = wherey();
             printf("%s", &str[current - 1]);
-            if ((strlen(str) > (*maxx - orgx)) && (orgy == *maxy + 1))
+            if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
               cury--;
             goxy(curx, cury);
             charcount++;
@@ -408,7 +454,7 @@ void readcommand(char *str, int maxlen)
             str[current++] = ch;
             putchar(ch);
           }
-          if ((strlen(str) > (*maxx - orgx)) && (orgy == *maxy + 1))
+          if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
             orgy--;
         }
         else
@@ -423,3 +469,4 @@ void readcommand(char *str, int maxlen)
 
   _setcursortype(_NORMALCURSOR);
 }
+#endif

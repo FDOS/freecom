@@ -5,6 +5,8 @@ binary.zip: the latest FreeCOM, binaries only
 debug.zip: the latest FreeCOM with debug information enabled
 localize.zip: Developer package for localizer (to create new or
 	maintaing existing *.LNG files), includes latest FreeCOM
+plainedt.zip: the latest FreeCOM, binraries only, no enhanced command
+	line editor (using the one from the kernel)
 suppl.zip: the SUPPL library pre-compiled for TC++ v1.01
 	its source code is avilable from:
 	http://www2.inf.fh-rhein-sieg.de/~skaise2a/ska/sources.html#suppl

@@ -20,6 +20,9 @@
  * 2000/06/22 ska
  *	add: DIR_STACK_LEN, commands: DIRS, POPD, PUSHD, CDD
  *	add: FEATURE_LAST_DIR
+ *
+ * 2000/09/26 ska
+ *	add: FEATURE_ENHANCED_INPUT
  */
 
 /* define DEBUG to add debugging code */
@@ -30,10 +33,14 @@
 /* Define to enable the alias command, and aliases. */
 #define FEATURE_ALIASES
 
-/* Define to enable history (and the doskey command) */
+/* Define to enable enhanced input (prerequisite of History and Filename
+	completion */
+#define FEATURE_ENHANCED_INPUT
+
+/* Define to enable history (aka DOSKEY); requires: Enhanced Input */
 #define FEATURE_HISTORY
 
-/* Define to enable filename completion */
+/* Define to enable filename completion; requires: Enhanced Input */
 #define FEATURE_FILENAME_COMPLETION
 
 /* Define to enable to load messages into memory */
@@ -138,6 +145,16 @@
 #define _TC_EARLY_
 #endif
 
+#endif
+
+	/* set by MKDIST.BAT */
+#ifdef IGNORE_ENHANCED_INPUT
+#undef FEATURE_ENHANCED_INPUT
+#endif
+
+#ifndef FEATURE_ENHANCED_INPUT
+#undef FEATURE_HISTORY
+#undef FEATURE_FILENAME_COMPLETION
 #endif
 
 #include "debug.h"

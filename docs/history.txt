@@ -1,6 +1,13 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+2000/09/26 ska <ska-src@gmx.net>
+~~~~~~~~~~~~~~~~~~~~~~
+bugfix: #("%1#(" expansion could overwrite end of string
+bugfix: length of external command line was assumed too long
+chg: moved check of length of ext cmdline before exec() in order
+	to allow batch files use the internal length
+
 2000/08/15 ska <ska-src@gmx.net>
 ~~~~~~~~~~~~~~~~~~~~~~
 chg: layout of CVS:
