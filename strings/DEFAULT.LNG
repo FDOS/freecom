@@ -910,11 +910,12 @@ Type BREAK without a parameter to display the current BREAK setting.
 :TEXT_CMDHELP_CALL#1
 Calls one batch program from another.
 
-CALL [/S | /N] [drive:][path]filename [batch-parameters]
+CALL [/S | /N] [/Y] [drive:][path]filename [batch-parameters]
 
   batch-parameters   Specifies any command-line information required by
                      the batch program.
-/S enforces, /N denies swapping of FreeCOM.
+  /S enforces, /N denies swapping of FreeCOM.
+  /Y enables tracemode during execution of the command.
 .
 
 :TEXT_CMDHELP_CD
@@ -1028,15 +1029,16 @@ prompt for a new one.  Press ENTER to keep the same date.
 /D prevents DATE to become interactive.
 .
 
-:TEXT_CMDHELP_DEL
+:TEXT_CMDHELP_DEL#2
 Deletes one or more files.
 
-DEL [drive:][path]filename [/P]
-ERASE [drive:][path]filename [/P]
+DEL [drive:][path]filename [/P] [/V]
+ERASE [drive:][path]filename [/P] [/V]
 
   [drive:][path]filename  Specifies the file(s) to delete.  Specify multiple
                           files by using wildcards.
-  /P		Prompts for confirmation before deleting each file.
+  /P	Prompts for confirmation before deleting each file.
+  /V	Displays all deleted files.
 .
 
 :TEXT_CMDHELP_DIR#3
@@ -1419,4 +1421,12 @@ Displays the internal memory used by FreeCOM internally
 
 MEMORY
 
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+The COPY destination must not contain plus ('+') characters.
+.
+
+:TEXT_DELETE_FILE#1
+Deleting file "%s".
 .

@@ -56,13 +56,14 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-static int optP;
+static int optP, verbose;
 
 #pragma argsused
 optScanFct(opt_del)
 {
   switch(ch) {
   case 'P': return optScanBool(optP);
+  case 'V': return optScanBool(verbose);
   }
   optErr();
   return E_Useage;
@@ -86,7 +87,7 @@ int cmd_del(char *param)
 	int argc, optc;
 
 	/* initialize options */
-	optP = 0;
+	verbose = optP = 0;
 
 	if((arg = scanCmdline(param, opt_del, 0, &argc, &optc)) == 0)
 		return E_Other;
@@ -177,6 +178,8 @@ int cmd_del(char *param)
 				/* define NODEL if you want to debug */
 				puts(fullname);
 #else
+				if(verbose && !optP)
+					displayString(TEXT_DELETE_FILE, fullname);
 				if(unlink(fullname) != 0) {
 					perror(fullname);   /* notify the user */
 				} else

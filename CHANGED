@@ -1,3 +1,4 @@
+add: DEL: /V option [#1587]
 chg: tracemode: print prompt prior command [#1487]
 add: CALL /Y: To enable tracemode during command
 bugfix: PROMPT $T: hour: space padded; fraction zero padded [#1481]
