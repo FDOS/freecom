@@ -55,11 +55,6 @@ void error_req_param_missing(void)
   displayString(TEXT_ERROR_REQ_PARAM_MISSING);
 }
 
-void error_invalid_drive(void)
-{
-  displayString(TEXT_ERROR_INVALID_DRIVE);
-}
-
 void error_bad_command(void)
 {
   displayString(TEXT_ERROR_BADCOMMAND);
@@ -248,6 +243,10 @@ void error_no_rw_device(const char * const devname)
 
 void error_ctty_dup(const char * const devname)
 { displayString(TEXT_ERROR_CTTY_DUP, devname);
+}
+
+void error_no_cwd(int drive)
+{	displayString(TEXT_ERROR_CWD_FAILED, drvNum(drive) + 'A');
 }
 
 //void newperror(unsigned error_id)

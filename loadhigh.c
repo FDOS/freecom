@@ -521,7 +521,8 @@ int parseArgs(char *cmdline, char **fnam, char **rest)
       upper_flag = 0;
 
       r++;
-      umbRegion[region_number].minSize = region_minSize;
+      assert(region_minSize < 0x10000ul);
+      umbRegion[region_number].minSize = (unsigned)region_minSize;
       umbRegion[region_number].access = 1;
     }
     }

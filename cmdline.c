@@ -12,6 +12,9 @@
  * 1999/11/02 ska
  * chg: re-enabled skipwd() as it used within FreeCom and resolved from
  *  SUPPL currently, which is not 100% compatible
+ *
+ * 2000/06/22 ska
+ *	bugfix: unquote() calculated portion preceeding left quote
  */
 
 #include "config.h"
@@ -40,7 +43,7 @@ char *ltrim(char *str)
 
   while ((c = *str++) != '\0' && isspace(c))
     ;
-  
+
   return str - 1;
 }
 
@@ -205,7 +208,7 @@ char *unquote(const char *str, const char * const end)
   while((q = strpbrk(str, QUOTE_STR)) != NULL && q < end) {
   /* there is a quote at *q */
     /* copy the portion before q */
-    memcpy(h, str, len = str - q++);
+    memcpy(h, str, len = q++ - str);
     h += len;
     if((str = strchr(q, q[-1])) == NULL || str >= end) {
       /* no right quote */
@@ -213,7 +216,7 @@ char *unquote(const char *str, const char * const end)
       break;
     }
     /* copy the quoted portion */
-    memcpy(h, q, len = q - str++);
+    memcpy(h, q, len = str++ - q);
     h += len;
   }
   /* copy the remaining unquoted portion */

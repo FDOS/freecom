@@ -3,8 +3,18 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
-# Revision 1.1  2000/05/20 03:29:38  jimtabor
-# Initial revision
+# Revision 1.2  2000/06/23 06:02:56  skaus
+# chg: ECHO, FDDEBUG, BREAK, VERIFY: share ON/OFF recognition code
+# chg: shellname & shellver: type change: * --> const[]
+# add: DIRS, PUSHD, POPD, CDD, FEATURE_LAST_DIR
+# add: MISC.C: changeDrive(), cwd(), drvNum()
+# chg: Display text: CMDHELP_CD, ERROR_INVALID_DRIVE
+# bugfix: option are peristent for VAR command
+# bugfix: "CD C:" must display current working directory of drive C:
+# bugfix: unquote(): calculation of portion before left quote
+#
+# Revision 1.1.1.1  2000/05/20 03:29:38  jimtabor
+# The GNU GPL FreeCom Command Shell
 #
 # Revision 1.2  2000/03/30 14:07:03  jprice
 # Merge in changes from Steffen's 0.78ska2 code
@@ -20,7 +30,7 @@ LDFLAGS += /msl
 
 # Project specific C compiler flags
 MYCFLAGS_DBG = -DDEBUG=1
-MYCFLAGS_NDBG = 
+MYCFLAGS_NDBG =
 MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 
 .SOURCE.lib := $(LIBDIR:s/;/ /:u)
@@ -29,21 +39,22 @@ MYCFLAGS = $(null,$(NDEBUG) $(MYCFLAGS_DBG) $(MYCFLAGS_NDBG))
 # Sources of this make target
 SRC = alias.c batch.c beep.c break.c call.c cb_catch.asm cls.c cmdinput.c \
 	cmdline.c cmdtable.c command.c copy.c ctty.c date.c datefunc.c debug.c \
-	del.c dir.c echo.c environ.c err_hand.c error.c exec.c \
-	filecomp.c for.c goto.c history.c if.c init.c internal.c lh.asm \
-	loadhigh.c lowexec.asm messages.c misc.c nls.c openf.c parsenum.c path.c \
-	pause.c prompt.c session.c set.c shift.c \
-	spawn.asm swapexec.c tempfile.c time.c timefunc.c tmpnam.c truename.c \
-	type.c ver.c verify.c where.c
+	del.c dir.c dstack.c echo.c environ.c err_hand.c error.c exec.c \
+	fddebug.c filecomp.c for.c goto.c history.c if.c init.c internal.c \
+	lh.asm loadhigh.c lowexec.asm messages.c misc.c nls.c openf.c parsenum.c \
+	path.c pause.c prompt.c redir.c ren.c session.c set.c shift.c spawn.asm \
+	swapexec.c tempfile.c time.c timefunc.c tmpnam.c truename.c type.c ver.c \
+	verify.c where.c
 OBJ = alias.obj batch.obj beep.obj break.obj call.obj cb_catch.obj cls.obj \
 	cmdinput.obj cmdline.obj cmdtable.obj command.obj copy.obj ctty.obj \
-	date.obj datefunc.obj debug.obj del.obj dir.obj echo.obj environ.obj \
-	err_hand.obj error.obj exec.obj filecomp.obj for.obj goto.obj \
-	history.obj if.obj init.obj internal.obj lh.obj loadhigh.obj lowexec.obj \
-	messages.obj misc.obj nls.obj openf.obj parsenum.obj path.obj pause.obj \
-	prompt.obj redir.obj ren.obj session.obj set.obj shift.obj \
-	spawn.obj swapexec.obj tempfile.obj time.obj timefunc.obj tmpnam.obj \
-	truename.obj type.obj ver.obj verify.obj where.obj
+	date.obj datefunc.obj debug.obj del.obj dir.obj dstack.obj echo.obj \
+	environ.obj err_hand.obj error.obj exec.obj fddebug.obj filecomp.obj \
+	for.obj goto.obj history.obj if.obj init.obj internal.obj lh.obj \
+	loadhigh.obj lowexec.obj messages.obj misc.obj nls.obj openf.obj \
+	parsenum.obj path.obj pause.obj prompt.obj redir.obj ren.obj session.obj \
+	set.obj shift.obj spawn.obj swapexec.obj tempfile.obj time.obj \
+	timefunc.obj tmpnam.obj truename.obj type.obj ver.obj verify.obj \
+	where.obj
 HDR = alias.h batch.h cmdline.h command.h compat.h config.h datefunc.h \
 	debug.h err_hand.h loadhigh.h model.def nls.h openf.h session.h \
 	strings.h swapexec.h tempfile.h timefunc.h
@@ -52,7 +63,7 @@ HDR = alias.h batch.h cmdline.h command.h compat.h config.h datefunc.h \
 
 
 #	Default target
-all: com.com ptchldrv.exe
+all: com.com tools
 
 
 .INIT : $(CFG) __errl
@@ -67,132 +78,167 @@ com.map com.exe .UPDATEALL : $(OBJ)
 	$(MAK_EXE)
 
 com.com : com.exe strings.dat
-	@+copy /b com.exe + strings.dat $@
+	@+copy /b com.exe com_tmp.exe >nul
+	@+tdstrip com_tmp.exe
+	@+copy /b com_tmp.exe + strings.dat $@
+	@+del com_tmp.exe >nul
 
-ptchldrv.obj : ptchldrv.c config.h
+strings.h strings.dat .UPDATEALL .SETDIR=strings : strings.txt
+	@+echo Entering $(PWD)
+	$(MAKE) all
+	@+echo Leaving $(PWD)
 
-strings.h : strings/strings.txt
-	+fixstrs
+strings_clean .SETDIR=strings :
+	@+echo Entering $(PWD)
+	$(MAKE) clean
+	@+echo Leaving $(PWD)
+
+strings_clobber .SETDIR=strings :
+	@+echo Entering $(PWD)
+	$(MAKE) clobber
+	@+echo Leaving $(PWD)
+
+tools .SETDIR=tools :
+	@+echo Entering $(PWD)
+	$(MAKE) all
+	@+echo Leaving $(PWD)
+
+tools_clean .SETDIR=tools :
+	@+echo Entering $(PWD)
+	$(MAKE) clean
+	@+echo Leaving $(PWD)
+
+tools_clobber .SETDIR=tools :
+	@+echo Entering $(PWD)
+	$(MAKE) clobber
+	@+echo Leaving $(PWD)
 
 #MAKEDEP START
-if.obj : if.c \
-	 batch.h cmdline.h command.h config.h debug.h
+lowexec.obj : lowexec.asm \
+	 .\model.def
 openf.obj : openf.c \
 	 openf.h
-loadhigh.obj : loadhigh.c \
-	 cmdline.h command.h config.h debug.h loadhigh.h strings.h
-cmdline.obj : cmdline.c \
-	 cmdline.h command.h config.h debug.h
-ver.obj : ver.c \
-	 cmdline.h command.h config.h debug.h strings.h
-internal.obj : internal.c \
-	 cmdline.h command.h config.h debug.h strings.h
-time.obj : time.c \
-	 command.h config.h debug.h strings.h timefunc.h
-exec.obj : exec.c \
+messages.obj : messages.c \
+	 command.h config.h debug.h strings.h
+goto.obj : goto.c \
+	 batch.h cmdline.h command.h config.h debug.h strings.h
+dstack.obj : dstack.c \
+	 command.h config.h debug.h strings.h
+where.obj : where.c \
 	 command.h config.h debug.h
 copy.obj : copy.c \
 	 cmdline.h command.h config.h debug.h openf.h strings.h
-cmdtable.obj : cmdtable.c \
-	 command.h config.h debug.h strings.h
-cls.obj : cls.c \
-	 command.h config.h debug.h
-date.obj : date.c \
-	 command.h config.h datefunc.h debug.h strings.h
-set.obj : set.c \
-	 cmdline.h command.h config.h debug.h
-cb_catch.obj : cb_catch.asm \
-	 .\model.def
-type.obj : type.c \
-	 cmdline.h command.h config.h debug.h openf.h strings.h
-redir.obj : redir.c \
-	 command.h config.h debug.h
-dir.obj : dir.c \
+internal.obj : internal.c \
 	 cmdline.h command.h config.h debug.h strings.h
-messages.obj : messages.c \
-	 command.h config.h debug.h strings.h
-ctty.obj : ctty.c \
-	 command.h config.h debug.h openf.h strings.h
-path.obj : path.c \
-	 cmdline.h command.h config.h debug.h
-environ.obj : environ.c \
-	 command.h config.h debug.h
-echo.obj : echo.c \
-	 batch.h cmdline.h command.h config.h debug.h strings.h
-spawn.obj : spawn.asm
-parsenum.obj : parsenum.c \
-	 cmdline.h command.h config.h debug.h
 shift.obj : shift.c \
 	 batch.h command.h config.h debug.h
-lh.obj : lh.asm
+pause.obj : pause.c \
+	 batch.h command.h config.h debug.h strings.h
+date.obj : date.c \
+	 command.h config.h datefunc.h debug.h strings.h
+dir.obj : dir.c \
+	 cmdline.h command.h config.h debug.h strings.h
+command.obj : command.c \
+	 batch.h cmdline.h command.h config.h debug.h nls.h openf.h session.h \
+	strings.h swapexec.h
+swapexec.obj : swapexec.c \
+	 command.h compat.h config.h debug.h swapexec.h
+truename.obj : truename.c \
+	 command.h config.h debug.h
+err_hand.obj : err_hand.c \
+	 command.h config.h debug.h err_hand.h
+session.obj : session.c \
+	 command.h config.h debug.h session.h
+ctty.obj : ctty.c \
+	 command.h config.h debug.h openf.h strings.h
+cmdinput.obj : cmdinput.c \
+	 batch.h command.h config.h debug.h
+ren.obj : ren.c \
+	 cmdline.h command.h config.h debug.h
+exec.obj : exec.c \
+	 command.h config.h debug.h
+break.obj : break.c \
+	 command.h config.h debug.h strings.h
+for.obj : for.c \
+	 batch.h cmdline.h command.h config.h debug.h strings.h
+cb_catch.obj : cb_catch.asm \
+	 .\model.def
+alias.obj : alias.c \
+	 alias.h cmdline.h command.h config.h debug.h tempfile.h
+parsenum.obj : parsenum.c \
+	 cmdline.h command.h config.h debug.h
+set.obj : set.c \
+	 cmdline.h command.h config.h debug.h
+misc.obj : misc.c \
+	 batch.h command.h config.h debug.h strings.h
+ver.obj : ver.c \
+	 cmdline.h command.h config.h debug.h strings.h
+tmpnam.obj : tmpnam.c \
+	 command.h config.h debug.h
+path.obj : path.c \
+	 cmdline.h command.h config.h debug.h
+if.obj : if.c \
+	 batch.h cmdline.h command.h config.h debug.h
+history.obj : history.c \
+	 command.h config.h debug.h strings.h
+init.obj : init.c \
+	 batch.h cmdline.h command.h config.h debug.h err_hand.h strings.h \
+	timefunc.h
 tempfile.obj : tempfile.c \
 	 command.h config.h debug.h tempfile.h
-goto.obj : goto.c \
-	 batch.h cmdline.h command.h config.h debug.h strings.h
+timefunc.obj : timefunc.c \
+	 timefunc.h
+cmdtable.obj : cmdtable.c \
+	 command.h config.h debug.h strings.h
+cmdline.obj : cmdline.c \
+	 cmdline.h command.h config.h debug.h
 call.obj : call.c \
 	 batch.h command.h config.h debug.h
 beep.obj : beep.c \
 	 batch.h command.h config.h debug.h
-timefunc.obj : timefunc.c \
-	 timefunc.h
-filecomp.obj : filecomp.c \
+echo.obj : echo.c \
+	 batch.h cmdline.h command.h config.h debug.h strings.h
+loadhigh.obj : loadhigh.c \
+	 cmdline.h command.h config.h debug.h loadhigh.h strings.h
+environ.obj : environ.c \
 	 command.h config.h debug.h
-err_hand.obj : err_hand.c \
-	 command.h config.h debug.h err_hand.h
-swapexec.obj : swapexec.c \
-	 command.h compat.h config.h debug.h swapexec.h
-init.obj : init.c \
-	 batch.h cmdline.h command.h config.h debug.h err_hand.h strings.h \
-	timefunc.h
-debug.obj : debug.c \
-	 config.h debug.h
-break.obj : break.c \
-	 command.h config.h debug.h strings.h
-verify.obj : verify.c \
-	 command.h config.h debug.h strings.h
-error.obj : error.c \
-	 command.h config.h debug.h strings.h
-where.obj : where.c \
-	 command.h config.h debug.h
-command.obj : command.c \
-	 batch.h cmdline.h command.h config.h debug.h nls.h openf.h session.h \
-	strings.h swapexec.h
-pause.obj : pause.c \
-	 batch.h command.h config.h debug.h strings.h
-del.obj : del.c \
-	 cmdline.h command.h config.h debug.h strings.h
-session.obj : session.c \
-	 command.h config.h debug.h session.h
-alias.obj : alias.c \
-	 alias.h cmdline.h command.h config.h debug.h tempfile.h
-truename.obj : truename.c \
-	 command.h config.h debug.h
-tmpnam.obj : tmpnam.c \
+type.obj : type.c \
+	 cmdline.h command.h config.h debug.h openf.h strings.h
+prompt.obj : prompt.c \
+	 cmdline.h command.h config.h debug.h
+cls.obj : cls.c \
 	 command.h config.h debug.h
 batch.obj : batch.c \
 	 batch.h cmdline.h command.h config.h debug.h
-lowexec.obj : lowexec.asm \
-	 .\model.def
-for.obj : for.c \
-	 batch.h cmdline.h command.h config.h debug.h strings.h
-misc.obj : misc.c \
-	 batch.h command.h config.h debug.h
-history.obj : history.c \
+debug.obj : debug.c \
+	 command.h config.h debug.h
+spawn.obj : spawn.asm
+error.obj : error.c \
 	 command.h config.h debug.h strings.h
 datefunc.obj : datefunc.c \
 	 datefunc.h
 nls.obj : nls.c \
 	 config.h debug.h nls.h
-ren.obj : ren.c \
-	 cmdline.h command.h config.h debug.h
-prompt.obj : prompt.c \
-	 cmdline.h command.h config.h debug.h
-cmdinput.obj : cmdinput.c \
-	 batch.h command.h config.h debug.h
+time.obj : time.c \
+	 command.h config.h debug.h strings.h timefunc.h
+filecomp.obj : filecomp.c \
+	 command.h config.h debug.h
+fddebug.obj : fddebug.c \
+	 command.h config.h debug.h strings.h
+lh.obj : lh.asm
+verify.obj : verify.c \
+	 command.h config.h debug.h strings.h
+del.obj : del.c \
+	 cmdline.h command.h config.h debug.h strings.h
+redir.obj : redir.c \
+	 command.h config.h debug.h
 DYNSOURCES =
 #MAKEDEP STOP
 
-clean :
+clobber : tools_clobber strings_clobber clean
+	$(RM) $(RMFLAGS) *.exe *.com
+
+clean : tools_clean strings_clean
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com
 
 
@@ -209,7 +255,7 @@ CONF_BASE =	\
 -w
 
 .IF $(_COMPILER)==BC5
-CONFIGURATION += -RT- -x- 
+CONFIGURATION += -RT- -x-
 .ENDIF
 
 CONF_DBG =	$(MYCFLAGS_DBG)
@@ -218,9 +264,6 @@ CONF_NDBG =	$(MYCFLAGS_NDBG)
 
 .ENDIF
 
-$(CFG) : makefile
-	@+-echo Creating compiler configuration file: $(CFG)
-	@+type $(mktmp 	$(CONFIGURATION)) >$@
 
 .ENDIF
 #-weas	\

@@ -61,7 +61,8 @@ EXE_dependencies =  \
  verify.obj \
  datefunc.obj \
  timefunc.obj \
- filecomp.obj
+ filecomp.obj \
+ dstack.obj
 
 #		*Explicit Rules*
 command.exe: command.cfg $(EXE_dependencies)
@@ -108,6 +109,7 @@ cls.obj+
 verify.obj+
 datefunc.obj+
 timefunc.obj+
+dstack.obj+
 filecomp.obj
 command
 		# no map file
@@ -116,91 +118,93 @@ cs.lib
 
 
 #		*Individual File Dependencies*
-alias.obj: command.cfg alias.c 
+alias.obj: command.cfg alias.c
 
-batch.obj: command.cfg batch.c 
+batch.obj: command.cfg batch.c
 
-cmdinput.obj: command.cfg cmdinput.c 
+dstack.obj: command.cfg dstack.c
 
-command.obj: command.cfg command.c 
+cmdinput.obj: command.cfg cmdinput.c
 
-dir.obj: command.cfg dir.c 
+command.obj: command.cfg command.c
 
-environ.obj: command.cfg environ.c 
+dir.obj: command.cfg dir.c
 
-exec.obj: command.cfg exec.c 
+environ.obj: command.cfg environ.c
 
-history.obj: command.cfg history.c 
+exec.obj: command.cfg exec.c
 
-internal.obj: command.cfg internal.c 
+history.obj: command.cfg history.c
 
-loadhigh.obj: command.cfg loadhigh.c 
+internal.obj: command.cfg internal.c
 
-prompt.obj: command.cfg prompt.c 
+loadhigh.obj: command.cfg loadhigh.c
 
-redir.obj: command.cfg redir.c 
+prompt.obj: command.cfg prompt.c
 
-where.obj: command.cfg where.c 
+redir.obj: command.cfg redir.c
 
-lowexec.obj: command.cfg lowexec.asm 
+where.obj: command.cfg where.c
+
+lowexec.obj: command.cfg lowexec.asm
 	$(TASM) /MX /ZI /O LOWEXEC.ASM,LOWEXEC.OBJ
 
-lh.obj: command.cfg lh.asm 
+lh.obj: command.cfg lh.asm
 	$(TASM) /MX /ZI /O LH.ASM,LH.OBJ
 
-tempfile.obj: command.cfg tempfile.c 
+tempfile.obj: command.cfg tempfile.c
 
-date.obj: command.cfg date.c 
+date.obj: command.cfg date.c
 
-err_hand.obj: command.cfg err_hand.c 
+err_hand.obj: command.cfg err_hand.c
 
-type.obj: command.cfg type.c 
+type.obj: command.cfg type.c
 
-time.obj: command.cfg time.c 
+time.obj: command.cfg time.c
 
-misc.obj: command.cfg misc.c 
+misc.obj: command.cfg misc.c
 
-error.obj: command.cfg error.c 
+error.obj: command.cfg error.c
 
-del.obj: command.cfg del.c 
+del.obj: command.cfg del.c
 
-ren.obj: command.cfg ren.c 
+ren.obj: command.cfg ren.c
 
-set.obj: command.cfg set.c 
+set.obj: command.cfg set.c
 
-ver.obj: command.cfg ver.c 
+ver.obj: command.cfg ver.c
 
-cmdtable.obj: command.cfg cmdtable.c 
+cmdtable.obj: command.cfg cmdtable.c
 
-truename.obj: command.cfg truename.c 
+truename.obj: command.cfg truename.c
 
-call.obj: command.cfg call.c 
+call.obj: command.cfg call.c
 
-echo.obj: command.cfg echo.c 
+echo.obj: command.cfg echo.c
 
-for.obj: command.cfg for.c 
+for.obj: command.cfg for.c
 
-goto.obj: command.cfg goto.c 
+goto.obj: command.cfg goto.c
 
-if.obj: command.cfg if.c 
+if.obj: command.cfg if.c
 
-beep.obj: command.cfg beep.c 
+beep.obj: command.cfg beep.c
 
-pause.obj: command.cfg pause.c 
+pause.obj: command.cfg pause.c
 
-shift.obj: command.cfg shift.c 
+shift.obj: command.cfg shift.c
 
-path.obj: command.cfg path.c 
+path.obj: command.cfg path.c
 
-cls.obj: command.cfg cls.c 
+cls.obj: command.cfg cls.c
 
-verify.obj: command.cfg verify.c 
+verify.obj: command.cfg verify.c
 
-datefunc.obj: command.cfg datefunc.c 
+datefunc.obj: command.cfg datefunc.c
 
-timefunc.obj: command.cfg timefunc.c 
+timefunc.obj: command.cfg timefunc.c
 
-filecomp.obj: command.cfg filecomp.c 
+filecomp.obj: command.cfg filecomp.c
 
 #		*Compiler Configuration File*
 command.cfg: command.mak

@@ -76,8 +76,10 @@ static unsigned msgSegm = 0;    /* strings segment if loaded */
 
 void unloadMsgs(void)  /* called at exit */
 {
-  if (msgSegm)
+  if (msgSegm) {
     freeBlk(msgSegm);
+    dprintf( ("[Message segment deallocated.]\n") );
+  }
   msgSegm = 0;
 }
 

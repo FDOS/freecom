@@ -44,6 +44,10 @@
  *
  * 1999/07/02 ska
  * chg: removed exist(), replaced by dfnstat() [reduces size of image]
+ *
+ *	2000/06/22 ska
+ *	add: cwd(int drive); changeDrive(int drive), drvNum(int drive)
+ *	add: onoffStr()
  */
 
 #include "config.h"
@@ -64,6 +68,8 @@
 #include "command.h"
 #include "batch.h"
 #include <dfn.h>
+
+#include "strings.h"
 
 /*
  * get a character out-of-band and honor Ctrl-Break characters
@@ -242,3 +248,61 @@ void dispCount(int cnt, const char * const zero, const char * const one
   default: printf(multiple, cnt); break;
   }
 }
+
+int drvNum(int drive)
+{
+	if(drive == 0)		/* change to current drive */
+		return getdisk();
+	if(drive <= 32)
+		return drive - 1;
+	return toupper(drive) - 'A';
+}
+
+/*
+ *	Retreive the current working directory including drive letter
+ *	Returns in a dynamically allocated buffer (free'ed by the caller)
+ *	on error: Displays "out of memory"
+ */
+char *cwd(int drive)
+{	char *h;
+
+	if((h = dfnpath(drive)) != NULL)
+		return h;
+
+	if(drive)
+		error_no_cwd(drive);
+	else error_out_of_memory();
+
+	return NULL;
+}
+
+int changeDrive(int drive)
+{	drive = drvNum(drive);
+
+    setdisk(drive);
+
+    if (getdisk() == drive)
+    	return 0;
+
+  displayString(TEXT_ERROR_INVALID_DRIVE, drive + 'A');
+
+  return 1;
+}
+
+/*
+ *	Tests if a string is ON or OFF
+ */
+enum OnOff onoffStr(char *line)
+{
+	if(!line)
+		return OO_Null;
+	if(!*line)
+		return OO_Empty;
+  if (stricmp(line, D_OFF) == 0)
+  	return OO_Off;
+  if (stricmp(line, D_ON) == 0)
+    return OO_On;
+
+return OO_Other;
+}
+

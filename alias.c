@@ -285,7 +285,7 @@ void aliasexpand(char *cmd, int maxlen)
           error_command_too_long();
           cmd[0] = '\0';        /* the parser won't cause any problems
           							with an empty line */
-          return; 
+          return;
         }
         else
         {

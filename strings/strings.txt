@@ -87,7 +87,7 @@ Required parameter missing.
 .
 
 :TEXT_ERROR_INVALID_DRIVE
-Invalid drive specification.
+Invalid drive %c:.
 .
 
 :TEXT_ERROR_BADCOMMAND
@@ -313,6 +313,11 @@ The current information cannot be preserved during the call of the
 program. Please refer to above error messages for the reason of
 this problem.
 .
+
+:TEXT_ERROR_CWD_FAILED
+Drive %c: not responding or out of internal memory.
+.
+
 #
 # Informational messages
 #
@@ -370,39 +375,43 @@ All files in directory will be deleted!
 Are you sure (Y/N)?
 ,
 
+:TEXT_DIRSTACK_EMPTY
+Directory stack empty.
+.
+
 :TEXT_MSG_VER_BASIC
-Copyright (C) 1994-1998 Tim Norman and others.
+Copyright (C) 1994-2000 Tim Norman and others.
 
 The FreeDOS Command Shell comes with ABSOLUTELY NO WARRANTY.
 For details type: "ver /w". This is free software, and you are
 welcome to redistribute it under certain conditions; type "ver /d"
 for details.  Type "ver /c" for a listing of credits.
 
-Send bug reports to command@gcfl.net.
+Send bug reports to fd-freecom@topica.com.
 Updates are available from http://www.gcfl.net/FreeCom
 .
 
 :TEXT_MSG_VER_WARRANTY
-Copyright (C) 1994-1998 Tim Norman and others.
+Copyright (C) 1994-2000 Tim Norman and others.
 
 This program is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details.
 
-Send bug reports to command@gcfl.net.
+Send bug reports to fd-freecom@topica.com.
 Updates are available from http://www.gcfl.net/FreeCom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
-Copyright (C) 1994-1998 Tim Norman and others.
+Copyright (C) 1994-2000 Tim Norman and others.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.
 
-Send bug reports to command@gcfl.net.
+Send bug reports to fd-freecom@topica.com.
 Updates are available from http://www.gcfl.net/FreeCom
 .
 
@@ -416,9 +425,9 @@ The FreeDOS Command Shell developed by:
 		Rob Lake        John P Price
 		Hans B Pufal
 
-Currently maintained by John P Price.
+Currently maintained by Steffen Kaiser.
 
-Send bug reports to command@gcfl.net.
+Send bug reports to fd-freecom@topica.com.
 Updates are available from http://www.gcfl.net/FreeCom
 .
 
@@ -467,10 +476,27 @@ CHDIR [drive:][path]
 CHDIR[..]
 CD [drive:][path]
 CD[..]
+CD -
 
   ..   Specifies that you want to change to the parent directory.
+  -    If "last directory" feature is enabled, change to last directory.
 
 Type CD drive: to display the current directory in the specified drive.
+Type CD without parameters to display the current drive and directory.
+See also: CDD
+.
+
+:TEXT_CMDHELP_CDD
+Displays the name of or changes the current directory and drive.
+
+CDD [drive:][path]
+CDD[..]
+
+  ..   Specifies that you want to change to the parent directory.
+  -    If "last directory" feature is enabled, change to last directory.
+
+If drive: is specified, the current working drive is changed; this
+is the only different to "CHDIR".
 Type CD without parameters to display the current drive and directory.
 .
 
@@ -769,6 +795,27 @@ codes:
   $_   Carriage return and linefeed
 
 Type PROMPT without parameters to reset the prompt to the default setting.
+.
+
+:TEXT_CMDHELP_PUSHD
+Pushes current directory onto the directory stack, with the option to
+change current working directory.
+
+PUSHD [[drive:]path]
+  Where [drive:]path is a path to which you wish to change.
+.
+
+:TEXT_CMDHELP_POPD
+Pops a directory off of the directory stack, and changes to it.
+
+POPD [*]
+  The '*' parameter clears the directory stack.
+.
+
+:TEXT_CMDHELP_DIRS
+Displays the contents of the directory stack.
+
+DIRS
 .
 
 :TEXT_CMDHELP_RD

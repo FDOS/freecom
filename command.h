@@ -27,6 +27,12 @@
  * 2000/01/15 ska
  * add: prototypes of error functions for CTTY implementation
  * add: declaration of oldinfd & oldoutfd; for CTTY, too
+ *
+ * 2000/06/22 ska
+ *	add: DIRS/PUSHD/POPD patch D. Lucas Parker
+ *	add: CDD
+ *	chg: shellver & shellname: from pointer --> const[]
+ *	add: enum OnOff, onoffStr()
  */
 
 #define MAX_INTERNAL_COMMAND_SIZE 256
@@ -45,6 +51,14 @@ enum InternalErrorCodes {
 	E_Ignore			/* Error that can be ignored */
 };
 
+enum OnOff {		/* ON/OFF tester */
+	OO_Empty = 0,		/* Empty line */
+	OO_Null,			/* NULL line */
+	OO_On,				/* "ON" */
+	OO_Off,				/* "OFF" */
+	OO_Other			/* else */
+};
+
 #define EnvSeg (*(unsigned far*)MK_FP(_psp, 0x2c))
 #define OwnerPSP (*(unsigned far *)MK_FP(_psp, 0x16))
 
@@ -56,8 +70,8 @@ enum InternalErrorCodes {
 
 #define cbreak chkCBreak(0)
 
-extern char *shellver;
-extern char *shellname;
+extern const char shellver[];
+extern const char shellname[];
 
 #define FINDFIRST(path,attrib,ffblk) findfirst(path,attrib,ffblk)
 #define FINDNEXT(ffblk)  findnext(ffblk)
@@ -93,6 +107,7 @@ int process_input(int xflg, char *cmdline);
 /* prototypes for INTERNAL.C */
 int cmd_break(char *);
 int cmd_chdir(char *);
+int cmd_cdd(char *);
 int cmd_cls(char *);
 int cmd_copy(char *);
 int cmd_ctty(char *);
@@ -118,6 +133,9 @@ int cmd_ver(char *);
 int cmd_verify(char *);
 int cmd_vol(char *);
 int internal_exit(char *);
+int cmd_pushd(char *);          /*DLP 06/01/2000 */
+int cmd_popd(char *);           /*DLP 06/01/2000 */
+int cmd_dirs(char *);           /*DLP 06/01/2000 */
 
 /* prototypes for ENVIRON.C */
 char *getEnv(char *);
@@ -175,6 +193,10 @@ char *comFile(void);
 char *comPathFile(const char * const fname);
 void dispCount(int cnt, const char * const zero, const char * const one
  , const char * const multiple);
+char *cwd(int drive);
+int changeDrive(int drive);
+int drvNum(int drive);
+enum OnOff onoffStr(char *line);
 
 /* Prototypes for ERROR.C */
 void error_no_pipe(void);
@@ -222,6 +244,7 @@ void error_save_session(void);
 void error_restore_session(void);
 void error_no_rw_device(const char * const);
 void error_ctty_dup(const char * const);
+void error_no_cwd(int drive);
 void dispCopy(const char src[], const char dst[], int append);
 void msg_pause(void);
 

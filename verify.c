@@ -14,8 +14,6 @@
 #ifdef INCLUDE_CMD_VERIFY
 
 #include <assert.h>
-#include <stdio.h>
-#include <string.h>
 #include <dos.h>
 
 #include "command.h"
@@ -24,15 +22,16 @@
 #pragma argsused
 int cmd_verify(char *param)
 {
-  if (!param || !*param)
-    displayString(TEXT_MSG_VERIFY_STATE, getverify()? D_ON : D_OFF);
-  else if (stricmp(param, D_OFF) == 0)
-    setverify(0);
-  else if (stricmp(param, D_ON) == 0)
-    setverify(1);
-  else
-    displayString(TEXT_ERROR_ON_OR_OFF);
-
+  switch(onoffStr(param)) {
+  	default:
+		displayString(TEXT_ERROR_ON_OR_OFF);
+		return 1;
+	case OO_Null:	case OO_Empty:
+		displayString(TEXT_MSG_VERIFY_STATE, getverify() ? D_ON : D_OFF);
+		break;
+  	case OO_Off:	setverify(0);	break;
+  	case OO_On:		setverify(1);	break;
+	}
   return 0;
 }
 

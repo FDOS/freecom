@@ -97,6 +97,8 @@
  * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
  * - added config.h include
  *
+ *	2000/06/22 ska
+ *	add: CDD (implies existance of CHDIR)
  */
 
 #include "config.h"
@@ -124,42 +126,42 @@
  *
  */
 
-#if defined(INCLUDE_CMD_CHDIR)
-#define INCLUDE_DIRECTORY_HANDLER
-#elif defined(INCLUDE_CMD_MDDIR)
-#define INCLUDE_DIRECTORY_HANDLER
-#elif defined(INCLUDE_CMD_RMDIR)
-#define INCLUDE_DIRECTORY_HANDLER
-#endif
+#if defined(INCLUDE_CMD_CHDIR)	\
+ || defined(INCLUDE_CMD_MDDIR)	\
+ || defined(INCLUDE_CMD_RMDIR)	\
+ || defined(INCLUDE_CMD_CDD)
 
-#ifdef INCLUDE_DIRECTORY_HANDLER
 static int directory_handler(char *rest,
                       int (*func) (const char *), char *fctname)
 { char **argv, *dir;
   int argc, opts;
+  int cdd, rv, freeDir;
 
   assert(func);
 
   if((argv = scanCmdline(rest, NULL, NULL, &argc, &opts)) == NULL)
     return 1;
 
+	cdd = freeDir = 0;
+	rv = 1;
+
+  if(func == (int (*)(const char*))cmd_cdd) {
+		func = chdir;
+		cdd = 1;
+	}
 
   /* if doing a CD and no parameters given, print out current directory */
   if (func == chdir && argc == 0)
   {
-    if((dir = dfnpath(0)) == NULL) {
-      error_out_of_memory();
-      freep(argv);
-      return 1;
-    }
+    if((dir = cwd(0)) == NULL)
+      goto errRet;
     else {
       puts(dir);
-      free(dir);
+      freeDir = 1;
     }
   } else if(argc != 1) {
-  error_req_param_missing();
-    freep(argv);
-    return 1;
+    error_req_param_missing();
+    goto errRet;
   }
   else {
     assert(argv[0]);
@@ -168,17 +170,53 @@ static int directory_handler(char *rest,
     if(dir > &argv[0][1] && *--dir == '\\' && dir[-1] != ':')
       *dir = '\0';
 
-    dprintf(("%s: '%s'\n", fctname, argv[0]));
-    if (func(argv[0]) != 0)
+	dir = argv[0];
+	if(func == chdir) {
+#ifdef FEATURE_LAST_DIR
+		static char *lastdir = NULL;
+
+		if(strcmp(dir, "-") == 0) {
+			/* change to last directory */
+			dir = lastdir;
+			freeDir = 1;
+		}
+		else
+			free(lastdir);
+
+		lastdir = cwd(0);
+		if(!dir) 	/* "CD -" without a CD before at all */
+			goto okRet;
+#endif
+		if(strlen(dir) >= 2 && dir[1] == ':') {
+			if(cdd) {
+				if(changeDrive(*dir) != 0)
+					goto errRet;
+				if(*(dir += 2) == '\0')		/* only change drive */
+					goto okRet;
+			} else if(!dir[2]) {	/* Real CHDIR displays CWD of specified drive */
+				assert(freeDir == 0);
+				if((dir = cwd(*dir)) != NULL) {
+					puts(dir);
+					freeDir = 1;
+					goto okRet;
+				} else
+					goto errRet;
+			}
+		}
+	}
+    dprintf(("%s: '%s'\n", fctname, dir));
+    if (func(dir) != 0)
     {
       perror(fctname);
-      freep(argv);
-      return 1;
+      goto errRet;
     }
   }
 
+okRet:
+	rv = 0;
+errRet:
   freep(argv);
-  return 0;
+  return rv;
 }
 #endif
 
@@ -191,6 +229,13 @@ static int directory_handler(char *rest,
 int cmd_chdir(char *rest)
 {
   return directory_handler(rest, chdir, "CHDIR");
+}
+#endif
+
+#ifdef INCLUDE_CMD_CDD
+int cmd_cdd(char *rest)
+{
+  return directory_handler(rest, (int (*)(const char*))cmd_cdd, "CDD");
 }
 #endif
 

@@ -28,6 +28,7 @@ date.c          Date command code
 datefunc.c      Get and set date functions for Pacific C compatibility
 del.c           Implements del command
 dir.c           Directory listing code
+dstack.c        Directory stack commands (DIRS/PUSHD/POPD)
 echo.c          Implements echo command
 environ.c       Environment handling
 err_hand.c      Critical Error Handling code
@@ -76,3 +77,5 @@ makecom.bat     Make com file from exe
 clean.bat       Deletes the .bak and .obj files (cleans up)
 
 TESTS/          Test files and documents
+STRINGS/	Strings file and program(s) to deal with them
+TOOLS/		various tools, see TOOLS/FILES.TXT

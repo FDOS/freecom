@@ -55,7 +55,7 @@ int fdattr(const int fd)
   : 0;            /* error */
 }
 /*
- *      Check if the passed file descriptor is connected to a 
+ *      Check if the passed file descriptor is connected to a
  *      character device rather than a block device
  *
  *      Return:

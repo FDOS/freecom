@@ -79,6 +79,9 @@
  *
  * 2000/01/05 ska
  * add: feature command line logging
+ *
+ * 2000/06/22 ska
+ * add: feature: last directory
  */
 
 #include "config.h"
@@ -171,6 +174,9 @@ int showcmds(char *rest)
 #endif
 #ifdef FEATURE_CALL_LOGGING
   printf("[start logging] ");
+#endif
+#ifdef FEATURE_LAST_DIR
+  printf("[last dir] ");
 #endif
   putchar('\n');
 

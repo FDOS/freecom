@@ -102,7 +102,7 @@
 ;	swapfname - swap file name (may be undefined if the
 ;		    "method" parameters disallows file swap).
 ;		    The string must be zero terminated, even
-;		    when calling from Pascal. For Pascal, the 
+;		    when calling from Pascal. For Pascal, the
 ;		    length byte of the string is ignored.
 ;
 ;   Returns:
@@ -136,8 +136,8 @@
 ;
 ;	When PAS_FREE is TRUE, the unused heap, i.e. the space between
 ;	HeapPtr and FreePtr for TP 5.x, or the space between HeapPtr and
-;	HeapEnd for TP6.x, is temporarily chained into the DOS free space 
-;	list, and is not swapped out. Depending on your applications heap 
+;	HeapEnd for TP6.x, is temporarily chained into the DOS free space
+;	list, and is not swapped out. Depending on your applications heap
 ;	usage, this can save a large amount of swap space, and considerably
 ;	speed up the swap.
 ;
@@ -310,8 +310,8 @@ prep_block	ends
 ;	It would also be possible to use an absolute segment for the
 ;	definition, but this is not supported by the Turbo Pascal linker.
 ;
-;	All references to low-core variables from low-core itself 
-;	are made through DS, so we define a text macro "lmem" that 
+;	All references to low-core variables from low-core itself
+;	are made through DS, so we define a text macro "lmem" that
 ;	expands to "ds:". When setting up low core from the normal
 ;	code, ES is used to address low memory, so this can't be used.
 ;
@@ -373,7 +373,7 @@ codebeg		=	param_len
 lowcode_begin:
 ;
 ;       The following parts of the program code will be moved to
-;	low core and executed there, so there must be no absolute 
+;	low core and executed there, so there must be no absolute
 ;	memory references.
 ;	The call to get_mcb must be made indirect, since the offset
 ;	from the swap-in routine to get_mcb will not be the same
@@ -430,7 +430,7 @@ getmcb_loop:
 	mov	es:paras,bx
 ;
 ;	We have found an MCB at the right address. If it's not free,
-;	abort. Else check the size. If the size is ok, we're done 
+;	abort. Else check the size. If the size is ok, we're done
 ;	(more or less).
 ;
 mcb_found:
@@ -542,7 +542,7 @@ noenvcpy:
         mov	ah,04ah
 	int     21h                     ; resize memory block
 ;
-;	Again walk all MCBs. This time, all blocks owned by the 
+;	Again walk all MCBs. This time, all blocks owned by the
 ;	current process are released.
 ;
 	mov	si,lmem lprep.first_mcb
@@ -1013,7 +1013,7 @@ ems_curpage	dw		?	; current EMS page number
 ems_curoff	dw		?	; current EMS offset (paragraph)
 ;
 ;--------------------------------------------------------------------
-;       
+;
 	.code
 ;
 ;	swapout_ems:	swap out an MCB block to EMS.
@@ -1671,8 +1671,8 @@ begin_swap:
 	mov	ems_curpage,0
 	mov	ems_curoff,ems_parasize
 ;
-;	Do the swapping. Each MCB block (except the last) has an 
-;	"mcbdesc" structure appended that gives location and size 
+;	Do the swapping. Each MCB block (except the last) has an
+;	"mcbdesc" structure appended that gives location and size
 ;	of the next MCB.
 ;
 swapout_main:
@@ -1900,7 +1900,7 @@ swoc_ready:
 	mov	ds:retflags,0
 ;
 ;
-;	If 'NO_INHERIT' is nonzero, save the entries of the 
+;	If 'NO_INHERIT' is nonzero, save the entries of the
 ;	handle table, and set the last 15 to 0ffh (unused).
 ;
 	IF	NO_INHERIT
