@@ -1,0 +1,451 @@
+$Id$
+Implementation of the LOADHIGH (aka LH) command
+	-- 2002/04/12 ska
+
+See below test results (tools reside in TOOLS directory).
+
+DISP_AST reveals that LH:
+1) enables "High First" within the allocation strategy,&
+2) Links in the UMB chain.
+
+MCB_VIEW reveals that MS COMMAND'S LH:
+1) leaves the conventional memory untouched,
+2) if /L switch is present, "hides" unused UMB regions (see below),&
+3) when the LH'ed command terminates, all "hidden" UMB regions
+	are restorred, regardless if the particular block was hidden by
+	the particular instance of COMMAND.
+
+MS COMMAND locks currently unused MCB's by allocating them for
+the system (owner PSP == 8). The useage of system MCBs can be
+determined from the name field of the MCB, e.g.:
+SC = System Code / lock outs
+SD = System Data (contains subchain)
+HIDDEN = MCBs hidden from DOS's memory management
+
+Considerations:
+1) If /L is present, all non-present UMB regions are hidden; but the
+ones "present" are _not_ unhidden.
+2) When loading high (regardless if with or without /L) _all_ hidden UMB
+regions are unhidden upon return of the LH'ed command.
+--> Ergo: There is no record to keep, which MCB had been hidden.
+
+An implementation of LOADHIGH might look like this:
+cmd_loadhigh(char *cmdline)
+{
+	quaff /L and /S option(s) from begin of cmdline;
+	if(/L present) {
+		for all UMB regions {
+			if(UMB region listed in /L) {
+				if(size is specified for UMB region) {
+					hide all unused MCBs in UMB region, but the
+					smallest one larger than or equal to size;
+					/* keep just _one_ MCB that has the requested
+						size at minimum */
+					if(/S && there is one unused MCB left therein) {
+						shrink this MCB to size;
+					}
+				}
+				/* no size --> use all MCBs therein */
+			} else {
+				hide all unused MCBs in UMB region;
+			}
+		}
+	}
+	save allocation strategy and UMB link state;
+	allocation strategy |= 0x80;	/* include UMBs in mem alloc */
+	UMB Link state := 1;
+	exec(cmdline);
+	restore allocation strategy and UMB link state;
+	unhide all MCBs;
+}
+
+
+======== Display the allocation stratedy and UMB Link state
+C> ver/r
+MS-DOS Version 6.20
+Revision A
+DOS ist im oberen Speicherbereich (High Memory Area)
+C> DISP_AST
+Allocation strategy: 0x0000
+UMB link state: 0x0000
+C> LH DISP_AST
+Allocation strategy: 0x0080
+UMB link state: 0x0001
+
+======== Test the MCB chain #1
+
+MS-DOS Version 6.20
+Revision A
+DOS ist im oberen Speicherbereich (High Memory Area)
+==== CONFIG.SYS
+device=himem.sys
+dos=high,umb
+device=emm386.exe noems
+==== AUTOEXEC.BAT <<empty>>
+===
+>> Started: mcb_view
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 0006 054b >n?Zu vie< myEnv
+054b 0523 054b >MCB_VIEW< itsMe
+0a6f 94c9 0000 >з???Г?P.< unused
+9f39 0001 0000 >х???,   < unused
+9f3b 0004 054b >\tool;c:< mySecondaryBlocks
+9f40 282e 0008 >SC      < system
+c76f 008f 0000 >        < unused
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0000 >        < unused
+>> Started: LH /L:1 mcb_view mcb_view.exe
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 0523 0544 >MCB_VIEW< itsMe
+0a68 94d7 0000 >Ч!=яяt?=< unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < myEnv
+c776 0081 0000 >        < unused
+c7f8 0001 0000 >        < unused
+c7fa 0004 0544 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+Chain to next program: 'mcb_view.exe'
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 0523 0544 >MCB_VIEW< isPSP
+0a68 0006 0a6f >Ч!=яяt?=< myEnv
+0a6f 0523 0a6f >mcb_view< itsMe
+0f93 8fac 0000 >Sie kann< unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < env(MCB_VIEW)
+c776 007c 0000 >        < unused
+c7f3 0001 0000 >        < unused
+c7f5 0004 0a6f >        < mySecondaryBlocks
+c7fa 0004 0544 >        < ownedBy(MCB_VIEW)
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+>> Started: mcb_view
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 0006 054b >MCB_VIEW< myEnv
+054b 0523 054b >MCB_VIEW< itsMe
+0a6f 94c9 0000 >mcb_view< unused
+9f39 0001 0000 >х???,   < unused
+9f3b 0004 054b >        < mySecondaryBlocks
+9f40 282e 0008 >SC      < system
+c76f 0006 0000 >        < unused
+c776 007c 0000 >        < unused
+c7f3 0001 0000 >        < unused
+c7f5 0004 0000 >        < unused
+c7fa 0004 0000 >        < unused
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0000 >        < unused
+>> Started: LH /L:1 mcb_view c:\command.com /c mcb_view
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 0523 0544 >MCB_VIEW< itsMe
+0a68 94d7 0000 >G?|фu?&ѓ< unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < myEnv
+c776 0081 0000 >        < unused
+c7f8 0001 0000 >яяяяяяяя< unused
+c7fa 0004 0544 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+Chain to next program: 'c:\command.com'
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 0523 0544 >MCB_VIEW< isPSP
+0a68 0006 0a6f >G?|фu?&ѓ< ownedBy(command )
+0a6f 00bc 0a6f >command < isPSP
+0b2c 0010 0a6f >arameter< env(command )
+0b3d 0006 0b44 >?Р?п????< myEnv
+0b44 0523 0b44 >MCB_VIEW< itsMe
+1068 8ed7 0000 >џиР!иЮ  < unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < env(MCB_VIEW)
+c776 007c 0000 >        < unused
+c7f3 0001 0000 >        < unused
+c7f5 0004 0b44 >        < mySecondaryBlocks
+c7fa 0004 0544 >        < ownedBy(MCB_VIEW)
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+>> Started: LH /L:1 mcb_view +c:\command.com /c LH /L:2 mcb_view
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< itsMe
+18b5 868a 0000 >h?Д^?&Д_< unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < myEnv
+c776 0081 0000 >        < unused
+c7f8 0001 0000 >яяяяяяяя< unused
+c7fa 0004 0544 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+Chain to next program: 'c:\command.com'
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< isPSP
+18b5 0006 18bc >h?Д^?&Д_< ownedBy(command )
+18bc 00bc 18bc >command < isPSP
+1979 0010 18bc >arameter< env(command )
+198a 0006 1991 >?Р?п????< myEnv
+1991 1370 1991 >MCB_VIEW< itsMe
+2d02 7236 0000 >Fц?     < unused
+9f39 0001 0000 >х???,   < unused
+9f3b 0004 1991 >        < mySecondaryBlocks
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < env(MCB_VIEW)
+c776 0083 0008 >HIDDEN  < system
+c7fa 0004 0544 >        < ownedBy(MCB_VIEW)
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+>> This is the 2nd output of the 1st MCB_VIEW when COMMAND returned!!
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< itsMe
+18b5 0006 0000 >h?Д^?&Д_< unused
+18bc 00bc 0000 >command < unused
+1979 0010 0000 >arameter< unused
+198a 85b5 0000 >?Р?п????< unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < myEnv
+c776 0083 0000 >        < unused
+c7fa 0004 0544 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0000 >        < unused
+>> Started: LH /L:1 mcb_view +c:\command.com /c LH mcb_view
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< itsMe
+18b5 868a 0000 >        < unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < myEnv
+c776 0081 0000 >        < unused
+c7f8 0001 0000 >        < unused
+c7fa 0004 0544 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+Chain to next program: 'c:\command.com'
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< isPSP
+18b5 0006 18bc >        < ownedBy(command )
+18bc 00bc 18bc >command < isPSP
+1979 0010 18bc >arameter< env(command )
+198a 1370 198a >MCB_VIEW< itsMe
+2cfb 7244 0000 >        < unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < env(MCB_VIEW)
+c776 0006 198a >        < myEnv
+c77d 0075 0000 >        < unused
+c7f3 0001 0000 >        < unused
+c7f5 0004 198a >        < mySecondaryBlocks
+c7fa 0004 0544 >        < ownedBy(MCB_VIEW)
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< itsMe
+18b5 0006 0000 >        < unused
+18bc 00bc 0000 >command < unused
+1979 0010 0000 >arameter< unused
+198a 85b5 0000 >MCB_VIEW< unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < myEnv
+c776 0083 0000 >        < unused
+c7fa 0004 0544 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0000 >        < unused
+>> Started: LH /L:1 mcb_view +c:\command.com /c mcb_view
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< itsMe
+18b5 868a 0000 >h?Д^?&Д_< unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < myEnv
+c776 0081 0000 >        < unused
+c7f8 0001 0000 >яяяяяяяя< unused
+c7fa 0004 0544 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+Chain to next program: 'c:\command.com'
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< isPSP
+18b5 0006 18bc >h?Д^?&Д_< ownedBy(command )
+18bc 00bc 18bc >command < isPSP
+1979 0010 18bc >arameter< env(command )
+198a 0006 1991 >?Р?п????< myEnv
+1991 1370 1991 >MCB_VIEW< itsMe
+2d02 723d 0000 >Fц?     < unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < env(MCB_VIEW)
+c776 007c 0000 >        < unused
+c7f3 0001 0000 >        < unused
+c7f5 0004 1991 >        < mySecondaryBlocks
+c7fa 0004 0544 >        < ownedBy(MCB_VIEW)
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0254 0217 0008 >SDЉчRґ?Н< system
+046c 0004 0008 >SC&ч?К??< system
+0471 00bc 0471 >COMMAND < isPSP
+052e 0004 0000 >arameter< unused
+0533 0010 0471 >lwort? '< env(COMMAND )
+0544 1370 0544 >MCB_VIEW< itsMe
+18b5 0006 0000 >h?Д^?&Д_< unused
+18bc 00bc 0000 >command < unused
+1979 0010 0000 >arameter< unused
+198a 85b5 0000 >?Р?п????< unused
+9f40 282e 0008 >SC      < system
+c76f 0006 0544 >        < myEnv
+c776 0083 0000 >        < unused
+c7fa 0004 0544 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 02fe 0008 >HIDDEN  < system
+
+======== Test the MCB chain #2
+
+Windows 98 [Version 4.10.2222]
+Version A
+DOS ist im hohen Speicherbereich (HMA)
+==== CONFIG.SYS
+device=himem.sys /verbose
+dos=high,umb
+device=emm386.exe noems /verbose
+==== AUTOEXEC.BAT <<empty>>
+===
+>> Started: LH /L:1 mcb_view +c:\command.com /c LH /L:2 mcb_view
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0209 0189 0008 >SD      < system
+0393 0004 0008 >SCЄ?v?ѓЖ< system
+0398 0002 039b >‹?4?Сйt?< ownedBy(COMMAND )
+039b 0165 039b >COMMAND < isPSP
+0501 1370 0501 >MCB_VIEW< itsMe
+1872 86cd 0000 >4u?йT?ѓ~< unused
+9f40 282e 0008 >SC      < system
+c76f 0059 039b >        < env(COMMAND )
+c7c9 0008 0501 >        < myEnv
+c7d2 0025 0000 >        < unused
+c7f8 0001 0000 >        < unused
+c7fa 0004 0501 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 01e0 0008 >SD      < system
+ede3 011d 0008 >HIDDEN  < system
+Chain to next program: 'c:\command.com'
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0209 0189 0008 >SD      < system
+0393 0004 0008 >SCЄ?v?ѓЖ< system
+0398 0002 039b >‹?4?Сйt?< ownedBy(COMMAND )
+039b 0165 039b >COMMAND < isPSP
+0501 1370 0501 >MCB_VIEW< isPSP
+1872 0007 187a >4u?йT?ѓ~< ownedBy(command )
+187a 0159 187a >command < isPSP
+19d4 0059 187a >?Н?С?Х?Щ< env(command )
+1a2e 0005 1a34 >?ЋШЋАїqб< myEnv
+1a34 1370 1a34 >MCB_VIEW< itsMe
+2da5 7193 0000 >№яя3Ат®ч< unused
+9f39 0001 0000 >bel ist.< unused
+9f3b 0004 1a34 >kette fЃ< mySecondaryBlocks
+9f40 282e 0008 >SC      < system
+c76f 0059 039b >        < env(COMMAND )
+c7c9 0008 0501 >        < env(MCB_VIEW)
+c7d2 0027 0008 >HIDDEN  < system
+c7fa 0004 0501 >        < ownedBy(MCB_VIEW)
+c7ff 2402 0008 >SC      < system
+ec02 01e0 0008 >SD      < system
+ede3 011d 0008 >HIDDEN  < system
+>> This is the 2nd output of the 1st MCB_VIEW when COMMAND returned
+UMBs not linked into the MCB chain
+Allocation strategy: 0x00
+0209 0189 0008 >SD      < system
+0393 0004 0008 >SCЄ?v?ѓЖ< system
+0398 0002 039b >‹?4?Сйt?< ownedBy(COMMAND )
+039b 0165 039b >COMMAND < isPSP
+0501 1370 0501 >MCB_VIEW< itsMe
+1872 0007 0000 >4u?йT?ѓ~< unused
+188a 0159 0000 >command < unused
+19d4 0059 0000 >?Н?С?Х?Щ< unused
+1a2e 0041 0000 >?ЋШЋАїqб< unused
+1a70 84cf 0000 >        < unused
+9f40 282e 0008 >SC      < system
+c76f 0059 039b >        < env(COMMAND )
+c7c9 0008 0501 >        < myEnv
+c7d2 0027 0000 >        < unused
+c7fa 0004 0501 >        < mySecondaryBlocks
+c7ff 2402 0008 >SC      < system
+ec02 01e0 0008 >SD      < system
+ede3 011d 0000 >        < unused
+
