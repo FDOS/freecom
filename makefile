@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.4.2.1  2000/07/19 19:57:25  skaus
+# Experimental DIR.C & COPY.C
+#
 # Revision 1.4  2000/07/10 22:15:58  skaus
 # Change internal strings without re-compiling FreeCOM
 #
@@ -59,12 +62,28 @@ HDR = alias.h batch.h cmdline.h command.h compat.h config.h datefunc.h \
 
 
 
+.INCLUDE .IGNORE : lastmake.mk
+
+THISMAKE !:= $(_COMPILER):$(_MODEL):$(LNG):$(null,$(NDEBUG) DBG NDBG)
 
 #	Default target
 all: com.com tools
 
 
-.INIT : $(CFG) __errl
+.INIT .PHONY .SEQUENTIAL : verscheck $(CFG) __errl
+
+.IF $(THISMAKE) == $(LASTMAKE)
+verscheck :;
+.ELSE
+verscheck : 
+	@+-echo Changed Make parameters, already made files invalid!
+	+-echo LASTMAKE = $(THISMAKE) >lastmake.mk
+	$(MAKE) clobber
+.IF $(CFG)
+	$(MAKE) $(CFG)
+.ENDIF
+.ENDIF
+
 
 __errl:
 	@+-if exist errlist del errlist >nul
