@@ -154,8 +154,8 @@ Vereiste parameter ontbreekt.
 Ongeldige schijf %c:.
 .
 
-:TEXT_ERROR_BADCOMMAND
-Ongeldige opdracht of bestandsnaam.
+:TEXT_ERROR_BADCOMMAND#2
+Ongeldige opdracht of bestandsnaam - "%s".
 .
 
 :TEXT_ERROR_OUT_OF_MEMORY
@@ -749,7 +749,7 @@ Beschikbare voorzieningen:
 [installeerbare commando's] \
 .
 :TEXT_SHOWCMD_FEATURE_NLS#1
-  [DOS NLS] \
+   [DOS NLS] \
 .
 :TEXT_SHOWCMD_FEATURE_DIRSTACK#1
 [directory stack (PUSHD)] \
@@ -842,13 +842,13 @@ C:\\FDOS
 Omgevings-segment    : max %5u bytes; beschikbaar %5u bytes
 .
 :TEXT_MEMORY_CONTEXT#1
-Context segment        : max %5u bytes; beschikbaar %5u bytes
+Context segment          : max %5u bytes; beschikbaar %5u bytes
 .	
 :TEXT_MEMORY_HEAP#1
-Heap                   : beschikbaar %5lu bytes
+        Heap           : beschikbaar %5lu bytes
 .
 :TEXT_MEMORY_CTXT_ALIAS#1
-\tAliassen        : limiet %5u bytes, huidig %5u bytes, %5u items
+\tAliassen       : limiet %5u bytes, huidig %5u bytes, %5u items
 .
 :TEXT_MEMORY_CTXT_HISTORY#1
 \tHistory        : limiet %5u bytes, huidig %5u bytes, %5u items
@@ -866,6 +866,17 @@ Heap                   : beschikbaar %5lu bytes
 \tSwapinfo       : gebruikt %5u bytes, %5u items
 .
 
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+Het opvragen van de huidige codepagina is niet gelukt.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+Het veranderen van de huidige codepagina is niet gelukt.
+.
+:TEXT_DISPLAY_CODEPAGE#1
+De huidige codepagina is %u.
+De (correcte) systeem-codepagina is: %u.
+.
 
 #
 # Command help text
@@ -1019,7 +1030,7 @@ een nieuwe. Druk op ENTER om de huidig ingestelde datum te behouden.
 /D voorkomt dat DATE u vraagt om een nieuwe datum op te geven.
 .
 
-:TEXT_CMDHELP_DEL
+:TEXT_CMDHELP_DEL#2
 Verwijdert een of meer bestanden.
 
 DEL [drive:][pad]bestandsnaam [/P]
@@ -1029,9 +1040,10 @@ ERASE [drive:][pad]bestandsnaam [/P]
                            bestanden op door jokertekens (*, ?) te gebruiken.
  /P                        Vraagt u steeds om bevestiging alvorens elk
                            bestand afzonderlijk te verwijderen.
+ /V                        Toont alle verwijderde bestanden
 .
 
-:TEXT_CMDHELP_DIR#1
+:TEXT_CMDHELP_DIR#4
 Toont een lijst van bestanden en directories in een directory.
 
 DIR [drive:][pad][bestandsnaam] [/P] [/W] [/A[[:]attributen]]
@@ -1042,22 +1054,20 @@ DIR [drive:][pad][bestandsnaam] [/P] [/W] [/A[[:]attributen]]
             (Kan uitgebreide bestandskeuze zijn of opgave meerdere bestanden.)
  /P         Pauzeert na ieder volgeschreven scherm met informatie.
  /W         Gebruikt het brede-lijst formaat.
- /A         Toont bestanden met aangeduide kenmerken.
-            [ATTRIBUUTKEUZE NOG NIET GEIMPLEMENTEERD; /A houdt in /ADRHS]
+ /A         Toont bestanden met de door u opgegeven kenmerken. (standaard /ADHSRA)
  attributen  D  Directories                R  Alleen-lezen bestanden
              H  Verborgen bestanden        A  Archiveringsbestanden
              S  Systeembestanden           -  Voorkomt tonen op basis van het
                                               opgegeven attribuut
- /O         Geef bestanden weer op gesorteerde volgorde [NOG NIET INGEBOUWD]
+ /O         Geef bestanden weer op gesorteerde volgorde
  sortorder   N  Op naam (alphabetisch)       S  Op grootte (smalste eerst)
              E  Op extensie (alphabetisch)   D  Op datum en tijd (vroegste 1st)
              G  Directories eerst groeperen  -  Prefix v. omgekeerde volgorde
-             A  Op laatste toegangsdatum (vroegste eerst)   
+             U  Ongesorteerde                Standaard /ONG
  /S         Toont bestanden in de opgegeven en onderliggende directories
  /B         Gebruik gestript formaat (geen extra informatie of opsomming).
  /L         Toon bestandsnamen in kleine letters.
- /V         Verbale mode - geeft extra informatie.
- /Y         Geeft het jaartal viercijferig weer.
+ /Y of /4   Geeft het jaartal viercijferig weer.
 
 Schakelopties mogen vooraf ingesteld worden in de DIRCMD omgevingsvariabele.
 Negeer deze vooraf ingestelde schakelopties door een optie te voorzien van
@@ -1416,4 +1426,12 @@ WHICH {opdracht}
 Geeft het binnen FreeCOM gebruikte interne systeemgeheugen aan
 
 MEMORY
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+De eindbestemming van COPY mag geen plus-tekens ('+') bevatten.
+.
+
+:TEXT_DELETE_FILE#1
+Bezig met verwijderen van bestand "%s".
 .

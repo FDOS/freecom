@@ -1,3 +1,5 @@
+upd: STRINGS\DUTCH.LNG {Bernd Blaauw}
+bugfix: CVS problem regarding strings\dutch.lng
 add: Russian/CP866 language file {Sandul}
 bugfix: dfnstat(): Use DOS-44-09 for "X:" {Bart Oldeman}
 fix: memory leak (newname) in REN
