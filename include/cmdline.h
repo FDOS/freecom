@@ -7,7 +7,8 @@
 
 /* What quotes COMMAND shell honor (only paired quotes) */
 /* Note: at least the double quotes MUST be included */
-#define QUOTE_STR "\"'`"
+/* #define QUOTE_STR "\"'`" others are valid filename chars */
+#define QUOTE_STR "\""
 
 /* What characters COMMAND shall delimit arguments and
   options, useable w/in if() */
