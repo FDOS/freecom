@@ -190,17 +190,15 @@
 
 static int optS, optP, optW, optB, optL, longyear;
 
-static unsigned attrMay, attrMust, attrMustNot;
+static unsigned attrMay, attrMask, attrMatch;
 /* within/right after the parsing of the options:
 		what attributes "may" be on (but need not), which "must" be set
 		and which "must not" be set.
 	attrMay is just passed into FINDFIRST(),
-	attrMust and attrMustNot are aggregated so that
-		(<current attributes> ^ mustNot) & must == must
-	Selects all valid files (it is: must |= mustNot actually).
-	Therefore, attrMust is called "attrMask" below.
+	attrMask and attrMatch are aggregated so that
+		<current attributes> & mask == match
+	selects all valid files
 */
-#define attrMask attrMust
 
 
 char *path;
@@ -210,39 +208,40 @@ int need_nl;
 /* The DIR command accepts more than one /A options, the later ones
 	replaces former ones */
 static scanAttr(const char *p)
-{	unsigned attr, bool;
+{	unsigned attr;
 
-	attrMust = attrMustNot = 0;	/* purge previous /A*** */
+	attrMask = attrMatch = 0;	/* purge previous /A*** */
+	attrMay = ATTR_ALL;
 
-	attrMay = 0;
-
-	if(p && *p) for(--p;;bool = *p) {
-		switch(toupper(*++p)) {
-		case 'R': attr = FA_RDONLY; break;
-		case 'A': attr = FA_ARCH; break;
-		case 'D': attr = FA_DIREC; break;
-		case 'H': attr = FA_HIDDEN; break;
-		case 'S': attr = FA_SYSTEM; break;
-		case '+': case '-': continue;
-		case '\0': goto done;
-		default:	/* error */
-			error_illformed_option(p);
-			return E_Useage;
-		}
-		if((attrMay & attr) == 0) {	/* not seen, yet */
-			switch(bool) {
-			case '-': /* disable */ attrMustNot |= attr; break;
-			default: /* enable */ attrMust |= attr; break;
-			case '+': /* anyway */ break;
+	if(p && *p) {
+		for(--p;;) {
+			switch(toupper(*++p)) {
+			case 'R': attr = FA_RDONLY; break;
+			case 'A': attr = FA_ARCH; break;
+			case 'D': attr = FA_DIREC; break;
+			case 'H': attr = FA_HIDDEN; break;
+			case 'S': attr = FA_SYSTEM; break;
+			/* case 'L': WinXP has this one too? */
+			/* case '+': */ case '-': continue;
+			case '\0': goto done;
+			default:	/* error */
+				error_illformed_option(p);
+				return E_Useage;
 			}
-			attrMay |= attr;	/* "mustNot" is dropped later, must need to
+			switch(p[-1]) {
+			case '-': /* disable */	attrMatch &= ~attr; break;
+			default: /* enable */	attrMatch |= attr; break;
+			/* case '+': / * anyway * / break; */
+			}
+			attrMask |= attr;	/* "mustNot" is dropped later, must need to
 									be ORed later anyway */
 		}
+done:
+		/* no need to fetch entries with disabled attributes */
+		attrMay &= ~attrMask | attrMatch;
 	}
 	/* else  no specifying arguments --> display all */
 
-done:
-	attrMay = ATTR_ALL;		/* for use with /A-l */
 	return E_None;
 }
 
@@ -502,7 +501,7 @@ static int dir_list(int pathlen
   strcpy(&path[pathlen - 1], "\\");
 
   if(rv == E_None) do
-  if(((file.ff_attrib ^ attrMustNot) & attrMask) == attrMask) {
+  if((file.ff_attrib & attrMask) == attrMatch) {
     assert(strlen(file.ff_name) < 13);
 
   /* moved down here because if we are recursively searching and
@@ -770,7 +769,7 @@ int cmd_dir(char *rest)
   unsigned long dircount;
 
   /* initialize options */
-  attrMust = attrMustNot
+  attrMask = attrMatch
    = longyear = optS = optP = optW = optB = optL = 0;
   attrMay = ATTR_DEFAULT;
 
@@ -784,12 +783,6 @@ int cmd_dir(char *rest)
   /* read the parameters */
   if ((argv = scanCmdline(rest, opt_dir, 0, &argc, &opts)) == 0)
     return 1;
-
-	/* Pre-process the stuff that it makes it easier to use the
-		values later on */
-/*	attrMay |= attrMust; */	/* ensure "must" attr are searched for */
-	attrMay &= ~attrMustNot;	/* no need to search for forbidden attrs */
-	attrMust |= attrMustNot;	/* forming the attrMask */
 
   dircount = 0;
   if(argc)

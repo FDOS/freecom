@@ -27,11 +27,9 @@ files, too.
 with selected attributes set, clear or not interesting. The argument
 of the <OPT>/A</OPT> option is a sequence of:
 	<UL>
-	<LI><OPT>+?</OPT> meaning: attribute <OPT>?</OPT> may be set or clear,
 	<LI><OPT>?</OPT> meaning: attribute <OPT>?</OPT> must be set, or
 	<LI><OPT>-?</OPT> meaning: attribute <OPT>?</OPT> must not be set.
 	</UL>
-	The <OPT>+?</OPT> is an extension to the standard syntax.
 	<P>The following attributes, the <OPT>?</OPT> above, are supported:
 	<UL>
 	<LI><OPT>R</OPT> for: read-only,
@@ -41,7 +39,7 @@ of the <OPT>/A</OPT> option is a sequence of:
 	<LI><OPT>A</OPT> for: archive.
 	</UL>
 	<P>If the same attribute is specified twice within the same
-	<OPT>/A</OPT> option, the first superceeds the later ones; if
+	<OPT>/A</OPT> option, the last one superceeds the previous ones; if
 	more than one <OPT>/A</OPT> option is specified, the last one
 	superceeds all previous ones.
 <LI><OPT>/B</OPT>: (Bare) Displays the lines with the information of
@@ -91,12 +89,3 @@ like this:
 !!todo!!
 </PRE>
 
-EXAMPLE: 4
-
-CMD: DIR /as ..
-CMD: DIR .. /a/s
-CMD: DIR /s .. /a
-Because <CMD>DIR</CMD> processes all options globally and single-character
-options may be joined together, all the above examples behave the same way
-and recursively display all files beginning from the current directory's
-parent directory including all System and Hidden files.
