@@ -186,4 +186,10 @@
 #error "The maximal context size may not exceed 65535 - 12 bytes"
 #endif
 
+#if sizeof(char*) > sizeof(short)
+/* Compiling in Large memory model --> turn of Warning:
+	"Conversation may lose significant digits"	*/
+#pragma warn -sig
+#endif
+
 #include "../include/debug.h"

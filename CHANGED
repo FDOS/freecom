@@ -1,3 +1,8 @@
+v0.83 Beta 21:
+bugfix: process_input(): iscntrl() does not advance ip
+possible bugfix: force to default to _unsigned_ char as built-in
+	<ctype.h> macros do not work with signed char > 127
+
 v0.83 Beta 15:
 bugfix: expalias: if malloc() fails, random expanded is free'ed
 bugfix: nls_maketime(): 12hour display does not free AM/PM id

@@ -623,9 +623,10 @@ int process_input(int xflag, char *commandline)
         continue;
       }
 
-      if (iscntrl(*ip))
-        *cp = ' ';
-      else 
+      if (iscntrl(*ip)) {
+        *cp++ = ' ';
+        ++ip;
+      } else 
       	*cp++ = *ip++;
     }
 
