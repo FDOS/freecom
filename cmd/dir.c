@@ -233,9 +233,6 @@ static scanAttr(const char *p, int bool)
 			error_illformed_option(p);
 			return E_Useage;
 		}
-		/* MS-DOS v6.22: /a-dd --> use -d --> first option superceeds
-			NT4: /a-dd --> use d --> latest option superceeds
-			we implement DOS6 behaviour as it is easier right here */
 		if((attrMay & attr) == 0) {	/* not seen, yet */
 			switch(bool) {
 			case '-': /* disable */ attrMustNot |= attr; break;
@@ -741,8 +738,14 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		}
 	}
 
-  if(optS)
-  	rv = print_total(filecount, bytecount);
+  if(optS) {
+    if(filecount)
+		rv = print_total(filecount, bytecount);
+    else {
+		error_file_not_found();
+		rv = E_Other;
+    }
+  }
   if(!rv)
     rv = dir_print_free(*dircount);
 
