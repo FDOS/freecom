@@ -49,3 +49,8 @@ extern setBatchParams(char *s);
 
 extern struct bcontext *newBatchContext(void);
 extern void initBatchContext(struct bcontext *b);
+extern struct bcontext *activeBatchContext(void);
+char *find_arg_bc(struct bcontext const * const b, int n);
+
+#define	find_arg(num)	find_arg_bc(activeBatchContext(), (num))
+#define getArgCur(num)	find_arg_bc(bc, (num))

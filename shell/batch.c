@@ -103,19 +103,28 @@ int tracemode = 0;              /* debug trace of scripts */
  * If no such parameter exists returns pointer to empty string.
  * If no batch file is current, returns NULL
  */
-char *find_arg(int n)
+char *find_arg_bc(struct bcontext const * const b, int n)
 {
   dprintf(("[find_arg (%d)]\n", n));
 
-  if (bc == 0)
-    return 0;
+	if(!b)
+		return 0;
 
-  n += bc->shiftlevel;
+  n += b->shiftlevel;
   if(n == 0)
-  	return bc->bfnam;
-  if(n > bc->numParams || n < 0)
+  	return b->bfnam;
+  if(n > b->numParams || n < 0)
   	return "";
-  return bc->params[n - 1];
+  return b->params[n - 1];
+}
+
+struct bcontext *activeBatchContext(void)
+{	struct bcontext *b = bc;
+
+	while(b && b->forvar)
+		b = b->prev;
+
+	return b;
 }
 
 /*
@@ -350,7 +359,7 @@ char *readbatchline(int *eflag, char *textline, int size)
         continue;
       }
 
-      fv1 = fv = find_arg(0);
+      fv1 = fv = getArgCur(0);
 
 	if (bc->ffind) {          /* First already done fo do next */
 		if(FINDNEXT(bc->ffind) != 0) {		/* no next file */

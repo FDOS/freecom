@@ -186,7 +186,7 @@ extern struct CMD internalCommands[];
 /* New procs in BATCH.C */
 
 char *readbatchline(int *, char *, int);
-char *find_arg(int);
+/* char *find_arg(int); */
 
 /* The MSDOS Batch Commands [MS-DOS 5.0 User's Guide and Reference p359] */
 int cmd_call(char *);
