@@ -8,6 +8,9 @@ The strings can be prepared for each language separately, prepared for
 FreeCOM, added to FreeCOM and at an instant FreeCOM speaks the new
 language to its user.
 
+Note: The Critical Error handler can be localized during compilation
+	of the CRITER module only, currently.
+
 == The basics
 
 FreeCOM references all strings by a number (see the "Current
