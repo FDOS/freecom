@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.6  2002/04/03 01:10:31  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.5  2002/04/02 23:36:37  skaus
 # add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 #
@@ -58,18 +61,21 @@ HDR = ..\config.h ..\include/batch.h ..\include/cmdline.h \
 	..\include/timefunc.h ..\include\large.inc ..\include\model.inc \
 	..\include\small.inc ..\include\stuff.inc
 
+XMS_SWAP_PRE_OBJ = xms_crit.obj xms_brk.obj cswap.obj
+XMS_SWAP_ADD_OBJ = cswapc.obj
+
 .IF $(XMS_SWAP) == yes
 SRC += cswap.asm cswapc.c xms_crit.asm xms_brk.asm
 HDR += ../include/cswapc.h
-OBJ += cswapc.obj
-PRE_OBJ = xms_crit.obj xms_brk.obj cswap.obj
+OBJ += $(XMS_SWAP_ADD_OBJ)
+PRE_OBJ = $(XMS_SWAP_PRE_OBJ)
 .ENDIF
 
 
 #	Default target
 all: com.exe
 
-dist : command.mak
+dist : command.mak xms-swap.mak
 
 %.obj : %.asm ; $(NASM) $(NASMFLAGS) -f obj -F borland -o $@ $< >>errlist
 
@@ -161,3 +167,6 @@ clean :
 
 command.mak : makefile command.m1 command.m2
 	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(LD) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@
+
+xms-swap.mak : makefile command.m1 command.m2
+	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") $(XMS_SWAP_ADD_OBJ) $(XMS_SWAP_PRE_OBJ)\n\t\44(LD) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(XMS_SWAP_PRE_OBJ)+\n$(OBJ:t"+\\n") $(XMS_SWAP_ADD_OBJ)\n) + command.m2 $@

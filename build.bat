@@ -1,7 +1,12 @@
 @echo off
 if exist lastmake.mk call clean.bat
+if "%1"=="-r" call clean.bat
+if "%1"=="-r" shift
 if "%1"=="clean" clean.bat
 if "%1"=="clean" goto ende
+set SWAP=
+if "%1"=="xms-swap" set SWAP=-DXMS_SWAP
+if "%1"=="xms-swap" shift
 
 if not x%1==x set LNG=%1
 if "%lng%"=="" set LNG=english
@@ -10,7 +15,7 @@ echo.
 echo Making basic utilities for build process
 echo.
 cd utils
-make -futils.mak all
+make %SWAP% -futils.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -30,7 +35,7 @@ echo.
 echo Making CRITER resource
 echo.
 cd criter
-make -fcriter.mak all
+make %SWAP% -fcriter.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -38,7 +43,7 @@ echo.
 echo Making misc library
 echo.
 cd lib
-make -flib.mak all
+make %SWAP% -flib.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -46,7 +51,7 @@ echo.
 echo Making commands library
 echo.
 cd cmd
-make -fcmd.mak all
+make %SWAP% -fcmd.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -54,7 +59,8 @@ echo.
 echo Making COMMAND.COM
 echo.
 cd shell
-make -fcommand.mak all
+if "%SWAP%"=="" make %SWAP% -fcommand.mak all
+if not "%SWAP%"=="" make %SWAP% -fxms-swap.mak all
 if errorlevel 1 goto ende
 cd ..
 

@@ -170,7 +170,7 @@ void XMSinit(void)
 	SwapResidentSize =
 		 FP_SEG(&SWAPresidentEnd)
 		 + (FP_OFF(&SWAPresidentEnd) + 0x0f) / 16
-		 - _psp;
+		 - _psp + 1;
 
 	mcb = (struct MCB _seg*)SEG2MCB(_psp);
 	xms_block_size = SwapTransientSize = mcb->mcb_size;
