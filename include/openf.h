@@ -20,6 +20,7 @@ int isadev(const int fd);
  *	Return the attributes of an opened handle; 0 on error
  */
 int fdattr(const int fd);
+int fdsetattr(const int fd, const int attr);
 
 /*
  *      Check for a CP/M-style device name
