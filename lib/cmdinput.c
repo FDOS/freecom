@@ -16,6 +16,11 @@
 
 static unsigned orgx, orgy;		/* start of current line */
 
+int isworddelimiter(unsigned c)
+{
+	return c == ' ' || c == '\t';
+}
+
 /* Print a character to current cursor position
 	Updates cursor postion
  */
@@ -283,19 +288,42 @@ void readcommandEnhanced(char * const str, const int maxlen)
 #endif
 
 		case KEY_LEFT:             /* move cursor left */
-
-			if (current > 0)
-			{
+			if(current > 0) {
 			  current--;
 			  if (wherex() == 1)
 				goxy(MAX_X, wherey() - 1);
 			  else
 				goxy(wherex() - 1, wherey());
 			}
-#if 0
-			else
-				   beep();
-#endif
+			break;
+
+
+		case KEY_CTRL_LEFT:	/* move cursor left to begin of word */
+			while(current > 0) {
+			  current--;
+			  if (wherex() == 1)
+				goxy(MAX_X, wherey() - 1);
+			  else
+				goxy(wherex() - 1, wherey());
+
+			  if(isworddelimiter(str[current-1])	/* ignore current == 0 */
+			   && !isworddelimiter(str[current]))
+			     break;
+			}
+			break;
+
+		case KEY_CTRL_RIGHT:	/* move cursor right to begin of word */
+			while(current < charcount) {
+			  current++;
+			  if (wherex() == MAX_X)
+				goxy(1, wherey() + 1);
+			  else
+				goxy(wherex() + 1, wherey());
+
+			  if(isworddelimiter(str[current-1])
+			   && !isworddelimiter(str[current]))
+			     break;
+			}
 			break;
 
 		default:                 /* insert character into string... */
