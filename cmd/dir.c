@@ -209,8 +209,8 @@ int need_nl;
 
 /* The DIR command accepts more than one /A options, the later ones
 	replaces former ones */
-static scanAttr(const char *p, int bool)
-{	unsigned attr;
+static scanAttr(const char *p)
+{	unsigned attr, bool;
 
 	attrMust = attrMustNot = 0;	/* purge previous /A*** */
 
@@ -218,6 +218,7 @@ static scanAttr(const char *p, int bool)
 		attrMay = ATTR_ALL;
 		return E_None;
 	}
+
 	attrMay = 0;
 
 	for(--p;;bool = *p) {
@@ -252,14 +253,15 @@ optScanFct(opt_dir)
   case 'P': return optScanBool(optP);
   case 'W': return optScanBool(optW);
   case 'B': return optScanBool(optB);
-  case 'A': return scanAttr(strarg, bool);
+  case 'A': if(!bool) return scanAttr(strarg);
+  			break;
   case 'L': return optScanBool(optL);
   case 'Y': return optScanBool(longyear);
   case 0:	/* Longname option, e.g. /A without argument sign */
   	switch(*optstr) {
   	case 'A': case 'a':		/* /A*** */
-  		if(!optHasArg())
-			return scanAttr(optstr + 1, bool);
+  		if(!bool && !optHasArg())
+			return scanAttr(optstr + 1);
 		break;
 	}
   }
