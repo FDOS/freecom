@@ -2,12 +2,20 @@
 
 	Implementation for Installable COMMAND extensions (MUX-AE)
 
+	Return:
+		0 - No extension
+		1 - Extension performed
+		2 - rewrote command line/name
+
 	This file bases on MUX_AE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.4  2004/06/07 19:32:14  skaus
+	Revision 1.5  2004/06/14 18:38:08  skaus
 	bugfix: MUX-AE: useage of DS:[SI] {Eduardo Almao}
 
+	Revision 1.4  2004/06/07 19:32:14  skaus
+	bugfix: MUX-AE: useage of DS:[SI] {Eduardo Almao}
+	
 	Revision 1.3  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -64,6 +72,7 @@ int runExtension(char * const command, char * const line)
 {	int clen, llen;
 	struct REGPACK r;
 	char *p;
+	int rc = 0;			/* Default: is no extension */
 
 	assert(command);
 	assert(line);
@@ -109,7 +118,8 @@ int runExtension(char * const command, char * const line)
 		intr(0x2f, &r);
 		invalidateNLSbuf();
 		if(command[-1] == 0)		/* The command had been processed */
-			return 1;				/* Stop interpreting the command */
+			rc = 1;				/* Stop interpreting the command */
+		else rc = 2;			/* buffers rewritten */
 
 		break;
 	}
@@ -138,5 +148,5 @@ int runExtension(char * const command, char * const line)
 	if(0 != (p = strchr(line, '\xd')))
 		*p = 0;
 
-	return 0;			/* Proceed command processing as usual */
+	return rc;
 }

@@ -4,7 +4,6 @@
 ;;
 
 %macro icmdAction 0
-	pusha
 	mov ax, ds
 	mov es, ax
 	mov ax, cs
@@ -13,7 +12,6 @@
 	mov si, newCommandName
 	mov cx, newCommandNameEnd - newCommandName
 	rep movsb
-	popa
 %endmacro
 
 %macro icmdComment 0

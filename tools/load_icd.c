@@ -41,7 +41,7 @@ main(int argc, char **argv)
 
 	if((f = fopen(argv[1], "rb")) == NULL) {
 		strcpy(stpcpy((char*)buf, argv[1]), ".icd");
-		if((f = fopen(argv[1], "rb")) == NULL) {
+		if((f = fopen(buf, "rb")) == NULL) {
 			fputs("Cannot open file: ", stdout);
 			puts(argv[1]);
 			return 34;

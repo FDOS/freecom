@@ -4,7 +4,6 @@
 ;;
 
 %macro icmdAction 0
-	pusha
 	mov ax, ds
 	mov es, ax
 	xor ax, ax
@@ -14,7 +13,6 @@
 	mov cx, ax
 	inc bx
 	call oString
-	popa
 %endmacro
 
 %macro icmdComment 0

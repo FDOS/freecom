@@ -214,6 +214,7 @@ static void docommand(char *line)
 #define BUFFER_SIZE BUFFER_SIZE_MUX_AE
 #else
 	char *com = malloc(MAX_INTERNAL_COMMAND_SIZE);
+#define args line
 #define buf com
 #define BUFFER_SIZE MAX_INTERNAL_COMMAND_SIZE
 #endif
@@ -235,10 +236,10 @@ static void docommand(char *line)
 		goto errRet;
 	}
 #endif
-	line = strcpy(args, line);
+	strcpy(args, line);
 #endif
 
-  if (*(rest = line))                    /* Anything to do ? */
+  if (*(rest = args))                    /* Anything to do ? */
   {
     cp = com;
 
@@ -255,18 +256,24 @@ static void docommand(char *line)
 
 	if(*com) {
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-		/* Check for installed COMMAND extension */
-		if(runExtension(com, args))
-			goto errRet;		/* OK, executed! */
-		/* reset the argument pointer */
-		rest = &args[(unsigned char)com[-1]];
+		int tryMUXAE = 1;
+		while(tryMUXAE) {
+			/* Check for installed COMMAND extension */
+			switch(runExtension(com, args)) {
+				case 1:		/* OK, done */
+					goto errRet;
+				case 0:		/* no extension */
+					tryMUXAE = 0;
+			}
+			/* reset the argument pointer */
+			rest = &args[(unsigned char)com[-1]];
 
-		dprintf( ("[Command on return of Installable Commands check: >%s]\n", com) );
+			dprintf( ("[Command on return of Installable Commands check: >%s]\n", com) );
 #ifndef NDEBUG
-		dprintf( ("[Command line: >") );
-		for(cp = args; cp < rest; ++cp)
-			dprintf( ("%c", *cp) );
-		dprintf( ("|%s]\n", rest) );
+			dprintf( ("[Command line: >") );
+			for(cp = args; cp < rest; ++cp)
+				dprintf( ("%c", *cp) );
+			dprintf( ("|%s]\n", rest) );
 #endif	/* !defined(NDEBUG) */
 
 #endif
@@ -276,7 +283,7 @@ static void docommand(char *line)
 		 ; cmdptr->name && strcmp(com, cmdptr->name) != 0
 		 ; cmdptr++);
 
-	}
+    if(cmdptr && cmdptr->name) {    /* internal command found */
 
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 	cp = realloc(buf, ARGS_BUFFER_SIZE);
@@ -289,8 +296,6 @@ static void docommand(char *line)
 #else
 	free(buf);  buf = 0;	/* no further useage of this buffer */
 #endif
-
-    if(cmdptr && cmdptr->name) {    /* internal command found */
       switch(cmdptr->flags & (CMD_SPECIAL_ALL | CMD_SPECIAL_DIR)) {
       case CMD_SPECIAL_ALL: /* pass everything into command */
         break;
@@ -315,8 +320,15 @@ static void docommand(char *line)
         } else {
           dprintf(("CMD '%s' : '%s'\n", cmdptr->name, rest));
           cmdptr->func(rest);
+          goto errRet;
         }
-      } else {
+	}
+#ifdef FEATURE_INSTALLABLE_COMMANDS
+	  }
+#endif
+      }
+
+        free(buf); buf = 0;		/* no longer used */
         /* no internal command --> spawn an external one */
         cp = unquote(line, rest = skip_word(line));
         if(!cp) {
@@ -326,7 +338,6 @@ static void docommand(char *line)
 		execute(cp, rest);
 		free(cp);
       }
-  }
 
 #undef com
 #undef args

@@ -6,6 +6,9 @@ I. Overview
 The MUX-AE handler allows TSRs and alike programs to install extensions
 to COMMAND, hence this function is called "Installable Commands".
 
+Note: The innerworking of the MUX-AE interface has been revised heavily
+by Eduardo Casino, mail appended.
+
 There are two subfunctions (quote from RBIL):
 
 --------l-2FAE00-----------------------------
@@ -77,10 +80,8 @@ shall demonstrate the internals and differences from other implementations.
 out of characters permisable in filenames, but excluding colon, dot,
 and backslash).
 
-4. If found a word, pass through MUX-AE-00 and, on success, through
-MUX-AE-01.
-	If MUX-AE-00 succeeds and MUX-AE-01 returns BYTE DS:[SI] == 0,
-	the interpretation of the command stops here.
+4. If found a word, pass it through MUX-AE-00, on success MUX-AE-01 is called.
+	If now BYTE DS:[SI] == 0, the interpretation of the command stops.
 
 5. Search the internal commands list for the word left in STRING DS:[SI+1].
 	If found, it is executed with the command line arguments starting at
@@ -92,28 +93,18 @@ MUX-AE-01.
 	   STRING DS:[SI] buffer. FreeCOM passes a full
   	   BUFFER_SIZE_MUX_AE (currently 255 bytes) buffer to MUX-AE.
 
-6. The command line (DS:[BX+2]) is tried as either drive change ("?:" syntax)
-	or external command. Note: Any change of the command name buffer (DS:[SI])
-	is ignored.
+6. Steps 4 and 5 are repeated until MUX-AE-00 returns false.
 
-Note: Steps 5 and 6 have been found by trying MS DOS 6's MUX-AE
-interface with an Installed Command that just alters the DS:[SI] buffer
-to "\x4ECHO", but keeping the command line DS:[BX] unchanged.
-Note: These tests also revealed that MS DOS 6 in fact does re-invoke MUX-AE,
-when command name buffer at DS:[SI] is changed into a name that is no internal
-command.
+7. The original command line is tried as either drive change ("?:" syntax)
+	or external command. Note: Any change of both the command name buffer
+	(DS:[SI]) and command name buffer (DS:[BX}) are ignored.
 
 III. Incompatiblies
 
-- FreeCOM does not double buffer neither the command line nor the command.
-	Thus if the Installed Command alters any of them, FreeCOM will use
-	the modified ones furtherly.
-	If this is an incompatibly or not, depends on the point of view strongly.
-
-- FreeCOM calls the MUX-AE chain exactly once per command. Hence, if
-	one Installed Command A changes the command into a string of
-	another Installed Command B, B must be installed prior A, in order
-	to let B reach the command line.
+- In earlier versions FreeCOM used the command line buffer (DS:[BX])
+	to execute an external command, if applicable; thusm allowing an
+	extension to re-write the command line. This is NO LONGER so, for
+	compatibly with MS COMMAND.
 
 - FreeCOM always uses BYTE DS:[BX+1] to determine the length of
 	STRING DS:[BX+2]. If an Installed Command wants to change the
@@ -217,4 +208,129 @@ C> WALK \THERE
 The Installable Command must be named equal to the internal command,
 e.g.: Installable Command "DEL" will disable the internal command
 DEL and any external one, too.
+
+VI. Clarifying mail by Eduardo Casino
+
+Hello,
+
+El jue, 10-06-2004 a las 15:25, FreeCOM escribió:
+
+
+>> there is another testing release of FreeCOM that should fix the MUX-AE 
+>> issue. Would you please test it?
+>> http://freedos.sourceforge.net/freecom/packages/TESTING/
+
+
+It works perfectly with FD APPEND, but...
+
+
+>> It has, however, one known incompatibly with MS DOS:
+>> 
+>> It occurs to me that MUX-AE is called recursively (or repeatedly) when 
+>> MUX-AE-00 returns 0xFF (true), but MUX-AE-01 returns with DS:[SI] != 0 
+>> (aka TSR re-wrote the command, but did not executed it itself).
+>> FreeCOM does not do this, but calls the MUX-AE pair only one time. Do 
+>> you know something more about this?
+
+
+I've written a group of silly test programs to check this and the
+conclusions are:
+
+When returning from MUX-AE-01 and DS:[SI] != 0, MS COMMAND.COM, again,
+checks DS:[SI+1] and:
+* If it is an internal command, executes the internal command without
+calling again MUX-AE.
+* If it is not an internal command, calls MUX-AE-00 to check if it is an
+extension. In this case, executes the extension using MUX-AE-01.
+* If it is not an extension, no matter what the content of DS:[SI+1] is,
+tries to load and execute the _typed_ command from disk and with its
+_original_ arguments, no matter if the extension has modified the
+command line buffer.
+
+Example 1: Extension to DIR
+Imagine that this extension just prints "I'm DIR!" and then:
+Case a) DS:[SI] unmodified. The internal DIR command is executed (you
+get the directory listing.) This is just the same as the next case.
+Case b) DS:[SI] contains 4, "ECHO" (or any other internal command). As
+this is an internal command, it is executed.
+Case c) DS:[SI] contains 3, "BAR" (or anything that it is not an
+internal command). MUX-AE-00 is called and, if the "BAR" extension
+exists, it is executed with MUX-AE-01. If it doesn't, the shell tries to
+execute DIR from disk (DIR.BAT, DIR.COM or DIR.EXE)
+
+Example 2: New extension "FOO"
+In this case, it prints "I'm FOO!" and then:
+Case a) DS:[SI] unmodified. The shell looks for the internal command
+"FOO". As it does not exist, calls MUX-AE-00 and finds that it is an
+extension, so it executes it using MUX-AE-01 and enters an endless loop.
+This is, in fact, the same as case c.
+Case b) The same as for example 1.
+Case c) The same as for example 1, but now it tries to execute "FOO"
+(FOO.BAT, FOO.COM or FOO.EXE)
+
+For all cases in both examples, the shell uses the arguments in the
+command line buffer (ignoring the first _updated_ DS:[SI] bytes), except
+if command is not an extension in case c.
+
+With FreeCOM 0.82pl3q two incompatibilities (or differences in
+implementation ;-)) remain:
+
+The first one is what you comment about FreeCOM calling the MUX-AE pair
+only once. This prevents the looping problem, that's true, but
+extensions should not allow this to happen. And if an extension tries to
+execute another extension on exit, it won't work with FreeCOM, because
+it won't call the MUX-AE functions again.
+
+The second difference is that FreeCOM, at exit of the MUX-AE-01, uses
+the arguments in the _updated_ command line buffer when it executes the
+typed command from disk (when the command name buffer contains something
+that it is not an internal command nor an extension) instead of the
+_original_ command line, like MS-DOS does.  
+
+These two programs show the incompatibilities:
+http <<norobot>> perso.wanadoo.es/samelborp/test1.asm
+http <<>norobot> perso.wanadoo.es/samelborp/test2.asm
+
+test1.asm - Installs two extensions: FOO and BAR. FOO prints "Hello, I
+am FOO!" and, on exit, calls BAR. BAR prints "Hello, I am BAR!" and
+terminates". With MS-DOS, if you type "FOO" you see this:
+
+C:\> FOO
+Hello, I am FOO!
+Hello, I am BAR!
+
+With FreeCOM, you get:
+
+C:\> FOO
+Hello, I'm FOO!
+Bad command or filename - "FOO".
+
+
+test2.asm - Installs the extension "MORE". It prints "Hello, I am MORE!"
+and, on exit, modifies the command name buffer with 8, "XXXXXXXX" and
+the command line buffer with 11, "MORE XX.TXT", 13 . If you have a
+TEST.TXT file with the line "This is a test.", in MS-DOS you get:
+
+C:\> MORE TEST.TXT
+Hello, I am MORE!
+This is a test.
+
+(MORE is executed with the original arguments)
+
+With FreeCOM you get:
+
+C:\> MORE TEST.TXT
+Hello, I am MORE!
+MORE: XX.TXT: No such file
+
+(MORE is executed with the modified arguments)
+
+
+WARNING: The programs are horrible, quick and dirty hacks with the only
+purpose of showing the incompatibilities. Please, do not use them
+against me  ;-) 
+
+Regards,
+Eduardo.
+
 
