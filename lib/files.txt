@@ -1,0 +1,5 @@
+These source files provide a library of functions used by all parts
+of FreeCOM. They have been broken into smallest pieces in order to
+use the linker ability to choose only those portions (one portion
+is exactly one source file) needed to successfully bind the whole
+executable.

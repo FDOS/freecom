@@ -1,0 +1,51 @@
+/*	$id$
+	$Locker$	$Name$	$State$
+
+	Map an input key into its associated metakey
+
+	Return:
+		0: on error
+		1..26: metakey
+
+	$Log$
+	Revision 1.1  2001/04/12 00:33:53  skaus
+	chg: new structure
+	chg: If DEBUG enabled, no available commands are displayed on startup
+	fix: PTCHSIZE also patches min extra size to force to have this amount
+	   of memory available on start
+	bugfix: CALL doesn't reset options
+	add: PTCHSIZE to patch heap size
+	add: VSPAWN, /SWAP switch, .SWP resource handling
+	bugfix: COMMAND.COM A:\
+	bugfix: CALL: if swapOnExec == ERROR, no change of swapOnExec allowed
+	add: command MEMORY
+	bugfix: runExtension(): destroys command[-2]
+	add: clean.bat
+	add: localized CRITER strings
+	chg: use LNG files for hard-coded strings (hangForEver(), init.c)
+		via STRINGS.LIB
+	add: DEL.C, COPY.C, CBREAK.C: STRINGS-based prompts
+	add: fixstrs.c: prompts & symbolic keys
+	add: fixstrs.c: backslash escape sequences
+	add: version IDs to DEFAULT.LNG and validation to FIXSTRS.C
+	chg: splitted code apart into LIB\*.c and CMD\*.c
+	bugfix: IF is now using error system & STRINGS to report errors
+	add: CALL: /N
+
+ */
+
+#include "../config.h"
+
+#include <assert.h>
+#include <string.h>
+
+#include "../include/misc.h"
+
+int mapMetakey(const char * const str, int ch)
+{	const char *q;
+
+	if((q = memchr(str + 1, ch, *(const unsigned char*)str)) == 0) 
+		return 0;                     /* hit erroreous character */
+
+	return str[(q - str) + *(unsigned char*)str];	/* metakey */
+}

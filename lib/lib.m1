@@ -1,0 +1,18 @@
+.AUTODEPEND
+
+CFG = TCCDOS.CFG
+CFG_DEPENDENCIES = lib.mak
+
+#		*Translator Definitions*
+##>> Modify this file with your local settings
+!include "..\config.mak"
+
+
+all: $(CFG) freecom.lib
+
+#		*Implicit Rules*
+.c.obj:
+  $(CC) -c {$< }
+.asm.obj:
+	$(NASM) $(NASMFLAGS) -f obj -DMODEL=s $<
+
