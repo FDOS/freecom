@@ -100,8 +100,11 @@
  *	2000/06/22 ska
  *	add: CDD (implies existance of CHDIR)
  *
- * 2000/06/07 Ron Cemer
+ * 2000/07/07 Ron Cemer
  * fix: TC++1 compatibly
+ *
+ * 2000/07/10 ska
+ * fix: lastdir: does not free temporarily strdup()'ed directory
  */
 
 #include "config.h"
@@ -218,6 +221,8 @@ okRet:
 	rv = 0;
 errRet:
   freep(argv);
+  if(freeDir)
+  	free(dir);
   return rv;
 }
 #endif
