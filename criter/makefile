@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM CRITER module
 #
 # $Log$
+# Revision 1.2  2002/04/02 23:36:37  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.1  2001/04/23 21:35:41  skaus
 # Beta 7 changes (code split)
 #
@@ -72,48 +75,4 @@ clobber : clean
 
 clean : 
 	$(RM) $(RMFLAGS) *.obj *.bak context.h_c context.def context.inc ..\context.h_c ..\context.inc tags errlist strings.inc
-
-
-.IF $(CFG) != $(NULL)
-
-#CONFIGURATION = $(CONF_BASE) $(null,$(NDEBUG) $(CONF_DBG) $(CONF_NDBG))
-CONFIGURATION = $(CONF_BASE)
-
-.IF $(_COMPTYPE) == BC
-CONF_BASE =	\
--f- \
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-.IF $(_COMPILER)==BC5
-CONFIGURATION += -RT- -x-
-.ENDIF
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-.IF $(_COMPTYPE) == TC
-CONF_BASE =	\
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-# The "-f-" causes that TCC passes option "/r" to the assembler, though
-# ASM chokes about it
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-
-.ENDIF
-#-weas	\
-#-wpre	\
-#-w-pro	\
 

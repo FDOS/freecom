@@ -9,9 +9,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.2  2002/04/02 18:09:31  skaus
+	Revision 1.3  2002/04/02 23:36:37  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 
+	Revision 1.2  2002/04/02 18:09:31  skaus
+	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -52,10 +55,7 @@
 #include "../include/res.h"
 #include "../strings.h"
 #include "../include/strings.typ"
-
-#ifdef FEATURE_XMS_SWAP
 #include "../include/cswap.h"
-#endif
 
 static unsigned msgSegm = 0;    /* strings segment if loaded */
 string_count_t strCnt = 0;		/* number of strings */

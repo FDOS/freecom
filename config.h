@@ -200,7 +200,7 @@
 #endif
 
 /* Externally defined to compile with XMS-Swap support */
-#ifdef defined(XMS_SWAP)
+#if defined(XMS_SWAP)
 #undef FEATURE_KERNEL_SWAP_SHELL
 #define FEATURE_XMS_SWAP
 #endif

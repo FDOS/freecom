@@ -135,7 +135,6 @@ real_XMSexec:
 		jne second_time
 
 ;;TODO: first_time either 04ah or 049h --> no jumps
-		; int 3
 		mov ah,04ah						; resize memory block
 		mov bx,[_SwapResidentSize]
 		int 21h
@@ -267,7 +266,7 @@ terminate_myself:
 	;; central PSP:0xa hook <-> may be called in every circumstance
 	global _terminateFreeCOMHook
 _terminateFreeCOMHook:
-	mov ax, cs
+	mov ax, cs				; setup run environment (in this module)
 	mov ss, ax
 	mov sp, localStack
 	mov ds, ax
@@ -290,14 +289,16 @@ _terminateFreeCOMHook:
 	mov ax, [terminationAddressSegm]
 	mov [es:0ch], ax
 
-	; Kill the XMS memory block
-	mov dx, [xms_handle]
-	mov ah, 0ah				; deallocate XMS memory block
-	callXMS
-
 	; Drop our "Shell" privileges
 	mov ax, [_origPPID]		; original parent process ID
 	mov [es:16h], ax
+
+	; Kill the XMS memory block
+	mov dx, [xms_handle]
+	or dx, dx
+	jz terminate_myself		; no block to deallocate
+	mov ah, 0ah				; deallocate XMS memory block
+	callXMS
 
 	; Now, DOS-4C should proceed correctly
 	jmp short terminate_myself

@@ -391,18 +391,21 @@ DoExec(char *command,char *cmdtail)
 #endif
 
 
-#if 0
+#define FREECOM_NEED_EXIT
+#ifdef __BORLANDC__
+#if __BORLANDC__ >= 0x500
+#undef FREECOM_NEED_EXIT
+#endif
+#endif
+
+
+#ifdef FREECOM_NEED_EXIT
+/* Using the original exit() function crashes in TC++ v1.01 */
 void exit()
 {
-#if 0
 	extern void exitfct(void);	/* from INIT.C */
 
 	exitfct();					/* restore the old owner_psp */
-#endif
-
-	XMSexit();
-
-	_cexit();					/* exit clean-up */
 
 	_AX = 0x4c00;
 	geninterrupt(0x21);

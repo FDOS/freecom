@@ -10,6 +10,9 @@
 #
 #
 # $Log$
+# Revision 1.8  2002/04/02 23:36:37  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.7  2001/04/12 00:09:06  skaus
 # chg: New structure
 # chg: If DEBUG enabled, no available commands are displayed on startup
@@ -95,47 +98,4 @@ kssf.com : kssf.asm
 load_icd.obj : load_icd.c
 
 .INCLUDE : makefile.1
-
-.IF $(CFG) != $(NULL)
-
-#CONFIGURATION = $(CONF_BASE) $(null,$(NDEBUG) $(CONF_DBG) $(CONF_NDBG))
-CONFIGURATION = $(CONF_BASE)
-
-.IF $(_COMPTYPE) == BC
-CONF_BASE =	\
--f- \
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-.IF $(_COMPILER)==BC5
-CONFIGURATION += -RT- -x-
-.ENDIF
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-.IF $(_COMPTYPE) == TC
-CONF_BASE =	\
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-# The "-f-" causes that TCC passes option "/r" to the assembler, though
-# ASM chokes about it
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-.ENDIF
-#-weas	\
-#-wpre	\
-#-w-pro	\
-
 

@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.7  2002/04/02 23:36:37  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.6  2002/04/02 20:58:13  skaus
 # add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 #
@@ -561,49 +564,6 @@ clobber : clean
 clean : 
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com tags errlist lib.m3
 
-
-.IF $(CFG) != $(NULL)
-
-#CONFIGURATION = $(CONF_BASE) $(null,$(NDEBUG) $(CONF_DBG) $(CONF_NDBG))
-CONFIGURATION = $(CONF_BASE)
-
-.IF $(_COMPTYPE) == BC
-CONF_BASE =	\
--f- \
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-.IF $(_COMPILER)==BC5
-CONFIGURATION += -RT- -x-
-.ENDIF
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-.IF $(_COMPTYPE) == TC
-CONF_BASE =	\
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-# The "-f-" causes that TCC passes option "/r" to the assembler, though
-# ASM chokes about it
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-
-.ENDIF
-#-weas	\
-#-wpre	\
-#-w-pro	\
 
 lib.mak : makefile lib.m1 lib.m2
 	..\utils\chunk freecom_deps <$(mktmp $(OBJ:t"\n")\n) >lib.m3

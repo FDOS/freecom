@@ -7,9 +7,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.2  2002/04/02 18:09:31  skaus
+	Revision 1.3  2002/04/02 23:36:37  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 
+	Revision 1.2  2002/04/02 18:09:31  skaus
+	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -60,8 +63,8 @@ char *getString(unsigned id)
   		+ requested string ID is not included with resource
   			(too high, or not defined).
 	*/
-	if(id >= strCnt
-	 || (segm = msgSegment()) == 0
+	if((segm = msgSegment()) == 0
+	 || id >= strCnt
 	 || (idx = MK_FP(segm, id * sizeof(*idx)))->size == 0)
 		return defaultMessage(id);
 

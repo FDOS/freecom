@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.4  2002/04/02 23:36:37  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.3  2001/12/03 20:15:54  skaus
 # v0.83 Beta 32:
 # bugfix: if FREECOM.COM /P without AUTOEXEC.BAT --> assert() failure.
@@ -244,49 +247,6 @@ clobber : clean
 clean : 
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com tags errlist
 
-
-.IF $(CFG) != $(NULL)
-
-#CONFIGURATION = $(CONF_BASE) $(null,$(NDEBUG) $(CONF_DBG) $(CONF_NDBG))
-CONFIGURATION = $(CONF_BASE)
-
-.IF $(_COMPTYPE) == BC
-CONF_BASE =	\
--f- \
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-.IF $(_COMPILER)==BC5
-CONFIGURATION += -RT- -x-
-.ENDIF
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-.IF $(_COMPTYPE) == TC
-CONF_BASE =	\
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-# The "-f-" causes that TCC passes option "/r" to the assembler, though
-# ASM chokes about it
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-
-.ENDIF
-#-weas	\
-#-wpre	\
-#-w-pro	\
 
 cmd.mak : makefile cmd.m1 cmd.m2
 	+copy cmd.m1 + $(mktmp cmds.lib : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\tif exist cmds.lib \44(AR) cmds.lib /c @&&|\n+-$(OBJ:t" &\\n+-")\n| , cmds.lst \n\tif not exist cmds.lib \44(AR) cmds.lib /c @&&|\n+$(OBJ:t" &\\n+")\n| , cmds.lst \n) + cmd.m2 $@

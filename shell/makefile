@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.5  2002/04/02 23:36:37  skaus
+# add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
+#
 # Revision 1.4  2002/04/02 20:58:13  skaus
 # add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 #
@@ -155,50 +158,6 @@ clobber : clean
 
 clean :
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com tags errlist
-
-
-.IF $(CFG) != $(NULL)
-
-#CONFIGURATION = $(CONF_BASE) $(null,$(NDEBUG) $(CONF_DBG) $(CONF_NDBG))
-CONFIGURATION = $(CONF_BASE)
-
-.IF $(_COMPTYPE) == BC
-CONF_BASE =	\
--f- \
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-.IF $(_COMPILER)==BC5
-CONFIGURATION += -RT- -x-
-.ENDIF
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-.IF $(_COMPTYPE) == TC
-CONF_BASE =	\
--I$(INCDIR:s/;/ /:t";")	\
--L$(LIBDIR:s/;/ /:t";")	\
--w
-
-# The "-f-" causes that TCC passes option "/r" to the assembler, though
-# ASM chokes about it
-
-CONF_DBG =	$(MYCFLAGS_DBG)
-
-CONF_NDBG =	$(MYCFLAGS_NDBG)
-
-.ENDIF
-
-
-.ENDIF
-#-weas	\
-#-wpre	\
-#-w-pro	\
 
 command.mak : makefile command.m1 command.m2
 	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(LD) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@
