@@ -352,6 +352,7 @@ void parsecommandline(char *s)
   {                             /* Question after the variables expansion
                                    and make sure _all_ executed commands will
                                    honor the trace mode */
+    printprompt();
     fputs(s, stdout);
     /* If the user hits ^Break, it has the same effect as
        usually: If he is in a batch file, he is asked if
