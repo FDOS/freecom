@@ -1005,7 +1005,7 @@ COPY [/A | /B] source [/A | /B] [+ source [/A | /B] [+ ...]] [destination
                existing destination file.
 
 The switch /Y may be preset in the COPYCMD environment variable.
-This may be overridden with /-Y on the command line
+This may be overridden with /-Y on the command line.
 
 To append files, specify a single file for destination, but multiple files
 for source (using wildcards or file1+file2+file3 format).
@@ -1122,7 +1122,7 @@ Type ECHO without parameters to display the current echo setting.
 .
 
 :TEXT_CMDHELP_EXIT
-Quits the FreeDOS command shell.
+Quits the FreeDOS command shell unless loaded with /P.
 
 EXIT
 .
@@ -1417,11 +1417,11 @@ command as if trace mode would be active.
 :TEXT_CMDHELP_WHICH
 Searches and displays the executable file for each specified command.
 
-WHICH {command}
+WHICH command...
 .
 
 :TEXT_CMDHELP_MEMORY#1
-Displays the internal memory used by FreeCOM internally
+Displays the internal memory used by FreeCOM internally.
 
 MEMORY
 

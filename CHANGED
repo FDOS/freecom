@@ -1,3 +1,6 @@
+fix: typos [#1694,#1696,#1695]
+add: FOR/?: example [#1679]
+bugfix: typo: bad varable specification [#1678]
 fix: copy(): replace chsize() to not fill with '\0's {Tom Ehlert}
 add: copy(): Speed-Up by pre-creating the file {Tom Ehlert}
 bugfix: BATCH.C: extract of label name failed due to macro {Tom Ehlert}
