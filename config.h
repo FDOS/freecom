@@ -31,7 +31,7 @@
 
 /* Define to enable F5/F8 key test on startup if /P is present on
 	command line */
-#define FEATURE_BOOT_KEYS
+/* #define FEATURE_BOOT_KEYS */
 
 /* Command line logging feature */
 /* #define FEATURE_CALL_LOGGING */
