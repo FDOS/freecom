@@ -6,26 +6,30 @@
 <META NAME="DESCRIPTION" CONTENT="Description of features and implementation status of FreeCOM, the COMMAND.COM replacement">
 <META NAME="AUTHOR" CONTENT="Steffen Kaiser">
 <META NAME="KEYWORDS" CONTENT="DOS, FreeDOS, FreeCOM, COMMAND.COM, CLI">
-<META NAME="DATE" CONTENT="2001-02-06">
+<META NAME="dATE" CONTENT="2001-02-06">
 <TITLE>Description of Features and Implementation Status of FreeCOM</TITLE>
 </HEAD>
 
 <BODY>
 <OL>
-<LI><A HREF="#intro">Introduction</A>
-<LI><A HREF="#cmdline">Command Line Syntax</A>
-<LI><A HREF="#envvars">Environment Variables</A>
-<LI><A HREF="#icmds">Internal Commands</A>
-<LI><A HREF="#userprompt">User prompt</A>
-<LI><A HREF="#appendix">Appendix</A>
+<LI><A HREF="#-intro">Introduction</A>
+<LI><A HREF="#-cmdline">FreeCOM Command Line Syntax</A>
+<LI><A HREF="#-envvars">Environment Variables</A>
+<LI><A HREF="#-icmds">Internal Commands</A>
+<LI><A HREF="#-userprompt">User prompt</A>
 	<OL>
-	<LI><A HREF="#cvs-tags">CVS Resources</A>
-	<LI><A HREF="#ebnf">EBNF</A>
+	<LI><A HREF="#-cmdline-syntax">Command Line Syntax</A>
+	<LI><A HREF="#-cmdline-editing">Command Line Editing</A>
+	</OL>
+<LI><A HREF="#-appendix">Appendix</A>
+	<OL>
+	<LI><A HREF="#-cvs-tags">CVS Resources</A>
+	<LI><A HREF="#-ebnf">EBNF</A>
 	</OL>
 </OL>
 
 <P><HR><P>
-<H1><A NAME="intro">Introduction</A></H1>
+<H1><A NAME="-intro">Introduction</A></H1>
 
 FreeCOM is a:
 <UL>
@@ -36,23 +40,23 @@ FreeCOM is a:
 <A HREF="http://www.freedos.org">FreeDOS</A>, a project that aims to implement
 a GNU GPL'ed DOS.
 
-<P>The main duty of FreeCOM is to prompt the user <A HREF="#userprompt">to enter
+<P>The main duty of FreeCOM is to prompt the user <A HREF="#-userprompt">to enter
 commands</A>, which
 are interpreted, processed directly by FreeCOM or executed as executable
 files.
 
 <P>Those commands processed by FreeCOM directly are called
-<A HREF="#icmds"><EM>Internal Commands</EM></A>.
+<A HREF="#-icmds"><EM>Internal Commands</EM></A>.
 
 <P>Non-internal commands, which cannot be processed by FreeCOM directly,
 are called <EM>External Commands</EM>,
 because FreeCOM will search for files equally named as typed-in.
 
 <P>Besides to implement certain commands FreeCOM offers some
-<A HREF="#features">features</A>.
+<A HREF="#-features">features</A>.
 
 <P><HR><P>
-<H1><A NAME="cmdline">Command Line Syntax</A></H1>
+<H1><A NAME="-cmdline">Command Line Syntax</A></H1>
 
 EBNF: COMMAND.COM [ path [ console ] ] [{ option }] [ '/' ( K | C ) <<commandline>> ]
 
@@ -117,7 +121,7 @@ script is executed prior executing the specified command.
 prompt after executing the specified command.
 
 <P><HR><P>
-<H1><A NAME="envvars">Environment Variables</A></H1>
+<H1><A NAME="-envvars">Environment Variables</A></H1>
 
 Environment variables can be freely assigned using the SET command,
 e.g. executing:<BR>
@@ -190,16 +194,16 @@ CMD: FOR %a in (*.*) DO echo %adam% %a
 <BR><CMD>%adam</CMD> is interpreted as [<CMD>%a</CMD>]dam.
 
 <P><HR><P>
-<H1><A NAME="icmds">Internal Commands</A></H1>
+<H1><A NAME="-icmds">Internal Commands</A></H1>
 Internal commands will be processed by FreeCOM directly, they are available
 to the user without presence of any external files, in fact they hide
 External Commands named equally.
 
 <P>The synopsises of the <A HREF="cmd.html">internal commands</A>
-are described in a style derived from <A HREF="#ebnf">EBNF</A>.
+are described in a style derived from <A HREF="#-ebnf">EBNF</A>.
 
 <P><HR><P>
-<H1><A NAME="userprompt">User Prompt</A></H1>
+<H1><A NAME="-userprompt">User Prompt</A></H1>
 
 FreeCOM knows two modes:
 <OL>
@@ -214,7 +218,7 @@ internal commands and calls to other batch files as well.
 <P>In interactive mode FreeCOM prompts the user to enter a command, the line is
 interpreted, parsed and, finally, either rejected because of an error or executed.
 
-<H2>Command Line Syntax</H2>
+<H2><A NAME="-cmdline-syntax">Command Line Syntax</A></H2>
 
 FreeCOM accepts the following command line:<BR>
 EBNF: [ ':' ] [ '?' ] [ '@' ] { command [{ argument | redirection }] : '|' }
@@ -251,7 +255,7 @@ CMD: cmd arg <infile >>outfile
 standard output stream to <TT>outfile</TT>. The double output redirection specifies to append
 to an existing file rather than overwriting it.
 
-<H2>Command Line Editing</H2>
+<H2><A NAME="-cmdline-editing">Command Line Editing</A></H2>
 FreeCOM offers two methods to interactively enter command lines:
 <OL>
 <LI>standard input, and
@@ -331,9 +335,9 @@ file completion.  The following keys have a special meaning:
 </TABLE>
 
 <P><HR><P>
-<H1><A NAME="appendix">Appendix</A></H1>
+<H1><A NAME="-appendix">Appendix</A></H1>
 
-<H2><A NAME="cvs-tags">CVS Resources</A></H2>
+<H2><A NAME="-cvs-tags">CVS Resources</A></H2>
 
 On <A HREF="http://sourceforge.net/project/?group_id=5109">SourceForge</A>
 a short description of how to access the CVS reository is located. Following those
@@ -373,7 +377,7 @@ manage files for two different branches.
 </TABLE></CENTER>
 
 <HR>
-<H2><A NAME="ebnf">EBNF</A></H2>
+<H2><A NAME="-ebnf">EBNF</A></H2>
 
 Documents encode the synopsis of the commands with operators derived from
 EBNF (<B>E</B>xtended <B>B</B>ackus-<B>N</B>aur <B>F</B>ormula).

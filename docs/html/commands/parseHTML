@@ -16,7 +16,7 @@ sub htmlCommandRef {
 foreach $file ('FreeCOM.html') {
 	die "Cannot open '$file': $!\n"
 		unless open(IN, $file);
-	die "Cannot creare '../$file': $!\n"
+	die "Cannot create '../$file': $!\n"
 		unless open(HTML, ">../$file");
 	&parseEBNF;
 	close HTML;
