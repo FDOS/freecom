@@ -31,7 +31,7 @@ of the <OPT>/A</OPT> option is a sequence of:
 	<LI><OPT>?</OPT> meaning: attribute <OPT>?</OPT> must be set, or
 	<LI><OPT>-?</OPT> meaning: attribute <OPT>?</OPT> must not be set.
 	</UL>
-	The <OPT>+?</OPT> is an extension of the standard syntax.
+	The <OPT>+?</OPT> is an extension to the standard syntax.
 	<P>The following attributes, the <OPT>?</OPT> above, are supported:
 	<UL>
 	<LI><OPT>R</OPT> for: read-only,
@@ -42,7 +42,7 @@ of the <OPT>/A</OPT> option is a sequence of:
 	</UL>
 	<P>If the same attribute is specified twice within the same
 	<OPT>/A</OPT> option, the first superceeds the later ones; if
-	more than one <OPT>/A</OPT> options are specified, the last one
+	more than one <OPT>/A</OPT> option is specified, the last one
 	superceeds all previous ones.
 <LI><OPT>/B</OPT>: (Bare) Displays the lines with the information of
 files and directories only. The ones displaying the volume label,
