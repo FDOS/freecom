@@ -1,9 +1,24 @@
 Compile notes:
 
+1) Setup TC++ v1.01 (see www.freedos.org, Links page for a reference to
+Borland's museum site).
+2) Configure COMMAND.MAK and STRINGS\FIXSTRS.MAK, esp. CC_BASE_PATH
+near the top of the files to reflect where you installed TC+ to.
+3) Run MAKE -f command.mak
+
+You will find two executables in the FreeCOM directory:
+COMMAND.EXE and COMMAND.COM.
+The .COM file is the stand-alone application, which includes the
+strings etc, whereas COMMAND.EXE is the pure executable without the
+strings table for instance. For debugging you must use the .EXE
+file.
+
+
+General information:
+
 To compile this version of command.com, you have to add the suppl
 directory to your list of include directories so that the compiler
 can find the header files located there.
 
-The library suppl_s.lib was built with the suppl library version 2.6
-which had the dosalloc.c file modified to fix a problem with the
-FreeDOS kernel.
+The library suppl_s.lib was built with the suppl library version 2.7
+pre-release 2000/07/20. See the SUPPL subdirectory.

@@ -1,12 +1,14 @@
 .AUTODEPEND
 
 #		*Translator Definitions*
+CC_BASE_PATH = D:\TC101
 CC = tcc +FIXSTRS.CFG
 TASM = TASM
 TLIB = tlib
 TLINK = tlink
-LIBPATH = C:\TC\LIB
-INCLUDEPATH = C:\TC\INCLUDE
+LIBPATH = $(CC_BASE_PATH)\LIB
+INCLUDEPATH = $(CC_BASE_PATH)\INCLUDE
+MMODEL = c
 
 
 #		*Implicit Rules*
@@ -25,10 +27,10 @@ EXE_dependencies =  \
 #		*Explicit Rules*
 fixstrs.exe: fixstrs.cfg $(EXE_dependencies)
   $(TLINK) /s/c/d/L$(LIBPATH) @&&|
-c0t.obj+
+c0$(MMODEL).obj+
 fixstrs.obj
 fixstrs,fixstrs
-cs.lib
+c$(MMODEL).lib
 |
 
 
@@ -38,7 +40,7 @@ fixstrs.obj: fixstrs.cfg fixstrs.c
 #		*Compiler Configuration File*
 fixstrs.cfg: fixstrs.mak
   copy &&|
--mt
+-m$(MMODEL)
 -a
 -f-
 -ff-
@@ -50,10 +52,10 @@ fixstrs.cfg: fixstrs.mak
 -k-
 -d
 -vi-
--H=FIXSTRS.SYM
 -I$(INCLUDEPATH)
 -L$(LIBPATH)
 -P-.C
 | fixstrs.cfg
 
 
+#-H=FIXSTRS.SYM

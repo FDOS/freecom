@@ -1,13 +1,15 @@
 .AUTODEPEND
 
 #		*Translator Definitions*
-CC = \bc45\bin\bcc +COMMAND.CFG
-TASM = \bc45\bin\TASM
-TLIB = \bc45\bin\tlib
-TLINK = \bc45\bin\tlink
-LIBPATH = C:\BC45\LIB
-INCLUDEPATH = C:\BC45\INCLUDE;SUPPL
+CC_BASE_PATH = D:\TC101
+CC = tcc +COMMAND.CFG
+TASM = TASM
+TLIB = tlib
+TLINK = tlink
+LIBPATH = $(CC_BASE_PATH)\LIB
+INCLUDEPATH = $(CC_BASE_PATH)\INCLUDE;.\SUPPL
 
+all: command.com
 
 #		*Implicit Rules*
 .c.obj:
@@ -37,6 +39,7 @@ EXE_dependencies =  \
  debug.obj \
  del.obj \
  dir.obj \
+ dstack.obj \
  echo.obj \
  environ.obj \
  error.obj \
@@ -78,12 +81,12 @@ EXE_dependencies =  \
  lh.obj \
  lowexec.obj \
  spawn.obj \
- {$(LIBPATH)}suppl_s.lib
+ suppl\suppl_s.lib
 
 #		*Explicit Rules*
 command.exe: command.cfg $(EXE_dependencies)
-  $(TLINK) /x/c/d/L$(LIBPATH) @&&|
-c0s.obj+
+  $(TLINK) /x /c /d @&&|
+$(LIBPATH)\c0s.obj+
 alias.obj+
 batch.obj+
 beep.obj+
@@ -101,6 +104,7 @@ datefunc.obj+
 debug.obj+
 del.obj+
 dir.obj+
+dstack.obj+
 echo.obj+
 environ.obj+
 error.obj+
@@ -144,10 +148,12 @@ lowexec.obj+
 spawn.obj
 command
 		# no map file
-suppl_s.lib+
-cs.lib
+suppl\suppl_s.lib+
+$(LIBPATH)\cs.lib
 |
 
+command.com : command.exe
+	copy /b command.exe + strings.dat command.com
 
 #		*Individual File Dependencies*
 alias.obj: command.cfg alias.c
@@ -183,6 +189,8 @@ debug.obj: command.cfg debug.c
 del.obj: command.cfg del.c
 
 dir.obj: command.cfg dir.c
+
+dstack.obj: command.cfg dstack.c
 
 echo.obj: command.cfg echo.c
 
@@ -270,45 +278,30 @@ lowexec.obj: command.cfg lowexec.asm
 spawn.obj: command.cfg spawn.asm
 	$(TASM) /MX /ZI /O SPAWN.ASM,SPAWN.OBJ
 
+strings.h:
+	fixstrs.bat tc101
+
 #		*Compiler Configuration File*
-command.cfg: command.mak
+#-h
+#-Vf
+#-Ff
+#-C
+
+# added strings.h here because command.cfg is included everywhere already
+command.cfg: command.mak strings.h
   copy &&|
+-a
 -f-
 -ff-
 -K
--j100
+-w+
 -O
 -Z
+-k-
 -d
 -b-
--vi-
--H=COMMAND.SYM
--w-ret
--w-nci
--w-inl
--wpin
--wamb
--wamp
--w-par
--wasm
--wcln
--w-cpt
--wdef
--w-dup
--w-pia
--wsig
--wnod
--w-ill
--w-sus
--wstv
--wucp
--wuse
--w-ext
--w-ias
--w-ibc
--w-pre
--w-nst
 -I$(INCLUDEPATH)
 -L$(LIBPATH)
--P-.C
+-D_NO__DOS_DATE
+-D_NO__DOS_TIME
 | command.cfg

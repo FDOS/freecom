@@ -13,6 +13,9 @@
  * 2000/07/17 Ron Cemer
  * bugfix: destination ending in "\\" must be a directory, but fails
  *	within dfnstat()
+ *
+ * 2000/07/24 Ron Cemer
+ * bugfix: Suppress "Overwrite..." prompt if destination is device
  */
 
 #include <assert.h>
@@ -243,22 +246,27 @@ int copy(char *dst, char *pattern, struct CopySource *src
         return 0;
       }
     } while((h = h->app) != NULL);
+
     if(openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != NULL) {
+    	int destIsDevice = isadev(fileno(fout));
+
       fclose(fout);
-      printf("Overwrite %s (Yes/No/All)?", rDest);
-      switch (vcgetcstr("YNA"))
-      {
-        case CTL_C:
-          free(rDest);
-          return 0;
-      case 'A':
-        optY = 1;
-      case 'Y':
-        break;
-      default:
-        free(rDest);
-        continue;
-      }
+      if(!destIsDevice) {	/* Devices do always exist */
+		  printf("Overwrite %s (Yes/No/All)?", rDest);
+		  switch (vcgetcstr("YNA"))
+		  {
+			case CTL_C:
+			  free(rDest);
+			  return 0;
+		  case 'A':
+			optY = 1;
+		  case 'Y':
+			break;
+		  default:
+			free(rDest);
+			continue;
+		  }
+	  }
     }
     if(cbreak) {
       free(rDest);
