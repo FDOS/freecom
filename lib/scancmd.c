@@ -16,9 +16,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.3  2001/07/08 17:23:43  skaus
+	Update #7
+
 	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
 	Update #5
-
+	
 	Revision 1.1.4.1  2001/07/01 22:04:31  skaus
 	Update #3
 	
@@ -94,7 +97,6 @@ char **scanCmdline(char *line, optScanner fct, void * const arg
   assert(opts);
 
   if((argv = split(line, argc)) == 0) {
-    error_out_of_memory();
     return 0;
   }
 

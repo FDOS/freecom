@@ -66,7 +66,7 @@ char *edupstr(const char far* const s);
 char *estrdup(const char far* const s);
 unsigned my_coreleft(void);
 unsigned long my_farcoreleft(void);
-
+int addArg(char ***, int * const, const char *, const char * const, const char * const);
 char far *_fstpcpy(char far *dst, const char far *src);
 void partstrlower(char *str);
 char *readcommandEnhanced(void);
@@ -85,6 +85,7 @@ char *fillFnam(const char * const pattern, const char * const fnam);
 int is_fnchar(const int c);
 int is_fnstr(const char * const s);
 int is_pathdelim(const int c);
+int is_pathchar(const int c);
 int is_empty(const char *s);
 int is_num(const char * const s, unsigned * const num);
 /* int is_quote(const int c); */

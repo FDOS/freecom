@@ -59,11 +59,12 @@ static forErrors checkFOR(char * param
 	}
 
 	/* Use a normal variable; strip leading %'s */
-	param = skipfnam(*varS = param);
+	*varE = param = skipfnam(*varS = param);
 	if(*param == '%')		/* ignore _one_ trailing percent sign */
-		*varE = param++;
-	if(!*param || !isargdelim(*param) || memicmp(*varS, "IN", 3) == 0
-	 || varE - varS < 2) {
+		++param;
+	if(!*param || !isargdelim(*param)
+	 || *varE - *varS < 2
+	 || (*varE - *varS == 2 && memicmp(*varS, "IN", 2) == 0)) {
 		return badVar;
 	}
 

@@ -13,5 +13,5 @@
 
 #undef error_for_bad_var
 void error_for_bad_var(void)
-{	displayError(TEXT_ERROR_BAD_VERABLE);
+{	displayError(TEXT_ERROR_BAD_VARIABLE);
 }

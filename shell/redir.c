@@ -41,6 +41,7 @@
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
+#include "../include/misc.h"
 
 /* The order of the strings MUST match the ones of the enum's below */
 static char * redir[] = {
@@ -75,51 +76,31 @@ static char prefixIn[] = "<";
 static int appEntry(const char * const prefix
 	, char *** const items
 	, int * const numItems
-	, char ** const s)
-{	char **h;
-	char *p, *q, *l;
-	int len;
+	, char ** const line)
+{	char *p, *q;
 
-	assert(items);
-	assert(numItems);
-	assert(s);
+	assert(line);
 
-	q = skippath(p = ltrimcl(*s));
+	q = skippath(p = ltrimcl(*line));
 	if(q == p) {
 		error_empty_redirection();
 		return 0;
 	}
-	*s = ltrimcl(q);
+	*line = ltrimcl(q);
 
-	if((h = realloc(*items, (*numItems + 1) * sizeof(char*))) == 0) {
-		error_out_of_memory();
-		return 0;
-	}
-	*items = h;
-	if((h[(*numItems)++] = l
-	 = malloc(Strlen(prefix) + (len = q - p) + 1)) == 0) {
-		error_out_of_memory();
-		return 0;
-	}
-	assert(l);
-	q = Stpcpy(l, prefix);
-	memcpy(q, p, len);
-	q[len] = 0;
-	h[*numItems] = 0;
-
-	return 1;
+	return addArg(items, numItems, p, q, prefix) == E_None;
 }
 
-int get_redirection(char * const s
+int get_redirection(char * const line
 	, char *** const in
 	, char *** const out
 	, char *** const pipe)
 {	int i, len;
 	int numIn, numOut, num;
-	char *src = s;	/* The command line is compacted by copying */
-	char *dst = s;	/* it byte-wise, skipping redirections */
+	char *src = line;	/* The command line is compacted by copying */
+	char *dst = line;	/* it byte-wise, skipping redirections */
 
-	assert(s);
+	assert(line);
 	assert(in);
 	assert(out);
 	assert(pipe);
@@ -134,10 +115,16 @@ int get_redirection(char * const s
 	for(;;) {
 		char *p = skipQuotedWord(src, (char*)0, "<>|");
 
-		if(dst != src && p != src) {
-			memmove(dst, src, p - src);
-			dst += p - src;
-			src = p;
+		if(p != src) {
+			if(dst != src) {
+				int len;
+
+				memmove(dst, src, len = p - src);
+				dst += len;
+				src = p;
+			} else {
+				src = dst = p;
+			}
 		}
 
 		i = -1;
@@ -166,10 +153,8 @@ int get_redirection(char * const s
 			{	char **p;
 
 				*dst++ = 0;				/* Terminate previous command */
-				if((p = realloc(*pipe, (num + 2) * sizeof(char*))) == 0) {
-					error_out_of_memory();
+				if((p = erealloc(*pipe, (num + 2) * sizeof(char*))) == 0)
 					goto errRet;
-				}
 				*pipe = p;
 				p[num++] = dst;
 			}
@@ -177,6 +162,7 @@ int get_redirection(char * const s
 		default:
 			assert(i == noRedir);
 			(*pipe)[num] = 0;
+			*dst = 0;				/* Termminate last commmand */
 			return num;
 		}                           /* end switch */
 	}

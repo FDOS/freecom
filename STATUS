@@ -31,6 +31,21 @@ var: (environment) variable
 		CALL'ed batch scripts.
 	- BUG?: Wildcarded, but non-matching parameters are passed unchanged
 		to the command.
+	- BUG?: If the first attempt to validate a FOR statement fails, the
+		command line is expanded, meaning:
+			C> FOR %a IN *.*) DO echo %a
+		fails, because the left "(" is missing; cmd_for_hackery()
+		returns, the command line gets expanded into:
+			C> FOR a
+		, because "%a IN *.*) DO echo %" is considered a variable name.
+		This leads to confusing error messages.
+		a) cmd_for_hackery() would need to cope with embedded redirections,
+			if errors are to be displayed there.
+		b) There is a logical clash between "%a" is to be treated as FOR
+			variable spec or a variable to be expanded.
+	- BUG?: If hackery FOR is found, the commmand is exapnded once, otherwise
+		the command is expanded twice: first before parsing FOR, second
+		when a match is found and the command gets executed.
 1.3. CALL
 	- Working
 	- Sets the local "called" flag.
@@ -78,6 +93,8 @@ var: (environment) variable
 1.13. HISTORY
 	- Working
 	- Added: To change the lower limit of history buffer
+1.14. FD
+	- Working
 
 2. Internal functions
 2.0. General
@@ -99,6 +116,14 @@ var: (environment) variable
 	- Working
 	- Newly added
 	- Quotes text against expansion by the command line parser
+2.4. BATCHNAME
+	- Working
+	- Newly added
+	- Returns the absolute filename of the currently active batch script
+2.5. BATCHLINE
+	- Working
+	- Newly added
+	- Returns the current line number of the currently active batch script
 
 3. Command line parser (aka scanner)
 - Working
@@ -112,6 +137,7 @@ var: (environment) variable
 - No line limit (except unused memory in heap)
 
 5. Command line executor (aka parser)
+5.0. General
 - Working for internal commands; pipes and redirections are scanned OK, but
 	their working is not verified; external commands possibly work
 - Modified into a state-driven automaton; the state is storred into the
@@ -140,6 +166,9 @@ var: (environment) variable
 	12) search for command through ".:%PATH%" search paths
 	13) Initiate batch file processing if absolute filename ends in ".BAT"
 	14) otherwise: call external command
+5.1. Redirections
+- Working verified for non-pipes with batchfiles (see tests\recurs?.bat);
+	no support for swapping
 - Supported redirections:
 	">>&>"	- stderr into file (append)
 	">>&"	- merging stderr & stdout into file (append)

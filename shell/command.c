@@ -262,12 +262,13 @@ static void docommand(char *line)
 			/* Installable Commands are allowed to change both:
 				"com" and "args". Therefore, we may need to
 				reconstruct the external command line */
-			if((p = erealloc(name, strlen(name) + strlen(rest) + 1)) == 0)
+			if((line = StrCat(name, rest)) == 0) {
+				error_out_of_memory();
 				goto errRet;
-			line = strcat(p, rest);
+			}
 			chkPtr(newargs);
 			StrFree(newargs);		/* conserve memory */
-			name = 0;
+//			name = 0;
 		}
 		chkHeap
 #endif
@@ -300,6 +301,8 @@ static int redirectJFTentry(int i
 	, void (*err_fct)(const char * const))
 {	int j;
 	byte far *jft;		/* pointer to FreeCOM's JFT */
+
+	flushall();			/* messing around with file descriptors */
 
 	jft = getJFTp();
 
@@ -510,7 +513,7 @@ void parseExpandedCommand(char *line)
 					>>&>	>\5	append, stderr -- 4dos compatibly
 				*/
 				assert(out[i][0] == '>');
-				assert(out[i][1] >= 2 && out[i][1] <= 5);
+				assert(out[i][1] >= 2 && out[i][1] <= 7);
 				if(out[i][1] & 2) {	/* redirect fd#1 == stdout */
 					if(jftUsed[1] && jftUsed[1][0] != '>') {
 						error_intermixed_redirection(1);
@@ -548,8 +551,8 @@ void parseExpandedCommand(char *line)
 											with secondary redirs */
 				if(!redirectJFTentry(i, jftUsed, &jftUsed[i][2]
 				 , (jftUsed[i][1] & 1)
-				  ? O_TEXT | O_WRONLY | O_CREAT | O_TRUNC	/* overwrite */
-				  : O_TEXT | O_WRONLY | O_CREAT | O_APPEND	/* append */
+				  ? O_TEXT | O_WRONLY | O_CREAT | O_APPEND	/* append */
+				  : O_TEXT | O_WRONLY | O_CREAT | O_TRUNC	/* overwrite */
 				 , S_IREAD | S_IWRITE
 				 , error_redirect_to_file))
 				 	goto errRet;

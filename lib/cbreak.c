@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.6  2001/07/08 17:23:43  skaus
+	Update #7
+
 	Revision 1.1.4.5  2001/07/07 20:37:17  skaus
 	Update #6
-
+	
 	Revision 1.1.4.4  2001/07/05 22:18:34  skaus
 	Update #5
 	
@@ -74,25 +77,19 @@ int chkCBreak(void)
 		/* we need to be sure the string arrives on the screen!
 			Therefore userprompt() is not what we need. */
 
-		char *fmt, *chars;
+		char *fmt, *chars, *fnam;
 		int ch;
-		ctxtEC_Batch_t far *bc = ecLastB();
 
 		if(!getPromptString(PROMPT_CANCEL_BATCH, &chars, &fmt)) {
 			/* Fatal error <-> Terminate all batches */
 			return doCancel = 1;
 		}
-		if(bc)
-			cprintf(fmt, bc->ec_fname);
+		if((fnam = fct_batchname(0)) == 0
+		 && (fnam = getString(TEXT_UNKNOWN_FILENAME)) == 0)
+			cprintf(fmt, "<<unknown>>");
 		else {
-			char *fnam;
-
-			if((fnam = getString(TEXT_UNKNOWN_FILENAME)) == 0)
-				cprintf(fmt, (char far*)"<<unknown>>");
-			else {
-				cprintf(fmt, (char far*)fnam);
-				myfree(fnam);
-			}
+			cprintf(fmt, fnam);
+			myfree(fnam);
 		}
 
 		while((ch = cgetchar()) == 0

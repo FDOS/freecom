@@ -1,3 +1,12 @@
+Update #7:
+fix: skippath(): accepting '.'
+fix: open output redirection: append & overwrite switched
+fix: type in cmdtable.c prevents FD
+fix: get_redirection(): compare with redir[i]
+fix: overwrite mmode in cmdinput.c
+fix: typo: bad_var
+fix: FOR: normmal env var detection screws up varE
+
 Update #6:
 chg: cbreak <-> using doExit/Quit/Cancel, no modes
 chg: CTXT_TAG_EXEC renamed to CTXT_TAG_FLAG
@@ -8,7 +17,7 @@ fix: cmd_for(): To reset the variable to its previous value must be
 fix: ecShrink(): 2nd validateTOS() is incorrect, because the new TOS header
 	is not initialized so far
 chg: renamed variables for FOR: varname, param, cmd
-fix: ecMkf(): calculation of varname & cmd based on normalized ec
+fix: ecMkf(): calculation of varname & cmd based on ctxtMain
 fix: forPatchCmdline(): wrong internal <-> external var ident
 fix: ecMkf(): prefix == 0
 fix: readFORfirst(): wrong return value for ecShrink()

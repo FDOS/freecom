@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/08 17:23:43  skaus
+	Update #7
+
 	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
 	Update #5
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -38,6 +41,7 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <string.h>
 
 #include <mcb.h>
 #include <suppl.h>

@@ -257,8 +257,8 @@ Illegal memory region %d - ignored.
 Must specify ON or OFF.
 .
 
-:TEXT_ERROR_BAD_VERABLE
-Bad varable specification.
+:TEXT_ERROR_BAD_VARIABLE#1
+Bad variable specification.
 .
 
 :TEXT_ERROR_IN_MISSING#1
@@ -503,6 +503,9 @@ DOSKEY features are already enabled in the shell.
 :TEXT_MSG_ECHO_STATE
 ECHO is %s
 .
+:TEXT_ECHO#1
+%s
+.
 
 :TEXT_MSG_VERIFY_STATE
 VERIFY is %s
@@ -586,7 +589,7 @@ aabb   a   a       b    b
 YyNnAaQq{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
 Control-Break pressed.\r
-Terminate batch file '%Fs' (Yes/No/All) ? \
+Terminate batch file '%s' (Yes/No/All) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!

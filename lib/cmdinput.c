@@ -143,7 +143,7 @@ char *readcommandEnhanced(void)
 #ifdef DEBUG
 		case KEY_CTL_T:
 			chkPtr(str);
-			if(!StrCat(str, "for %a in (a*.* b*.*) do echo %a--%a")) {
+			if(!StrCat(str, "echo q >q")) {
 				error_out_of_memory();
 				break;
 			}
@@ -171,9 +171,7 @@ char *readcommandEnhanced(void)
 				str = p;
 				str[charcount] = 0;
 				/* limit the filename */
-				for(p = &str[current]
-				 ; --p >= str && (is_fnchar(*p) || is_pathdelim(*p))
-				 ; );
+				for(p = &str[current]; --p >= str && is_pathchar(*p); );
 				++p;				/* start of string */
 				end = skippath(p);
 				len = &str[charcount] - end;
@@ -339,20 +337,26 @@ char *readcommandEnhanced(void)
 #endif
 			break;
 
-		default:                 /* insert character into string... */
+		default:
 
 			if(ch >= 32 && ch <= 255) {
-				if(!StrAppChr(str, ch))
-					error_out_of_memory();
-				else {
-					if(insert && current != charcount) {
-						memmove(&str[current + 1]
-						 , &str[current], charcount - current);
-						str[current] = ch;
+				if(insert || current == charcount) {
+					/* insert or append character into string... */
+					if(!StrAppChr(str, ch))
+						error_out_of_memory();
+					else {
+						if(insert && current != charcount) {
+							memmove(&str[current + 1]
+							 , &str[current], charcount - current);
+							str[current] = ch;
+						}
+						outs(&str[current]);
+						recalcOrgXY(++charcount);
+						++current;
 					}
-					outs(&str[current]);
-					recalcOrgXY(++charcount);
-					++current;
+				} else {
+					/* Overwrite character */
+					outc(str[current++] = ch);
 				}
 			} else
 				beep();

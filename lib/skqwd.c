@@ -7,9 +7,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.4.3  2001/07/08 17:23:43  skaus
+	Update #7
+
 	Revision 1.2.4.2  2001/06/21 21:40:35  skaus
 	Update #2
-
+	
 	Revision 1.2.4.1  2001/06/19 20:42:23  skaus
 	Update #1
 	
@@ -60,30 +63,31 @@
 #include "../include/command.h"
 #include "../include/cmdline.h"
 
-char *skipqword(const char *pp, const char * const stop)
+char *skipqword(const char * const pp, const char * const stop)
 {	return skipQuotedWord(pp, stop, (char*)0);
 }
-char *skipQuotedWord(const char *pp
+char *skipQuotedWord(const char * const pp
 	, const char * const stopStr
 	, const char * const stopChr)
 {	size_t len;
 	int quote = 0;
+	const char *p;
 
 	assert(pp);
 
 	len = stopStr? strlen(stopStr): 0;
 
-	if(*pp) do {
+	if(*(p = pp) != 0) do {
 		if(quote) {
-			if(quote == *pp)
+			if(quote == *p)
 				quote = 0;
-		} else if(strchr(QUOTE_STR, *pp))
-			quote = *pp;
-		else if(len? (memcmp(pp, stopStr, len) == 0)
-		           : stopChr? strchr(stopChr, *pp) != 0
-		                    : isargdelim(*pp))
+		} else if(strchr(QUOTE_STR, *p))
+			quote = *p;
+		else if(len? (memcmp(p, stopStr, len) == 0)
+		           : stopChr? strchr(stopChr, *p) != 0
+		                    : isargdelim(*p))
 			break;
-	} while(*++pp);
+	} while(*++p);
 
-	return (char *) pp;		/* strip const */
+	return (char *)p;		/* strip const */
 }

@@ -9,6 +9,7 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <fcntl.h>
 #include <io.h>
 #include <stdio.h>
 
@@ -19,18 +20,21 @@
 #include "../err_fcts.h"
 
 int cmd_fd(char *param)
-{	unsigned jft, sft;
+{	unsigned fd, sft;
 
-	if(2 == sscanf(param, "%u %u", &jft, &sft)) {
-		unsigned jftLen;
-		byte far *jftp;
+	if(2 == sscanf(param, "%u %u", &fd, &sft)) {
+		byte far *jft;
 
-		jftLen = peekw(_psp, 0x32);
-		jftp = *(byte far**)MK_FP(_psp, 0x34);
-		assert(jftp);
-		if(jft < jftLen && sft <= 255) {
-			close(jft);
-			jftp[jft] = sft;
+		flushall();		/* messing around with file descriptors */
+
+		jft = getJFTp();
+		assert(jft);
+		if(fd < getJFTlen() && sft <= 255) {
+			close(fd);
+			jft[fd] = sft;
+			/* in DOS redirections are text-mode */
+			/* without this call, Borland C does not expand '\n' */
+			setmode(fd, O_TEXT);
 			return 0;
 		}
 	}

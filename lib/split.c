@@ -9,6 +9,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/08 17:23:43  skaus
+	Update #7
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -41,55 +44,27 @@
 #include <stdlib.h>
 
 #include "../include/cmdline.h"
-
-static int addArg(char ***Xarg, int *argc, char *sBeg, char **sEnd)
-{ char **arg;
-
-  assert(Xarg);
-  assert(argc);
-  assert(sEnd);
-  assert(sBeg);
-
-    *sEnd = skip_word(sBeg);   /* find end of argument */
-
-    /* Because *start != '\0' && !isargdelim(*start) ==> s != start */
-    assert(*sEnd > sBeg);
-
-      /* add new entry for new argument */
-      if((arg = realloc(*Xarg, (*argc + 2) * sizeof(char *))) ==  0) {
-        freep(*Xarg);
-        return 1;
-      }
-      /* create new entry */
-      if((arg[(*argc)++] = unquote(sBeg, *sEnd)) == 0) {
-        freep(arg);
-        return 1;
-      }
-      *Xarg = arg;
-
-    return 0;
-  }
+#include "../include/ierror.h"
+#include "../include/misc.h"
 
 char **split(char *s, int *args)
 {
-  char **arg,
-   *start;
-  int ac;
+	char **arg, *start;
+	int ac;
 
-  assert(args);
+	assert(args);
 
-  arg = malloc(sizeof(char *));
-  if (!arg)
-    return 0;
-  ac = 0;
+	arg = emalloc(sizeof(char *));
+	if(!arg)
+		return 0;
+	ac = 0;
 
-    /* skip to next argument */
-  if(s) while (*(start = skipdm(s)) != '\0')
-  {
-    if(addArg(&arg, &ac, start, &s))
-      return 0;
-  }
+	/* skip to next argument */
+	if(s) while(*(start = skipdm(s)) != '\0') {
+		if(addArg(&arg, &ac, start, s = skip_word(start), (char*)0) != E_None)
+			return 0;
+	}
 
-  arg[*args = ac] = 0;
-  return arg;
+	arg[*args = ac] = 0;
+	return arg;
 }

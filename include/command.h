@@ -122,6 +122,8 @@ int cmd_dispFlags(char *);
 char *fct_tempfile(char *);
 char *fct_ivar(char *);
 char *fct_verbatim(char *);
+char *fct_batchname(char *);
+char *fct_batchline(char *);
 
 
 /* prototypes from PROMPT.C */
@@ -177,6 +179,7 @@ int setArguments(const char * const line);
 /* The MSDOS Batch Commands [MS-DOS 5.0 User's Guide and Reference p359] */
 int cmd_call(char *);
 int cmd_echo(char *);
+int cmd_echoerr(char *);
 int cmd_for(char *);
 int cmd_for_hackery(const char *);
 int cmd_goto(char *);

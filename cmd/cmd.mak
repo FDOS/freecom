@@ -29,6 +29,8 @@ cmds.lib : $(CFG) alias.obj \
 	doskey.obj \
 	echo.obj \
 	exit.obj \
+	f_bfnam.obj \
+	f_blnr.obj \
 	f_ivar.obj \
 	f_tfile.obj \
 	f_verb.obj \
@@ -79,6 +81,8 @@ cmds.lib : $(CFG) alias.obj \
 +-doskey.obj &
 +-echo.obj &
 +-exit.obj &
++-f_bfnam.obj &
++-f_blnr.obj &
 +-f_ivar.obj &
 +-f_tfile.obj &
 +-f_verb.obj &
@@ -130,6 +134,8 @@ cmds.lib : $(CFG) alias.obj \
 +doskey.obj &
 +echo.obj &
 +exit.obj &
++f_bfnam.obj &
++f_blnr.obj &
 +f_ivar.obj &
 +f_tfile.obj &
 +f_verb.obj &

@@ -14,9 +14,11 @@
 
 struct IFCT internalFunctions[] =
 {
-	{"TEMPFILE",	fct_tempfile},
-	{"IVAR",		fct_ivar},
-	{"VERBATIM",	fct_verbatim},
+	{"TEMPFILE",		fct_tempfile},
+	{"IVAR",			fct_ivar},
+	{"VERBATIM",		fct_verbatim},
+	{"BATCHNAME",		fct_batchname},
+	{"BATCHLINE",		fct_batchline},
 
 	{0, 0}
 };

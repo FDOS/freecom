@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.2.2.6  2001/07/08 17:23:43  skaus
+# Update #7
+#
 # Revision 1.2.2.5  2001/07/05 22:18:34  skaus
 # Update #5
 #
@@ -52,17 +55,18 @@
 # Sources of this make target
 SRC = alias.c arg.c beep.c break.c call.c cancel.c cdd.c chdir.c cls.c \
 	copy.c ctty.c date.c del.c dir.c dirs.c disp_flg.c disp_nls.c doskey.c \
-	echo.c exit.c f_ivar.c f_tfile.c f_verb.c fd.c fddebug.c for.c goto.c \
-	history.c icmds.c if.c ivar.c memory.c mkdir.c path.c pause.c popd.c \
-	prompt.c pushd.c quit.c rem.c ren.c rmdir.c set.c shift.c time.c \
-	truename.c type.c verify.c which.c
+	echo.c exit.c f_bfnam.c f_blnr.c f_ivar.c f_tfile.c f_verb.c fd.c \
+	fddebug.c for.c goto.c history.c icmds.c if.c ivar.c memory.c mkdir.c \
+	path.c pause.c popd.c prompt.c pushd.c quit.c rem.c ren.c rmdir.c set.c \
+	shift.c time.c truename.c type.c verify.c which.c
 OBJ = alias.obj arg.obj beep.obj break.obj call.obj cancel.obj cdd.obj \
 	chdir.obj cls.obj copy.obj ctty.obj date.obj del.obj dir.obj dirs.obj \
-	disp_flg.obj disp_nls.obj doskey.obj echo.obj exit.obj f_ivar.obj \
-	f_tfile.obj f_verb.obj fd.obj fddebug.obj for.obj goto.obj history.obj \
-	icmds.obj if.obj ivar.obj memory.obj mkdir.obj path.obj pause.obj \
-	popd.obj prompt.obj pushd.obj quit.obj rem.obj ren.obj rmdir.obj set.obj \
-	shift.obj time.obj truename.obj type.obj verify.obj which.obj
+	disp_flg.obj disp_nls.obj doskey.obj echo.obj exit.obj f_bfnam.obj \
+	f_blnr.obj f_ivar.obj f_tfile.obj f_verb.obj fd.obj fddebug.obj for.obj \
+	goto.obj history.obj icmds.obj if.obj ivar.obj memory.obj mkdir.obj \
+	path.obj pause.obj popd.obj prompt.obj pushd.obj quit.obj rem.obj \
+	ren.obj rmdir.obj set.obj shift.obj time.obj truename.obj type.obj \
+	verify.obj which.obj
 HDR = ..\config.h ..\err_fcts.h ..\include/cmdline.h ..\include/command.h \
 	..\include/context.h ..\include/datefunc.h ..\include/debug.h \
 	..\include/ierror.h ..\include/message.h ..\include/misc.h \
@@ -107,26 +111,26 @@ mkdir.obj : mkdir.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 memory.obj : memory.c \
-	 ../config.h ../include/command.h ../include/context.h \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
 	../strings.h
 goto.obj : goto.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 copy.obj : copy.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/openf.h ../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/openf.h ../include/timefunc.h ../strings.h
 disp_nls.obj : disp_nls.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/nls.h ../include/timefunc.h ../strings.h
 shift.obj : shift.c \
-	 ../config.h ../include/cmdline.h ../include/command.h \
+	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
@@ -169,58 +173,59 @@ break.obj : break.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h ../strings.h
 cancel.obj : cancel.c \
-	 ../config.h ../include/command.h ../include/context.h \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 for.obj : for.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 chdir.obj : chdir.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 alias.obj : alias.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/nls.h ../include/timefunc.h ../strings.h
 cdd.obj : cdd.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 set.obj : set.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 path.obj : path.c \
-	 ../config.h ../include/cmdline.h ../include/command.h \
+	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
 if.obj : if.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
+icmds.obj : icmds.c \
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/nls.h ../include/timefunc.h ../strings.h
+ivar.obj : ivar.c \
+	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
-icmds.obj : icmds.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
+history.obj : history.c \
+	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
-ivar.obj : ivar.c \
-	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
-history.obj : history.c \
-	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h \
-	../strings.h
 dirs.obj : dirs.c \
-	 ../config.h ../include/command.h ../include/context.h \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
 	../strings.h
@@ -229,17 +234,21 @@ which.obj : which.c \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 popd.obj : popd.c \
-	 ../config.h ../include/command.h ../include/context.h \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
 	../strings.h
+f_blnr.obj : f_blnr.c \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 f_verb.obj : f_verb.c \
-	 ../config.h ../include/cmdline.h ../include/command.h \
+	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
 f_ivar.obj : f_ivar.c \
-	 ../config.h ../include/cmdline.h ../include/command.h \
+	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
@@ -248,25 +257,25 @@ f_tfile.obj : f_tfile.c \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 exit.obj : exit.c \
-	 ../config.h ../include/command.h ../include/context.h \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 arg.obj : arg.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 call.obj : call.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 beep.obj : beep.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 echo.obj : echo.c \
-	 ../config.h ../include/cmdline.h ../include/command.h \
+	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
@@ -276,7 +285,7 @@ type.obj : type.c \
 	../include/message.h ../include/misc.h ../include/openf.h \
 	../include/timefunc.h ../strings.h
 prompt.obj : prompt.c \
-	 ../config.h ../include/cmdline.h ../include/command.h \
+	 ../config.h ../context.h_c ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
 	../include/ierror.h ../include/message.h ../include/misc.h \
 	../include/timefunc.h
@@ -285,22 +294,28 @@ cls.obj : cls.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 quit.obj : quit.c \
-	 ../config.h ../include/command.h ../include/context.h \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 pushd.obj : pushd.c \
-	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/ierror.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 disp_flg.obj : disp_flg.c \
-	 ../config.h ../include/command.h ../include/context.h \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h \
 	../strings.h
-fd.obj : fd.c \
-	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
+f_bfnam.obj : f_bfnam.c \
+	 ../config.h ../context.h_c ../include/command.h ../include/context.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
+fd.obj : fd.c \
+	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 time.obj : time.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/ierror.h \
@@ -320,10 +335,10 @@ verify.obj : verify.c \
 	../include/debug.h ../include/ierror.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h ../strings.h
 del.obj : del.c \
-	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/ierror.h ../include/message.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/ierror.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 DYNSOURCES =
 #MAKEDEP STOP
 

@@ -10,6 +10,7 @@ all: $(CFG) freecom.lib
 
 freecom_deps :  \
 	act_qec.obj \
+	add_arg.obj \
 	alloc_ec.obj \
 	alloc_ed.obj \
 	alloc_em.obj \
@@ -127,17 +128,18 @@ freecom_deps :  \
 	is_ifct.obj \
 	is_ivar.obj \
 	is_num.obj \
+	is_pch.obj \
 	is_pchr.obj \
 	isadev.obj \
 	ivarset.obj \
 	keyprsd.obj \
 	lastdget.obj \
 	lastdset.obj \
-	leadopt.obj \
-	lowexec.obj \
 	chunk1
 
 chunk1 :  \
+	leadopt.obj \
+	lowexec.obj \
 	ltrimcl.obj \
 	ltrimsp.obj \
 	lwr1wd.obj \
@@ -263,11 +265,11 @@ chunk1 :  \
 	err62.obj \
 	err63.obj \
 	err64.obj \
-	err65.obj \
-	err66.obj \
 	chunk2
 
 chunk2 :  \
+	err65.obj \
+	err66.obj \
 	err67.obj \
 	err68.obj \
 	err69.obj \
@@ -293,6 +295,7 @@ chunk2 :  \
 freecom.lib : $(CFG) freecom_deps 
 	if exist freecom.lib $(AR) freecom.lib /c @&&|
 +-act_qec.obj &
++-add_arg.obj &
 +-alloc_ec.obj &
 +-alloc_ed.obj &
 +-alloc_em.obj &
@@ -410,6 +413,7 @@ freecom.lib : $(CFG) freecom_deps
 +-is_ifct.obj &
 +-is_ivar.obj &
 +-is_num.obj &
++-is_pch.obj &
 +-is_pchr.obj &
 +-isadev.obj &
 +-ivarset.obj &
@@ -568,6 +572,7 @@ freecom.lib : $(CFG) freecom_deps
 | , freecom.lst 
 	if not exist freecom.lib $(AR) freecom.lib /c @&&|
 +act_qec.obj &
++add_arg.obj &
 +alloc_ec.obj &
 +alloc_ed.obj &
 +alloc_em.obj &
@@ -685,6 +690,7 @@ freecom.lib : $(CFG) freecom_deps
 +is_ifct.obj &
 +is_ivar.obj &
 +is_num.obj &
++is_pch.obj &
 +is_pchr.obj &
 +isadev.obj &
 +ivarset.obj &
