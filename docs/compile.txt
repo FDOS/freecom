@@ -1,5 +1,11 @@
 Compile notes:
 
+NOTE: NASM version 0.98.34 compiled on Jun 17 2002
+Contains a bug, you'll need to switch to a previous version,
+the DJGPP compiled or Win32 variant, e.g.:
+Win32: NASM version 0.98.34 compiled on Jun 13 2002
+                                            ^^   !!
+
 1) Setup TC++ v1.01 (see www.freedos.org, Links page for a reference to
 Borland's museum site).
 2) Configure CONFIG.MAK (see below)
