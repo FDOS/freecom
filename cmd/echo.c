@@ -38,7 +38,7 @@ int cmd_echo(char *param)
 		nostatus = !isspace(*param);
 			/* Unlike other internal commands, puncation characters
 				are not removed by ECHO */
-		param = ltrimsp(param + 1);
+		++param;
 	} else nostatus = 0;
 
 	switch(onoffStr(param)) {
