@@ -1,5 +1,6 @@
+bugfix: onoffStr(): do not ignore leading argument delimiters [#1736]
 add/upd: CVS $id$ keywords to/of files
-bugfix: misidentifying unspecific failures from within SUPPL
+bugfix: misidentifying unspecific failures from within SUPPL [#1616]
 
 v0.82 pl 3:
 bugfix: Ask for FreeCOM location when STRINGS are missing [#687]

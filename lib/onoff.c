@@ -5,9 +5,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.5  2004/02/10 19:10:02  skaus
+	bugfix: onoffStr(): do not ignore leading argument delimiters [#1736]
+
 	Revision 1.4  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.3  2002/11/12 18:56:48  skaus
 	bugfix: onOffStr(): zaps trailing argument delimiters, e.g. ECHO set=
 	
@@ -58,7 +61,7 @@ enum OnOff onoffStr(char *line)
 
 	if(!line)
 		return OO_Null;
-	line = ltrimcl(line);
+	line = ltrimsp(line);
 	if(!*line)
 		return OO_Empty;
 	if(matchtok(line, D_OFF))
