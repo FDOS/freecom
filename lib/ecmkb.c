@@ -38,7 +38,7 @@ int ecMkB(const char * const name)
 	assert(strlen(buf) < sizeof(buf));
 
 		/* reset position & line number to zero */
-	strcpy(strchr(buf, '|'), "|0 0|");
+	memcpy(strchr(buf, '|'), "|0 0|", sizeof("|0 0|") - 1);
 
 	if((rv = ctxtPush(CTXT_TAG_EXEC, buf)) == E_None
 	 && ++gflag_batchlevel == 1) {

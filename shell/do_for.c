@@ -43,6 +43,7 @@ static char *forPatchCmdline(const unsigned idVarname
 			rv = ctxtSetS(CTXT_TAG_IVAR, p, param);
 		else
 			rv = chgEnv(p, param);
+		chkRegStr(p);
 	} else
 		rv = E_NoMem;
 
@@ -50,6 +51,7 @@ static char *forPatchCmdline(const unsigned idVarname
 
 	if(rv == E_None && (p == ecString(idCmd)) != 0) {
 		unregStr(p);
+		chkPtr(p);
 		return p;
 	}
 	return 0;
@@ -101,8 +103,9 @@ char *readFORfirst(char far * const ctxt)
 		*dfnfilename(pattern) = '\0';	/* extract path */
 		if(ecMkf(&f, idVarname, idCmd, pattern) != E_None)
 			return 0;
-		chkPtr(pattern);
+		chkRegStr(pattern);
 		unregStr(pattern);
+		chkPtr(pattern);
 		if((pattern
 		 = efrealloc(pattern, strlen(pattern) + strlen(f.ff_name) + 1)) == 0)
 			return 0;
@@ -138,6 +141,7 @@ char *readFORnext(char far * const ctxt)
 
 		/* necessary information to let findnext() do some good */
 	esDecode(ffstr);
+	chkRegStr(ffstr);
 	memcpy(&f, ffstr, 21);
 	if(findnext(&f) != 0) {		/* f-context used up */
 		dprintf(("[FOR#2: No further match]\n"));
@@ -151,6 +155,7 @@ char *readFORnext(char far * const ctxt)
 	if(ctxtSet(CTXT_TAG_STRING, idFfblk, ffstr) != E_None)
 		return 0;
 
+	chkRegStr(prefix);
 	unregStr(prefix);
 	chkPtr(prefix);
 	if(!StrCat(prefix, f.ff_name)) {

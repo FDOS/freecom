@@ -548,14 +548,21 @@ int cmd_dir(char *rest)
   int argc, opts;
   int rv;                       /* return value */
   unsigned long dircount;
+#ifdef DEBUG
+	char *tst;
+#define _ tst =
+#else
+#define _
+#endif
 
   /* initialize options */
   longyear = optS = optP = optW = optB = optA = optL = 0;
 
   /* read the parameters from env */
-  if ((argv = scanCmdline(getEnv("DIRCMD"), opt_dir, 0, &argc, &opts))
+  if ((argv = scanCmdline(_ getEnv("DIRCMD"), opt_dir, 0, &argc, &opts))
    == 0)
     return 1;
+  chkRegStr(tst);
   freep(argv);    /* ignore any parameter from env var */
 
   line = 0;

@@ -26,7 +26,8 @@ int ecEnum(const Context_Tag tag, const unsigned startID, int (*fct)(unsigned id
 	if(!id || id > CTXT_INFO(tag, nummax))
 		id = CTXT_INFO(tag, nummax);
 
-	for(rv = 0; !rv && id && id >= CTXT_INFO(tag, nummin); --id)
+	for(rv = 0; !rv && id && id >= CTXT_INFO(tag, nummin); --id) {
+		chkHeap
 		switch(ctxtGet(0, tag, id, &buf)) {
 		case 0:	/* OK */
 			rv = fct(id, buf, arg);
@@ -44,5 +45,7 @@ int ecEnum(const Context_Tag tag, const unsigned startID, int (*fct)(unsigned id
 			return -1;
 #endif
 		}
+		chkHeap
+	}
 	return rv;
 }

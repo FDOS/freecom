@@ -4,9 +4,12 @@
 	Display the internal execution context
 
 	$Log$
+	Revision 1.1.2.6  2001/08/02 21:51:56  skaus
+	Update #13
+
 	Revision 1.1.2.5  2001/07/30 00:45:17  skaus
 	Update #13 / Beta 27: plain dynamic context
-
+	
 	Revision 1.1.2.4  2001/07/25 20:17:28  skaus
 	Update #12
 	
@@ -47,7 +50,7 @@ static int view(unsigned id, char *buf, void * const arg)
 			unsigned idFnam;
 			char *fnam;
 
-			if(3 != sscanf(buf, "%u %lu %lu", &idFnam, &pos, &lnr)) {
+			if(3 != sscanf(buf, "%u|%lu %lu", &idFnam, &pos, &lnr)) {
 				error_context_corrupted();
 				return 1;
 			}
@@ -60,7 +63,7 @@ static int view(unsigned id, char *buf, void * const arg)
 		{	unsigned idPattern, idVarname, idCmd;
 			char *varname, *cmd, *pattern, *p;
 
-			if(3 != sscanf(buf, "%u %u %u", &idVarname, &idCmd, &idPattern)) {
+			if(3 != sscanf(buf, "%u %u|%u", &idVarname, &idCmd, &idPattern)) {
 				error_context_corrupted();
 				return 1;
 			}
@@ -73,6 +76,7 @@ static int view(unsigned id, char *buf, void * const arg)
 					return 1;
 				}
 				unregStr(p);
+				chkPtr(p);
 				if(!StrAppChr(pattern, ' ') || !StrCat(pattern, p)) {
 				 	error_out_of_memory();
 				 	myfree(pattern);
@@ -81,6 +85,8 @@ static int view(unsigned id, char *buf, void * const arg)
 				}
 				myfree(p);
 			}
+			chkRegStr(varname);
+			chkRegStr(cmd);
 			displayString(TEXT_EC_DISP_FOR1, varname, pattern + 1, cmd);
 			myfree(pattern);
 		}
@@ -100,6 +106,9 @@ static int view(unsigned id, char *buf, void * const arg)
 				return 1;
 
 			displayString(TEXT_EC_DISP_FOR2, varname, prefix, cmd);
+			chkRegStr(varname);
+			chkRegStr(cmd);
+			chkRegStr(prefix);
 		}
 		break;
 	case EC_TAG_COMMAND:	/* command */
@@ -147,6 +156,7 @@ int cmd_dispEC(char *param)
 
 	assert(ctxtSegm);
 
+	cnt = 0;
 	ecEnum(CTXT_TAG_EXEC, 0, view, &cnt);
 
 	return 1;

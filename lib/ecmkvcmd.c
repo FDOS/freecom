@@ -26,7 +26,6 @@
 int ecMkvcmd(int mode, const char * const str, va_list ap)
 {	char *p;
 	char *buf, hbuf[EC_LENGTH_C];
-	FLAG missingCmd;
 
 	sprintf(hbuf, "%c%u ", EC_TAG_COMMAND, mode);
 	if(mode & EC_CMD_FORCE_INTERNAL)
@@ -37,20 +36,13 @@ int ecMkvcmd(int mode, const char * const str, va_list ap)
 		return E_NoMem;
 	}
 
-	missingCmd = TRUE;
 	while((p = va_arg(ap, char *)) != 0) if(*p) {
-		missingCmd = FALSE;
 		chkPtr(buf);
 		if(!StrCat(buf, p)) {
 			error_out_of_memory();
 			myfree(buf);
 			return E_NoMem;
 		}
-	}
-
-	if(missingCmd) {		/* Don't make an empty context */
-		myfree(buf);
-		return E_None;		/* Though -> it's successful */
 	}
 
 	return ctxtPush(CTXT_TAG_EXEC, buf);

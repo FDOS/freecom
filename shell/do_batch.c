@@ -82,6 +82,7 @@ char *readBatch(char far * const ctxt)
 	}
 
 	for(; !cbreak; chkp(line)) {
+		chkRegStr(name);
 		dprintf(("[BATCH: about to read line #%lu from @%lu]\n"
 		 , lnr + 1, ftell(f)));
 		if((line = Fgetline(f)) == 0) {

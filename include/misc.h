@@ -115,7 +115,8 @@ FILE *tempfile(void);
 void rmtmpfile(void);
 
 char *regStr(const char * const str);
-void unregStr(const char * const s);
+char *unregStr(const char * const s);
+int isRegStr(const char * const s);
 
 /************* Imported from LH.ASM        */
 

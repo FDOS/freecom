@@ -33,10 +33,12 @@ void dbg_outc(int ch);
 void dbg_outs(const char * const s);
 void dbg_outsn(const char * const s);
 
-#define chkPtr(p)	assert(!(p) || heapchecknode((p)) == _USEDENTRY)
-/* #define myfree(p)	free((p)) */
+//#define chkPtr(p)	assert(!(p) || heapchecknode((p)) == _USEDENTRY)
+#define chkRegStr(p)	assert(!(p) || isRegStr(p) >= 0)
+#define chkPtr(p)	dbg_chkptr((p), __FILE__, __LINE__)
 #define myfree(p)	dbg_free((p), __FILE__, __LINE__)
 void dbg_free(void *p, char*fnam, int line);
+void dbg_chkptr(void *p, char*fnam, int line);
 
 #define SUPPL_DBG_HEAP
 
@@ -46,6 +48,7 @@ void dbg_free(void *p, char*fnam, int line);
 #define dprintf(p)
 #define dbg_printmem()
 #define chkPtr(p)
+#define chkRegStr(p)
 #define myfree free
 
 #endif	/* defined(DEBUG) */

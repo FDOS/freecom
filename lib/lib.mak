@@ -50,10 +50,10 @@ freecom_deps :  \
 	ctxt_clr.obj \
 	ctxt_get.obj \
 	ctxt_inf.obj \
-	ctxt_ini.obj \
 	ctxt_mk.obj \
 	ctxt_mkn.obj \
 	ctxt_mks.obj \
+	ctxt_po2.obj \
 	ctxt_pop.obj \
 	ctxt_psh.obj \
 	ctxt_rnu.obj \
@@ -69,6 +69,7 @@ freecom_deps :  \
 	dateget.obj \
 	dateset.obj \
 	dbg_c.obj \
+	dbg_cptr.obj \
 	dbg_free.obj \
 	dbg_mem.obj \
 	dbg_prnt.obj \
@@ -78,25 +79,28 @@ freecom_deps :  \
 	devopen.obj \
 	dispcnt.obj \
 	drvnum.obj \
+	ecenum.obj \
 	ecfrivar.obj \
 	eclastb.obj \
 	ecmk.obj \
 	ecmk_c.obj \
 	ecmk_f.obj \
+	ecmk_s.obj \
 	ecmkb.obj \
 	ecmkf.obj \
 	ecmkfd.obj \
 	ecmkhc.obj \
-	ecmki.obj \
 	ecmkivar.obj \
+	ecmks.obj \
 	ecmksc.obj \
 	ecmkv1c.obj \
 	ecmkvcmd.obj \
 	ecmkverb.obj \
 	ecpop.obj \
-	ecsettos.obj \
-	ecshrink.obj \
-	ecvalid.obj \
+	ecpushst.obj \
+	ecscarg.obj \
+	ecsets.obj \
+	ecstring.obj \
 	efct_001.obj \
 	efct_002.obj \
 	efct_003.obj \
@@ -131,13 +135,13 @@ freecom_deps :  \
 	is_alias.obj \
 	is_empty.obj \
 	is_fnamc.obj \
+	chunk1
+
+chunk1 :  \
 	is_fnstr.obj \
 	is_icmd.obj \
 	is_ifct.obj \
 	is_ivar.obj \
-	chunk1
-
-chunk1 :  \
 	is_num.obj \
 	is_pch.obj \
 	is_pchr.obj \
@@ -185,6 +189,7 @@ chunk1 :  \
 	o_nsize.obj \
 	o_pad.obj \
 	o_str.obj \
+	obsolete.obj \
 	onoff.obj \
 	openf.obj \
 	optsb.obj \
@@ -195,6 +200,7 @@ chunk1 :  \
 	pr_prmpt.obj \
 	pr_time.obj \
 	prprompt.obj \
+	purgemem.obj \
 	realnum.obj \
 	reg_str.obj \
 	res.obj \
@@ -259,15 +265,15 @@ chunk1 :  \
 	err27.obj \
 	err28.obj \
 	err29.obj \
+	chunk2
+
+chunk2 :  \
 	err30.obj \
 	err31.obj \
 	err32.obj \
 	err33.obj \
 	err34.obj \
 	err35.obj \
-	chunk2
-
-chunk2 :  \
 	err36.obj \
 	err37.obj \
 	err38.obj \
@@ -364,10 +370,10 @@ freecom.lib : $(CFG) freecom_deps
 +-ctxt_clr.obj &
 +-ctxt_get.obj &
 +-ctxt_inf.obj &
-+-ctxt_ini.obj &
 +-ctxt_mk.obj &
 +-ctxt_mkn.obj &
 +-ctxt_mks.obj &
++-ctxt_po2.obj &
 +-ctxt_pop.obj &
 +-ctxt_psh.obj &
 +-ctxt_rnu.obj &
@@ -383,6 +389,7 @@ freecom.lib : $(CFG) freecom_deps
 +-dateget.obj &
 +-dateset.obj &
 +-dbg_c.obj &
++-dbg_cptr.obj &
 +-dbg_free.obj &
 +-dbg_mem.obj &
 +-dbg_prnt.obj &
@@ -392,25 +399,28 @@ freecom.lib : $(CFG) freecom_deps
 +-devopen.obj &
 +-dispcnt.obj &
 +-drvnum.obj &
++-ecenum.obj &
 +-ecfrivar.obj &
 +-eclastb.obj &
 +-ecmk.obj &
 +-ecmk_c.obj &
 +-ecmk_f.obj &
++-ecmk_s.obj &
 +-ecmkb.obj &
 +-ecmkf.obj &
 +-ecmkfd.obj &
 +-ecmkhc.obj &
-+-ecmki.obj &
 +-ecmkivar.obj &
++-ecmks.obj &
 +-ecmksc.obj &
 +-ecmkv1c.obj &
 +-ecmkvcmd.obj &
 +-ecmkverb.obj &
 +-ecpop.obj &
-+-ecsettos.obj &
-+-ecshrink.obj &
-+-ecvalid.obj &
++-ecpushst.obj &
++-ecscarg.obj &
++-ecsets.obj &
++-ecstring.obj &
 +-efct_001.obj &
 +-efct_002.obj &
 +-efct_003.obj &
@@ -496,6 +506,7 @@ freecom.lib : $(CFG) freecom_deps
 +-o_nsize.obj &
 +-o_pad.obj &
 +-o_str.obj &
++-obsolete.obj &
 +-onoff.obj &
 +-openf.obj &
 +-optsb.obj &
@@ -506,6 +517,7 @@ freecom.lib : $(CFG) freecom_deps
 +-pr_prmpt.obj &
 +-pr_time.obj &
 +-prprompt.obj &
++-purgemem.obj &
 +-realnum.obj &
 +-reg_str.obj &
 +-res.obj &
@@ -670,10 +682,10 @@ freecom.lib : $(CFG) freecom_deps
 +ctxt_clr.obj &
 +ctxt_get.obj &
 +ctxt_inf.obj &
-+ctxt_ini.obj &
 +ctxt_mk.obj &
 +ctxt_mkn.obj &
 +ctxt_mks.obj &
++ctxt_po2.obj &
 +ctxt_pop.obj &
 +ctxt_psh.obj &
 +ctxt_rnu.obj &
@@ -689,6 +701,7 @@ freecom.lib : $(CFG) freecom_deps
 +dateget.obj &
 +dateset.obj &
 +dbg_c.obj &
++dbg_cptr.obj &
 +dbg_free.obj &
 +dbg_mem.obj &
 +dbg_prnt.obj &
@@ -698,25 +711,28 @@ freecom.lib : $(CFG) freecom_deps
 +devopen.obj &
 +dispcnt.obj &
 +drvnum.obj &
++ecenum.obj &
 +ecfrivar.obj &
 +eclastb.obj &
 +ecmk.obj &
 +ecmk_c.obj &
 +ecmk_f.obj &
++ecmk_s.obj &
 +ecmkb.obj &
 +ecmkf.obj &
 +ecmkfd.obj &
 +ecmkhc.obj &
-+ecmki.obj &
 +ecmkivar.obj &
++ecmks.obj &
 +ecmksc.obj &
 +ecmkv1c.obj &
 +ecmkvcmd.obj &
 +ecmkverb.obj &
 +ecpop.obj &
-+ecsettos.obj &
-+ecshrink.obj &
-+ecvalid.obj &
++ecpushst.obj &
++ecscarg.obj &
++ecsets.obj &
++ecstring.obj &
 +efct_001.obj &
 +efct_002.obj &
 +efct_003.obj &
@@ -802,6 +818,7 @@ freecom.lib : $(CFG) freecom_deps
 +o_nsize.obj &
 +o_pad.obj &
 +o_str.obj &
++obsolete.obj &
 +onoff.obj &
 +openf.obj &
 +optsb.obj &
@@ -812,6 +829,7 @@ freecom.lib : $(CFG) freecom_deps
 +pr_prmpt.obj &
 +pr_time.obj &
 +prprompt.obj &
++purgemem.obj &
 +realnum.obj &
 +reg_str.obj &
 +res.obj &

@@ -1,4 +1,7 @@
 Update #13 / Beta 27: plain dynamic context
+fix: reg str useage: readCommand(), fct_batchname(), getEnv()
+add: chkregStr() debug macro
+fix: ecLastB(): to return 0 if no Batch context was found
 
 Beta 26 (main branch):
 chg: using FLAG for all boolean options (reduce size)

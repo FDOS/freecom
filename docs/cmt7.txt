@@ -1,6 +1,11 @@
 $Id$
 Permanent data storage within external memory block
 
+--> Note:
+	This comment still treats the execution context as a binary
+	stack at the end of the dynamic context. This info is
+	outdated. This doc is about to be re-written. <--
+
 FreeCOM utilizes several information that need to keep the same
 when it gets reloaded. The current implementation, esp. ALIAS,
 command line history, directory stack and batch nesting level,
@@ -89,14 +94,16 @@ The slightly modified format of the dynamic context looks like this:
 stored in this line.
 
 <tag> has been choosen like this:
-\1 -> execution context
+\1 -> text flags
 \2 -> entries of the command line history  (A)
 \3 -> entries of the directory stack (A)
 \4 -> last directory (B)
 \5 -> swapinfo
 \6 -> arguments %0..%9..%# currently in effect
-\8 -> internal variables
-\9 .. ' ' -> reserved for future use
+\7 -> internal variables
+\8 -> internal strings (used within execution context)
+\9 -> execution context stack
+\a .. ' ' -> reserved for future use
 '!' .. -> alias
 
 To let the aliases allocate all the remaining tags has the slight

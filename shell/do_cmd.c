@@ -31,6 +31,7 @@ char *readCommand(char far * const ctxt)
 
 	lflag_doQuit = cbreak;
 
+		/* reg the string to let it be allocated on failure */
 	if((p = line = regStr(edupstr(ctxt + 1))) == 0)
 		return 0;
 	if(1 != sscanf(p, "%u", &mode) || 0 == (p = strchr(p, ' '))) {
@@ -70,5 +71,7 @@ char *readCommand(char far * const ctxt)
 	ecPop();		/* Remove this context as it has been done
 						completely now */
 
+		/* run_exec_context() deallocates the line itself */
+	unregStr(line);
 	return line;
 }

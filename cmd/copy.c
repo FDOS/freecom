@@ -386,14 +386,21 @@ int cmd_copy(char *rest)
 { char **argv, *p;
   int argc, opts, argi;
   struct CopySource *h;
+#ifdef DEBUG
+	char *tst;
+#define _ tst = 
+#else
+#define _
+#endif
 
   /* Initialize options */
   optA = optB = optV = optY = 0;
 
   /* read the parameters from env */
-  if ((argv = scanCmdline(getEnv("COPYCMD"), opt_copy, 0, &argc, &opts))
+  if ((argv = scanCmdline(_ getEnv("COPYCMD"), opt_copy, 0, &argc, &opts))
    == 0)
     return 1;
+  chkRegStr(tst);
   freep(argv);    /* ignore any parameter from env var */
 
   if((argv = scanCmdline(rest, opt_copy, 0, &argc, &opts)) == 0)

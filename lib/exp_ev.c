@@ -156,6 +156,7 @@ char *expEnvVars(char * const line)
 					goto appPercent;
 				++p;
 				appStr(h);
+				chkRegStr(h);
 				break;
 
 			case '*':	/* all script variables %1..%# (ignores shiftlevel!) */
@@ -217,7 +218,7 @@ char *expEnvVars(char * const line)
 					*h = '\0';
 					if((var = getEnv(p)) != 0) {
 						appStr(var);
-						myfree(var);
+						chkRegStr(var);
 					}
 					p = h + 1;
 				}

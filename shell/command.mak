@@ -18,6 +18,7 @@ command.exe : $(CFG) batch.obj \
 	do_for.obj \
 	do_inter.obj \
 	do_keep.obj \
+	do_strg.obj \
 	dummies.obj \
 	ec_fcts.obj \
 	expalias.obj \
@@ -40,6 +41,7 @@ do_exit.obj+
 do_for.obj+
 do_inter.obj+
 do_keep.obj+
+do_strg.obj+
 dummies.obj+
 ec_fcts.obj+
 expalias.obj+

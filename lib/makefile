@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.3.2.13  2001/08/02 21:51:56  skaus
+# Update #13
+#
 # Revision 1.3.2.12  2001/07/30 00:45:17  skaus
 # Update #13 / Beta 27: plain dynamic context
 #
@@ -88,12 +91,12 @@ SRC = act_qec.c add_arg.c alloc_e1.c alloc_ec.c alloc_ed.c alloc_em.c \
 	ctxt_mk.c ctxt_mkn.c ctxt_mks.c ctxt_po2.c ctxt_pop.c ctxt_psh.c \
 	ctxt_rnu.c ctxt_ses.c ctxt_set.c ctxt_sp.c ctxt_ss.c ctxt_vw.c \
 	ctxtfree.c curdatel.c curtime.c cwd.c dateget.c dateset.c dbg_c.c \
-	dbg_free.c dbg_mem.c dbg_prnt.c dbg_s.c dbg_sn.c dbg_v1.c devopen.c \
-	dispcnt.c drvnum.c ecenum.c ecfrivar.c eclastb.c ecmk.c ecmk_c.c \
-	ecmk_f.c ecmk_s.c ecmkb.c ecmkf.c ecmkfd.c ecmkhc.c ecmkivar.c ecmks.c \
-	ecmksc.c ecmkv1c.c ecmkvcmd.c ecmkverb.c ecpop.c ecpushst.c ecscarg.c \
-	ecsets.c ecstring.c efct_001.c efct_002.c efct_003.c esdec.c esenc.c \
-	exec.c exec1.c exp_ev.c farread.c fcompl1.c fcompl2.c fdattr.c \
+	dbg_cptr.c dbg_free.c dbg_mem.c dbg_prnt.c dbg_s.c dbg_sn.c dbg_v1.c \
+	devopen.c dispcnt.c drvnum.c ecenum.c ecfrivar.c eclastb.c ecmk.c \
+	ecmk_c.c ecmk_f.c ecmk_s.c ecmkb.c ecmkf.c ecmkfd.c ecmkhc.c ecmkivar.c \
+	ecmks.c ecmksc.c ecmkv1c.c ecmkvcmd.c ecmkverb.c ecpop.c ecpushst.c \
+	ecscarg.c ecsets.c ecstring.c efct_001.c efct_002.c efct_003.c esdec.c \
+	esenc.c exec.c exec1.c exp_ev.c farread.c fcompl1.c fcompl2.c fdattr.c \
 	fdevopen.c fillcomp.c find.c find_arg.c freep.c frsysblk.c fstpcpy.c \
 	gallstr.c get1mcb.c getcnam.c getenv.c goxy.c grabfcom.c gumblink.c \
 	hdlrctxt.c hist_get.c hist_set.c i_tty.c inputdos.c is_alias.c \
@@ -123,34 +126,35 @@ OBJ = act_qec.obj add_arg.obj alloc_e1.obj alloc_ec.obj alloc_ed.obj \
 	ctxt_po2.obj ctxt_pop.obj ctxt_psh.obj ctxt_rnu.obj ctxt_ses.obj \
 	ctxt_set.obj ctxt_sp.obj ctxt_ss.obj ctxt_vw.obj ctxtfree.obj \
 	curdatel.obj curtime.obj cwd.obj dateget.obj dateset.obj dbg_c.obj \
-	dbg_free.obj dbg_mem.obj dbg_prnt.obj dbg_s.obj dbg_sn.obj dbg_v1.obj \
-	devopen.obj dispcnt.obj drvnum.obj ecenum.obj ecfrivar.obj eclastb.obj \
-	ecmk.obj ecmk_c.obj ecmk_f.obj ecmk_s.obj ecmkb.obj ecmkf.obj ecmkfd.obj \
-	ecmkhc.obj ecmkivar.obj ecmks.obj ecmksc.obj ecmkv1c.obj ecmkvcmd.obj \
-	ecmkverb.obj ecpop.obj ecpushst.obj ecscarg.obj ecsets.obj ecstring.obj \
-	efct_001.obj efct_002.obj efct_003.obj esdec.obj esenc.obj exec.obj \
-	exec1.obj exp_ev.obj farread.obj fcompl1.obj fcompl2.obj fdattr.obj \
-	fdevopen.obj fillcomp.obj find.obj find_arg.obj freep.obj frsysblk.obj \
-	fstpcpy.obj gallstr.obj get1mcb.obj getcnam.obj getenv.obj goxy.obj \
-	grabfcom.obj gumblink.obj hdlrctxt.obj hist_get.obj hist_set.obj \
-	i_tty.obj inputdos.obj is_alias.obj is_empty.obj is_fnamc.obj \
-	is_fnstr.obj is_icmd.obj is_ifct.obj is_ivar.obj is_num.obj is_pch.obj \
-	is_pchr.obj is_quote.obj isadev.obj ivarset.obj keyprsd.obj lastdget.obj \
-	lastdset.obj leadopt.obj lowexec.obj ltrimcl.obj ltrimsp.obj lwr1wd.obj \
-	match.obj messages.obj mk_rddir.obj mktmpfil.obj msg_dflt.obj \
-	msg_dps.obj msg_fstr.obj msg_get.obj msg_gpt.obj msg_mkey.obj \
-	msg_prmp.obj msg_v1.obj mux_ae.obj nls.obj nls_date.obj nls_time.obj \
-	num_fmt.obj o_blank.obj o_blks.obj o_ch.obj o_cleft.obj o_flush.obj \
-	o_fnl.obj o_gcur.obj o_id.obj o_init.obj o_istty.obj o_mem.obj \
-	o_modes.obj o_nl.obj o_nsize.obj o_pad.obj o_str.obj obsolete.obj \
-	onoff.obj openf.obj optsb.obj optsi.obj optss.obj parsenum.obj \
-	pr_date.obj pr_prmpt.obj pr_time.obj prprompt.obj purgemem.obj \
-	realnum.obj reg_str.obj res.obj res_r.obj res_w.obj resfile.obj \
-	rmtmpfil.obj rtrimcl.obj rtrimsp.obj salloc.obj samefile.obj scancmd.obj \
-	scanopt.obj set_arg.obj showcmds.obj skiparg.obj skipchrs.obj \
-	skippath.obj skipquot.obj skqwd.obj spfnam.obj split.obj splitfc.obj \
-	sumblink.obj tempfile.obj timeget.obj timeset.obj tmpnam.obj trimcl.obj \
-	trimsp.obj txtlend.obj unquote.obj vcgetch.obj vcgetstr.obj where.obj
+	dbg_cptr.obj dbg_free.obj dbg_mem.obj dbg_prnt.obj dbg_s.obj dbg_sn.obj \
+	dbg_v1.obj devopen.obj dispcnt.obj drvnum.obj ecenum.obj ecfrivar.obj \
+	eclastb.obj ecmk.obj ecmk_c.obj ecmk_f.obj ecmk_s.obj ecmkb.obj \
+	ecmkf.obj ecmkfd.obj ecmkhc.obj ecmkivar.obj ecmks.obj ecmksc.obj \
+	ecmkv1c.obj ecmkvcmd.obj ecmkverb.obj ecpop.obj ecpushst.obj ecscarg.obj \
+	ecsets.obj ecstring.obj efct_001.obj efct_002.obj efct_003.obj esdec.obj \
+	esenc.obj exec.obj exec1.obj exp_ev.obj farread.obj fcompl1.obj \
+	fcompl2.obj fdattr.obj fdevopen.obj fillcomp.obj find.obj find_arg.obj \
+	freep.obj frsysblk.obj fstpcpy.obj gallstr.obj get1mcb.obj getcnam.obj \
+	getenv.obj goxy.obj grabfcom.obj gumblink.obj hdlrctxt.obj hist_get.obj \
+	hist_set.obj i_tty.obj inputdos.obj is_alias.obj is_empty.obj \
+	is_fnamc.obj is_fnstr.obj is_icmd.obj is_ifct.obj is_ivar.obj is_num.obj \
+	is_pch.obj is_pchr.obj is_quote.obj isadev.obj ivarset.obj keyprsd.obj \
+	lastdget.obj lastdset.obj leadopt.obj lowexec.obj ltrimcl.obj \
+	ltrimsp.obj lwr1wd.obj match.obj messages.obj mk_rddir.obj mktmpfil.obj \
+	msg_dflt.obj msg_dps.obj msg_fstr.obj msg_get.obj msg_gpt.obj \
+	msg_mkey.obj msg_prmp.obj msg_v1.obj mux_ae.obj nls.obj nls_date.obj \
+	nls_time.obj num_fmt.obj o_blank.obj o_blks.obj o_ch.obj o_cleft.obj \
+	o_flush.obj o_fnl.obj o_gcur.obj o_id.obj o_init.obj o_istty.obj \
+	o_mem.obj o_modes.obj o_nl.obj o_nsize.obj o_pad.obj o_str.obj \
+	obsolete.obj onoff.obj openf.obj optsb.obj optsi.obj optss.obj \
+	parsenum.obj pr_date.obj pr_prmpt.obj pr_time.obj prprompt.obj \
+	purgemem.obj realnum.obj reg_str.obj res.obj res_r.obj res_w.obj \
+	resfile.obj rmtmpfil.obj rtrimcl.obj rtrimsp.obj salloc.obj samefile.obj \
+	scancmd.obj scanopt.obj set_arg.obj showcmds.obj skiparg.obj \
+	skipchrs.obj skippath.obj skipquot.obj skqwd.obj spfnam.obj split.obj \
+	splitfc.obj sumblink.obj tempfile.obj timeget.obj timeset.obj tmpnam.obj \
+	trimcl.obj trimsp.obj txtlend.obj unquote.obj vcgetch.obj vcgetstr.obj \
+	where.obj
 HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\gflags.h_c \
 	..\include/cmdline.h ..\include/command.h ..\include/context.h \
 	..\include/crossjmp.h ..\include/datefunc.h ..\include/debug.h \
@@ -344,7 +348,8 @@ exp_ev.obj : exp_ev.c \
 ecsets.obj : ecsets.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/message.h ../include/misc.h ../include/timefunc.h
+	../include/ierror.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 ecmkv1c.obj : ecmkv1c.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
 	../include/context.h ../include/debug.h ../include/ierror.h ec.h
@@ -903,6 +908,9 @@ ecmkb.obj : ecmkb.c \
 esdec.obj : esdec.c \
 	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
 	../include/debug.h
+dbg_cptr.obj : dbg_cptr.c \
+	 ../config.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 alsysblk.obj : alsysblk.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h

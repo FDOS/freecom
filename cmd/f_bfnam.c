@@ -15,5 +15,5 @@
 char *fct_batchname(char *param)
 {	ctxtEC_Batch_t *bc = ecLastB();
 
-	return bc? ecString(bc->ec_idFnam): 0;
+	return bc? unregStr(ecString(bc->ec_idFnam)): 0;
 }

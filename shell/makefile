@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.2.2.7  2001/08/02 21:51:56  skaus
+# Update #13
+#
 # Revision 1.2.2.6  2001/07/30 00:45:17  skaus
 # Update #13 / Beta 27: plain dynamic context
 #
@@ -134,9 +137,9 @@ kswap.obj : kswap.c \
 	../include/debug.h ../include/ierror.h ../include/kswap.h \
 	../include/message.h ../include/misc.h ../include/timefunc.h
 do_cmd.obj : do_cmd.c \
-	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/timefunc.h
+	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 cb_catch.obj : cb_catch.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc \
 	.\..\include\stuff.inc
@@ -147,7 +150,7 @@ ver.obj : ver.c \
 	../strings.h
 do_strg.obj : do_strg.c \
 	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
-	../include/debug.h
+	../include/debug.h ../include/ierror.h
 init.obj : init.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
 	../include/cmdline.h ../include/command.h ../include/context.h \
@@ -188,8 +191,9 @@ dummies.obj : dummies.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc
 do_inter.obj : do_inter.c \
 	 ../config.h ../context.h_c ../gflags.h_c ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/message.h \
-	../include/misc.h ../include/output.h ../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/ierror.h \
+	../include/message.h ../include/misc.h ../include/output.h \
+	../include/timefunc.h
 do_batch.obj : do_batch.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../gflags.h_c \
 	../include/cmdline.h ../include/command.h ../include/context.h \
