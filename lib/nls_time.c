@@ -7,6 +7,9 @@
 	This file bases on NLS.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2001/06/12 22:56:59  skaus
+	bugfix: nls_maketime(): 12hour display does not free AM/PM id
+
 	Revision 1.2  2001/04/29 11:33:51  skaus
 	chg: default heap size (tools\ptchsize) set to 6KB
 	chg: error displaying functions centralized into lib\err_fcts.src
@@ -18,7 +21,7 @@
 	bugfix: error message on empty redirection
 	bugfix: comma and semicolon ';' are recognized as argument seperators
 		of internal commands
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -58,7 +61,7 @@
 
 char *nls_maketime(int mode, int hour, int minute, int second, int fraction)
 {	char buf[4 + 4 + sizeof(int) * 8 * 4 + 6];
-	char *p, *q;
+	char *p;
 	int i, pm;
 
 #ifdef FEATURE_NLS
@@ -87,6 +90,8 @@ char *nls_maketime(int mode, int hour, int minute, int second, int fraction)
 		i = sprintf(p = buf, "%02u%s%02u", hour, sep, minute);
 	}
 
+	assert(strlen(buf) < sizeof(buf));
+
 	if(i == EOF) return 0;
 	if(second >= 0) {
 		i = sprintf(p += i, "%s%02u", sep, second);
@@ -97,16 +102,21 @@ char *nls_maketime(int mode, int hour, int minute, int second, int fraction)
 		}
 	}
 
+	assert(strlen(buf) < sizeof(buf));
+
 	/** Warning: conditional always true -- if !NLS **/
 	if(fmt == 0) {
-		q = getString(pm? TEXT_STRING_PM: TEXT_STRING_AM);
+		char *q = getString(pm? TEXT_STRING_PM: TEXT_STRING_AM);
 		if(!q)		return 0;
 		if(mode & NLS_MAKE_SHORT_AMPM) {
 			*(p += i) = *ltrimsp(q);
 			p[1] = 0;
 		} else
 			strcpy(p + i, q);
+		free(q);
 	}
+
+	assert(strlen(buf) < sizeof(buf));
 
 	return strdup(buf);
 }
