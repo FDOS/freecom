@@ -7,6 +7,8 @@
 
 #include <assert.h>
 
+#include <environ.h>
+
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../include/context.h"
@@ -20,6 +22,12 @@ static int optC;
 optScanFct(opt_set)
 { switch(ch) {
   case 'C': return optScanBool(optC);
+#if 1
+  case 'I': /* Display Information about current memory */
+		printf("Size of environment segment: %u bytes; unused: %u\n"
+		 , env_resize(0, 0), env_freeCount(env_glbSeg));
+		return E_Other;
+#endif
   }
   optErr();
   return E_Useage;

@@ -162,6 +162,8 @@ static void execute(char *first, char *rest)
 	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
     result = exec(fullname, rest, 0);
 	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
+	/* The external command might has killed the string area. */
+	env_nullStrings(0);
 
     perform_exec_result(result);
   }

@@ -209,6 +209,10 @@ int initialize(void)
     The name of the current file is string #0. */
   if((offs = env_string(0, 0)) != 0)    /* OK, environment filled */
     grabComFilename(0, (char far *)MK_FP(env_glbSeg, offs));
+  /* After that argv[0] is no longer used and maybe zapped.
+  	This also will help, as most programs altering the environment
+  	segment externally don't expect a string area. */
+  env_nullStrings(0);
 
   /* Aquire the command line, there are three possible sources:
     1) DOS command line @PSP:0x80 as pascal string,

@@ -44,7 +44,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "version 0.83 Beta 28 [" __DATE__ "]";
+const char shellver[] = "version 0.83 Beta 30 [" __DATE__ "]";
 const char shellname[] = "FreeCom";
 
 void short_version(void)
