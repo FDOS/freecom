@@ -1,3 +1,9 @@
+v0.83 Beta 46:
+add: COPY: keep file time if not appending
+chg: upload.txt: update options of DIFF utility
+bugfix: documentation: link to ftp://sourceforge
+bugfix: shell\batch.c: incorrect dfn.h path
+
 v0.83 Beta 44:
 upd: documented bug of 16bit NASM version 0.98.34 compiled on Jun 17 2002
 

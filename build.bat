@@ -16,15 +16,20 @@ if "%1"=="xms-swap" shift
 if not "%1"=="-h" goto run
 
 echo Build FreeCOM
-echo Useage: %0 [-r] [clean] [xms-swap]
+echo Useage: %0 [-r] [clean] [xms-swap] [language]
 echo -r: Rebuilt -- Clean before proceed
 echo clean: Remove *.OBJ, *.COM, *.LIB, etc. files, then exit
 echo xms-swap: Build FreeCOM with XMS-Only Swap support
+echo You can select for which language to built FreeCOM by setting
+echo the environment variable LNG before running this script, e.g.:
+echo SET LNG=german
+echo selects the German language. For available language see STRINGS\*.LNG
 goto ende
 
 :run
 if not x%1==x set LNG=%1
 if "%lng%"=="" set LNG=english
+echo Building FreeCOM for lanaguage %LNG%
 
 echo.
 echo Making basic utilities for build process
@@ -105,7 +110,7 @@ echo.
 if NOT "%SWAP%"=="" goto ende
 
 echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
-echo %0 -r xms-swap
+echo BUILD.BAT -r xms-swap
 goto ende
 
 :err1
