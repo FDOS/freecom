@@ -9,6 +9,10 @@
  *
  * 1999/07/08 ska
  * bugfix: destination is a drive letter only
+ *
+ * 2000/07/17 Ron Cemer
+ * bugfix: destination ending in "\\" must be a directory, but fails
+ *	within dfnstat()
  */
 
 #include <assert.h>
@@ -538,7 +542,10 @@ int cmd_copy(char *rest)
     }
     free(last);
     (last = h)->nxt = NULL;
-    destIsDir = dfnstat(destFile) & DFN_DIRECTORY;
+    p = strchr(destFile, '\0') - 1;
+    if(*p == '\\' || *p == '/')		/* must be a directory */
+    	destIsDir = 1;
+    else destIsDir = dfnstat(destFile) & DFN_DIRECTORY;
   } else {              /* Nay */
     destFile = ".";
     destIsDir = 1;
