@@ -36,7 +36,10 @@ In CONFIG.SYS:
 SHELL=C:\KSSF.COM C:\COMMAND.COM /E:2048 /P
 
 From command line:
-KSSF.COM c:\command.com /e:2048
+CALL /S KSSF.COM c:\command.com /e:2048
+
+[[The CALL /S will force the previously loaded FreeCOM to swap;
+  don't use it if you doesn't use FreeCOM.]]
 
 You can even nest KSSFs.
 Doing so KSSF and FreeCOM associate together very tidly, you will need

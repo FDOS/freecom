@@ -10,6 +10,10 @@
 #
 #
 # $Log$
+# Revision 1.2.4.5  2001/02/21 01:07:01  skaus
+# bugfix: _fstrchr() doesnot find '\0'
+# bugfix: NULL problematic
+#
 # Revision 1.2.4.4  2001/02/18 22:43:58  skaus
 # bugfix: STRINGS resource length value counts 1. string twice
 # sub: enumResources() won't check secondary files no longer
@@ -42,7 +46,7 @@
 
 INCDIR +=;$(FREEDOS)\SRC\INCLUDE;..
 LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
-# LDLIBS = suppl_$(_MODEL).lib
+LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib
 LDFLAGS += /msl
 
 # Project specific C compiler flags

@@ -1,3 +1,5 @@
+bugfix: _fstrchr() doesnot find '\0'
+bugfix: NULL problematic
 v0.81 beta 0:
 bugfix: "copy 1 + 2 + 3 target" copies first & last file only
 add: interactive command flag

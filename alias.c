@@ -61,11 +61,9 @@
 
 #ifdef FEATURE_ALIASES
 
-/*
 #ifdef DEBUG
-#define DEBUG_ALIASES
+// #define DEBUG_ALIASES
 #endif
-*/
 
 #include <assert.h>
 #include <stdlib.h>
@@ -379,7 +377,7 @@ void alias_streamfrom(char far *p)
 #endif
 
 #ifdef DEBUG_ALIASES
-	dbg_outsn("[Alias dump]");
+	dbg_print("[Alias dump %Fp]\n", p);
 	for(len = 0; len < 4; ++len) {
 		dbg_print("%04x ", len * 8);
 		for(cnt = 0; cnt < 8; ++cnt)

@@ -3,6 +3,10 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.4.4.6  2001/02/21 01:07:01  skaus
+# bugfix: _fstrchr() doesnot find '\0'
+# bugfix: NULL problematic
+#
 # Revision 1.4.4.5  2001/02/18 21:08:23  skaus
 # add: command WHICH
 # fix: BUILD.BAT and accompanying makefiles for TC++ v1.01
@@ -86,11 +90,11 @@
 
 INCDIR +=;$(FREEDOS)\SRC\INCLUDE
 LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
-LDLIBS = suppl_$(_MODEL).lib
+LDLIBS = $(FREEDOS)\SRC\LIB\$(_COMPILER)\Suppl_$(_MODEL).lib
 LDFLAGS += /msl
 NASM *= c:\TOOL\NASMW.EXE
 
-##LD_TLINK != D:\BC5\BIN\TLINK.EXE
+LD_TLINK != D:\BC5\BIN\TLINK.EXE
 
 # Project specific C compiler flags
 MYCFLAGS_DBG = -DNDEBUG=1 $(null,$(DEBUG) $(NULL) -DDEBUG=1)
