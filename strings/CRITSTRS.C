@@ -23,6 +23,9 @@ memory model.
 
 2000/07/11 ska
 started
+
+26.03.2003 Dejan Strbac (strbac@phreaker.net) - hexadecimal bug
+
 */
 
 #define MODULE_VERSION 0
@@ -131,8 +134,8 @@ void savetext(strings s[], int i, const char * const line)
 				continue;
 			case '&':		/* hexa-decimal string */
 				if(isxdigit(p[1]) && isxdigit(p[2])) {
-					p += 3;
 					*q++ = (tonum(p[1]) << 4) | tonum(p[2]);
+					p += 3;
 					continue;
 				}
 				/** fall though **/

@@ -1,3 +1,4 @@
+bugfix: CRITSTRS: hexa-decimal (%&??) interpretation {Strbac Dejan}
 upd: STRINGS\DUTCH.LNG {Bernd Blaauw}
 bugfix: CVS problem regarding strings\dutch.lng
 add: Russian/CP866 language file {Sandul}
