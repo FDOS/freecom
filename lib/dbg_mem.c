@@ -6,9 +6,12 @@
 	This file bases on DEBUG.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2001/06/11 20:45:38  skaus
+	fix: dbg_printmem() #if must be #ifdef
+
 	Revision 1.2  2001/06/11 20:33:37  skaus
 	fix: dbg_printmem() if compiled in Large memory model, near is invalid
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -50,12 +53,12 @@
 #undef dbg_printmem
 void dbg_printmem(void)
 {
-#if DISP_NEAR
+#ifdef DISP_NEAR
 	static unsigned nearLast = 0;
 #endif
 	static unsigned long farLast = 0;
 
-#if DISP_NEAR
+#ifdef DISP_NEAR
 	unsigned nearThis;
 #endif
 	unsigned long farThis;
@@ -74,12 +77,12 @@ void dbg_printmem(void)
 		break;
 	}
 
-#if DISP_NEAR
+#ifdef DISP_NEAR
 	nearThis = coreleft();
 #endif
 	farThis = farcoreleft();
 
-#if DISP_NEAR
+#ifdef DISP_NEAR
 	dprintf(("[free memory: near=%6u far=%13lu]\n", nearThis, farThis));
 	if(nearLast)
 		dprintf(("[changed    : near=%6d far=%13ld]\n"
@@ -90,7 +93,7 @@ void dbg_printmem(void)
 		dprintf(("[changed    : far=%13ld]\n", farThis - farLast));
 #endif
 
-#if DISP_NEAR
+#ifdef DISP_NEAR
 	nearLast = nearThis;
 #endif
 	farLast = farThis;
