@@ -383,8 +383,16 @@ char *readbatchline(int *eflag, char *textline, int size)
          	*dfnfilename(fv) = '\0';	/* extract path */
         	fv = bc->ffind->ff_name;
          } else {			/* if not found use the string itself */
+#if 0
+			/* To use the pattern is not compatible with MS COMMAND */
 			++bc->shiftlevel;
 			fv1 = "";				/* No additional info */
+#else
+          free(bc->ffind);      /* free the buffer */
+          bc->ffind = 0;
+          bc->shiftlevel++;     /* On to next list element */
+          continue;
+#endif
         }
 
       }
