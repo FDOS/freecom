@@ -1,7 +1,8 @@
 You can download pre-compiled variants of FreeCOM from:
 
-
 http://freedos.sourceforge.net/freecom/packages/
+
+other download locations are explained at:
 
 binary.zip: the latest FreeCOM, binaries only
 

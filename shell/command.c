@@ -65,7 +65,6 @@ int defaultToSwap = FALSE;
 	/* if != 0, pointer to static context
 		NOT allowed to alter if swapOnExec == ERROR !!
 	*/
-kswap_p kswapContext = 0;
 
 
 void perform_exec_result(int result)

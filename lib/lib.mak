@@ -86,6 +86,7 @@ freecom_deps :  \
 	is_pchr.obj \
 	isadev.obj \
 	keyprsd.obj \
+	kswap_c.obj \
 	lastdget.obj \
 	lastdset.obj \
 	leadopt.obj \
@@ -134,10 +135,10 @@ freecom_deps :  \
 	showcmds.obj \
 	skqwd.obj \
 	split.obj \
-	sumblink.obj \
 	chunk1
 
 chunk1 :  \
+	sumblink.obj \
 	tempfile.obj \
 	timeget.obj \
 	timeset.obj \
@@ -310,6 +311,7 @@ freecom.lib : $(CFG) freecom_deps
 +-is_pchr.obj &
 +-isadev.obj &
 +-keyprsd.obj &
++-kswap_c.obj &
 +-lastdget.obj &
 +-lastdset.obj &
 +-leadopt.obj &
@@ -529,6 +531,7 @@ freecom.lib : $(CFG) freecom_deps
 +is_pchr.obj &
 +isadev.obj &
 +keyprsd.obj &
++kswap_c.obj &
 +lastdget.obj &
 +lastdset.obj &
 +leadopt.obj &

@@ -5,6 +5,7 @@ set DBG=
 
 : don't forget to pass on the default rather than mine
 copy config.std config.mak
+copy /u docs\download.txt .
 
 for %pkg in (binary debug plainedt) for %fnam in (ptchldrv.exe ptchsize.exe kssf.com vspawn.com command.com) (set fn=packages\%pkg.std\%fnam %+ if exist %fn del /q %fn)
 

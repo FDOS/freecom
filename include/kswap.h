@@ -1,5 +1,7 @@
 /* Kernel-supported swapping */
 
+#ifndef FEATURE_XMS_SWAP
+
 #ifndef __KSWAP__H
 #define __KSWAP__H
 
@@ -30,5 +32,7 @@ int kswapLoadStruc(void);
 
 	/* Default alignment */
 #pragma -a.
+
+#endif
 
 #endif

@@ -64,6 +64,11 @@
 */
 #define FEATURE_KERNEL_SWAP_SHELL
 
+/* Define to support XMS-only swap support of FreeCOM
+	This setting is incompatible with the above one!
+*/
+/* #define FEATURE_XMS_SWAP */
+
 /* Define the size of the buffer used to store old paths for PUSHD/POPD */
 #define DIRSTACK_DEFAULT_SIZE 256
 
@@ -188,6 +193,10 @@
 
 #if CONTEXT_MAX_SIZE > 65535U - 12
 #error "The maximal context size may not exceed 65535 - 12 bytes"
+#endif
+
+#if defined(FEATURE_KERNEL_SWAP_SHELL) && defined(FEATURE_XMS_SWAP)
+#error "FreeCOM cannot support both Kernel- and XMS-based swapping simultaneously"
 #endif
 
 #if sizeof(char*) > sizeof(short)

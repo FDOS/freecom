@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.4  2002/04/02 17:41:31  skaus
+# CleanUp before adding XMS Swapping
+#
 # Revision 1.3  2001/06/10 17:17:24  skaus
 # bugfix: Single point of configuration CONFIG.MAK/.H
 #
@@ -60,15 +63,16 @@ SRC = alprmblk.c alsysblk.c beep_l.c beep_n.c brk_get.c brk_set.c cbreak.c \
 	fdevopen.c fillcomp.c find.c freep.c frsysblk.c fstpcpy.c gallstr.c \
 	get1mcb.c getenv.c goxy.c grabfcom.c gumblink.c hdlrctxt.c hist_get.c \
 	hist_set.c inputdos.c is_empty.c is_fnamc.c is_fnstr.c is_pchr.c \
-	isadev.c keyprsd.c lastdget.c lastdset.c leadopt.c lowexec.asm ltrimcl.c \
-	ltrimsp.c lwr1wd.c match.c messages.c mk_rddir.c mktmpfil.c msg_dflt.c \
-	msg_dps.c msg_fstr.c msg_get.c msg_gpt.c msg_mkey.c msg_prmp.c mux_ae.c \
-	nls.c nls_date.c nls_time.c num_fmt.c onoff.c openf.c optsb.c optsi.c \
-	optss.c parsenum.c pr_date.c pr_prmpt.c pr_time.c prprompt.c realnum.c \
-	res.c res_r.c res_w.c resfile.c rmtmpfil.c rtrimcl.c rtrimsp.c salloc.c \
-	samefile.c scancmd.c scanopt.c showcmds.c skqwd.c split.c sumblink.c \
-	tempfile.c timeget.c timeset.c tmpnam.c trimcl.c trimsp.c txtlend.c \
-	unquote.c vcgetch.c vcgetstr.c where.c
+	isadev.c keyprsd.c kswap_c.c lastdget.c lastdset.c leadopt.c lowexec.asm \
+	ltrimcl.c ltrimsp.c lwr1wd.c match.c messages.c mk_rddir.c mktmpfil.c \
+	msg_dflt.c msg_dps.c msg_fstr.c msg_get.c msg_gpt.c msg_mkey.c \
+	msg_prmp.c mux_ae.c nls.c nls_date.c nls_time.c num_fmt.c onoff.c \
+	openf.c optsb.c optsi.c optss.c parsenum.c pr_date.c pr_prmpt.c \
+	pr_time.c prprompt.c realnum.c res.c res_r.c res_w.c resfile.c \
+	rmtmpfil.c rtrimcl.c rtrimsp.c salloc.c samefile.c scancmd.c scanopt.c \
+	showcmds.c skqwd.c split.c sumblink.c tempfile.c timeget.c timeset.c \
+	tmpnam.c trimcl.c trimsp.c txtlend.c unquote.c vcgetch.c vcgetstr.c \
+	where.c
 OBJ = alprmblk.obj alsysblk.obj beep_l.obj beep_n.obj brk_get.obj \
 	brk_set.obj cbreak.obj cbs.obj cd_dir.obj cgetch.obj cgettime.obj \
 	chgctxt.obj chgdrv.obj chgenv.obj chgenvc.obj chgenvr.obj clrline.obj \
@@ -82,17 +86,17 @@ OBJ = alprmblk.obj alsysblk.obj beep_l.obj beep_n.obj brk_get.obj \
 	find.obj freep.obj frsysblk.obj fstpcpy.obj gallstr.obj get1mcb.obj \
 	getenv.obj goxy.obj grabfcom.obj gumblink.obj hdlrctxt.obj hist_get.obj \
 	hist_set.obj inputdos.obj is_empty.obj is_fnamc.obj is_fnstr.obj \
-	is_pchr.obj isadev.obj keyprsd.obj lastdget.obj lastdset.obj leadopt.obj \
-	lowexec.obj ltrimcl.obj ltrimsp.obj lwr1wd.obj match.obj messages.obj \
-	mk_rddir.obj mktmpfil.obj msg_dflt.obj msg_dps.obj msg_fstr.obj \
-	msg_get.obj msg_gpt.obj msg_mkey.obj msg_prmp.obj mux_ae.obj nls.obj \
-	nls_date.obj nls_time.obj num_fmt.obj onoff.obj openf.obj optsb.obj \
-	optsi.obj optss.obj parsenum.obj pr_date.obj pr_prmpt.obj pr_time.obj \
-	prprompt.obj realnum.obj res.obj res_r.obj res_w.obj resfile.obj \
-	rmtmpfil.obj rtrimcl.obj rtrimsp.obj salloc.obj samefile.obj scancmd.obj \
-	scanopt.obj showcmds.obj skqwd.obj split.obj sumblink.obj tempfile.obj \
-	timeget.obj timeset.obj tmpnam.obj trimcl.obj trimsp.obj txtlend.obj \
-	unquote.obj vcgetch.obj vcgetstr.obj where.obj
+	is_pchr.obj isadev.obj keyprsd.obj kswap_c.obj lastdget.obj lastdset.obj \
+	leadopt.obj lowexec.obj ltrimcl.obj ltrimsp.obj lwr1wd.obj match.obj \
+	messages.obj mk_rddir.obj mktmpfil.obj msg_dflt.obj msg_dps.obj \
+	msg_fstr.obj msg_get.obj msg_gpt.obj msg_mkey.obj msg_prmp.obj \
+	mux_ae.obj nls.obj nls_date.obj nls_time.obj num_fmt.obj onoff.obj \
+	openf.obj optsb.obj optsi.obj optss.obj parsenum.obj pr_date.obj \
+	pr_prmpt.obj pr_time.obj prprompt.obj realnum.obj res.obj res_r.obj \
+	res_w.obj resfile.obj rmtmpfil.obj rtrimcl.obj rtrimsp.obj salloc.obj \
+	samefile.obj scancmd.obj scanopt.obj showcmds.obj skqwd.obj split.obj \
+	sumblink.obj tempfile.obj timeget.obj timeset.obj tmpnam.obj trimcl.obj \
+	trimsp.obj txtlend.obj unquote.obj vcgetch.obj vcgetstr.obj where.obj
 HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\include/batch.h \
 	..\include/cmdline.h ..\include/command.h ..\include/context.h \
 	..\include/crossjmp.h ..\include/datefunc.h ..\include/debug.h \
@@ -139,8 +143,9 @@ freecom.lib .LIBRARY : $(OBJ)
 
 #MAKEDEP START
 onoff.obj : onoff.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	 ../config.h ../include/cmdline.h ../include/command.h \
+	../include/datefunc.h ../include/debug.h ../include/misc.h \
+	../include/timefunc.h
 lastdget.obj : lastdget.c \
 	 ../config.h ../err_fcts.h ../include/context.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h
@@ -344,6 +349,8 @@ showcmds.obj : showcmds.c \
 	 ../config.h ../context.h_c ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/kswap.h ../include/misc.h \
 	../include/timefunc.h ../strings.h
+kswap_c.obj : kswap_c.c \
+	 ../config.h ../context.h_c ../include/debug.h ../include/kswap.h
 is_pchr.obj : is_pchr.c
 dateset.obj : dateset.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h
@@ -473,7 +480,7 @@ gallstr.obj : gallstr.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h
 res_r.obj : res_r.c \
-	 ../include/resource.h
+	 ../config.h ../include/debug.h ../include/resource.h
 msg_mkey.obj : msg_mkey.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h
