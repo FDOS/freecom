@@ -6,9 +6,9 @@ op: FEATURE_KERNEL_SWAP_SHELL
 SYNOPSIS:
 <OL>
 <LI>
-EBNF: CALL program [ <<arguments>> ]
+EBNF: CALL [/Y] program [ <<arguments>> ]
 <LI>
-EBNF: CALL [ /S | /N ] program [ <<arguments>> ]
+EBNF: CALL [/Y] [ /S | /N ] program [ <<arguments>> ]
 </OL>
 
 DESCRIPTION:
@@ -35,6 +35,9 @@ had been compiled with some support for swapping.
 <LI><OPT>/N</OPT>: If <ARG>program</ARG> is not a batch script, the external
 program is executed directly, with swapping disabled. <OPT>/N</OPT> superceeds
 <OPT>/S</OPT>.
+
+<LI><OPT>/Y</OPT>: Enables tracemode during execution of the command.
+
 </UL>
 
 <P>Note: In the future to swap FreeCOM out of memory during the execution
