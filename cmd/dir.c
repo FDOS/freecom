@@ -549,8 +549,8 @@ static int dir_list(int pathlen
 		if(longyear)
 			year += 1900;
 		else	year %= 100;
-		month = file.ff_fdate & 0x001f;
-		day = (file.ff_fdate >> 5) & 0x000f;
+		day = file.ff_fdate & 0x001f;
+		month = (file.ff_fdate >> 5) & 0x000f;
 		hour = file.ff_ftime >> 5 >> 6;
 		minute = (file.ff_ftime >> 5) & 0x003f;
 
