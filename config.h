@@ -29,8 +29,12 @@
 /* Define to enable DOS NLS */
 #define FEATURE_NLS
 
+/* Define to enable F5/F8 key test on startup if /P is present on
+	command line */
+#define FEATURE_BOOT_KEYS
+
 /* Command line logging feature */
-//#define FEATURE_CALL_LOGGING
+/* #define FEATURE_CALL_LOGGING */
 
 /* Preserves last directory (CD, CHDIR, CDD, PUSHD, POPD);
 	"CD -" chdir's there */

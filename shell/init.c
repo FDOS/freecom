@@ -138,7 +138,6 @@ int initialize(void)
   int comPath;                /* path to COMMAND.COM (for COMSPEC/reload) */
   char *newTTY;                 /* what to change TTY to */
   int showinfo;                 /* show initial info only if no command line options */
-  int key;
 
   int ec;           /* error code */
   unsigned offs;        /* offset into environment segment */
@@ -412,7 +411,10 @@ int initialize(void)
 			displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
 		} else {
 			if(exist(autoexec)) {
+#ifdef FEATURE_BOOT_KEYS
 				struct REGPACK r;
+				int key;
+
 				r.r_ax = 0x3000;	/* Get DOS version & OEM ID */
 				intr(0x21, &r);
 				if(!tracemode	/* /Y --> F8 on CONFIG.SYS */
@@ -429,6 +431,7 @@ int initialize(void)
 				if(key == KEY_F5)
 					displayString(TEXT_MSG_INIT_BYPASSING_AUTOEXEC, autoexec);
 				else
+#endif
 					process_input(1, autoexec);
 			} else {
 				if(user_autoexec)
