@@ -12,6 +12,6 @@
 #include "../strings.h"
 
 #undef error_bad_command
-void error_bad_command(void)
-{	displayError(TEXT_ERROR_BADCOMMAND);
+void error_bad_command(const char * const f)
+{	displayError(TEXT_ERROR_BADCOMMAND, f);
 }

@@ -1,3 +1,8 @@
+v0.83 Beta 54:
+bugfix: prevent from executing non-*.bat/com/exe files [part 1) BugID #966]
+bugfix: calling an external program: preserve leading spaces [BugID #752]
+bugfix: ECHO: preserve leading spaces [BugID #1081]
+
 v0.83 Beta 52:
 add: CHCP (disabled by default)
 bugfix: COPY: additional output to honor redirection {Eric Auer} [bugID #1313]

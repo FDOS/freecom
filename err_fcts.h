@@ -6,7 +6,7 @@ void error_path_not_found(void);
 void error_file_not_found(void);
 void error_sfile_not_found(const char * const f);
 void error_req_param_missing(void);
-void error_bad_command(void);
+void error_bad_command(const char * const f);
 void error_no_pipe(void);
 void error_out_of_memory(void);
 void error_syntax(const char * const s);
