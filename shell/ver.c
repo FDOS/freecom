@@ -44,16 +44,17 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "version 0.82 pl 3b "
+const char shellver[] = "0.82 pl 3o"
 #ifdef FEATURE_XMS_SWAP
-	"XMS_Swap "
+	" XMS_Swap"
 #endif
-	"[" __DATE__ " " __TIME__ "]";
+;
+const char shelldate[] = __DATE__ " " __TIME__;
 const char shellname[] = "FreeCom";
 
 void short_version(void)
 {
-  printf("\n%s %s\n", shellname, shellver);
+  printf("\n%s version %s [%s]\n", shellname, shellver, shelldate);
 }
 
 #ifdef INCLUDE_CMD_VER

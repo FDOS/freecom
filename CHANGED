@@ -1,3 +1,4 @@
+fix: PROMPT $V: include FreeCOM version information [#1776]
 fix: docu: typo and mailing list [#1774]
 fix: docu: mailing list at topica {Arkady V.Belousov}
 upd: german.lng [Eric Auer]

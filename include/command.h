@@ -52,6 +52,7 @@ enum InternalErrorCodes {
 #define OwnerPSP (*(unsigned far *)MK_FP(_psp, 0x16))
 
 extern const char shellver[];
+extern const char shelldate[];
 extern const char shellname[];
 
 #define FINDFIRST(path,attrib,ffblk) findfirst(path,attrib,ffblk)
