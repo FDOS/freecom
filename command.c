@@ -212,6 +212,8 @@ int forceLow = 0;               /* load resident copy into low memory */
 int oldinfd = -1;       /* original file descriptor #0 (stdin) */
 int oldoutfd = -1;        /* original file descriptor #1 (stdout) */
 
+context_t context;				/* standard global & shared context */
+
 void fatal_error(char *s)
 {
   /*

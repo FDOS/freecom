@@ -11,6 +11,8 @@
 #ifndef __DEBUG__H
 #define __DEBUG__H
 
+extern int fddebug;
+
 #ifdef DEBUG
 		/* DEBUG ENABLED */
 

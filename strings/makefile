@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.3.4.1  2000/07/19 20:28:30  skaus
+# Experimental Resources, Modules, Context
+#
 # Revision 1.3  2000/07/10 22:26:56  skaus
 # Change internal strings without re-compiling FreeCOM
 #
@@ -26,7 +29,7 @@ LIBDIR +=;$(FREEDOS)\SRC\LIB\$(_COMPILER)
 LDFLAGS += /msl
 _MODEL !:= c
 ## Disable debugging
-NDEBUG !:= Yes
+#NDEBUG !:= Yes
 
 # Project specific C compiler flags
 MYCFLAGS_DBG = -DDEBUG=1
@@ -42,9 +45,10 @@ OBJ :=
 
 
 #	Default target
-all: strings.h strings.dat 
+all: strings.h strings.dat  strings.err
 	+copy strings.h .. >nul
 	+copy strings.dat .. >nul
+	+copy strings.err .. >nul
 
 
 .INIT : $(CFG) __errl
@@ -54,18 +58,23 @@ __errl:
 	-ctags *.c
 
 strings.h strings.dat .UPDATEALL : fixstrs.exe default.lng
-	+fixstrs.exe $(LNG)
+	fixstrs.exe $(LNG)
+
+strings.err : critstrs.exe default.err
+	critstrs.exe $(LNG)
 
 fixstrs.exe : fixstrs.c ../strings.typ
+
+critstrs.exe : critstrs.c
 
 #MAKEDEP START
 #MAKEDEP STOP
 
 clobber : clean
-	$(RM) $(RMFLAGS) *.exe *.com ..\strings.h ..\strings.dat
+	$(RM) $(RMFLAGS) *.exe *.com ..\strings.h ..\strings.dat ..\string.err
 
 clean :
-	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) strings.h strings.dat
+	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj $(CFG) strings.h strings.dat string.err
 
 
 .IF $(CFG) != $(NULL)

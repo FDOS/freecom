@@ -11,7 +11,7 @@ DEFAULT.LNG and the language file passed as argument to FIXSTRS.
 DEFAULT.LNG has two meanings, which make it fundamental file, which
 ensures the integrity of the multi-language support of FreeCOM:
 
-1) The order of strings noted in DEFAULT.LNG will kept the same in
+1) The order of strings noted in DEFAULT.LNG will be kept the same in
 	all *.LNG files.
 2) If an individual *.LNG file does not define a certain string, its
 	contents is taken from the DEFAULT file.
@@ -53,6 +53,7 @@ chg: To use STRINGS.H to keep up the order becomes problematic, as this
 #include <stdlib.h>
 
 #include "../strings.typ"
+#include "../resource.h"
 
 #define fDAT "STRINGS.DAT"
 #define fTXT "DEFAULT.LNG"
@@ -66,7 +67,8 @@ typedef enum STATE {
 
 #define MAXSTRINGS       256
 
-const char id[]="FreeDOS STRINGS v2.02";
+const char id[]="FreeDOS STRINGS v";
+
 
 /*
 	Implementation details about to cache the strings within memory:
@@ -90,6 +92,9 @@ string_count_t maxCnt = 0;	/* number of strings within array */
 #endif
 
 char temp[256];
+
+	/* keep it a single-file project */
+#include "../res_w.c"
 
 /*
  * Append the passed in string onto strg[cnt].text
@@ -260,14 +265,17 @@ int main(int argc, char **argv)
 		" * Any modifications will be lost next time this tool\n"
 		" * is invoked.\n"
 		" */\n\n", inc);
-	fprintf(inc,"#define  STRINGS_ID         \"%s\"\n",id);
+	fprintf(inc,"#define  STRINGS_ID         \"%s%u\"\n"
+	 , id, STRING_RESOURCE_MINOR_ID);
 #if 0		/* Note: Superceeded by embedded parameters */
 	fprintf(inc,"#define  NUMBER_OF_STRINGS  0x%02X\n",maxCnt);
 	fprintf(inc,"#define  SIZE_OF_STRINGS    0x%04X\n", (unsigned)size);
 #endif
 
+	startResource(dat, RES_ID_STRINGS, STRING_RESOURCE_MINOR_ID);
 		/* Preamble of STRINGS.DAT file */
-	fwrite(id, sizeof(id) - 1, 1, dat);		/* file contents ID */
+	fprintf(dat, "%s%u", id, STRING_RESOURCE_MINOR_ID);
+/*	fwrite(id, sizeof(id) - 1, 1, dat);		*//* file contents ID */
 	fwrite("\r\n\x1a", 4, 1, dat);			/* text file full stop */
 	fputs("#define  STRINGS_ID_TRAILER 4\n", inc);	/* 4 additional bytes */
 	fputs("\n\n", inc);						/* delimiter */
@@ -286,6 +294,7 @@ int main(int argc, char **argv)
 		 , strg[cnt].name, cnt, string[cnt].index);
 	}
 	fputs("\n/* END OF FILE */\n", inc);
+	endResource(dat);
 
 	fflush(dat);
 	if(ferror(dat)) {

@@ -67,9 +67,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <dfn.h>
+
 #include "command.h"
 #include "batch.h"
-#include <dfn.h>
+#include "misc.h"
 
 #include "strings.h"
 
@@ -308,3 +310,26 @@ enum OnOff onoffStr(char *line)
 return OO_Other;
 }
 
+/*
+ *	Read a block of data from a FILE* into far memory
+ *	Return 0 on failure, otherwise the number of read bytes
+ */
+size_t farread(void far*buf, size_t length, FILE *f)
+{	struct REGPACK r;
+
+	/* synchronize FILE* with file descriptor in order to be able to
+		call the DOS API */
+	lseek(fileno(f), ftell(f), SEEK_SET);
+	/* Use DOS API in order to read the strings directly to the
+		far address */
+	r.r_ax = 0x3f00;              /* read from file descriptor */
+	r.r_bx = fileno(f);           /* file descriptor */
+	r.r_cx = length;              /* size of block to read */
+	r.r_ds = FP_SEG(buf);         /* segment of buffer to read block to */
+	r.r_dx = FP_OFF(buf);         /* offset of buffer to read block to */
+	intr(0x21, &r);               /* perform DOS API */
+	if ((r.r_flags & 1) != 0)     /* read failed */
+		return 0;
+
+	return r.r_ax;
+}

@@ -17,3 +17,4 @@ typedef struct
 } string_index_t;
 
 #define STRING_NONE ((string_count_t)-1)
+#define STRING_RESOURCE_MINOR_ID 3
