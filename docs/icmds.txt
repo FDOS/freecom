@@ -106,13 +106,27 @@ is popped.
 === ARG
 
 Synopsis:
-	ARG [ shift_level arg0 { arg } ]
+	ARG base_shift_level first_entry_to_remove shift_level
 
 
-Resets the %1-style arguments currently in effect. If no argument
-is specified, all arguments are cleared and the shift level is reset to
-zero. Otherwise the arguments are assigned in sequence, the arg0 (%0)
-is required.
+All arguments are continueously number from 0 (zero), including argument
+%0 (the name of the batch file). All of them are stored into the dynamic
+context with tag 6, the number is transformed into a four-digit
+hexadecimal string and gets used as name.
+
+The current argument %0 is referred to by the "base_shift_level", the 
+actual string returned when expanding a "%#" variable is:
+	base_shift_level + shift_level + #
+where "shift_level" is the modified by the statement:
+	SHIFT [ DOWN ]
+.
+
+The ARG command discards the argument pushed onto the argument stack,
+e.g. when a batch file terminates. "base_shift_level" specifies the new
+"base_shift_level" and "first_entry_to_remove" is the number of the
+first argument entry to be removed, which was the current
+base_shift_level most probably.
+
 
 === Example of how the special internal commands are used
 
@@ -319,10 +333,19 @@ which means:
 and the additional " ahoi" on the command line.
 
 If no argument is specified, the internal function is called with
-an arguments empty.
+all arguments empty.
 If an internal function uses sub-arguments, such as @tempfile, they
 are delimited by the NLS list separator character, usually a comma ','
-or semi-colon ';'.
+or semi-colon ';'. There must be no spurious whitespaces around the
+sub-argument delimiter, e.g.
+	%@tempfile(  .tmp)
+would expand to:
+	argv[0] = "@tempfile"
+	argv[1] = "  .tmp"
+	argv[2] = ""
+So a temporary filename tried to be created would be, if %TEMP%==C:\TEMP:
+	"C:\\TEMP\\CMD0000  .tmp"
+Which will fail most probably.
 
 === @tempfile[ext,path]
 

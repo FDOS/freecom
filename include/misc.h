@@ -89,6 +89,7 @@ int is_fnchar(const int c);
 int is_fnstr(const char * const s);
 int is_pathdelim(const int c);
 int is_empty(const char *s);
+int is_num(const char * const s, unsigned * const num);
 // int is_quote(const int c);
 #define is_quote(c)	((c) == '"')
 char *skipfnam(const char * const fnam);
@@ -98,6 +99,7 @@ char *getCmdName(const char ** const cp);
 FILE *tempfile(void);
 void rmtmpfile(void);
 
+char *regStr(const char * const str);
 
 /************* Imported from LH.ASM        */
 
@@ -121,6 +123,7 @@ void printprompt(void);
 int showcmds(char *rest);
 void grabComFilename(const int warn, const char far * const fnam);
 
+char *tmpefn(const char * const ext);
 char *tmpfn(void);
 char *mktempfile(const char * const path, const char *ext);
 void killtmpfn(char * const);

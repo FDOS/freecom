@@ -7,9 +7,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.4.2  2001/06/21 21:40:35  skaus
+	Update #2
+
 	Revision 1.2.4.1  2001/06/19 20:42:23  skaus
 	Update #1
-
+	
 	Revision 1.2  2001/04/29 11:33:51  skaus
 	chg: default heap size (tools\ptchsize) set to 6KB
 	chg: error displaying functions centralized into lib\err_fcts.src
@@ -65,6 +68,8 @@ char *skipQuotedWord(const char *pp
 	, const char * const stopChr)
 {	size_t len;
 	int quote = 0;
+
+	assert(pp);
 
 	len = stopStr? strlen(stopStr): 0;
 

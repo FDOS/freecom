@@ -190,6 +190,7 @@ int is_ivar(const char * const, char ** const);
 
 char *readbatchline(int *, char *, int);
 char *find_arg(int);
+int setArguments(const char * const line);
 
 /* The MSDOS Batch Commands [MS-DOS 5.0 User's Guide and Reference p359] */
 int cmd_call(char *);

@@ -422,7 +422,7 @@ static int makePipeContext(char *** const Xout
 /* The first command of the pipe may be executed now */
 	/* perform the ::=IVAR <ivarIn>=%@TEMPFILE  command */
 	assert(!p);
-	if((p = fct_tempfile("")) == 0		/* make the tempfile */
+	if((p = tmpfn()) == 0			/* make the tempfile */
 	 || (q = erealloc(p, strlen(p) + 3)) == 0	/* needed below */
 	 || !ivarSet(ivarIn, p = q))		/* in 'p', if Set() fails */
 		goto errRet;
@@ -633,10 +633,10 @@ void run_exec_context(void)
 
 			/* as we are about to aquire a new command line, some
 				options are resetted to their defaults */
-			echo = ctxtFlags.f_echo;
-			trace = ctxtFlags.f_trace;
-			swap = ctxtFlags.f_swap;
-			called = ctxtFlags.f_call;
+			echo = F(echo);
+			trace = F(trace);
+			swap = F(swap);
+			called = F(call);
 			interactive = 0;
 
 			if((cmdline = (ecFunction[ec->ctxt_type])(ec)) != 0) {

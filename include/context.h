@@ -152,11 +152,13 @@ typedef struct {
 	FLAG f_dispPrompt;		/* display prompt on interactive cmdline */
 	FLAG f_echo;			/* batch script echo mode */
 	FLAG f_trace;			/* batch script trace mode by default */
+	unsigned f_base_shiftlevel;
 	unsigned f_shiftlevel;	/* argument shift level */
 	unsigned f_batchlevel;	/* how many batch nesting levels */
 	char * f_goto;			/* label to goto, if a B context is active */
 } ctxt_flags_t;
 extern ctxt_flags_t ctxtFlags;
+#define F(flags)	ctxtFlags.CTXT_join(f_,flags)
 
 /* flags currently in use are declared in command.h */
 
@@ -170,6 +172,8 @@ int ecMkV1C(const char * const str, ...);
 int ecMkF(const char * const, const char * const, const char * const);
 	/* Make a I context */
 int ecMkI(void);
+	/* Make a F context: fullname (pos & lcount default to 0) */
+int ecMkB(const char * const fullname);
 	/* Make a C/FD context */
 int ecMkFD(int jft, int sft);
 	/* Return a pointer to the most current F context */

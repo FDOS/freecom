@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.2.2.2  2001/06/21 21:40:35  skaus
+# Update #2
+#
 # Revision 1.2.2.1  2001/06/19 20:42:23  skaus
 # Update #1
 #
@@ -46,8 +49,8 @@ OBJ = batch.obj cb_catch.obj cmdtable.obj command.obj dummies.obj \
 HDR = ..\config.h ..\include/cmdline.h ..\include/command.h \
 	..\include/context.h ..\include/crossjmp.h ..\include/datefunc.h \
 	..\include/debug.h ..\include/keys.h ..\include/kswap.h \
-	..\include/misc.h ..\include/module.h ..\include/mux_ae.h \
-	..\include/nls.h ..\include/openf.h ..\include/res.h \
+	..\include/message.h ..\include/misc.h ..\include/module.h \
+	..\include/mux_ae.h ..\include/nls.h ..\include/openf.h ..\include/res.h \
 	..\include/resource.h ..\include/timefunc.h ..\include\large.inc \
 	..\include\model.inc ..\include\small.inc ..\include\stuff.inc
 
@@ -87,52 +90,55 @@ com.exe com.map .UPDATEALL : $(OBJ) ../cmd/cmds.lib ../lib/freecom.lib
 #MAKEDEP START
 expalias.obj : expalias.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 command.obj : command.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
-	../include/command.h ../include/crossjmp.h ../include/datefunc.h \
-	../include/debug.h ../include/kswap.h ../include/misc.h \
-	../include/mux_ae.h ../include/nls.h ../include/openf.h \
-	../include/timefunc.h ../strings.h
+	../include/command.h ../include/context.h ../include/crossjmp.h \
+	../include/datefunc.h ../include/debug.h ../include/kswap.h \
+	../include/message.h ../include/misc.h ../include/mux_ae.h \
+	../include/nls.h ../include/openf.h ../include/timefunc.h ../strings.h
 module.obj : module.c \
 	 ../context.h_c ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/kswap.h ../include/misc.h \
-	../include/module.h ../include/res.h ../include/resource.h \
-	../include/timefunc.h
+	../include/debug.h ../include/kswap.h ../include/message.h \
+	../include/misc.h ../include/module.h ../include/res.h \
+	../include/resource.h ../include/timefunc.h
 kswap.obj : kswap.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/kswap.h ../include/misc.h ../include/timefunc.h
+	../include/kswap.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 cb_catch.obj : cb_catch.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc \
 	.\..\include\stuff.inc
 ver.obj : ver.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 init.obj : init.c \
 	 ../config.h ../context.h_c ../err_fcts.h ../include/cmdline.h \
 	../include/command.h ../include/context.h ../include/datefunc.h \
 	../include/debug.h ../include/keys.h ../include/kswap.h \
-	../include/misc.h ../include/module.h ../include/timefunc.h ../strings.h
+	../include/message.h ../include/misc.h ../include/module.h \
+	../include/timefunc.h ../strings.h
 cmdtable.obj : cmdtable.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h ../strings.h
 loadhigh.obj : loadhigh.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 batch.obj : batch.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h /freedos/src/include/../include/dfn.h
+	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/message.h ../include/misc.h ../include/timefunc.h
 dummies.obj : dummies.asm \
 	 .\..\include\large.inc .\..\include\model.inc .\..\include\small.inc
 redir.obj : redir.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 DYNSOURCES =
 #MAKEDEP STOP
 

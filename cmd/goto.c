@@ -40,7 +40,7 @@ int cmd_goto(char *param)
 		return 1;
 	}
 
-	StrRepl(ctxtFlags.f_goto, tmp);
+	StrRepl(F(goto), tmp);
 
 	return 0;
 }

@@ -1,167 +1,24 @@
 /*
  *  BATCH.C - batch file processor for COMMAND.COM.
  *
- *  Comments:
- *
- * ??/??/?? (Evan Jeffrey)
- *   started.
- *
- * 15 Jul 1995 (Tim Norman)
- *   modes and bugfixes.
- *
- * 08 Aug 1995 (Matt Rains)
- *   i have cleaned up the source code. changes now bring this source
- *   into guidelines for recommended programming practice.
- *
- *   i have added some constants to help making changes easier.
- *
- * 29 Jan 1996 (Steffan Kaiser)
- *   made a few cosmetic changes
- *
- * 05 Feb 1996 (Tim Norman)
- * - changed to comply with new first/rest calling scheme
- *
- * 14 Jun 1997 (Steffen Kaiser)
- * - bug fixes.  added error level expansion %?.  ctrl-break handling
- *
- * 16 Jul 1998 (Hans B Pufal)
- * - Totally reorganised in conjunction with COMMAND.C (cf) to implement
- *   proper BATCH file nesting and other improvements.
- *
- * 16 Jul 1998 (John P Price <linux-guru@gcfl.net>)
- * - Seperated commands into individual files.
- *
- * 19 Jul 1998 (Hans B Pufal) [HBP_001]
- * - Preserve state of echo flag across batch calls.
- *
- * 19 Jul 1998 (Hans B Pufal) [HBP_002]
- * - Implementation of FOR command
- *
- * 20-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added error checking after malloc calls
- *
- * 27-Jul-1998 (John P Price <linux-guru@gcfl.net>)
- * - added config.h include
- *
- * 02-Aug-1998 (Hans B Pufal) [HBP_003]
- * - Fixed bug in ECHO flag restoration at exit from batch file
- *
- * 10-Aug-1998 ska
- * - added modifyable batchfile (standard behaviour)
- * - corrected ^Break processing
- * - added "newBatchContext()" to create/clear/chain a bcontext variable
- * - added initBatchContext() & clearBatchContext() to make changes in the
- *   bcontext structure easier.
- *
- * 12-Aug-1998 ska
- * - added tracemode variable, however, it's currently ignored
- *
- * 1998/12/05 ska
- * - fix: ECHO state of interactive command line was not properly preserved
- *
- * 1999/04/23 ska
- * bugfix: batch_param(): Missing right quote, after stopping the do-while
- *	loop, the '\0' byte is copied, then s2 incremented --> right of string.
- * bugfix: batch(): fullname is duplicated into heap, but
- *	not freed if this function fails
- * bugfix: batch(): no error checking of batch_params()
- *
- * 1999/05/06 ska		(see CMT2.TXT)
- * bugfix: FOR %a IN (dir\*.*) :: must expand to dir\...
- * bugfix: %9 wrong, if 9 > number of parameters
- * chg: %0 returns full name now
- * add: exit_all_batch() for session management
- *
- * 1999/07/08 ska
- * add: find_arg() returns a valid string for all, even negative indexes
+ *	Enter a batch file
  */
 
 #include "../config.h"
 
 #include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
+#include <limits.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <ctype.h>
+//#include <string.h>
 
-#include "../include/dfn.h"
+#include <dfn.h>
 
 #include "../include/command.h"
+#include "../include/context.h"
 #include "../include/cmdline.h"
-#include "../include/batch.h"
 #include "../err_fcts.h"
-
-struct bcontext *bc = 0;     /* The stack of current batch contexts.
-                                 * NULL when no batch is active
-                                 */
-
-unsigned int echo = 1;          /* The echo flag */
-int tracemode = 0;              /* debug trace of scripts */
-
-
-/* Returns a pointer to the n'th parameter of the current batch file.
- * If no such parameter exists returns pointer to empty string.
- * If no batch file is current, returns NULL
- */
-char *find_arg(int n)
-{
-  dprintf(("[find_arg (%d)]\n", n));
-
-  if (bc == 0)
-    return 0;
-
-  n += bc->shiftlevel;
-  if(n == 0)
-  	return bc->bfnam;
-  if(n > bc->numParams || n < 0)
-  	return "";
-  return bc->params[n - 1];
-}
-
-/*
- * setBatchParams builds a parameter list in newly allocated memory.
- * The parameters consist of null terminated strings with a final
- * NULL character signalling the end of the parameters.
- */
-int setBatchParams(char *s)
-{
-  if((bc->params = split(s, &bc->numParams)) == 0)
-  {
-    error_out_of_memory();
-    return 0;
-  }
-  return 1;
-}
-
-/* Move init/clear functionality out of the files in order to centralize
- * the low-level functionality --> easier to add/remove members of bcontext
- */
-void clearBatchContext(struct bcontext *b)
-{
-	assert(b);
-
-  if (b->bfile)
-    fclose(b->bfile);
-  if (b->bfnam)
-    free(b->bfnam);
-  if (b->blabel)
-    free(b->blabel);
-
-  if (b->ffind)
-    free(b->ffind);
-  if (b->forproto)
-    free(b->forproto);
-  if (b->params)
-    freep(b->params);
-}
-
-void initBatchContext(struct bcontext *b)
-{
-	assert(b);
-  memset(b, 0, sizeof(*b));
-
-  b->brewind = 1;
-}
 
 void exit_batch(void)
 {
@@ -203,27 +60,6 @@ void exit_all_batch(void)
 		exit_batch();
 }
 
-
-/*  Create/Clear/Chain all fields of the structure */
-struct bcontext *newBatchContext(void)
-{
-  struct bcontext *b;
-
-  b = malloc(sizeof(*b));
-  if (!b)
-  {
-    error_out_of_memory();
-    return 0;
-  }
-
-  initBatchContext(b);
-  b->echo = echo;               /* a new context must always preserve the
-                                   current ECHO state */
-
-  b->prev = bc;
-  return bc = b;
-}
-
 /*
  *  Batch files are entitled to be "modifyable" and may span across
  *  floppy disks (you know: calling an external program that says
@@ -232,73 +68,49 @@ struct bcontext *newBatchContext(void)
  *  The current implementation keeps the batchfile open, which is not
  *  the standard behaviour.
  */
-#pragma argsused
 int batch(char *fullname, char *firstword, char *param)
 {
-  /*
-   * Start batch file execution
-   *
-   * The firstword parameter is the full filename of the batch file.
-   */
+	assert(fullname);
+	assert(firstword);
+	assert(param);
 
-   assert(fullname);
-   assert(firstword);
-   assert(param);
+	if((fullname = regStr(dfnexpand(fullname, 0))) == 0) {
+		error_out_of_memory();
+		return 1;
+	}
 
-  if ((fullname = dfnexpand(fullname, 0)) == 0)
-  {
-    error_out_of_memory();
-    return 1;
-  }
+	dprintf(("batch('%s', '%s', '%s')\n", fullname, firstword, param));
 
-  dprintf(("batch ('%s', '%s', '%s')\n", fullname, firstword,
-           param));
+	if(!called)			/* when this batch file terminates,
+							drop to interactive command line */
+		ecMkHC("CANCEL");
 
-  while (bc && bc->forvar)      /* Kill any and all FOR contexts */
-    exit_batch();
+	if(CTXT_INFO(CTXT_TAG_ARG, nummax)) {
+		/* There are already arguments storred */
+		char buf[(sizeof(unsigned) * 8 + 1 + 1) * 3 + 1];
 
-  if (bc == 0)               /* No current batch file, create new context */
-  {
-    if (!newBatchContext()) {
-    	free(fullname);
-      return 1;
-    }
-  }
-  else
-  {                             /* Then we are transferring to another batch */
-    struct bcontext *q;
-    int echo;
+		sprintf(buf, "%u %u %u"
+		 , F(base_shiftlevel)
+		 , CTXT_INFO(CTXT_TAG_ARG, nummax) + 1
+		 , F(shiftlevel));
+		assert(strlen(buf) < sizeof(buf));
+		ecMkHC("ARG ", buf);
+	} else
+		ecMkHC("ARG");		/* reset all arguments */
 
-    clearBatchContext(bc);
+		/* New base is the first non-used string */
+	ctxtPush(CTXT_TAG_ARG, firstword);	/* argv[0] <-> name of script */
+	F(base_shiftlevel) = CTXT_INFO(CTXT_TAG_ARG, nummax);
+	F(shiftlevel) = 0;		/* each script has its own sh-lvl */
 
-    q = bc->prev;               /* preserve context chain intact */
-    echo = bc->echo;            /* preserve former ECHO state */
-    /* if the _current_ ECHO state would be preserved,
-       the following case would forget about the
-       ECHO state on the interactive command line:
-       === File BATCH1.BAT
-       @echo off
-       batch2
-       === File BATCH2.BAT
-       @echo off
-       ===
-       The transfer to BATCH2 would destroy BTACH1's
-       context and therefore the original ECHO state.
-       because BATCH2 is called with ECHO OFF, this
-       state would be preserved as the command line's
-       ECHO state */
-    initBatchContext(bc);
-    bc->prev = q;
-    bc->echo = echo;
-  }
+	if(setArguments(param)) {	 /* out of memory condition */
+		exit_batch();		/* clear this erroreous batch context */
+		return 1;
+	}
 
-  bc->bfnam = fullname;         /* already duplicated */
-  if(!setBatchParams(param)) {	 /* out of memory condition */
-  	exit_batch();		/* clear this erroreous batch context */
-  	return 1;
-  }
+	ecMkB(fullname);
 
-  return 0;
+	return 0;
 }
 
 char *readbatchline(int *eflag, char *textline, int size)

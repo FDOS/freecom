@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.2.2.2  2001/06/21 21:40:34  skaus
+# Update #2
+#
 # Revision 1.2.2.1  2001/06/19 20:42:22  skaus
 # Update #1
 #
@@ -39,20 +42,20 @@
 
 # Sources of this make target
 SRC = alias.c arg.c beep.c break.c call.c cdd.c chdir.c cls.c copy.c ctty.c \
-	date.c del.c dir.c dirs.c doskey.c echo.c exit.c fd.c fddebug.c for.c \
-	goto.c history.c icmds.c if.c ivar.c memory.c mkdir.c path.c pause.c \
-	popd.c prompt.c pushd.c rem.c ren.c rmdir.c set.c shift.c time.c \
-	truename.c type.c verify.c which.c
+	date.c del.c dir.c dirs.c doskey.c echo.c exit.c f_tfile.c fd.c \
+	fddebug.c for.c goto.c history.c icmds.c if.c ivar.c memory.c mkdir.c \
+	path.c pause.c popd.c prompt.c pushd.c rem.c ren.c rmdir.c set.c shift.c \
+	time.c truename.c type.c verify.c which.c
 OBJ = alias.obj arg.obj beep.obj break.obj call.obj cdd.obj chdir.obj \
 	cls.obj copy.obj ctty.obj date.obj del.obj dir.obj dirs.obj doskey.obj \
-	echo.obj exit.obj fd.obj fddebug.obj for.obj goto.obj history.obj \
-	icmds.obj if.obj ivar.obj memory.obj mkdir.obj path.obj pause.obj \
-	popd.obj prompt.obj pushd.obj rem.obj ren.obj rmdir.obj set.obj \
-	shift.obj time.obj truename.obj type.obj verify.obj which.obj
+	echo.obj exit.obj f_tfile.obj fd.obj fddebug.obj for.obj goto.obj \
+	history.obj icmds.obj if.obj ivar.obj memory.obj mkdir.obj path.obj \
+	pause.obj popd.obj prompt.obj pushd.obj rem.obj ren.obj rmdir.obj \
+	set.obj shift.obj time.obj truename.obj type.obj verify.obj which.obj
 HDR = ..\config.h ..\err_fcts.h ..\include/cmdline.h ..\include/command.h \
 	..\include/context.h ..\include/datefunc.h ..\include/debug.h \
-	..\include/misc.h ..\include/nls.h ..\include/openf.h \
-	..\include/timefunc.h
+	..\include/message.h ..\include/misc.h ..\include/nls.h \
+	..\include/openf.h ..\include/timefunc.h
 
 
 #	Default target
@@ -87,158 +90,181 @@ cmds.lib .LIBRARY : $(OBJ)
 #MAKEDEP START
 mkdir.obj : mkdir.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 memory.obj : memory.c \
 	 ../config.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 goto.obj : goto.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h
+	../include/message.h ../include/misc.h ../include/timefunc.h
 copy.obj : copy.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/openf.h ../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/openf.h ../include/timefunc.h ../strings.h
 shift.obj : shift.c \
 	 ../config.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h
+	../include/message.h ../include/misc.h ../include/timefunc.h
 rmdir.obj : rmdir.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 pause.obj : pause.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h ../strings.h
 date.obj : date.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/nls.h ../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/nls.h ../include/timefunc.h ../strings.h
 dir.obj : dir.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/nls.h ../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/nls.h ../include/timefunc.h ../strings.h
 truename.obj : truename.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 rem.obj : rem.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 ctty.obj : ctty.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/openf.h \
-	../include/timefunc.h ../strings.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/openf.h ../include/timefunc.h ../strings.h
 ren.obj : ren.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 break.obj : break.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h ../strings.h
 for.obj : for.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 chdir.obj : chdir.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 alias.obj : alias.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 cdd.obj : cdd.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 set.obj : set.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 path.obj : path.c \
 	 ../config.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 if.obj : if.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 icmds.obj : icmds.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 ivar.obj : ivar.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 history.obj : history.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 dirs.obj : dirs.c \
 	 ../config.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 which.obj : which.c \
 	 ../config.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 popd.obj : popd.c \
 	 ../config.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
+f_tfile.obj : f_tfile.c \
+	 ../config.h ../include/cmdline.h ../include/datefunc.h \
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 exit.obj : exit.c \
 	 ../config.h ../include/context.h ../include/debug.h
 arg.obj : arg.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 call.obj : call.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/context.h ../include/datefunc.h ../include/debug.h \
+	../include/datefunc.h ../include/debug.h ../include/message.h \
 	../include/misc.h ../include/timefunc.h
 beep.obj : beep.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 echo.obj : echo.c \
 	 ../config.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/message.h ../include/misc.h ../include/timefunc.h \
+	../strings.h
 type.obj : type.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/openf.h ../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/openf.h ../include/timefunc.h ../strings.h
 prompt.obj : prompt.c \
 	 ../config.h ../include/cmdline.h ../include/command.h \
 	../include/context.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h
+	../include/message.h ../include/misc.h ../include/timefunc.h
 cls.obj : cls.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h
 pushd.obj : pushd.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 fd.obj : fd.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/context.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h
 time.obj : time.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/nls.h ../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/nls.h ../include/timefunc.h ../strings.h
 doskey.obj : doskey.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h ../strings.h
 fddebug.obj : fddebug.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 verify.obj : verify.c \
 	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
+	../include/debug.h ../include/message.h ../include/misc.h \
+	../include/timefunc.h ../strings.h
 del.obj : del.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
-	../include/datefunc.h ../include/debug.h ../include/misc.h \
-	../include/timefunc.h ../strings.h
+	../include/datefunc.h ../include/debug.h ../include/message.h \
+	../include/misc.h ../include/timefunc.h ../strings.h
 DYNSOURCES =
 #MAKEDEP STOP
 

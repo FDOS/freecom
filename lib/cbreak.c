@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/06/21 21:40:34  skaus
+	Update #2
+
 	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
 	Update #1
-
+	
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -59,7 +62,7 @@ int chkCBreak(int mode)
       return 0;
 
     case 0:
-      if (!ctxtFlags.f_batchlevel)
+      if (!F(batchlevel))
         goto justCheck;
 
     case BREAK_BATCHFILE:

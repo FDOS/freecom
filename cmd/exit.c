@@ -11,7 +11,7 @@
 #pragma argsused
 int cmd_exit(char *param)
 {
-	ctxtFlags.f_exit = 1;
+	F(exit) = 1;
 
 	return 0;
 }

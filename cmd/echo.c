@@ -27,9 +27,9 @@ int cmd_echo(char *param)
 		param = ltrimsp(param + 1);
 	} else nostatus = 0;
 
-	echo = ctxtFlags.f_interactive
-	 ? &ctxtFlags.f_dispPrompt
-	 : &ctxtFlags.f_echo;
+	echo = F(interactive)
+	 ? &F(dispPrompt)
+	 : &F(echo);
 
 	switch(onoffStr(param)) {
 	case OO_Null:	case OO_Empty:

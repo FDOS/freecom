@@ -18,7 +18,7 @@ char *skippath(const char * const path)
 {	const char *p;
 
 	assert(path);
-	p = fnam - 1;
+	p = path - 1;
 	while(is_fnchar(*++p) || is_pathdelim(*p));
 	return (char *)p;
 }

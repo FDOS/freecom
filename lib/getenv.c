@@ -15,13 +15,16 @@
 	This file bases on ENVIRON.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.4.1  2001/06/21 21:40:35  skaus
+	Update #2
+
 	Revision 1.2  2001/04/29 12:24:36  skaus
 	bugfix: >>PATH<< with empty %PATH% --> PATH=(null)
 	fix: BREAK/VERIFY ignore trailing spaces
 	fix: >>PATH ;<< remove PATH environment variable
 	fix: cache 3 environment variables to overcome nested useage (e.g. when
 		loading message segment to print environment variable)
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -59,9 +62,6 @@
 
 char *getEnv(char var[])
 {
-  static char *lastVal1 = 0;
-  static char *lastVal2 = 0;
-  static char *lastVal3 = 0;
 
   assert(var);
 
@@ -74,11 +74,5 @@ char *getEnv(char var[])
   if (env_matchVar(0, var) & 7) /* found? */
     return 0;                /* no match found */
 
-  /* var now contains the correct variable name and we can be
-     sure that's there */
-  free(lastVal3);
-  lastVal3 = lastVal2;
-  lastVal2 = lastVal1;
-
-  return lastVal1 = dupvar(var);
+  return regStr(dupvar(var));
 }

@@ -99,6 +99,10 @@
 /* Define this value to select the initialization value of fddebug */
 #define FDDEBUG_INIT_VALUE 1
 
+/* How many dynamically allocated strings shall be internally cached
+	before they are considered "old" and gets removed. */
+#define STRING_CACHE_ITEMS 5
+
 #define INCLUDE_CMD_BEEP
 #define INCLUDE_CMD_BREAK
 #define INCLUDE_CMD_CHDIR
@@ -192,6 +196,12 @@
 
 #if CONTEXT_MAX_SIZE > 65535U - 12
 #error "The maximal context size may not exceed 65535 - 12 bytes"
+#endif
+
+#if sizeof(char*) > sizeof(short)
+/* Compiling in Large memory model --> turn of Warning:
+	"Conversation may lose significant digits"	*/
+#pragma warn -sig
 #endif
 
 #include "../include/debug.h"
