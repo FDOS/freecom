@@ -6,7 +6,7 @@ other download locations are explained at:
 
 binary.zip: the latest FreeCOM, binaries only
 
-xmsswap.zip: the latest FreeCOM with XMS-Inly swap support, binaries only
+xmsswap.zip: the latest FreeCOM with XMS-Only swap support, binaries only
 
 plainedt.zip: the latest FreeCOM without the command line editing
 	enhancements (history, file complation)

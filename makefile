@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.18  2003/04/28 15:57:43  skaus
+# v0.82 pl 2:
+#
 # Revision 1.17  2002/05/11 22:10:36  skaus
 # v0.83 Beta 40:
 # bugfix: ^Break detection after XMS-Swapping
@@ -146,3 +149,5 @@ my_clean :
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp
 	$(RM) $(RMFLAGS) strings.dat strings.h context.h_c criter1 criter2 context.inc infores
 
+doc .SETDIR=docs/html/commands :
+	upd_html.bat

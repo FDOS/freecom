@@ -1,0 +1,10 @@
+name: ENVIRONMENT_KEEP_FREE
+de: keep free space in environment segment
+see: 
+req: 
+
+DESCRIPTION:
+
+If defined on compilation of FreeCOM, FreeCOM tries to keep the unused
+space in the environment segment equal to or greater than
+<CMD>ENVIRONMENT_KEEP_FREE</CMD>. The default value is 256.
