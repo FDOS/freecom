@@ -107,15 +107,15 @@ DELIMITER: , %.
 UNKNOWN: Unbekannter Fehler
 S15
 0: Laufwerk ist schreibgeschtzt
-1: Unbekannte Treibereinheit
+1: Unbekannte Treiberuntereinheit
 2: Ger„t nicht bereit
 3: Treiber erhielt ein unbekanntes Kommando
 4: Daten- bzw. CRC-Fehler
-5: Inkorrekte L„nge der Kommandostruktur des Treibers
+5: Inkorrekte L„nge der Treiberkommandostruktur
 6: Positionierungsfehler
 7: Unbekannter Medientyp
 8: Sektor wurde nicht gefunden
-9: Papier aus
+9: Papier zu Ende
 10: Allgemeiner Schreibfehler
 11: Allgemeiner Lesefehler
 12: Allgemeiner Fehler

@@ -3,8 +3,8 @@ CC_BASE_PATH = D:\TC101
 
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
-SUPPL_INC_PATH = D:\FREEDOS\SRC\INCLUDE
-SUPPL_LIB_PATH = D:\FREEDOS\SRC\LIB\TC101
+SUPPL_INC_PATH = .\SUPPL
+SUPPL_LIB_PATH = $(SUPPL_INC_PATH)
 
 ## Program locations
 BINPATH = $(CC_BASE_PATH)\BIN

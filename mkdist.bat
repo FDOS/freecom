@@ -42,6 +42,7 @@ dmake clobber || quit
 : Make the "with debug" binary
 set ndebug=
 set debug=1
+set compiler=bc5
 
 %_DBG setdos /y0 %+ %_DBG echo off
 dmake MODEL!:=l || quit
@@ -91,7 +92,6 @@ touch config.h
 dmake -W config.h || quit
 %_DBG setdos /y1 %+ %_DBG echo on
 : pause
-for %file in (tools\kssf.com tools\vspawn.com tools\ptchldrv.exe tools\ptchsize.exe) (if exist %file copy %file packages\plainedt.std\ %+ if exist %file move %file packages\binary.std\ %+ if exist %file goto ende)
 
 if not exist com.com goto ende
 copy /b shell\com.exe +infores + criter\criter + criter\criter1 command.cln
@@ -103,6 +103,8 @@ iff not exist tools\ptchsize.exe then
 endiff
 tools\ptchsize.exe command.com +6KB
 if errorlevel 1 goto ende
+
+for %file in (tools\kssf.com tools\vspawn.com tools\ptchldrv.exe tools\ptchsize.exe) (if exist %file copy %file packages\plainedt.std\ %+ if exist %file move %file packages\binary.std\ %+ if exist %file goto ende)
 
 perl get_ver.pl .\command.com
 
