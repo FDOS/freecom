@@ -21,7 +21,7 @@ unsigned my_coreleft(void)
 
 		if((p = malloc(len | probe)) != 0) {
 			len |= probe;
-			free(p);
+			myfree(p);
 		}
 	}
 

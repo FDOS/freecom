@@ -93,7 +93,7 @@ int is_fnstr(const char * const s);
 int is_pathdelim(const int c);
 int is_empty(const char *s);
 int is_num(const char * const s, unsigned * const num);
-// int is_quote(const int c);
+/* int is_quote(const int c); */
 #define is_quote(c)	((c) == '"')
 char *skipfnam(const char * const fnam);
 char *skippath(const char * const path);

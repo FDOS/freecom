@@ -31,7 +31,7 @@ char *ecMkVerbatimStr(const char * const str)
 			verb[i] = ' ' + 1;
 			if(!verb[++i]) {		/* end of string --> append a character */
 				if(!StrAppChr(verb, ' ' + 1)) {
-					free(verb);
+					myfree(verb);
 					error_out_of_memory();
 					return 0;
 				}

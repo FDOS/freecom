@@ -63,7 +63,7 @@ int cmd_time(char *param)
 			return 1;
 
 		displayString(TEXT_MSG_CURRENT_TIME, time);
-		free(time);
+		myfree(time);
 		param = 0;
 	}
 

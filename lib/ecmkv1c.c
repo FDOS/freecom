@@ -26,13 +26,13 @@ int ecMkV1C(const char * const str, ...)
 		return E_NoMem;
 	if((s = StrConcat(5, "%@VERBATIM(", verbatim, ")", str, verbatim)) == 0) {
 		error_out_of_memory();
-		free(verbatim);
+		myfree(verbatim);
 		return E_NoMem;
 	}
 
-	free(verbatim);
+	myfree(verbatim);
 	va_start(ap, str);
 	rv = ecMkvcmd(echoBatch? 0: EC_CMD_SILENT, str, ap);
-	free(s);
+	myfree(s);
 	return rv;
 }

@@ -3,6 +3,9 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
+# Revision 1.15.4.1  2001/07/05 22:18:33  skaus
+# Update #5
+#
 # Revision 1.15  2001/04/29 11:33:50  skaus
 # chg: default heap size (tools\ptchsize) set to 6KB
 # chg: error displaying functions centralized into lib\err_fcts.src
@@ -70,7 +73,9 @@ GLOBAL_DEPS = err_fcts.h
 .SOURCE.lib := $(LIBDIR:s/;/ /:u)
 
 # Sources of this make target
-SRC = 
+SRC = env_clear.c
+OBJ = env_clear.obj
+HDR =
 
 
 .INCLUDE .IGNORE : lastmake.mk
@@ -80,10 +85,7 @@ THISMAKE !:= $(_COMPILER):$(_MODEL):$(LNG):$(null,$(NDEBUG) DBG NDBG):$(LNG)
 #	Default target
 all: com.com tools
 
-.INIT .PHONY .SEQUENTIAL : verscheck $(CFG) __errl tags
-
-tags :
-	ctags cmd\*.c lib\*.c shell\*.c
+.INIT .PHONY .SEQUENTIAL : verscheck $(CFG) __errl
 
 .IF $(THISMAKE) == $(LASTMAKE)
 verscheck :;
@@ -99,7 +101,7 @@ verscheck :
 
 __errl:
 	@+-if exist errlist del errlist >nul
-#	-ctags *.c
+	-ctags cmd\*.c lib\*.c shell\*.c \freedos\src\lib\suppl\*.c
 
 com.com .SEQUENTIAL : utils strings criter lib cmd shell\\com.exe infores
 	@+copy /b shell\\com.exe + infores + criter\\criter + criter\\criter1 + strings\\strings.dat $@
@@ -119,6 +121,8 @@ subdirs.mk : makefile
 err_fcts.h : lib\\err_fcts.src lib\\efct_*.c ; perl lib\\scanerr.pl lib\\err_fcts.src lib\\efct_*.c >$@
 
 #MAKEDEP START
+env_clear.obj : env_clear.c
+DYNSOURCES =
 #MAKEDEP STOP
 
 clobber : $(CLOBBER_DEPENDENCIES) my_clean

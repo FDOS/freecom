@@ -6,6 +6,9 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -52,7 +55,7 @@ int optScanString_(const char * const optstr, int bool, const char *arg, char **
     error_opt_noarg(optstr);
     return E_Useage;
   }
-  free(*value);
+  myfree(*value);
   if((*value = strdup(arg)) == 0) {
     error_out_of_memory();
     return E_NoMem;

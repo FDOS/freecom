@@ -20,7 +20,6 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-//extern FILE *dbg_logfile;
 extern char *dbg_logname2;
 
 int cmd_fddebug(char *param)
@@ -51,6 +50,7 @@ int cmd_fddebug(char *param)
 		if(!duplicate || channel == 2) {
 			fclose(dbg_logfile2);
 			dbg_logfile2 = 0;
+			chkPtr(dbg_logname2);
 			StrFree(dbg_logname2);
 		}
 		if(!duplicate || channel == 1)
@@ -60,7 +60,7 @@ int cmd_fddebug(char *param)
 			dbg_logname2 = p;
 		} else {
 			dbg_logfile = f;
-			free(p);
+			myfree(p);
 		}
 		/* FALL THROUGH */
 	}

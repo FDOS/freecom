@@ -15,6 +15,9 @@
 	This file bases on ENVIRON.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -38,7 +41,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -47,10 +50,10 @@
 #include <string.h>
 
 #include <environ.h>
-#include <nls_c.h>
 
 #include "../include/context.h"
 #include "../include/misc.h"
+#include "../include/nls.h"
 
 int chgEnvCase(const int keepCase, char var[], const char value[])
 {

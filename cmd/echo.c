@@ -27,7 +27,7 @@ int cmd_echo(char *param)
 		param = ltrimsp(param + 1);
 	} else nostatus = 0;
 
-	echo = F(interactive)
+	echo = interactive
 	 ? &F(dispPrompt)
 	 : &F(echo);
 

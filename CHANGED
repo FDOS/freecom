@@ -1,4 +1,20 @@
-fix: Re-allocating the environment may clash with Borland#('s internal heap
+fix: ecMkc()/ecMkvcmd(): Ignore-Exit commands tagged as normal ones
+fix: ctxtChgSize(): clear environment if newly created
+fix: ARG: wrong operator to pop old arguments
+add: ecPop() & ecMkB(): F(batchlevel)
+add: command.c & batch.c: chkHeap
+fix: docommand(): name free()'ed and realloc()
+fix: qecAction(): no parameter --> no error
+chg: beautify: variable names of command lines ::= 'line' , (full) name
+	of command ::= name, first word ::= first [to ease debugging]
+fix: readbatchline(): 2. dprintf() %ul --> %lu
+fix: readbatchline(): fopen(): text mode
+fix: readbatchline(): echoBatch = 0
+fix: <TAB>: moves cursor behind the replacement text
+fix: expandEnvVar: no free() for %1-style variables
+
+Update #4:
+fix: Re-allocating the environment may clash with Borland's internal heap
 	management and with to allocate the other external memory blocks, when
 	no UMBs are available.
 bugfix: farcoreleft() is a nonsense function, replaced by a function

@@ -16,9 +16,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1.4.1  2001/07/01 22:04:31  skaus
 	Update #3
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -71,7 +74,7 @@ static int parseOptions(optScanner fct, void * const arg, char **argv, int *argc
   while((*argp++ = a = *argv++) != 0)
     if(isoption(a))
       if((ec = scanOption(fct, arg, a)) == E_None) {
-        free(*--argp);  /* ignore (overwrite) it */
+        myfree(*--argp);  /* ignore (overwrite) it */
         ++*optcnt;
       } else if(ec != E_Ignore) { /* the entry caused an error */
         /* Copy the remaining entries */

@@ -149,7 +149,7 @@ enum ExecContext_Tags {
 	, EC_TAG_FOR_FIRST			/* F */
 	, EC_TAG_FOR_NEXT			/* f */
 	, EC_TAG_COMMAND			/* C */
-	, EC_TAG_COMMAND_NO_IGNORE	/* c */
+	, EC_TAG_COMMAND_IGNORE_EXIT	/* c */
 	, EC_TAG_KEEP_RUNNING		/* e */
 	, EC_TAG_TERMINATE			/* E */
 };
@@ -206,8 +206,8 @@ int ecMkF(char ** const, const int, const char * const, const char * const);
 int ecMkf(const void * const, const char far* const, const char far* const, const char * const);
 	/* Make a I context */
 int ecMkI(void);
-	/* Make a B context: fullname (pos & lcount default to 0) */
-int ecMkB(const char * const fullname);
+	/* Make a B context: name (pos & lcount default to 0) */
+int ecMkB(const char * const name);
 	/* Make a C/FD context */
 int ecMkFD(const int jft, const int sft);
 	/* Return a pointer to the most current B context */
@@ -247,8 +247,8 @@ char *readFORfirst(ctxtEC_t far * const);
 char *readFORnext(ctxtEC_t far * const);
 	/* EC_TAG_COMMAND -- C-context */ 
 char *readCommand(ctxtEC_t far * const);
-	/* EC_TAG_COMMAND_NO_IGNORE -- c-context */ 
-char *readCommandNoIgnore(ctxtEC_t far * const);
+	/* EC_TAG_COMMAND_IGNORE_EXIT -- c-context */ 
+char *readCommandIgnoreExit(ctxtEC_t far * const);
 	/* EC_TAG_KEEP_RUNNING -- e-context */ 
 char *keepMeRunning(ctxtEC_t far * const);
 	/* EC_TAG_TERMINATE -- E-context */ 

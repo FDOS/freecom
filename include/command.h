@@ -53,23 +53,14 @@ extern void interrupt cbreak_handler();
 extern void initCBreak(void);
 
 /* prototypes for COMMAND.C */
-//extern int interactive_command;
-//extern int persistentMSGs;
 extern int ctrlBreak;
-//extern int exitflag;
-//extern unsigned int echo;       /* The echo flag */
-//extern int tracemode;                   /* debug script? */
-//extern FLAG swap, called, echo, trace;
 extern int autofail;
 extern int inInit;
-//obsoleted extern int canexit;
-//extern int errorlevel;
 extern int isSwapFile;
 extern int forceLow;
 extern unsigned far *maxx;
 extern unsigned char far *maxy;
 extern char *ComPath;            /* absolute filename of COMMAND shell */
-//extern int oldinfd, oldoutfd;
 
 void fatal_error(char *);
 int is_delim(int);

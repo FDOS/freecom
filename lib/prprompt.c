@@ -6,6 +6,9 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -77,7 +80,7 @@ void displayPrompt(const char *pr)
 
             if((p = curTime()) != 0) {
 				fputs(p, stdout);
-				free(p);
+				myfree(p);
 			}
 
             break;
@@ -86,7 +89,7 @@ void displayPrompt(const char *pr)
           {	 char *p;
           	 if((p = curDateLong()) != 0) {
           	 	fputs(p, stdout);
-          	 	free(p);
+          	 	myfree(p);
           	 }
             break;
           }
@@ -96,7 +99,7 @@ void displayPrompt(const char *pr)
 
 			if((p = cwd(0)) != 0) {
 				fputs(p, stdout);
-				free(p);
+				myfree(p);
 			}
 
             break;

@@ -40,6 +40,7 @@ int cmd_goto(char *param)
 		return 1;
 	}
 
+	chkPtr(gotoLabel);
 	StrRepl(gotoLabel, tmp);
 	rewindBatchFile = 1;
 

@@ -3,6 +3,9 @@
 	Declarations to access the DOS NLS information
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:09:06  skaus
 	chg: New structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -26,13 +29,15 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
 */
 
 #ifndef __NLS_H
 #define __NLS_H
 
 #include <cntry.h>
+#include <nls_c.h>
+#include <nls_f.h>
 
 extern Country *nlsBuf;		/* internally cached NLS info buffer */
 

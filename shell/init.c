@@ -132,7 +132,6 @@ optScanFct(opt_init)
 
 int initialize(void)
 {
-  //int rc;
   int comPath;                /* path to COMMAND.COM (for COMSPEC/reload) */
   char *newTTY;                 /* what to change TTY to */
   int showinfo;                 /* show initial info only if no command line options */
@@ -170,7 +169,7 @@ int initialize(void)
 	{ void* p;
 		if((p = malloc(6*1024)) == 0)
 			dprintf(("[MEM: Out of memory allocating test block during INIT]"));
-		else free(p);
+		else myfree(p);
 	}
 #endif
 
@@ -291,18 +290,18 @@ int initialize(void)
   if(!comPath) {      /* 1st argument */
     grabComFilename(1, (char far*)q);
     comPath = 1;
-    free(q);
+    myfree(q);
   } else if(!newTTY) {  /* 2nd argument */
 #ifdef INCLUDE_CMD_CTTY
     newTTY = q;
 #else
       error_ctty_excluded();
-    free(q);
+    myfree(q);
 #endif
       } else {
         error_too_many_parameters(q);
         showhelp = 1;
-        free(q);
+        myfree(q);
         break;
       }
    } while(1);
@@ -328,7 +327,7 @@ int initialize(void)
   if (newTTY) {      /* change TTY as early as possible so the caller gets
                           the messages into the correct channel */
     cmd_ctty(newTTY);
-    free(newTTY);
+    myfree(newTTY);
   }
 #endif
 
@@ -478,7 +477,7 @@ int initialize(void)
 			}
 		}
 
-		free(user_autoexec);
+		myfree(user_autoexec);
 	} else {
 		assert(user_autoexec == 0);
 	}

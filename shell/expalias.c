@@ -13,11 +13,11 @@
 #include <dynstr.h>
 #include <environ.h>
 #include <fmemory.h>
-#include <nls_f.h>
 
 #include "../include/cmdline.h"
 #include "../include/context.h"
 #include "../include/misc.h"
+#include "../include/nls.h"
 #include "../err_fcts.h"
 
 char *aliasexpand(const char * const Xcmd)
@@ -47,7 +47,7 @@ redo:						/* iteration to expand all aliases */
 		goto errRet;
 	}
 
-	free(name);
+	myfree(name);
 	/* Get the name of this command */
 	if((name = getCmdName(&(const char*)cp)) == 0 || is_pathdelim(*cp))
 		goto errRet;
@@ -102,8 +102,8 @@ errRet1:
 	error_long_internal_line();
 
 errRet:							/* return to caller */
-	free(expanded);
-	free(name);
+	myfree(expanded);
+	myfree(name);
 
 	return StrTrim(cmd);
 }

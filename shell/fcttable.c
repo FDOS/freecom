@@ -7,7 +7,6 @@
 
 #include "../config.h"
 #include "../include/command.h"
-//#include "../strings.h"
 
 
 /* a list of all the internal functions, associating their command names */

@@ -50,6 +50,7 @@ int ecMkF(char ** const param
 			assert(param[i]);
 			if((p = esEncode(param[i])) == 0)
 				return E_NoMem;
+			chkPtr(param[i]);
 			StrRepl(param[i], p);
 			if(!addu(&length, strlen(p))) {
 				error_context_out_of_memory();

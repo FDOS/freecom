@@ -21,7 +21,7 @@ static char *strCache[STRING_CACHE_ITEMS];
 char *regStr(const char * const s)
 {
 	if(s) {
-		free(strCache[0]);
+		myfree(strCache[0]);
 		memmove(&strCache[0], &strCache[1]
 		 , sizeof(strCache) - sizeof(strCache[0]));
 		strCache[STRING_CACHE_ITEMS - 1] = (char*)s;

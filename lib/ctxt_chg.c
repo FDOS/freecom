@@ -36,7 +36,7 @@ int ctxtChgSize(unsigned tosize)
 		assert(ctxtp->ctxt_size);
 		assert(ctxtMCB->mcb_size > 2);
 		assert(ctxtMCB->mcb_size < 0x1000);
-		assert(ctxtp->ctxt_size < ctxtMCB->mcb_size - 2);
+		assert(ctxtp->ctxt_size <= ctxtMCB->mcb_size - 2);
 		if(tosize < (curSize = mcb_length(ctxtMain))) {
 			/* Check if the size does not shrink below the currently
 				used space */
@@ -53,7 +53,7 @@ int ctxtChgSize(unsigned tosize)
 			error_out_of_dos_memory();
 			return E_NoMem;
 		}
-		//ctxtPurgeCache();
+		/** ctxtPurgeCache(); **/
 		/* Copy the contents there, incl the MCB name */
 		_fmemcpy(MK_FP(SEG2MCB(tempSegm), 8)
 		 , MK_FP(SEG2MCB(ctxtMain), 8)
@@ -81,14 +81,18 @@ redo:
 			   - ecLen - 1;
 				/* copy the strings */
 			_fmemcpy(MK_FP(new_context + 1, 0), MK_FP(ctxtSegm, 0)
-			 , nctxtp->ctxt_size);
+			 , env_firstFree(ctxtSegm));
 			_fmemcpy(MK_FP(new_context + 1 + nctxtp->ctxt_size, 0)
-			 , MK_FP(ctxtExecContext, 0), ecLen);
+			 , MK_FP(ctxtExecContext, 0), ecLen * 16);
 			freeSysBlk(ctxtMain);
 #ifdef DEBUG
-			if(env_check(ctxtSegm)) {
+			switch(env_check(new_context + 1)) {
+			case 0:	case 4:		/* OK & no string table */
+				break;
+			default:
 				fputs("[CTXT: Dynamic context had been corrupted!\n"
 				 , stderr);
+				freeSysBlk(new_context);
 				ctxtMain = 0;
 				goto redo;
 			}
@@ -103,6 +107,7 @@ redo:
 			_fmemcpy(MK_FP(new_context + 1 + nctxtp->ctxt_size
 			  , nctxtp->ctxt_eOffs)
 			 , TO_FP(&ctxtInitialEC), sizeof(ctxtInitialEC));
+			env_clear(new_context + 1);		/* Kill its contents */
 		}
 		ctxtMain = new_context;
 		return E_None;

@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.2.2.5  2001/07/05 22:18:34  skaus
+# Update #5
+#
 # Revision 1.2.2.4  2001/07/01 22:04:30  skaus
 # Update #3
 #
@@ -74,8 +77,10 @@ dist: cmd.mak
 %.obj : %.asm ; $(NASM) $(NASMFLAGS) -f obj -F borland -o $@ $< >>errlist
 
 ### Utils are required by build process
-.INIT .PHONY .SEQUENTIAL : verscheck $(CFG) __errl
+.INIT .PHONY .SEQUENTIAL : verscheck $(CFG) __errl tags
 
+tags : ../tags
+	perl ..\\upd_tags.pl cmd <..\\tags >$@
 
 .IF $(THISMAKE) == $(LASTMAKE)
 verscheck :;
@@ -91,7 +96,8 @@ verscheck :
 
 __errl:
 	@+-if exist errlist del errlist >nul
-	-ctags *.c ..\lib\*.c ..\shell\*.c $(FREEDOS)\SRC\LIB\SUPPL\*.c
+
+#	-ctags *.c ..\lib\*.c ..\shell\*.c $(FREEDOS)\SRC\LIB\SUPPL\*.c
 
 cmds.lib .LIBRARY : $(OBJ)
 

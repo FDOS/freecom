@@ -12,7 +12,6 @@
 #include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
-//#include <stdlib.h>
 #include <string.h>
 
 #include <dfn.h>
@@ -24,10 +23,20 @@
 #include "../include/cmdline.h"
 #include "../err_fcts.h"
 
+#ifdef DEBUG
+static int chkp(char *p)
+{	chkPtr(p);
+	StrFree(p);
+	return 1;
+}
+#else
+#define chkp(p)	StrFree((p))
+#endif
+
 char *readbatchline(ctxtEC_t far * const ctxt)
 {	ctxtEC_Batch_t far *bc;		/* current batch context */
 	char *line, *p;				/* read line */
-	char *fnam;
+	char *name;
 	FILE *f;
 
 	dprintf(("readbatchline()\n"));
@@ -44,15 +53,15 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 	assert(_fstrlen(bc->ec_fname)
 	 == ctxt->ctxt_length - sizeof(ctxtEC_Batch_t));
 
-	dprintf(("[BATCH: pos=%ul, line=%ul: %Fs]\n"
+	dprintf(("[BATCH: pos=%lu, line=%lu: %Fs]\n"
 	 , bc->ec_pos, bc->ec_lnum, bc->ec_fname));
 
-	 if((fnam = regStr(edupstr(bc->ec_fname))) == 0) {
+	 if((name = regStr(edupstr(bc->ec_fname))) == 0) {
 	 	return 0;
 	 }
 
-	if((f = fopen(fnam, "rb")) == 0) {
-		error_bfile_vanished(fnam);
+	if((f = fopen(name, "rt")) == 0) {
+		error_bfile_vanished(name);
 		return 0;
 	}
 
@@ -67,15 +76,19 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 			goto errRet;		/* silently ignore this error */
 	}
 
-	for(; !chkCBreak(BREAK_BATCHFILE); StrFree(line)) {
+	for(; !chkCBreak(BREAK_BATCHFILE); chkp(line)) {
 		if((line = Fgetline(f)) == 0) {
-			if(errno == ENOMEM)
-				error_out_of_memory();
-			break;		/* end of file */
+			error_out_of_memory();
+			break;
+		}
+		if(!*line) {			/* End of file */
+			line = 0;		/* Force ecPop() */
+			break;
 		}
 		++bc->ec_lnum;
 		if(ferror(f)) {
-			error_bfile_read(fnam, bc->ec_lnum);
+			error_bfile_read(name, bc->ec_lnum);
+			chkPtr(line);
 			StrFree(line);
 			break;
 		}
@@ -101,8 +114,10 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 			if(gotoLabel) {
 				/* label: the 1st word immediately following the colon ':' */
 				int len = strlen(gotoLabel);
-				if(memicmp(p, gotoLabel, len) == 0 && !isgraph(line[len]))
+				if(memcmpFI(p + 1, gotoLabel, len) == 0
+				 && !isgraph(line[len + 1]))
 					/* got it! -> proceed with next line */
+					chkPtr(line);
 					StrFree(gotoLabel);
 			}
 			continue;			/* ignore label */
@@ -113,7 +128,7 @@ char *readbatchline(ctxtEC_t far * const ctxt)
 				p = ltrimcl(p + 1);
 				if(!*p)				/* ignore empty lines */
 					continue;
-				echoBatch = 1;
+				echoBatch = 0;
 			}
 
 			/* assume that clearing the space stepped over is

@@ -7,9 +7,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
 	Update #1
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -62,19 +65,19 @@ char *curDateLong(void)
 	}
 
 	if((h = getString(TEXT_WEEKDAY_SHORT_NAME_SUNDAY + d.dayofweek)) == 0) {
-		free(date);
+		myfree(date);
 		error_out_of_memory();
 		return 0;
 	}
 
 	if((p = erealloc(h, strlen(h) + strlen(date) + 2)) == 0) {
-		free(h);
-		free(date);
+		myfree(h);
+		myfree(date);
 		return 0;
 	}
 
 	strcpy(stpcat(p, " "), date);
-	free(date);
+	myfree(date);
 
 	return p;
 }

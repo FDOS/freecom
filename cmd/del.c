@@ -81,14 +81,14 @@ int cmd_del(char *param)
 
 			if((len = strlen(p)) >= MAXPATH) {
 				error_filename_too_long(p);
-				free(p);
+				myfree(p);
 				ec = E_Other;
 				goto errRet;
 			}
 			strcpy(fullname, p);  /* Operating over a local buffer simplifies
 					 the process; rather than keep the pattern
 					 within dynamic memory */
-			free(p);
+			myfree(p);
 			p = fullname + len;
 
 			/* check if it is a directory */

@@ -17,7 +17,7 @@ void lastDirSet(void)
 
 	if((dir = cwd(0)) != 0) {
 		ctxtSet(CTXT_TAG_LASTDIR, 1, dir);
-		free(dir);
+		myfree(dir);
 	} else
 		error_out_of_memory();
 }

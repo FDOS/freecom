@@ -13,11 +13,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <nls_f.h>
-
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../include/context.h"
+#include "../include/nls.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
@@ -60,7 +59,7 @@ int cmd_icmds(char *param)
 
 		if(p) {
 			puts(p);
-			free(p);
+			myfree(p);
 		} else {
 			ec = E_NoMem;
 		}

@@ -6,11 +6,14 @@
 	useage: MKTOOLS >makefile.mk
 
 	$Log$
+	Revision 1.3.4.1  2001/07/05 22:18:35  skaus
+	Update #5
+
 	Revision 1.3  2001/04/01 21:05:44  skaus
 	bugfix: CALL doesn't reset options
 	add: PTCHSIZE to patch heap size
 	add: VSPAWN, /SWAP switch, .SWP resource handling
-
+	
 	Revision 1.2  2001/03/07 19:49:01  skaus
 	Merged in Swap Support changes
 	
@@ -28,7 +31,7 @@
 
 main(void)
 {
-	fputs("all : $(CFG) ptchsize.exe", stdout);
+	fputs("all : $(CFG) ptchsize.exe a_all.exe", stdout);
 #ifdef FEATURE_KERNEL_SWAP_SHELL
 	fputs(" kssf.com vspawn.com", stdout);
 #endif

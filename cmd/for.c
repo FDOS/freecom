@@ -132,7 +132,7 @@ static int doFOR(char *var, char *varE, char *param, char *paramE
 			break;
 		case 0:		/* Got it */
 			rv = ecMkc("IVAR ", var, "=", oldContents, (char*)0);
-			free(oldContents);
+			myfree(oldContents);
 			break;
 		case 2:	/* Out of memory */
 			error_out_of_memory();

@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.4  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1.4.3  2001/07/01 22:04:31  skaus
 	Update #3
-
+	
 	Revision 1.1.4.2  2001/06/21 21:40:34  skaus
 	Update #2
 	
@@ -94,7 +97,7 @@ int chkCBreak(int mode)
       			cprintf(fmt, (char far*)"<<unknown>>");
       		else {
 				cprintf(fmt, (char far*)fnam);
-				free(fnam);
+				myfree(fnam);
 			}
 		}
 

@@ -79,7 +79,7 @@ static void appCh(int c)
 	appStr(buf);
 }
 
-char *expEnvVars(char * const param)
+char *expEnvVars(char * const line)
 {	char *h, c;
 	char *p, *q;
 
@@ -87,7 +87,7 @@ char *expEnvVars(char * const param)
 	cmdbuf = cmdlen = 0;
 	error = 0;
 
-	for(p = param; !error && *p;) {
+	for(p = line; !error && *p;) {
 		if(*p == '%') {			/* Scanner metafunctions */
 			/* Try to identify special FOR variables */
 			h = p;
@@ -133,7 +133,6 @@ char *expEnvVars(char * const param)
 					goto appPercent;
 				++p;
 				appStr(h);
-				free(h);
 				break;
 
 			case '?':
@@ -172,7 +171,7 @@ char *expEnvVars(char * const param)
 					*h = '\0';
 					if((var = getEnv(p)) != 0) {
 						appStr(var);
-						free(var);
+						myfree(var);
 					}
 					p = h + 1;
 				}
@@ -188,7 +187,7 @@ loop:
 	case 1:
 		error_out_of_memory();
 	case 2:
-		free(cmdline);
+		myfree(cmdline);
 		return 0;
 	}
 

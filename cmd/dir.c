@@ -239,7 +239,7 @@ static int dir_print_free(unsigned long dirs)
   if(optB)
     return 0;
 
-  /* print number of dirs and bytes free */
+  /* print number of dirs and bytes myfree */
 
   convert(dirs, buffer);
   displayString(TEXT_DIR_FTR_DIRS, buffer);
@@ -414,7 +414,7 @@ static int dir_list(int pathlen
 		}
 		putchar(' ');
 		fputs(p, stdout);
-		free(p);
+		myfree(p);
 		p = nls_maketime(NLS_MAKE_SHORT_AMPM, hour, minute, -1, 0);
 		if(!p) {
 			error_out_of_memory();
@@ -422,7 +422,7 @@ static int dir_list(int pathlen
 		}
 		putchar(' ');
 		fputs(p, stdout);
-		free(p);
+		myfree(p);
 		putchar('\n');
 	 }
 
@@ -494,7 +494,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		return E_NoMem;
 	}
 	if((path = erealloc(p, 270*sizeof(char))) == 0) {
-		free(p);
+		myfree(p);
 		return E_NoMem;
 	}
 
@@ -521,7 +521,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 				rv = dir_list(pattern - path, cachedPattern, dircount
 				 , &filecount, &bytecount
 				 );
-				free(cachedPattern);
+				myfree(cachedPattern);
 			}
 		}
 	}
@@ -531,7 +531,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
   if(!rv)
     rv = dir_print_free(*dircount);
 
-	free(path);
+	myfree(path);
 	return rv;
 }
 

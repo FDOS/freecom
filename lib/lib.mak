@@ -64,6 +64,7 @@ freecom_deps :  \
 	dateget.obj \
 	dateset.obj \
 	dbg_c.obj \
+	dbg_free.obj \
 	dbg_mem.obj \
 	dbg_prnt.obj \
 	dbg_s.obj \
@@ -134,10 +135,10 @@ freecom_deps :  \
 	lastdset.obj \
 	leadopt.obj \
 	lowexec.obj \
-	ltrimcl.obj \
 	chunk1
 
 chunk1 :  \
+	ltrimcl.obj \
 	ltrimsp.obj \
 	lwr1wd.obj \
 	match.obj \
@@ -264,10 +265,10 @@ chunk1 :  \
 	err64.obj \
 	err65.obj \
 	err66.obj \
-	err67.obj \
 	chunk2
 
 chunk2 :  \
+	err67.obj \
 	err68.obj \
 	err69.obj \
 	err70.obj \
@@ -346,6 +347,7 @@ freecom.lib : $(CFG) freecom_deps
 +-dateget.obj &
 +-dateset.obj &
 +-dbg_c.obj &
++-dbg_free.obj &
 +-dbg_mem.obj &
 +-dbg_prnt.obj &
 +-dbg_s.obj &
@@ -620,6 +622,7 @@ freecom.lib : $(CFG) freecom_deps
 +dateget.obj &
 +dateset.obj &
 +dbg_c.obj &
++dbg_free.obj &
 +dbg_mem.obj &
 +dbg_prnt.obj &
 +dbg_s.obj &

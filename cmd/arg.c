@@ -38,7 +38,7 @@ int cmd_arg(char *param)
 	 		if(!to_del)
 	 			ctxtClear(CTXT_TAG_ARG);
 	 		else {
-	 			while(to_del >= CTXT_INFO(CTXT_TAG_ARG, nummax))
+	 			while(to_del <= CTXT_INFO(CTXT_TAG_ARG, nummax))
 	 				ctxtPop(CTXT_TAG_ARG, (char*)0);
 	 		}
 			F(shiftlevel) = shiftlevel;

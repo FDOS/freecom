@@ -23,7 +23,7 @@ int cmd_truename(char *param)
 		return 0;
 	}
 	puts(p);
-	free(p);
+	myfree(p);
 
 	return 1;
 }

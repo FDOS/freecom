@@ -44,10 +44,6 @@
 
 #include <assert.h>
 #include <limits.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <ctype.h>
-//#include <string.h>
 
 #include <dfn.h>
 
@@ -64,24 +60,26 @@
  *  The current implementation keeps the batchfile open, which is not
  *  the standard behaviour.
  */
-int batch(char *fullname, char *firstword, char *param)
+int batch(char *name, char *first, char *line)
 {
-	assert(fullname);
-	assert(firstword);
-	assert(param);
+	assert(name);
+	assert(first);
+	assert(line);
 
-	if((fullname = regStr(dfnexpand(fullname, 0))) == 0) {
+	if((name = regStr(dfnexpand(name, 0))) == 0) {
 		error_out_of_memory();
 		return 1;
 	}
 
-	dprintf(("batch('%s', '%s', '%s')\n", fullname, firstword, param));
+	chkHeap
+	dprintf(("batch('%s', '%s', '%s')\n", name, first, line));
 
 	if(!called)			/* when this batch file terminates,
 							drop to interactive command line */
 		if(ecMkc("CANCEL", (char*)0) != E_None)
 			return 1;
 
+	chkHeap
 	if(CTXT_INFO(CTXT_TAG_ARG, nummax)) {
 		/* There are already arguments storred */
 		char buf[(sizeof(unsigned) * 8 + 1 + 1) * 3 + 1];
@@ -97,15 +95,19 @@ int batch(char *fullname, char *firstword, char *param)
 		if(ecMkc("ARG", (char*)0) != E_None)	/* reset all arguments */
 			return 1;
 
+	chkHeap
 		/* New base is the first non-used string */
-	ctxtPush(CTXT_TAG_ARG, firstword);	/* argv[0] <-> name of script */
+	ctxtPush(CTXT_TAG_ARG, first);	/* argv[0] <-> name of script */
 	F(base_shiftlevel) = CTXT_INFO(CTXT_TAG_ARG, nummax);
 	F(shiftlevel) = 0;		/* each script has its own sh-lvl */
 
-	if(setArguments(param))	 /* out of memory condition */
+	chkHeap
+	if(setArguments(line))	 /* out of memory condition */
 		return 1;
 
-	ecMkB(fullname);		/* Default to pos & lnr := 0 */
+	chkHeap
+	ecMkB(name);		/* Default to pos & lnr := 0 */
 
+	chkHeap
 	return 0;
 }

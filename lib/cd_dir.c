@@ -88,6 +88,6 @@ okRet:
 errRet:
 	freep(argv);
 	if(freeDir)
-		free(dir);
+		myfree(dir);
 	return rv;
 }

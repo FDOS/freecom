@@ -6,9 +6,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1.4.1  2001/07/01 22:04:31  skaus
 	Update #3
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -67,11 +70,11 @@ int leadOptions(char **Xline, optScanner fct, void * arg)
     if(!isoption(q)
      || ((ec = scanOption(fct, arg, q)) != E_None
           && ec != E_Ignore)) {
-      free(q);
+      myfree(q);
       break;
     }
 
-    free(q);
+    myfree(q);
   }
 
   *Xline = line;

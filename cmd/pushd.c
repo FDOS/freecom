@@ -28,7 +28,7 @@ int cmd_pushd(char *param)
 	}
 
 	rc = ctxtPush(CTXT_TAG_DIRSTACK, curdir);
-	free(curdir);
+	myfree(curdir);
 
 	if(rc == E_None) {
 		/* Change to directory specified on command line */

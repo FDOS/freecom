@@ -6,6 +6,9 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.2.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.2  2001/04/29 11:33:51  skaus
 	chg: default heap size (tools\ptchsize) set to 6KB
 	chg: error displaying functions centralized into lib\err_fcts.src
@@ -17,7 +20,7 @@
 	bugfix: error message on empty redirection
 	bugfix: comma and semicolon ';' are recognized as argument seperators
 		of internal commands
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -60,7 +63,7 @@ static void displayXString(FILE *stream, unsigned id, va_list args)
 
 	if((str = getString(id)) != 0) {
 		vfprintf(stream, str, args);
-		free(str);
+		myfree(str);
 	}
 }
 void displayString(unsigned id,...)

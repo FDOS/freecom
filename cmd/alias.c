@@ -5,13 +5,12 @@
 
 #include "../config.h"
 
-#include <nls_f.h>
-
 #include "../err_fcts.h"
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../include/misc.h"
+#include "../include/nls.h"
 #include "../strings.h"
 
 int cmd_alias(char *param)

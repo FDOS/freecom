@@ -15,14 +15,14 @@
 #include "../include/context.h"
 #include "../include/misc.h"
 
-char *readCommandNoIgnore(ctxtEC_t far * const ctxt)
+char *readCommandIgnoreExit(ctxtEC_t far * const ctxt)
 {	char far* cmd;	/* arg of ctxt */
 	char *line;
 
 	dprintf(("readCommandNoIgnore()\n"));
 
 	assert(ctxt);
-	assert(ctxt->ctxt_type == EC_TAG_COMMAND_NO_IGNORE);
+	assert(ctxt->ctxt_type == EC_TAG_COMMAND_IGNORE_EXIT);
 	assert(ctxt->ctxt_length >= 1);
 
 	cmd = ecData(ctxt, char);
@@ -48,10 +48,15 @@ char *readCommand(ctxtEC_t far * const ctxt)
 	assert(ctxt);
 	assert(ctxt->ctxt_type == EC_TAG_COMMAND);
 
-	if(doExit || doCancel || doQuit)
+	if(doExit || doCancel || doQuit) {
+#ifdef DEBUG
+		char far*cmd = ecData(ctxt, char);
+		dprintf(("[CTXT: Skipping command: %Fs]\n", cmd));
+#endif
 		return 0;
+	}
 
 		/* to fake readCommndNoIgnore()'s asserts() */
-	assert((ctxt->ctxt_type = EC_TAG_COMMAND_NO_IGNORE) != 0);
-	return readCommandNoIgnore(ctxt);
+	assert((ctxt->ctxt_type = EC_TAG_COMMAND_IGNORE_EXIT) != 0);
+	return readCommandIgnoreExit(ctxt);
 }

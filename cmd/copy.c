@@ -90,10 +90,10 @@ void killContext(void)
     do {
       if((lastApp = head->app) != 0) do {
         lastApp = (last = lastApp)->app;
-        free(last);
+        myfree(last);
       } while(lastApp);
       head = (last = head)->nxt;
-      free(last);
+      myfree(last);
     } while(head);
   }
 }
@@ -127,18 +127,18 @@ int copy(char *dst, char *pattern, struct CopySource *src
     do {  /* to prevent to open a source file for writing, e.g.
           for COPY *.c *.?    */
       if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
-        free(rDest);
+        myfree(rDest);
         return 0;
       }
       rc = samefile(rDest, rSrc);
-      free(rSrc);
+      myfree(rSrc);
       if(rc < 0) {
         error_out_of_memory();
-        free(rDest);
+        myfree(rDest);
         return 0;
       } else if(rc) {
         error_selfcopy(rDest);
-        free(rDest);
+        myfree(rDest);
         return 0;
       }
     } while((h = h->app) != 0);
@@ -152,27 +152,27 @@ int copy(char *dst, char *pattern, struct CopySource *src
       	switch(userprompt(PROMPT_OVERWRITE_FILE, rDest)) {
 		default:	/* Error */
 		case 4:	/* Quit */
-			  free(rDest);
+			  myfree(rDest);
 			  return 0;
 		case 3:	/* All */
 			optY = 1;
 		case 1: /* Yes */
 			break;
 		case 2:	/* No */
-			free(rDest);
+			myfree(rDest);
 			continue;
 		}
 	  }
     }
     if(cbreak) {
-      free(rDest);
+      myfree(rDest);
       return 0;
     }
     mode[0] = openMode;
     mode[1] = 'b';
     if((fout = fdevopen(rDest, mode)) == 0) {
       error_open_file(rDest);
-      free(rDest);
+      myfree(rDest);
       return 0;
     }
     mode[0] = 'r';
@@ -180,7 +180,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
     do {
       if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
         fclose(fout);
-        free(rDest);
+        myfree(rDest);
         return 0;
       }
       mode[1] = (asc = h->flags & ASCII) != 0? 't': 'b';
@@ -188,8 +188,8 @@ int copy(char *dst, char *pattern, struct CopySource *src
       if((fin = fdevopen(rSrc, mode)) == 0) {
         error_open_file(rSrc);
         fclose(fout);
-        free(rSrc);
-        free(rDest);
+        myfree(rSrc);
+        myfree(rDest);
         return 0;
       }
       if(isadev(fileno(fin)) && mode[1] != 't'
@@ -205,8 +205,8 @@ int copy(char *dst, char *pattern, struct CopySource *src
       if(cbreak) {
         fclose(fin);
         fclose(fout);
-        free(rSrc);
-        free(rDest);
+        myfree(rSrc);
+        myfree(rDest);
         return 0;
       }
 
@@ -235,7 +235,7 @@ int copy(char *dst, char *pattern, struct CopySource *src
             } else
               fputs(buf, fout);
           }
-          free(buf);
+          myfree(buf);
         } else {
           error_out_of_memory();
           rc = 0;
@@ -252,10 +252,10 @@ int copy(char *dst, char *pattern, struct CopySource *src
       if(cbreak)
         rc = 0;
       fclose(fin);
-      free(rSrc);
+      myfree(rSrc);
       if(!rc) {
         fclose(fout);
-        free(rDest);
+        myfree(rDest);
         return 0;
       }
     } while((h = h->app) != 0);
@@ -266,10 +266,10 @@ int copy(char *dst, char *pattern, struct CopySource *src
     fclose(fout);
     if(rc) {
       error_write_file(rDest);
-      free(rDest);
+      myfree(rDest);
       return 0;
     }
-    free(rDest);
+    myfree(rDest);
   } while(findnext(&ff) == 0);
 
   return 1;
@@ -285,8 +285,8 @@ int copyFiles(struct CopySource *h)
       return 0;
     }
     dst = dfnmerge(0, 0, destFile, fnam, ext);
-    free(fnam);
-    free(ext);
+    myfree(fnam);
+    myfree(ext);
     if(!dst) {
       error_out_of_memory();
       return 0;
@@ -306,7 +306,7 @@ int copyFiles(struct CopySource *h)
     error_selfcopy(dst);
 
   if(destIsDir)
-    free(dst);
+    myfree(dst);
   return rc;
 }
 
@@ -446,7 +446,7 @@ int cmd_copy(char *rest)
       assert(h->nxt);
       h = h->nxt;
     }
-    free(last);
+    myfree(last);
     (last = h)->nxt = 0;
     p = strchr(destFile, '\0') - 1;
     if(*p == '\\' || *p == '/')		/* must be a directory */
@@ -462,7 +462,7 @@ int cmd_copy(char *rest)
   while(copyFiles(h) && (h = h->nxt) != 0);
 
   if(freeDestFile)
-    free(destFile);
+    myfree(destFile);
 errRet:
   killContext();
   freep(argv);

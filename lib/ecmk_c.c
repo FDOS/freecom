@@ -19,5 +19,6 @@ int ecMkc(const char * const str, ...)
 
 	va_start(ap, str);
 
-	return ecMkvcmd(EC_CMD_IGNORE | EC_CMD_HIDDEN | EC_CMD_SILENT, str, ap);
+	return ecMkvcmd(EC_CMD_IGNORE_EXIT | EC_CMD_HIDDEN | EC_CMD_SILENT
+	 , str, ap);
 }

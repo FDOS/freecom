@@ -1,9 +1,9 @@
 cmd .SEQUENTIAL : utils err_fcts.h strings context lib cmd_dir
 
 cmd_dir .SETDIR=cmd :
-	@echo Entering ' '$(PWD)
+	@echo Entering $(PWD)
 	$(RUNMAKE) all
-	@echo Leaving " " $(PWD)
+	@echo Leaving\  $(PWD)
 
 CLEAN_DEPENDENCIES += cmd_clean
 cmd_clean .SETDIR=cmd :

@@ -36,7 +36,7 @@ static char *forPatchCmdline(const char far* const varname
 	int rv;
 
 	if((p = edupstr(varname)) == 0) {
-		free(arg);
+		myfree(arg);
 		return 0;
 	}
 
@@ -47,8 +47,8 @@ static char *forPatchCmdline(const char far* const varname
 	else
 		rv = chgEnv(p, arg);
 
-	free(p);
-	free(arg);
+	myfree(p);
+	myfree(arg);
 
 	return rv == E_None? edupstr(cmd): 0;
 }
@@ -108,8 +108,9 @@ char *readFORfirst(ctxtEC_t far * const ctxt)
 		*dfnfilename(arg) = '\0';	/* extract path */
 		if(ecMkf(&f, varname, cmd, arg) != E_None)
 			return 0;
+		chkPtr(arg);
 		if(!StrCat(arg, f.ff_name)) {
-			free(arg);
+			myfree(arg);
 			error_out_of_memory();
 			return 0;
 		}
@@ -147,8 +148,9 @@ char *readFORnext(ctxtEC_t far * const ctxt)
 		return 0;
 
 	arg = _fdupstr(fc->ec_prefix);
+	chkPtr(arg);
 	if(!arg || !StrCat(arg, f.ff_name)) {
-		free(arg);
+		myfree(arg);
 		error_out_of_memory();
 		return 0;
 	}

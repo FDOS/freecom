@@ -8,9 +8,12 @@
 	This file bases on MUX_AE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
 	Update #1
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -45,13 +48,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <nls_f.h>
 #include <dynstr.h>
 
 #include "../include/command.h"
 #include "../include/crossjmp.h"
 #include "../err_fcts.h"
 #include "../include/mux_ae.h"
+#include "../include/nls.h"
 
 #if BUFFER_SIZE_MUX_AE > 255
 #error "BUFFER_SIZE_MUX_AE must not exceed 255"
@@ -162,7 +165,7 @@ int runExtension(char ** const command
 		}
 
 		if(muxCmd[-1] == 0) {	/* The command had been processed */
-			free(muxBuf);
+			myfree(muxBuf);
 			return 1;			/* Stop interpreting the command */
 		}
 
@@ -176,12 +179,13 @@ int runExtension(char ** const command
 	*++p = 0;
 	if(*muxCmd) {
 		if((p = erealloc(*command, (nlen = p - muxCmd) + 1)) == 0) {
-			free(muxBuf);
+			myfree(muxBuf);
 			return 0;
 		}
 		StrFUpr(muxCmd);		/* make sure it's still uppercased */
 		memcpy(*command = p, muxCmd, nlen + 1);
 	} else {
+		chkPtr(*command);
 		StrFree(*command);
 		nlen = 0;
 	}
@@ -208,6 +212,6 @@ int runExtension(char ** const command
 		return 0;
 	}
 
-	free(muxBuf);
+	myfree(muxBuf);
 	return 0;			/* Proceed command processing as usual */
 }

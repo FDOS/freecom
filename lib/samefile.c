@@ -9,6 +9,9 @@
 	This file bases on COPY.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -59,8 +62,8 @@ int samefile(const char * const f1, const char * const f2)
     differ = -1;
   else differ = strcmp(t1, t2) == 0;
 
-  free(t1);
-  free(t2);
+  myfree(t1);
+  myfree(t2);
 
   return differ;
 }

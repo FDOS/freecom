@@ -22,12 +22,12 @@
 
 #include <dynstr.h>
 #include <mcb.h>
-#include <nls_f.h>
 
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../include/cmdline.h"
 #include "../include/misc.h"
+#include "../include/nls.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 #ifdef FEATURE_NLS
@@ -41,24 +41,6 @@
 #endif
 #include "../include/crossjmp.h"
 
-
-#if 0
-  /* Shall the message block remain in memory when an external
-    program is executed */
-int persistentMSGs = 0;
-int interactive = 0;	/* command directly entered by user */
-int exitflag = 0;               /* indicates EXIT was typed */
-int canexit = 0;                /* indicates if this shell is exitable
-									enable within initialize() */
-int errorlevel = 0;             /* Errorlevel of last launched external prog */
-
-	/* FALSE: no swap this time
-		TRUE: swap this time
-		ERROR: no swap avilable at all
-	*/
-int swapOnExec = FALSE;
-int defaultToSwap = FALSE;
-#endif
 
 int ctrlBreak = 0;              /* Ctrl-Break or Ctrl-C hit */
 int forceLow = 0;               /* load resident copy into low memory */
@@ -87,91 +69,89 @@ void perform_exec_result(int result)
 }
 
 
+/*
+ * Execute an external command or X:.
+ *
+ * first - first word on command line
+ * rest  - rest of command line
+ */
 static void execute(char *first, char *rest)
 {
-  /*
-   * Execute an external command or X:.
-   *
-   * first - first word on command line
-   * rest  - rest of command line
-   */
+	char *name;
 
-  char *fullname;
+	assert(first);
+	assert(rest);
 
-  assert(first);
-  assert(rest);
-
-  /* check for a drive change */
-  if((strcmp(first + 1, ":") == 0) && isalpha(*first)) {
-  	changeDrive(*first);
-    return;
-  }
-
-  if (strchr(first,'?') || strchr(first,'*'))
-  {
-    error_bad_command();
-    return;
-  }
-
-  /* search through %PATH% for the binary */
-  errno = 0;
-  fullname = find_which(first);
-  dprintf(("[find_which(%s) returned %s]\n", first, fullname));
-
-  if (!fullname)
-  {
-    error_bad_command();
-    return;
-  }
-
-  /* check if this is a .BAT file */
-  assert(strrchr(fullname, '.'));
-
-  if (stricmp(strrchr(fullname, '.'), ".bat") == 0)
-  {
-    dprintf(("[BATCH: %s %s]\n", fullname, rest));
-    batch(fullname, first, rest);
-  }
-  else
-    /* exec the program */
-  {
-    int result;
-
-    dprintf(("[EXEC: %s %s]\n", fullname, rest));
-
-	if (strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE)
-	{
-		error_long_external_line();
+	/* check for a drive change */
+	if((strcmp(first + 1, ":") == 0) && isalpha(*first)) {
+		changeDrive(*first);
 		return;
 	}
 
-/* Prepare to call an external program */
-
-	/* Unload the message block if not loaded persistently */
-	if(!F(persistentMSGs))
-		unloadMsgs();
-
-/* Execute the external program */
-#ifdef FEATURE_KERNEL_SWAP_SHELL
-    if(swap == TRUE && F(swap) != ERROR
-	 && kswapMkStruc(fullname, rest)) {
-	 	/* The Criter and ^Break handlers has been installed within
-	 		the PSP in kswapRegister() --> nothing to do here */
-	 	dprintf(("[EXEC: exiting to kernel swap support]\n"));
-	 	exit(123);		/* Let the kernel swap support do the rest */
+	if(strchr(first,'?') || strchr(first,'*')) {
+		error_bad_command();
+		return;
 	}
-#ifdef DEBUG
-	if(swap == TRUE && F(swap) != ERROR)
-		dprintf(("KSWAP: failed to save context, proceed without swapping\n"));
-#endif
-#endif
-		/* Install the dummy (always abort) ^Break handler */
-	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
-    result = exec(fullname, rest, 0);
-	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
 
-    perform_exec_result(result);
-  }
+	chkHeap
+	/* search through %PATH% for the binary */
+	errno = 0;
+	name = find_which(first);
+	chkHeap
+	dprintf(("[find_which(%s) returned %s]\n", first, name));
+
+	if(!name) {
+		error_bad_command();
+		return;
+	}
+
+	/* check if this is a .BAT file */
+	assert(strrchr(name, '.'));
+
+	if(stricmp(strrchr(name, '.'), ".bat") == 0) {
+		dprintf(("[BATCH: %s %s]\n", name, rest));
+		chkHeap
+		batch(name, first, rest);
+		chkHeap
+	} else {
+		/* exec the program */
+		int result;
+
+		dprintf(("[EXEC: %s %s]\n", name, rest));
+
+		if(strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE) {
+			error_long_external_line();
+			return;
+		}
+
+		/* Prepare to call an external program */
+
+		/* Unload the message block if not loaded persistently */
+		if(!F(persistentMSGs))
+			unloadMsgs();
+
+		chkHeap
+		/* Execute the external program */
+#ifdef FEATURE_KERNEL_SWAP_SHELL
+		if(swap == TRUE && F(swap) != ERROR
+		 && kswapMkStruc(name, rest)) {
+			/* The Criter and ^Break handlers has been installed within
+				the PSP in kswapRegister() --> nothing to do here */
+			dprintf(("[EXEC: exiting to kernel swap support]\n"));
+			exit(123);		/* Let the kernel swap support do the rest */
+		}
+#ifdef DEBUG
+		if(swap == TRUE && F(swap) != ERROR)
+			dprintf(("KSWAP: failed to save context, proceed without swapping\n"));
+#endif
+#endif
+			/* Install the dummy (always abort) ^Break handler */
+		setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
+		result = exec(name, rest, 0);
+		setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
+
+		perform_exec_result(result);
+	}
 }
 
 static void docommand(char *line)
@@ -194,7 +174,7 @@ static void docommand(char *line)
 							here, if a MUX-AE client had changed it */
 #endif
 
-  assert(line);
+	assert(line);
 
 	/* delete leading spaces, but keep trailing whitespaces */
 	line = ltrimcl(line);
@@ -205,17 +185,20 @@ static void docommand(char *line)
 		dprintf(("[Force execution of internal command]\n"));
 	}
 
+	chkHeap
 	if(*(rest = line) == 0)
 		return;		/* nothing to do */
 
 	if((name = getCmdName(&(const char*)rest)) != 0) {
 		if(*rest && strchr(QUOTE_STR, *rest)) {
 			/* If the first word is quoted, it is no internal command */
+			chkPtr(name);
 			StrFree(name);
 			rest = line;
 		}
 	}
 
+	chkHeap
 	if(!name && !strchr(QUOTE_STR, *rest)) {
 		/* maybe it's a special internal command */
 		if((name = StrChar(*rest)) != 0)
@@ -223,6 +206,7 @@ static void docommand(char *line)
 	}
 	StrFUpr(name);		/* Pass a mangled name to MUX-AE */
 
+	chkHeap
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 	newargs = 0;
 	if(!forceInternalCommand && name) {
@@ -238,6 +222,7 @@ static void docommand(char *line)
 	}
 #endif
 
+	chkHeap
 	/* Scan internal command table */
 	if((cmdptr = is_icmd(name)) != 0
 	 && (forceInternalCommand || (cmdptr->flags & CMD_HIDDEN) == 0)) {
@@ -271,6 +256,7 @@ static void docommand(char *line)
 		if(forceInternalCommand) {
 			error_no_such_forced_internal_command(name);
 	} else {
+		chkHeap
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 		if(name) {	/* MUX-AE had been invoked */
 			/* Installable Commands are allowed to change both:
@@ -278,23 +264,31 @@ static void docommand(char *line)
 				reconstruct the external command line */
 			if((p = erealloc(name, strlen(name) + strlen(rest) + 1)) == 0)
 				goto errRet;
-			line = strcat(name, rest);
+			line = strcat(p, rest);
+			chkPtr(newargs);
 			StrFree(newargs);		/* conserve memory */
+			name = 0;
 		}
+		chkHeap
 #endif
         /* no internal command --> spawn an external one */
         if((p = unquote(line, rest = skip_word(line))) == 0) {
 			error_out_of_memory();
 			goto errRet;
         }
+		chkHeap
 		execute(p, rest);
-		free(p);
+		chkHeap
+		myfree(p);
+		chkHeap
 	}
 
 errRet:
-	free(name);
+	myfree(name);
+	chkHeap
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-	free(newargs);
+	myfree(newargs);
+	chkHeap
 #endif
 }
 
@@ -404,6 +398,7 @@ static int makePipeContext(char *** const Xout
 		if(ecMkV1C(pipe[num - 1], p, "<%@IVAR(", ivarIn, ")", (char*)0)
 		 != E_None)
 			goto errRet;
+		chkPtr(p);
 		StrFree(p);
 		freep(out);
 		*Xout = 0;
@@ -419,7 +414,7 @@ static int makePipeContext(char *** const Xout
 			*q = 0;
 			q = 0;			/* q == 0 <-> redirect stderr, too */
 		}
-		free(ivarOut);
+		myfree(ivarOut);
 		ivarOut = ivarIn;
 		if((ivarIn = makePipeDelTemp()) == 0
 		 || ecMkV1C(pipe[i], ">", q? "": "&", "%@IVAR(", ivarOut, ")"
@@ -437,6 +432,7 @@ static int makePipeContext(char *** const Xout
 		goto errRet;
 
 	/* Setup the *Xout array to contain the previous ivarIn */
+	chkPtr(ivarIn);
 	StrFree(ivarIn);		/* the name is no longer needed */
 	if((out = ecalloc(2, sizeof(char*))) == 0)
 		goto errRet;
@@ -457,14 +453,14 @@ static int makePipeContext(char *** const Xout
 	rv = 0;						/* OK */
 
 errRet:
-	free(ivarIn);
-	free(ivarOut);
-	free(p);
+	myfree(ivarIn);
+	myfree(ivarOut);
+	myfree(p);
 
 	return rv;
 }
 
-void parseExpandedCommand(char *s)
+void parseExpandedCommand(char *line)
 {
 	char ** in, ** out, ** pipe;	/* list of all input, output redirections
   										in sequence of appearence and the
@@ -474,7 +470,8 @@ void parseExpandedCommand(char *s)
 	char **jftUsed;		/* which entries are redir'ed to which file */
 	int i;
 
-	num = get_redirection(s, &in, &out, &pipe);
+	num = get_redirection(line, &in, &out, &pipe);
+	chkHeap
 
 	if(num) {
 		if(num > 1) {			/* pipe */
@@ -483,12 +480,14 @@ void parseExpandedCommand(char *s)
 			if(!makePipeContext(&out, pipe, num))
 				goto errRet1;
 		}
+		chkHeap
 
 	/* Execute a single command with possible redirections */
 		/* Setup the redirection contexts */
 		if((jftUsed = ecalloc(getJFTlen(), sizeof(char*))) == 0)
 			goto errRet;
 
+		chkHeap
 		if(in) {
 			for(i = 0; in[i]; ++i) {
 				/* There is currently only one kind of input redirection:
@@ -497,6 +496,7 @@ void parseExpandedCommand(char *s)
 				jftUsed[0] = in[i];
 			}
 		}
+		chkHeap
 		if(out) {
 			int error = 0;
 			for(i = 0; out[i]; ++i) {
@@ -530,6 +530,7 @@ void parseExpandedCommand(char *s)
 				goto errRet;
 		}
 
+		chkHeap
 		/* apply the redirections */
 		for(i = getJFTlen(); --i;) if(jftUsed[i]) {
 			switch(jftUsed[i][0]) {
@@ -564,39 +565,46 @@ void parseExpandedCommand(char *s)
 			}
 		}
 
+		chkHeap
 		docommand(pipe[0]);		/* execute the command */
 errRet:
-		free(jftUsed);
+		chkHeap
+		myfree(jftUsed);
 	}
 	/* else an empty command line is happily ignored */
 
 errRet1:
+	chkHeap
 	freep(in);
+	chkHeap
 	freep(out);
-	free(pipe);		/* pointers into s[] */
+	chkHeap
+	myfree(pipe);		/* pointers into line[] */
+	chkHeap
 }
 
 /*
  * process the command line and execute the appropriate functions
  * full input/output redirection and piping are supported
  */
-void parsecommandline(char *Xs)
-{	char *s;
+void parsecommandline(char *Xline)
+{	char *line;
 
-	s = Xs;
-	assert(s);
+	line = Xline;
+	assert(line);
 
-	dprintf(("[parsecommandline (%s)]\n", s));
+	dprintf(("[parsecommandline (%s)]\n", line));
 
 #ifdef FEATURE_ALIASES
-	s = aliasexpand(s);
-	dprintf(("[alias expanded to (%s)]\n", s));
+	line = aliasexpand(line);
+	chkHeap
+	dprintf(("[alias expanded to (%s)]\n", line));
 #endif
 
 	if(traceMode) {		/* Question after the variables expansion
                                    and make sure _all_ executed commands will
                                    honor the mode */
-		fputs(s, stdout);
+		fputs(line, stdout);
 		/* If the user hits ^Break, it has the same effect as
 			usually: If he is in a batch file, he is asked if
 			to abort all the batchfiles or just the current one */
@@ -605,11 +613,12 @@ void parsecommandline(char *Xs)
 			goto errRet;
 	}
 
-	parseExpandedCommand(s);
+	parseExpandedCommand(line);
 
 errRet:
-	if(s != Xs)
-		free(s);
+	if(line != Xline)
+		myfree(line);
+	chkHeap
 }
 
 /*
@@ -620,13 +629,14 @@ errRet:
 void run_exec_context(void)
 {	ctxtEC_t far *ec;
 	unsigned len;
-	char *cmdline;
+	char *line;
 
 	for(;;) {
 		assert(ctxtMain);
 		ec = ctxtExecContext;
 		assert(ec);
 
+		chkHeap
 			/* absolute bottom of dynamic context */
 		if(FP_SEG(ec) >= nxtMCB(FP_SEG(ctxtMCB))
 		 	/* or an end context reached */
@@ -642,6 +652,7 @@ void run_exec_context(void)
 		  	return;
 		}
 
+		chkHeap
 		if(ec->ctxt_type >= EC_TAG_TERMINATE) {
 			dprintf(("[EXEC: Skipping unknown exec context: %u]\n"
 			 , ec->ctxt_type));
@@ -652,23 +663,21 @@ void run_exec_context(void)
 
 			/* as we are about to aquire a new command line, some
 				options are resetted to their defaults */
-#if 1
 			echoBatch = F(echo);
 			traceMode = F(trace);
 			swap = F(swap);
 			called = F(call);
 			interactive = F(interactive);
 			dispPrompt = F(dispPrompt);
-#else
-			dprintf(("Need to set local options before exec'ing context\n"));
-#endif
 
-			if((cmdline = (ecFunction[ec->ctxt_type])(ec)) == 0)
+			chkHeap
+			if((line = (ecFunction[ec->ctxt_type])(ec)) == 0)
 				ecPop();
-			else if(cmdline != cmdlineIgnore) {
+			else if(line != cmdlineIgnore) {
 				/* process this command line */
 				char *p, *q;
 
+				chkHeap
 				/* 
 				 * The question mark '?' has a double meaning:
 				 *	C:\> ?
@@ -677,248 +686,36 @@ void run_exec_context(void)
 				 *	C:\> ? command arguments
 				 *		==> enable tracemode for just this line
 				 */
-				if(*(p = ltrimcl(cmdline)) == '?' && *(q = ltrimcl(p + 1))) {
+				if(*(p = ltrimcl(line)) == '?' && *(q = ltrimcl(p + 1))) {
 					/* something follows --> tracemode */
 					traceMode = 1;
 					p = q;			/* skip the prefix */
 				}
 
-				/* Placed here FOR even preceeds any checks for 
+				chkHeap
+				/* Placed here, FOR even preceeds any checks for 
 					redirections, pipes etc. */
 				if(cmd_for_hackery(p)) {
-					free(cmdline);
+					myfree(line);
 					continue;
 				}
 
+				chkHeap
 				p = expEnvVars(p);
-				free(cmdline);
+				chkHeap
+				myfree(line);
+				chkHeap
 				if(p != 0) {
 					parsecommandline(p);
-					free(p);
+					chkHeap
+					myfree(p);
+					chkHeap
 				}
 			}
 			/* else ignore this call */
 		}
 	}
 }
-
-#if 0
-void readcommand(char * const str, int maxlen)
-{
-#ifdef FEATURE_ENHANCED_INPUT
-	/* If redirected from file or so, should use normal one */
-	readcommandEnhanced(str, maxlen);
-#else
-	readcommandDOS(str, maxlen);
-#endif
-}
-
-/*
- * do the prompt/input/process loop
- *
- *  If xflg is true, the function will not go interactive, but returns.
- *  If commandline != NULL, this command is processed first.
- *
- *  Return: 0: on success
- */
-int process_input(int xflag, char *commandline)
-{
-    /* Dimensionate parsedline that no sprintf() can overflow the buffer
-     */
-  char parsedline[MAX_INTERNAL_COMMAND_SIZE + sizeof(errorlevel) * 8]
-    , *readline;
-/* Return the maximum pointer into parsedline to add 'numbytes' bytes */
-#define parsedMax(numbytes)   \
-  (parsedline + MAX_INTERNAL_COMMAND_SIZE - 1 - (numbytes))
-  char *evar;
-  char *tp;
-  char *ip;
-  char *cp;
-  char forvar;
-  int echothisline;
-  int tracethisline;
-
-  do
-  {
-  	interactive_command = 0;		/* not directly entered by user */
-  	echothisline = tracethisline = 0;
-    if(commandline) {
-      ip = commandline;
-      readline = commandline = 0;
-    } else {
-    if((readline = emalloc(MAX_INTERNAL_COMMAND_SIZE + 1)) == 0)
-      return 1;
-
-      if (0 == (ip = readbatchline(&echothisline, readline,
-                      MAX_INTERNAL_COMMAND_SIZE)))
-      { /* if no batch input then... */
-      if (xflag   /* must not go interactive */
-       || (fdattr(0) & 0x84) == 0x84  /* input is NUL device */
-       || feof(stdin))    /* no further input */
-      {
-        free(readline);
-        break;
-      }
-
-      /* Go Interactive */
-		interactive_command = 1;		/* directly entered by user */
-      readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
-      tracemode = 0;          /* reset trace mode */
-      }
-    }
-
-    /* 
-     * The question mark '?' has a double meaning:
-     *	C:\> ?
-     *		==> Display short help
-     *
-     *	C:\> ? command arguments
-     *		==> enable tracemode for just this line
-     */
-    if(*(ip = ltrimcl(ip)) == '?') {
-    	 ip = ltrimcl(ip + 1);
-    	 if(!*ip) {		/* is short help command */
-#ifdef INCLUDE_CMD_QUESTION
-    	 	showcmds(ip);
-#endif
-			free(readline);
-			continue;
-		}
-		/* this-line-tracemode */
-		echothisline = 0;
-		tracethisline = 1;
-	}
-
-  /* The FOR hack
-    If the line matches /^\s*for\s+\%[a-z]\s/, the FOR hack
-    becomes active, because FOR requires the sequence "%<ch>"
-    in its input.
-    When the percent (%) expansion is made later on, any
-    sequence "%<ch>" is retained.
-  */
-  cp = ip;
-  if(matchtok(cp, "for") && *cp == '%' && isalpha(cp[1])
-   && isargdelim(cp[2]))   /* activate FOR hack */
-    forvar = toupper(cp[1]);
-  else forvar = 0;
-
-  cp = parsedline;
-    while (*ip)
-    {
-      /* Assume that at least one character is added, place the
-        test here to simplify the switch() statement */
-      if(cp >= parsedMax(1)) {
-        cp = 0;    /* error condition */
-        break;
-      }
-      if (*ip == '%')
-      {
-        switch (*++ip)
-        {
-          case '\0':    /* FOR hack forvar == 0 if no FOR is active */
-            *cp++ = '%';
-            break;
-
-          case '%':
-            *cp++ = *ip++;
-            break;
-
-          case '0':
-          case '1':
-          case '2':
-          case '3':
-          case '4':
-          case '5':
-          case '6':
-          case '7':
-          case '8':
-          case '9':
-            if (0 != (tp = find_arg(*ip - '0')))
-            {
-              if(cp >= parsedMax(strlen(tp))) {
-                cp = 0;
-                goto intBufOver;
-              }
-              cp = stpcpy(cp, tp);
-              ip++;
-            }
-            else
-              *cp++ = '%';
-              /* Let the digit be copied in the cycle */
-
-            break;
-
-          case '?':
-            /* overflow check: parsedline has that many character
-              "on reserve" */
-            cp += sprintf(cp, "%u", errorlevel);
-            ip++;
-            break;
-
-          default:
-            if(forvar == toupper(*ip)) {    /* FOR hack */
-              *cp++ = '%';			/* let the var be copied in next cycle */
-              break;
-            }
-            if ((tp = strchr(ip, '%')) != 0)
-            {
-              *tp = '\0';
-
-              if ((evar = getEnv(ip)) != 0) {
-                if(cp >= parsedMax(strlen(evar))) {
-                  cp = 0;
-                  goto intBufOver;
-                }
-                cp = stpcpy(cp, evar);
-               }
-
-              ip = tp + 1;
-            }
-            break;
-        }
-        continue;
-      }
-
-      if (iscntrl(*ip))
-        *cp = ' ';
-      else 
-      	*cp++ = *ip++;
-    }
-
-intBufOver:
-    free(readline);
-
-  if(!cp) {     /* internal buffer overflow */
-    error_line_too_long();
-    continue;
-  }
-
-    *cp = '\0';   /* terminate copied string */
-
-    if (echothisline)           /* Echo batch file line */
-    {
-      printprompt();
-      puts(parsedline);
-    }
-
-    if (*parsedline)
-    {
-      if(swapOnExec != ERROR)
-      	swapOnExec = defaultToSwap;
-      if(tracethisline)
-      	++tracemode;
-      parsecommandline(parsedline);
-      if(tracethisline)
-      	--tracemode;
-      if (echothisline || echo)
-        putchar('\n');
-    }
-  }
-  while (!canexit || !exitflag);
-
-  return 0;
-}
-#endif
 
 static void hangForever(void)
 {
@@ -959,16 +756,16 @@ static void hangForever(void)
 
 int main(void)
 {
-  if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
-    run_exec_context();
+	if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
+		run_exec_context();
 
-  if(!F(canexit))
-    hangForever();
+	if(!F(canexit))
+		hangForever();
 
 #ifdef FEATURE_KERNEL_SWAP_SHELL
 	kswapDeRegister(kswapContext);
 #endif
 	ctxtDestroy();
 
-  return 0;
+	return 0;
 }

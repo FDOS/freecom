@@ -29,6 +29,7 @@ int histGet(const int num, char ** const str)
 
 	if(ctxtGet(0, CTXT_TAG_HISTORY, realNum(CTXT_TAG_HISTORY, num), &p) == 0) {
 		assert(p);
+		chkPtr(*str);
 		StrRepl(*str, p);
 		return 1;
 	}

@@ -19,8 +19,8 @@ char* (*ecFunction[])(ctxtEC_t far * const) = {
 	, readFORnext
 /* EC_TAG_COMMAND */ 
 	, readCommand
-/* EC_TAG_COMMAND_NO_IGNORE */ 
-	, readCommandNoIgnore
+/* EC_TAG_COMMAND_IGNORE_EXIT */ 
+	, readCommandIgnoreExit
 /* EC_TAG_KEEP_RUNNING */ 
 	, keepMeRunning
 /* EC_TAG_TERMINATE */ 

@@ -17,6 +17,9 @@
 	This file bases on COPY.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -40,7 +43,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -111,10 +114,10 @@ char *fillFnam(const char * const pattern
     return 0;
 
   if(!dfnsplit(fnam, 0, 0, &pfn, &pex)) {
-    free(fn);
-    free(ex);
-    free(dr);
-    free(pa);
+    myfree(fn);
+    myfree(ex);
+    myfree(dr);
+    myfree(pa);
     return 0;
   }
 
@@ -123,12 +126,12 @@ char *fillFnam(const char * const pattern
 
   p = dfnmerge(0, dr, pa, dfn, dex);
 
-  free(pfn);
-  free(pex);
-  free(dr);
-  free(pa);
-  free(fn);
-  free(ex);
+  myfree(pfn);
+  myfree(pex);
+  myfree(dr);
+  myfree(pa);
+  myfree(fn);
+  myfree(ex);
 
   return p;
 }

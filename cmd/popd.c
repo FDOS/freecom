@@ -25,7 +25,7 @@ int cmd_popd(char *param)
 			int rc;
 
 			rc = cmd_cdd(todir);
-			free(todir);
+			myfree(todir);
 			return rc;
 		}
 

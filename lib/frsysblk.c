@@ -6,6 +6,9 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -50,6 +53,9 @@ void freeSysBlk(unsigned segm)
 
 	mcb = (struct MCB _seg *)SEG2MCB(segm);
 	mcb->mcb_ownerPSP = _psp;
+#ifdef DEBUG
+	_fmemset(MK_FP(segm, 0), 'S', mcb->mcb_size * 16);
+#endif
 	freeBlk(segm);
 	dprintf(("[MEM: deallocated system memory block: %04x]\n", segm));
 }

@@ -16,10 +16,12 @@
 int qecAction(char *param, FLAG * const flag)
 {	unsigned ec;
 
-	if(param && *param && is_num(param, &ec))
-		F(errorlevel) = ec;
-	else
-		error_invalid_number(param);
+	if(param && *param) {
+		if(is_num(param, &ec))
+			F(errorlevel) = ec;
+		else
+			error_invalid_number(param);
+	}
 
 	*flag = TRUE;
 

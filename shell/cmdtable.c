@@ -205,7 +205,9 @@ struct CMD internalCommands[] =
 
 #ifdef DEBUG
 	{"@", HIDDEN, cmd_dispNLS, TEXT_CMDHELP_INTERNAL_COMMAND},
+	{"DISPLAY_NLS", HIDDEN, cmd_dispNLS, TEXT_CMDHELP_INTERNAL_COMMAND},
 	{"!", HIDDEN, cmd_dispFlags, TEXT_CMDHELP_INTERNAL_COMMAND},
+	{"DISPLAY_FLAGS", HIDDEN, cmd_dispFlags, TEXT_CMDHELP_INTERNAL_COMMAND},
 #endif
 
 	{0, 0, 0, 0}

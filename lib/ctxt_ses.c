@@ -26,6 +26,6 @@ int ctxtSetS(const Context_Tag tag
 	name[0] = tag;
 	strcpy(&name[1], tail);
 	rc = chgCtxt(tag, name, value);
-	free(name);
+	myfree(name);
 	return rc;
 }

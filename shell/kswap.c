@@ -165,7 +165,7 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 		*h = '\r';				/* command line terminator */
 		h[1] = 0;				/* ASCIIZ */
 		ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE, q);
-		free(q);
+		myfree(q);
 	} else
 		ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE, "\1 \r");
 	ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_PRGNAME, prg);

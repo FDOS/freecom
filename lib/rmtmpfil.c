@@ -15,7 +15,7 @@
  *    "."; in that order, whichever returns a writeable location first
  *
  *    The filenames are created within dymamic memory and must be
- *    free()'ed by the caller himself.
+ *    myfree()'ed by the caller himself.
  *    The files are touched, meaning they are created with zero
  *    length and no special attributes, but closed; the caller must
  *    remove the file himself.
@@ -24,6 +24,9 @@
 	This file bases on TMPNAM.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -47,7 +50,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 #include "../config.h"
 
@@ -61,6 +64,6 @@ void killtmpfn(char * const fn)
   if (fn)
   {
     remove(fn);
-    free(fn);
+    myfree(fn);
   }
 }

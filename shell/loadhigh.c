@@ -152,7 +152,7 @@ static int lh_lf(char *args)
         /* command line was OK - try to find the file */
 
         fullname = find_which(fnam);
-      free(fnam);
+      myfree(fnam);
 
         if (fullname)
         {
@@ -180,9 +180,9 @@ static int lh_lf(char *args)
     DOSfree(block[i]);
 
   /* free dynamic arrays */
-  free(umbRegion);
-  free(block);
-  free(optL);
+  myfree(umbRegion);
+  myfree(block);
+  myfree(optL);
 
   /* Restore UMB link state and DOS malloc strategy to their
    * original values. */
@@ -459,7 +459,7 @@ static int loadhigh_prepare(void)
 
   for (i = 0; i < availBlocks; i++)
     DOSfree(availBlock[i]);
-  free(availBlock);
+  myfree(availBlock);
 
   /* If the program is to be loaded in upper memory, set the malloc
    * strategy to 'first fit high', otherwise to 'first fit low'. */

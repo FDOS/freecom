@@ -184,7 +184,7 @@ int get_redirection(char * const s
 errRet:
 	freep(*in);		*in = 0;
 	freep(*out);	*out = 0;
-	free(*pipe);	*pipe = 0;
+	myfree(*pipe);	*pipe = 0;
 
 	return -1;
 }

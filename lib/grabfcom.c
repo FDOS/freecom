@@ -9,6 +9,9 @@
 	This file bases on INIT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -32,7 +35,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -77,7 +80,7 @@ void grabComFilename(const int warn, const char far * const fnam)
 
         /* expand the string for the user */
       p = dfnexpand(buf, 0);
-      free(buf);
+      myfree(buf);
       if((buf = p) == 0) {
 		  if(warn) error_out_of_memory();
 		  return;
@@ -97,7 +100,7 @@ void grabComFilename(const int warn, const char far * const fnam)
 
       if((p = realloc(buf, len + sizeof(COM_NAME) + 1)) == 0) {
         if(warn) error_out_of_memory();
-        free(buf);
+        myfree(buf);
         return;
       }
       buf = p;
@@ -107,11 +110,11 @@ void grabComFilename(const int warn, const char far * const fnam)
     if(!(dfnstat(buf) & DFN_FILE)) {
       /* not found */
       if(warn) error_open_file(buf);
-      free(buf);
+      myfree(buf);
       return;
     }
 
-  free(ComPath);    /* Save the found file */
+  myfree(ComPath);    /* Save the found file */
   ComPath = buf;
 	dprintf(("[INIT: new resource file name: %s]\n", ComPath));
 

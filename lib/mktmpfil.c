@@ -18,7 +18,7 @@
  *    "."; in that order, whichever returns a writeable location first
  *
  *    The filenames are created within dymamic memory and must be
- *    free()'ed by the caller himself.
+ *    myfree()'ed by the caller himself.
  *    The files are touched, meaning they are created with zero
  *    length and no special attributes, but closed; the caller must
  *    remove the file himself.
@@ -27,9 +27,12 @@
 	This file bases on TMPNAM.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
+	Update #5
+
 	Revision 1.1.4.1  2001/06/19 20:42:23  skaus
 	Update #1
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -110,7 +113,7 @@ char *mktempfile(const char * const path, const char *ext)
   if ((newpath = erealloc(fn, strlen(fn) + strlen(ext) + 10)) == 0)
   {
     /* out of mem */
-    free(fn);
+    myfree(fn);
     return 0;
   }
 
@@ -150,6 +153,6 @@ char *mktempfile(const char * const path, const char *ext)
   }
 
 errRet:
-  free(newpath);
+  myfree(newpath);
   return 0;
 }

@@ -142,6 +142,7 @@ char *readcommandEnhanced(void)
 
 #ifdef DEBUG
 		case KEY_CTL_T:
+			chkPtr(str);
 			if(!StrCat(str, "1234567890")) {
 				error_out_of_memory();
 				break;
@@ -205,6 +206,7 @@ char *readcommandEnhanced(void)
 					end[len] = 0;
 				}
 				charcount = strlen(str);
+				current = end - str;
 
 				goxy(orgx, orgy);
 				outs(str);
@@ -269,6 +271,7 @@ char *readcommandEnhanced(void)
 			if(current < Strlen(prvLine)) {
 				if(charcount)
 					str[current] = 0;
+				chkPtr(str);
 				if(!StrCat(str, prvLine))
 					error_out_of_memory();
 				else {
@@ -284,6 +287,7 @@ char *readcommandEnhanced(void)
 				++histLevel;		/* failed -> keep current command line */
 			else {
 				clrcmdline(str, orgx, orgy);
+				chkPtr(str);
 				StrRepl(str, prvLine);
 				prvLine = 0;
 				current = charcount = Strlen(str);
@@ -296,6 +300,7 @@ char *readcommandEnhanced(void)
 		case KEY_DOWN:             /* get next command from buffer */
 			if(histLevel) {
 				clrcmdline(str, orgx, orgy);
+				chkPtr(prvLine);
 				StrRepl(prvLine, str);
 				str = 0;
 				histGet(++histLevel, &str);
@@ -307,6 +312,7 @@ char *readcommandEnhanced(void)
 
 		case KEY_F5: /* keep cmdline in F3/UP buffer and move to next line */
 			clrcmdline(str, orgx, orgy);
+			chkPtr(prvLine);
 			StrRepl(prvLine, str);
 			str = 0;
 			current = charcount = 0;
@@ -360,7 +366,7 @@ char *readcommandEnhanced(void)
 	_setcursortype(_NORMALCURSOR);
 
 #ifdef FEATURE_HISTORY
-	free(prvLine);
+	myfree(prvLine);
 #endif
 	return str? StrTrim(str): estrdup("");
 }

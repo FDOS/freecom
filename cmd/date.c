@@ -67,7 +67,7 @@ int cmd_date(char *param)
 			return 1;		/* out of mem */
 
 		displayString(TEXT_MSG_CURRENT_DATE, date);
-		free(date);
+		myfree(date);
 
 		param = 0;
 	}
@@ -93,7 +93,7 @@ int cmd_date(char *param)
 			break;
 		
 		error_invalid_date();
-		// force input the next time around.
+		/* force input the next time around. */
 		param = 0;
 	}
 

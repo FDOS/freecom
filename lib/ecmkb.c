@@ -19,7 +19,7 @@
 #include "../include/ierror.h"
 #include "../include/misc.h"
 
-int ecMkB(const char * const fullname)
+int ecMkB(const char * const name)
 {	ctxtEC_t far* ec;
 	ctxtEC_Batch_t far *d;
 	unsigned length;
@@ -27,9 +27,9 @@ int ecMkB(const char * const fullname)
 	char far *q;
 #endif
 
-	assert(fullname);
+	assert(name);
 
-	if((ec = ecMk(EC_TAG_BATCH, length = strlen(fullname) + sizeof(*d))) == 0)
+	if((ec = ecMk(EC_TAG_BATCH, length = strlen(name) + sizeof(*d))) == 0)
 		return E_NoMem;
 	d = ecData(ec, ctxtEC_Batch_t);
 	d->ec_pos = d->ec_lnum = 0;
@@ -37,8 +37,10 @@ int ecMkB(const char * const fullname)
 #ifndef NDEBUG
 	q =
 #endif
-	_fstpcpy(d->ec_fname, TO_FP(fullname));
+	_fstpcpy(d->ec_fname, TO_FP(name));
 	assert(_fnormalize(q) == _fnormalize(&ecData(ec, byte)[length - 1]));
+
+	++F(batchlevel);
 
 	return E_None;
 }
