@@ -259,7 +259,11 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 								 no need to copy file, if it won't fit */
         					/* No test if chsize() fails for MS DOS 5/6 bug
         						see RBIL DOS-40 */
-        	if(chsize(fileno(fout),filelength(fileno(fin))) == -1) {
+        					/* Don't use chsize() as Turbo RTL fills with
+        						'\0' bytes, which is not useful here */
+        	lseek(fileno(fout), filelength(fileno(fin)), SEEK_SET);
+        	if(truncate(fileno(fout)) != 0
+        	 || lseek(fileno(fout), 0, SEEK_SET) == -1) {
 				error_write_file_disc_full(rDest, filelength(fileno(fin)));
         		rc = 0;
 			} else {

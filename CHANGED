@@ -1,3 +1,4 @@
+fix: copy(): replace chsize() to not fill with '\0's {Tom Ehlert}
 add: copy(): Speed-Up by pre-creating the file {Tom Ehlert}
 bugfix: BATCH.C: extract of label name failed due to macro {Tom Ehlert}
 add: Serbian CP437 LNG/ERR files {Dejan Strbac}
