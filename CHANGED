@@ -1,3 +1,4 @@
+add: /Z: Display exit code after external command {Bernd Blaauw}
 fix: LH: Errorlevel of program effects LH's error reporting {Eric Auer}
 chg: BUILD.BAT: Removed CONFIG.MAK and add the warning concering CONFIG.STD
 fix: CONFIG.MAK: changes of CONFIG.MAK propagate to all make's 

@@ -56,6 +56,9 @@ extern unsigned _heaplen;
 #define FDDEBUG_INIT_VALUE 0
 #endif
 int fddebug = FDDEBUG_INIT_VALUE;    /* debug flag */
+#ifdef DISP_EXITCODE
+int dispExitcode = 0;
+#endif
 
 /* Without resetting the owner PSP, the program is not removed
    from memory */
@@ -84,6 +87,9 @@ optScanFct(opt_init)
   case '?': showhelp = 1; return E_None;
   case '!': return optScanBool(fddebug);
   case 'Y': return optScanBool(tracemode);
+#ifdef DISP_EXITCODE
+  case 'Z': return optScanBool(dispExitcode);
+#endif
   case 'F': return optScanBool(autofail);
   case 'D': return optScanBool(skipAUTOEXEC);
   case 'P':

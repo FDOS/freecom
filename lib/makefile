@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.17  2004/12/01 21:15:31  skaus
+# add: /Z: Display exit code after external command {Bernd Blaauw}
+#
 # Revision 1.16  2004/09/13 18:59:39  skaus
 # add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
 #
@@ -93,13 +96,13 @@ SRC = absfile.c almemblk.c alprmblk.c alsysblk.c app_get.c app_set.c \
 	ctxt_mkb.c ctxt_mkn.c ctxt_pop.c ctxt_psh.c ctxt_rnu.c ctxt_set.c \
 	ctxt_ss.c ctxt_vw.c curdatel.c curtime.c cwd.c dateget.c dateset.c \
 	dbg_c.c dbg_mem.c dbg_prnt.c dbg_s.c dbg_sn.c devopen.c dfn_err.c \
-	dispcnt.c drvnum.c efct_001.c exec.c exec1.c farread.c fcompl1.c \
-	fcompl2.c fdattr.c fdevopen.c fdsattr.c fillcomp.c find.c freep.c \
-	frsysblk.c fstpcpy.c gallstr.c get1mcb.c getenv.c goxy.c grabfcom.c \
-	gumblink.c hdlrctxt.c hist_get.c hist_set.c inputdos.c is_empty.c \
-	is_fnamc.c is_fnstr.c is_pchr.c isadev.c keyprsd.c kswap_c.c lastdget.c \
-	lastdset.c leadopt.c lowexec.asm ltrimcl.c ltrimsp.c lwr1wd.c match.c \
-	messages.c mk_rddir.c mktmpfil.c msg_dflt.c msg_dps.c msg_fstr.c \
+	dispcnt.c dispexit.c drvnum.c efct_001.c exec.c exec1.c farread.c \
+	fcompl1.c fcompl2.c fdattr.c fdevopen.c fdsattr.c fillcomp.c find.c \
+	freep.c frsysblk.c fstpcpy.c gallstr.c get1mcb.c getenv.c goxy.c \
+	grabfcom.c gumblink.c hdlrctxt.c hist_get.c hist_set.c inputdos.c \
+	is_empty.c is_fnamc.c is_fnstr.c is_pchr.c isadev.c keyprsd.c kswap_c.c \
+	lastdget.c lastdset.c leadopt.c lowexec.asm ltrimcl.c ltrimsp.c lwr1wd.c \
+	match.c messages.c mk_rddir.c mktmpfil.c msg_dflt.c msg_dps.c msg_fstr.c \
 	msg_get.c msg_gpt.c msg_mkey.c msg_prmp.c mux_ae.c nls.c nls_date.c \
 	nls_time.c num_fmt.c onoff.c openf.c optsb.c optsi.c optss.c parsenum.c \
 	pr_date.c pr_prmpt.c pr_time.c prprompt.c readcmd.c realnum.c res.c \
@@ -117,13 +120,13 @@ OBJ = absfile.obj almemblk.obj alprmblk.obj alsysblk.obj app_get.obj \
 	ctxt_mkb.obj ctxt_mkn.obj ctxt_pop.obj ctxt_psh.obj ctxt_rnu.obj \
 	ctxt_set.obj ctxt_ss.obj ctxt_vw.obj curdatel.obj curtime.obj cwd.obj \
 	dateget.obj dateset.obj dbg_c.obj dbg_mem.obj dbg_prnt.obj dbg_s.obj \
-	dbg_sn.obj devopen.obj dfn_err.obj dispcnt.obj drvnum.obj efct_001.obj \
-	exec.obj exec1.obj farread.obj fcompl1.obj fcompl2.obj fdattr.obj \
-	fdevopen.obj fdsattr.obj fillcomp.obj find.obj freep.obj frsysblk.obj \
-	fstpcpy.obj gallstr.obj get1mcb.obj getenv.obj goxy.obj grabfcom.obj \
-	gumblink.obj hdlrctxt.obj hist_get.obj hist_set.obj inputdos.obj \
-	is_empty.obj is_fnamc.obj is_fnstr.obj is_pchr.obj isadev.obj \
-	keyprsd.obj kswap_c.obj lastdget.obj lastdset.obj leadopt.obj \
+	dbg_sn.obj devopen.obj dfn_err.obj dispcnt.obj dispexit.obj drvnum.obj \
+	efct_001.obj exec.obj exec1.obj farread.obj fcompl1.obj fcompl2.obj \
+	fdattr.obj fdevopen.obj fdsattr.obj fillcomp.obj find.obj freep.obj \
+	frsysblk.obj fstpcpy.obj gallstr.obj get1mcb.obj getenv.obj goxy.obj \
+	grabfcom.obj gumblink.obj hdlrctxt.obj hist_get.obj hist_set.obj \
+	inputdos.obj is_empty.obj is_fnamc.obj is_fnstr.obj is_pchr.obj \
+	isadev.obj keyprsd.obj kswap_c.obj lastdget.obj lastdset.obj leadopt.obj \
 	lowexec.obj ltrimcl.obj ltrimsp.obj lwr1wd.obj match.obj messages.obj \
 	mk_rddir.obj mktmpfil.obj msg_dflt.obj msg_dps.obj msg_fstr.obj \
 	msg_get.obj msg_gpt.obj msg_mkey.obj msg_prmp.obj mux_ae.obj nls.obj \
@@ -346,6 +349,9 @@ dfn_err.obj : dfn_err.c \
 dispcnt.obj : dispcnt.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h
+dispexit.obj : dispexit.c \
+	 ../config.h ../include/command.h ../include/datefunc.h \
+	../include/debug.h ../include/misc.h ../include/timefunc.h
 drvnum.obj : drvnum.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h

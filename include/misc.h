@@ -57,6 +57,7 @@ extern FILE *errStream;
 extern int swapOnExec, defaultToSwap, swapContext;
 
 void display_errno_fnam_error(const char * const fnam);
+void displayExitcode(void);
 
 int cgetchar(void);
 int vcgetchar(void);

@@ -8,9 +8,12 @@
 	This file bases on EXEC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2004/12/01 21:15:48  skaus
+	add: /Z: Display exit code after external command {Bernd Blaauw}
+
 	Revision 1.3  2004/10/25 19:37:34  skaus
 	fix: LH: Errorlevel of program effects LH's error reporting {Eric Auer}
-
+	
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -53,7 +56,9 @@ void setErrorLevel(int rc)
 	dprintf(("[exec: DOS error code of exec(): %d]\n", rc));
 
 	if(!rc) {
-		int exitReason;
+#ifndef DISP_EXITCODE
+		int exitReason;		/* else we use the global variable */
+#endif
 		rp.r_ax = 0x4d00;           /* get return code */
 		intr(0x21, &rp);
 		rc = rp.r_ax & 0xFF;
@@ -71,7 +76,14 @@ void setErrorLevel(int rc)
 		if(exitReason && !rc)	/* Make sure this condition is reflected */
 			rc = CBREAK_ERRORLEVEL;
 	}
+#ifdef DISP_EXITCODE
+	else
+		exitReason = -1;
+#endif
 
 	errorlevel = rc;	/* assign DOS error code, if the call failed itself */
+#ifdef DISP_EXITCODE
+	displayExitcode();
+#endif
 }
 

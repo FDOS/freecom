@@ -64,6 +64,7 @@ freecom_deps :  \
 	devopen.obj \
 	dfn_err.obj \
 	dispcnt.obj \
+	dispexit.obj \
 	drvnum.obj \
 	efct_001.obj \
 	exec.obj \
@@ -134,10 +135,10 @@ freecom_deps :  \
 	res.obj \
 	res_r.obj \
 	res_vald.obj \
-	res_w.obj \
 	chunk1
 
 chunk1 :  \
+	res_w.obj \
 	resfile.obj \
 	rmtmpfil.obj \
 	rtrimcl.obj \
@@ -310,6 +311,7 @@ freecom.lib : $(CFG) freecom_deps
 +-devopen.obj &
 +-dfn_err.obj &
 +-dispcnt.obj &
++-dispexit.obj &
 +-drvnum.obj &
 +-efct_001.obj &
 +-exec.obj &
@@ -551,6 +553,7 @@ freecom.lib : $(CFG) freecom_deps
 +devopen.obj &
 +dfn_err.obj &
 +dispcnt.obj &
++dispexit.obj &
 +drvnum.obj &
 +efct_001.obj &
 +exec.obj &

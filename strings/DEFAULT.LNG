@@ -1486,3 +1486,23 @@ Terminating now.
 :TEXT_HIDDEN_CRITER#0%
 %u Critical Error requests suppressed.
 .
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+Exit code (ERRORLEVEL): %u, reason: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+DOS API error\
+.
+:TEXT_EXIT_REASON_0
+terminated normally\
+.
+:TEXT_EXIT_REASON_1
+terminated by ^Break\
+.
+:TEXT_EXIT_REASON_2
+terminared by critical error\
+.
+:TEXT_EXIT_REASON_3
+gone resident\
+.
