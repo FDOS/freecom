@@ -131,6 +131,7 @@ int cmd_ver(char *);
 int cmd_verify(char *);
 int cmd_vol(char *);
 int internal_exit(char *);
+int force_exit(char *);
 int cmd_pushd(char *);          /*DLP 06/01/2000 */
 int cmd_popd(char *);           /*DLP 06/01/2000 */
 int cmd_dirs(char *);           /*DLP 06/01/2000 */

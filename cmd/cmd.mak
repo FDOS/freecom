@@ -25,6 +25,7 @@ cmds.lib : $(CFG) alias.obj \
 	doskey.obj \
 	echo.obj \
 	exit.obj \
+	exit2.obj \
 	fddebug.obj \
 	for.obj \
 	goto.obj \
@@ -64,6 +65,7 @@ cmds.lib : $(CFG) alias.obj \
 +-doskey.obj &
 +-echo.obj &
 +-exit.obj &
++-exit2.obj &
 +-fddebug.obj &
 +-for.obj &
 +-goto.obj &
@@ -104,6 +106,7 @@ cmds.lib : $(CFG) alias.obj \
 +doskey.obj &
 +echo.obj &
 +exit.obj &
++exit2.obj &
 +fddebug.obj &
 +for.obj &
 +goto.obj &
