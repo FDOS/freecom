@@ -3,6 +3,9 @@
 	Declarations to access the DOS NLS information
 
 	$Log$
+	Revision 1.2  2003/03/05 17:43:42  skaus
+	bugfix: cached NLS data not flushed
+
 	Revision 1.1  2001/04/12 00:09:06  skaus
 	chg: New structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -26,7 +29,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
 */
 
 #ifndef __NLS_H
@@ -37,6 +40,8 @@
 extern Country *nlsBuf;		/* internally cached NLS info buffer */
 
 void refreshNLS(void);		/* make sure the nlsBuf is valid */
+
+#define invalidateNLSbuf() nlsBuf = 0
 
 /* The mode parameter is an OR combination of the following
 	defines */

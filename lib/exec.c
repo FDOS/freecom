@@ -6,9 +6,12 @@
 	This file bases on EXEC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2003/03/05 17:43:52  skaus
+	bugfix: cached NLS data not flushed
+
 	Revision 1.3  2002/11/12 18:31:57  skaus
 	add: save/restore session (swap context) {Tom Ehlert}
-
+	
 	Revision 1.2  2002/04/02 18:09:31  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 	
@@ -47,6 +50,7 @@
 
 #include "../include/command.h"
 #include "../include/cswap.h"
+#include "../include/nls.h"
 
 /* align one byte */
 #pragma option -a-
@@ -79,6 +83,8 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
   assert(cmd);
   assert(cmdLine);
   assert(strlen(cmdLine) <= 125);
+
+  invalidateNLSbuf();
 
   /* generate Pascal string from the command line */
   memcpy(&buf[1], cmdLine, buf[0] = strlen(cmdLine));

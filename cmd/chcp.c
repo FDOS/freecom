@@ -6,9 +6,12 @@
  	via DOS-66-01/02
 
 	$Log$
+	Revision 1.2  2003/03/05 17:43:51  skaus
+	bugfix: cached NLS data not flushed
+
 	Revision 1.1  2002/11/12 21:47:16  skaus
 	add: CHCP (disabled by default)
-
+	
  */
 
 #include "../config.h"
@@ -22,6 +25,7 @@
 #include "../err_fcts.h"
 #include "../include/command.h"
 #include "../include/cmdline.h"
+#include "../include/nls.h"
 #include "../strings.h"
 
 int cmd_chcp(char *param)
@@ -57,6 +61,8 @@ int cmd_chcp(char *param)
 			error_syntax(param);
 			return 1;
 		}
+
+		invalidateNLSbuf();
 
 		_DX = sysCP;
 		_BX = curCP;
