@@ -112,7 +112,7 @@ char *find_arg_bc(struct bcontext const * const b, int n)
 
   n += b->shiftlevel;
   if(n == 0)
-  	return b->bfnam;
+  	return b->bfirst;
   if(n > b->numParams || n < 0)
   	return "";
   return b->params[n - 1];
@@ -153,6 +153,8 @@ void clearBatchContext(struct bcontext *b)
     fclose(b->bfile);
   if (b->bfnam)
     free(b->bfnam);
+  if (b->bfirst)
+    free(b->bfirst);
   if (b->blabel)
     free(b->blabel);
 
@@ -304,7 +306,8 @@ int batch(char *fullname, char *firstword, char *param)
   }
 
   bc->bfnam = fullname;         /* already duplicated */
-  if(!setBatchParams(param)) {	 /* out of memory condition */
+  if(0 == (bc->bfirst = strdup(firstword))
+   || !setBatchParams(param)) {	 /* out of memory condition */
   	exit_batch();		/* clear this erroreous batch context */
   	return 1;
   }

@@ -18,7 +18,8 @@ struct bcontext
 {
   struct bcontext *prev;
   FILE *bfile;
-  char *bfnam;                  /* name of batchfile */
+  char *bfnam;                  /* abs filename of batchfile */
+  char *bfirst;                 /* name of batchfile as typed on cmd line */
   char *forproto;				/* command to execute */
   char *forvar;					/* current FOR variable */
   char **params;				/* FOR/batch parameter list */
