@@ -1,3 +1,4 @@
+fix: get_redirection(): double comment mark /* {Arkady V.Belousov}
 bugfix: get_redirection(): apostrophe used as quote
 bugfix: readcommandline(): spurious \n after commands [#1721]
 bugfix: readbatchline(): permit @ before labels [#1747]
