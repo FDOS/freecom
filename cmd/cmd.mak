@@ -14,6 +14,7 @@ cmds.lib : $(CFG) alias.obj \
 	break.obj \
 	call.obj \
 	cdd.obj \
+	chcp.obj \
 	chdir.obj \
 	cls.obj \
 	copy.obj \
@@ -54,6 +55,7 @@ cmds.lib : $(CFG) alias.obj \
 +-break.obj &
 +-call.obj &
 +-cdd.obj &
++-chcp.obj &
 +-chdir.obj &
 +-cls.obj &
 +-copy.obj &
@@ -95,6 +97,7 @@ cmds.lib : $(CFG) alias.obj \
 +break.obj &
 +call.obj &
 +cdd.obj &
++chcp.obj &
 +chdir.obj &
 +cls.obj &
 +copy.obj &

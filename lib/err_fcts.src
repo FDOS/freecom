@@ -77,3 +77,5 @@ error_for_parens:=TEXT_ERROR_MISSING_PARENTHESES
 error_for_do:=TEXT_ERROR_DO_MISSING
 error_for_no_command:=TEXT_ERROR_NO_COMMAND_AFTER_DO
 error_goto_label:=TEXT_ERROR_NO_GOTO_LABEL
+error_get_codepage:=TEXT_ERROR_GET_CODEPAGE
+error_set_codepage:=TEXT_ERROR_SET_CODEPAGE

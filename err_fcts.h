@@ -78,3 +78,5 @@ void error_for_parens(void);
 void error_for_do(void);
 void error_for_no_command(void);
 void error_goto_label(void);
+void error_get_codepage(void);
+void error_set_codepage(void);

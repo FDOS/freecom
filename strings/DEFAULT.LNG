@@ -867,6 +867,18 @@ Heap                   : free %5lu bytes
 .
 
 
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+Failed to aquire current code page from system.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+Failed to change current code page.
+.
+:TEXT_DISPLAY_CODEPAGE#1
+The current codepage is %u.
+The system codepage (properly) is: %u.
+.
+
 #
 # Command help text
 #

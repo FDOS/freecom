@@ -1,3 +1,5 @@
+v0.83 Beta 52:
+add: CHCP (disabled by default)
 bugfix: COPY: additional output to honor redirection {Eric Auer} [bugID #1313]
 bugfix: onOffStr(): zaps trailing argument delimiters, e.g. ECHO set=
 add: save/restore session (swap context) {Tom Ehlert}

@@ -3,6 +3,9 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
+# Revision 1.5  2002/11/12 21:56:14  skaus
+# v0.83 Beta 52:
+#
 # Revision 1.4  2002/04/02 23:36:37  skaus
 # add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 #
@@ -47,17 +50,17 @@
 .INCLUDE : ../_config.mk
 
 # Sources of this make target
-SRC = alias.c beep.c break.c call.c cdd.c chdir.c cls.c copy.c ctty.c \
-	date.c del.c dir.c dirs.c doskey.c echo.c exit.c exit2.c fddebug.c for.c \
-	goto.c history.c if.c memory.c mkdir.c path.c pause.c popd.c prompt.c \
-	pushd.c rem.c ren.c rmdir.c set.c shift.c time.c truename.c type.c \
-	verify.c which.c
-OBJ = alias.obj beep.obj break.obj call.obj cdd.obj chdir.obj cls.obj \
-	copy.obj ctty.obj date.obj del.obj dir.obj dirs.obj doskey.obj echo.obj \
-	exit.obj exit2.obj fddebug.obj for.obj goto.obj history.obj if.obj \
-	memory.obj mkdir.obj path.obj pause.obj popd.obj prompt.obj pushd.obj \
-	rem.obj ren.obj rmdir.obj set.obj shift.obj time.obj truename.obj \
-	type.obj verify.obj which.obj
+SRC = alias.c beep.c break.c call.c cdd.c chcp.c chdir.c cls.c copy.c \
+	ctty.c date.c del.c dir.c dirs.c doskey.c echo.c exit.c exit2.c \
+	fddebug.c for.c goto.c history.c if.c memory.c mkdir.c path.c pause.c \
+	popd.c prompt.c pushd.c rem.c ren.c rmdir.c set.c shift.c time.c \
+	truename.c type.c verify.c which.c
+OBJ = alias.obj beep.obj break.obj call.obj cdd.obj chcp.obj chdir.obj \
+	cls.obj copy.obj ctty.obj date.obj del.obj dir.obj dirs.obj doskey.obj \
+	echo.obj exit.obj exit2.obj fddebug.obj for.obj goto.obj history.obj \
+	if.obj memory.obj mkdir.obj path.obj pause.obj popd.obj prompt.obj \
+	pushd.obj rem.obj ren.obj rmdir.obj set.obj shift.obj time.obj \
+	truename.obj type.obj verify.obj which.obj
 HDR = ..\config.h ..\err_fcts.h ..\include/batch.h ..\include/cmdline.h \
 	..\include/command.h ..\include/context.h ..\include/datefunc.h \
 	..\include/debug.h ..\include/kswap.h ..\include/misc.h ..\include/nls.h \
@@ -124,6 +127,9 @@ date.obj : date.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
 	../include/nls.h ../include/timefunc.h ../strings.h
+chcp.obj : chcp.c \
+	 ../config.h ../err_fcts.h ../include/command.h ../include/datefunc.h \
+	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
 dir.obj : dir.c \
 	 ../config.h ../err_fcts.h ../include/cmdline.h ../include/command.h \
 	../include/datefunc.h ../include/debug.h ../include/misc.h \
@@ -147,8 +153,8 @@ break.obj : break.c \
 	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
 for.obj : for.c \
 	 ../config.h ../err_fcts.h ../include/batch.h ../include/cmdline.h \
-	../include/command.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h ../strings.h
+	../include/command.h ../include/context.h ../include/datefunc.h \
+	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
 chdir.obj : chdir.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h
