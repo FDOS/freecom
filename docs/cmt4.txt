@@ -1,3 +1,4 @@
+$Id$
 How the COPY command works -- 1999/05/10 ska
 
 There are several curiosities about the COPY command:

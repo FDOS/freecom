@@ -93,3 +93,30 @@ C> ECHO,,a
 will display ",a" ignoring the very first ',' only.
 C> IF,,a;;;==a====echo OK
 is all correct and will display "OK"
+
+=== Special Commands
+
+Normally all line beginning with a colon are considered labels or
+errors, FreeCOM however uses this trick to implement a series of
+internal command that shallt not be visible to other batch file
+interpreters.
+
+If a line starts with:
+
+::=
+
+The remainder of the line is executed with enabling all internal
+commands temporarily, most importantly, the ICMDS command (see ICMDS.TXT).
+
+E.g.:
+
+C> ALIAS ALIAS=ECHO aliases have been disbaled
+C> ::=ALIAS ALIAS=
+
+Because "::=" forces the use of internal commands, Aliases are bypassed, too.
+Although this is possible using this command as well:
+C> *ALIAS ALIAS=
+
+So independendly of ICMDS settings, you can ensure that you invoke
+the correct _internal_ command rather than an external one, which is,
+by default, the only way to enable "ICMDS" itself.

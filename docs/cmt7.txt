@@ -1,5 +1,5 @@
+$Id$
 Permanent data storage within external memory block
-	-- 20001/03/30 ska
 
 FreeCOM utilizes several information that need to keep the same
 when it gets reloaded. The current implementation, esp. ALIAS,
@@ -40,7 +40,9 @@ itself.
 ALIASes are by nature already expressed in this syntax.
 Entries of the command line history and the directory stack can also
 be expressed as such strings easily.
-Even the batch nesting can be easily written as a string.
+
+Even the batch nesting could be easily written as a string, but it would
+require a rather heavy transforming between both forms.
 
 However, there need to be a way to distinguish all different kinds of
 information stored within such pseudo-environment. Under the
@@ -69,6 +71,14 @@ context fails. The static context will reference to the associated
 dynamic context, which, if lost, is rebuilt by FreeCOM easily, though,
 with 100% loss of all information stored within there.
 
+To place all above mentioned information into the same dynamic context
+has the great advantage that all of them are located in one place, so
+the overhead to retreive their location and the management overhead,
+if they would be located in different memory blocks, is reduced.
+But doing so bestows FreeCOM with the management to verify that
+all information is allocating at maximum as many space as allowed by the
+user.
+
 The slightly modified format of the dynamic context looks like this:
 
 <tag><name>=<value>\0
@@ -82,9 +92,11 @@ stored in this line.
 \2 -> entries of the command line history  (A)
 \3 -> entries of the directory stack (A)
 \4 -> last directory (B)
-\5 -> batch nesting level (A)
-\6 -> swapinfo
-\7 .. ' ' -> reserved for future use
+\5 -> swapinfo
+\6 -> arguments %0..%9..%# currently in effect
+\7 -> FOR variables currently in effect
+\8 -> internal variables
+\6 .. ' ' -> reserved for future use
 '!' .. -> alias
 
 To let the aliases allocate all the remaining tags has the slight
@@ -112,6 +124,12 @@ Theoretical notes:
 	preceeding the environment segment -- esp. to aquire the length
 	of the segment from.
 
++ Because the dyn context is splitted into multiple sections (see below
+	in section "Batch nesting information"), it is possible to furtherly
+	separate the aliases from the other strings, what would make the
+	handling of the aliases _exactly_ the same as the one of the
+	environment variables, with the only exception that another segment
+	is in use.
 ===
 
 At this time not every instance of FreeCOM maintains a static context,
@@ -119,3 +137,161 @@ hence, there is no dynamic context by default.
 So for this time, the values that should normally go into the static
 context are implemented as global variables and are saved/restored
 into the static context on swap.
+
+===
+
+Batch nesting information
+
+This is a rather old name for all information necessary to describe
+in what execution state FreeCOM is located in currently. It includes
+batch scripts, FOR loops, pipes, multi-command lines, redirections.
+
+By its nature, FreeCOM enters a new execution state by hitting
+specific commands and leaves them, when these commands terminate.
+As a DOS-specific hack, if a batch script is called without the
+CALL instruction, all previous execution states must be terminated
+and the script is invoked as if typed in on command line interactively.
+
+So, these states can be visualized as a stack using push and pop
+operations to enter or leave the current state; the information
+assocated with each particular state describe what to do in order
+to fetch the next command in detail.
+This information will be called execution context below.
+
+To overvome the disadvantage of the transformation of the execution
+context to and from environment format, it is stored in binary
+format. In order to do so, the dynamic context is splitted into
+two portions: first (at the lowest address) the string area and
+the execution contexts last, strings are allocated bottom-up,
+whereas contexts are allocated top-down; see below figure.
+
+low address
+	MCB of dynamic context (16 bytes)
+|	1st string in environment-like format
+|	2nd string in environment-like format
+|	... string in environment-like format
+v	last string in environment-like format
+	unallocated space
+^	most current execution context in binary format
+|	previous execution context in binary format
+|	... next execution contexts in binary format
+|	first (eldest) execution context in binary format
+high address
+	MCB of next DOS memory block
+
+Because the strings shall be maintained by the environment handling
+functions, they need to be surrounded by a structure that looks
+like a MCB, except some function not used by FreeCOM the environment
+functions use the size field of the MCB only, in order to calculate
+the unused space of the segment. So, if the dynamic context starts
+with a sub-MCB of its own, the environment functions of SUPPL can be
+faked to work easily, like this:
+
+low address
+	MCB of dynamic context (16 bytes)
+	sub-MCB for string area
+|	1st string in environment-like format
+|	2nd string in environment-like format
+|	... string in environment-like format
+v	last string in environment-like format
+	unallocated space part of sub-MCB (may be empty)
+some paragraphe boundary
+	unallocated space of this paragraphe not used by 1st ctxt (may be empty)
+^	most current execution context in binary format
+|	previous execution context in binary format
+|	... next execution contexts in binary format
+|	first (eldest) execution context in binary format
+high address
+	MCB of next DOS memory block
+
+Whenever a context is pushed, the "some paragraphe" boundary is moved down
+and the "size" field of the sub-MCB is reduced; on a pop operation the
+boundary moves up.
+
+This way the space of the dynamic context can be allocated without much slack
+space. Because only the size field is used by the environment functions,
+all the remaining 14 bytes of the sub-MCB may be used for some purpose.
+
+Normal MCB fields:
+offset	size	meaning
+0		1		MCB type 'M' or 'Z'
+1		2		MCB owner (segment of PSP)
+3		2		MCB data size in paragraphes
+5		11		reserved / unused
+
+Fields of sub-MCB:
+offset	size	meaning
+0		1		MCB type to cope with enabled debugging of SUPPL [== 'Z']
+1		2		owner of this dynamic context (for future use)
+3		2		data size in paragraphes [always != 0]
+5		1		offset of 1st context in "some paragraphe" [0..15] (*)
+6		10		reserved for future use
+
+(*) The current execution context starts at:
+	MK_FP(FP_SEG(subMCB) + data_size + 1, offset)
+
+The format of the execution contexts is byte-aligned flat binary with this
+structure:
+byte	context ID
+word	size of context excluding this header
+....	body
+
+The body has as many bytes as mentioned in the "size" field of the header.
+Then the next context follows immediately.
+
+The following section describes the individual contexts in the following
+syntax:
+
+'?' short description:
+optional_repetition_of_field	type_of_field	meaning_of_field
+long description and notes
+
+types:
+ASCIIZ: '\0'-terminated string
+BOOLEAN: one-byte value 0 == false; else == true
+BYTE: one-byte value
+WORD: two-byte value
+DWORD: four-byte value
+
+If the repetition is omited, "1" is assumed.
+
+
+
+The context ID describes, what kind of information is storred there; there are:
+
+'B' Batch contexts:
+DWORD	position within file to read the next line from
+DWORD	number of lines already read from file
+ASCIIZ	absolute filename of batch file
+
+When such context is popped, the file is opened, seeked to the mentioned
+position, one line is read. Then the line number is incremented, the
+position is updated, the file is closed and the line is executed. Until
+a line has been read, the file is kept open, e.g. skipping labels and
+empty lines.
+
+
+'F' FOR context #1:
+ASCIIZ	variable name
+ASCIIZ	remaining patterns
+ASCIIZ	command
+
+If the variable name is specified without any leading percent sign, it is
+treated as a normal environment variables and is also storred there.
+Otherwise, it is a single-letter variable and must be preceeded by as
+many percent signs as enumerated in the string.
+
+'f' FOR context #2:
+21	BYTE	bytes required to call next findnext()
+ASCIIZ	variable name
+ASCIIZ	command
+
+variable name - see 'F' context.
+
+'C' Command context:
+ASCIIZ	command
+
+This context contains a command that is to be executed when popped.
+NOTE: This context is particularily useful in conjunction with the
+internal commands "::=" and "!SET" (see CMT3.TXT).
+

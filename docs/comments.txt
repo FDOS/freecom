@@ -1,3 +1,4 @@
+$Id$
 cmt1.txt - Redesign of command line parser for internal commands
 cmt2.txt - Batchfile processing
 cmt3.txt - Command line parser
@@ -5,3 +6,4 @@ cmt4.txt - How the COPY command works
 cmt5.txt - option parser
 cmt6.txt - MUX-AE handler
 cmt7.txt - Permanent data storage within external memory block
+cmt8.txt - Internal representation of command lines

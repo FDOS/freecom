@@ -1,3 +1,4 @@
+$Id$
 option parser -- 1999/07/09 ska
 
 All internal commands and the arguments of COMMAND.COM itself are

@@ -147,4 +147,94 @@ Please note that %0 is effected by SHIFT, too.
 There is no upper limit for SHIFT. If "n + shift_level" references to a
 non-existant argument, it is replaced by an empty string, aka by nothing.
 
-=== Noisiness / Echo State
+=== Noisiness / Echo State / Process Options
+
+There are some batchfile process options that effects the way batchfiles
+are processed, e.g.:
+ECHO -> display the command line before executing it
+TRACE -> prompt if to execute a command line
+SWAP -> swap FreeCOM out of memory during executing the command
+
+All these settings are peristent options: They get a default setting on 
+startup, then they can be changed and keep their setting until a) changed
+again or b) the execution drops to the interactive command line again, in
+which case they get their default setting again.
+
+For instance:
+== BATCH1.BAT
+ECHO
+CALL batch2.bat
+ECHO in batch1
+ECHO
+== BATCH2.BAT
+@ECHO OFF
+ECHO in batch2
+ECHO
+==
+will display:
+C> ECHO
+ECHO is ON
+C> CALL batch2.bat
+in batch2
+ECHO is OFF
+in batch1
+ECHO is OFF
+
+The ECHO state is still "OFF", when the script BATCH2.BAT exits and returns to
+BATCH1.BAT. The first two lines are ECHO'ed.
+The batch language do also include single line modifications of several
+options, such as if '@' prefixes a line, this line is not ECHO'ed, but
+this setting may not effect a called batch file, e.g.:
+== BATCH.BAT
+ECHO
+==
+C> @batch
+should tell that ECHO is ON, although the invocation of BATCH.BAT is not
+ECHO'ed itself.
+
+However, the possibility to control the swapping of FreeCOM is an extension
+to the CALL command and could be interpreted differently in that that
+== BATCH1.BAT
+CALL /S batch2.bat
+prg1.exe
+== BATCH2.BAT
+prg2.exe
+==
+the swapping is enabled for prg2.exe (and the whole BATCH2 script), but no
+longer in BATCH1, thus, to execute prg1.exe FreeCOM would remain in memory.
+To interprete this option is a "local" one, rather than a global one as ECHO
+seems more logical and less incompatible.
+
+Therefore FreeCOM implements a global set of options, which are "currently"
+active, and provides a push/pop mechanism to keep previous versions of the
+them.
+When a batch script is invoked, the current options are pushed and the
+global settings are overwritten by the defaults ones for batch script
+execution. Once the last batch script has terminated, these options are
+poped, thus, automatically resetting the global options by the pushed ones.
+
+So, changes of the global options during execution of a batch script are
+made local for batch scripts, even if one chains from one script to another
+by invoking a script without CALL.
+
+Also, craftly used the push/pop feature can provide the possibilty to
+change such options during a called batch script only, as intended with
+the SWAP option. This might be the basis for 4dos's SETLOCAL command.
+
+Though, if the push/pop feature is used, there is one implicit pop when
+a batch script terminates and if one chains to script, all currently
+active scripts are terminated. So if one calls:
+== BATCH1.BAT
+CALL /S batch2
+prg1.exe
+== BATCH2.BAT
+prg2.exe
+batch3.bat
+== BATCH3.BAT
+prg3.exe
+==
+PRG1.EXE is never invoked, because to chain from BATCH2 to BATCH3 terminates
+both BATCH2 and BATCH1; when invoking PRG2.EXE swapping is enabled; but
+when invoking PRG3.EXE swapping has been resetted to its default value,
+because to terminate BATCH2 and then BATCH1 causes to pop the O-context
+created by CALL /S.

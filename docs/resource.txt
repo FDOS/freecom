@@ -1,3 +1,4 @@
+$id$
 Description of layout of COMMAND.COM image
 	-- 2000/07/11 ska
 

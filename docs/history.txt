@@ -1,6 +1,16 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+2001/06/11 ska
+~~~~~~~~~~~~~~~~~~~~~~
+fix: dbg_printmem() if compiled in Large memory model, near is invalid
+
+2001/06/11 ska
+~~~~~~~~~~~~~~~~~~~~~~
+release of v0.83 Beta 14:
+add: ALIAS HTML documentation
+bugfix: MEMORY displays batch nesting level, although, not implemented, yet
+
 2001/06/10 ska
 ~~~~~~~~~~~~~~~~~~~~~~
 bugfix: Single point of configuration CONFIG.MAK/.H:

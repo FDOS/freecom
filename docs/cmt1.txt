@@ -1,4 +1,5 @@
-1999/04/27 ska - Redesign of command line parser for internal commands
+$Id$
+Redesign of command line parser for internal commands
 
 Every internal command parses the command line individually bestowing
 individual rules what is detected and what is supported. This not

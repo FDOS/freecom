@@ -1,4 +1,5 @@
-Start logging feature 2000/01/05 ska
+$id$
+Start logging feature -- 2000/01/05 ska
 
 This feature logs, if compiled in, the command line into a file,
 whenever FreeCom is started. This feature shall help to identify

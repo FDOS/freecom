@@ -1,4 +1,5 @@
-Description of kernel-supoorted swapping of FreeCOM
+$id$
+Description of kernel-supported swapping of FreeCOM
 	-- 2001/01/21 ska
 
 ===> Please also read VSPAWN.TXT.
