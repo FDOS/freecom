@@ -6,8 +6,8 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.1.4.8  2001/07/25 20:13:46  skaus
-	Update #11
+	Revision 1.1.4.9  2001/07/25 20:17:28  skaus
+	Update #12
 
 	Revision 1.1.4.6  2001/07/08 17:23:43  skaus
 	Update #7

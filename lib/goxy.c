@@ -8,6 +8,9 @@
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/25 20:17:28  skaus
+	Update #12
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -31,7 +34,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -39,18 +42,20 @@
 #include <assert.h>
 #include <dos.h>
 
+#include <portable.h>
+
 #include "../include/misc.h"
 
 void goxy(const unsigned char x, const unsigned char y)
 {
-	union REGS regs;
+	USEREGS
 
 	assert(x > 0);
 	assert(y > 0);
 
-	regs.h.ah = 2;                /* set cursor position */
-	regs.h.dh = y - 1;
-	regs.h.dl = x - 1;
-	regs.h.bh = 0;                /* video page 0 */
-	int86(0x10, &regs, &regs);
+
+	_DX = (y - 1) << 8 | (x - 1);
+	_BH = 0;                /* video page 0 */
+	_AH = 2;                /* set cursor position */
+	geninterrupt(0x10);
 }

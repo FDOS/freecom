@@ -48,7 +48,7 @@ int cmd_if(char *param)
 		pp = skip_word(param);
 		*pp++ = '\0';
 
-		if(findfirst(param, &f, FA_NORMAL) == 0)
+		if(findfirst(param, &f, 0) == 0)
 			x_flag = X_EXEC;
 	}
 

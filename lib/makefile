@@ -3,8 +3,8 @@
 # Makefile for the FreeCOM library
 #
 # $Log$
-# Revision 1.3.2.10  2001/07/25 20:13:46  skaus
-# Update #11
+# Revision 1.3.2.11  2001/07/25 20:17:28  skaus
+# Update #12
 #
 # Revision 1.3.2.8  2001/07/16 20:28:38  skaus
 # Update #9

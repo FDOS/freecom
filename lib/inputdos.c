@@ -8,8 +8,8 @@
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.1.4.5  2001/07/25 20:13:46  skaus
-	Update #11
+	Revision 1.1.4.6  2001/07/25 20:17:28  skaus
+	Update #12
 
 	Revision 1.1.4.3  2001/07/16 20:28:38  skaus
 	Update #9

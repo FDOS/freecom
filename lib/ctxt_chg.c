@@ -66,7 +66,9 @@ int ctxtChgSize(unsigned tosize)
 	if(new_context) {
 		ctxtCB_t _seg *nctxtp = (ctxtCB_t _seg*)new_context;
 
+#ifdef DEBUG
 redo:
+#endif
 		if(ctxtMain) {		/* Move the current contents there */
 			unsigned ecLen;		/* #segm of exec context */
 

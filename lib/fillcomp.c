@@ -17,9 +17,12 @@
 	This file bases on COPY.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.2  2001/07/25 20:17:28  skaus
+	Update #12
+
 	Revision 1.1.4.1  2001/07/05 22:18:34  skaus
 	Update #5
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -113,13 +116,9 @@ char *fillFnam(const char * const pattern
   if(!dfnsplit(pattern, &dr, &pa, &fn, &ex))
     return 0;
 
-  if(!dfnsplit(fnam, 0, 0, &pfn, &pex)) {
-    myfree(fn);
-    myfree(ex);
-    myfree(dr);
-    myfree(pa);
-    return 0;
-  }
+  p = 0;
+  if(!dfnsplit(fnam, 0, 0, &pfn, &pex))
+  	goto errRet;
 
   fillComp(dfn, fn, pfn, MAXFILE);
   fillComp(dex, ex, pex, MAXEXT);
@@ -128,6 +127,7 @@ char *fillFnam(const char * const pattern
 
   myfree(pfn);
   myfree(pex);
+errRet:
   myfree(dr);
   myfree(pa);
   myfree(fn);

@@ -6,8 +6,8 @@
 	This file bases on DEBUG.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.1.4.2  2001/07/25 20:13:46  skaus
-	Update #11
+	Revision 1.1.4.3  2001/07/25 20:17:28  skaus
+	Update #12
 
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure

@@ -6,6 +6,9 @@
 	This file bases on INIT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/25 20:17:28  skaus
+	Update #12
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -37,19 +40,18 @@
 #include <assert.h>
 #include <dos.h>
 
+#include <portable.h>
+
 #include "../include/misc.h"
 
 int keypressed(void)
 {
-  union REGS r;
+  struct REGPACK r;
 
-  r.h.ah = 0x01;
+  r.r_ax = 0x0100;
 
-  int86(0x16, &r, &r);
+  geninterrupt(0x16);
 
   /* Check the zero flag.  Z=0 means a key was pressed; Z=1 means no key */
-  if (r.x.flags & 0x40)
-    return 0;
-  else
-    return 1;
+  return r.r_flags & 0x40;
 }

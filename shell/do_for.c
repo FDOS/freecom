@@ -14,6 +14,7 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <dir.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -107,7 +108,7 @@ char *readFORfirst(ctxtEC_t far * const ctxt)
 
 	esDecode(param);			/* decode string from internal quote form */
 
-	if(findfirst(param, &f, FA_NORMAL) == 0) {	/* need a f-context */
+	if(findfirst(param, &f, 0) == 0) {	/* need a f-context */
 		*dfnfilename(param) = '\0';	/* extract path */
 		if(ecMkf(&f, varname, cmd, param) != E_None)
 			return 0;

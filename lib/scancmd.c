@@ -16,9 +16,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.4  2001/07/25 20:17:28  skaus
+	Update #12
+
 	Revision 1.1.4.3  2001/07/08 17:23:43  skaus
 	Update #7
-
+	
 	Revision 1.1.4.2  2001/07/05 22:18:34  skaus
 	Update #5
 	
@@ -86,7 +89,7 @@ static int parseOptions(optScanner fct, void * const arg, char **argv, int *argc
       }
 
   *argc -= *optcnt;
-  return ec;    /* everything done */
+  return ec == E_Ignore? E_None: ec;    /* everything done */
 }
 
 char **scanCmdline(char *line, optScanner fct, void * const arg

@@ -67,7 +67,7 @@ void *erealloc(void *const p, const size_t len);
 void *efrealloc(void *const p, const size_t len);
 void *ecalloc(const size_t num, const size_t len);
 char *edupstr(const char far* const s);
-char *estrdup(const char far* const s);
+char *estrdup(const char * const s);
 unsigned my_coreleft(void);
 unsigned long my_farcoreleft(void);
 int addArg(char ***, int * const, const char *, const char * const, const char * const);

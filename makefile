@@ -3,8 +3,8 @@
 # Makefile for the FreeDOS kernel's command interpreter
 #
 # $Log$
-# Revision 1.15.4.4  2001/07/25 20:13:46  skaus
-# Update #11
+# Revision 1.15.4.5  2001/07/25 20:17:28  skaus
+# Update #12
 #
 # Revision 1.15.4.2  2001/07/16 20:28:36  skaus
 # Update #9

@@ -226,7 +226,7 @@ char *expEnvVars(char * const line)
 		} else
 			appCh(*p++);
 
-loop:
+loop:;
 	}
 endloop:
 

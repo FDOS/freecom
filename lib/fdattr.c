@@ -10,6 +10,9 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/25 20:17:28  skaus
+	Update #12
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -33,19 +36,21 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include <dos.h>
 
+#include <portable.h>
+
 int fdattr(const int fd)
 {
-  union REGS r;
+  USEREGS
 
-  r.x.ax = 0x4400;              /* Get handle information */
-  r.x.bx = fd;
-  int86(0x21, &r, &r);
-  return r.x.cflag == 0         /* call OK */
-  ? r.x.dx          /* attributes */
+  _BX = fd;
+  _AX = 0x4400;              /* Get handle information */
+  geninterrupt(0x21);
+  return !_CFLAG         /* call OK */
+  ? _DX          /* attributes */
   : 0;            /* error */
 }

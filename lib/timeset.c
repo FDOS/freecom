@@ -6,6 +6,9 @@
 	This file bases on TIMEFUNC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.1.4.1  2001/07/25 20:17:28  skaus
+	Update #12
+
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -29,7 +32,7 @@
 	chg: splitted code apart into LIB\*.c and CMD\*.c
 	bugfix: IF is now using error system & STRINGS to report errors
 	add: CALL: /N
-
+	
  */
 
 #include "../config.h"
@@ -41,17 +44,17 @@
 
 unsigned _dos_settime(struct dostime_t *t)
 {
-  union REGS r;
+  USEREGS
 
-  r.h.ah = 0x2D;
-  r.h.ch = t->hour;
-  r.h.cl = t->minute;
-  r.h.dh = t->second;
-  r.h.dl = t->hsecond;
+  _CH = t->hour;
+  _CL = t->minute;
+  _DH = t->second;
+  _DL = t->hsecond;
+  _AH = 0x2D;
 
-  int86(0x21, &r, &r);
+  geninterrupt(0x21);
 
-  if (r.h.al == 0xFF)           /* Error occured setting time */
+  if (_AL == 0xFF)           /* Error occured setting time */
     return -1;
 
   return 0;

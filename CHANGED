@@ -1,3 +1,11 @@
+Update #12 / Beta 25: make smaller
+chg: removed int86(), intdos() reduce by 560 bytes
+chg: fixed COPY, reduce by 400 bytes
+bugfix: COPY con file
+bugfix: parseOptions(): If last option is E_ignore --> scanOptions() fails
+bugfix: remove destination file on failure & Stop on ^Break (between
+	the copy of one block)
+
 Update 11 / Beta 24: verification of kernel swap support
 fix: dyn_ctxt never initialized
 chg: gflag_swap: defaults to TRUE

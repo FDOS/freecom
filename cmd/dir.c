@@ -118,8 +118,7 @@ static int dir_print_header(int drive)
 	/* standard alignment */
 #pragma -a.
   struct ffblk f;
-  struct SREGS s;
-  union REGS r;
+  struct REGPACK r;
   int currDisk;
   int rv;
 
@@ -148,11 +147,11 @@ static int dir_print_header(int drive)
 
  */
 
-  r.x.ax = 0x6900;
-  r.x.bx = drive + 1;
-  s.ds = FP_SEG(&media);
-  r.x.dx = FP_OFF(&media);
-  int86x(0x21, &r, &r, &s);
+  r.r_ax = 0x6900;
+  r.r_bx = drive + 1;
+  r.r_ds = FP_SEG(&media);
+  r.r_dx = FP_OFF(&media);
+  intr(0x21, &r);
 
   /* print drive info */
  	displayString(TEXT_DIR_HDR_VOLUME, drive + 'A');
@@ -178,7 +177,7 @@ static int dir_print_header(int drive)
 
   if ((rv = incline()) == 0) {
   /* print the volume serial number if the return was successful */
-	  if (!r.x.cflag) {
+	  if ((r.r_flags & 1) == 0) {
 		displayString(TEXT_DIR_HDR_SERIAL_NUMBER
 		 , media.serial2, media.serial1);
 		rv = incline();
@@ -236,7 +235,7 @@ static int print_total
 static int dir_print_free(unsigned long dirs)
 {
   char buffer[32];
-  union REGS r;
+  struct REGPACK r;
 
   if(optB)
     return 0;
@@ -246,10 +245,10 @@ static int dir_print_free(unsigned long dirs)
   convert(dirs, buffer);
   displayString(TEXT_DIR_FTR_DIRS, buffer);
 
-  r.h.ah = 0x36;
-  r.h.dl = toupper(*path) - 'A' + 1;
-  int86(0x21, &r, &r);
-  convert((unsigned long)r.x.ax * r.x.bx * r.x.cx, buffer);
+  r.r_ax = 0x3600;
+  r.r_dx = toupper(*path) - 'A' + 1;
+  intr(0x21, &r);
+  convert((unsigned long)r.r_ax * r.r_bx * r.r_cx, buffer);
   displayString(TEXT_DIR_FTR_BYTES_FREE, buffer);
 
   return incline();

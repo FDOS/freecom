@@ -15,7 +15,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "version 0.83 Beta 24 expExec branch [" __DATE__ "]";
+const char shellver[] = "version 0.83 Beta 25 expExec branch [" __DATE__ "]";
 const char shellname[] = "FreeCom";
 
 #pragma argsused
@@ -62,9 +62,12 @@ int cmd_ver(char *rest)
   /* arguments are simply ignored */
 
   if(optR) {                         /* version information */
-        union REGS regs;
+        union {
+			struct REGPACK r;
+			struct BYTEREGS h;
+		} regs;
         regs.h.ah = 0x30;
-        intdos(&regs, &regs);
+        intr(0x21, &regs.r);
         displayString(TEXT_MSG_VER_DOS_VERSION, regs.h.al, regs.h.ah);
 
         if (regs.h.bh == 0xfd)

@@ -114,19 +114,23 @@ int copy(char *dst, char *pattern, struct CopySource *src
   assert(src);
 
   if(findfirst(pattern, &ff, FA_RDONLY | FA_ARCH) != 0) {
-    error_sfile_not_found(pattern);
-    return 0;
-  }
+    if((fin = fopen(pattern, "rb")) == 0) {
+		error_sfile_not_found(pattern);
+		return 0;
+	}
+	fclose(fin);
+  } else
+  	pattern = ff.ff_name;
 
   mode[2] = '\0';
 
   do {
-    if((rDest = fillFnam(dst, ff.ff_name)) == 0)
+    if((rDest = fillFnam(dst, pattern)) == 0)
       return 0;
     h = src;
     do {  /* to prevent to open a source file for writing, e.g.
           for COPY *.c *.?    */
-      if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
+      if((rSrc = fillFnam(h->fnam, pattern)) == 0) {
         myfree(rDest);
         return 0;
       }
@@ -164,34 +168,28 @@ int copy(char *dst, char *pattern, struct CopySource *src
 		}
 	  }
     }
-    if(cbreak) {
-    	dprintf(("[COPY: Quit because of ^Break]\n"));
-      myfree(rDest);
-      return 0;
-    }
+
+  	rc = E_Operation;		/* Default error code */
     mode[0] = openMode;
     mode[1] = 'b';
     if((fout = fdevopen(rDest, mode)) == 0) {
       error_open_file(rDest);
-      myfree(rDest);
-      return 0;
+      goto errRet;
     }
     mode[0] = 'r';
+    asc = src->flags & ASCII;
+    assert(asc == 0 || asc == 1);
     h = src;
     do {
-      if((rSrc = fillFnam(h->fnam, ff.ff_name)) == 0) {
-        fclose(fout);
-        myfree(rDest);
-        return 0;
+      if((rSrc = fillFnam(h->fnam, pattern)) == 0) {
+		goto errRet;
       }
-      mode[1] = (asc = h->flags & ASCII) != 0? 't': 'b';
+      mode[1] = (h->flags & ASCII) != 0? 't': 'b';
     reOpenIn:
       if((fin = fdevopen(rSrc, mode)) == 0) {
         error_open_file(rSrc);
-        fclose(fout);
         myfree(rSrc);
-        myfree(rDest);
-        return 0;
+		goto errRet;
       }
       if(isadev(fileno(fin)) && mode[1] != 't'
        && (h->flags & BINARY) == 0) {
@@ -199,82 +197,91 @@ int copy(char *dst, char *pattern, struct CopySource *src
           by default */
         fclose(fin);
         mode[1] = 't';
+        if(h == src)
+        	asc = ASCII;
         goto reOpenIn;
       }
 
       dispCopy(rSrc, rDest, openMode == 'a' || h != src);
-      if(cbreak) {
-    	dprintf(("[COPY: Quit because of ^Break]\n"));
-        fclose(fin);
-        fclose(fout);
-        myfree(rSrc);
-        myfree(rDest);
-        return 0;
-      }
 
       /* Now copy the file */
-      rc = 1;
-      if(mode[1] != 't') {    /* binary file */
-        if(Fcopy(fout, fin) != 0) {
-          if(ferror(fin)) {
-            error_read_file(rSrc);
-          } else if(ferror(fout)) {
-            error_write_file(rDest);
-          } else error_copy();
-          rc = 0;
-        }
-      } else {      /* text file, manually transform '\n' */
-        if(Fmaxbuf((byte**)&buf, &len) == 0) {
-          if(len > INT_MAX)
-            len = INT_MAX;
-          while(fgets(buf, len, fin)) {
-            p = strchr(buf, '\0');
-            if(*--p == '\n') {
-              *p = '\0';
-              fputs(buf, fout);
-              putc('\r', fout);
-              putc('\n', fout);
-            } else
-              fputs(buf, fout);
-          }
-          myfree(buf);
-        } else {
-          error_out_of_memory();
-          rc = 0;
-        }
-      }
-      if(rc)
-        if(ferror(fin)) {
-          error_read_file(rSrc);
-          rc = 0;
-        } else if(ferror(fout)) {
-          error_write_file(rDest);
-          rc = 0;
-        }
-      if(cbreak) {
-    	dprintf(("[COPY: Quit because of ^Break]\n"));
-        rc = 0;
-      }
+		rc = E_None;
+		if(Fmaxbuf((byte**)&buf, &len) == 0) {
+			int rlen;
+
+			if(len > INT_MAX)
+				len = INT_MAX;
+			while(rc == E_None && (rlen = fread(p = buf, 1, len, fin)) > 0)
+				if(cbreak)		rc = E_CBreak;
+				else {
+					if(asc) {		/* Output is text */
+						char *q;
+
+						++rlen;
+						while(--rlen && (q = memchr(p, '\n', rlen)) != 0) {
+							int wlen;
+
+							if((wlen = q - p) != 0) {
+								if(wlen != fwrite(p, 1, wlen, fout))
+									goto writeError;
+								rlen -= wlen;
+							}
+							p = q + 1;
+							if(2 != fwrite("\r\n", 1, 2, fout))
+								goto writeError;
+						}
+					}
+					if(!rlen || rlen == fwrite(p, 1, rlen, fout))
+						continue;
+writeError:
+					error_write_file(rDest);
+					rc = E_Operation;
+				}
+			myfree(buf);
+		} else {
+			error_out_of_memory();
+			rc = E_NoMem;
+		}
+		if(rc == E_None) {
+			fflush(fout);
+			if(ferror(fin)) {
+				error_read_file(rSrc);
+				rc = E_Operation;
+			} else if(ferror(fout)) {
+				error_write_file(rDest);
+				rc = E_Operation;
+			}
+		}
       fclose(fin);
       myfree(rSrc);
-      if(!rc) {
-        fclose(fout);
-        myfree(rDest);
-        return 0;
-      }
-    } while((h = h->app) != 0);
-    if(asc) {   /* append the ^Z as we copied in ASCII mode */
-      putc(0x1a, fout);
-    }
-    rc = ferror(fout);
+    } while(rc == E_None && (h = h->app) != 0);
+    if(rc == E_None) {
+		if(asc) {   /* append the ^Z as we copied in ASCII mode */
+			putc(0x1a, fout);
+			fflush(fout);
+			if(ferror(fout)) {
+				error_write_file(rDest);
+				rc = E_Operation;
+			}
+		}
+	}
+errRet:
     fclose(fout);
-    if(rc) {
-      error_write_file(rDest);
-      myfree(rDest);
-      return 0;
+    if(rc != E_None) {
+    	/* Error message already displayed */
+#ifdef DEBUG
+		if(rc == E_CBreak)
+			dprintf(("[COPY: Terminated on ^Break]\n"));
+		else
+			dprintf(("[COPY: Erroreous termination]\n"));
+#endif
+
+		unlink(rDest);		/* remove the erroreous file */
+		myfree(rDest);
+		return 0;
     }
-    myfree(rDest);
-  } while(findnext(&ff) == 0);
+	myfree(rDest);
+  } while(pattern == ff.ff_name && findnext(&ff) == 0);
 
   return 1;
 }
@@ -295,8 +302,10 @@ int copyFiles(struct CopySource *h)
       error_out_of_memory();
       return 0;
     }
-  } else
+  } else {
+  	assert(destFile);
     dst = destFile;
+  }
 
   rc = 0;
 
@@ -316,10 +325,26 @@ int copyFiles(struct CopySource *h)
 
 int cpyFlags(void)
 {
-  return (optA? ASCII: 0) | (optB? BINARY: 0);
+  if(optA)
+  	return ASCII;
+  if(optB)
+  	return BINARY;
+  return 0;
 }
 
-int addSource(char *p)
+static struct CopySource *mkSourceItem(char *q)
+{ struct CopySource *h;
+
+    if((h = emalloc(sizeof(struct CopySource))) == 0)
+      return 0;
+    isDeviceName(h->fnam = q);
+    h->flags = cpyFlags();
+    h->nxt = h->app = 0;
+
+    return h;
+}
+
+static int addSource(char *p)
 { struct CopySource *h;
   char *q;
 
@@ -334,16 +359,13 @@ int addSource(char *p)
       return 0;
     }
   } else {      /* New entry */
-    if((h = emalloc(sizeof(struct CopySource))) == 0)
-      return 0;
+  	if((h = mkSourceItem(q)) == 0)
+  		return 0;
     if(!last)
       last = lastApp = head = h;
     else
       last = lastApp = last->nxt = h;
 
-    h->nxt = h->app = 0;
-    h->fnam = q;
-    h->flags = cpyFlags();
     if((q = strtok(0, "+")) == 0)   /* no to-append file */
       return 1;
   }
@@ -352,12 +374,8 @@ int addSource(char *p)
   assert(q);
   assert(lastApp);
   do {
-    if((h = emalloc(sizeof(struct CopySource))) == 0)
-      return 0;
-    h->fnam = q;
-    h->flags = cpyFlags();
-    h->app = 0;
-    lastApp = lastApp->app = h;
+  	if((lastApp = lastApp->app = mkSourceItem(q)) == 0)
+  		return 0;
   } while((q = strtok(0, "+")) != 0);
 
   return 1;
@@ -382,9 +400,9 @@ int cmd_copy(char *rest)
   if((argv = scanCmdline(rest, opt_copy, 0, &argc, &opts)) == 0)
     return 1;
 
-  /* scan the trailing '/a' and '/b' options */
-  while(argc > 0 && isoption(argv[argc - 1])) {
-    p = argv[--argc];     /* argv[] must not be changed */
+  /* scan the trailing '/a' and '/b' option */
+  if(isoption(argv[argc - 1])) {
+    p = argv[argc - 1];     /* argv[] must not be changed */
     if(leadOptions(&p, opt_copy1, 0) != E_None) {
       freep(argv);
       return 1;
@@ -444,7 +462,6 @@ int cmd_copy(char *rest)
       error_out_of_memory();
       goto errRet;
     }
-    freeDestFile = 1;
     h = head;         /* remove it from argument list */
     while(h->nxt != last) {
       assert(h->nxt);
@@ -457,7 +474,7 @@ int cmd_copy(char *rest)
     	destIsDir = 1;
     else destIsDir = dfnstat(destFile) & DFN_DIRECTORY;
   } else {              /* Nay */
-    destFile = ".";
+    destFile = 0;
     destIsDir = 1;
   }
 
@@ -465,7 +482,6 @@ int cmd_copy(char *rest)
   h = head;
   while(copyFiles(h) && (h = h->nxt) != 0);
 
-  if(freeDestFile)
     myfree(destFile);
 errRet:
   killContext();
