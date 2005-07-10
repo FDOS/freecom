@@ -14,6 +14,7 @@
 #include "../include/misc.h"
 #include "../strings.h"
 #include "../err_fcts.h"
+#include "../suppl/dfn.h"
 
 int cd_dir(char *param, int cdd, const char * const fctname)
 {	char **argv, *dir;
@@ -40,12 +41,24 @@ int cd_dir(char *param, int cdd, const char * const fctname)
 	}
 	else {
 		assert(argv[0]);
+
+#ifdef FEATURE_CDD_FNAME
+		/* if path refers to an existing file and not directory, ignore filename portion */
+            if (cdd && (dfnstat(argv[0]) & DFN_FILE))
+		{
+			dir = strchr(argv[0], '\0');
+			while(dir > &argv[0][1] && *--dir != '\\' && dir[-1] != ':')
+				*dir = '\0';
+		}
+#endif
+
 		dir = strchr(argv[0], '\0');
 		/* take off trailing \ if any, but ONLY if dir is not the root dir */
 		while(dir > &argv[0][1] && *--dir == '\\' && dir[-1] != ':')
 			*dir = '\0';
 
 		dir = argv[0];
+
 #ifdef FEATURE_LAST_DIR
 		if(strcmp(dir, "-") == 0) {
 			assert(!freeDir);

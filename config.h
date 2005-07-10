@@ -46,6 +46,9 @@
 	"CD -" chdir's there */
 #define FEATURE_LAST_DIR
 
+/* Enables CDD to a filepath (ignores filename portion) */
+#define FEATURE_CDD_FNAME
+
 /* Enable to support installable COMMAND extensions (MUX-AE)
  */
 #define FEATURE_INSTALLABLE_COMMANDS
