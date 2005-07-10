@@ -46,9 +46,17 @@ int cd_dir(char *param, int cdd, const char * const fctname)
 		/* if path refers to an existing file and not directory, ignore filename portion */
             if (cdd && (dfnstat(argv[0]) & DFN_FILE))
 		{
-			dir = strchr(argv[0], '\0');
-			while(dir > &argv[0][1] && *--dir != '\\' && dir[-1] != ':')
-				*dir = '\0';
+			dir = strrchr(argv[0], '\\');
+			if (dir == NULL)
+			{
+				dir = argv[0];
+				if (dir[1] == ':') dir[2]='\0';  /* change drive only, no path */
+				else goto okRet;                 /* no drive, no path, so exit early */
+			}
+			else /* includes a path or refers to root dir */
+			{
+				*(dir+1) = '\0';
+			}
 		}
 #endif
 
