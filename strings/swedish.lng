@@ -24,7 +24,7 @@ Felaktig växel. - /%s
 Ogiltig parameter: '%s'
 .
 
-:TEXT_ERROR_OPT_ARG 
+:TEXT_ERROR_OPT_ARG
 '%s' kan inte ha några parametrar
 .
 

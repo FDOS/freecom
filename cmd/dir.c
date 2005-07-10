@@ -212,6 +212,13 @@ struct currDir {
 	
 static int optS, optP, optW, optB, optL, longyear, optO, dispLFN
 	, lfnAvailable;
+
+#ifdef FEATURE_DESCRIPT_ION
+static int descriptionExists;
+static FILE *fDescription;
+void showDescription(const char *shortName, char *ext);
+#endif
+
 static struct ffblk _seg *orderArray;
 
 static unsigned attrMay, attrMask, attrMatch;
@@ -287,6 +294,111 @@ void printLFNname(char *shortName, char *ext)
 	r.r_ax = 0x71a1;
 	intr(0x21,&r);
 }
+
+
+#ifdef FEATURE_DESCRIPT_ION
+static int incline(void); /* forward reference */
+
+/* this will read in next non-blank line from fDescription,
+   and stores next token (ie filename or description).
+   returns 0 on any error or no more entries in file
+   *buf will equal '\0' or successfully read in filename
+*/
+int descGetNextToken(char *buf, int fn, int maxlen)
+{
+  /* skip blank lines and any initial spaces, also exit early on any read error */
+  do {
+    if (fread(buf, 1,1,fDescription) != 1)
+    {
+      /*printf("[read error]\n");*/
+      *buf = '\0';
+      return 0;
+    }
+  } while ( (*buf == ' ') || (fn && isspace(*buf)) );
+
+  /* read in characters until end of line/file (or space) is found */
+  do {
+    if (maxlen > 1) /* reuse last char in buffer, but don't exceed maxlen */
+    {
+      maxlen--;
+      buf++;
+    }
+    if (fread(buf, 1,1,fDescription) != 1)
+      break;
+  } while ( (*buf!='\r') && (*buf!='\n') && 
+            (*buf!=0x4/*Ctrl-D*/) && (*buf!=26/*Ctrl-Z*/) &&
+            (!fn || (fn && !isspace(*buf))) );
+
+  /* if read in description, then skip to end of line */
+  /* note: because we stop at \r, next read may seem like blank line (\n) */
+  if (!fn) 
+    while ( (*buf!='\r') && (*buf!='\n') )
+    {
+      if (fread(buf, 1,1,fDescription) != 1)
+        break;
+    }
+
+  /* terminate filename read in */
+  *buf = '\0';
+  return 1;
+}
+
+/* if a DESCRIPT.ION file was found (and opened) in current
+   directory, then sequentially (as it's unsorted) read through it
+   and print matching descriptions if found. Basic format are lines of
+   filename <whitespace> description text [Ctrl-D ...] <EOL (\r,\n,\r\n)>|<EOF>
+ */
+void showDescription(const char *shortName, char *ext)
+{
+  char fn[14], dummy[1], buf[128]; /* 4096 is max line size officially supported */
+  assert(fDescription != NULL);
+
+  if (*shortName == '.') return; /* ignore . and .. entries */
+
+  sprintf(fn, "%s%c%s", shortName, (*ext)?'.':0x0, ext); /* fn is 8.3 filename[.extension] */
+  fn[13]='\0';
+  rewind(fDescription);  /* start at beginning of unsorted description file */
+  while (descGetNextToken(buf,1,sizeof(buf)) && (strcmpi(fn,buf) != 0)) 
+    { descGetNextToken(dummy,0,sizeof(dummy)); /* skip rest of this line & try again */ }
+
+  if (*buf) /* found line in DESCRIPT.ION file matching this file */
+  {
+    descGetNextToken(buf,0,sizeof(buf));
+    /* loop displaying upto 34 characters of description at a time. */
+    #define DESCLEN 34
+    {
+      char *p = buf;
+      while (strlen(p) > DESCLEN) /* display in chunks */
+      {
+        char t;
+
+        /* start at end of chunk, try to split word at whitespace [or
+           any punctuation]; don't split if word too big.
+           i set to where '\0' will be stored.
+         */
+        int i = DESCLEN+1;
+        while ((i>(DESCLEN/2)) && !isspace(*(p+i)) /*&& !ispunct(*(p+i))*/) i--;
+        if (i<=(DESCLEN/2)) i = DESCLEN+1;
+        else if (i<=DESCLEN) i++;
+
+        t = *(p+i);                   /* store character          */
+        *(p+i) = '\0';                /* temp force end of string */
+        printf("\n");  incline();     /* handle dir /p            */
+        printf("%44c%s", ' ', p);     /* display the substring    */
+        p += i;                       /* skip past portion shown  */
+        *p = t;                       /* restore saved character  */
+
+        while(isspace(*p)) p++;       /* skip past whitespace splitting words at line edge */
+      }
+      /* and print the final (or only) chunk of description */
+      printf("\n");  incline();       /* handle dir /p            */
+      printf("%44c%s", ' ', p);
+      /* printf("\n%44c%s", ' ', (*buf)? buf : "<empty description>"); */
+    }
+  }
+  /* else printf("\n%44c%s", ' ', "NO MATCH FOUND"); */
+}
+#endif
 
 
 /* The DIR command accepts more than one /A options, the later ones
@@ -752,6 +864,10 @@ int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 		free(p);
 		if(lfnAvailable)
 			printLFNname(file->ff_name, ext);
+		#ifdef FEATURE_DESCRIPT_ION
+			if (descriptionExists)
+				showDescription(file->ff_name, ext);
+		#endif
 		putchar('\n');
 	 }
 
@@ -889,6 +1005,10 @@ static int dir_list(int pathlen
     
   /* Search for matching entries */
   path[pathlen - 1] = '\\';
+#ifdef FEATURE_DESCRIPT_ION
+  strcpy(&path[pathlen], "DESCRIPT.ION");
+  descriptionExists = ((fDescription = fopen(path, "rb")) != NULL);
+#endif
   strcpy(&path[pathlen], pattern);
 
   if (FINDFIRST(path, &file, attrMay) == 0) {
@@ -950,6 +1070,11 @@ static int dir_list(int pathlen
   }
   while (rv == E_None && FINDNEXT(&file) == 0);
   }
+
+  #ifdef FEATURE_DESCRIPT_ION
+    if (descriptionExists) fclose(fDescription);
+  #endif
+
 
   if(optO) {
     if(rv == E_None)

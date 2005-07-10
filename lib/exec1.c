@@ -8,9 +8,12 @@
 	This file bases on EXEC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.5  2005/07/10 04:46:39  perditionc
+	build fixes and minor enhancements
+
 	Revision 1.4  2004/12/01 21:15:48  skaus
 	add: /Z: Display exit code after external command {Bernd Blaauw}
-
+	
 	Revision 1.3  2004/10/25 19:37:34  skaus
 	fix: LH: Errorlevel of program effects LH's error reporting {Eric Auer}
 	
@@ -50,6 +53,11 @@
 
 #include "../include/command.h"
 
+#ifdef DISP_EXITCODE
+	extern int exitReason;	/* global variable, defined in dispexit.c, set in exec1.c */
+	void displayExitcode(void); /* also in include/misc.h */
+#endif
+
 void setErrorLevel(int rc)
 {	struct REGPACK rp;
 
@@ -73,7 +81,7 @@ void setErrorLevel(int rc)
 			ctrlBreak = 1;
 		if(exitReason == 0x2)	/* Shallt change in the future */
 			ctrlBreak = 1;
-		if(exitReason && !rc)	/* Make sure this condition is reflected */
+		if(ctrlBreak && !rc)	/* Make sure this condition is reflected */
 			rc = CBREAK_ERRORLEVEL;
 	}
 #ifdef DISP_EXITCODE

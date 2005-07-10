@@ -37,19 +37,40 @@
 #include "../include/command.h"
 #include "../err_fcts.h"
 
+static int ignore_case = 0;
+
+#pragma argsused
+optScanFct(opt_if)
+{ switch(ch) {
+  case 'I': return optScanBool(ignore_case);
+  }
+  optErr();
+  return E_Useage;
+}
+
+
 int cmd_if(char *param)
 {
 
 #define X_EXEC 1
 
+	char *pp;
+	int ec;
+
 	int x_flag = 0;       /* when set cause 'then' clause to be exec'ed */
 	int negate = 0;       /* NOT keyword present */
 
-	char *pp;
+	ignore_case = 0;      /* /I option, case insensitive compare */
 
-	/* First check if param string begins with word 'not' */
+
+	/* First check if param exists */
 	assert(param);
 
+	/* check for options */
+	if((ec = leadOptions(&param, opt_if, 0)) != E_None)
+		return ec;
+
+	/* next check if param string begins with word 'not' */
 	if(matchtok(param, "not"))
 		negate = X_EXEC;            /* Remember 'NOT' */
 
@@ -67,7 +88,7 @@ int cmd_if(char *param)
 		pp = skip_word(param);
 		*pp++ = '\0';
 
-		if(FINDFIRST(param, &f, FA_NORMAL) == 0)
+		if(FINDFIRST(param, &f, FA_NORMAL|FA_ARCH|FA_SYSTEM|FA_RDONLY|FA_HIDDEN) == 0)
 			x_flag = X_EXEC;
 	}
 
@@ -147,8 +168,10 @@ int cmd_if(char *param)
 		rtrimcl(param);      /* ensure that spurious whitespaces are ignored */
 		len = strlen(param);
 
-		if((pp - r) == len
-		 && memcmp(param, r, len) == 0) /* strings differ */
+		/* check if strings differ */
+		if ( ((pp - r) == len) &&
+		     ((ignore_case && strncmpi(param, r, len) == 0) ||
+		      (memcmp(param, r, len) == 0)) )
 			x_flag = X_EXEC;
 	}
 

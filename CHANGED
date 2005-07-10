@@ -1,3 +1,11 @@
+add: SET /U: indicate that the value will be stored in env var in UPPERCASE
+add: DIR: bug#1889, added limited 4DOS DESCRIPT.ION file support {KJD}
+add: IF: /I option for case insensitive comparisons, if /I "Aa"=="aA" echo is true
+fix: IF: bug#1885, fix if exists on system/hidden files {Erwin Veermans}
+fix: LH: fix wrong errorlevel returned when program goes resident {KJD}
+fix: default.lng: typos and misc corrections {Bernd Blaauw}
+fix: swedish.lng & swedish.err so correctly builds
+add: /Z: lib\dispexit.c missing, added new implementation {KJD}
 add: /Z: Display exit code after external command {Bernd Blaauw}
 fix: LH: Errorlevel of program effects LH's error reporting {Eric Auer}
 chg: BUILD.BAT: Removed CONFIG.MAK and add the warning concering CONFIG.STD

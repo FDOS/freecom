@@ -50,7 +50,7 @@ S13
 DELIMITER: , %.
 
 ## Error strings
-OKÄND: Okänd fel-kod
+UNKNOWN: Okänd fel-kod
 S15
 0: försök att bryta skrivskyddet
 1: okänd typ för drivrutin

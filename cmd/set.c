@@ -20,13 +20,18 @@
 
 #define promptBuffer 256
 
-static int optC, promptUser;
+/* optC determines if env variable's name (param) is set using
+   passed in case or uppercased, whereas upCaseValue determines
+   if the value the user passes in (with the /P option) is
+   stored as typed or uppercased. */
+static int optC, promptUser, upCaseValue;
 
 #pragma argsused
 optScanFct(opt_set)
 { switch(ch) {
   /* case 'A': return optScanBool(optA); arithmetic expression */
   case 'C': return optScanBool(optC);
+  case 'U': return optScanBool(upCaseValue);
 #if 1
   case 'I': /* Display Information about current memory */
 		printf("Size of environment segment: %u bytes; unused: %u\n"
@@ -44,7 +49,7 @@ int cmd_set(char *param)
 	char *promptBuf = 0;
 	int ret;
 
-	optC = promptUser = 0;
+	optC = promptUser = upCaseValue = 0;
 
 	if(leadOptions(&param, opt_set, 0) != E_None)
 		return 1;
@@ -86,6 +91,8 @@ int cmd_set(char *param)
 		but otherwise even leading and trailing spaces must be kept */
 	if(is_empty(value))
 		value = 0;
+
+	if (upCaseValue) StrUpr(value); /* set value as upper case, eg for if testing */
 
 	ret = chgEnvCase(optC, param, value);
 	free(promptBuf);

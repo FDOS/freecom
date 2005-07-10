@@ -26,6 +26,12 @@
 /* Define to enable to load messages into memory */
 #define FEATURE_LOAD_MESSAGES
 
+/* Define to enable /Z support, display exit code on program exit */
+#define DISP_EXITCODE
+
+/* Define for limited support of 4DOS DESCRIPT.ION files */
+#define FEATURE_DESCRIPT_ION
+
 /* Define to enable DOS NLS */
 #define FEATURE_NLS
 
