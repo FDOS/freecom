@@ -1259,12 +1259,15 @@ int cmd_vol(char *rest)
 
   if (rest && *rest)
   {
+    /* trim whitespace after drive indicator, else extra spaces cause syntax error */
+    rtrimcl(rest);
+
     if ((strlen(rest) != 2) || (rest[1] != ':'))
     {
       error_syntax(rest);
       return E_Useage;
     }
-  drive = toupper(rest[0]) - 'A';
+    drive = toupper(rest[0]) - 'A';
   }
   else
     drive = getdisk();
