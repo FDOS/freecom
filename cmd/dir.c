@@ -633,12 +633,17 @@ static int dir_print_header(int drive)
   if (FINDFIRST("\\*.*", &f, FA_LABEL) == 0)
   {
         /* Added to remove "." from labels which are longer than
-               8 characters (as DOS does). */
+           8 characters (as DOS does), but must pad name with spaces. */
     char *dotptr = strchr(f.ff_name, '.');
     if (dotptr != 0)
-    	if(strlen(dotptr + 1))
-			memmove(dotptr, dotptr + 1, strlen(dotptr));
-		else *dotptr = '\0';		/* dot at end of name */
+    {
+      char *mptr = f.ff_name+8;
+      /* shift extension either back over dot or to end of space padding */
+      memmove(mptr, dotptr+1, 4);  /* 4=max 3 char ext + \0 */
+      /* add spaces for padding / overwrite with spaces shifted extension */
+      while (dotptr < mptr)
+        *dotptr++ = ' ';  /* pad with space and increment */
+    }
     displayString(TEXT_DIR_HDR_VOLUME_STRING, f.ff_name);
   }
   else
