@@ -1,3 +1,6 @@
+v0.84:
+fix: DIR/VOL: bug#1809, volume label missing spaces {KJD}
+fix: VOL: syntax error if extra whitespace after drive {KJD}
 add: CDD: if given path to a valid filename, ignore filename portion instead of error
 add: SET /U: indicate that the value will be stored in env var in UPPERCASE
 add: DIR: bug#1889, added limited 4DOS DESCRIPT.ION file support {KJD}

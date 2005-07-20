@@ -1,1 +1,1 @@
-	FreeCom version 0.82 pl 3 [Dec 10 2003 06:54:37]
+FreeCom version 0.84-pre XMS_Swap [Jul 20 2005 09:46:02]
