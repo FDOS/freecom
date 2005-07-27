@@ -255,10 +255,7 @@ void printLFNname(char *shortName, char *ext)
 	struct REGPACK r;
 	struct LFNFindData LFNEntry;
 	int pathlen;
-	
-	/* Only few people disable this, right? */
-	if (strchr(shortName,'~') == NULL)	/* ask for LFN only if necessary */
-		return;
+
 										/* reconstruct the path+filename */
 	pathlen = strrchr(path,'\\') - path;
 
@@ -284,7 +281,6 @@ void printLFNname(char *shortName, char *ext)
 	
 	if(r.r_flags & 1) {
 /*		dprintf(("[LFN: not supported %x]\n",r.r_ax)); */
-		lfnAvailable = 0;
 		return;
 	}
 	
@@ -1140,6 +1136,29 @@ static int dir_list(int pathlen
   return rv;
 }
 
+static int supportsLFN(char driveLetter)
+{
+  static char rootname[] = "X:\\";
+  char buffer[32];
+  union REGS r;
+  struct SREGS sr;
+  
+  *rootname = driveLetter;
+
+  r.x.ax = 0x71A0; /* get volume information */
+  sr.ds = FP_SEG(rootname);
+  r.x.dx = FP_OFF(rootname);
+  sr.es = FP_SEG(buffer);
+  r.x.di = FP_OFF(buffer);
+  r.x.cx = sizeof(buffer);
+  int86x(0x21, &r, &r, &sr);
+
+  /* if carry or LFN function unsupportd or volume does NOT support LFN functions */
+  if (r.x.cflag || r.x.ax==0x7100)
+    return 0; /* return definitely unsupported */
+  return 1; /* else give it a go, ie probably supported */
+}
+
 static int dir_print_body(char *arg, unsigned long *dircount)
 {	int rv;
 	unsigned long filecount, bytecount;
@@ -1164,6 +1183,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 	filecount = bytecount = 0;
 	lfnAvailable = dispLFN;	/* reset the LFN display flag for this
 		argument, maybe the drive is changed */
+	if (lfnAvailable) lfnAvailable=supportsLFN(toupper(path[0]));
 
 	/* print the header */
 	if((rv = dir_print_header(toupper(path[0]) - 'A')) == 0) {

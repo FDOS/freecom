@@ -1,3 +1,4 @@
+chg: DIR/LFN: now displays lfn for all files that return one
 fix: IF: /I option parsing interfered with /whatever tests
 fix: DIR: divide by 0 {TE, Eric, & Mark Bailey}
 v0.84pre:
