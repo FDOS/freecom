@@ -37,18 +37,6 @@
 #include "../include/command.h"
 #include "../err_fcts.h"
 
-static int ignore_case = 0;
-
-#pragma argsused
-optScanFct(opt_if)
-{ switch(ch) {
-  case 'I': return optScanBool(ignore_case);
-  }
-  optErr();
-  return E_Useage;
-}
-
-
 int cmd_if(char *param)
 {
 
@@ -59,16 +47,15 @@ int cmd_if(char *param)
 
 	int x_flag = 0;       /* when set cause 'then' clause to be exec'ed */
 	int negate = 0;       /* NOT keyword present */
-
-	ignore_case = 0;      /* /I option, case insensitive compare */
+	int ignore_case = 0;  /* /I option, case insensitive compare */
 
 
 	/* First check if param exists */
 	assert(param);
 
-	/* check for options */
-	if((ec = leadOptions(&param, opt_if, 0)) != E_None)
-		return ec;
+	/* check for options, note non-options must be treated as part of comparision */
+      if (matchtok(param, "/I")||matchtok(param, "/i"))
+        ignore_case++;
 
 	/* next check if param string begins with word 'not' */
 	if(matchtok(param, "not"))

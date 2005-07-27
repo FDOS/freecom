@@ -1,4 +1,6 @@
-v0.84:
+fix: IF: /I option parsing interfered with /whatever tests
+fix: DIR: divide by 0 {TE, Eric, & Mark Bailey}
+v0.84pre:
 fix: DIR/VOL: bug#1809, volume label missing spaces {KJD}
 fix: VOL: syntax error if extra whitespace after drive {KJD}
 add: CDD: if given path to a valid filename, ignore filename portion instead of error
