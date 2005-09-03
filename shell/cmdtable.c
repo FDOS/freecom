@@ -129,16 +129,18 @@ struct CMD internalCommands[] =
 
   {"IF", 0, cmd_if, TEXT_CMDHELP_IF},
 
+#ifdef INCLUDE_CMD_FAKELOADHIGH
+  {"LH", CMD_SPECIAL_DIR, cmd_call, TEXT_CMDHELP_CALL},
+  {"LOADHIGH", CMD_SPECIAL_DIR, cmd_call, TEXT_CMDHELP_CALL},
+#endif
+
 #ifdef INCLUDE_CMD_LOADHIGH
   {"LH", CMD_SPECIAL_DIR, cmd_loadhigh, TEXT_CMDHELP_LH},
+  {"LOADHIGH", CMD_SPECIAL_DIR, cmd_loadhigh, TEXT_CMDHELP_LH},
 #endif
 
 #ifdef INCLUDE_CMD_LOADFIX
   {"LOADFIX", CMD_SPECIAL_DIR, cmd_loadfix, TEXT_CMDHELP_LOADFIX},
-#endif
-
-#ifdef INCLUDE_CMD_LOADHIGH
-  {"LOADHIGH", CMD_SPECIAL_DIR, cmd_loadhigh, TEXT_CMDHELP_LH},
 #endif
 
 #ifdef INCLUDE_CMD_MEMORY
