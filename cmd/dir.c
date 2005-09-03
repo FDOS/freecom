@@ -496,7 +496,7 @@ done:;
 optScanFct(opt_dir)
 { switch(ch) {
   case 'S': return optScanBool(optS);
-  case 'P': return optScanBool(optP);
+  case 'P': return optScanBool2(optP);  /* multiple uses, /P /P, do not cancel, only /-P */
   case 'W': return optScanBool(optW);
   case 'B': return optScanBool(optB);
   case 'O': if(!bool) return scanOrder(strarg);
@@ -752,8 +752,11 @@ static int dir_print_free(unsigned long dirs)
 	clustersize = FAT32_Free_Space.sectors_per_cluster
 	 * FAT32_Free_Space.bytes_per_sector;
 
+       /* The following loop is intended to handle large free space amounts
+          and huge [fake] cluster sizes, such as NTFS4DOS driver on large HDs.
+       */
        if (clustersize)
-          if (FAT32_Free_Space.free_clusters >= 0x80000000l / clustersize)
+          if (FAT32_Free_Space.free_clusters >= 0x80000000ul / clustersize)
                 {
                 int shift;
                 
