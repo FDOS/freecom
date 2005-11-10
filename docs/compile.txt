@@ -68,6 +68,7 @@ or optimization settings, configure as you wish.
 
 ===
 
+[this step is optional, recommended to just use included mini SUPPL library]
 To compile the SUPPL library as well do this:
 + download the source code from where SUPPL\README.TXT points to
 + use one of the COMPILER\* preparations -or-
