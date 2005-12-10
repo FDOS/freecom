@@ -12,6 +12,9 @@
 #define FEATURE_ALIASES
 #define ALIAS_DEFAULT_SIZE 1024
 
+/* Define to disable context error messages that may scare a user */
+/* #define NO_CONTEXT_ERROR */
+
 /* Define to enable enhanced input (prerequisite of History and Filename
 	completion */
 #define FEATURE_ENHANCED_INPUT
@@ -28,6 +31,9 @@
 
 /* Define to enable /Z support, display exit code on program exit */
 #define DISP_EXITCODE
+
+/* Define to enable usage of LFNs */
+#define FEATURE_LONG_FILENAMES
 
 /* Define for limited support of 4DOS DESCRIPT.ION files */
 #define FEATURE_DESCRIPT_ION

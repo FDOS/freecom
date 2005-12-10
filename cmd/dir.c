@@ -210,8 +210,11 @@ struct currDir {
 	unsigned linecount; /* for /B */
 	};          
 	
-static int optS, optP, optW, optB, optL, longyear, optO, dispLFN
-	, lfnAvailable;
+static int optS, optP, optW, optB, optL, longyear, optO;
+
+#ifdef FEATURE_LONG_FILENAMES
+static int dispLFN, lfnAvailable;
+#endif
 
 #ifdef FEATURE_DESCRIPT_ION
 static int descriptionExists;
@@ -236,6 +239,7 @@ char *path;
 unsigned line;
 int need_nl;
 
+#if 0
 struct LFNFindData {
   unsigned long attributes;
   unsigned long CreationTime[2];
@@ -248,15 +252,17 @@ struct LFNFindData {
   unsigned char ShortName[14]; 
   } ;                     
 struct { char x[sizeof(struct LFNFindData) == 0x13e ? 1 : -1]; } verify_size = {""};
+#endif
 
+#ifdef FEATURE_LONG_FILENAMES
 void printLFNname(char *shortName, char *ext)
 {
     char pathbuffer[128];
+	char longname[270];
 	struct REGPACK r;
-	struct LFNFindData LFNEntry;
 	int pathlen;
 
-										/* reconstruct the path+filename */
+	/* reconstruct the path+filename */
 	pathlen = strrchr(path,'\\') - path;
 
 	sprintf(pathbuffer,"%*.*s\\%s%c%s"
@@ -269,13 +275,13 @@ void printLFNname(char *shortName, char *ext)
 
 /*	dprintf(("[LFN: path %s\n",pathbuffer)); */
 	
-	r.r_ax = 0x714e;
-	r.r_cx = 0xff;
-	r.r_si = 1;
+      /* LFN get canonical LFN */
+	r.r_ax = 0x7160;
+	r.r_cx = 0x02;
 	r.r_ds = FP_SEG(pathbuffer);
-	r.r_dx = FP_OFF(pathbuffer);
-	r.r_es = FP_SEG(&LFNEntry);
-	r.r_di = FP_OFF(&LFNEntry);
+	r.r_si = FP_OFF(pathbuffer);
+	r.r_es = FP_SEG(longname);
+	r.r_di = FP_OFF(longname);
 	
 	intr(0x21, &r);
 	
@@ -284,12 +290,9 @@ void printLFNname(char *shortName, char *ext)
 		return;
 	}
 	
-	printf(" %.30s ", LFNEntry.FullName);
-
-	r.r_bx = r.r_ax;	// close handle
-	r.r_ax = 0x71a1;
-	intr(0x21,&r);
+	printf(" %.30s ", &strrchr(longname, '\\')[1]);
 }
+#endif
 
 
 #ifdef FEATURE_DESCRIPT_ION
@@ -516,10 +519,12 @@ optScanFct(opt_dir)
   		if(!bool && !optHasArg())
 			return scanOrder(optstr + 1);
 		break;
+#ifdef FEATURE_LONG_FILENAMES
     case 'L': case 'l':		/* enable to display LFNs? */
       if(optLong("LFN"))
         return optScanBool(dispLFN);
       break;
+#endif
 	}
   }
   optErr();
@@ -782,7 +787,7 @@ output:
   return incline();
 }
 
-int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
+static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 {
    int rv = E_None;
 
@@ -878,8 +883,10 @@ int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 		putchar(' ');
 		fputs(p, stdout);
 		free(p);
-		if(lfnAvailable)
-			printLFNname(file->ff_name, ext);
+		#ifdef FEATURE_LONG_FILENAMES
+			if(lfnAvailable)
+				printLFNname(file->ff_name, ext);
+		#endif
 		#ifdef FEATURE_DESCRIPT_ION
 			if (descriptionExists)
 				showDescription(file->ff_name, ext);
@@ -1139,7 +1146,8 @@ static int dir_list(int pathlen
   return rv;
 }
 
-static int supportsLFN(char driveLetter)
+#ifdef FEATURE_LONG_FILENAMES
+int checkDriveSupportsLFN(char driveLetter)
 {
   static char rootname[] = "X:\\";
   char buffer[32];
@@ -1161,6 +1169,7 @@ static int supportsLFN(char driveLetter)
     return 0; /* return definitely unsupported */
   return 1; /* else give it a go, ie probably supported */
 }
+#endif
 
 static int dir_print_body(char *arg, unsigned long *dircount)
 {	int rv;
@@ -1184,9 +1193,11 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 	}
 
 	filecount = bytecount = 0;
+#ifdef FEATURE_LONG_FILENAMES
 	lfnAvailable = dispLFN;	/* reset the LFN display flag for this
 		argument, maybe the drive is changed */
-	if (lfnAvailable) lfnAvailable=supportsLFN(toupper(path[0]));
+	if (lfnAvailable) lfnAvailable=checkDriveSupportsLFN(toupper(path[0]));
+#endif
 
 	/* print the header */
 	if((rv = dir_print_header(toupper(path[0]) - 'A')) == 0) {
@@ -1245,8 +1256,10 @@ int cmd_dir(char *rest)
   int appState;					/* DOS/APPEND state */
 
   /* initialize options */
-  attrMask = attrMatch = optO = dispLFN
-   = longyear = optS = optP = optW = optB = optL = 0;
+  attrMask = attrMatch = optO = longyear = optS = optP = optW = optB = optL = 0;
+#ifdef FEATURE_LONG_FILENAMES
+  dispLFN = 0;
+#endif
   attrMay = ATTR_DEFAULT;
 
   /* read the parameters from env */
@@ -1260,7 +1273,7 @@ int cmd_dir(char *rest)
   if ((argv = scanCmdline(rest, opt_dir, 0, &argc, &opts)) == 0)
     return 1;
 
-  critEnableRepeatCheck();
+  /* critEnableRepeatCheck(); */
   appState = appendDisable();
   dircount = 0;
   if(argc)
@@ -1270,7 +1283,7 @@ int cmd_dir(char *rest)
       ;
   else
     rv = dir_print_body(".", &dircount);
-	critEndRepCheck();
+  /* critEndRepCheck(); */
 
   appendRestore(appState);
   freep(argv);

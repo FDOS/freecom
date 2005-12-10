@@ -1,5 +1,7 @@
 # $Id$
 #
+# Derived from: Id: DEFAULT.LNG,v 1.34 2004/12/01 21:20:46 skaus Exp
+#
 # FreeCOM national customization file
 #
 #	Language: Italian
@@ -419,7 +421,7 @@ programma. Fare riferimento al precedente messaggio di errore per
 comprendere la ragione di questo problema.
 .
 
-:TEXT_ERROR_CWD_FAILED#0%
+:TEXT_ERROR_CWD_FAILED#1%
 L'unit… %c: non risponde o la memoria interna Š esaurita.
 .
 
@@ -594,6 +596,18 @@ Sovrascrivere '%s' (S/No/Tutti/Esci) ? \
 # Note: This prompt ignores DOS NLS intentionally in order to
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_APPEND_FILE#1%
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+SsNnTtEe{CBREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Appendere a '%s' (S/No/Tutti/Esci) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
 :PROMPT_DELETE_FILE#1%
 SsNnTtEe{CBREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
@@ -645,8 +659,8 @@ Directory di %s
 :TEXT_DIR_LINE_FILENAME_WIDE#1%
 %-15s\
 .
-:TEXT_DIR_LINE_FILENAME_BARE#0%
-%-13s
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
 .
 :TEXT_DIR_LINE_FILENAME_SINGLE#1%
 %-13s\
@@ -1501,4 +1515,32 @@ Caricamento delle risorse in memoria fallito, la posizione puntata da
 FreeCOM pu• provare a caricare le risorse, per esempio:
 C:\\COMMAND.COM
 o premi INVIO per annullare il caricamento.
+.
+
+:TEXT_TERMINATING
+Fine dell'elaborazione.
+.
+
+:TEXT_HIDDEN_CRITER#0%
+Richiesta di Errore Critico %u soppressa.
+.
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+Codice d'uscita (ERRORLEVEL): %u, causa: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+errore API DOS\
+.
+:TEXT_EXIT_REASON_0
+terminato normalmente\
+.
+:TEXT_EXIT_REASON_1
+terminato da ^Interr (^Break)\
+.
+:TEXT_EXIT_REASON_2
+terminato da errore critico\
+.
+:TEXT_EXIT_REASON_3
+divenuto residente\
 .

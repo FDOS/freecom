@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include <environ.h>
+#include <nls_c.h>
 
 #include "../include/cmdline.h"
 #include "../include/command.h"

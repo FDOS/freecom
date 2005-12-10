@@ -43,7 +43,6 @@ int cmd_if(char *param)
 #define X_EXEC 1
 
 	char *pp;
-	int ec;
 
 	int x_flag = 0;       /* when set cause 'then' clause to be exec'ed */
 	int negate = 0;       /* NOT keyword present */

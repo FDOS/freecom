@@ -16,6 +16,10 @@
 #include "../err_fcts.h"
 #include "../suppl/dfn.h"
 
+#ifdef FEATURE_LONG_FILENAMES
+#define chdir(x) lfn_mrc_dir(x, 2)
+#endif
+
 int cd_dir(char *param, int cdd, const char * const fctname)
 {	char **argv, *dir;
 	int argc, opts;

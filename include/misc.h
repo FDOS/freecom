@@ -118,6 +118,7 @@ char *skipfnam(const char * const fnam);
 FILE *tempfile(void);
 void rmtmpfile(void);
 
+int checkDriveSupportsLFN (char drive);
 
 /************* Imported from LH.ASM        */
 

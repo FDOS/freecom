@@ -654,7 +654,7 @@ int process_input(int xflag, char *commandline)
       /* Go Interactive */
 		interactive_command = 1;		/* directly entered by user */
 		/* Ensure the prompt starts at column #0 */
-		if(echo)
+		if(echo && (wherex()>1))
 			putchar('\n');
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
       tracemode = 0;          /* reset trace mode */

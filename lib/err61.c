@@ -13,5 +13,8 @@
 
 #undef error_context_out_of_memory
 void error_context_out_of_memory(void)
-{	displayError(TEXT_ERROR_CONTEXT_OUT_OF_MEMORY);
+{
+#ifndef NO_CONTEXT_ERROR
+	displayError(TEXT_ERROR_CONTEXT_OUT_OF_MEMORY);
+#endif
 }

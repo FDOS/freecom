@@ -6,9 +6,14 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.6  2005/12/10 10:09:43  perditionc
+	based on patches from Blair Campbell, additional LFN support (slim print,
+	add initial cd,rd,md support, make compile time optional), remove some
+	compiler warnings, and prevent extra linebreak for compatibility
+
 	Revision 1.5  2004/09/13 18:59:40  skaus
 	add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
-
+	
 	Revision 1.4  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -58,7 +63,6 @@
 char *find_which(const char * const fname)
 {	char *p;
 	static char *buf = 0;
-	unsigned critCount;
 
 	critEnableRepeatCheck();
 	if(0 == (p = dfnsearch(fname, 0, 0))) {

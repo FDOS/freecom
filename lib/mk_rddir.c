@@ -12,6 +12,25 @@
 #include "../err_fcts.h"
 #include "../include/cmdline.h"
 
+
+#ifdef FEATURE_LONG_FILENAMES
+int lfn_mrc_dir(const char *path, int mode)
+{
+	struct REGPACK r;
+	int mrc_f[6] = { 0x713A, 0x7139, 0x713B, 0x3A, 0x39, 0x3B };
+	r.r_ax = mrc_f[mode + (checkDriveSupportsLFN(getdisk() + 'A') ? 0 : 3)];
+	r.r_ds = FP_SEG(path);
+	r.r_dx = FP_OFF(path);
+	intr(0x21, &r);
+	return (r.r_flags & 1) ? -1 : 0;
+}
+
+#define mkdir(x) lfn_mrc_dir(x,1)
+#define rmdir(x) lfn_mrc_dir(x,0)
+#define chdir(x) lfn_mrc_dir(x,2)
+#endif
+
+
 int mk_rd_dir(char *param, int (*func) (const char *), char *fctname)
 {	char **argv;
 	int argc, opts;
