@@ -17,7 +17,7 @@
 #include "../suppl/dfn.h"
 
 #ifdef FEATURE_LONG_FILENAMES
-#define chdir(x) lfn_mrc_dir(x, 2)
+#define chdir(x) lfn_mrc_dir(x,0x3B00)
 #endif
 
 int cd_dir(char *param, int cdd, const char * const fctname)
