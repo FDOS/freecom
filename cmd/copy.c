@@ -121,33 +121,21 @@ static void killContext(void)
 	faster copy, using large (far) buffers
 */
 
-static unsigned DOSread(int fd, void far *buffer, unsigned size)
-{
-	union REGS r; struct SREGS sr;
+#define DOSread(x, y, z) DOSreadwrite( x, y, z, 0x3F00 )
+#define DOSwrite(x, y, z) DOSreadwrite( x, y, z, 0x4000 )
 
-	r.h.ah = 0x3f;
-	r.x.bx = fd;
-	r.x.cx = size;
-	r.x.dx = FP_OFF(buffer);
-	sr.ds  = FP_SEG(buffer);
-	int86x(0x21,&r,&r,&sr);
-	if (r.x.cflag)
-		return 0xffff;
-	return r.x.ax;		
-}
-static unsigned DOSwrite(int fd, void far *buffer, unsigned size)
+unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
+                             unsigned short func )
 {
-	union REGS r; struct SREGS sr;
+	struct REGPACK r;
 
-	r.h.ah = 0x40;
-	r.x.bx = fd;
-	r.x.cx = size;
-	r.x.dx = FP_OFF(buffer);
-	sr.ds  = FP_SEG(buffer);
-	int86x(0x21,&r,&r,&sr);
-	if (r.x.cflag)
-		return 0xffff;
-	return r.x.ax;		
+	r.r_ax = func;
+	r.r_bx = fd;
+	r.r_cx = size;
+	r.r_dx = FP_OFF(buffer);
+    r.r_ds = FP_SEG(buffer);
+	intr(0x21, &r);
+    return( ( r.r_flags & 1 ) ? 0xFFFF : r.r_ax );
 }
 
 
@@ -636,7 +624,7 @@ int cmd_copy(char *rest)
 			 || !q) {
 				free(q);
 				error_out_of_memory();
-				goto errRet1;
+				goto errRet;
 			}
 			argBuffer = buf;
 			buf[argc] = p->fnam = q;
@@ -644,7 +632,7 @@ int cmd_copy(char *rest)
   		} else if(*s == ':') {		/* Device name?? */
   			if(!isDeviceName(p->fnam)) {
 				error_invalid_parameter(p->fnam);
-				goto errRet1;
+				goto errRet;
 			}
   		}
   	} while(0 != (p = p->app));
@@ -672,7 +660,6 @@ int cmd_copy(char *rest)
   h = head;
   while(copyFiles(h) && (h = h->nxt) != 0);
 
-errRet1:
 errRet:
   killContext();
   freep(argv);
