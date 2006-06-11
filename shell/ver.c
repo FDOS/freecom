@@ -49,7 +49,7 @@ const char shellver[] = "0.84-pre"
 	" XMS_Swap"
 #endif
 ;
-const char shelldate[] = __DATE__ " " __TIME__;
+static const char shelldate[] = __DATE__ " " __TIME__;
 const char shellname[] = "FreeCom";
 
 void short_version(void)
@@ -95,21 +95,26 @@ int cmd_ver(char *rest)
   /* arguments are simply ignored */
 
   if(optR) {                         /* version information */
-        union REGS regs;
-        regs.h.ah = 0x30;
-        intdos(&regs, &regs);
-        displayString(TEXT_MSG_VER_DOS_VERSION, regs.h.al, regs.h.ah);
+        struct REGPACK regs;
+        regs.r_ax = 0x3000;
+        intr(0x21, &regs);
+        displayString(TEXT_MSG_VER_DOS_VERSION, regs.r_ax & 0xFF, regs.r_ax >> 8);
 
-        if (regs.h.bh == 0xfd)
+        if ((regs.r_bx >> 8) == 0xfd)
         {
-          if (regs.h.bl == 0xff)
+          if ((regs.r_bx & 0xFF) == 0xff)
           {
           	displayString(TEXT_MSG_VER_EARLY_FREEDOS);
           }
           else
           {
-            displayString(TEXT_MSG_VER_LATER_FREEDOS
-             , regs.h.ch, regs.h.cl, regs.h.bl);
+//            displayString(TEXT_MSG_VER_LATER_FREEDOS
+/*             , regs.r_cx >> 8, regs.r_cx & 0xFF, regs.r_bx & 0xFF);*/
+//             , 2, 0, regs.r_bx & 0xFF );
+             regs.r_ax = 0x33FF;
+             intr( 0x21, &regs );
+             printf( "%Fs", MK_FP( regs.r_dx, regs.r_ax ) );
+             /* "%Fs" may only work in Turbo C's printf */
           }
         }
       }
