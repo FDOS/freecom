@@ -197,8 +197,8 @@
 #define ORDER_BY_MASK 0x1e    
 #define DEFAULT_SORT_ORDER "NG"
 
-unsigned char optOdir = 0;
-char optOorderby[5];	/* Array: One byte longer than order methods,
+static unsigned char optOdir = 0;
+static char optOorderby[5]; /* Array: One byte longer than order methods,
 							the last unused orderby[] byte is zero
 							by design always
 							--> eases implementation, e.g. memcpy()
@@ -212,8 +212,9 @@ struct currDir {
 	
 static int optS, optP, optW, optB, optL, longyear, optO;
 
+
 #ifdef FEATURE_LONG_FILENAMES
-static int dispLFN, lfnAvailable;
+static int dispLFN;
 #endif
 
 #ifdef FEATURE_DESCRIPT_ION
@@ -235,31 +236,16 @@ static unsigned attrMay, attrMask, attrMatch;
 */
 
 
-char *path;
-unsigned line;
-int need_nl;
-
-#if 0
-struct LFNFindData {
-  unsigned long attributes;
-  unsigned long CreationTime[2];
-  unsigned long AccesstionTime[2];
-  unsigned long ModificationTime[2];
-  unsigned long FileSize;
-  unsigned long FileSizeHigh;
-  unsigned char reserved[8];
-  unsigned char FullName[260]; 
-  unsigned char ShortName[14]; 
-  } ;                     
-struct { char x[sizeof(struct LFNFindData) == 0x13e ? 1 : -1]; } verify_size = {""};
-#endif
+static char *path;
+static unsigned line;
+static int need_nl;
 
 #ifdef FEATURE_LONG_FILENAMES
-void printLFNname(char *shortName, char *ext)
+static void printLFNname(char *shortName, char *ext)
 {
+    struct REGPACK r;
     char pathbuffer[128];
 	char longname[270];
-	struct REGPACK r;
 	int pathlen;
 
 	/* reconstruct the path+filename */
@@ -273,20 +259,20 @@ void printLFNname(char *shortName, char *ext)
 	 , *ext ? '.' : 0x0
 	 , ext);
 
-/*	dprintf(("[LFN: path %s\n",pathbuffer)); */
+    dprintf(("[LFN: path %s\n",pathbuffer)); 
 	
       /* LFN get canonical LFN */
 	r.r_ax = 0x7160;
 	r.r_cx = 0x02;
-	r.r_ds = FP_SEG(pathbuffer);
 	r.r_si = FP_OFF(pathbuffer);
-	r.r_es = FP_SEG(longname);
+    r.r_ds = FP_SEG( pathbuffer );
 	r.r_di = FP_OFF(longname);
-	
+    r.r_es = FP_SEG( longname );
+    r.r_flags = 1;
 	intr(0x21, &r);
 	
-	if(r.r_flags & 1) {
-/*		dprintf(("[LFN: not supported %x]\n",r.r_ax)); */
+    if( r.r_flags & 1 || r.r_ax == 0x7100) {
+        dprintf(("[LFN: not supported %x]\n",r.r_ax)); 
 		return;
 	}
 	
@@ -303,7 +289,7 @@ static int incline(void); /* forward reference */
    returns 0 on any error or no more entries in file
    *buf will equal '\0' or successfully read in filename
 */
-int descGetNextToken(char *buf, int fn, int maxlen)
+static int descGetNextToken(char *buf, int fn, int maxlen)
 {
   /* skip blank lines and any initial spaces, also exit early on any read error */
   do {
@@ -347,7 +333,7 @@ int descGetNextToken(char *buf, int fn, int maxlen)
    and print matching descriptions if found. Basic format are lines of
    filename <whitespace> description text [Ctrl-D ...] <EOL (\r,\n,\r\n)>|<EOF>
  */
-void showDescription(const char *shortName, char *ext)
+static void showDescription(const char *shortName, char *ext)
 {
   char fn[14], dummy[1], buf[128]; /* 4096 is max line size officially supported */
   assert(fDescription != NULL);
@@ -565,7 +551,8 @@ static int incline(void)
 
 static int flush_nl(void)
 { if(need_nl) {
-    putchar('\n');
+//    putchar('\n');
+    write( 1, "\n", 1 );
     return incline();
   }
 
@@ -593,8 +580,7 @@ static int dir_print_header(int drive)
 	/* standard alignment */
 #pragma -a.
   struct ffblk f;
-  struct SREGS s;
-  union REGS r;
+  struct REGPACK r;
   int currDisk;
   int rv;
 
@@ -621,11 +607,11 @@ static int dir_print_header(int drive)
 
  */
 
-  r.x.ax = 0x6900;
-  r.x.bx = drive + 1;
-  s.ds = FP_SEG(&media);
-  r.x.dx = FP_OFF(&media);
-  int86x(0x21, &r, &r, &s);
+  r.r_ax = 0x6900;
+  r.r_bx = drive + 1;
+  r.r_ds = FP_SEG(&media);
+  r.r_dx = FP_OFF(&media);
+  intr( 0x21, &r );
 
   /* print drive info */
  	displayString(TEXT_DIR_HDR_VOLUME, drive + 'A');
@@ -656,7 +642,7 @@ static int dir_print_header(int drive)
 
   if ((rv = incline()) == 0) {
   /* print the volume serial number if the return was successful */
-	  if (!r.x.cflag) {
+      if (!( r.r_flags & 1 )) {
 		displayString(TEXT_DIR_HDR_SERIAL_NUMBER
 		 , media.serial2, media.serial1);
 		rv = incline();
@@ -665,7 +651,8 @@ static int dir_print_header(int drive)
 
         /* Added to exactly match DOS's formatting. */
   if ( (optS) && (rv == 0) ) {
-      putchar('\n');
+//      putchar('\n');
+      write( 1, "\n", 1 );
       rv = incline();
   }
 
@@ -714,8 +701,7 @@ static int print_total
 static int dir_print_free(unsigned long dirs)
 {
   char buffer[32];
-  union REGS r;
-  struct SREGS sr;
+  struct REGPACK r;
   struct {
   	unsigned short whatever;
   	unsigned short version;
@@ -741,18 +727,18 @@ static int dir_print_free(unsigned long dirs)
   displayString(TEXT_DIR_FTR_DIRS, buffer);
 
   rootname[0] = toupper(*path);
-  r.x.ax = 0x7303;
-  sr.ds = FP_SEG(rootname);
-  r.x.dx = FP_OFF(rootname);
-  sr.es = FP_SEG(&FAT32_Free_Space);
-  r.x.di = FP_OFF(&FAT32_Free_Space);
-  r.x.cx = sizeof(FAT32_Free_Space);
-  int86x(0x21, &r, &r, &sr);
+  r.r_ax = 0x7303;
+  r.r_ds = FP_SEG(rootname);
+  r.r_dx = FP_OFF(rootname);
+  r.r_es = FP_SEG(&FAT32_Free_Space);
+  r.r_di = FP_OFF(&FAT32_Free_Space);
+  r.r_cx = sizeof(FAT32_Free_Space);
+  intr( 0x21, &r);
 
   /* Note: RBIL carry clear and al==0 also means unimplemented 
      alternately carry set and ax==undefined (usually unchanged) for unimplemented
   */  
-  if(!r.x.cflag && r.h.al) {
+  if(!( r.r_flags & 1 ) && r.r_ax) {
 	dprintf(("[DIR: Using FAT32 info]\n"));
 	clustersize = FAT32_Free_Space.sectors_per_cluster
 	 * FAT32_Free_Space.bytes_per_sector;
@@ -777,10 +763,10 @@ static int dir_print_free(unsigned long dirs)
                 goto output;
                 }
   }  
-  r.x.ax = 0x3600;
-  r.x.dx = toupper(*path) - 'A' + 1;
-  int86(0x21, &r, &r);
-  convert((unsigned long)r.x.ax * r.x.bx * r.x.cx, buffer);
+  r.r_ax = 0x3600;
+  r.r_dx = toupper(*path) - 'A' + 1;
+  intr(0x21, &r);
+  convert((unsigned long)r.r_ax * r.r_bx * r.r_cx, buffer);
 output:
   displayString(TEXT_DIR_FTR_BYTES_FREE, buffer);
 
@@ -813,7 +799,8 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
       if (++cDir->linecount == WIDE_COLUMNS)
       {
         /* outputted 5 columns */
-        putchar('\n');
+//        putchar('\n');
+        write( 1, "\n", 1 );
         rv = incline();
         cDir->linecount = 0;
       }
@@ -872,7 +859,8 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 			error_out_of_memory();
 			return E_NoMem;
 		}
-		putchar(' ');
+//        putchar(' ');
+        write( 1, " ", 1 );
 		fputs(p, stdout);
 		free(p);
 		p = nls_maketime(NLS_MAKE_SHORT_AMPM, hour, minute, -1, 0);
@@ -880,18 +868,20 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 			error_out_of_memory();
 			return E_NoMem;
 		}
-		putchar(' ');
+//        putchar(' ');
+        write( 1, " ", 1 );
 		fputs(p, stdout);
 		free(p);
 		#ifdef FEATURE_LONG_FILENAMES
-			if(lfnAvailable)
+            if( dispLFN )
 				printLFNname(file->ff_name, ext);
 		#endif
 		#ifdef FEATURE_DESCRIPT_ION
 			if (descriptionExists)
 				showDescription(file->ff_name, ext);
 		#endif
-		putchar('\n');
+//        putchar('\n');
+        write( 1, "\n", 1 );
 	 }
 
       rv = incline();
@@ -899,7 +889,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
    return cbreak? E_CBreak: rv;
 }
 
-int _Cdecl orderFunction(const void *p1, const void *p2)
+static int orderFunction(const void *p1, const void *p2)
 {
   int i1 = *(int*)p1;
   int i2 = *(int*)p2;
@@ -961,7 +951,7 @@ int _Cdecl orderFunction(const void *p1, const void *p2)
 }    	
 
 
-int flushOrder(struct ffblk _seg *orderArray,
+static int flushOrder(struct ffblk _seg *orderArray,
   		int *orderIndex,
   		int  orderCount)
 {
@@ -1065,7 +1055,8 @@ static int dir_list(int pathlen
          , path);
 	    path[pathlen - 1] = '\\';	/* need this below */
         if((rv = incline()) == E_None) {
-        putchar('\n');
+//        putchar('\n');
+        write( 1, "\n", 1 );
         rv = incline();
     }
    }
@@ -1107,7 +1098,8 @@ static int dir_list(int pathlen
   }
 
   if (rv == E_None && optW && (cDir.linecount != 0)) {
-    putchar('\n');
+//    putchar('\n');
+    write( 1, "\n", 1 );
     rv = incline();
   }
 
@@ -1146,6 +1138,7 @@ static int dir_list(int pathlen
   return rv;
 }
 
+#if 0
 #ifdef FEATURE_LONG_FILENAMES
 int checkDriveSupportsLFN(char driveLetter)
 {
@@ -1162,13 +1155,14 @@ int checkDriveSupportsLFN(char driveLetter)
   sr.es = FP_SEG(buffer);
   r.x.di = FP_OFF(buffer);
   r.x.cx = sizeof(buffer);
-  int86x(0x21, &r, &r, &sr);
+  myintdosx( &r, &r, &sr);
 
   /* if carry or LFN function unsupportd or volume does NOT support LFN functions */
   if (r.x.cflag || r.x.ax==0x7100)
     return 0; /* return definitely unsupported */
   return 1; /* else give it a go, ie probably supported */
 }
+#endif
 #endif
 
 static int dir_print_body(char *arg, unsigned long *dircount)
@@ -1193,11 +1187,6 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 	}
 
 	filecount = bytecount = 0;
-#ifdef FEATURE_LONG_FILENAMES
-	lfnAvailable = dispLFN;	/* reset the LFN display flag for this
-		argument, maybe the drive is changed */
-	if (lfnAvailable) lfnAvailable=checkDriveSupportsLFN(toupper(path[0]));
-#endif
 
 	/* print the header */
 	if((rv = dir_print_header(toupper(path[0]) - 'A')) == 0) {
