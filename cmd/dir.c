@@ -1138,32 +1138,6 @@ static int dir_list(int pathlen
   return rv;
 }
 
-#if 0
-#ifdef FEATURE_LONG_FILENAMES
-int checkDriveSupportsLFN(char driveLetter)
-{
-  static char rootname[] = "X:\\";
-  char buffer[32];
-  union REGS r;
-  struct SREGS sr;
-  
-  *rootname = driveLetter;
-
-  r.x.ax = 0x71A0; /* get volume information */
-  sr.ds = FP_SEG(rootname);
-  r.x.dx = FP_OFF(rootname);
-  sr.es = FP_SEG(buffer);
-  r.x.di = FP_OFF(buffer);
-  r.x.cx = sizeof(buffer);
-  myintdosx( &r, &r, &sr);
-
-  /* if carry or LFN function unsupportd or volume does NOT support LFN functions */
-  if (r.x.cflag || r.x.ax==0x7100)
-    return 0; /* return definitely unsupported */
-  return 1; /* else give it a go, ie probably supported */
-}
-#endif
-#endif
 
 static int dir_print_body(char *arg, unsigned long *dircount)
 {	int rv;
