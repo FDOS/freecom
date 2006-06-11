@@ -10,9 +10,12 @@
 	This file bases on MUX_AE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.6  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.5  2004/06/14 18:38:08  skaus
 	bugfix: MUX-AE: useage of DS:[SI] {Eduardo Almao}
-
+	
 	Revision 1.4  2004/06/07 19:32:14  skaus
 	bugfix: MUX-AE: useage of DS:[SI] {Eduardo Almao}
 	
@@ -103,7 +106,7 @@ int runExtension(char * const command, char * const line)
 	r.r_si = FP_OFF(command) - 1;
 	r.r_di = 0;				/* Magic value 4dos v4 */
 
-	intr(0x2f, &r);
+    intr(0x2F, &r);
 
 	switch(r.r_ax & 0xFF) {
 	case 0x00:		/* No appropriate extension found */
@@ -115,7 +118,7 @@ int runExtension(char * const command, char * const line)
 
 	case 0xFF:		/* Is an extension -> execute the Installable Command */
 		r.r_ax = 0xae01;
-		intr(0x2f, &r);
+        intr(0x2F, &r);
 		invalidateNLSbuf();
 		if(command[-1] == 0)		/* The command had been processed */
 			rc = 1;				/* Stop interpreting the command */

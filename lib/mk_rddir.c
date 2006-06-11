@@ -17,22 +17,32 @@
 int lfn_mrc_dir(const char *path, int func)
 {
 	struct REGPACK r;
-	if (checkDriveSupportsLFN(getdisk() + 'A'))
-        func = (func >> 8) + 0x7100;
-	r.r_ax = func;
+    r.r_ax = 0x7100 | func;
+    r.r_dx = FP_OFF( path );
 	r.r_ds = FP_SEG(path);
+    r.r_flags = 1;
+    intr( 0x21, &r );
+    if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) {
+        r.r_ax = func << 8;
 	r.r_dx = FP_OFF(path);
+        r.r_ds = FP_SEG( path );
 	intr(0x21, &r);
-	return (r.r_flags & 1) ? -1 : 0;
+}
+    return( ( r.r_flags & 1 ) ? -1 : 0 );
 }
 
-#define mkdir(x) lfn_mrc_dir(x,0x3900)
-#define rmdir(x) lfn_mrc_dir(x,0x3A00)
-#define chdir(x) lfn_mrc_dir(x,0x3B00)
+
+#define mkdir(x) lfn_mrc_dir(x,0x39)
+#define rmdir(x) lfn_mrc_dir(x,0x3A)
+#define chdir(x) lfn_mrc_dir(x,0x3B)
 #endif
 
 
+#ifdef FEATURE_LONG_FILENAMES
+int mk_rd_dir( char *param, int lfnfunc, char *fctname )
+#else
 int mk_rd_dir(char *param, int (*func) (const char *), char *fctname)
+#endif
 {	char **argv;
 	int argc, opts;
 	int rv;
@@ -49,7 +59,11 @@ int mk_rd_dir(char *param, int (*func) (const char *), char *fctname)
 		cutBackslash(argv[0]);
 
 		dprintf(("%s: '%s'\n", fctname, argv[0]));
+#ifdef FEATURE_LONG_FILENAMES
+        if((rv = lfn_mrc_dir( argv[0], lfnfunc )) != 0)
+#else
 		if((rv = func(argv[0])) != 0)
+#endif
 			error_dirfct_failed(fctname, argv[0]);
 	}
 

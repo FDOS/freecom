@@ -11,5 +11,9 @@
 
 int cmd_rmdir(char *param)
 {
+#ifdef FEATURE_LONG_FILENAMES
+    return mk_rd_dir( param, 0x3A, "RMDIR" );
+#else
 	return mk_rd_dir(param, rmdir, "RMDIR");
+#endif
 }

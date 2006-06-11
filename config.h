@@ -3,9 +3,11 @@
  *
  */
 
+#include <io.h>
+
 /* define DEBUG to add debugging code */
 #ifndef DEBUG			/* possibly already defined via command line */
-//#define DEBUG
+/*#define DEBUG*/
 #endif
 
 /* Define to enable the alias command, and aliases. */
@@ -13,7 +15,7 @@
 #define ALIAS_DEFAULT_SIZE 1024
 
 /* Define to disable context error messages that may scare a user */
-/* #define NO_CONTEXT_ERROR */
+#define NO_CONTEXT_ERROR
 
 /* Define to enable enhanced input (prerequisite of History and Filename
 	completion */
@@ -36,14 +38,14 @@
 #define FEATURE_LONG_FILENAMES
 
 /* Define for limited support of 4DOS DESCRIPT.ION files */
-#define FEATURE_DESCRIPT_ION
+/* #define FEATURE_DESCRIPT_ION */
 
 /* Define to enable DOS NLS */
 #define FEATURE_NLS
 
 /* Define to enable F5/F8 key test on startup if /P is present on
 	command line */
-/* #define FEATURE_BOOT_KEYS */
+#define FEATURE_BOOT_KEYS
 
 /* Command line logging feature */
 /* #define FEATURE_CALL_LOGGING */
@@ -80,12 +82,12 @@
 /* Define to support kernel-supported swapout of FreeCOM
 	see DOCS\K-SWAP.TXT
 */
-#define FEATURE_KERNEL_SWAP_SHELL
+/* #define FEATURE_KERNEL_SWAP_SHELL */
 
 /* Define to support XMS-only swap support of FreeCOM
 	This setting is incompatible with the above one!
 */
-/* #define FEATURE_XMS_SWAP */
+#define FEATURE_XMS_SWAP
 
 /* Define the size of the buffer used to store old paths for PUSHD/POPD */
 #define DIRSTACK_DEFAULT_SIZE 256
@@ -171,6 +173,9 @@
    shift
 
  */
+
+#define myintdos( a, b ) int86( 0x21, a, b )
+#define myintdosx( a, b, c ) int86x( 0x21, a, b, c )
 
 /********
 	***** Resolve dependencies

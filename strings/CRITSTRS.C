@@ -35,7 +35,7 @@ started
 #include <string.h>
 #include <stdlib.h>
 
-//ska: no resource in this project! #include "../resource.h"
+/*ska: no resource in this project! #include "../resource.h"*/
 
 #define fDAT "STRINGS.ERR"
 #define fTXT "DEFAULT.ERR"
@@ -97,7 +97,7 @@ strings special[] = {
 char temp[256];
 
 	/* keep it a single-file project */
-//ska: no resource in this project! #include "../res_w.c"
+/*ska: no resource in this project! #include "../res_w.c"*/
 
 #define join(s1,s2)	strcpy(stpcpy(temp, s1), s2);
 void pxerror(char *msg1, char *msg2)
@@ -241,9 +241,9 @@ int main(int argc, char **argv)
 	int rc, i, j;
 	unsigned long size;
 
-	//word w;
+	/*word w;*/
 	byte *p;
-	//byte b, *p;
+	/*byte b, *p;*/
 
 
 	if(argc > 2) {
@@ -313,24 +313,24 @@ int main(int argc, char **argv)
 	puts("CRITSTRS: Dumping CRITER strings resource");
 
 /* Dump the stuff into a file */
-	//if((dat = fopen(fDAT, "wb")) == NULL) {
+	/*if((dat = fopen(fDAT, "wb")) == NULL) {*/
 	if((dat = fopen(fDAT, "wt")) == NULL) {
 		perror("creating " fDAT);
 		return 35;
 	}
 
-	//ska: no resource in this project! startResource(dat, RES_ID_CRITER, 2, MODULE_VERSION);
+	/*ska: no resource in this project! startResource(dat, RES_ID_CRITER, 2, MODULE_VERSION);*/
 		/* Number of strings EXCEPT trailing "Unknown error" */
 	fprintf(dat, "??strings	DB %u\n", maxNr);
-	//b = maxNr;
-	//fwrite(&b, sizeof(b), 1, dat);
+	/*b = maxNr;*/
+	/*fwrite(&b, sizeof(b), 1, dat);*/
 		/* when loaded the pointer to the string, now offset
 			within file */
 	size = 1l + maxNr * 2;
 	for(i = 0; i <= maxNr; ++i) {
 		fprintf(dat, "\tDW S%u\n", i);
-		//w = (word)size;
-		//fwrite(&w, sizeof(w), 1, dat);
+		/*w = (word)size;*/
+		/*fwrite(&w, sizeof(w), 1, dat);*/
 		size += i == STR_KEYS? 1 + *(byte*)strg[STR_KEYS].text * 2
 			: strlen(strg[i].text) + 1;
 	}
@@ -352,13 +352,13 @@ int main(int argc, char **argv)
 				fprintf(dat, "%u,", *p++);
 			fprintf(dat, "%u\n", *p);
 		}
-		//fwrite(strg[i].text, 1
+		/*fwrite(strg[i].text, 1
 		 //, i == STR_KEYS? 1 + *(byte*)strg[STR_KEYS].text * 2
 		 //               : strlen(strg[i].text) + 1
-		 //, dat);
+		 //, dat);*/
 	}
 
-	//ska: no resource in this project! endResource(dat);
+	/*ska: no resource in this project! endResource(dat);*/
 
 	fflush(dat);
 	if(ferror(dat)) {

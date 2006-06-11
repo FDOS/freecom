@@ -3,11 +3,14 @@
 	Criter repeat check interface
 
 	$Log$
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.2  2005/12/10 10:09:43  perditionc
 	based on patches from Blair Campbell, additional LFN support (slim print,
 	add initial cd,rd,md support, make compile time optional), remove some
 	compiler warnings, and prevent extra linebreak for compatibility
-
+	
 	Revision 1.1  2004/09/13 18:59:39  skaus
 	add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
 	
@@ -69,6 +72,7 @@ unsigned critDisableRepeatCheck(void)
 
 	return 0;
 }
+#if 0
 char *critDriveReport(void)
 {	if(drives) {
 		char *rep = malloc(drives + 1);
@@ -90,3 +94,4 @@ char *critDriveReport(void)
 
 	return 0;
 }
+#endif

@@ -5,9 +5,12 @@
 	This file bases on TIMEFUNC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -43,15 +46,15 @@
 
 void _dos_gettime(struct dostime_t *t)
 {
-  union REGS r;
+  struct REGPACK r;
 
-  r.h.ah = 0x2C;
-  int86(0x21, &r, &r);
+  r.r_ax = 0x2C00;
+  intr(0x21, &r);
 
-  t->hour = r.h.ch;
-  t->minute = r.h.cl;
-  t->second = r.h.dh;
-  t->hsecond = r.h.dl;
+  t->hour = r.r_cx >> 8;
+  t->minute = r.r_cx & 0xFF;
+  t->second = r.r_dx >> 8; /* high bit */
+  t->hsecond = r.r_dx & 0xFF; /* low bit */
 }
 
 #endif

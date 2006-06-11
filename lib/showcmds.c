@@ -5,9 +5,12 @@
 	This file bases on INIT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.3  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.2  2002/04/02 18:09:31  skaus
 	add: XMS-Only Swap feature (FEATURE_XMS_SWAP) (Tom Ehlert)
 	
@@ -69,7 +72,8 @@ int showcmds(char *rest)
     cmdptr++;
   }
   if (y != 0)
-    putchar('\n');
+//    putchar('\n');
+    write( 1, "\n", 1 );
 
   displayString(TEXT_MSG_SHOWCMD_FEATURES);
 #ifdef FEATURE_ALIASES
@@ -117,7 +121,8 @@ int showcmds(char *rest)
 #ifdef DEBUG
 	displayString(TEXT_SHOWCMD_FEATURE_DEBUG);
 #endif
-  putchar('\n');
+//  putchar('\n');
+  write( 1, "\n", 1 );
 
   return 0;
 }

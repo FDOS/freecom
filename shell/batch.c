@@ -145,7 +145,7 @@ int setBatchParams(char *s)
 /* Move init/clear functionality out of the files in order to centralize
  * the low-level functionality --> easier to add/remove members of bcontext
  */
-void clearBatchContext(struct bcontext *b)
+static void clearBatchContext(struct bcontext *b)
 {
 	assert(b);
 
@@ -168,7 +168,7 @@ void clearBatchContext(struct bcontext *b)
     freep(b->params);
 }
 
-void initBatchContext(struct bcontext *b)
+static void initBatchContext(struct bcontext *b)
 {
 	assert(b);
   memset(b, 0, sizeof(*b));
@@ -210,11 +210,13 @@ void exit_batch(void)
     chkCBreak(BREAK_ENDOFBATCHFILES);
 }
 
+#if 0
 /* kill all batch contexts */
 void exit_all_batch(void)
 {	while(bc)
 		exit_batch();
 }
+#endif
 
 
 /*  Create/Clear/Chain all fields of the structure */

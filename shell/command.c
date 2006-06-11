@@ -91,6 +91,7 @@ static void execute(char *first, char *rest)
 
   char *fullname;
   char *extension;
+  void interrupt (*old2e)();
 
   assert(first);
   assert(rest);
@@ -161,6 +162,11 @@ static void execute(char *first, char *rest)
 	setvect(0x23, (void interrupt(*)()) lowlevel_cbreak_handler);
 #else
 	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
+#endif
+#ifdef FEATURE_XMS_SWAP
+    old2e = getvect( 0x2E );
+    if( peekb( FP_SEG( old2e ), FP_OFF( old2e ) ) == 0xCF )
+        setvect( 0x2E, ( void interrupt(*)() )lowlevel_int_2e_handler );
 #endif
     result = exec(fullname, rest, 0);
 	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
@@ -655,7 +661,8 @@ int process_input(int xflag, char *commandline)
 		interactive_command = 1;		/* directly entered by user */
 		/* Ensure the prompt starts at column #0 */
 		if(echo && (wherex()>1))
-			putchar('\n');
+//			putchar('\n');
+			write( 1, "\n", 1 );
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
       tracemode = 0;          /* reset trace mode */
       }
@@ -777,6 +784,12 @@ static void hangForever(void)
   }
 }
 
+int _Cdecl my2e_parsecommandline( char *s ) {
+    s[ s[ 0 ] ] = '\0';
+/*    printf("_my2e_parsecommandline( %s )\n", s );*/
+    parsecommandline( &s[ 1 ], 1 );
+    return( errorlevel );
+}
 
 int main(void)
 {

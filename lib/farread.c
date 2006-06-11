@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -44,22 +47,29 @@
 
 #include "../include/misc.h"
 
+unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
+                      unsigned short func );
+
 size_t farread(void far*buf, size_t length, FILE *f)
-{	struct REGPACK r;
+{
+#if 0
+    struct REGPACK r;
+#endif
 
 	/* synchronize FILE* with file descriptor in order to be able to
 		call the DOS API */
 	lseek(fileno(f), ftell(f), SEEK_SET);
 	/* Use DOS API in order to read the strings directly to the
 		far address */
+#if 0
 	r.r_ax = 0x3f00;              /* read from file descriptor */
 	r.r_bx = fileno(f);           /* file descriptor */
 	r.r_cx = length;              /* size of block to read */
 	r.r_ds = FP_SEG(buf);         /* segment of buffer to read block to */
 	r.r_dx = FP_OFF(buf);         /* offset of buffer to read block to */
-	intr(0x21, &r);               /* perform DOS API */
-	if ((r.r_flags & 1) != 0)     /* read failed */
-		return 0;
-
-	return r.r_ax;
+    intr( 0x21, &r );
+    return( ( r.r_flags & 1 ) ? 0 : r.r_ax );
+#else
+    return( DOSreadwrite( fileno( f ), buf, length, 0x3F00 ) );
+#endif
 }

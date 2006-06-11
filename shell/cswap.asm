@@ -39,6 +39,7 @@ _dosFCB2 times 37 db 0
 ;;_dosCMDTAIL  times 128 db 0
 _dosCMDNAME times 128 db 0
  		times 256	db 0
+;;    global localStack
 localStack:
 
 
@@ -73,6 +74,9 @@ _origPPID DW 0
 	global _canexit
 _canexit	DB 0		; 1 -> can exit; _else_ --> cannot exit
 
+    global _mySS, _mySP
+_mySS DW 0
+_mySP DW 0
 
 execSS dw 0
 execSP dw 0
@@ -80,6 +84,8 @@ execSP dw 0
 execRetval dw 0
 
 first_time db 1
+
+global SWAPXMSdirection
 
 ;;TODO make XMSsave two structures in order to drop this subroutine
 SWAPXMSdirection:
@@ -105,7 +111,7 @@ SWAPXMSdirection:
 
 ;;TODO: DS ought to be equal to SS, DS could be reconstructed from
 ;;	SS at the end of the XMSexec function
-	global real_XMSexec
+;	global real_XMSexec
 real_XMSexec:
 						; save ALL registers needed later
 		push si
@@ -116,6 +122,8 @@ real_XMSexec:
 		mov cx, cs
 		mov ds, cx
 
+        mov [_mySS],ss  ; 2E
+        mov [_mySP],sp  ; 2E
 		mov [execSS],ss
 		mov [execSP],sp
 

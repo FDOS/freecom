@@ -11,5 +11,9 @@
 
 int cmd_mkdir(char *param)
 {
+#ifdef FEATURE_LONG_FILENAMES
+    return mk_rd_dir( param, 0x39, "MKDIR" );
+#else
 	return mk_rd_dir(param, mkdir, "MKDIR");
+#endif
 }

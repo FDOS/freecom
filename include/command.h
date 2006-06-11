@@ -68,14 +68,14 @@ enum
 /* prototypes for INIT.C */
 extern void interrupt dummy_criter_handler();
 extern void interrupt cbreak_handler();
-// extern void initCBreak(void);
+/* extern void initCBreak(void);*/
 
 /* prototypes for COMMAND.C */
 extern int interactive_command;
 extern int persistentMSGs;
 extern int far CBreakCounter;
 #define ctrlBreak CBreakCounter
-// extern int ctrlBreak;
+/* extern int ctrlBreak;*/
 extern int exitflag;
 extern unsigned int echo;       /* The echo flag */
 extern int tracemode;                   /* debug script? */

@@ -23,6 +23,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
+#ifdef DEBUG
 extern FILE *dbg_logfile;
 extern char *dbg_logname;
 
@@ -61,3 +62,4 @@ int cmd_fddebug(char *param)
 	}
   return 0;
 }
+#endif

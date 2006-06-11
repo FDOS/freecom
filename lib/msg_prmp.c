@@ -6,9 +6,12 @@
 	map key to metakey, return metakey if valid.
 
 	$Log$
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -65,7 +68,8 @@ int userprompt(unsigned id,...)
 	while((ch = vcgetchar()) == 0 || (ch = mapMetakey(str, ch)) == 0)
 		beep();                     /* hit erroreous character */
 
-	putchar('\n');                /* advance to next line */
+//	putchar('\n');                /* advance to next line */
+    write( 1, "\n", 1 );
 	freePromptString(str, fmt);
 
 	return ch;

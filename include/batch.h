@@ -49,7 +49,7 @@ void exit_all_batch(void);
 extern setBatchParams(char *s);
 
 extern struct bcontext *newBatchContext(void);
-extern void initBatchContext(struct bcontext *b);
+/* static void initBatchContext(struct bcontext *b); */
 extern struct bcontext *activeBatchContext(void);
 char *find_arg_bc(struct bcontext const * const b, int n);
 

@@ -34,12 +34,13 @@ int cmd_pause(char *param)
 {
 
 	if(param && *param)
-		fputs(param, stdout);
+        write( 1, param, strlen(param) );
 	else
 		displayString(TEXT_MSG_PAUSE);
 
 	cgetchar();
-	putchar('\n');
+/*	putchar('\n');*/
+    write( 1, "\n", 1 );
 
 	return 0;
 }

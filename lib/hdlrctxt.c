@@ -43,6 +43,7 @@ int breakVarAssign(ctxt_t context, char * const s, char ** const value)
 
 	/* make sure there is an = in the command */
 	if((p = strchr(s, '=')) == 0 || p == s)
+    /* Should this print the value for the environment variable? */
 		return 1;
 
 	*p = 0;			/* separate name and value */

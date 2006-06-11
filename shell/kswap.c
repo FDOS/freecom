@@ -33,7 +33,7 @@ int kswapInit(void)
 	r.r_dx = 'FD';
 	intr(0x21, &r);
 
-	if((r.r_flags & 1) == 0) {
+	if(!( r.r_flags & 1 )) {
 		dprintf(("[KSWAP: using kernel swapping support (KSSF eventually at %04x)]\n", r.r_ax));
 		if(r.r_bx)	 {			/* segment found */
 			kswapContext = (kswap_p)r.r_bx;
@@ -84,7 +84,7 @@ void kswapRegister(kswap_p ctxt)
 	r.r_bx = (word)ctxt;
 	r.r_dx = 'FD';
 	intr(0x21, &r);
-	if((r.r_flags & 1) != 0) {	/* failed */
+	if(r.r_flags & 1) {	/* failed */
 		swapOnExec = ERROR;		/* cannot register -> cannot use */
 		dprintf(("[KSWAP: Registering failed, kernel swap deactivated]\n"));
 		return;

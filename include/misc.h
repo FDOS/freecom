@@ -78,7 +78,11 @@ char *cwd(int drive);
 char *abspath(const char * const fnam, const int warn);
 char *truepath(const char * const fnam);
 int changeDrive(int drive);
+#ifdef FEATURE_LONG_FILENAMES
+int mk_rd_dir( char *param, int lfnfunc, char *fctname );
+#else
 int mk_rd_dir(char *param, int (*func) (const char *), char *fctname);
+#endif
 void cutBackslash(char * const s);
 int cd_dir(char *param, int cdd, const char * const fctname);
 enum OnOff onoffStr(char *line);
@@ -111,7 +115,7 @@ int is_fnchar(const int c);
 int is_fnstr(const char * const s);
 int is_pathdelim(const int c);
 int is_empty(const char *s);
-// int is_quote(const int c);
+/* int is_quote(const int c);*/
 #define is_quote(c)	((c) == '"')
 char *skipfnam(const char * const fnam);
 

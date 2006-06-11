@@ -16,7 +16,7 @@
 
 static unsigned orgx, orgy;		/* start of current line */
 
-int isworddelimiter(unsigned c)
+static int isworddelimiter(unsigned c)
 {
 	return c == ' ' || c == '\t';
 }
@@ -26,7 +26,8 @@ int isworddelimiter(unsigned c)
  */
 static void outc(char c)
 {
-	putchar(c);
+//	putchar(c);
+	write( 1, &c, 1 );
 }
 /* Print a blank to current cursor postion
 	Updates cursor position

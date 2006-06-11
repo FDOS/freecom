@@ -5,9 +5,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.3  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.2  2001/04/29 11:33:51  skaus
 	chg: default heap size (tools\ptchsize) set to 6KB
 	chg: error displaying functions centralized into lib\err_fcts.src
@@ -55,7 +58,11 @@
 
 #include "../include/misc.h"
 
+#ifdef DEBUG
 FILE *errStream = 0;
+#else
+/* static FILE *errStream = 0; */
+#endif
 
 static void displayXString(FILE *stream, unsigned id, va_list args)
 {	char *str;
@@ -76,6 +83,10 @@ void displayError(unsigned id,...)
 {	va_list ap;
 
 	va_start(ap, id);
+#ifdef DEBUG
 	displayXString(errStream? errStream: stderr, id, ap);
+#else
+    displayXString( stderr, id, ap );
+#endif
 	va_end(ap);
 }

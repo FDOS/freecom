@@ -55,7 +55,11 @@ extern unsigned _heaplen;
 #ifndef FDDEBUG_INIT_VALUE
 #define FDDEBUG_INIT_VALUE 0
 #endif
+#ifdef DEBUG
 int fddebug = FDDEBUG_INIT_VALUE;    /* debug flag */
+#else
+static int fddebug = FDDEBUG_INIT_VALUE;
+#endif
 #ifdef DISP_EXITCODE
 int dispExitcode = 0;
 #endif
@@ -73,11 +77,10 @@ void exitfct(void)
 }
 
 
-int showhelp = 0, internalBufLen = 0, inputBufLen = 0;
-int spawnAndExit = E_None;
-int newEnvSize = 0;          /* Min environment table size */
-char *user_autoexec = 0;
-int skipAUTOEXEC = 0;
+static int showhelp = 0, internalBufLen = 0, inputBufLen = 0,
+           spawnAndExit = E_None, newEnvSize = 0, skipAUTOEXEC = 0;
+/* static int newEnvSize = 0;          Min environment table size */
+static char *user_autoexec = 0;
 
 #pragma argsused
 optScanFct(opt_init)
@@ -527,7 +530,8 @@ int initialize(void)
 				      && !(r.r_cx > 0x101 || (r.r_bx & 0xff) > 24))) {
 					displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
 					key = cgetchar_timed(3);
-					putchar('\n');
+//					putchar('\n');
+					write( 1, "\n", 1 );
 				} else key = 0;
 
 				if(key == KEY_F8)

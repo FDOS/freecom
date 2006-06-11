@@ -5,9 +5,12 @@
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.3  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.2  2003/12/09 21:29:24  skaus
 	bugfix: Ask for FreeCOM location when STRINGS are missing [#687]
 	
@@ -77,5 +80,6 @@ void readcommandDOS(char * const str, int maxlen)
 	if(iobuf[1]) 		/* could bug if == 0 */
 		memcpy(str, &iobuf[2], iobuf[1]);
 	str[iobuf[1]] = 0;
-	putchar('\n');
+//	putchar('\n');
+    write( 1, "\n", 1 );
 }

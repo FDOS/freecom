@@ -14,9 +14,9 @@
 #include <stdio.h>
 
 extern FILE *dbg_logfile;
-extern int fddebug;
 
 #ifdef DEBUG
+extern int fddebug;
 		/* DEBUG ENABLED */
 
 #define dprintf(p)  if (fddebug) dbg_print p

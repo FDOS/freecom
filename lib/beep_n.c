@@ -7,9 +7,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -46,7 +49,7 @@
 void beep(void)
 {
   sound(900);
-  delay(400);
+  delay(200); /* 400 */
   nosound();
   delay(100);
 }

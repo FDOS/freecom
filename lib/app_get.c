@@ -8,9 +8,12 @@
 	Return 0 if no APPEND is loaded.
 
 	$Log$
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+
 	Revision 1.2  2004/07/12 18:48:38  skaus
 	fix: appendDisable(): should disable APPEND [Eduardo Casino]
-
+	
 	Revision 1.1  2004/06/21 17:49:25  skaus
 	fix: DIR: disable APPEND.EXE during DIR processing {Eduardo Almao}
 	
@@ -26,9 +29,14 @@
 int appendDisable(void)
 {	struct REGPACK r;
 	int state;
-
+#if 1
 	r.r_ax = 0xb700;		/* APPEND installation check */
 	intr(0x2f, &r);
+#endif
+#if 0
+    r.x.ax = 0xB700;
+    int86( 0x2F, &r, &r );
+#endif
 	if(0xFF != (r.r_ax & 0xFF)) {	/* Not loaded */
 #ifndef NDEBUG
 		static int dispCnt = 1;
