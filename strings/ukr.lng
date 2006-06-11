@@ -1,0 +1,1466 @@
+# $Id$
+#
+# FreeCOM national customization file
+#
+#       Language: Ukrainian
+#       Codepage: DOS-866
+#       Author:   FreeWolle Voluntary
+# 
+# This file is used to generate all the messages that command.com
+# outputs.  This file is the input to the fixstrs program, and it
+# outputs strings.h and strings.dat.  The .DAT file is appended to
+# the command.exe file, and then renamed to command.com.  The .H
+# file contains all the info for the program to retreive the
+# messages.
+#
+# The format of this file is simple.  Blank lines and lines starting
+# with "#" are ignored.
+# Each message starts with a label name that will be used to refer to
+# the message in the program.  A label starts with a colon ":".
+# A label has a version ID attached to it delimited by a hash sign, e.g.:
+#	:TEXT_LABEL#1
+# This version is incremented each time the contents of the string has
+# undergo a larger change. The same language definition may contain the
+# same label up to one time, regardless of the version. FIXSTRS compares
+# both the label and the version ID and both must match.
+# A missing version is assumed as "#0".
+#
+# All lines after the label are the message until a line with a
+# single "." or "," in the first column.  The difference is the
+# period (".") signifies that there will be a final carrage return when
+# the message is displayed, but a comma does not.
+#
+# The body may contain backslash escape sequences as known from C; there
+# are the usual \# (where '#' is a lowercase letter except 'x' or one of
+# "[]{}?"), \\ (to embed a backslash itself)
+# \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
+# character), \, and \. (to specify a period or comma in the first column
+# of a line) and the single \ at the end of the line to suppress to append
+# a newline character. Note: There is NO octal sequence except the short \0!
+# There is a known bug (or feature): [ignore the very first hash mark]
+#:TEXT_LABEL#2
+#
+#\
+#,
+# Although the first data line appends the newline, the second does not,
+# though the comma removes the newline from the first line.
+
+# Defining prompts
+# Some prompts may cause an user interaction. Those ones should be in sync
+# with the issued text. To define how to interprete a pressed key, they
+# are mapped into metakeys like that: [ignore first hash sign]
+
+## Return value: a -> Yes; else -> No
+#:PROMPT_YES_NO#1
+#YyNn\n\r{CBREAK}
+#aabb b b       b
+# (Yes/No) ? \
+#.
+
+# All strings, which label start with "PROMPT_", are parsed as prompts.
+# The first two lines of the body are special; the first one enumerates all
+# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# range from 'a' through 'z'; spaces are ignored; everything else cause
+# an error. The comment preceeding the prompt definition associates the
+# metakeys with their meaning.
+# The remaining lines of the body contain the text to be displayed.
+#
+# Above example defines a native Yes/No prompt with a space behind the question
+# mark and no appended newline.
+# The metakey 'a' means "User answered with 'Yes'" and 'b' means no.
+# The keys 'Y' and 'y' are mapped to metakey 'a' (aka Yes) and the keys
+# 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
+# The spaces between the 'b's in the second line had been inserted to
+# align them with the corresponding keys of the first line, hence in order
+# to enhance readibility of the association between the pressed keys and their
+# mapping into a metakey.
+#
+# The first line (pressed keys) has to enumerate the ASCII value as returned
+# by DOS or BIOS (INT-10); special keys normally expressed with ASCII code zero,
+# but a non-zero scancode are NOT supported; this limit includes for instance
+# the function keys F1 through F12 and the cursor keys and it is not possible
+# to differ between the number pad and normal keys.
+# The keys may be enumerated by their ASCII character, by a backslash sequence,
+# or a symbolic name enclosed in curly brackets (see FIXSTRS.C "symkeys[]"
+# array about the supported symnames).
+
+
+#
+#  These are error messages
+#
+## Issued if a single character option is unknown
+:TEXT_ERROR_INVALID_SWITCH
+Негожий перемикач. - /%c
+.
+
+## Issued if a longname option is unknown
+:TEXT_ERROR_INVALID_LSWITCH
+Негожий перемикач. - /%s
+.
+
+## Issued if the context, the type of argument etc. is invalid
+:TEXT_ERROR_ILLFORMED_OPTION
+Неправильно вказана опцўя: '%s'
+.
+
+:TEXT_ERROR_OPT_ARG
+Опцўя '%s' не може мати аргументўв
+.
+
+:TEXT_ERROR_OPT_NOARG
+Опцўя '%s' потребуї вказання аргументу
+.
+
+:TEXT_INVALID_NUMBER
+У '%s' негоже вказано число
+.
+
+:TEXT_ERROR_CLOSE_QUOTE
+Очўкуїться закриваюча лапка: %c
+.
+
+:TEXT_ERROR_TEMPFILE
+Неможливо створити тимчасовий файл
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR
+Забагато параметрўв. - '%s'
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS
+Забагато параметрўв.
+.
+
+:TEXT_ERROR_INVALID_PARAMETER
+Негожий параметр. - '%s'
+.
+
+:TEXT_ERROR_PATH_NOT_FOUND
+Шлях не знайдено.
+.
+
+:TEXT_ERROR_FILE_NOT_FOUND
+Файл не знайдено.
+.
+
+:TEXT_ERROR_SFILE_NOT_FOUND
+Файл не знайдено. - '%s'
+.
+
+:TEXT_ERROR_REQ_PARAM_MISSING
+Не заданий обов'язковий параметр.
+.
+
+:TEXT_ERROR_INVALID_DRIVE
+Неправильно вказано диск %c:.
+.
+
+:TEXT_ERROR_BADCOMMAND#2
+Неправильно задана команда чи ўм'я файлу - "%s".
+.
+
+:TEXT_ERROR_OUT_OF_MEMORY
+Пам'ять вичерпано.
+.
+
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+Збўй видўлення пам'ятў через DOS.
+.
+
+:TEXT_ERROR_CANNOTPIPE
+Неможливо перенаправити! Неможливо вўдкрити тимчасовий файл!
+.
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE
+Рядок #%ld у командному файлў '%s' задовгий.
+.
+
+:TEXT_ERROR_BFILE_VANISHED
+Командний файл '%s' не знайдено.
+.
+
+:TEXT_ERROR_BFILE_LABEL
+Командний файл '%s' не мўстить мўтки '%s'.
+.
+
+:TEXT_ERROR_DIRFCT_FAILED#1
+%s збўй для '%s'.
+.
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ENV_VAR
+Неможливо встановити значення змўнноў оточення '%s'.
+Ймовўрне переповнення пам'тў для змўнних оточення.
+.
+:TEXT_ERROR_ENV_VAR_NOT_FOUND
+Змўнна оточення '%s' не знайдена.
+.
+:TEXT_ERROR_NO_ENVIRONMENT
+Не видўлена пам'ять для змўнних оточення. Замало пам'ятў. Задайте опцўю /E при запускў.
+.
+
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1
+Неможливо встановити псевдонўм '%s'. Ймовўрне вичерпання пам'ят∙ для псевдонўмўв.
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1
+Псевдонўм '%s' не знайдено.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+Вичерпано пам'ять для псевдонўмўв.
+.
+
+:TEXT_ERROR_SYNTAX_STR
+Синтаксична помилка. - '%s'
+.
+
+:TEXT_ERROR_SYNTAX
+Синтаксична помилка.
+.
+
+:TEXT_ERROR_FILENAME_TOO_LONG
+Задовге ўм'я файлу. - '%s'
+.
+
+:TEXT_ERROR_SELFCOPY
+Неможливо скопўювати '%s' у себе
+.
+
+:TEXT_ERROR_COMMAND_TOO_LONG
+Задовгий командний рядок опўсля розширення псевдонўму!
+.
+
+:TEXT_ERROR_LINE_TOO_LONG
+Задовгий рядок. Неможливо виконати команду.
+.
+
+:TEXT_ERROR_HISTORY_SIZE#1
+Невўрний об'їм ўсторў∙ команд '%s'.
+.
+
+:TEXT_HISTORY_EMPTY#1
+Ўсторўя команд пуста.
+.
+
+
+:TEXT_ERROR_BAD_MCB_CHAIN
+Пошкоджено ланцюг MCB чи несумўсна з MS-DOS система.
+.
+
+:TEXT_ERROR_UNDEFINED_ERROR
+Неовўдома помилка %d.
+.
+
+:TEXT_ERROR_REGION_WARNING
+Пошкоджена дўлянка пам'ятў %d була пропущена.
+.
+
+:TEXT_ERROR_ON_OR_OFF
+Маэ бути вказано ON чи OFF.
+.
+
+:TEXT_ERROR_BAD_VERABLE
+Негоже вказана змўнна.
+.
+
+:TEXT_ERROR_IN_MISSING#1
+FOR: Вўдсутнўй IN.
+.
+
+:TEXT_ERROR_MISSING_PARENTHESES#1
+Вўдсутня одна чи обидвў дужки.
+.
+
+:TEXT_ERROR_DO_MISSING#1
+FOR: Очўкуїться DO.
+.
+
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+FOR: Не вказано команди опўсля DO.
+.
+
+:TEXT_ERROR_REDIRECT_FROM_FILE
+Неможливо перенаправити ввўд з файлу '%s'.
+.
+
+:TEXT_ERROR_REDIRECT_TO_FILE
+Неможливо перенаправити вивўд у файл '%s'.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+Пусте перенаправлення.
+.
+
+:TEXT_ERROR_INVALID_DATE
+Неправильно вказано дату.
+.
+
+:TEXT_ERROR_INVALID_TIME
+Неправильно вказано час.
+.
+
+:TEXT_ERROR_NO_GOTO_LABEL
+Не задано мўтки для GOTO.
+.
+
+:TEXT_CTTY_NOTIMPLEMENTED
+Команда CTTY виключена з цього COMMAND.COM.
+.
+
+:TEXT_ERROR_NORW_DEVICE
+Пошкоджений чи нечитабельний/незаписуїмий пристрўй '%s'.
+.
+
+:TEXT_ERROR_CTTY_DUP
+Збўй змўни описувача файлу для TTY '%s'.
+.
+
+:TEXT_ERROR_L_NOTIMPLEMENTED
+/L не пўдтримуїться.
+.
+
+:TEXT_ERROR_U_NOTIMPLEMENTED
+/U не пўдтримуїться.
+.
+
+:TEXT_ERROR_WRITING_DEST
+Збўй запису у приймач.
+.
+
+:TEXT_ERROR_CANNOT_OPEN_SOURCE
+Збўй вўдкриття джерела. - '%s'
+.
+
+:TEXT_ERROR_OPEN_FILE
+Збўй вўдкриття файлу '%s'
+.
+
+:TEXT_ERROR_READ_FILE
+Збўй читання з файлу '%s'
+.
+
+:TEXT_ERROR_WRITE_FILE
+Збўй запису у файл '%s'
+.
+
+:TEXT_ERROR_LEADING_PLUS
+Об'їднувальний символ '+' не може знаходитись перед аргументами.
+.
+
+:TEXT_ERROR_TRAILING_PLUS
+Об'їднувальний символ '+' не може знаходитись опўсля аргументўв.
+.
+
+:TEXT_ERROR_NOTHING_TO_DO
+Нўчого робити!
+.
+
+:TEXT_ERROR_COPY
+Збўй COPY
+.
+
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: не вказано ўм'я файлу
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: не вказано число
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: не вказано число
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: Не вказано команду
+.
+
+:TEXT_NOT_IMPLEMENTED_YET
+Вибачте... не реалўзовано.
+.
+
+:TEXT_FAILED_LOAD_STRINGS
+Збўй завантаження повўдомлень у пам'ять.
+.
+
+:TEXT_MSG_NOTIMPLEMENTED
+Опцўя /MSG виключена з цього COMMAND.COM.
+.
+
+:TEXT_MSG_ITEMS_DISPLAYED#1
+Вўдображено %u пунктўв.
+.
+
+:TEXT_CORRUPT_COMMAND_LINE
+Пошкодження командного рядка. Це внутрўшня помилка командного ўнтерпретатора
+й пов'язана з виконуваним COMMAND.COM. Будь-ласка, повўдомте нам про цю помилку.
+.
+
+:TEXT_QUOTED_C_OR_K#1
+Опцў∙ /C ў /K не можуть бути вказаними у лапках, тому вони проўгнорувались.
+.
+
+:TEXT_INIT_FULLY_QUALIFIED#1
+Шлях до COMMAND.COM маї бути вказаний повнўстю!
+У цей шлях включаїться буква диску ў шлях розпочинаючи зў зворотньо∙ косо∙
+риски, наприклад: C:\\FDOS
+
+Для COMMAND.COM прийнято шлях:
+%s
+.
+
+:TEXT_ERROR_RESTORE_SESSION
+Ўнформацўя сесў∙ виконання не може бути вўдновлена - усў локальнў налаштування
+були втраченў. Для вияснення причини цўї∙ помилки проаналўзуйте попередў
+повўдомлення про помилки.
+.
+
+:TEXT_ERROR_SAVE_SESSION
+°нформацўя сесў∙ виконання не може бути збережена протягом виконання програми.
+Для вияснення причини цўї∙ помилки проаналўзуйте попередў повўдомлення про
+помилки.
+.
+
+:TEXT_ERROR_CWD_FAILED
+Пристрўй %c: не вўдповўдаї або вичерпано внутрўшню пам'ять.
+.
+
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+Збўй пўдкачування: Видўлено забагато пам'ятў для псевдонўмўв.
+.
+
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+Збўй пўдкачування: Неможливо видўлити верхню пам'ять.
+.
+
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+Вичерпання робочого простору пам'ятў для псевдонўмўв.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1
+Псевдонўм: '%s' не ї правильним
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+Збўй вставляння псевдонўму.
+.
+
+:TEXT_ALIAS_INVALID_NAME#1
+'%s' - негоже ўм'я псевдонўму.
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+Збўй завантаження контекстного модуля чи оброблювача критичних помилок.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+Вичерпання пам'ятў для контексту.
+Якщо ця помилка повторюватиметься, спробуйте збўльшити деякў з внутрўшнўх
+буферўв, такў як-от розмўр буферу ўсторў∙ командних рядкўв, стек папок, тощо.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1
+Розмўр контексту на %lu байтўв перевищуї граничний лўмўт.
+Збўльште розмўр контексту на %u байтўв.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+Збўй додавання статусно∙ ўнформацў∙ до контексту. Ця помилка вказуї
+на пошкодження пам'ятў чи на неправильно вказаний мўнўмальний розмўр
+контексту. Будь-ласка, проўнформуйте про цю помилку розробникўв FreeCOM на:
+freecom@freedos.org
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+Контекст було втрачено опўсля пўдкачування. Контекст був вўдтворений, проте
+усў псевдонўми, тощо, були втраченў.
+.
+
+#
+# Informational messages
+#
+
+:TEXT_MSG_PAUSE#1
+Натиснўть будь-яку клавўшу для продовження . . .\
+.
+
+:TEXT_MSG_HISTORY_SIZE
+Розмўр ўсторў∙ командних рядкўв складаї %d байт.
+.
+
+:TEXT_MSG_DOSKEY
+Можливостў DOSKEY вкладено у цю оболонку.
+.
+
+:TEXT_MSG_ECHO_STATE
+Статус ECHO - %s
+.
+
+:TEXT_MSG_VERIFY_STATE
+Статус VERIFY - %s
+.
+
+:TEXT_MSG_FDDEBUG_STATE
+Вивўд DEBUG - %s.
+.
+:TEXT_MSG_FDDEBUG_TARGET
+Вивўд DEBUG надруковано у '%s'.
+.
+
+:TEXT_MSG_BREAK_STATE
+Статус BREAK - %s
+.
+
+:TEXT_MSG_CURRENT_DATE
+Поточна дата: %s
+.
+
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN#1
+Уведўть нову дату (мм%sдд%s[сс]рр): \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1
+Уведўть нову дату (дд%sмм%s[сс]рр): \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1
+Уведўть нову дату ([сс]рр%sмм%sдд): \
+.
+
+:TEXT_MSG_CURRENT_TIME
+Поточний час: %s
+.
+
+:TEXT_STRING_PM#1
+ pm\
+.
+:TEXT_STRING_AM#1
+ am\
+.
+
+:TEXT_MSG_ENTER_TIME#1
+Уведўть новий час: \
+.
+
+# src-file <operation> target-file
+:TEXT_MSG_COPYING
+%s %s %s
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (Y/N) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1
+YyNn{CR}{LF}{CBREAK}
+aabb   b   b       b
+Усў файли з '%s' буде знищено!
+Ви впевненў у правильностў свого намўру (Y/N)? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+YyNn{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Так=ENTER, Нў=ESC] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+#	by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1
+YyNnAaQq{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Натиснуто Control-Break.\r
+Припинити виконання командного файлу '%s' (Так(Y)/Нў(N)/Усў(A)) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Перезаписати '%s' (Так(Y)/Нў(N)/Усў(A)/Зупинитись(Q)) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Знищити '%s' (Так(Y)/Нў(N)/Усў(A)/Зупинитись(Q)) ? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<невўдомо>>\
+.
+
+:TEXT_DIRSTACK_EMPTY
+Стек папок пустий.
+.
+
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME#1
+ Мўтка тома %c \
+.
+:TEXT_DIR_HDR_VOLUME_STRING
+ %s
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+не маї мўтки
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER
+ Серўйний номер тома - %04X-%04X
+.
+:TEXT_DIR_FTR_FILES#1
+%10s файл(ўв)\
+.
+:TEXT_DIR_FTR_BYTES
+   %12s байт
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+Виведено файлўв:
+.
+:TEXT_DIR_FTR_DIRS#1
+%10s папок\
+.
+:TEXT_DIR_FTR_BYTES_FREE
+ %15s байт вўльно
+.
+:TEXT_DIR_DIRECTORY
+Папка %s
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE
+ Папка %s
+.
+:TEXT_DIR_LINE_FILENAME_WIDE#1
+%-15s\
+.
+:TEXT_DIR_LINE_FILENAME_BARE
+%-13s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE#1
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <ТЕКА> \
+.
+:TEXT_DIR_LINE_SIZE#1
+   %10s \
+.
+
+:TEXT_FILE_COMPLATION_DISPLAY#1
+%-14s\
+.
+
+:TEXT_MSG_PATH
+ШЛЯХ=%s
+.
+:TEXT_MSG_PATH_NONE#1
+Не задано шлях для пошуку.
+.
+
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+Нед\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+Пон\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+Вўв\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+Срд\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+Чтв\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+Птн\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+Суб\
+.
+
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+файл не знищено.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+один файл знищено.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1
+%u файл(ўв) знищено.
+.
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+Доступнў внутрўшнў команди:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+Доступнў розширення:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[псевдонўми] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[розширенний ввўд] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[ўсторўя] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[завершення ўмен файлўв] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[пўдкачка] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[початок звўтування] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+[остання тека] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[пўдкачка ядра] \
+.
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[пўдкачка XMS] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[пўдкачка по замовчуванню] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[доданў команди] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+[DOS NLS] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[стек папок (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[вўдлагодження FreeCOM] \
+.
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
+
+Натиснўть F8 для трасування чи F5 для обходу %s... \
+.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC
+Обхўд '%s'.
+.
+
+:TEXT_MSG_VER_DOS_VERSION
+Версўя DOS %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+Ядро FreeDOS (збўрка 1933 чи пўзнўша)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS
+Версўя ядра FreeDOS %d.%d.%d
+.
+
+
+:TEXT_MSG_VER_WARRANTY
+Авторське право (C) 1994-2001 Тўм Норман та ўншў.
+
+   Ця про розповсюджуїться у надў∙, що вона стане користою, проте
+не  надаїться жодних гарантўй на те, що вона належно працюватиме;
+також  не  гарантуїться  комерцўйна  цўннўсть  та  приданўсть для
+конкретно∙ мети. За подробицями звертайтесь до публўчноў лўцензў∙
+ГНУ.
+
+Повўдомлення про помилки надсилайте на адресу freecom@fredos.org.
+Поновлення доступнў для завантаження на:
+http://freedos.sourceforge.net/freecom
+.
+
+:TEXT_MSG_VER_REDISTRIBUTION
+Авторське право (C) 1994-2001 Тўм Норман та ўншў.
+
+    Ця програма ї вўльним програмним забезпеченням; ви можете ∙∙
+перерозповсюджувати й модифўкувати згўдно умов, викладених у публўчнўй
+лўцензў∙ ГНУ версў∙ 2 (чи пўзнўшо∙), опублўковано∙ Фондом вўльного
+програмного забезпечення.
+
+Повўдомлення про помилки надсилайте на адресу freecom@fredos.org.
+Поновлення доступнў для завантаження на:
+http://freedos.sourceforge.net/freecom
+.
+
+:TEXT_MSG_VER_DEVELOPERS
+
+Командна оболонка FreeDOS розроблена багатьма розробниками; дивўться
+файл HISTORY.TXT.
+
+У даний момент вўдповўдальним за цю оболонку ї Стефан Кайзер
+(freecom@freedos.org).
+
+Повўдомлення про помилки надсилайте на адресу freecom@fredos.org.
+Поновлення доступнў для завантаження на:
+http://freedos.sourceforge.net/freecom
+.
+
+
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+
+З оболонки можна вийти, проте оскўльки вона запущена з\r
+опцўїю "/P", вийти з не∙ неможливо Ви маїте перезавантажити.\r
+комп'ютер або якщо ви працюїте у мультизадачному оточеннў,\r
+"убити" вўдповўдну цўй сесў∙ задачу.\r
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+Виконувальний модуль FreeCOM не знайдено.
+Ви маїте вказати повний шлях до COMMAND.COM
+у якостў першого аргументу при запусцў COMMAND,
+наприклад:
+C:\\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1
+Сегмент оточення    : лўмўт %5u байт; вўльно %5u байт
+.
+:TEXT_MEMORY_CONTEXT#1
+Сегмент контексту        : лўмўт %5u bytes; вўльно %5u байт
+.	
+:TEXT_MEMORY_HEAP#1
+Пам'ять                   : вўльно %5lu байт
+.
+:TEXT_MEMORY_CTXT_ALIAS#1
+\tПсевдонўми        : лўмўт %5u байт, зараз %5u байт, %5u елементўв
+.
+:TEXT_MEMORY_CTXT_HISTORY#1
+\tЎсторя        : лўмўт %5u байт, зараз %5u байт, %5u елементўв
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1
+\tСтек директорўй: лўмўт %5u байт, зараз %5u байт, %5u елементўв
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1
+\tПўдкачка останньо∙ теки : використовуїться  %5u байт, %5u елементўв
+.
+:TEXT_MEMORY_CTXT_BATCH#1
+\tВкладенўсть викликўв командних файлўв  : використовуїться  %5u байт, %5u елементўв
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1
+\tЎнформацўя про пўдкачування       : використовуїться  %5u байт, %5u елементўв
+.
+
+
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+Збўй отримання поточно∙ кодово∙ сторўнки з системи.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+Збўй змўни поточно∙ кодово∙ сторўнки.
+.
+:TEXT_DISPLAY_CODEPAGE#1
+Поточна кодова сторўнка is %u.
+Системна кодова сторўнка: %u.
+.
+
+#
+# Command help text
+#
+
+:TEXT_CMDHELP_ALIAS
+Вўдображення, задання чи знищення псевдонўмўв.
+
+ALIAS [змўнна[=][рядок]]
+
+        змўнна    Псевдонўм.
+        рядок     Послўдовнўсть символўв - значення псевдонўму.
+
+
+Уведўть ALIAS без параметрўв для вўдображення заданих псевдонўмўв.
+.
+
+:TEXT_CMDHELP_BEEP
+Подача звукового сигналу через динамўк.
+.
+
+:TEXT_CMDHELP_BREAK
+Встановлення чи вўдмўна розширеного контролю натиснення CTRL+C.
+
+BREAK [ON | OFF]
+
+Уведўть BREAK без параметрўв для виводу поточного статусу BREAK.
+.
+
+:TEXT_CMDHELP_CALL#1
+Виклик командного файлу з ўншого командного файлу.
+
+CALL [/S | /N] [/Y] [диск:][шлях]ўм'я файлу [аргументи]
+
+  аргументи          Будь-якў аргументи, що потребуються викликаїмому
+                     командному файлу.
+  /S передача виконання, /N заборона пўдкачування для FreeCOM.
+  /Y включення режиму трасування для викликаїмого командного файлу.
+.
+
+:TEXT_CMDHELP_CD
+Вўдображення ўменў поточно∙ теки чи змўна поточно∙ теки на ўншу.
+
+CHDIR [диск:][шлях]
+CHDIR[..]
+CD [диск:][шлях]
+CD[..]
+CD -
+
+  ..   Перехўд у теку вищого рўвня.
+  -    Якщо розширення "остання тека" включено, змўна теки на останню у стеку папок.
+
+Уведўть CD диск: для вўдображення поточно∙ теки на заданому диску.
+Уведўть CD без параметрўв для вўдображення поточного диску ў теки.
+Дивўться також команду CDD
+.
+
+:TEXT_CMDHELP_CDD
+Вўдображення ўменў поточно∙ теки чи змўна поточно∙ теки на ўншу.
+
+CDD [диск:][шлях]
+CD[..]
+CD -
+
+  ..   Перехўд у теку вищого рўвня.
+  -    Якщо розширення "остання тека" включено, змўна теки на останню у стеку папок.
+
+Якщо задано диск, виконуїться змўна поточного диску; це їдина вўдмўннўсть
+вўд команди "CHDIR".
+.
+
+:TEXT_CMDHELP_CHCP
+Вўдображення чи змўна поточно∙ кодово∙ сторўнки.
+
+CHCP [nnn]
+
+  nnn   Номер кодово∙ сторўнки.
+
+Уведўть CHCP без параметрўв для вўдображення поточно∙ кодово∙ сторўнки.
+.
+
+:TEXT_CMDHELP_CLS
+Очищення екрану.
+
+CLS
+.
+
+:TEXT_CMDHELP_COMMAND
+Запуск ново∙ копў∙ командно∙ оболонки FreeDOS.
+
+COMMAND [[диск:]шлях] [пристрўй] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+                       [/LOW] [/Y [/[C|K] команда]]
+  [диск:]шлях     Тека з файлом COMMAND.COM.
+  пристрўй        Пристрўй, що використовуватиметься для вводу/виводу.
+  /E:nnnnn        Установлення початкового розмўру середовища оточення
+                  у nnnnn байт (число nnnnn може бути вўд 256 до 32768).
+  /L:nnnn         Встановлення розмўру внутрўшнўх буферўв у nnnn байт
+                  (вказуїться у разў потреби лише разом з опцўїю /P).
+                  Число nnnn може бути вўд 128 до 1024.
+  /U:nnn          Вказання розмўру буферу вводу (вказуїться у разў потреби
+                  лише разом з опцўїю /P). Число nnn може бути вўд 128 до 255.
+  /P              Перманентний запуск (без можливостў виходу з оболонки).
+  /MSG            Збереження усўх повўдомлень про помилки (вказуїться у разў
+                  потреби лише разом з опцўїю /P).
+  /LOW            Задання розмўщення резидентно∙ частини COMMAND.COM у нижнўх
+                  адресах пам'ятў.
+  /Y              Включення режиму трасування для командних файлўв, якў
+                  запускатимуться з опцўїю /C чи /K.
+  /C команда      Виконання задано∙ команди ў вихўд з ўнтерпретатора.
+  /K команда      Виконання задано∙ команди з подпльшим продовженням
+                  виконання ўнтерпретатора.
+.
+
+:TEXT_CMDHELP_COPY
+Копўювання одного чи заданих по шаблону файлўв у заданий приймач.
+
+COPY [/A | /B] джерело [/A | /B] [+ джерело [/A | /B] [+ ...]] [приймач
+  [/A | /B]] [/V] [/Y | /-Y]
+
+  джерело      Файл чи файли для копўювання.
+  /A           Вказўвка на копўювання ASCII (текстових) файлўв.
+  /B           Вказўвка на копўювання не текстових файлўв (бўнарних файлўв).
+  приймач      Ўм'я теки ў/або нове ўм'я/ўмена скопўйованих файлўв.
+  /V           Перевўрка правильностў копўювання.
+  /Y           Вўдмова вўд видання пўдтвердження перезапису ўснуючих файлўв
+               у приймачў.
+  /-Y          Видання пўдтвердження на перезапис ўснуючих кўнцевих файлўв.
+
+Перемикач /Y може бути заданий у змўннўй оточення COPYCMD, проте дўя
+заданого у змўннўй оточення COPYCMD перемикача /Y може бути вўдмўнена
+вказанням перемикача /-Y у командному рядку.
+
+Для об'їднання файлўв слўд вказати їдиний кўнцевий файл при вказаннў
+декўлькох файлўв-джерел, використочуючи шаблони ўмен чи заданням у командному
+рядку щось на кшталт: файл-джерело1+файл-джерело1+файл-джерело3.
+.
+
+:TEXT_CMDHELP_CTTY
+Змўна пристрою-термўналу, що застосовуїться для вводу командних рядкўв та
+вўдображення на ньому даних.
+
+CTTY пристрўй
+
+  пристрўй   Термўнальний пристрўй для вводу/виводу, скажўмо, СОМ1.
+.
+
+:TEXT_CMDHELP_DATE#1
+Вўдображення поточно∙ дати чи ∙∙ змўна.
+
+DATE [/D] [дата]
+
+Уведўть DATE без параметрўв для вўдображення поточно∙ дати та виведення
+запиту на змўну дати. Для збереження встановлено∙ дати просто натиснўть
+ENTER у вўдповўдь на запит.
+
+/D вивўд поточно∙ дати без видання запиту на ∙∙ змўнення.
+.
+
+:TEXT_CMDHELP_DEL#2
+Знищення одного визначеного чи заданих по шаблону файлўв.
+
+DEL [диск:][шлях]ўм'я файлу [/P] [/V]
+ERASE [диск:][шлях]ўм'я файлу [/P] [/V]
+
+  [диск:][шлях]ўм'я файлу     Файл чи файли для знищення. Для задання
+                              бўльш як одного файлу для знищення
+                              використовуйте шаблони ўмен файлўв.
+  /P    Виведення запиту на пўдтвердження кожного зў знищуваних файлўв.
+  /V    Вўдображення ўмен знищених файлўв.
+.
+
+:TEXT_CMDHELP_DIR#4
+Вўдображення списку файлўв й папок поточно∙ теки.
+
+DIR [диск:][шлях][ўм'я файлу] [/P] [/W] [/A[[:]атрибути]]
+  [/O[[:]сортування]] [/S] [/B] [/L] [/V]
+
+ [диск:][шлях][ўм'я файлу]   Диск, шлях та/або ўмена файлўв для вўдображення.
+                             (Може бути задана розширена специфўкацўя файлўв
+                             чи шаблон ўмен вўдображуваних у списку файлўв).
+ /P         Пауза опўсля вўдображення кожного повного екрану.
+ /W         Стислий формат виводу списку файлўв.
+ /A         Вўдображення файл згўдно заданих атрибутўв (по замовчуванню
+            вважаїться задано /ADHSRA).
+ атрибути    D  Папки                       R  Тўльки для читання
+             H  Схованў файли               A  Файли для архўвацў∙
+             S  Системнў файли              -  Заперечуючий префўкс
+ /O         Вивўд списку файлўв згўдно заданого режиму сортування.
+ сортування  N  По ўменў (алфавўтний)       S  По розмўру (починаючи з менших)
+             E  По розширенню (алфавўтний)  D  По датў ў часу (починаючи зў
+                                               старших)
+             G  Спершу теки                 -  Префўкс реверсў∙
+             U  Без сотрування              По замовчуванню вважаїться
+                                            заданим /ONG
+ /S         Вўдображення файлўв з теки й усўх ∙∙ пўдкаталогўв.
+ /B         Вивўд списку ўмен без додатково∙ ўнформацў∙.
+ /L         Вивўд у нижньому регўстрў.
+ /Y чи /4   Вивўд чотиризначного формату значення року.
+
+Перемикачў можуть бути заданў у змўннўй оточення DIRCMD, проте перемикачў,
+заданў у командному рядку, мають вищий приорўтет, анўж заданў у змўннўй
+оточення DIRCMD. Для вўдмўни дў∙ будь-якого з заданих у цўй змўннўй оточення
+перемикачўв можна слўд вказати цў перемикачў у командному рядку з префўксом
+"-", наприклад /-W.
+.
+
+:TEXT_CMDHELP_DOSKEY#1
+Зовнўшня утилўта DOSKEY вбудована у FreeCOM.
+Клавўшў перемўщення курсору уверх та вниз виводять у командний рядок ранўше
+уведенў команди з ўсторў∙ команд.
+Клавўшў перемўщення курсору влўво, вправо, а також клавўшў HOME та END
+вўдповўдно перемўщують курсор у поточному командному рядку влўво, вправо,
+на початок та на кўнець. Клавўша INSERT дозволяї перемикати режим
+вставки/перезапису сивмолўв при редагуваннў командного рядка.
+Клавўша TAB замўнїю уведене слово пўдхожим ўменем файлу з поточно∙ теки;
+подвўйне натиснення на TAB вўдображуї на екранў список усўх доступних у
+поточнўй тецў файлўв.
+.
+
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
+Редагування командних рядкўв, вўдобрадення ранўш уведених командних рядкўв й
+∙х виконання, а також створення макросўв.
+
+DOSKEY [/перемикач ...] [ўм'я макросу=[текст]]
+
+  /BUFSIZE:розмўр Встановлення розмўру командного буферу а також буферу для
+                  макросўв (по замовчуванню 512 байт)
+  /ECHO:on|off    Вўдображення макросўв при виконаннў (по замовчуванню on)
+  /FILE:файл      Вказання файлу зў списком макросўв
+  /HISTORY        Вўдображення збережено∙ у пам'ятў ўсторў∙ командних рядкўв
+  /INSERT         Режим вставки при редагуваннў командного рядка
+  /KEYSIZE:розмўр Встановлення клавўатурного буферу (за замовчуванням 15 байт)
+  /LINE:розмўр    Вказання лўмўту довжини командного рядка (за замовчуванням
+                  128 байт)
+  /MACROS         Вўдображення усўх макросўв DOSKey
+  /OVERSTRIKE     Режим перезапису при редагуваннў командного рядка
+                  (використовуїться за замовчуванням)
+  /REINSTALL      Повторний виклик DOSKey
+  ўм'я макросу    Ўм'я створюваного макросу
+  текст           Команд(а/и) для присвоїння макросу
+
+  UP,DOWN   перегляд ўсторў∙ командних рядкўв
+      Esc   очищення поточного командного рядку
+       F7   вўдображення ўсторў∙ командних рядкўв
+   Alt+F7   очищення ўсторў∙ командних рядкўв
+[символи]F8 пошук у ўсторў∙ командних рядкўв команди, яка розпочинаїться з
+            вказаних символўв [символи] ў виклик ∙∙ у командний рядок
+       F9   виклик у командний рядок команди згўдно вказаного у командному
+            рядку номера команди у ўсторў∙ командних рядкўв
+  Alt+F10   стирання створеного макроса
+
+Наступнў коди можуть бути заданў у макросах DOSKey:
+  $T     Роздўлювач команд, який дозволяї вставляти декўлька команд у один
+         рядок
+  $1-$9  Номер аргументу з командного рядку - те саме, що й %1-%9 у командному
+         файлў
+  $*     Замўнюїться текстом, вказаним опўсля ўменў макроса у командному рядку
+.
+
+:TEXT_CMDHELP_ECHO
+Вўдображення повўдомлень чи перемикання вўдображення команд на екранў при
+ўх виконаннў з командного файлу.
+
+  ECHO [ON | OFF]
+  ECHO [повўдомлення]
+
+Уведўть ECHO без параметрўв для вўдображення поточного статуту вўдображення
+команд з командного файлу на екранў пўд час його виконання.
+.
+
+:TEXT_CMDHELP_EXIT
+Вихўд з командно∙ оболонки FreeDOS.
+
+EXIT
+.
+
+:TEXT_CMDHELP_FOR
+Виконання певно∙ заданоў команди визначену кўлькўсть разўв для набору файлўв.
+
+FOR %змўнна IN (набор) DO команда [параметри]
+
+  %змўнна    Пўдставляїмий параметр
+  (набор)    Один чи список з декўлькох ўмен файлўв. Можна використовувати
+             шаблони ўмен файлўв.
+  команда    Команда, яка викликатиметься для кожного з файлўв набору.
+  параметри  Параметри чи перемикачў для задано∙ команди для файлўв набору.
+
+При викликцў команди FOR з командного файлу замўсть вказання %змўнна вказуйте
+%%змўнна.
+.
+
+:TEXT_CMDHELP_GOTO
+Перехўд на задану мўтку у командному файлў.
+
+GOTO мўтка
+
+  мўтка   Текст (послўдовний набор символўв) - ўм'я мўтки.
+
+Ўм'я мўтки розпочинаїться з двокрапки (":").
+.
+
+:TEXT_CMDHELP_HISTORY#1
+Ўсторўя командних рядкўв.
+
+HISTORY [розмўр]
+
+  розмўр   Новий розмўр буферу ўсторў∙ командних рядкўв.
+
+Уведўть HISTORY без аргументўв для вўдображення ўсторў∙ командних рядкўв.
+.
+
+:TEXT_CMDHELP_IF
+Умовна перевўрка.
+
+IF [NOT] ERRORLEVEL число команда
+IF [NOT] рядок1==рядок2 команда
+IF [NOT] EXIST ўм'я файлу команда
+
+  NOT               Оператор логўчного заперечення (команда виконуїться лише
+                    у тому разў, якщо зазначена умова неўстинна).
+  ERRORLEVEL число  Умова ўстинна якщо код закўнчення виконання програми
+                    дорўвнюватиме вказаному числу чи бўльше його.
+  команда           Команда, яка виконуватиметься при досягненнў визначеного
+                    результату умови.
+  рядок1==рядок2    Умова ўстинна якщо текст у обох рядках тотожний.
+  EXIST ўм'я файлу  Умова ўстинна у разў, якщо зазначений файл ўснуї.
+.
+
+:TEXT_CMDHELP_LH
+Завантаження програми у верхню пам'ять.
+
+LOADHIGH [диск:][шлях]ўм'я файлу [параметри]
+LOADHIGH [/L:область1[,мўнўмальнийрозмўр1][;область2[,мўнўмальнийрозмўр2]...]
+         [/S]] [диск:][шлях]ўм'я файлу [параметри]
+
+/L:область1[,мўнўмальнийрозмўр1][;область2[,мўнўмальнийрозмўр2]...
+            Задання областей пам'ятў для завантаження програми.
+            Область1 - перша область пам'ятў для програми;
+            мўнўмальнийрозмўр1 - мўнўмальний потрўбний розмўр задано∙
+            областў пам'ятў. Область2 - наступна область пам'ятў для
+            програми; мўнўмальнийрозмўр2 - мўнўмальний потрўбний розмўр
+            задано∙ областў пам'ятў. При потребў може бути вказано будь-яка
+            кўлькўсть областей пам'ятў з зазначеним мўнўмальним розмўром цих
+            дўлянок пам'ятў, якў необхўдно видўлити для завантажувано∙ програми.
+/S          Змешнення розмўру UMB до мўнўмума при завантаженнў програми.
+[диск:][шлях]ўм'я файлу
+            Програма для завантаження.
+.
+
+:TEXT_CMDHELP_LOADFIX
+Завантаження програми у область над першими 64 КБ нижньо∙ пам'ятў.
+
+LOADFIX [диск:][шлях]ўм'я файлу
+
+Застосовуйте команду LOADFIX для завантаження програм, якў видають
+повўдомлення про помилку: "Packed file corrupt" - "Запакований файл
+пошкоджено" при спробў завантаження програми у нижню пам'ять.
+.
+
+:TEXT_CMDHELP_MD
+Створення ново∙ теки.
+
+MKDIR [диск:]шлях
+MD [диск:]шлях
+.
+
+:TEXT_CMDHELP_PATH
+Вўдображення чи встановка шляху пошуку виконувальних файлўв.
+
+PATH [[диск:]шлях[;...]]
+PATH ;
+
+Уведўть PATH ; для очищення заданого шляху пошуку ў вказання на пошук
+виконувальних файлўв виключно у поточнўй тецў. Уведўть PATH без параметрўв
+для вўдображення поточного шляху пошуку.
+.
+
+:TEXT_CMDHELP_PAUSE
+Призупинення виконання командного файлу та виведення на термўнал повўдомлення:
+"Натиснўть будь-яку клавўшу для продовження...." чи заданого повўдомлення.
+
+PAUSE [повўдомлення]
+.
+
+:TEXT_CMDHELP_PROMPT
+Змўна ввўдного запрошення командного рядку.
+
+PROMPT [текст]
+
+  текст    Ввўдне запрошення командного рядку.
+
+Запрошення може мўстити поряд з будь-яким ўншим текстом спецўальнў
+управляючў послўдовностў символўв:
+
+  $Q   = (знак "дорўвнюї")
+  $$   $ (символ долара)
+  $T   Поточний час
+  $D   Поточна дата
+  $P   Поточний диск ў шлях
+  $V   Версўя командно∙ оболонки FreeDOS
+  $N   Поточний диск
+  $G   > (знак "бўльше")
+  $L   < (знак "менше")
+  $B   | (труба; перенаправлення)
+  $H   Код Backspace (знищення попереднього символа)
+  $E   Код Escape (ASCII код 27)
+  $_   Перехўд на новий рядок ў повернення каретки
+
+Уведўть PROMPT без аргументўв для встановлення значення запрошення по
+замовчуваннў.
+.
+
+:TEXT_CMDHELP_PUSHD
+Додавання поточно∙ теки у стек папок а також перехўд у вказану теку.
+
+PUSHD [[диск:]шлях]
+  Де [диск:]шлях - шлях, на який Ви бажаїте змўнити поточну теку.
+.
+
+:TEXT_CMDHELP_POPD
+Отримання теки зў стеку папок ў перехўд у не∙.
+
+POPD [*]
+  При вказаннў аргументу '*' здўйснюїться очищення стеку папок.
+.
+
+:TEXT_CMDHELP_DIRS
+Вўдображення вмўсту стеку папок.
+
+DIRS
+.
+
+:TEXT_CMDHELP_RD
+Знищення теки.
+
+RMDIR [диск:]шлях
+RD [диск:]шлях
+.
+
+:TEXT_CMDHELP_REM
+Додавання коментарўв у команднў файли чи у файл CONFIG.SYS.
+
+REM [коментар]
+.
+
+:TEXT_CMDHELP_REN
+Перейменування файлу/теки чи файлўв/папок.
+
+RENAME [диск:][шлях][тека1 | ўм'я файлу1] [тека2 | ўм'я файлу2]
+REN [диск:][шлях][тека1 | ўм'я файлу1] [тека2 | ўм'я файлу2]
+
+При перейменування недопустимо задавати ўнший диск чи шлях - приймач.
+Для перенесення файлўв на ўнший диск чи у ўнший шлях використовуйте
+команду MOVE.
+.
+
+:TEXT_CMDHELP_SET#1
+Вўдображення, змўна чи знищення змўнних оточення.
+
+SET [/C] [/P] [змўнна=[рядок]]
+
+  змўнна  Ўм'я змўнно∙ оточення.
+  рядок   Послўдовнўсть символўв - значення змўнно∙.
+
+* Якщо опўсля ўменў змўнно∙ не вказано значення, змўнна знищуїться.
+
+Уведўть SET без параметрўв для вўдображення змўнних оточення.
+
+Опцўя /C вказуї на те, що ўм'я змўнно∙ оточення необхўдно задати без змўни
+∙∙ регўстру, бо по замовчуваннў ўм'я змўнних оточення переводяться у верхнўй
+регўстр, якщо змўнно∙ з таким ўменем ще не ўснуї.
+
+/P виведення запиту на уведення значення у задану змўнну оточення.
+.
+
+:TEXT_CMDHELP_SHIFT#1
+Змўна позицў∙ чи замўна параметрўв у командному файлў.
+
+SHIFT [DOWN]
+
+DOWN змўщуї параметри вўд останнього до першого, ўнакше змўщуї вўд першого
+до останнього.
+.
+
+:TEXT_CMDHELP_TIME#1
+Вўдображення чи змўна поточного системного часу.
+
+TIME [/T] [час]
+
+Уведўть TIME без параметрўв для вўдображення поточного системного часу ў
+виведення запиту на змўну часу. Якщо Ви не бажаїте змўнювати поточний час,
+натиснўть ENTER у вўдповўдь на цей запит.
+
+/T вўдображення поточного часу без виведення запиту на його змўну.
+.
+
+:TEXT_CMDHELP_TRUENAME
+Вўдображення повного ўменў.
+
+TRUENAME [диск:][шлях][ўм'я файлу]
+.
+
+:TEXT_CMDHELP_TYPE
+Вўдображення вмўсту текстового файлу.
+
+TYPE [диск:][шлях]ўм'я файлу
+.
+
+:TEXT_CMDHELP_VER
+Вўдображення версў∙ командно∙ оболонки FreeDOS й ўншо∙ ўнформацў∙.
+
+VER [/R] [/W] [/D] [/C]
+
+ /R         Показ версў∙ ядра та ўншо∙ ўнформацў∙.
+ /W         Показ положень про гарантў∙ на командну оболонку FreeDOS.
+ /D         Показ умов розповсюдження командно∙ оболонки FreeDOS.
+ /C         Показ списку розробникўв командно∙ оболонки FreeDOS.
+.
+
+:TEXT_CMDHELP_VERIFY
+Вўдображення чи змўна статуту перевўрки коректностў запису файлўв на диск.
+
+VERIFY [ON | OFF]
+
+Уведўть VERIFY без параметрўв для вўдображення поточного статуту VERIFY.
+.
+
+:TEXT_CMDHELP_FDDEBUG
+Якщо опцўя вўдлагодження була включена при компўляцў∙ FreeDOS, ця команда
+вмикаї чи вимикаї режим виводу вўдлагоджувально∙ ўнформацў∙ на термўнал.
+
+FDDEBUG [ON | OFF | файл]
+
+Уведўть FDDEBUG без параметрўв для показу поточного статуту вўдлагодження.
+Якщо у командному рядку для цўї∙ команди задано файл, увесь вўдлагоджувальний
+вивўд здўйснюватиметься у цей файл й записуватиметься у його кўнець (якщо вўн
+ўснуї). Для перенаправлення виводу вўдлагоджувально∙ ўнформацў∙ може бути
+вказано стандартнў ўмена "stdout" чи "stderr" для перенаправлення вўдповўдно
+на екран чи на вивўдний термўнал для повўдомлень про помилки.
+.
+
+:TEXT_CMDHELP_VOL
+Вўдображення за умови ўснування мўтки тома й серўйного номера диску.
+
+VOL [диск:]
+.
+
+:TEXT_CMDHELP_QUESTION#1
+Вўдображення перелўку усўх команд й вбудованих розширень командно∙ оболонки.
+
+?                     Вўдображення перелўку усўх команд й вбудованих
+                      розширень командно∙ оболонки.
+
+?команда [параметр]   Виведення запиту на виконання визначено∙ команди,
+                      немовби як у режимў увўмкненого трасування.
+.
+
+:TEXT_CMDHELP_WHICH
+Пошук й вўдображення ўменў виконувального файлу для тўї∙ чи ўншо∙
+зовнўшньо∙ команди.
+
+WHICH {команда}
+.
+
+:TEXT_CMDHELP_MEMORY#1
+Вўдображення статистики використання внутрўшньо∙ пам'ятў FreeCOM
+
+MEMORY
+
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+Приймач, вказаний у командў COPY, не може мўстити символ об'їднання ('+').
+.
+
+:TEXT_DELETE_FILE#1
+Знищення файлу "%s".
+.
