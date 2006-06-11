@@ -19,6 +19,9 @@
  *   screen.
  *
  * $Log$
+ * Revision 1.7  2006/06/11 02:06:11  blairdude
+ * All of FreeCOM now uses write instead of putchar and intr instead of int86[x] or intdos[x]
+ *
  * Revision 1.6  2004/08/19 19:10:49  skaus
  * fix: CLS: cut debug message
  *
@@ -41,15 +44,15 @@
 
 #pragma argsused
 int cmd_cls(char *param)
-{	struct REGPACK r;
-
-	putchar('\xc');		/*  ^L Form feed */
+{
+    write( 1, "\xc", 1 ); /* ^L Form feed */
 	fflush(stdout);
 	fflush(stderr);
 
 	/* Output stream is neither a file nor NUL nor CLOCK$ */
 	if(((fdattr(1) ^ 0x80) & (0x80 | 0x08 | 0x04)) == 0) {
 		/* Now roll the screen */
+        struct REGPACK r;
 		r.r_ax = 0x0600;	/* Scroll window up // entire window */
 		r.r_bx = 0x0700;	/* Attribute to write */
 		r.r_cx = 0x0000;	/* Upper left */
