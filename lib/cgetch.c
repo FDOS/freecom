@@ -6,9 +6,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/06/11 06:50:49  blairdude
+	Removed usage of Turbo C's getch to remove idle ...getch... object modules being compiled in.
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -42,6 +45,17 @@
 #include "../include/command.h"
 #include "../include/keys.h"
 #include "../include/misc.h"
+
+static int mygetch( void )
+{
+    struct REGPACK regs;
+    regs.r_ax = 0x0700;
+    intr(0x21, &regs);
+    return (regs.r_ax)&0xFF;
+}
+
+#define getch mygetch
+
 
 int cgetchar(void)
 {	int c;
