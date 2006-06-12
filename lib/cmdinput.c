@@ -16,14 +16,14 @@
 
 static unsigned orgx, orgy;		/* start of current line */
 
-int mywherex( void )
+unsigned mywherex( void )
 {
-    return( int )( *( ( char far * )MK_FP( 0x0040, 0x0050 ) ) + 1 );
+    return( unsigned )( *( ( char far * )MK_FP( 0x0040, 0x0050 ) ) + 1 );
 }
 
-static int mywherey( void )
+static unsigned mywherey( void )
 {
-    return( int )( *( ( char far * )MK_FP( 0x0040, 0x0051 ) ) + 1 );
+    return( unsigned )( *( ( char far * )MK_FP( 0x0040, 0x0051 ) ) + 1 );
 }
 
 #undef _NOCURSOR

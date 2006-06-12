@@ -5,10 +5,13 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.6  2006/06/12 14:43:59  blairdude
+	Fix for potential bug noticed by Arkady
+
 	Revision 1.5  2006/06/12 04:55:42  blairdude
 	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
 	significantly smaller.
-
+	
 	Revision 1.4  2006/06/11 02:47:05  blairdude
 	
 	
@@ -93,10 +96,10 @@ void displayPrompt(const char *pr)
       case 'B': putchar('|'); break;
       case 'C': putchar('('); break;
       /* case 'D': see below */
-      case 'E': putchar('27');  break; /* Decimal 27 */
+      case 'E': putchar(27);  break; /* Decimal 27 */
       case 'F': putchar(')');  break;
       case 'G': putchar('>'); break;
-      case 'H': putchar('8');   break; /* Decimal 8 */
+      case 'H': putchar(8);   break; /* Decimal 8 */
       case 'L': putchar('<'); break;
       /* case 'M': putchar('<'); break; remote name of current drive */
       /* case 'N': see below */
