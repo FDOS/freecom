@@ -440,7 +440,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     if (!bc->bfile)
     {                           /* modifyable batchfiles */
-      if ((bc->bfile = fopen(bc->bfnam, "rt")) == 0)
+      if ((bc->bfile = fopen(bc->bfnam, "rb")) == 0)
       {
         error_bfile_vanished(bc->bfnam);
         exit_batch();
