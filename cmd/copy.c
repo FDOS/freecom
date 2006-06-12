@@ -284,19 +284,33 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 
       fclose(fout);
       if(!destIsDevice) {	/* Devices do always exist */
-      	switch(userprompt(PROMPT_OVERWRITE_FILE, rDest)) {
-		default:	/* Error */
-		case 4:	/* Quit */
-			  free(rDest);
-			  return 0;
-		case 3:	/* All */
-			optY = 1;
-		case 1: /* Yes */
-			break;
-		case 2:	/* No */
-			free(rDest);
-			continue;
-		}
+        if((fin = fdevopen(rSrc, "r")) == 0) {
+        /* 
+         * For some reason, passing rSrc directly to error_open_file
+         * prints what seems to be garble... bug in compiler? memory leak?
+         */
+            char newFname[MAXPATH];
+            strcpy( newFname, rSrc );
+            error_open_file( newFname );
+            free( rSrc );
+            free( rDest );
+            return 0;
+        } else {
+            fclose( fin );
+          	switch(userprompt(PROMPT_OVERWRITE_FILE, rDest)) {
+	    	default:	/* Error */
+		    case 4:	/* Quit */
+    			  free(rDest);
+	    		  return 0;
+		    case 3:	/* All */
+			    optY = 1;
+    		case 1: /* Yes */
+	    		break;
+		    case 2:	/* No */
+			    free(rDest);
+    			continue;
+    		}
+        }
 	  }
     }
     if(cbreak) {
