@@ -45,8 +45,7 @@ int cmd_echo(char *param)
 	case OO_Null:	case OO_Empty:
 	default:
 	  if(nostatus)
-		putchar('\n');
-//        write( 1, "\n", 1 );
+		outc('\n');
 	  else
 		displayString(TEXT_MSG_ECHO_STATE, echo ? D_ON : D_OFF);
 	  break;

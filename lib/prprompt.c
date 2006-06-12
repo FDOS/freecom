@@ -5,9 +5,15 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.4  2006/06/11 02:47:05  blairdude
-	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	Revision 1.5  2006/06/12 04:55:42  blairdude
+	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
+	significantly smaller.
 
+	Revision 1.4  2006/06/11 02:47:05  blairdude
+	
+	
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	
 	Revision 1.3  2004/05/03 20:36:50  skaus
 	fix: PROMPT $V: include FreeCOM version information [#1776]
 	
@@ -60,7 +66,7 @@
 #define PROMPTVAR "PROMPT"
 
 #undef putchar
-#define putchar(x) write( 1, x, 1 )
+#define putchar outc
 
 void displayPrompt(const char *pr)
 {
@@ -80,29 +86,28 @@ void displayPrompt(const char *pr)
   while (*pr)
   {
     if(*pr != '$') {
-//      putchar(*pr);
-      write( 1, &*pr, 1 );
+      putchar(*pr);
     } else {
       switch (toupper(*++pr)) {
-      case 'A': putchar("&"); break;
-      case 'B': putchar("|"); break;
-      case 'C': putchar("("); break;
+      case 'A': putchar('&'); break;
+      case 'B': putchar('|'); break;
+      case 'C': putchar('('); break;
       /* case 'D': see below */
-      case 'E': putchar("\33");  break; /* Decimal 27 */
-      case 'F': putchar(")");  break;
-      case 'G': putchar(">"); break;
-      case 'H': putchar("\10");   break; /* Decimal 8 */
-      case 'L': putchar("<"); break;
+      case 'E': putchar('27');  break; /* Decimal 27 */
+      case 'F': putchar(')');  break;
+      case 'G': putchar('>'); break;
+      case 'H': putchar('8');   break; /* Decimal 8 */
+      case 'L': putchar('<'); break;
       /* case 'M': putchar('<'); break; remote name of current drive */
       /* case 'N': see below */
       /* case 'P': see below */
-      case 'Q': putchar("="); break;
-      case 'S': putchar(" "); break;
+      case 'Q': putchar('='); break;
+      case 'S': putchar(' '); break;
       /* case 'T': see below */
       /* case 'V': see below */
 
-      case '$': putchar("$"); break;
-      case '_': putchar("\n"); break;
+      case '$': putchar('$'); break;
+      case '_': putchar('\n'); break;
       /* case '+': see below */
 
         case 'D':
@@ -115,9 +120,7 @@ void displayPrompt(const char *pr)
           }
         case 'N':
           {
-            char p[ 1 ];
-            p[ 0 ] = ( getdisk() + 'A' );
-            putchar( p );
+            outc( ( getdisk() + 'A' ) );
             break;
           }
         case 'P':
@@ -157,7 +160,7 @@ void displayPrompt(const char *pr)
 			info = &CTXT_INFO_STRUCT(CTXT_TAG_DIRSTACK);
 			assert(info);
 			if((i = info->c_nummax) > 0) do {
-				putchar("+");
+				putchar('+');
 			} while(--i);
 #endif
          }

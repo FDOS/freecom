@@ -39,8 +39,7 @@ int cmd_pause(char *param)
 		displayString(TEXT_MSG_PAUSE);
 
 	cgetchar();
-/*	putchar('\n');*/
-    write( 1, "\n", 1 );
+	outc('\n');
 
 	return 0;
 }

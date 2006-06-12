@@ -78,12 +78,10 @@ int cmd_which(char *param)
 		assert(arg[i]);
 		fputs(arg[i], stdout);
 		if((p = find_which(arg[i])) != 0) {
-//			putchar('\t');
-            write( 1, "\t", 1 );
+			outc('\t');
 			puts(p);
 		} else {
-//			putchar('\n');
-            write( 1, "\n", 1 );
+			outc('\n');
 		}
 	}
 

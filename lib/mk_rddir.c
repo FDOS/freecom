@@ -28,7 +28,7 @@ int lfn_mrc_dir(const char *path, int func)
         r.r_ds = FP_SEG( path );
 	intr(0x21, &r);
 }
-    return( ( r.r_flags & 1 ) ? -1 : 0 );
+    return( -( r.r_flags & 1 ) );
 }
 
 

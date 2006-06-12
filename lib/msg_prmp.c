@@ -6,9 +6,15 @@
 	map key to metakey, return metakey if valid.
 
 	$Log$
-	Revision 1.3  2006/06/11 02:47:05  blairdude
-	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	Revision 1.4  2006/06/12 04:55:42  blairdude
+	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
+	significantly smaller.
 
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	
+	
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -68,8 +74,7 @@ int userprompt(unsigned id,...)
 	while((ch = vcgetchar()) == 0 || (ch = mapMetakey(str, ch)) == 0)
 		beep();                     /* hit erroreous character */
 
-//	putchar('\n');                /* advance to next line */
-    write( 1, "\n", 1 );
+	outc('\n');                /* advance to next line */
 	freePromptString(str, fmt);
 
 	return ch;

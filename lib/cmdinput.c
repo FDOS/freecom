@@ -16,6 +16,63 @@
 
 static unsigned orgx, orgy;		/* start of current line */
 
+int mywherex( void )
+{
+    return( int )( *( ( char far * )MK_FP( 0x0040, 0x0050 ) ) + 1 );
+}
+
+static int mywherey( void )
+{
+    return( int )( *( ( char far * )MK_FP( 0x0040, 0x0051 ) ) + 1 );
+}
+
+#undef _NOCURSOR
+#undef _NORMALCURSOR
+#undef _SOLIDCURSOR
+#undef _HALFCURSOR
+#define _NOCURSOR     3
+#define _HALFCURSOR   2
+#define _NORMALCURSOR 0
+#define _SOLIDCURSOR  1
+
+static void my_setcursortype( unsigned short state )
+{
+   struct REGPACK regs;
+   int cur_mode;
+
+   regs.r_ax = 0x0F00;
+   intr( 0x21, &regs );
+   cur_mode = regs.r_ax & 0xFF;
+   regs.r_ax = 0x0100;
+   /* ch == start line. cl == end line */
+
+   switch (state)
+   {
+          case _SOLIDCURSOR :
+             regs.r_cx = (cur_mode == 7) ? 0x010C : 0x0107;
+             break;
+          case _NORMALCURSOR:
+             regs.r_cx = (cur_mode == 7) ? 0x0B0C : 0x0607;
+             break;
+#if 0 /* Unused */
+          case _NOCURSOR    :
+             regs.r_cx = 0x2020;
+             break;
+          case _HALFCURSOR  :
+             regs.r_cx = (cur_mode == 7) ? 0x070C :  0x0407;
+             break;
+          default           :
+             regs.r_cx = state;
+             break;
+#endif
+   }
+   intr( 0x10, &regs );
+}
+
+#define wherex mywherex
+#define wherey mywherey
+#define _setcursortype my_setcursortype
+
 static int isworddelimiter(unsigned c)
 {
 	return c == ' ' || c == '\t';
@@ -24,9 +81,9 @@ static int isworddelimiter(unsigned c)
 /* Print a character to current cursor position
 	Updates cursor postion
  */
-static void outc(char c)
+void outc(char c)
 {
-//	putchar(c);
+	fflush( stdout );
 	write( 1, &c, 1 );
 }
 /* Print a blank to current cursor postion

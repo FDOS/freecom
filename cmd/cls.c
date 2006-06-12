@@ -19,7 +19,13 @@
  *   screen.
  *
  * $Log$
+ * Revision 1.8  2006/06/12 04:55:42  blairdude
+ * All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
+ * significantly smaller.
+ *
  * Revision 1.7  2006/06/11 02:06:11  blairdude
+ *
+ *
  * All of FreeCOM now uses write instead of putchar and intr instead of int86[x] or intdos[x]
  *
  * Revision 1.6  2004/08/19 19:10:49  skaus
@@ -45,7 +51,7 @@
 #pragma argsused
 int cmd_cls(char *param)
 {
-    write( 1, "\xc", 1 ); /* ^L Form feed */
+    outc( '\xc' ); /* ^L Form feed */
 	fflush(stdout);
 	fflush(stderr);
 

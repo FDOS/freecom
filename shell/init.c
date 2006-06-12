@@ -512,7 +512,8 @@ int initialize(void)
 		autoexec = user_autoexec? user_autoexec: AUTO_EXEC;
 
 		showinfo = 0;
-		short_version();
+//		short_version();
+		cmd_ver(NULL);
 
 		if(skipAUTOEXEC) {		/* /D option */
 			showinfo = 0;
@@ -530,8 +531,7 @@ int initialize(void)
 				      && !(r.r_cx > 0x101 || (r.r_bx & 0xff) > 24))) {
 					displayString(TEXT_MSG_INIT_BYPASS_AUTOEXEC, autoexec);
 					key = cgetchar_timed(3);
-//					putchar('\n');
-					write( 1, "\n", 1 );
+					outc('\n');
 				} else key = 0;
 
 				if(key == KEY_F8)
@@ -570,7 +570,8 @@ int initialize(void)
 
   if (showinfo)
   {
-    short_version();
+//    short_version();
+    cmd_ver(NULL);
 /* #ifndef DEBUG		No more commands
     putchar('\n');
     showcmds(0);

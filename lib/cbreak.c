@@ -5,9 +5,13 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/06/12 04:55:42  blairdude
+	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
+	significantly smaller.
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:52  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -41,11 +45,32 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 #include "../include/batch.h"
 #include "../include/misc.h"
 #include "../include/command.h"
 #include "../strings.h"
+
+/* This is to prevent all that Turbo C CONIO stuff from being linked in */
+void mycprintf( char *fmt, ... )
+{
+    va_list args;
+    char buffer[ 512 ];
+    int consolehandle = _open( "CON", O_WRONLY );
+    /* 
+     * Just as cprintf _ensures_ printing directly to the console, so will
+     * opening the console and writing to it do the same
+     */
+
+    va_start( args, fmt );
+    vsprintf( buffer, fmt, args );
+    _write( consolehandle, buffer, strlen( buffer ) );
+    _close( consolehandle );
+}
+
+#define cprintf mycprintf
+#define cputs mycprintf
 
 int chkCBreak(int mode)
 {

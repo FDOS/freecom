@@ -78,6 +78,8 @@ int defaultToSwap = FALSE;
 	*/
 int swapContext = TRUE;					/* may destroy external context */
 
+extern int mywherex( void );
+
 static void execute(char *first, char *rest)
 {
   /*
@@ -660,9 +662,8 @@ int process_input(int xflag, char *commandline)
       /* Go Interactive */
 		interactive_command = 1;		/* directly entered by user */
 		/* Ensure the prompt starts at column #0 */
-		if(echo && (wherex()>1))
-//			putchar('\n');
-			write( 1, "\n", 1 );
+		if(echo && (mywherex()>1))
+			outc('\n');
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
       tracemode = 0;          /* reset trace mode */
       }

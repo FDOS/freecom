@@ -59,6 +59,7 @@ extern int swapOnExec, defaultToSwap, swapContext;
 void display_errno_fnam_error(const char * const fnam);
 void displayExitcode(void);
 
+void outc( char c );
 int cgetchar(void);
 int vcgetchar(void);
 int vcgetcstr(const char *const legalCh);

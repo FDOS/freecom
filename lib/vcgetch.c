@@ -6,9 +6,15 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.3  2006/06/11 02:47:05  blairdude
-	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	Revision 1.4  2006/06/12 04:55:42  blairdude
+	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
+	significantly smaller.
 
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	
+	
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -49,15 +55,12 @@
 
 int vcgetchar(void)
 {
-//	int ch;
-	char ch[ 1 ];
+	int ch;
 
-	ch[ 0 ] = cgetchar();
-//	putchar(isprint(ch) ? ch : ' ');
-//	putchar('\b');
-    write( 1, isprint(ch[ 0 ]) ? ch : " ", 1 );
-    write( 1, "\b", 1 );
+	ch = cgetchar();
+	outc(isprint(ch) ? ch : ' ');
+	outc('\b');
 	fflush(stdout);
 
-	return cbreak? KEY_CTL_C: ch[ 0 ];
+	return cbreak? KEY_CTL_C: ch;
 }

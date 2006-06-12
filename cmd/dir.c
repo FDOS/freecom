@@ -551,8 +551,7 @@ static int incline(void)
 
 static int flush_nl(void)
 { if(need_nl) {
-//    putchar('\n');
-    write( 1, "\n", 1 );
+    outc('\n');
     return incline();
   }
 
@@ -651,8 +650,7 @@ static int dir_print_header(int drive)
 
         /* Added to exactly match DOS's formatting. */
   if ( (optS) && (rv == 0) ) {
-//      putchar('\n');
-      write( 1, "\n", 1 );
+      outc('\n');
       rv = incline();
   }
 
@@ -738,7 +736,7 @@ static int dir_print_free(unsigned long dirs)
   /* Note: RBIL carry clear and al==0 also means unimplemented 
      alternately carry set and ax==undefined (usually unchanged) for unimplemented
   */  
-  if(!( r.r_flags & 1 ) && r.r_ax) {
+  if(!( r.r_flags & 1 ) && ( r.r_ax & 0xFF) ) {
 	dprintf(("[DIR: Using FAT32 info]\n"));
 	clustersize = FAT32_Free_Space.sectors_per_cluster
 	 * FAT32_Free_Space.bytes_per_sector;
@@ -799,8 +797,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
       if (++cDir->linecount == WIDE_COLUMNS)
       {
         /* outputted 5 columns */
-//        putchar('\n');
-        write( 1, "\n", 1 );
+        outc('\n');
         rv = incline();
         cDir->linecount = 0;
       }
@@ -859,8 +856,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 			error_out_of_memory();
 			return E_NoMem;
 		}
-//        putchar(' ');
-        write( 1, " ", 1 );
+        outc(' ');
 		fputs(p, stdout);
 		free(p);
 		p = nls_maketime(NLS_MAKE_SHORT_AMPM, hour, minute, -1, 0);
@@ -868,8 +864,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 			error_out_of_memory();
 			return E_NoMem;
 		}
-//        putchar(' ');
-        write( 1, " ", 1 );
+        outc(' ');
 		fputs(p, stdout);
 		free(p);
 		#ifdef FEATURE_LONG_FILENAMES
@@ -880,8 +875,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 			if (descriptionExists)
 				showDescription(file->ff_name, ext);
 		#endif
-//        putchar('\n');
-        write( 1, "\n", 1 );
+        outc('\n');
 	 }
 
       rv = incline();
@@ -1055,8 +1049,7 @@ static int dir_list(int pathlen
          , path);
 	    path[pathlen - 1] = '\\';	/* need this below */
         if((rv = incline()) == E_None) {
-//        putchar('\n');
-        write( 1, "\n", 1 );
+        outc('\n');
         rv = incline();
     }
    }
@@ -1098,8 +1091,7 @@ static int dir_list(int pathlen
   }
 
   if (rv == E_None && optW && (cDir.linecount != 0)) {
-//    putchar('\n');
-    write( 1, "\n", 1 );
+    outc('\n');
     rv = incline();
   }
 
