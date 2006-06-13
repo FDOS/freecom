@@ -16,14 +16,17 @@
 
 static unsigned orgx, orgy;		/* start of current line */
 
-unsigned mywherex( void )
-{
-    return( unsigned )( *( ( char far * )MK_FP( 0x0040, 0x0050 ) ) + 1 );
+#define MK_PTR(type,seg,ofs) ((type FAR*) MK_FP (seg, ofs))
+/* safer edition of MK_FP (Arkady) */
+typedef struct { unsigned char col, row; } SCRPOS;
+#define _scr_page      (* MK_PTR (volatile const unsigned char, 0, 0x462))
+#define _scr_pos_array    MK_PTR (volatile const SCRPOS, 0, 0x450)
+unsigned mywherex (void) {
+    return _scr_pos_array [_scr_page].col + 1;
 }
 
-static unsigned mywherey( void )
-{
-    return( unsigned )( *( ( char far * )MK_FP( 0x0040, 0x0051 ) ) + 1 );
+unsigned mywherey (void) {
+    return _scr_pos_array [_scr_page].row + 1;
 }
 
 #undef _NOCURSOR
