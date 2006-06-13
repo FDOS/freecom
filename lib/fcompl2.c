@@ -6,10 +6,13 @@
 	This file bases on FILECOMP.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.5  2006/06/13 02:10:19  blairdude
+	Cleaned up some code, moved write in outc to fwrite to make everybody happy (thanks to Arkady for the reports)
+
 	Revision 1.4  2006/06/12 04:55:42  blairdude
 	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
 	significantly smaller.
-
+	
 	Revision 1.3  2006/06/11 02:47:05  blairdude
 	
 	
@@ -55,9 +58,6 @@
 
 #include "../include/command.h"
 #include "../strings.h"
-
-#undef putchar
-#define putchar outc
 
 int show_completion_matches(char *str, unsigned charcount)
 {
@@ -118,7 +118,7 @@ int show_completion_matches(char *str, unsigned charcount)
   if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
   {                             // find anything
 
-    putchar('\n');
+    outc('\n');
     count = 0;
     do
     {
@@ -134,14 +134,14 @@ int show_completion_matches(char *str, unsigned charcount)
       displayString(TEXT_FILE_COMPLATION_DISPLAY, fname);
       if (++count == 5)
       {
-        putchar('\n');
+        outc('\n');
         count = 0;
       }
     }
     while (FINDNEXT(&file) == 0);
 
     if (count)
-      putchar('\n');
+      outc('\n');
 
   }
   else

@@ -5,10 +5,13 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2006/06/13 02:10:19  blairdude
+	Cleaned up some code, moved write in outc to fwrite to make everybody happy (thanks to Arkady for the reports)
+
 	Revision 1.3  2006/06/12 04:55:42  blairdude
 	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
 	significantly smaller.
-
+	
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -53,7 +56,7 @@
 #include "../strings.h"
 
 /* This is to prevent all that Turbo C CONIO stuff from being linked in */
-void mycprintf( char *fmt, ... )
+static void mycprintf( char *fmt, ... )
 {
     va_list args;
     char buffer[ 512 ];
@@ -67,10 +70,10 @@ void mycprintf( char *fmt, ... )
     vsprintf( buffer, fmt, args );
     _write( consolehandle, buffer, strlen( buffer ) );
     _close( consolehandle );
+    va_end( args );
 }
 
 #define cprintf mycprintf
-#define cputs mycprintf
 
 int chkCBreak(int mode)
 {
@@ -103,14 +106,14 @@ int chkCBreak(int mode)
       		break;
       	}
       	if(bc && bc->bfnam)
-			cprintf(fmt, bc->bfnam);
+			mycprintf(fmt, bc->bfnam);
       	else {
       		char *fnam;
 
       		if((fnam = getString(TEXT_UNKNOWN_FILENAME)) == 0)
-      			cprintf(fmt, "<<unknown>>");
+      			mycprintf(fmt, "<<unknown>>");
       		else {
-				cprintf(fmt, fnam);
+				mycprintf(fmt, fnam);
 				free(fnam);
 			}
 		}
@@ -118,7 +121,7 @@ int chkCBreak(int mode)
 		while((ch = cgetchar()) == 0 || (ch = mapMetakey(chars, ch)) == 0)
 			beep();
 
-		cputs("\r\n");
+		mycprintf("\r\n");
 		freePromptString(chars, fmt);
 
 		switch(ch) {
