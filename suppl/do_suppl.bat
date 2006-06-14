@@ -5,8 +5,8 @@ if not exist vars.bat goto err1
 call vars.bat
 
 :- Extract the source files (Force overwrite)
-untar.exe -f suppl.tgz
-if errorlevel 1 goto ende
+rem untar.exe -f suppl.tgz
+rem if errorlevel 1 goto ende
 
 cd src
 
@@ -36,14 +36,16 @@ if errorlevel 1 goto ende
 Echo Library created
 Echo Removing sources files
 :- Prevent DEL *.* from questioning us
-DEL *.c
-DEL *.h
+rem DEL *.c
+rem DEL *.h
 DEL *.obj
-FOR %%A in (*.*) DO DEL %%A
-FOR %%A in (NLS\*.*) DO DEL %%A
-RMDIR nls
+DEL objlist.txt
+DEL %CFG% tccdos.cfg
+rem FOR %%A in (*.*) DO DEL %%A
+rem FOR %%A in (NLS\*.*) DO DEL %%A
+rem RMDIR nls
 CD ..
-RMDIR src
+rem RMDIR src
 
 Echo done.
 Echo All DONE >all_done

@@ -5,7 +5,7 @@ CFG_DEPENDENCIES = suppl.mak
 
 all : $(CFG) suppl_$(SHELL_MMODEL).lib
 
-suppl_$(SHELL_MMODEL).lib: suppl.tgz untar.exe
+suppl_$(SHELL_MMODEL).lib: # suppl.tgz untar.exe
 	echo SET CFG=$(CFG)>vars.bat
 	echo SET SUPPL=suppl_$(SHELL_MMODEL)>>vars.bat
 	echo SET CC=$(CC)>>vars.bat
