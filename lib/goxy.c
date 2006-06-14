@@ -7,9 +7,14 @@
 	This file bases on CMDINPUT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
-	Revision 1.3  2006/06/11 02:47:05  blairdude
-	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	Revision 1.4  2006/06/14 05:25:06  blairdude
+	goxy now uses the current video page for setting the cursor position
 
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	
+	
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -48,21 +53,10 @@
 
 void goxy(const unsigned char x, const unsigned char y)
 {
-#if 0
-	struct REGPACK regs;
-
-	assert(x > 0);
-	assert(y > 0);
-
-	regs.r_ax = 0x0200;                /* set cursor position */
-	regs.r_dx = ( ( y - 1 ) & 0xFF ) | ( ( x - 1 ) >> 8 );
-/*	regs.h.dl = x - 1; */
-	regs.r_bx = 0;                /* video page 0 */
-	intr(0x10, &regs);
-#endif
+    _AH = 0x0F;
+    geninterrupt( 0x10 );
     _AH = 0x02;
     _DH = ( y - 1 );
     _DL = ( x - 1 );
-    _BX = 0;
     geninterrupt( 0x10 );
 }
