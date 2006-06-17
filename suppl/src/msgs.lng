@@ -1,0 +1,4 @@
+	/* standard strings */
+#include "nls/english.lng"
+	/* generated error codes */
+#include "nls/english.err"

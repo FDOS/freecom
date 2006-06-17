@@ -1,0 +1,16 @@
+This file contains the "Known Bugs" section.
+
+o All environment functions, except env_matchVar(), are case-sensitive! Thus
+	env_findVar(0, "temp") will fail, because normally all DOS environment
+	variables are in upper-case.
+	Well, this is, of course :-), not a bug but a feature. Just use the
+	env_matchVar() to adjust the variable's name prior using it.
+
+o Because Micro-C does not have neither ungetc() nor feof(), Feof()
+	simulates an ungetc() via fseek() and assumes always true for
+	FILE* pointers in write mode.
+
+o The control break catcher terminates the process using the program's
+	exit() function. If the catcher is activated when the process is
+	not currently active, e.g. a child is currently running, this
+	should confuse DOS & application crashablely.

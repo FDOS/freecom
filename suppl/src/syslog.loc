@@ -1,0 +1,66 @@
+/*
+    This file is part of SUPPL - the supplemental library for DOS
+    Copyright (C) 1996-2000 Steffen Kaiser
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+/* $Id$
+   $Locker$	$Name$	$State$
+
+	Internal declarations for the SYSLOG subsystem.
+
+*/
+
+#ifndef __SYSLOG_LOC
+#define __SYSLOG_LOC
+
+#include <assert.h>
+#include <portable.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include "syslog.h"
+
+/* How to construct the filenmae from the basename */
+#define SYSLOG_FNAM(fnam)	EStrConcat(2, fnam, ".LOG")
+
+/* Extract level & facility from priority */
+#define LEVEL(pri)	(((pri) >> 12) & 0xf)
+#define FACILITY(pri)	((pri) & 0xfff)
+
+/* Internal variables */
+extern int syslog_options;
+extern int syslog_facility;
+extern FILE *syslog_logfile;
+extern char *syslog_fnam;
+extern char syslog_openmode[];
+extern char *syslog_ident;
+extern int syslog_opencount;
+
+/*
+ *	Dump one line via printf() into the log file
+ *	Dump the time into the log file.
+ *	The log file must be open already.
+ */
+void syslog_print(const char * const format, ...);
+void syslog_vprint(const char * const format, va_list ap);
+void syslog_print_time(void);
+
+/*
+ * Dump a newline character into the log file, if the passed
+ * string does not terminate with one.
+ */
+void syslog_eol(const char * const str);
+
+#endif

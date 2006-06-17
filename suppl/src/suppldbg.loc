@@ -1,0 +1,125 @@
+/*
+    This file is part of SUPPL - the supplemental library for DOS
+    Copyright (C) 1996-2000 Steffen Kaiser
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+/* $RCSfile$
+   $Locker$	$Name$	$State$
+
+   	Declarations for the local debug implementation
+
+*/
+
+#ifndef __SUPPL_DBG_LOC
+#define __SUPPL_DBG_LOC
+
+#include <stdarg.h>
+
+#include "suppldbg.h"
+#include "supplio.h"
+
+	/* Extension appended to application name to form the logfile name */
+#define DBG_EXTENSION ".DBG"
+
+	/* Exit code if debug system terminates application
+		E*() functions use 125 */
+#define DBG_EXIT_CODE 124
+
+/*
+	The log list is a double linked list;
+
+	The sentinel element contains the default flag ('+' == enabled or
+	'-' == disabled). To look up, the list is always completely walked
+	through and the last matched entry is used.
+
+	Each element is prefixed by either '+' == enabled or '-' == disabled.
+*/
+typedef struct SUPPL_LOG_LIST {
+	struct SUPPL_LOG_LIST *suppl_l_nxt;
+	char suppl_l_name[2];			/* Dynamically expanded */
+} suppl_log_list_t;
+
+/* Declarations for the function logging package
+
+	"Stack" expands to the currently active logging status and
+	the macro S() expands to a member of this status.
+*/
+
+struct SUPPL_LOG_STATUS {
+	struct SUPPL_LOG_STATUS *suppl_l_nxt;
+	suppl_log_list_t suppl_l_files;		/* files to be logged */
+	suppl_log_list_t suppl_l_classes;	/* classes to be logged */
+	suppl_log_list_t suppl_l_functions;	/* functions to be logged */
+	int suppl_l_maxdepth;				/* maximum nesting level */
+	FLAG suppl_l_enabled;				/* logging active? */
+	FLAG suppl_l_indent;				/* indent output? */
+	FLAG suppl_l_ownFiles;				/* 'files' member NOT inherited */
+	FLAG suppl_l_ownClasses;			/* 'classes' member NOT inherited */
+	FLAG suppl_l_ownFunctions;			/* 'functions' member NOT inherited */
+};
+typedef struct SUPPL_LOG_STATUS suppl_log_stack_t;
+
+extern suppl_log_stack_t *suppl_Stack;
+#define S(member)	suppl_Stack->suppl_l_##member
+
+extern int suppl_l_nestlevel;				/* current nesting level */
+extern FLAG suppl_l_fct_enabled;			/* function class permits logging */
+extern FILE *suppl_l_logfile;				/* logfile opened already? */
+extern char suppl_l_openmode[];				/* how to open the logfile */
+extern long suppl_l_count;					/* line counter */
+
+/* Prevent recursion of the debug/logging package */
+int suppl_log_lock(void);
+void suppl_log_unlock(void);
+
+#define suppl_log_chg_list(f,l,p)	\
+	suppl_log_chg_list_(&(f), &(l), p)
+
+void suppl_log_chg_list_(FLAG *ownCopy
+	, suppl_log_list_t *baseCopy
+	, suppl_log_sptr_t *p);
+
+suppl_log_list_t *suppl_log_mkf_item(int flag, suppl_log_csptr_t s
+	, size_t length);
+suppl_log_list_t *suppl_log_mk_item(suppl_log_csptr_t s);
+
+void suppl_log_dup_list(suppl_log_list_t *list);
+#define suppl_log_del_list(list)		\
+	suppl_log_del_list_(aS(list))
+void suppl_log_del_list_(suppl_log_list_t *list);
+
+int suppl_log_match_item(suppl_log_list_t *item
+	, suppl_log_csptr_t s);
+int suppl_log_find_list(suppl_log_list_t *list
+	, suppl_log_csptr_t s);
+int suppl_log_item_enabled(suppl_log_list_t *list
+	, suppl_log_csptr_t str);
+int suppl_log_find_list(suppl_log_list_t *list
+	, suppl_log_csptr_t str);
+int suppl_log_match_list(suppl_log_list_t *list
+	, suppl_log_csptr_t str);
+
+#define suppl_log_flag(flag,poi)		\
+	suppl_log_flag_(&(flag), (poi))
+void suppl_log_flag_(FLAG *flag, suppl_log_sptr_t *p);
+
+void suppl_log_log_item(suppl_log_csptr_t fmt, ...);
+void suppl_log_log_vitem(suppl_log_csptr_t fmt, va_list ap);
+void suppl_log_log_header(void);
+void suppl_log_log_trailer(void);
+void suppl_log_log_open(void);
+
+#endif

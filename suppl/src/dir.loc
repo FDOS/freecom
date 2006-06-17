@@ -1,0 +1,66 @@
+/*
+    This file is part of SUPPL - the supplemental library for DOS
+    Copyright (C) 1996-2000 Steffen Kaiser
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+/*
+	Includes DOS specific directory settings
+*/
+
+#ifndef _DIR__H
+#define _DIR__H
+
+#ifdef __TURBOC__
+#include <dir.h>
+#endif
+
+#ifdef _PAC_NOCLIB_
+
+#define MAXDIR 66		/* 64: path; +1: root sign; +1: NUL terminator */
+#define MAXDRIVE 3		/* 1: drive letter; +1: ':'; +1: NUL terminator */
+#define MAXNAME 9		/* 8: name; +1: NUL terminator */
+#define MAXEXT 5		/* 3: name; +1: dot; +1: NUL terminator */
+#define MAXPATH (MAXDIR + MAXDRIVE + MAXNAME + MAXEXT - 3)
+
+/* file attributes for Borland C */
+#define FA_NORMAL   0x00        /* no special */
+#define FA_RDONLY   0x01        /* Read only */
+#define FA_HIDDEN   0x02        /* Hidden */
+#define FA_SYSTEM   0x04        /* System */
+#define FA_LABEL    0x08        /* Volume */
+#define FA_DIREC    0x10        /* Directory */
+#define FA_ARCH     0x20        /* Archive */
+#define FA_ALL		0x3F
+
+/* findfirst()/findnext() block for Borland C */
+#define find_t ffblk		/* MSC's block structure is the same */
+#define _find_t ffblk
+#endif
+
+#ifdef __WATCOMC__
+#define MAXDIR 66		/* 64: path; +1: root sign; +1: NUL terminator */
+#define MAXDRIVE 3		/* 1: drive letter; +1: ':'; +1: NUL terminator */
+#define MAXNAME 9		/* 8: name; +1: NUL terminator */
+#define MAXEXT 5		/* 3: name; +1: dot; +1: NUL terminator */
+#define MAXPATH (MAXDIR + MAXDRIVE + MAXNAME + MAXEXT - 3)
+
+#define findfirst(pattern,buf,attrib) _dos_findfirst((pattern), (attrib)	\
+	, (struct find_t*)(buf))
+#define findnext(buf) _dos_findnext((struct find_t*)(buf))
+
+#endif
+
+#endif

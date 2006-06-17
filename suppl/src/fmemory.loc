@@ -1,0 +1,54 @@
+/*
+    This file is part of SUPPL - the supplemental library for DOS
+    Copyright (C) 1996-2000 Steffen Kaiser
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+/*
+	Set up the compiler depend macros
+	for far memory subsystem
+*/
+
+#ifdef COMPILE
+#undef COMPILE
+#endif
+
+#ifdef _MICROC_
+#define COMPILE
+
+#define fargDecl(type,name)	unsigned name/**/_segm, unsigned name/**/_ofs
+#define fargPass(name)	 name/**/_segm,  name/**/_ofs
+#endif
+
+#ifdef _TC_EARLY_
+#define COMPILE
+
+#define fargDecl(type,name)	type far * const  name
+#define fargPass(name)	 name
+#endif
+
+
+#ifdef COMPILE
+#include <portable.h>
+#include "fmemory.h"
+
+/* Don't create a new function as the "+1" is just one byte
+	normally. This function has to be called lots of time to
+	save more of these single bytes than a new function actually
+	would cost */
+#define _fstrlen1(name)	(_fstrlen(fargPass(name)) + 1)
+
+#define COMPILE
+#endif

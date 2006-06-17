@@ -1,0 +1,198 @@
+
+
+
+SYSLOG(3)           Linux Programmer's Manual           SYSLOG(3)
+
+
+NNAAMMEE
+       closelog,  openlog,  syslog  - send messages to the system
+       logger
+
+SSYYNNOOPPSSIISS
+       ##iinncclluuddee <<ssyysslloogg..hh>>
+
+       vvooiidd ooppeennlloogg(( cchhaarr _*_i_d_e_n_t,, iinntt _o_p_t_i_o_n,, iinntt  _f_a_c_i_l_i_t_y))
+
+       vvooiidd ssyysslloogg(( iinntt _p_r_i_o_r_i_t_y,, cchhaarr _*_f_o_r_m_a_t,, ......))
+
+       vvooiidd cclloosseelloogg(( vvooiidd ))
+
+
+DDEESSCCRRIIPPTTIIOONN
+       cclloosseelloogg(()) closes the descriptor being used  to  write  to
+       the system logger.  The use of cclloosseelloogg(()) is optional.
+
+       ooppeennlloogg(())  opens  a  connection to the system logger for a
+       program.  The string pointed to by _i_d_e_n_t is added to  each
+       message, and is typically set to the program name.  Values
+       for _o_p_t_i_o_n and _f_a_c_i_l_i_t_y are given  in  the  next  section.
+       The use of ooppeennlloogg(()) is optional; It will automatically be
+       called by ssyysslloogg(()) if necessary, in which case _i_d_e_n_t  will
+       default to NULL.
+
+       ssyysslloogg(())  generates  a  log  message,  which  will be dis-
+       tributed by ssyyssllooggdd(8).  _p_r_i_o_r_i_t_y is a combination of  the
+       _f_a_c_i_l_i_t_y  and the _l_e_v_e_l, values for which are given in the
+       next section.  The remaining arguments are a _f_o_r_m_a_t, as in
+       pprriinnttff(3) and any arguments required by the _f_o_r_m_a_t, except
+       that the two character %m will be replaced  by  the  error
+       message  string  (_s_t_r_e_r_r_o_r)  corresponding  to the present
+       value of _e_r_r_n_o.
+
+
+PPAARRAAMMEETTEERRSS
+       This section lists the parameters used to set  the  values
+       of _o_p_t_i_o_n, _f_a_c_i_l_i_t_y, and _p_r_i_o_r_i_t_y.
+
+   ooppttiioonn
+       The _o_p_t_i_o_n argument to ooppeennlloogg(()) is an OR of any of these:
+
+       LLOOGG__CCOONNSS
+              write directly to system console  if  there  is  an
+              error while sending to system logger
+
+       LLOOGG__NNDDEELLAAYY
+              open the connection immediately (normally, the con-
+              nection is opened when the first message is logged)
+
+       LLOOGG__PPEERRRROORR
+              print to stderr as well
+
+
+
+
+Linux                      15 Feb 1994                          1
+
+
+
+
+
+SYSLOG(3)           Linux Programmer's Manual           SYSLOG(3)
+
+
+       LLOOGG__PPIIDD
+              include PID with each message
+
+   ffaacciilliittyy
+       The _f_a_c_i_l_i_t_y argument is used to specify what type of pro-
+       gram is logging the message.  This lets the  configuration
+       file  specify that messages from different facilities will
+       be handled differently.
+
+       LLOOGG__AAUUTTHH
+              security/authorization  messages  (DEPRECATED   Use
+              LLOOGG__AAUUTTHHPPRRIIVV instead)
+
+       LLOOGG__AAUUTTHHPPRRIIVV
+              security/authorization messages (private)
+
+       LLOOGG__CCRROONN
+              clock daemon (ccrroonn and aatt)
+
+       LLOOGG__DDAAEEMMOONN
+              other system daemons
+
+       LLOOGG__KKEERRNN
+              kernel messages
+
+       LLOOGG__LLOOCCAALL00 through LLOOGG__LLOOCCAALL77
+              reserved for local use
+
+       LLOOGG__LLPPRR
+              line printer subsystem
+
+       LLOOGG__MMAAIILL
+              mail subsystem
+
+       LLOOGG__NNEEWWSS
+              USENET news subsystem
+
+       LLOOGG__SSYYSSLLOOGG
+              messages generated internally by ssyyssllooggdd
+
+       LLOOGG__UUSSEERR(default)
+              generic user-level messages
+
+       LLOOGG__UUUUCCPP
+              UUCP subsystem
+
+
+   lleevveell
+       This determines the importance of the message.  The levels
+       are, in order of decreasing importance:
+
+       LLOOGG__EEMMEERRGG
+              system is unusable
+
+
+
+
+Linux                      15 Feb 1994                          2
+
+
+
+
+
+SYSLOG(3)           Linux Programmer's Manual           SYSLOG(3)
+
+
+       LLOOGG__AALLEERRTT
+              action must be taken immediately
+
+       LLOOGG__CCRRIITT
+              critical conditions
+
+       LLOOGG__EERRRR
+              error conditions
+
+       LLOOGG__WWAARRNNIINNGG
+              warning conditions
+
+       LLOOGG__NNOOTTIICCEE
+              normal, but significant, condition
+
+       LLOOGG__IINNFFOO
+              informational message
+
+       LLOOGG__DDEEBBUUGG
+              debug-level message
+
+
+
+HHIISSTTOORRYY
+       A ssyysslloogg function call appeared in BSD 4.2.
+
+SSEEEE AALLSSOO
+       llooggggeerr(1), ssyysslloogg..ccoonnff(5), ssyyssllooggdd(8)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Linux                      15 Feb 1994                          3
+
+

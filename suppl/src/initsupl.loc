@@ -1,0 +1,66 @@
+/*
+    This file is part of SUPPL - the supplemental library for DOS
+    Copyright (C) 1996-2000 Steffen Kaiser
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+/*
+	Set up the compiler depend macros
+	-and-
+	Set up SUPPL global macros
+*/
+
+
+#include "supl_def.h"
+
+
+	/* Identify to compile a SUPPL file */
+#define _SUPPL_
+
+	/* Add the RCS ID into the files */
+#ifndef NDEBUG
+#define RCS_Version
+#endif
+
+
+/*
+ *	Debug settings
+ *	Note: Debugging is globally turned off when the NDEBUG macro is
+ *	defined, which causes to nullify assert()'s, too.
+ *	See SUPPLDBG.H	for more details.
+ */
+	/* Enable all debug/logging features of SUPPL */
+// #define SUPPL_DBG_ALL
+#define SUPPL_DBG_HEAP
+#define SUPPL_DBG_MEMORY
+// #define SUPPL_LOG_MEMORY
+#define SUPPL_LOG_FUNCTION
+
+	/* Prevent possible program crashes:
+		If the logfiles are closed rather than just flushed, the possibility
+		that the data is really commited to disk instead of kept in memory
+		(BUFFERs) is much higher; the disadvantage is that the logfiles
+		are opened and closed for each line individually, what makes logging
+		a very time-consuming action.
+
+		FLUSH is a weaker method, but less time-consuming.
+		CLOSE superceeds FLUSH.
+	*/
+#define DBG_ALWAYS_CLOSELOG
+// #define DBG_ALWAYS_FLUSHLOG
+// #define SYSLOG_ALWAYS_FLUSHLOG
+
+	/* Mark all files of this library as part of it */
+#define DBG_LIBRARY Suppl_SUPPL

@@ -1,0 +1,36 @@
+set nomore
+set autoindent
+set autowrite
+set noerrorbells
+set exrc
+set showmatch
+set shiftwidth=4  
+set tabstop=4  
+abbr #i #include
+abbr! #i #include
+abbr #d #define
+abbr! #d #define
+abbr #f #ifdef
+abbr! #f #ifdef
+abbr #n #ifndef
+abbr! #n #ifndef
+abbr #l #else
+abbr! #l #else
+abbr #e #endif
+abbr! #e #endif
+abbr MC Micro-C
+abbr! MC Micro-C
+abbr BC Borland C/Turbo C
+abbr! BC Borland C/Turbo C
+abbr TC Turbo C
+abbr! TC Turbo C
+abbr WC Watcom C
+abbr! WC Watcom C
+abbr PAC Pacific HiTech C
+abbr! PAC Pacific HiTech C
+abbr #E #define ESUPPL_
+abbr! #E #define ESUPPL_
+abbr #m #ifdef _MICROC_
+abbr #M #ifndef _MICROC_
+
+map q 0wCunless_segm(segm)

@@ -1,0 +1,29 @@
+/* $Id$
+   $Locker$	$Name$	$State$
+
+	Secure string functions.
+
+	They accept NULLs as string/memory pointers.
+
+   $Log$
+   Revision 1.1  2006/06/17 03:25:06  blairdude
+   Suppl files in CVS
+
+   Revision 1.1  1999/01/18 05:32:29  ska
+   Initial revision
+
+
+*/
+
+#ifndef __SSTR_H
+#define __SSTR_H
+
+#ifndef _MICROC_
+#include <string.h>
+#endif
+#include <portable.h>
+
+#define Strcmpi	Stricmp
+#define Strncmpi	Strnicmp
+#define Memcmpi	Memicmp
+

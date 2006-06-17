@@ -1,0 +1,7 @@
+This package contains: SUPPL a supplemental library written by
+		Copyright (C) 1995-98 Steffen Kaiser
+		Release Version 2.7
+
+Also included are:
+	- a patched version of DMAKE v4.00
+	- the utilities: RM, MSGCOMP, _XSET, FOREACH
