@@ -28,14 +28,18 @@
 
 #ifdef __TURBOC__ /* OpenWatcom has an LFN CLIB Extension available */
 
-#pragma warn -sus
-
-#define _STC __emit__(0xF9)
+#define _STC     __emit__(0xF9)
+#define _PUSH_DS __emit__(0x1E)
+#define _PUSH_ES __emit__(0x06)
+#define _POP_DS  __emit__(0x1F)
+#define _POP_ES  __emit__(0x07)
 
 char * getshortfilename( const char *longfilename )
 {
     static char shortfilename[ 128 ];
     
+    _PUSH_DS;
+    _PUSH_ES;
     _DS = FP_SEG( longfilename );
     _SI = FP_OFF( longfilename );
     _ES = FP_SEG( shortfilename );
@@ -47,148 +51,102 @@ char * getshortfilename( const char *longfilename )
 
     geninterrupt( 0x21 );
 
-    if( _AX == 0x7100 || _CFLAG ) return( NULL );
+    _POP_ES;
+    _POP_DS;
 
-    return( shortfilename );
+    return( ( _CFLAG || _AX == 0x7100 ) ?
+            strcpy( shortfilename, longfilename ) : shortfilename );
 }
 
 int lfn_chmod( const char *filename, int func, ... )
 {
-    char *sfn = getshortfilename( filename );
     int attrib = 0;
     va_list vargs;
 
-    if( sfn == NULL ) sfn = filename;
     va_start( vargs, func );
     if( func )attrib = va_arg( vargs, int );
     va_end( vargs );
 
-    return( _chmod( sfn, func, attrib ) );
+    return( _chmod( getshortfilename( filename ), func, attrib ) );
 }
 
-int lfnchmod( const char *filename, int mode )
+static void __creat_or_truncate( const char * filename, int mode )
 {
-    char *sfn = getshortfilename( filename );
-
-    if( sfn == NULL ) sfn = filename;
-    return( chmod( sfn, mode ) );
-}
-
-int lfncreat( const char *filename, int amode )
-{
-    char *sfn = getshortfilename( filename );
-
-    if( sfn == NULL ) sfn = filename;
-    return( creat( sfn, amode ) );
-}
-
-int lfn_creat( const char *filename, int mode )
-{
-    char *sfn = getshortfilename( filename );
-
-    if( sfn == NULL ) sfn = filename;
-    return( _creat( sfn, mode ) );
-}
-
-int lfncreatnew( const char *filename, int mode )
-{
-    char *sfn = getshortfilename( filename );
-
-    if( sfn == NULL ) sfn = filename;
-    return( creatnew( sfn, mode ) );
-}
-
-int lfncreattemp( const char *filename, int attrib )
-{
-    char *sfn = getshortfilename( filename );
-
-    if( sfn == NULL ) sfn = filename;
-    return( creattemp( sfn, attrib ) );
-}
-
-int lfnaccess( const char *filename, int mode )
-{
-    int attribs = lfn_chmod( filename, 0 );
-
-    return( ( attribs == -1 ) ? -1 : ( mode == 0 || mode == 1 || mode == 4 ) ?
-           0 : ( ( mode == 2 || mode == 6 ) && !( attribs & FA_RDONLY ) ) ? 0 :
-           -1 );
-}
-
-char * lfn_getdcwd( int drive, char *buffer, int size )
-{
-    char *tmpbuf;
-    static char longfilename[ 270 ];
-    
-    if( !buffer ) tmpbuf = _getdcwd( drive, NULL, size );
-    else if( _getdcwd( drive, tmpbuf, size ) == NULL ) return( NULL );
-    if( tmpbuf == NULL ) return( NULL );
-
-    _DS = FP_SEG( tmpbuf );
-    _DX = FP_OFF( tmpbuf );
-    _ES = FP_SEG( longfilename );
-    _DI = FP_OFF( longfilename );
-    _CL = 0x02;
-    _CH = 0x80;
-    _AX = 0x7160;
+    int handle;
+    _PUSH_DS;
+    _DS = FP_SEG( filename );
+    _SI = FP_OFF( filename );
+    _BX = O_WRONLY;
+    _CX = mode;
+    _DX = 0x10;
+    _AX = 0x716C;
     _STC;
 
     geninterrupt( 0x21 );
 
-    if( _AX == 0x7100 || _CFLAG ) return( ( buffer = tmpbuf ) );
-    if( size < strlen( longfilename ) ) {
-        errno = ERANGE;
-        return( NULL );
-    }
-    if( ( buffer = malloc( strlen( longfilename ) + 1 ) ) == NULL ) {
-        errno = ENOMEM;
-        return( NULL );
-    }
+    _POP_DS;
 
-    strcpy( buffer, longfilename );
-    return( buffer );
+    if( _CFLAG || ( handle = _AX ) == 0x7100 )
+        handle = creatnew( filename, mode );
+    _close( handle );
 }
 
-FILE * lfnfopen( const char *filename, const char *mode )
+int lfn_creat( const char *filename, int mode )
 {
-    char *sfn = getshortfilename( filename );
+    __creat_or_truncate( filename, mode );
+    return( _open( getshortfilename( filename ), O_BINARY|O_RDWR|O_TRUNC ) );
+}
 
-    if( sfn == NULL ) sfn = filename;
-    return( fopen( sfn, mode ) );
+int lfncreat( const char *filename, int amode )
+{
+    __creat_or_truncate( filename,
+                         ( !( amode & S_IWRITE ) ) ? FA_RDONLY : 0 );
+    return( _open( getshortfilename( filename ), _fmode|O_RDWR|O_TRUNC ) );
+
+}
+
+int lfncreatnew( const char *filename, int mode )
+{
+    if( access( getshortfilename( filename ), 0 ) == 0 ) {
+        errno = EEXIST;
+        return( -1 );
+    }
+    __creat_or_truncate( filename, mode );
+    return( _open( getshortfilename( filename ), O_RDWR ) );
+}
+
+FILE * lfnfopen( const char *filename, char *mode )
+{
+    if( strchr( mode, 'a' ) != NULL )
+        __creat_or_truncate( filename, 0 );
+    else if( strchr( mode, 'w' ) != NULL )
+        __creat_or_truncate( filename, 0 );
+    return( fopen( getshortfilename( filename ), mode ) );
 }
 
 int lfnopen( const char *filename, int access, ... )
 {
-    char *sfn = getshortfilename( filename );
-    unsigned mode = 0;
     va_list vargs;
 
     va_start( vargs, access );
-    if( access & O_CREAT )mode = va_arg( vargs, unsigned );
+    if( access & O_CREAT ) {
+        unsigned int mode = 0;
+        mode = va_arg( vargs, unsigned );
+
+        access |= O_CREAT;
+
+        __creat_or_truncate( filename, mode );
+    }
     va_end( vargs );
 
-    if( sfn == NULL ) sfn = filename;
-    return( open( sfn, access, mode ) );
-}
-
-int lfn_open( const char *filename, int omode )
-{
-    char *sfn = getshortfilename( filename );
-
-    if( sfn == NULL ) sfn = filename;
-    return( _open( sfn, omode ) );
-}
-
-int lfnremove( const char *filename )
-{
-    char *sfn = getshortfilename( filename );
-
-    if( sfn == NULL ) sfn = filename;
-    return( remove( sfn ) );
+    return( open( getshortfilename( filename ), access ) );
 }
 
 int lfnrename( const char *oldfilename, const char *newfilename )
 {   /* Must use the actual interrupt for this */
+    _PUSH_DS;
+    _PUSH_ES;
+
     _DS = FP_SEG( oldfilename );
     _DX = FP_OFF( oldfilename );
     _ES = FP_SEG( newfilename );
@@ -198,22 +156,22 @@ int lfnrename( const char *oldfilename, const char *newfilename )
 
     geninterrupt( 0x21 );
 
-    if( _AX == 0x7100 || _CFLAG ) {
+    if( _CFLAG || _AX == 0x7100 ) {
         _AH = 0x56;
 
         geninterrupt( 0x21 );
         if( _CFLAG ) errno = _AX;
+
+        _POP_ES;
+        _POP_DS;
+
         return( -1 );
     }
+
+    _POP_ES;
+    _POP_DS;
+
     return( 0 );
-}
-
-int lfnstat( const char *filename, struct stat * statbuf )
-{
-    char *sfn = getshortfilename( filename );
-
-    if( sfn == NULL ) sfn = filename;
-    return( stat( sfn, statbuf ) );
 }
 
 static void convert_to_ffblk( struct lfnffblk *dosblock,
@@ -239,6 +197,9 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
     struct locffblk lfnblock;
 
     buf->lfnax = buf->lfnsup = 0; /* Zero find handle and LFN-supported flag */
+
+    _PUSH_DS;
+    _PUSH_ES;
     _DS = FP_SEG( path );
     _DX = FP_OFF( path );       /* path goes in DS:DX */
     _ES = FP_SEG( &lfnblock );
@@ -250,14 +211,17 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
 
     geninterrupt( 0x21 );
 
+    _POP_ES;
+    _POP_DS;
+
     /*
      * If ax = 7100, there is probably an LFN TSR but no LFN support for
      * whatever drive or directory is being searched. In that case, fall back on
      * the old findfirst.  Also if the function fails, it could be because of
      * no LFN TSR so fall back to the old findfirst.
      */
-    if( _AX == 0x7100 || _CFLAG )
-        return( findfirst( path, buf, attr ) );
+    if( _CFLAG || _AX == 0x7100 )
+        return( findfirst( path, ( struct ffblk * )buf, attr ) );
 
     /*
      * If there was no failure, the next step is to move the values from the
@@ -283,8 +247,10 @@ int lfnfindnext( struct lfnffblk *buf )
      * previous call to findfirst.
      */
     if( !buf->lfnsup ) {
-        return( findnext( buf ) );
+        return( findnext( ( struct ffblk * )buf ) );
     }
+
+    _PUSH_ES;
 
     _ES = FP_SEG( &lfnblock );
     _DI = FP_SEG( &lfnblock );          /* The LFN find block */
@@ -294,6 +260,8 @@ int lfnfindnext( struct lfnffblk *buf )
     _STC;
 
     geninterrupt( 0x21 );
+
+    _POP_ES;
 
     /* Check for errors */
     if( _CFLAG ) {
