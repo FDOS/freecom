@@ -73,6 +73,7 @@ int lfn_chmod( const char *filename, int func, ... )
 static void __creat_or_truncate( const char * filename, int mode )
 {
     int handle;
+
     _PUSH_DS;
     _DS = FP_SEG( filename );
     _SI = FP_OFF( filename );
@@ -87,12 +88,15 @@ static void __creat_or_truncate( const char * filename, int mode )
     _POP_DS;
 
     if( _CFLAG || ( handle = _AX ) == 0x7100 )
-        handle = creatnew( filename, mode );
+        handle = ( access( getshortfilename( filename ), 0 ) == 0 ) ?
+                 -1 : creatnew( filename, mode );
     /*
      * Win2k always returns handle == 2, which is a bug.
      * File handle 2 is already used for stderr
+     * Fortunately, FreeCOM never actually expects to get file handle 2
+     * ( as it does for '1' and '0', when redirecting stdin and stdout )
      */
-    if( handle > 4 )_close( handle );
+    if( handle != 2 )_close( handle );
 }
 
 int lfn_creat( const char *filename, int mode )
@@ -109,6 +113,7 @@ int lfncreat( const char *filename, int amode )
 
 }
 
+#if 0 /* creatnew isn't used at all in the FreeCOM source code */
 int lfncreatnew( const char *filename, int mode )
 {
     if( access( getshortfilename( filename ), 0 ) == 0 ) {
@@ -118,6 +123,7 @@ int lfncreatnew( const char *filename, int mode )
     __creat_or_truncate( filename, mode );
     return( _open( getshortfilename( filename ), O_RDWR ) );
 }
+#endif
 
 FILE * lfnfopen( const char *filename, char *mode )
 {
@@ -133,17 +139,18 @@ int lfnopen( const char *filename, int access, ... )
     va_list vargs;
 
     va_start( vargs, access );
+
     if( access & O_CREAT ) {
         unsigned int mode = 0;
         mode = va_arg( vargs, unsigned );
 
-        access |= O_CREAT;
+        access &= ~O_CREAT; /* Remove the O_CREAT bit */
 
         __creat_or_truncate( filename, mode );
     }
     va_end( vargs );
 
-    return( open( getshortfilename( filename ), access ) );
+    return( _open( getshortfilename( filename ), access ) );
 }
 
 int lfnrename( const char *oldfilename, const char *newfilename )

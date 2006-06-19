@@ -21,6 +21,7 @@
 #include <sys\stat.h>
 
 #include <dfn.h>
+#include "../include/lfnfuncs.h"
 
 #include "../include/command.h"
 #include "../include/batch.h"
