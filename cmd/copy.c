@@ -39,6 +39,7 @@
 #include <suppl.h>
 #include <supplio.h>
 
+#include "../include/lfnfuncs.h"
 #include "../include/command.h"
 #include "../include/cmdline.h"
 #include "../err_fcts.h"
@@ -284,7 +285,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 
       fclose(fout);
       if(!destIsDevice) {	/* Devices do always exist */
-        if((fin = fdevopen(rSrc, "r")) == 0) {
+        if( access( rSrc, 0 ) != 0) { /* Source doesn't exist */
         /* 
          * For some reason, passing rSrc directly to error_open_file
          * prints what seems to be garble... bug in compiler? memory leak?
@@ -296,7 +297,6 @@ static int copy(char *dst, char *pattern, struct CopySource *src
             free( rDest );
             return 0;
         } else {
-            fclose( fin );
           	switch(userprompt(PROMPT_OVERWRITE_FILE, rDest)) {
 	    	default:	/* Error */
 		    case 4:	/* Quit */
@@ -464,6 +464,8 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     }
     free(rDest);
   } while(wildcarded && FINDNEXT(&ff) == 0);
+
+  FINDSTOP(&ff);
 
   return 1;
 }

@@ -78,6 +78,15 @@ int     lfnfindclose( struct lfnffblk *buf );
 #define findclose         lfnfindclose
 #define ffblk             lfnffblk
 
+#undef MAXFILE
+#undef MAXDIR
+#undef MAXPATH
+#undef MAXEXT
+#define MAXFILE 255
+#define MAXDIR  255
+#define MAXEXT  255
+#define MAXPATH 260
+
 #endif
 
 #endif

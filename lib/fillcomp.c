@@ -14,9 +14,12 @@
 	This file bases on COPY.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2006/06/19 01:37:06  blairdude
+	Fixed some bugs in LFN support, copy now fully supports long filenames
+
 	Revision 1.3  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.2  2003/04/08 13:37:57  skaus
 	chg: wilcard matching: COPY/REN *.TXT ???b.*: If length of source filename
 		is less than 3, the superflous question marks are ignored, as in MS
@@ -59,6 +62,7 @@
 #include <dfn.h>
 
 #include "../include/command.h"
+#include "../include/lfnfuncs.h"
 
 static void fillComp(char * const dst
  , const char *pattern

@@ -88,7 +88,11 @@ static void __creat_or_truncate( const char * filename, int mode )
 
     if( _CFLAG || ( handle = _AX ) == 0x7100 )
         handle = creatnew( filename, mode );
-    _close( handle );
+    /*
+     * Win2k always returns handle == 2, which is a bug.
+     * File handle 2 is already used for stderr
+     */
+    if( handle > 4 )_close( handle );
 }
 
 int lfn_creat( const char *filename, int mode )
@@ -175,7 +179,7 @@ int lfnrename( const char *oldfilename, const char *newfilename )
 }
 
 static void convert_to_ffblk( struct lfnffblk *dosblock,
-                               struct locffblk *lfnblock )
+                              struct locffblk *lfnblock )
 {
     dosblock->ff_attrib = lfnblock->attributes;
     dosblock->cr_time   = lfnblock->creattime;
@@ -220,14 +224,13 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
      * the old findfirst.  Also if the function fails, it could be because of
      * no LFN TSR so fall back to the old findfirst.
      */
-    if( _CFLAG || _AX == 0x7100 )
+    if( _CFLAG || ( buf->lfnax  = _AX ) == 0x7100 )
         return( findfirst( path, ( struct ffblk * )buf, attr ) );
 
     /*
      * If there was no failure, the next step is to move the values from the
      * LFN block into the non-lfn block
      */
-    buf->lfnax = _AX;              /* The find handle for findnext */
     buf->lfnsup = 1;
     convert_to_ffblk( buf, &lfnblock );
     /*
@@ -253,11 +256,10 @@ int lfnfindnext( struct lfnffblk *buf )
     _PUSH_ES;
 
     _ES = FP_SEG( &lfnblock );
-    _DI = FP_SEG( &lfnblock );          /* The LFN find block */
-    _SI = 1;                            /* Use DOS times */
+    _DI = FP_OFF( &lfnblock );          /* The LFN find block */
     _BX = buf->lfnax;                   /* The lfn handle set by findfirst */
+    _SI = 1;                            /* Use DOS times */
     _AX = 0x714F;
-    _STC;
 
     geninterrupt( 0x21 );
 
