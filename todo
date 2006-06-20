@@ -1,6 +1,5 @@
 goxy(): check if unsigned char is better than just unsigned
 PATH: check if environment functions report errors
-goxy(): to work with current page
 change size of context
 editing of long command lines that wraps the screen
 Test if "command.com A:\" accepts the A:\command.com
