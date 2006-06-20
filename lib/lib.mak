@@ -100,6 +100,7 @@ freecom_deps :  \
 	lastdget.obj \
 	lastdset.obj \
 	leadopt.obj \
+	lfnfuncs.obj \
 	lowexec.obj \
 	ltrimcl.obj \
 	ltrimsp.obj \
@@ -347,6 +348,7 @@ freecom.lib : $(CFG) freecom_deps
 +-lastdget.obj &
 +-lastdset.obj &
 +-leadopt.obj &
++-lfnfuncs.obj &
 +-lowexec.obj &
 +-ltrimcl.obj &
 +-ltrimsp.obj &
@@ -589,6 +591,7 @@ freecom.lib : $(CFG) freecom_deps
 +lastdget.obj &
 +lastdset.obj &
 +leadopt.obj &
++lfnfuncs.obj &
 +lowexec.obj &
 +ltrimcl.obj &
 +ltrimsp.obj &
