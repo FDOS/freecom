@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../include/lfnfuncs.h"
 #include "../include/batch.h"
 #include "../include/cmdline.h"
 #include "../include/command.h"
