@@ -77,6 +77,7 @@ int cmd_if(char *param)
 
 		if(FINDFIRST(param, &f, FA_NORMAL|FA_ARCH|FA_SYSTEM|FA_RDONLY|FA_HIDDEN) == 0)
 			x_flag = X_EXEC;
+        FINDSTOP(&f);
 	}
 
 	/* Check for 'errorlevel' form */
