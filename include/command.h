@@ -50,7 +50,11 @@ extern const char shellname[];
 
 #define FINDFIRST(path,attrib,ffblk) findfirst(path,attrib,ffblk)
 #define FINDNEXT(ffblk)  findnext(ffblk)
+#ifdef FEATURE_LONG_FILENAMES
+#define FINDSTOP(ffblk) lfnfindclose(ffblk)
+#else
 #define FINDSTOP(ffblk)
+#endif
 #ifndef FA_NORMAL
 #define FA_NORMAL 0
 #endif
@@ -119,6 +123,7 @@ int cmd_dir(char *);
 int cmd_doskey(char *);
 int cmd_fddebug(char *);
 int cmd_history(char *);
+int cmd_lfnfor(char *);
 int cmd_loadfix(char *);
 int cmd_loadhigh(char *);
 int cmd_memory(char *);
