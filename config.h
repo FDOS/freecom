@@ -7,7 +7,7 @@
 
 /* define DEBUG to add debugging code */
 #ifndef DEBUG			/* possibly already defined via command line */
-/*#define DEBUG*/
+//#define DEBUG
 #endif
 
 /* Define to enable the alias command, and aliases. */
@@ -15,7 +15,7 @@
 #define ALIAS_DEFAULT_SIZE 1024
 
 /* Define to disable context error messages that may scare a user */
-#define NO_CONTEXT_ERROR
+/* #define NO_CONTEXT_ERROR */
 
 /* Define to enable enhanced input (prerequisite of History and Filename
 	completion */
@@ -38,7 +38,7 @@
 #define FEATURE_LONG_FILENAMES
 
 /* Define for limited support of 4DOS DESCRIPT.ION files */
-/* #define FEATURE_DESCRIPT_ION */
+#define FEATURE_DESCRIPT_ION
 
 /* Define to enable DOS NLS */
 #define FEATURE_NLS
@@ -136,6 +136,9 @@
 #define INCLUDE_CMD_DEL
 #define INCLUDE_CMD_DIR
 #define INCLUDE_CMD_DIRS
+#ifdef FEATURE_LONG_FILENAMES
+#define INCLUDE_CMD_LFNFOR
+#endif
 #define INCLUDE_CMD_LOADFIX
 #define INCLUDE_CMD_LOADHIGH
 /*#define INCLUDE_CMD_FAKELOADHIGH */ /* DO NOT include this and CMD_LOADHIGH nor CMD_LOADFIX */

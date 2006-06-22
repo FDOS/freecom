@@ -511,6 +511,10 @@ DEBUG output is printed to '%s'.
 BREAK is %s
 .
 
+:TEXT_MSG_LFNFOR_STATE#0%
+LFNFOR is %s
+.
+
 :TEXT_MSG_CURRENT_DATE#0%
 Current date is %s
 .
@@ -749,6 +753,9 @@ Features available:
 .
 :TEXT_SHOWCMD_FEATURE_LAST_DIR#1
 [last dir] \
+.
+:TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
+[long filenames] \
 .
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
 [kernel swap] \
@@ -1196,6 +1203,14 @@ IF [NOT] EXIST filename command
                     strings match.
   EXIST filename    Specifies a true condition if the specified filename
                     exists.
+.
+
+:TEXT_CMDHELP_LFNFOR
+Enables/Disables long filenames within the FOR command.
+
+LFNFOR [ON | OFF]
+
+Type LFNFOR without a parameter to display the current LFNFOR setting.
 .
 
 :TEXT_CMDHELP_LH

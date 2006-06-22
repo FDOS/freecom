@@ -91,6 +91,12 @@
 #include "../include/batch.h"
 #include "../err_fcts.h"
 
+#ifdef INCLUDE_CMD_LFNFOR
+extern unsigned char lfnfor;
+#else
+#define lfnfor 0
+#endif
+
 struct bcontext *bc = 0;     /* The stack of current batch contexts.
                                  * NULL when no batch is active
                                  */
@@ -364,24 +370,32 @@ char *readbatchline(int *eflag, char *textline, int size)
       fv1 = fv = getArgCur(0);
 
 	if (bc->ffind) {          /* First already done fo do next */
+#ifdef FEATURE_LONG_FILENAMES
+        if( lfnfor ? lfnfindnext( bc->ffind ) != 0 :
+                     FINDNEXT( ( struct ffblk * )bc->ffind ) != 0 ) {
+            FINDSTOP( bc->ffind );
+#else
 		if(FINDNEXT(bc->ffind) != 0) {		/* no next file */
+#endif
           free(bc->ffind);      /* free the buffer */
           bc->ffind = 0;
           bc->shiftlevel++;     /* On to next list element */
           continue;
         }
 	  fv = bc->ffind->ff_name;
-	} else
-	{
+	} else {
       if (strpbrk(fv, "?*") == 0) {      /* element is not wild file */
         bc->shiftlevel++;       /* No -> use it and shift list */
         fv1 = "";				/* No additional info */
-      } else
+      } else {
         /* Wild file spec, find first (or next) file name */
-      {
 
 	  /*  For first find, allocate a find first block */
+#ifdef FEATURE_LONG_FILENAMES
+          if ((bc->ffind = (struct lfnffblk *)malloc(sizeof(struct lfnffblk)))
+#else
           if ((bc->ffind = (struct ffblk *)malloc(sizeof(struct ffblk)))
+#endif
            == 0)
           {
             error_out_of_memory();
@@ -389,7 +403,13 @@ char *readbatchline(int *eflag, char *textline, int size)
             break;
           }
 
+#ifdef FEATURE_LONG_FILENAMES
+         if( lfnfor ? lfnfindfirst( fv, bc->ffind, FA_NORMAL ) == 0 :
+                      FINDFIRST( fv, ( struct ffblk * )bc->ffind, FA_NORMAL )
+                      == 0 ) {
+#else
          if(FINDFIRST(fv, bc->ffind, FA_NORMAL) == 0) {
+#endif
          	/* found a file */
          	*dfnfilename(fv) = '\0';	/* extract path */
         	fv = bc->ffind->ff_name;

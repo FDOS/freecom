@@ -32,6 +32,7 @@ cmds.lib : $(CFG) alias.obj \
 	goto.obj \
 	history.obj \
 	if.obj \
+	lfnfor.obj \
 	memory.obj \
 	mkdir.obj \
 	path.obj \
@@ -73,6 +74,7 @@ cmds.lib : $(CFG) alias.obj \
 +-goto.obj &
 +-history.obj &
 +-if.obj &
++-lfnfor.obj &
 +-memory.obj &
 +-mkdir.obj &
 +-path.obj &
@@ -115,6 +117,7 @@ cmds.lib : $(CFG) alias.obj \
 +goto.obj &
 +history.obj &
 +if.obj &
++lfnfor.obj &
 +memory.obj &
 +mkdir.obj &
 +path.obj &

@@ -14,6 +14,9 @@
 #include <dir.h>
 #endif
 
+#define __LFNFUNCS_C
+#include "../include/lfnfuncs.h"
+
 struct bcontext
 {
   struct bcontext *prev;
@@ -24,7 +27,11 @@ struct bcontext
   char *forvar;					/* current FOR variable */
   char **params;				/* FOR/batch parameter list */
   char *blabel;                 /* label to search for */
+#ifdef FEATURE_LONG_FILENAMES
+  struct lfnffblk *ffind;
+#else
   struct ffblk *ffind;			/* already started FOR wildcard expand loop */
+#endif
 #ifndef __PACIFIC__
   fpos_t bpos;                  /* position within file if bfile == NULL */
 #else

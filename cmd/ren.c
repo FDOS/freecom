@@ -22,6 +22,8 @@
 #include <dfn.h>
 #include <supplio.h>
 
+#undef FEATURE_LONG_FILENAMES
+#include "../include/lfnfuncs.h"
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../include/misc.h"
@@ -100,6 +102,7 @@ int cmd_rename(char *param)
 		} while(FINDNEXT(&ff) == 0);
 
 	errRet:
+        FINDSTOP(&ff);
 		free(s_drv); free(s_dir); free(s_fil); free(s_ext);
 		free(d_drv); free(d_dir); free(d_fil); free(d_ext);
 		free(newname); free(sn); free(dn);
