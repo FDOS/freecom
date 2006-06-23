@@ -79,6 +79,10 @@ int defaultToSwap = FALSE;
 	*/
 int swapContext = TRUE;					/* may destroy external context */
 
+#ifdef FEATURE_LONG_FILENAMES
+unsigned char __supportlfns = 1;
+#endif
+
 extern int mywherex( void );
 
 static void execute(char *first, char *rest)
@@ -637,6 +641,11 @@ int process_input(int xflag, char *commandline)
 
   do
   {
+#ifdef FEATURE_LONG_FILENAMES
+    if( toupper( *getEnv( "LFN" ) ) == 'N' )
+         __supportlfns = 0;
+    else __supportlfns = 1;
+#endif
   	interactive_command = 0;		/* not directly entered by user */
   	echothisline = tracethisline = 0;
     if(commandline) {

@@ -34,6 +34,8 @@
 #define _POP_DS  __emit__(0x1F)
 #define _POP_ES  __emit__(0x07)
 
+extern unsigned char __supportlfns;
+
 char * getshortfilename( const char *longfilename )
 {
     static char shortfilename[ 128 ];
@@ -54,25 +56,19 @@ char * getshortfilename( const char *longfilename )
     _POP_ES;
     _POP_DS;
 
-    return( ( _CFLAG || _AX == 0x7100 ) ?
+    return( ( _CFLAG || _AX == 0x7100 || !__supportlfns ) ?
             strcpy( shortfilename, longfilename ) : shortfilename );
-}
-
-int lfn_chmod( const char *filename, int func, ... )
-{
-    int attrib = 0;
-    va_list vargs;
-
-    va_start( vargs, func );
-    if( func )attrib = va_arg( vargs, int );
-    va_end( vargs );
-
-    return( _chmod( getshortfilename( filename ), func, attrib ) );
 }
 
 static void __creat_or_truncate( const char * filename, int mode )
 {
     int handle;
+
+    if( !__supportlfns ) {
+        handle = creatnew( filename, mode );
+        _close( handle );
+        return;
+    }
 
     _PUSH_DS;
     _DS = FP_SEG( filename );
@@ -99,6 +95,19 @@ static void __creat_or_truncate( const char * filename, int mode )
     if( handle != 2 )_close( handle );
 }
 
+#if 0 /* these functions aren't used at all in the FreeCOM source code */
+int lfn_chmod( const char *filename, int func, ... )
+{
+    int attrib = 0;
+    va_list vargs;
+
+    va_start( vargs, func );
+    if( func )attrib = va_arg( vargs, int );
+    va_end( vargs );
+
+    return( _chmod( getshortfilename( filename ), func, attrib ) );
+}
+
 int lfn_creat( const char *filename, int mode )
 {
     __creat_or_truncate( filename, mode );
@@ -113,7 +122,6 @@ int lfncreat( const char *filename, int amode )
 
 }
 
-#if 0 /* creatnew isn't used at all in the FreeCOM source code */
 int lfncreatnew( const char *filename, int mode )
 {
     if( access( getshortfilename( filename ), 0 ) == 0 ) {
@@ -125,7 +133,7 @@ int lfncreatnew( const char *filename, int mode )
 }
 #endif
 
-FILE * lfnfopen( const char *filename, char *mode )
+FILE * lfnfopen( const char *filename, const char *mode )
 {
     if( strchr( mode, 'a' ) != NULL )
         __creat_or_truncate( filename, 0 );
@@ -150,11 +158,13 @@ int lfnopen( const char *filename, int access, ... )
     }
     va_end( vargs );
 
-    return( _open( getshortfilename( filename ), access ) );
+    return( open( getshortfilename( filename ), access ) );
 }
 
 int lfnrename( const char *oldfilename, const char *newfilename )
 {   /* Must use the actual interrupt for this */
+#if 1
+    printf( "%s, %s\n", oldfilename, newfilename );
     _PUSH_DS;
     _PUSH_ES;
 
@@ -165,24 +175,58 @@ int lfnrename( const char *oldfilename, const char *newfilename )
     _AX = 0x7156;
     _STC;
 
+    _POP_DS;
+    _POP_ES;
+
     geninterrupt( 0x21 );
 
     if( _CFLAG || _AX == 0x7100 ) {
+        _PUSH_DS;
+        _PUSH_ES;
+
+        _DS = FP_SEG( oldfilename );
+        _ES = FP_SEG( newfilename );
         _AH = 0x56;
 
         geninterrupt( 0x21 );
-        if( _CFLAG ) errno = _AX;
 
-        _POP_ES;
         _POP_DS;
+        _POP_ES;
 
-        return( -1 );
+        if( _CFLAG ) {
+            errno = _AX;
+            printf( "%s, %s\n", oldfilename, newfilename );
+
+            return( -1 );
+        }
     }
 
-    _POP_ES;
-    _POP_DS;
+    return( 0 );
+#else
+    struct REGPACK r;
+    printf( "%s, %s\n", oldfilename, newfilename );
+
+    r.r_ds = FP_SEG( oldfilename );
+    r.r_dx = FP_OFF( oldfilename );
+    r.r_es = FP_SEG( newfilename );
+    r.r_di = FP_OFF( newfilename );
+    r.r_ax = 0x7156;
+
+    intr( 0x21, &r );
+
+    if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) {
+        r.r_ax = 0x5600;
+
+        intr( 0x21, &r );
+
+        if( ( r.r_flags & 1 ) ) {
+            errno = r.r_ax;
+            return( -1 );
+        }
+    }
 
     return( 0 );
+#endif
 }
 
 static void convert_to_ffblk( struct lfnffblk *dosblock,
@@ -208,6 +252,9 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
     struct locffblk lfnblock;
 
     buf->lfnax = buf->lfnsup = 0; /* Zero find handle and LFN-supported flag */
+
+    if( !__supportlfns )
+        return( findfirst( path, ( struct ffblk * )buf, attr ) );
 
     _PUSH_DS;
     _PUSH_ES;
