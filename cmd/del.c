@@ -51,10 +51,15 @@
 
 #include <dfn.h>
 
+#include "../include/lfnfuncs.h"
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
 #include "../strings.h"
+
+#ifdef FEATURE_LONG_FILENAMES
+#define abspath( x, y ) abspath( getshortfilename( x ), y )
+#endif
 
 static int optP, verbose;
 
@@ -140,8 +145,12 @@ int cmd_del(char *param)
 
 			/* make sure user is sure if all files are to be
 			 * deleted */
+            /*
+             * Also make sure to find the LAST '.', as long filenames
+             * are allowed to contain several
+             */
 			if(!optP && *p == '*'
-			 && ((q = strchr(p, '.')) == 0 || q[1] == '*')) {
+			 && ((q = strrchr(p, '.')) == 0 || q[1] == '*')) {
 				if(userprompt(PROMPT_DELETE_ALL, p) != 1) {
 					ec = E_Other;
 					goto errRet;
@@ -185,10 +194,11 @@ int cmd_del(char *param)
 #endif
 
 			} while (FINDNEXT(&f) == 0);
-		} while(++i < argc);
+		} while(++i < argc && *arg[i]);/* arg[i] can be NULL with LFNS?? */
 	}
 
 errRet:
+    FINDSTOP(&f);
 
 	if(echo)
 		dispCount(count, TEXT_MSG_DEL_CNT_FILES);
