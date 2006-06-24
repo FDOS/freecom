@@ -160,7 +160,7 @@ int lfnopen( const char *filename, int access, ... )
 
 int lfnrename( const char *oldfilename, const char *newfilename )
 {   /* Must use the actual interrupt for this */
-#if 1
+#if 0 /* _REGISTER usage here fails */
     printf( "%s, %s\n", oldfilename, newfilename ); /* Debug */
     _PUSH_DS;
 
@@ -194,9 +194,8 @@ int lfnrename( const char *oldfilename, const char *newfilename )
     }
 
     return( 0 );
-#else /* Debug */
+#else
     struct REGPACK r;
-    printf( "%s, %s\n", oldfilename, newfilename );
 
     r.r_ds = FP_SEG( oldfilename );
     r.r_dx = FP_OFF( oldfilename );
