@@ -34,14 +34,17 @@
 #define _POP_DS  __emit__(0x1F)
 #define _POP_ES  __emit__(0x07)
 
-extern unsigned char __supportlfns;
-
-char * getshortfilename( const char *longfilename )
+/*
+ * The following function copies a short filename equivalent of a long
+ * filename into a local static buffer, which will be overwritten on
+ * subsequent calls
+ */
+const char * getshortfilename( const char *longfilename )
 {
     static char shortfilename[ 128 ];
     
     _PUSH_DS;
-    _PUSH_ES;
+
     _DS = FP_SEG( longfilename );
     _SI = FP_OFF( longfilename );
     _ES = FP_SEG( shortfilename );
@@ -53,11 +56,10 @@ char * getshortfilename( const char *longfilename )
 
     geninterrupt( 0x21 );
 
-    _POP_ES;
     _POP_DS;
 
     return( ( _CFLAG || _AX == 0x7100 || !__supportlfns ) ?
-            strcpy( shortfilename, longfilename ) : shortfilename );
+            longfilename : shortfilename );
 }
 
 static void __creat_or_truncate( const char * filename, int mode )
@@ -65,8 +67,7 @@ static void __creat_or_truncate( const char * filename, int mode )
     int handle;
 
     if( !__supportlfns ) {
-        handle = creatnew( filename, mode );
-        _close( handle );
+        _close( creatnew( filename, mode ) );
         return;
     }
 
@@ -83,9 +84,10 @@ static void __creat_or_truncate( const char * filename, int mode )
 
     _POP_DS;
 
-    if( _CFLAG || ( handle = _AX ) == 0x7100 )
+    if( _CFLAG || _AX == 0x7100 )
         handle = ( access( getshortfilename( filename ), 0 ) == 0 ) ?
                  -1 : creatnew( filename, mode );
+    else handle = _AX;
     /*
      * Win2k always returns handle == 2, which is a bug.
      * File handle 2 is already used for stderr
@@ -135,9 +137,7 @@ int lfncreatnew( const char *filename, int mode )
 
 FILE * lfnfopen( const char *filename, const char *mode )
 {
-    if( strchr( mode, 'a' ) != NULL )
-        __creat_or_truncate( filename, 0 );
-    else if( strchr( mode, 'w' ) != NULL )
+    if( strchr( mode, 'a' ) || strchr( mode, 'w' ) )
         __creat_or_truncate( filename, 0 );
     return( fopen( getshortfilename( filename ), mode ) );
 }
@@ -149,12 +149,9 @@ int lfnopen( const char *filename, int access, ... )
     va_start( vargs, access );
 
     if( access & O_CREAT ) {
-        unsigned int mode = 0;
-        mode = va_arg( vargs, unsigned );
-
         access &= ~O_CREAT; /* Remove the O_CREAT bit */
 
-        __creat_or_truncate( filename, mode );
+        __creat_or_truncate( filename, va_arg( vargs, unsigned ) );
     }
     va_end( vargs );
 
@@ -164,9 +161,8 @@ int lfnopen( const char *filename, int access, ... )
 int lfnrename( const char *oldfilename, const char *newfilename )
 {   /* Must use the actual interrupt for this */
 #if 1
-    printf( "%s, %s\n", oldfilename, newfilename );
+    printf( "%s, %s\n", oldfilename, newfilename ); /* Debug */
     _PUSH_DS;
-    _PUSH_ES;
 
     _DS = FP_SEG( oldfilename );
     _DX = FP_OFF( oldfilename );
@@ -175,23 +171,19 @@ int lfnrename( const char *oldfilename, const char *newfilename )
     _AX = 0x7156;
     _STC;
 
-    _POP_DS;
-    _POP_ES;
-
     geninterrupt( 0x21 );
+
+    _POP_DS;
 
     if( _CFLAG || _AX == 0x7100 ) {
         _PUSH_DS;
-        _PUSH_ES;
 
         _DS = FP_SEG( oldfilename );
-        _ES = FP_SEG( newfilename );
         _AH = 0x56;
 
         geninterrupt( 0x21 );
 
         _POP_DS;
-        _POP_ES;
 
         if( _CFLAG ) {
             errno = _AX;
@@ -202,7 +194,7 @@ int lfnrename( const char *oldfilename, const char *newfilename )
     }
 
     return( 0 );
-#else
+#else /* Debug */
     struct REGPACK r;
     printf( "%s, %s\n", oldfilename, newfilename );
 
@@ -257,7 +249,6 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
         return( findfirst( path, ( struct ffblk * )buf, attr ) );
 
     _PUSH_DS;
-    _PUSH_ES;
     _DS = FP_SEG( path );
     _DX = FP_OFF( path );       /* path goes in DS:DX */
     _ES = FP_SEG( &lfnblock );
@@ -269,7 +260,6 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
 
     geninterrupt( 0x21 );
 
-    _POP_ES;
     _POP_DS;
 
     /*
@@ -303,11 +293,9 @@ int lfnfindnext( struct lfnffblk *buf )
      * function first, buf->lfnsup will tell us if LFN was supported with the
      * previous call to findfirst.
      */
-    if( !buf->lfnsup ) {
+    if( !buf->lfnsup || !__supportlfns ) {
         return( findnext( ( struct ffblk * )buf ) );
     }
-
-    _PUSH_ES;
 
     _ES = FP_SEG( &lfnblock );
     _DI = FP_OFF( &lfnblock );          /* The LFN find block */
@@ -316,8 +304,6 @@ int lfnfindnext( struct lfnffblk *buf )
     _AX = 0x714F;
 
     geninterrupt( 0x21 );
-
-    _POP_ES;
 
     /* Check for errors */
     if( _CFLAG ) {

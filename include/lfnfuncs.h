@@ -27,33 +27,36 @@ struct lfnffblk {
 #ifdef __LFNFUNCS_C
 
 struct locffblk {
-    long            attributes;
-    long            creattime;
-    long            creatdate;
-    long            accesstime;
-    long            accessdate;
-    long            wrtime;
-    long            wrdate;
-    long            hifilesize;
-    long            filesize;
-    char            reserved[8];
-    char            lfn[260];
-    char            sfn[14];
+    long attributes;
+    long creattime;
+    long creatdate;
+    long accesstime;
+    long accessdate;
+    long wrtime;
+    long wrdate;
+    long hifilesize;
+    long filesize;
+    char reserved[8];
+    char lfn[260];
+    char sfn[14];
 };
 
 #endif
 
-char *  getshortfilename( const char *longfilename );
-int     lfn_chmod( const char *filename, int func, ... );
-int     lfn_creat( const char *filename, int mode );
-int     lfncreat( const char *filename, int amode );
-int     lfncreatnew( const char *filename, int mode );
-FILE *  lfnfopen( const char *filename, char *mode );
-int     lfnopen( const char *filename, int access, ... );
-int     lfnrename( const char *oldfilename, const char *newfilename );
-int     lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr );
-int     lfnfindnext( struct lfnffblk *buf );
-int     lfnfindclose( struct lfnffblk *buf );
+const char * getshortfilename( const char *longfilename );
+int          lfn_chmod( const char *filename, int func, ... );
+int          lfn_creat( const char *filename, int mode );
+int          lfncreat( const char *filename, int amode );
+int          lfncreatnew( const char *filename, int mode );
+FILE *       lfnfopen( const char *filename, const char *mode );
+int          lfnopen( const char *filename, int access, ... );
+int          lfnrename( const char *oldfilename, const char *newfilename );
+int          lfnfindfirst( const char *path, struct lfnffblk *buf,
+                           unsigned attr );
+int          lfnfindnext( struct lfnffblk *buf );
+int          lfnfindclose( struct lfnffblk *buf );
+
+extern unsigned char __supportlfns;
 
 #ifndef __LFNFUNCS_C
 
