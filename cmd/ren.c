@@ -179,7 +179,6 @@ int cmd_rename(char *param)
 				break;
 			}
 			myfnmerge( sn, s_drv, s_dir, ff.ff_name, NULL );
-            printf("%s, %s\n", sn, dn);
 			dprintf(("rename(%s, %s)\n", sn, newname) );
 			if(rename(sn, newname) != 0) {
 				perror("rename");
