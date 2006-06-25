@@ -75,17 +75,14 @@ void myfnsplit( const char *path, char *drv, char *dir, char *name, char *ext )
 void myfnmerge( char *path, const char *drive, const char *dir,
                 const char *fname, const char *ext )
 {
-    int dir_len;
-
-    if( ( *drive ) && ( *drive ) ) {
+    if( *drive ) {
         strcpy( path, drive );
-        strcat( path, ":" );
+        if( !drive[ 1 ] )strcat( path, ":" );
     } else ( *path ) = 0;
 
     if( *dir ) {
         strcat( path, dir );
-        dir_len = strlen( dir );
-        if( dir_len && *( dir + dir_len - 1 ) != '\\' )
+        if( *( dir + strlen( dir ) - 1 ) != '\\' )
             strcat( path, "\\" );
     }
 
@@ -151,12 +148,10 @@ int cmd_rename(char *param)
 #else
         char s_drv[ MAXDRIVE ], s_dir[ MAXDIR ], d_drv[ MAXDRIVE ],
              d_dir[ MAXDIR ], d_fil[ MAXFILE ], d_ext[ MAXEXT ], sn[ MAXPATH ],
-             dn[ MAXPATH ], *oldFname, *newname;
+             dn[ MAXPATH ], *newname;
 
         myfnsplit( argv[ 0 ], s_drv, s_dir, NULL, NULL );
         myfnsplit( argv[ 1 ], d_drv, d_dir, d_fil, d_ext );
-        myfnmerge( sn, s_drv, s_dir, "", NULL );
-        oldFname = strchr( sn, '\0' );
 #endif
 
 		/* if drive or path in second arg, return with syntax error */
@@ -183,7 +178,8 @@ int cmd_rename(char *param)
 				ec = E_NoMem;
 				break;
 			}
-			strcpy(oldFname, ff.ff_name);
+			myfnmerge( sn, s_drv, s_dir, ff.ff_name, NULL );
+            printf("%s, %s\n", sn, dn);
 			dprintf(("rename(%s, %s)\n", sn, newname) );
 			if(rename(sn, newname) != 0) {
 				perror("rename");
