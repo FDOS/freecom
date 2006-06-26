@@ -83,8 +83,6 @@ int swapContext = TRUE;					/* may destroy external context */
 unsigned char __supportlfns = 1;
 #endif
 
-extern int mywherex( void );
-
 static void execute(char *first, char *rest)
 {
   /*
