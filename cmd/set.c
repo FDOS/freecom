@@ -57,8 +57,17 @@ int cmd_set(char *param)
 
 	switch(breakVarAssign(ctxtEnvironment, param, &value)) {
 	case 1:			/* no equal sign */
+#ifdef FEATURE_CMD_SET_PRINT
+        if( ( value = getEnv( param ) ) != NULL ) printf( "%s\n", value );
+        else {
+            error_env_var_not_found( param );
+            return( 1 );
+        }
+        return( 0 );
+#else
 		error_syntax(0);
 		return 1;
+#endif
 	case 0:			/* displayed */
 		return 0;
 #ifdef DEBUG

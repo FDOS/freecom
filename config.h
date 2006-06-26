@@ -37,6 +37,10 @@
 /* Define to enable usage of LFNs */
 #define FEATURE_LONG_FILENAMES
 
+/* Define to enable printing of environment variables for "SET VAR" syntax */
+/* (Like Win2k's cmd.exe does) */
+#define FEATURE_CMD_SET_PRINT
+
 /* Define for limited support of 4DOS DESCRIPT.ION files */
 #define FEATURE_DESCRIPT_ION
 
@@ -82,12 +86,12 @@
 /* Define to support kernel-supported swapout of FreeCOM
 	see DOCS\K-SWAP.TXT
 */
-/* #define FEATURE_KERNEL_SWAP_SHELL */
+#define FEATURE_KERNEL_SWAP_SHELL
 
 /* Define to support XMS-only swap support of FreeCOM
 	This setting is incompatible with the above one!
 */
-#define FEATURE_XMS_SWAP
+/* #define FEATURE_XMS_SWAP */
 
 /* Define the size of the buffer used to store old paths for PUSHD/POPD */
 #define DIRSTACK_DEFAULT_SIZE 256
