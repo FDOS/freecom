@@ -62,6 +62,7 @@ fi(le): dfnsearc.c
 
 */
 
+#include "../../config.h"
 #include "initsupl.loc"
 
 #ifndef _MICROC_
@@ -75,6 +76,8 @@ fi(le): dfnsearc.c
 #include "dynstr.h"
 #include "suppl.h"
 #include "eno.loc"
+
+#include "../../include/lfnfuncs.h"
 
 #include "suppldbg.h"
 
@@ -116,8 +119,12 @@ int dfnglobread(DFN_GLOB * const g)
 	if(g->dfn_flags.dfn_eof)		/* we hit the end of entries already */
 		goto errRet2;
 
-	if(findnext(g->dfn_data) == 0)
+	if(findnext(g->dfn_data) == 0) {
+#ifdef FEATURE_LONG_FILENAMES
+        lfnfindclose(g->dfn_data);
+#endif
 		DBG_RETURN_I(1)
+    }
 
 errRet:
 	g->dfn_flags.dfn_eof = 1;

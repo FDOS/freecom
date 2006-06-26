@@ -6,11 +6,14 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.7  2006/06/26 18:36:36  blairdude
+	FreeCOM can now execute long filenamed executable files.
+
 	Revision 1.6  2005/12/10 10:09:43  perditionc
 	based on patches from Blair Campbell, additional LFN support (slim print,
 	add initial cd,rd,md support, make compile time optional), remove some
 	compiler warnings, and prevent extra linebreak for compatibility
-
+	
 	Revision 1.5  2004/09/13 18:59:40  skaus
 	add: CRITER: Repeat check autofail magic {Tom Ehlert/Eric Auer}
 	
@@ -57,6 +60,7 @@
 
 #include <dfn.h>
 
+#include "../include/lfnfuncs.h"
 #include "../err_fcts.h"
 #include "../include/misc.h"
 
@@ -74,7 +78,11 @@ char *find_which(const char * const fname)
 	}
 
 	free(buf);
-	buf = abspath(p, 1);
+#ifdef FEATURE_LONG_FILENAMES
+	buf = abspath(getshortfilename(p), 1);
+#else
+    buf = abspath(p, 1);
+#endif
 	free(p);
 
 	critEndRepCheck();
