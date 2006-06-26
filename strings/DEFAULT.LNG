@@ -515,6 +515,10 @@ BREAK is %s
 LFNFOR is %s
 .
 
+:TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
+LFN Complete is %s
+.
+
 :TEXT_MSG_CURRENT_DATE#0%
 Current date is %s
 .
@@ -1206,11 +1210,13 @@ IF [NOT] EXIST filename command
 .
 
 :TEXT_CMDHELP_LFNFOR
-Enables/Disables long filenames within the FOR command.
+Enables/Disables long filenames within the FOR command or filename completion.
 
 LFNFOR [ON | OFF]
+LFNFOR COMPLETE [ON | OFF]
 
-Type LFNFOR without a parameter to display the current LFNFOR setting.
+Type LFNFOR or LFNFOR COMPLETE without a parameter to display the current
+LFNFOR setting.
 .
 
 :TEXT_CMDHELP_LH

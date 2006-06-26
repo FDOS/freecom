@@ -5,9 +5,12 @@
 	This file bases on FILECOMP.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/06/26 19:54:12  blairdude
+	Long filename filename completion can be enabled with LFNFOR COMPLETE ON
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -43,6 +46,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "../include/lfnfuncs.h"
+#undef findfirst
+#undef findnext
 #include "../include/command.h"
 #include "../strings.h"
 
@@ -50,6 +56,7 @@ void complete_filename(char *str, unsigned charcount)
 {
   // variables found within code
   struct ffblk file;
+  #undef ffblk
 
   int found_dot = 0;
   int curplace = 0;
@@ -110,12 +117,20 @@ void complete_filename(char *str, unsigned charcount)
 
   curplace = 0;                 // current fname
 
+#ifdef FEATURE_LONG_FILENAMES
+  if( lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
+                    findfirst( path, ( struct ffblk * )&file, FILE_SEARCH_MODE )
+                    == 0 )
+#else
   if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
+#endif
   {                             // find anything
 
     do
     {
-      if (file.ff_name[0] == '.') // ignore . and ..
+      if (file.ff_name[0] == '.' &&
+          (!file.ff_name[1] ||
+          (file.ff_name[1] == '.' && !file.ff_name[2]))) // ignore . and ..
 
         continue;
 
@@ -142,7 +157,13 @@ void complete_filename(char *str, unsigned charcount)
           }
       }
     }
+#ifdef FEATURE_LONG_FILENAMES
+    while( lfncomplete ? lfnfindnext( &file ) == 0 :
+                         findnext( ( struct ffblk * )&file ) == 0 );
+#else
     while (FINDNEXT(&file) == 0);
+#endif
+    FINDSTOP(&file);
 
     strcpy(&str[start], directory);
     strcat(&str[start], maxmatch);

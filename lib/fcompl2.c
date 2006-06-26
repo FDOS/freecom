@@ -6,9 +6,12 @@
 	This file bases on FILECOMP.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.6  2006/06/26 19:54:12  blairdude
+	Long filename filename completion can be enabled with LFNFOR COMPLETE ON
+
 	Revision 1.5  2006/06/13 02:10:19  blairdude
 	Cleaned up some code, moved write in outc to fwrite to make everybody happy (thanks to Arkady for the reports)
-
+	
 	Revision 1.4  2006/06/12 04:55:42  blairdude
 	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
 	significantly smaller.
@@ -56,6 +59,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "../include/lfnfuncs.h"
+#undef findfirst
+#undef findnext
 #include "../include/command.h"
 #include "../strings.h"
 
@@ -63,6 +69,7 @@ int show_completion_matches(char *str, unsigned charcount)
 {
   // varibles found within code
   struct ffblk file;
+  #undef ffblk
 
   int found_dot = 0;
   int curplace = 0;
@@ -115,11 +122,17 @@ int show_completion_matches(char *str, unsigned charcount)
 
   curplace = 0;                 // current fname
 
+#ifdef FEATURE_LONG_FILENAMES
+  if( lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
+                    findfirst( path, ( struct ffblk * )&file, FILE_SEARCH_MODE )
+                    == 0 )
+#else
   if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
+#endif
   {                             // find anything
 
     outc('\n');
-    count = 0;
+    count = found_dot = 0; /* Use found_dot as waslfn */
     do
     {
       if (file.ff_name[0] == '.') // ignore . and ..
@@ -131,16 +144,35 @@ int show_completion_matches(char *str, unsigned charcount)
       else
         strcpy(fname, file.ff_name);
 
-      displayString(TEXT_FILE_COMPLATION_DISPLAY, fname);
+//      displayString(TEXT_FILE_COMPLATION_DISPLAY, fname);
+#ifdef FEATURE_LONG_FILENAMES
+      if( ( found_dot = strlen( fname ) ) > 13 && count > 1 ) {
+        outc( '\n' );
+        count = 0;
+      }
+      printf("%-14s", fname);
+      if( found_dot > 13 ) {
+        outc( '\n' );
+        count = 0;
+      }
+#else
+      printf("%-14s", fname);
+#endif
       if (++count == 5)
       {
         outc('\n');
         count = 0;
       }
     }
+#ifdef FEATURE_LONG_FILENAMES
+    while( lfncomplete ? lfnfindnext( &file ) == 0 :
+                         findnext( ( struct ffblk * )&file ) == 0 );
+#else
     while (FINDNEXT(&file) == 0);
+#endif
+    FINDSTOP(&file);
 
-    if (count)
+    if (mywherex() > 1)
       outc('\n');
 
   }

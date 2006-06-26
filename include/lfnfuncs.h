@@ -57,6 +57,7 @@ int          lfnfindnext( struct lfnffblk *buf );
 int          lfnfindclose( struct lfnffblk *buf );
 
 extern unsigned char __supportlfns;
+extern unsigned char lfncomplete;
 
 #ifndef __LFNFUNCS_C
 
