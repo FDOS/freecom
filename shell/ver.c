@@ -44,7 +44,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "0.84-pre"
+const char shellver[] = "0.84-pre2"
 #ifdef FEATURE_XMS_SWAP
 	" XMS_Swap"
 #endif
@@ -52,10 +52,12 @@ const char shellver[] = "0.84-pre"
 static const char shelldate[] = __DATE__ " " __TIME__;
 const char shellname[] = "FreeCom";
 
+#if 0
 void short_version(void)
 {
   printf("\n%s version %s [%s]\n", shellname, shellver, shelldate);
 }
+#endif
 
 #ifdef INCLUDE_CMD_VER
 
@@ -85,7 +87,11 @@ int cmd_ver(char *rest)
   char **argv;
   int argc, opts, ec = E_None;
 
+#if 0
   short_version();
+#else
+  printf("\n%s version %s [%s]\n", shellname, shellver, shelldate);
+#endif
 
 	optR = optW = optD = optC = 0;
 
