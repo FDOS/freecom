@@ -233,7 +233,7 @@ Command line too long after alias expansion!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
-Line too long.  Can not execute command.
+Commandline longer than 125 characters.
 .
 
 :TEXT_ERROR_HISTORY_SIZE#1%
