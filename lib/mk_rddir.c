@@ -11,30 +11,27 @@
 #include "../strings.h"
 #include "../err_fcts.h"
 #include "../include/cmdline.h"
+#include "../include/lfnfuncs.h"
 
 
 #ifdef FEATURE_LONG_FILENAMES
-int lfn_mrc_dir(const char *path, int func)
+int lfn_mrc_dir( const char *path, int func )
 {
 	struct REGPACK r;
-    r.r_ax = 0x7100 | func;
+    r.r_ax = ( !__supportlfns ) ? ( func << 8 ) : ( 0x7100 | func );
     r.r_dx = FP_OFF( path );
-	r.r_ds = FP_SEG(path);
+	r.r_ds = FP_SEG( path );
     r.r_flags = 1;
     intr( 0x21, &r );
-    if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) {
+    if( ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) && __supportlfns ) {
         r.r_ax = func << 8;
-	r.r_dx = FP_OFF(path);
+	    r.r_dx = FP_OFF( path );
         r.r_ds = FP_SEG( path );
-	intr(0x21, &r);
-}
+    	intr(0x21, &r);
+    }
     return( -( r.r_flags & 1 ) );
 }
 
-
-#define mkdir(x) lfn_mrc_dir(x,0x39)
-#define rmdir(x) lfn_mrc_dir(x,0x3A)
-#define chdir(x) lfn_mrc_dir(x,0x3B)
 #endif
 
 

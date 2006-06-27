@@ -171,6 +171,8 @@
 
 #include <dfn.h>
 
+#define __LFNFUNCS_C
+#include "../include/lfnfuncs.h"
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
@@ -264,14 +266,14 @@ static void printLFNname(char *shortName, char *ext)
       /* LFN get canonical LFN */
 	r.r_ax = 0x7160;
 	r.r_cx = 0x02;
-	r.r_si = FP_OFF(pathbuffer);
+	r.r_si = FP_OFF( pathbuffer );
     r.r_ds = FP_SEG( pathbuffer );
-	r.r_di = FP_OFF(longname);
+	r.r_di = FP_OFF( longname );
     r.r_es = FP_SEG( longname );
     r.r_flags = 1;
 	intr(0x21, &r);
 	
-    if( r.r_flags & 1 || r.r_ax == 0x7100) {
+    if( r.r_flags & 1 || r.r_ax == 0x7100 || !__supportlfns ) {
         dprintf(("[LFN: not supported %x]\n",r.r_ax)); 
 		return;
 	}
@@ -1136,6 +1138,20 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 	unsigned long filecount, bytecount;
 	char *pattern, *cachedPattern;
 	char *p;
+#if 0
+    char altarg[ MAXPATH ];
+
+    if( ( p = strrchr( arg, '\\' ) ) == NULL && arg[ 1 ] ) {
+        if( *arg = '.' ) {
+            sprintf( altarg, "*%s", arg );
+        } else if( strchr( arg, '.' ) == NULL ) {
+            sprintf( altarg, "%s.*", arg );
+        }
+    } else if( p[ 1 ] ) {
+        if( *arg = '.' ) {
+        }
+    }
+#endif
 
 		/* Modified to pre-allocate path to 270 bytes so that
 		   we don't have to realloc() it later.  That was causing
