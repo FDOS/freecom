@@ -138,8 +138,15 @@ static void execute(char *first, char *rest)
     dprintf(("[EXEC: %s %s]\n", fullname, rest));
 
 	if(strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE) {
-		error_line_too_long();
-		return;
+        char *fullcommandline = malloc( strlen( first ) + strlen( rest ) + 2 );
+        error_line_too_long();
+        if( fullcommandline == NULL ) return;
+        sprintf( fullcommandline, "%s%s", first, rest );
+        if( chgEnv( "CMDLINE", fullcommandline ) != 0 ) {
+            free( fullcommandline );
+            return;
+        }
+        free( fullcommandline );
 	}
 
 /* Prepare to call an external program */
@@ -181,6 +188,7 @@ static void execute(char *first, char *rest)
     setErrorLevel(result);
   } else
     error_bad_command(first);
+  chgEnv( "CMDLINE", NULL );
 }
 
 static void docommand(char *line)
