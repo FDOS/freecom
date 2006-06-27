@@ -6,9 +6,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.8  2006/06/27 07:09:26  blairdude
+	find_which now uses simpler functions to parse %PATH% to find executables.
+
 	Revision 1.7  2006/06/26 18:36:36  blairdude
 	FreeCOM can now execute long filenamed executable files.
-
+	
 	Revision 1.6  2005/12/10 10:09:43  perditionc
 	based on patches from Blair Campbell, additional LFN support (slim print,
 	add initial cd,rd,md support, make compile time optional), remove some
@@ -57,6 +60,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <dfn.h>
 
@@ -64,10 +68,48 @@
 #include "../err_fcts.h"
 #include "../include/misc.h"
 
+static char *__addcomexebat( char * file )
+{
+    char tmpname[ MAXPATH ];
+
+    sprintf( tmpname, "%s.COM", file );
+    if( access( tmpname, 0 ) == 0 ) return( strcpy( file, tmpname ) );
+    sprintf( tmpname, "%s.EXE", file );
+    if( access( tmpname, 0 ) == 0 ) return( strcpy( file, tmpname ) );
+    sprintf( tmpname, "%s.BAT", file );
+    if( access( tmpname, 0 ) == 0 ) return( strcpy( file, tmpname ) );
+    if( access( file, 0 ) == 0 ) return( file );
+    return( NULL );
+}
+
+/* The return value is overwritten on subsequent calls */
+static char *_searchpath( const char *name )
+{
+    char *envptr = getEnv( "PATH" );
+    static char file[ MAXPATH ];
+
+    strcpy( file, name );
+    if( __addcomexebat( file ) != NULL ) return( file );
+    while( envptr && envptr[0] ) {    /* While there are paths left to parse */
+        char *tok = strchr( envptr, ';' );
+        int toklen;
+        if( tok == NULL ) toklen = strlen( envptr );
+        else toklen = tok - envptr;
+        memcpy( file, envptr, toklen );
+        strcpy( file+toklen, "\\" );
+        strcat( file, name );
+        if( __addcomexebat( file ) != NULL ) return( file );
+        envptr = tok;
+        if( envptr ) envptr++;    /* Move on to the next one */
+    }
+    return( NULL );
+}
+
 char *find_which(const char * const fname)
 {	char *p;
 	static char *buf = 0;
 
+#if 0
 	critEnableRepeatCheck();
 	if(0 == (p = dfnsearch(fname, 0, 0))) {
 		if(errno == ENOMEM) {
@@ -77,14 +119,19 @@ char *find_which(const char * const fname)
 		return 0;
 	}
 
+#else
+    if( 0 == ( p = _searchpath( fname ) ) ) return( 0 );
+#endif
 	free(buf);
 #ifdef FEATURE_LONG_FILENAMES
 	buf = abspath(getshortfilename(p), 1);
 #else
     buf = abspath(p, 1);
 #endif
+#if 0
 	free(p);
 
 	critEndRepCheck();
+#endif
 	return buf;
 }
