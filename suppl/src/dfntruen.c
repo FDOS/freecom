@@ -73,6 +73,7 @@ fi(le): dfntruen.c
 
 */
 
+#include "../../config.h"
 #include "initsupl.loc"
 
 #ifndef _MICROC_
@@ -103,18 +104,31 @@ char *dfntruename(const char * const fnam)
 
 	chkHeap
 	if((h = eno_malloc(DFN_FILENAME_BUFFER_LENGTH)) != 0) {
+#ifdef FEATURE_LONG_FILENAMES
+        r.r_ax = 0x7160;
+        r.r_cx = 0x02;
+#else
 		r.r_ax = 0x6000;
+#endif
         r.r_ds = FP_SEG(fnam);
 		r.r_si = FP_OFF(fnam);
 		r.r_es = FP_SEG(h);
 		r.r_di = FP_OFF(h);
 		chkHeap
         intr( 0x21, &r );
+#ifdef FEATURE_LONG_FILENAMES
+        if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) {
+            r.r_ax = 0x6000;
+            intr( 0x21, &r );
+#endif
 		if(( r.r_flags & 1 ) ? r.r_ax : 0) {		/* failed */
 			eno_setOSerror( r.r_ax);
 			free(h);
 			DBG_RETURN_S( 0)
 		}
+#ifdef FEATURE_LONG_FILENAMES
+        }
+#endif
 	}
 
 	DBG_RETURN_BS( StrTrim(h))

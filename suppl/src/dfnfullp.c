@@ -68,6 +68,7 @@ co(mpilers):
 
 */
 
+#include "../../config.h"
 #include "initsupl.loc"
 
 #ifndef _MICROC_
@@ -135,7 +136,7 @@ char *dfnfullpath(const char * const fnam)
 		if((nxtDelim = strchr(q, '\\')) == 0)
 			nxtDelim = strchr(q, '\0');
 		if((cnt = strspn(q, ".")) == nxtDelim - q
-#ifndef OS_WIN32
+#ifndef FEATURE_LONG_FILENAMES
 		 && cnt < 3		/* DOS limits to "." and ".." */
 #endif
 		) {

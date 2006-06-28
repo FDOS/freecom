@@ -5,9 +5,12 @@
  *	on error: Displays "out of memory" (or appropriate)
 
 	$Log$
+	Revision 1.3  2006/06/28 06:29:11  blairdude
+	TRUENAME now supports long filenames
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2004/02/01 13:24:22  skaus
 	bugfix: misidentifying unspecific failures from within SUPPL
 	
@@ -20,6 +23,7 @@
 
 #include <dfn.h>
 
+#include "../include/lfnfuncs.h"
 #include "../err_fcts.h"
 #include "../include/command.h"
 #include "../include/misc.h"
@@ -29,7 +33,11 @@ char *truepath(const char * const fnam)
 
 	assert(fnam);
 
-	if((h = dfntruename(fnam)) != 0)
+#ifdef FEATURE_LONG_FILENAMES
+	if((h = dfntruename(getshortfilename(fnam))) != 0)
+#else
+    if((h = dfntruename(fnam)) != 0)
+#endif
 		return h;
 
 	display_errno_fnam_error(fnam);
