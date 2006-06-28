@@ -502,7 +502,7 @@ char *readbatchline(int *eflag, char *textline, int size)
     /* Strip leading spaces and \n chars */
 /*    rtrimsp(textline);	must not remove trailing spaces */
 	first = strchr(textline, '\0');
-	while(first >= textline && *--first == '\n');
+	while(--first >= textline && ( *first == '\n' || *first == '\r' ) );
 	first[1] = '\0';
     first = ltrimcl(textline);
 
