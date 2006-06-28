@@ -45,6 +45,7 @@
 #include "../err_fcts.h"
 #include "../include/openf.h"
 #include "../strings.h"
+#include "../include/lfnfuncs.h"
 
 #ifdef DEBUG
 static void devAttr(int fd)
@@ -82,10 +83,17 @@ int cmd_ctty(char *param)
   devAttr(2);
 #endif
 
+#ifdef FEATURE_LONG_FILENAMES
+  attr = __supportlfns;
+  __supportlfns = 0;
+#endif
   if((f = devopen(param, O_RDWR)) < 0) {
     error_no_rw_device(param);
     return 1;
   }
+#ifdef FEATURE_LONG_FILENAMES
+  __supportlfns = attr;
+#endif
 
   if(((attr = fdattr(f)) & 0x80) == 0
    || write(f, "\r\n", 2) != 2) {		/* need \r as in bin mode */
