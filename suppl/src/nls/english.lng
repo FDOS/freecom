@@ -1,0 +1,64 @@
+/* $Id$
+   $Locker$	$Name$	$State$
+
+   SUPPL message definitions for the English tongue
+
+   Every entry must be an #define; also, don't prevent multiple
+   inclusion
+
+   $Log$
+   Revision 1.1  2006/06/28 16:04:19  blairdude
+   Initial checkin
+
+*/
+
+/* standard MSGLIB errors */
+#define E_argMissing	"Option '%c' requires a non-empty argument\n"
+#define E_nonArgOption 	"Option '%c' cannot have an argument\n"
+#define E_argOption		"Option '%c' requires an argument\n"
+#define E_lArgOption	"Option '%s' requires an argument\n"
+#define E_option		"Unknown option '%c'\n"
+#define E_lOption		"Unknown option '%s'\n"
+#define E_longOption	"Long options not supported\n"
+#define E_noMem			"Out of memory\n"
+#define Y_noFNam		"<<unknown filename>>"
+#define E_openFile		"Cannot open file: %s\n"
+#define E_createFile	"Cannot create file: %s\n"
+#define E_readFile		"Cannot read file: %s\n"
+#define E_writeFile		"Cannot write file: %s\n"
+#define E_accessFile	"Cannot access file: %s\n"
+#define E_creatTmpFnam	"Cannot create filename for temporary file\n"
+#define E_tmpOpen		"Cannot open temporary file: %s\n"
+#define E_wrCfgFile		"Cannot write binary configuration file: %s\n"
+#define E_ovrLinkcount	"Locked the same key too often in cfg file: %s\n"
+
+#define I_success "success"
+#define I_failure "failure"
+#define I_error "error"
+
+#define  I_wdInc		"inc"
+#define  I_sgnPlus		"+"
+#define  I_wdDec		"dec"
+#define  I_sgnMinus		"-"
+#define  I_wdOff		"off"
+#define  I_wdFalse		"false"
+#define  I_wdNo			"no"
+#define  I_wdClear		"clear"
+#define  I_wdOn			"on"
+#define  I_wdTrue		"true"
+#define  I_wdYes		"yes"
+#define  I_wdSet		"set"
+#define  I_wdToggle		"toggle"
+#define  I_wdSwitch		"switch"
+
+#define	I_TcfgErr		"unknown"
+#define	I_TcfgNone		"unspecified"
+#define	I_TcfgStr		"string"
+#define	I_TcfgExpStr	"expandable string"
+#define	I_TcfgInt		"integer"
+#define	I_TcfgBool		"boolean"
+#define	I_TcfgExpInt	"expandable integer"
+#define	I_TcfgExpBool	"expandable boolean"
+
+/* cfg errors */
+#define E_CFGunknown "Unknown error\n"
