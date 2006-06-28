@@ -22,6 +22,7 @@
 #include "../strings.h"
 #include "../err_fcts.h"
 #include "../include/cmdline.h"
+#include "../include/openf.h"
 
 
 #ifdef FEATURE_LONG_FILENAMES
@@ -42,6 +43,10 @@
 const char * getshortfilename( const char *longfilename )
 {
     static char shortfilename[ 128 ];
+
+/* This function causes an invalid opcode when working with NUL */
+/* access() doesn't even work here */
+    if( _close( _open( longfilename, 0 ) ) == 0 ) return( longfilename );
     
     _PUSH_DS;
 
