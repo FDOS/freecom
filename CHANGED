@@ -1,3 +1,14 @@
+v0.84pre2
+add: exec sets CMDLINE if command-line is longer than 125 characters; if setting CMDLINE fails, so does exec. (All DJGPP-compiled apps and various others support CMDLINE for passing parameters)
+chg: Size optimizations
+chg: CONIO dependencies removed - smaller size
+chg: VER /R now prints the FreeDOS version string
+chg: SET VAR can display %VAR% instead of syntax error
+chg: Remove version strings
+fix: COPY now checks for existance of source file before asking to overwrite destination
+add: ukr.lng: Ukrainian translated messages
+add: default.lng: LFNFOR messages
+add: LFN support for REN, COPY, IF EXIST, DEL, FOR (LFNFOR), MKDIR, CHDIR, RMDIR, TYPE, TRUENAME, filename completion (LFNFOR COMPLETE), command execution, and redirection; set LFN=n to disable
 chg: DIR/LFN: now displays lfn for all files that return one
 fix: IF: /I option parsing interfered with /whatever tests
 fix: DIR: divide by 0 {TE, Eric, & Mark Bailey}
