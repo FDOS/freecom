@@ -50,6 +50,7 @@ int          lfncreat( const char *filename, int amode );
 int          lfncreatnew( const char *filename, int mode );
 FILE *       lfnfopen( const char *filename, const char *mode );
 int          lfnopen( const char *filename, int access, ... );
+int          lfn_mrc_dir( const char *name, int function );
 int          lfnrename( const char *oldfilename, const char *newfilename );
 int          lfnfindfirst( const char *path, struct lfnffblk *buf,
                            unsigned attr );
