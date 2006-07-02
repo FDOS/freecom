@@ -3,9 +3,14 @@
 	Criter repeat check interface
 
 	$Log$
-	Revision 1.3  2006/06/11 02:47:05  blairdude
-	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	Revision 1.4  2006/07/02 08:15:10  blairdude
+	#if 0'd out 2 unused functions.
 
+	Revision 1.3  2006/06/11 02:47:05  blairdude
+	
+	
+	Optimized FreeCOM for size, fixed LFN bugs, and started an int 2e handler (which safely fails at the moment)
+	
 	Revision 1.2  2005/12/10 10:09:43  perditionc
 	based on patches from Blair Campbell, additional LFN support (slim print,
 	add initial cd,rd,md support, make compile time optional), remove some
@@ -51,6 +56,7 @@ void registerCriterRepeatCheckAddr(word far *p)
 	}
 }
 
+#if 0 /* Unused?? */
 void critEnableRepeatCheck(void)
 {
 	if(drives) {
@@ -72,6 +78,7 @@ unsigned critDisableRepeatCheck(void)
 
 	return 0;
 }
+#endif
 #if 0
 char *critDriveReport(void)
 {	if(drives) {
