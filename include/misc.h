@@ -93,6 +93,8 @@ unsigned allocSysBlk(const unsigned size, const unsigned mode);
 unsigned allocMemBlk(const unsigned size, const unsigned mode);
 void freeSysBlk(const unsigned segm);
 
+void myperror(const char *msg);
+
 char far *_fstpcpy(char far *dst, const char far *src);
 void partstrlower(char *str);
 void readcommand(char * const str, int maxlen);

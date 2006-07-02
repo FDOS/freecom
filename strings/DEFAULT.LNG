@@ -476,6 +476,18 @@ The context is missing after swap. The context is re-created,
 but all aliases etc. are lost.
 .
 
+:TEXT_ERROR_PERMISSION_DENIED#1%
+%s: Permission denied
+.
+
+:TEXT_ERROR_NO_SUCH_FILE#1%
+%s: No such file or directory
+.
+
+:TEXT_ERROR_UNKNOWN_ERROR#1%
+%s: Unknown error
+.
+
 #
 # Informational messages
 #

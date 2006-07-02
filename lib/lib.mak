@@ -117,6 +117,7 @@ freecom_deps :  \
 	msg_mkey.obj \
 	msg_prmp.obj \
 	mux_ae.obj \
+	myperror.obj \
 	nls.obj \
 	nls_date.obj \
 	nls_time.obj \
@@ -365,6 +366,7 @@ freecom.lib : $(CFG) freecom_deps
 +-msg_mkey.obj &
 +-msg_prmp.obj &
 +-mux_ae.obj &
++-myperror.obj &
 +-nls.obj &
 +-nls_date.obj &
 +-nls_time.obj &
@@ -608,6 +610,7 @@ freecom.lib : $(CFG) freecom_deps
 +msg_mkey.obj &
 +msg_prmp.obj &
 +mux_ae.obj &
++myperror.obj &
 +nls.obj &
 +nls_date.obj &
 +nls_time.obj &

@@ -188,7 +188,7 @@ int cmd_del(char *param)
 				if(verbose && !optP)
 					displayString(TEXT_DELETE_FILE, fullname);
 				if(unlink(fullname) != 0) {
-					perror(fullname);   /* notify the user */
+					myperror(fullname);   /* notify the user */
 				} else
 					++count;
 #endif

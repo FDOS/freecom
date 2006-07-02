@@ -28,7 +28,11 @@
 #include "../include/misc.h"
 #include "../err_fcts.h"
 
-void myfnsplit( const char *path, char *drv, char *dir, char *name, char *ext )
+void myfnsplit( const char *path,
+                      char *drv,
+                      char *dir,
+                      char *name,
+                      char *ext )
 {
     const char* end;
     const char* p;
@@ -73,11 +77,13 @@ void myfnsplit( const char *path, char *drv, char *dir, char *name, char *ext )
 }
 
 void myfnmerge( char *path, const char *drive, const char *dir,
-                const char *fname, const char *ext )
+                            const char *fname, const char *ext )
 {
     if( *drive ) {
         strcpy( path, drive );
+#if 0 /* Unused */
         if( !drive[ 1 ] )strcat( path, ":" );
+#endif
     } else ( *path ) = 0;
 
     if( *dir ) {
@@ -89,7 +95,9 @@ void myfnmerge( char *path, const char *drive, const char *dir,
     if( *fname ) {
         strcat( path, fname );
         if( *ext ) {
+#if 0 /* Unused */
             if( *ext != '.' ) strcat( path, "." );
+#endif
             strcat( path, ext );
         }
     }
@@ -181,7 +189,7 @@ int cmd_rename(char *param)
 			myfnmerge( sn, s_drv, s_dir, ff.ff_name, NULL );
 			dprintf(("rename(%s, %s)\n", sn, newname) );
 			if(rename(sn, newname) != 0) {
-				perror("rename");
+				myperror("rename");
 				ec = E_Other;
 				break;
 			}
