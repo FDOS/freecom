@@ -69,9 +69,9 @@ CHAR_DEVICE: B’†d %1 urz†dzenia %A: %3
 
 ## kind of operation
 S0
-ODCZYTU: odczyt z
+READ: odczyt z
 S1
-ZAPISU: zapis do
+WRITE: zapis do
 
 ## kind of failed area of block devices
 S4
@@ -81,17 +81,17 @@ FAT: FAT
 S6
 ROOT: root
 S7
-DANE: dane
+DATA: dane
 
 ## action strings
 S8
-IGNORUJ: (I)gnoruj
+IGNORE: (I)gnoruj
 S9
-PON£W: p(O)n¢w
+RETRY: p(O)n¢w
 S10
-PRZERWIJ: (P)rzerwij
+ABORT: (P)rzerwij
 S11
-Zrezygnuj: (Z)rezygnuj
+FAIL: (Z)rezygnuj
 ## keys associated with the actions
 S14 (compacted)
 KEYS_IGNORE: iI
@@ -105,7 +105,7 @@ S13
 DELIMITER: , %.
 
 ## Error strings
-NIEZNANY: Nieznany kod b’‘du
+UNKNOWN: Nieznany kod b’‘du
 S15
 0: pr¢ba pogwa’cenia ochrony przez zapisem
 1: nieznana jednostka sterownika
