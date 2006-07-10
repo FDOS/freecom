@@ -2,22 +2,22 @@
 #
 # Critical error national customization file
 #
-#       Language: French
-#       Codepage: 852
-#       Author:   Mateusz Viste "Fox"
-#
+#       Language: Polish
+#       Codepage: 991 (Mazovia)
+#       Author:   Mateusz Viste "Fox" / the.killer@wp.pl
+# 
 # The critical error (criter) handler receives some information
 # from the kernel about what error condition happens, generates some
 # human friendly message from it, requests the user's opinion about
 # how to proceed and, finally, returns to the kernel.
-#
+# 
 # The human friendly message is generated using one of the following
 # templates:
 # BLOCK_DEVICE (for criters on block devices)
 # 	Error %1 drive %A: %2 area: %3
 # -and- CHAR_DEVICE (for criters on character devices)
 # 	Error %1 device %A: %3
-#
+# 
 # Two-character sequences, which first character is a percent sign '%',
 # are placeholders for other information:
 # %% -> a single percent sign
@@ -63,15 +63,15 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: Erreur %1 lecteur %A: %2 area: %3
+BLOCK_DEVICE: B’†d %1 dysku %A: %2 obszar: %3
 S3
-CHAR_DEVICE: Erreur %1 device %A: %3
+CHAR_DEVICE: B’†d %1 urz†dzenia %A: %3
 
 ## kind of operation
 S0
-READ: lecture de
+ODCZYTU: odczyt z
 S1
-WRITE: ‚criture vers
+ZAPISU: zapis do
 
 ## kind of failed area of block devices
 S4
@@ -81,23 +81,23 @@ FAT: FAT
 S6
 ROOT: root
 S7
-DATA: donn‚es
+DANE: dane
 
 ## action strings
 S8
-IGNORE: (I)gnorer
+IGNORUJ: (I)gnoruj
 S9
-RETRY: (R)ecommencer
+PON£W: p(O)n¢w
 S10
-ABORT: (A)nnuler
+PRZERWIJ: (P)rzerwij
 S11
-FAIL: (E)chec
+Zrezygnuj: (Z)rezygnuj
 ## keys associated with the actions
 S14 (compacted)
 KEYS_IGNORE: iI
-KEYS_RETRY:  rR
-KEYS_ABORT:  aA
-KEYS_FAIL:   eE
+KEYS_RETRY:  pP
+KEYS_ABORT:  eE
+KEYS_FAIL:   zZ
 ## embedded strings
 S12
 QUESTION:  ? %.
@@ -105,26 +105,26 @@ S13
 DELIMITER: , %.
 
 ## Error strings
-UNKNOWN: Unknown error code
+NIEZNANY: Nieznany kod b’‘du
 S15
-0: write-protection violation attempted
-1: unit‚ inconnue pour pilote
-2: lecteur non prˆt
-3: commande inconnue donn‚e au pilote
-4: erreur de donn‚es (mauvais CRC)
+0: pr¢ba pogwa’cenia ochrony przez zapisem
+1: nieznana jednostka sterownika
+2: nap‘d nie jest gotowy
+3: sterownik nie rozpozna’ polecenia
+4: b’†d danych (b’‘dne CRC)
 5: bad device driver request structure length
-6: erreur de recherche
-7: type de support inconnu
-8: secteur non trouv‚
-9: imprimante … cours de papier
-10: erreur d'‚criture
-11: erreur de lecture
-12: erreur g‚n‚rale
-13: violation de partage
+6: b’†d wyszukiwania
+7: nieznany typ nožnika
+8: sektor nie odnaleziony
+9: brak papieru w drukarce
+10: b’†d zapisu
+11: b’†d odczytu
+12: b’†d og¢lny
+13: pogwa’cenie praw wsp¢’dzielenia
 14: lock violation
-15: changement de disque invalide
-16: FCB indisponible
-17: tampon de partage satur‚
-18: page de code manquante
-19: fin de l'entr‚e
-20: espace disque insuffisant
+15: nieprawid’owa zmiana dysku
+16: FCB niedost‘pne
+17: przepe’nieniee wsp¢’dzielonych bufor¢w
+18: nieprawid’owa strona kodowa
+19: koniec wejžcia
+20: niewystarczaj†ce miejsce na dysku

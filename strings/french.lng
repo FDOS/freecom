@@ -1,5 +1,11 @@
-## Supplied by:  "Etelain" <etelain@club-internet.fr>
-
+# $Id$
+#
+# FreeCOM national customization file
+#
+#       Language: French
+#       Codepage: 852
+#       Author:   Mateusz Viste "Fox" / the.killer@wp.pl
+# 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
 # outputs strings.h and strings.dat.  The .DAT file is appended to
@@ -11,161 +17,246 @@
 # with "#" are ignored.
 # Each message starts with a label name that will be used to refer to
 # the message in the program.  A label starts with a colon ":".
-# Please look at other messages to see the pattern, and try to
-# follow with new messages.
+# A label has a version ID attached to it delimited by a hash sign, e.g.:
+#	:TEXT_LABEL#1
+# This version is incremented each time the contents of the string has
+# undergo a larger change. The same language definition may contain the
+# same label up to one time, regardless of the version. FIXSTRS compares
+# both the label and the version ID and both must match.
+# A missing version is assumed as "#0".
+# If there is a percent sign (%) appended to the version, the printf()
+# format string %-style placeholders are compared for the strings. The
+# sign need to be set in DEFAULT.LNG only.
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
-# period signifies that there will be a final carrage return when
+# period (".") signifies that there will be a final carrage return when
 # the message is displayed, but a comma does not.
 #
+# The body may contain backslash escape sequences as known from C; there
+# are the usual \# (where '#' is a lowercase letter except 'x' or one of
+# "[]{}?"), \\ (to embed a backslash itself)
+# \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
+# character), \, and \. (to specify a period or comma in the first column
+# of a line) and the single \ at the end of the line to suppress to append
+# a newline character. Note: There is NO octal sequence except the short \0!
+# There is a known bug (or feature): [ignore the very first hash mark]
+#:TEXT_LABEL#2
 #
+#\
+#,
+# Although the first data line appends the newline, the second does not,
+# though the comma removes the newline from the first line.
+
+# Defining prompts
+# Some prompts may cause an user interaction. Those ones should be in sync
+# with the issued text. To define how to interprete a pressed key, they
+# are mapped into metakeys like that: [ignore first hash sign]
+
+## Return value: a -> Yes; else -> No
+#:PROMPT_YES_NO#1
+#YyNn\n\r{CBREAK}
+#aabb b b       b
+# (Yes/No) ? \
+#.
+
+# All strings, which label start with "PROMPT_", are parsed as prompts.
+# The first two lines of the body are special; the first one enumerates all
+# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# range from 'a' through 'z'; spaces are ignored; everything else cause
+# an error. The comment preceeding the prompt definition associates the
+# metakeys with their meaning.
+# The remaining lines of the body contain the text to be displayed.
+#
+# Above example defines a native Yes/No prompt with a space behind the question
+# mark and no appended newline.
+# The metakey 'a' means "User answered with 'Yes'" and 'b' means no.
+# The keys 'Y' and 'y' are mapped to metakey 'a' (aka Yes) and the keys
+# 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
+# The spaces between the 'b's in the second line had been inserted to
+# align them with the corresponding keys of the first line, hence in order
+# to enhance readibility of the association between the pressed keys and their
+# mapping into a metakey.
+#
+# The first line (pressed keys) has to enumerate the ASCII value as returned
+# by DOS or BIOS (INT-10); special keys normally expressed with ASCII code zero,
+# but a non-zero scancode are NOT supported; this limit includes for instance
+# the function keys F1 through F12 and the cursor keys and it is not possible
+# to differ between the number pad and normal keys.
+# The keys may be enumerated by their ASCII character, by a backslash sequence,
+# or a symbolic name enclosed in curly brackets (see FIXSTRS.C "symkeys[]"
+# array about the supported symnames).
+
 
 #
 #  These are error messages
 #
 ## Issued if a single character option is unknown
-:TEXT_ERROR_INVALID_SWITCH
-Param‚tre incorrect. - /%c
+:TEXT_ERROR_INVALID_SWITCH#0%
+ParamŠtre incorrect. - /%c
 .
 
 ## Issued if a longname option is unknown
-:TEXT_ERROR_INVALID_LSWITCH
-Param‚tre incorrect. - /%s
+:TEXT_ERROR_INVALID_LSWITCH#0%
+ParamŠtre incorrect. - /%s
 .
 
 ## Issued if the context, the type of argument etc. is invalid
-:TEXT_ERROR_ILLFORMED_OPTION
-Format incorrect de l'option : '%s'
+:TEXT_ERROR_ILLFORMED_OPTION#0%
+Option mal form‚e: '%s'
 .
 
-:TEXT_ERROR_OPT_ARG
-L'option "%s" ne peut avoir d'arguments
+:TEXT_ERROR_OPT_ARG#0%
+L'option '%s' ne peut pas avoir d'arguments
 .
 
-:TEXT_ERROR_OPT_NOARG
-l'option "%s" doit avoir un ou des paramétre(s)
+:TEXT_ERROR_OPT_NOARG#0%
+l'option "%s" doit avoir un ou des paramŠtre(s)
 .
 
-:TEXT_INVALID_NUMBER
-Nombre invalide spécifié dans "%s"
+:TEXT_INVALID_NUMBER#0%
+Nombre invalide sp‚cifi‚ dans '%s'
 .
 
-:TEXT_ERROR_CLOSE_QUOTE
+:TEXT_ERROR_CLOSE_QUOTE#0%
 Il manque la fermeture des guiellemets: %c
 .
 
 :TEXT_ERROR_TEMPFILE
-Ne peut cr‚e le repertoire temporaire
+Impossible de cr‚er le fichier temporaire
 .
 
-:TEXT_ERROR_TOO_MANY_PARAMETERS_STR
-Trop de param‚tres. - %s
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
+Trop de paramŠtres. - '%s'
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS
-Trop de param‚tres.
+Trop de paramŠtres.
 .
 
-:TEXT_ERROR_INVALID_PARAMETER
-Param‚tre invalide. - %s
+:TEXT_ERROR_INVALID_PARAMETER#0%
+ParamŠtre invalide. - '%s'
 .
 
 :TEXT_ERROR_PATH_NOT_FOUND
-Repertoire introuvable
+Chemin introuvable.
 .
 
 :TEXT_ERROR_FILE_NOT_FOUND
 Fichier introuvable.
 .
 
-:TEXT_ERROR_SFILE_NOT_FOUND
-Fichier introuvable. - %s
+:TEXT_ERROR_SFILE_NOT_FOUND#0%
+Fichier introuvable. - '%s'
 .
 
-:TEXT_ERROR_REQ_PARAM_MISSING
-Param‚tre requis absent.
+:TEXT_ERROR_REQ_PARAM_MISSING#0%
+ParamŠtre requis absent.
 .
 
-:TEXT_ERROR_INVALID_DRIVE
-Sp‚cification de lecteur invalide.
+:TEXT_ERROR_INVALID_DRIVE#0%
+Sp‚cification de lecteur invalide: %c:.
 .
 
-:TEXT_ERROR_BADCOMMAND
-Commande ou nom de fichier incorrect.
+:TEXT_ERROR_BADCOMMAND#2%
+Commande ou nom de fichier incorrect - "%s".
 .
 
 :TEXT_ERROR_OUT_OF_MEMORY
 Plus de m‚moire disponible.
 .
 
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+L'allocation de m‚moire DOS a ‚chou‚.
+.
+
 :TEXT_ERROR_CANNOTPIPE
 Cannot pipe!  Ne peut ouvrir le fichier temporaire!
 .
 
-:TEXT_ERROR_LONG_LINE_BATCHFILE
-La ligne #%ld dans le fichier BATCH '%s' est trop lomgue.
+:TEXT_ERROR_LONG_LINE_BATCHFILE#0%
+La ligne #%ld dans le fichier BATCH '%s' est trop longue.
 .
 
-:TEXT_ERROR_BFILE_VANISHED
-Le fichier BATCH "%s" est introuvable.
+:TEXT_ERROR_BFILE_VANISHED#0%
+Le fichier BATCH '%s' est introuvable.
 .
 
-:TEXT_ERROR_BFILE_LABEL
-Le fichier BATCH "%s" ne contient pas l'‚tiqette "%s".
+:TEXT_ERROR_BFILE_LABEL#0%
+Le fichier BATCH '%s' ne contient pas d'‚tiquette '%s'.
 .
 
-:TEXT_ERROR_SET_ENV_VAR
-Impossible de definir la variable "%s".
-L'environment est-il satur‚?
+:TEXT_ERROR_DIRFCT_FAILED#1%
+%s … ‚chou‚ pour '%s'.
 .
 
-:TEXT_ERROR_ENV_VAR_NOT_FOUND
-l'environment de la variable "%s" introuvable.
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ENV_VAR#0%
+Impossible de definir la variable '%s'.
+L'environment serait-il satur‚?
+.
+
+:TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
+La variable d'environment '%s' est introuvable.
 .
 
 :TEXT_ERROR_NO_ENVIRONMENT
-Aucun environement! La memoire est peut ˆtre trop petite. Utilisez l'option /E.
+Aucun environement! La m‚moire est peut-ˆtre a bout. Utilisez l'option /E.
 .
 
-:TEXT_ERROR_SYNTAX_STR
-Erreur de syntaxe. - %s
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1%
+Impossible de d‚finir l'alias '%s'. L'espace des alias serait-il satur‚?
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1%
+Alias '%s' non trouv‚.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+Pas d'espace pour les alias. La m‚moire est peut-ˆtre … bout.
+.
+
+:TEXT_ERROR_SYNTAX_STR#0%
+Erreur de syntaxe. - '%s'
 .
 
 :TEXT_ERROR_SYNTAX
 Erreur de syntaxe.
 .
 
-:TEXT_ERROR_FILENAME_TOO_LONG
-Nom de fichier trop long. - %s
+:TEXT_ERROR_FILENAME_TOO_LONG#0%
+Nom de fichier trop long. - '%s'
 .
 
-:TEXT_ERROR_SELFCOPY
-Impossible de copier "%s" sur lui mˆme
+:TEXT_ERROR_SELFCOPY#0%
+Impossible de copier '%s' sur lui-mˆme
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
-Ligne de commande trop longue apr‚s expension d'emprunt!
+Ligne de commande trop longue aprŠs expension d'alias!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
 Ligne trop longue.  Impossible d'executer la commande.
 .
 
-:TEXT_ERROR_HISTORY_SIZE
-Taille de l'historique invalide.
+:TEXT_ERROR_HISTORY_SIZE#1%
+Taille de l'historique invalide '%s'.
+.
+
+:TEXT_HISTORY_EMPTY#1
+L'historique de la ligne de commandes est vide.
 .
 
 :TEXT_ERROR_BAD_MCB_CHAIN
-MCB chain est corronput, ou le system de compatiblit‚ MS-DOS.
+La chaŒne MCB ou le system de compatibilit‚ MS-DOS est corrompu.
 .
 
-:TEXT_ERROR_UNDEFINED_ERROR
-Erreur non definit %d.
+:TEXT_ERROR_UNDEFINED_ERROR#0%
+Erreur non definie %d.
 .
 
-:TEXT_ERROR_REGION_WARNING
-Region de memoire invalide %d - ignor‚.
+:TEXT_ERROR_REGION_WARNING#0%
+R‚gion de memoire invalide %d - ignor‚.
 .
 
 :TEXT_ERROR_ON_OR_OFF
@@ -176,28 +267,32 @@ Vous devez sp‚cifier ON ou OFF.
 Mauvaise sp‚cification de variable.
 .
 
-:TEXT_ERROR_IN_MISSING
+:TEXT_ERROR_IN_MISSING#1
 IN oubli‚ dans la commande FOR.
 .
 
-:TEXT_ERROR_MISSING_PARENTHESES
-Une ou plusieurs parath‚se(s) oubli‚e(s).
+:TEXT_ERROR_MISSING_PARENTHESES#1
+Une ou plusieurs paranth‚se(s) oubli‚e(s).
 .
 
-:TEXT_ERROR_DO_MISSING
+:TEXT_ERROR_DO_MISSING#1
 DO oubli‚ dans la commande FOR.
 .
 
-:TEXT_ERROR_NO_COMMAND_AFTER_DO
-Aucunne commande apr‚s DO.
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+FOR: Aucune commande aprŠs DO.
 .
 
-:TEXT_ERROR_REDIRECT_FROM_FILE
-Impossible de rediriger l'entr‚e vers le fichier %s.
+:TEXT_ERROR_REDIRECT_FROM_FILE#0%
+Impossible de rediriger l'entr‚e depuis le fichier '%s'.
 .
 
-:TEXT_ERROR_REDIRECT_TO_FILE
-Impossible de rediriger la sortie vers le fichier %s.
+:TEXT_ERROR_REDIRECT_TO_FILE#0%
+Impossible de rediriger la sortie vers le fichier '%s'.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+La redirection est vide.
 .
 
 :TEXT_ERROR_INVALID_DATE
@@ -209,23 +304,19 @@ Heure invalide.
 .
 
 :TEXT_ERROR_NO_GOTO_LABEL
-Etiquette destination non definit dans GOTO.
-.
-
-:TEXT_ERROR_NO_CTTY_CMD
-CTTY pas encore implant‚.
+Etiquette de destination non definit dans GOTO.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
-La commande CTTY a ‚t‚ exlut de ce COMMAND.COM.
+La commande CTTY a ‚t‚ exclut de ce COMMAND.COM.
 .
 
-:TEXT_ERROR_NORW_DEVICE
-Invalide ou non ‚criture-lecture device '%s'.
+:TEXT_ERROR_NORW_DEVICE#0%
+Invalid or no read-write device '%s'.
 .
 
-:TEXT_ERROR_CTTY_DUP
-Echec du changement des descriptors du fichiers vers TTY '%s'.
+:TEXT_ERROR_CTTY_DUP#0%
+Echec lors du changement des descriptors du fichiers vers TTY '%s'.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
@@ -240,28 +331,28 @@ Echec du changement des descriptors du fichiers vers TTY '%s'.
 Erreur lors de l'‚criture sur la destination.
 .
 
-:TEXT_ERROR_CANNOT_OPEN_SOURCE
-Impossible d'ouvrirla source. - %s
+:TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
+Impossible d'ouvrir la source. - '%s'
 .
 
-:TEXT_ERROR_OPEN_FILE
+:TEXT_ERROR_OPEN_FILE#0%
 Impossible d'ouvrir le fichier '%s'
 .
 
-:TEXT_ERROR_READ_FILE
+:TEXT_ERROR_READ_FILE#0%
 Impossible de lire le fichier '%s'
 .
 
-:TEXT_ERROR_WRITE_FILE
-Impossible d'‚crire sur le fichier '%s'
+:TEXT_ERROR_WRITE_FILE#0%
+Impossible d'‚crire dans le fichier '%s'
 .
 
 :TEXT_ERROR_LEADING_PLUS
-Le concatenation caract‚re '+' ne peut diriger les arguments.
+Le caractŠre '+' ne peut pas pr‚c‚der les arguments.
 .
 
 :TEXT_ERROR_TRAILING_PLUS
-The concatenation caract‚re '+' ne peut suivre les arguments.
+Le caractŠre '+' ne peut pas suivre les arguments.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
@@ -269,237 +360,620 @@ Rien a faire.
 .
 
 :TEXT_ERROR_COPY
-COPY … ‚chou‚
+COPY … ‚chou‚.
+.
+
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: il manque le nom du fichier
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: il manque le numero
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: numero non valide
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: Commande manquante
 .
 
 :TEXT_NOT_IMPLEMENTED_YET
-D‚sol‚...d‚ja implant‚.
+D‚sol‚... pas encore implant‚.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
-Echec lors du transfer des 'messages' en memoire.
+Echec lors du transfer des messages en m‚moire.
 .
 
 :TEXT_MSG_NOTIMPLEMENTED
 L'option /MSG … ‚t‚ exclu de ce COMMAND.COM.
 .
 
+:TEXT_MSG_ITEMS_DISPLAYED#1%
+%u ‚l‚ments affich‚s.
+.
+
 :TEXT_CORRUPT_COMMAND_LINE
-Ligne de commande corronpu ! Ceci est une erreur interne,
-merci de la reporter … julien-e@caramail.com ou sur www.freedos.org/bugs
+Ligne de commande corrompue! Ceci est une erreur interne li‚e … COMMAND.COM,
+merci de la raporter (par exemple sur www.freedos.org/bugs).
 .
 
-:TEXT_QUOTED_C_OR_K
-Les options /C et /K ne peuvent ˆtre ajout‚,
-elles sont ignor‚es.
+:TEXT_QUOTED_C_OR_K#1
+Les options /C et /K ne peuvent pas ˆtre ajout‚es, elles sont ignor‚es.
 .
-:TEXT_INIT_FULLY_QUALIFIED
-Le repertoire de COMMAND.COM doit ˆtre compl‚t‚ment defini !
-cela signifie que la lettre de lecteur doit ˆtre pr‚cis‚.
-Par exepmle: C:\FDOS
 
-COMMAND.COM utilise ce repertoire actuellement:
+:TEXT_INIT_FULLY_QUALIFIED#1%
+Le r‚pertoire de COMMAND.COM doit ˆtre completement defini!
+cela signifie que la lettre du lecteur doit ˆtre pr‚cis‚e.
+Par exemple: C:\\FDOS
+
+COMMAND.COM utilise actuellement le r‚pertoire suivant:
 %s
 .
 
 :TEXT_ERROR_RESTORE_SESSION
-Les informations de la session ne peuvent ˆtre restaur‚es, tout les
-param‚tres locals sont perdus. Referez vous aux messages d'erreurs au dessus
-pour connaitre la raison de ce probl‚me...
+Les informations de la session ne peuvent pas ˆtre restaur‚es, tous les
+paramŠtres locals sont perdus. Referez vous aux messages d'erreurs au dessus
+pour connaŒtre la raison de ce problŠme...
 .
 
 :TEXT_ERROR_SAVE_SESSION
-L'information courrante ne peut ˆtre preserv‚e durant l'appel
+L'information courante ne peut ˆtre preserv‚e durant l'appel
 du programme. Referez vous aux messages d'erreurs au dessus pour
-connaitre la raison de ce probl‚me...
-
+connaŒtre la raison de ce problŠme...
 .
+
+:TEXT_ERROR_CWD_FAILED#1%
+Le lecteur %c: ne repond pas.
+.
+
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+Swapping failed: Les alias allouent trop de m‚moire.
+.
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+Swapping failed: Cannot allocate far memory.
+.
+
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+Fin d'espace pour les alias.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1%
+Il n'y a pas de tel alias: '%s'
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+Insertion de l'alias ‚chou‚e..
+.
+
+:TEXT_ALIAS_INVALID_NAME#1%
+Nom d'alias invalide '%s'.
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+Impossible de charger le module contextuel ou le pilote d'erreurs critiques.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+Contexte … bout de m‚moire.
+Si cette erreur persiste, songez … alouer plus de tampons internes, comme
+l'historique, la pile de r‚pertoires etc.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1%
+Size of context totals %lu bytes exceeding maximal limit.
+Resizing context to %u bytes.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+Failed to add status information into context. This error may indicate
+memory corruption or an incorrectly determined minimum size of
+the context. Please inform the maintainer of FreeCOM at:
+freecom@freedos.org
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+Le contexte a ‚t‚ perdu aprŠs le swap. Un contexte vas ˆtre recr‚‚, mais
+tous les alias etc. seront perdus.
+.
+
 #
 # Informational messages
 #
 
-:TEXT_MSG_PAUSE
-Appuyez sur une touche pour continuer . . .
+:TEXT_MSG_PAUSE#1
+Appuyez sur une touche pour continuer . . .\
 .
 
-:TEXT_MSG_HISTORY_SIZE
-La taille de l'historique est de %d bytes.
+:TEXT_MSG_HISTORY_SIZE#0%
+La taille de l'historique est de %d octets.
 .
 
 :TEXT_MSG_DOSKEY
-Les carct‚ristiques de DOSKEY sont dej… autoris‚es dans le shell.
+DOSKEY est d‚j… implant‚ dans le shell.
 .
 
-:TEXT_MSG_ECHO_STATE
+:TEXT_MSG_ECHO_STATE#0%
 ECHO est %s
 .
 
-:TEXT_MSG_VERIFY_STATE
+:TEXT_MSG_VERIFY_STATE#0%
 VERIFY est %s
 .
 
-:TEXT_MSG_FDDEBUG_STATE
-DEBUG output est %s
+:TEXT_MSG_FDDEBUG_STATE#0%
+DEBUG output is %s.
 .
 
-:TEXT_MSG_BREAK_STATE
+:TEXT_MSG_FDDEBUG_TARGET#0%
+DEBUG output is printed to '%s'.
+.
+
+:TEXT_MSG_BREAK_STATE#0%
 BREAK est %s
 .
 
-:TEXT_MSG_CURRENT_DATE
-La date actuelle est %s %02d-%02d-%d
+:TEXT_MSG_CURRENT_DATE#0%
+La date actuelle est %s
 .
 
-:TEXT_MSG_ENTER_DATE
-Entrez une nouvelle date (mm-jj-[aa]aa):
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN#1%
+Entrez une nouvelle date (mm%sjj%s[aa]aa): \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1%
+Entrez une nouvelle date (jj%smm%s[aa]aa): \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1%
+Entrez une nouvelle date ([aa]aa%smm%sjj): \
 .
 
-:TEXT_MSG_CURRENT_TIME
-L'heure actuelle est %2d:%02d:%02d.%02d%c
+:TEXT_MSG_CURRENT_TIME#0%
+L'heure actuelle est %s
 .
 
-:TEXT_MSG_ENTER_TIME
-Entrez une nouvelle heure:
+:TEXT_STRING_PM#1
+ pm\
+.
+:TEXT_STRING_AM#1
+ am\
 .
 
-:TEXT_MSG_COPYING
+:TEXT_MSG_ENTER_TIME#1
+Entrez une nouvelle heure: \
+.
+
+# src-file <operation> target-file
+:TEXT_MSG_COPYING#0%
 %s %s %s
 .
 
-:TEXT_MSG_DELETE_ALL
-TOUT LES FICHIERS DU REPERTOIRE VONT ÒTRE DETRUIS !
-Òtes vous s–r (Y/N)?
-,
-
-:TEXT_MSG_VER_BASIC
-Copyright (C) 1994-1998 Tim Norman and others.
-
-AUCUNES GARANTIES n'est fournis pour ce programme !!!
-
-For details type: "ver /w". This is free software, and you are
-welcome to redistribute it under certain conditions; type "ver /d"
-for details.  Type "ver /c" for a listing of credits.
-
-Traductions de Julien Etelain <julien-e@caramail.com>
-         et de MadFab <mad-fab@caramail.com>
-
-Repportez vos bugs … julien-e@caramail.com (en fran‡ais)
-                   … www.freedos.org/bugs (en anglais)
-Mises … jours :  http://www.gcfl.net/FreeCom (anglais)
-                 http://club.ovh.net/freedos (fran‡ais)
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (Y/N) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1%
+OoNn{CR}{LF}{CBREAK}
+aabb   b   b       b
+Tout les fichiers dans '%s' vont ˆtre detruits!
+Òtes vous s–r (O/N)? \
 .
 
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+OoNn{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Oui=ENTREE, Non=ECH] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+#	by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1%
+OoNnTtQq{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Control-Break a ‚t‚ press‚.\r
+Terminer le fichier batch '%s' (Oui/Non/Tous) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1%
+OoNnTtQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Sur-‚crire '%s' (Oui/Non/Tous/Quiter) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_APPEND_FILE#1%
+OoNnTtQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Ajouter … '%s' (Yes/No/All/Quit) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1%
+OoNnTtQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Effacer '%s' (Oui/Non/Tous/Quitter) ? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<unkown>>\
+.
+
+:TEXT_DIRSTACK_EMPTY
+La pile de r‚petoires est vide.
+.
+
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME#1%
+ Le volume dans le lecteur %c \
+.
+:TEXT_DIR_HDR_VOLUME_STRING#0%
+est %s
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+n'a pas d'‚tiquette
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER#0%
+ Le num‚ro de serie du volume est %04X-%04X
+.
+:TEXT_DIR_FTR_FILES#1%
+%10s fichier(s)\
+.
+:TEXT_DIR_FTR_BYTES#0%
+   %12s octets
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+Total des fichiers list‚s:
+.
+:TEXT_DIR_FTR_DIRS#1%
+%10s r‚pertoire(s)\
+.
+:TEXT_DIR_FTR_BYTES_FREE#0%
+ %15s octets de libres
+.
+:TEXT_DIR_DIRECTORY#0%
+R‚pertoire de %s
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE#0%
+ R‚pertoire de %s
+.
+:TEXT_DIR_LINE_FILENAME_WIDE#1%
+%-15s\
+.
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE#1%
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1%
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <REP> \
+.
+:TEXT_DIR_LINE_SIZE#1%
+   %10s \
+.
+
+:TEXT_FILE_COMPLATION_DISPLAY#1%
+%-14s\
+.
+
+:TEXT_MSG_PATH#0%
+PATH=%s
+.
+:TEXT_MSG_PATH_NONE#1
+Aucun chemin de recherche d‚fini.
+.
+
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+Dim\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+Lun\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+Mar\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+Mer\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+Jeu\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+Ven\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+Sam\
+.
+
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+aucun fichier effac‚.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+un fichier effac‚.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1%
+%u fichiers effac‚s.
+.
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+Commandes internes disponible:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+Features available:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[aliases] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[enhanced input] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[history] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[filename completion] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[swapping] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[start logging] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+[last dir] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[kernel swap] \
+.
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[XMS swap] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[default to swap] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[installable commands] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+[DOS NLS] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[directory stack (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[FreeCOM debugging] \
+.
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
+
+Appuyez F8 pour le mode pas-…-pas, ou F5 pour passer %s... \
+.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
+Passage de '%s'.
+.
+
+:TEXT_MSG_VER_DOS_VERSION#0%
+DOS version %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+Noyeau FreeDOS (build 1933 ou plus r‚cent)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS#0%
+Version du noyeau FreeDOS: %d.%d.%d
+.
+
+
 :TEXT_MSG_VER_WARRANTY
-Copyright (C) 1994-1998 Tim Norman and others.
+Copyright (C) 1994-2001 Tim Norman and others.
 
-<< This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details. >>
+Ce programme est distribu‚ dans l'espoir qu'il sera utile, mais SANS
+AUCUNE GARANTIE, ni explicite ni implicite, y compris les garanties de
+commercialisation ou d'adaptation dans un but sp‚cifique. Prenez
+connaissance de la Licence Publique G‚n‚rale GNU pour plus de d‚tails.
 
-Traductions de Julien Etelain <julien-e@caramail.com>
-         et de MadFab <mad-fab@caramail.com>
-
-Repportez vos bugs … julien-e@caramail.com (en fran‡ais)
-                   … www.freedos.org/bugs (en anglais)
-Mises … jours :  http://www.gcfl.net/FreeCom (anglais)
-                 http://club.ovh.net/freedos (fran‡ais)
+Envoyez les raports de bugs … freedos-freecom@lists.sourceforge.net.
+Les mise … jour sont disponibles sur http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
-Copyright (C) 1994-1998 Tim Norman and others.
+Copyright (C) 1994-2001 Tim Norman and others.
 
-<< This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or (at
-   your option) any later version. >>
+Ce programme est libre, vous pouvez le redistribuer et/ou le modifier
+selon les termes de la Licence Publique G‚n‚rale GNU publi‚e par la Free
+Software Foundation (version 2 ou bien toute autre version ult‚rieure
+choisie par vous).
 
-Traductions de Julien Etelain <julien-e@caramail.com>
-         et de MadFab <mad-fab@caramail.com>
-
-Repportez vos bugs … julien-e@caramail.com (en fran‡ais)
-                   … www.freedos.org/bugs (en anglais)
-Mises … jours :  http://www.gcfl.net/FreeCom (anglais)
-                 http://club.ovh.net/freedos (fran‡ais)
+Envoyez les raports de bugs … freedos-freecom@lists.sourceforge.net.
+Les mise … jour sont disponibles sur http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_DEVELOPERS
-FreeDOS Command Shell a ‚t‚ d‚vollop‚ par :
-		Tim Norman      Matt Rains
-		Evan Jeffrey    Steffen Kaiser
-		Svante Frey     Oliver Mueller
-		Aaron Kaufman   Marc Desrochers
-		Rob Lake        John P Price
-		Hans B Pufal
 
-Currently maintained by John P Price.
-Traductions de Julien Etelain <julien-e@caramail.com>
-         et de MadFab <mad-fab@caramail.com>
+The FreeDOS Command Shell developed by many developers, please refer
+to the enclosed HISTORY.TXT file.
 
-Repportez vos bugs … julien-e@caramail.com (en fran‡ais)
-                   … www.freedos.org/bugs (en anglais)
-Mises … jours :  http://www.gcfl.net/FreeCom (anglais)
-                 http://club.ovh.net/freedos (fran‡ais)
+Currently maintained by Steffen Kaiser mailto:freecom@freedos.org
+
+Send bug reports to freedos-freecom@lists.sourceforge.net.
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+Le shell est sur le point d'ˆtre termin‚, bien que cela soit interdit\r
+(habituellement par la sp‚cification de l'option "/P")\r
+Vous devez relancer le systeme ou, si le shell fonctionne dans un\r
+environnement multitƒches, terminer la tƒche manuellement.\r
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+Executable FreeCOM non trouv‚.
+You must specify the complete path to COMMAND.COM
+as the first argument of COMMAND, for instance:
+C:\\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1%
+Environment segment    : max %5u bytes; free %5u bytes
+.
+:TEXT_MEMORY_CONTEXT#1%
+Context segment        : max %5u bytes; free %5u bytes
+.	
+:TEXT_MEMORY_HEAP#1%
+Heap                   : free %5lu bytes
+.
+:TEXT_MEMORY_CTXT_ALIAS#1%
+\tAliases        : limit %5u bytes, current %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_HISTORY#1%
+\tHistory        : limit %5u bytes, current %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1%
+\tDirectory stack: limit %5u bytes, current %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1%
+\tLast dir cache : used  %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_BATCH#1%
+\tBatch nesting  : used  %5u bytes, %5u items
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1%
+\tSwapinfo       : used  %5u bytes, %5u items
+.
+
+
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+Impossible d'identifier la page de code actuelle depuis le systŠme.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+Changement de page de code en cours ‚chou‚.
+.
+:TEXT_DISPLAY_CODEPAGE#1%
+La page de code actuelle est %u.
+La page de code systeme est: %u.
+.
+
 #
-# Command help text -> A TRADUIRE PLUS TARD !!!!! <<<<<<<<<<<<<<<<<<<<<<<<<---
+# Command help text
 #
 
 :TEXT_CMDHELP_ALIAS
-Affiche, d‚termine ou enl‚ve les alias
+Affiche, d‚termine ou enlŠve les alias
 
-ALIAS [Alias[=][String]
+ALIAS [variable[=][string]]
 
-        Alias specifie le nom de l'alias
-        String  Specifie la chaine de caract‚re qui activera l'alias.
+        variable  Specifie le nom de l'alias
+        string    Specifie la chaine de caract‚re qui activera l'alias.
 
-Taper ALIAS sans param‚tres pour afficher les alias
+
+Taper ALIAS sans param‚tres pour afficher les alias actuels.
 .
 
 :TEXT_CMDHELP_BEEP
-G‚n‚re un bip sonore (buzzer)
+G‚nŠre un bip sonore.
 .
 
 :TEXT_CMDHELP_BREAK
-Active ou désactive un contrôle plus fréquent de CTRL + C.
+Active ou d‚sactive l'usage de CTRL+C.
 
 BREAK [ON | OFF]
 
-Taper BREAK sans param‚tre pour afficher l'état actuel de la commande.
+Tapez BREAK sans paramŠtres pour afficher le statut actuel de BREAK.
 .
 
-:TEXT_CMDHELP_CALL
-Appelle un fichier de commande depuis un autre.
+:TEXT_CMDHELP_CALL#1
+Ex‚cute un fichier batch … partir d'un autre fichier batch.
 
-CALL [lecteur:][chem]fichier [param]
+CALL [/S | /N] [/Y] [lecteur:][chemin]fichier [paramŠtres batch]
 
-  param   Paramètres requis par le fichier de commandes appelé.
-                    
+  paramŠtres batch   Sp‚cifie les paramŠtres du fichier batch … invoquer.
 
+  /S renforce, /N renie le swapping de FreeCOM.
+  /Y active le tracemode pendant l'ex‚cution de la commande.
 .
+
 :TEXT_CMDHELP_CD
-Change le réperoire actif ou affiche son nom.
+Change de r‚pertoire ou affiche le nom du r‚pertoire en cours.
 
 CHDIR [lecteur:][chemin]
 CHDIR[..]
 CD [lecteur:][chemin]
 CD[..]
+CD -
 
-     .. Indique que vous voulez remonter au r‚pertoire parent.
+ ..   Sp‚cifie que vous shouaitez changer vers le r‚pertoire-parent.
+ -    Si l'option "dernier r‚pertoire" est activ‚, change vers le
+      dernier r‚pertoire.
 
-Taper CD lecteur: pour afficher le r‚pertoire actif sur le lecteur spécifié.
-Taper CD sans param‚tre pour afficher le lecteur et le r‚pertoire actif.
+Tapez CD lecteur: pour afficher le r‚pertoire en cours sur le lecteur sp‚cifi‚.
+Tapez CD sans paramŠtres pour afficher le lecteur et r‚pertoire actuels.
+Regardez aussi: CDD
+.
+
+:TEXT_CMDHELP_CDD
+Affiche le nom ou change le r‚pertoire et le lecteur en cours.
+
+CDD [lecteur:][chemin]
+CDD[..]
+
+ ..  Change vers le r‚pertoire parent.
+ -   Si l'option "dernier r‚pertoire" est active, revient au dernier r‚pertoire.
+
+Si lecteur: est sp‚cifi‚, le lecteur en cours est chang‚; c'est la seule
+diff‚rence avec "CHDIR".
+Tapez CD sans paramŠtres pour afficher le lecteur et r‚pertoire en cours.
 .
 
 :TEXT_CMDHELP_CHCP
-Affiche ou d‚finit le numéro de page de codes active.
+Affiche ou d‚fini la page de code en cours.
+
 CHCP [nnn]
 
-  nnn   Sp‚cifie un num‚ro de page de codes.
+  nnn   Sp‚cifie le numero de page de code.
 
-Taper CHCP sans param‚tre pour afficher le numéro de codes active.
+Tapez CHCP sans paramŠtres afin d'afficher la page de code en cours.
 .
 
 :TEXT_CMDHELP_CLS
@@ -509,394 +983,529 @@ CLS
 .
 
 :TEXT_CMDHELP_COMMAND
-D‚marre une nouvelle copie de l'interpr‚éteur de commandes.
+Starts a new copy of the FreeDOS command shell.
 
-COMMAND [[lecteur:]chem] [p‚riph‚rique] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
-                       [/LOW] [/Y [/[C|K] commande]]
-  [lecter:]chem   Emplacement de fichier COMMAND.COM. 
-  péricph         Périph‚rique utilisé pour les E/S des commandes.                
-  /E:nnnnn        Fixe … nnnnn octets la taille de l'environnement initial.
-                  (nnnnn doit ˆtre compris entre 256 et 32 768).                
-  /L:nnnn         Sp‚cifie la longeur des tampons internes (/p n‚cessaire).
-                  (nnnn doit ˆtre compris entre 128 et 1,024).                 
-  /U:nnn          Specifie la longeur du tampon d'entr‚ (/p n‚cessaire).
-                  (nnn doit ˆtre compris entre 128 et 255).
-  /P              Rend le nouvelle interpr‚teur de commande permanent.               
-  /MSG            Stocke tous les messages d'erreur (/p n‚cessaire).
-  /LOW            COMMAND conserve les donn‚es r‚sidentes en m‚moire basse.
-  /Y              D‚roule le fichier de commandes sp‚cifi‚ par /C ou /K.
-  /C command      Ex‚cute la commande sp‚cifi‚ puis quitte.
-  /K command      Ex‚cutes les commandes sp‚cifi‚ et continue son ex‚cution.
+COMMAND [[drive:]path] [device] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+                       [/LOW] [/Y [/[C|K] command]]
+  [drive:]path    Specifies the directory containing COMMAND.COM.
+  device          Specifies the device to use for command input and output.
+  /E:nnnnn        Sets the initial environment size to nnnnn bytes.
+                  (nnnnn should be between 256 and 32,768).
+  /L:nnnn         Specifies internal buffers length (requires /P as well).
+                  (nnnn should be between 128 and 1,024).
+  /U:nnn          Specifies the input buffer length (requires /P as well).
+                  (nnn should be between 128 and 255).
+  /P              Makes the new command shell permanent (can't exit).
+  /MSG            Stores all error messages in memory (requires /P as well).
+  /LOW            Forces the command shell to keep its resident data in
+                  low memory.
+  /Y              Steps through the batch program specified by /C or /K.
+  /C command      Executes the specified command and returns.
+  /K command      Executes the specified command and continues running.
 .
 
 :TEXT_CMDHELP_COPY
-Copies un ou plusieurs fichiers dans un autre emplacement 
+Copie un ou plusieurs fichiers vers un autre emplacement.
 
 COPY [/A | /B] source [/A | /B] [+ source [/A | /B] [+ ...]] [destination
   [/A | /B]] [/V] [/Y | /-Y]
 
-  source       Fichiers<s> … copier.
+  source       Specifie le ou les fichiers … copier.
   /A           Indique un fichier texte ASCII.
   /B           Indique un fichier binaire.
-  destination  R‚pertoire et /ou nom de fichier cible.
-  /V           V‚rifie l'‚criture des nouveaux fichiers.
-  /Y           Ne demande pas de comfirmation lors de l'‚crasement
-	       d'un fichier de destination existant.
-  /-Y          Demande confirmation lors de l'‚crasement d'un
-	       fichier de destination existant
+  destination  Specifie le r‚pertoire et/ou le nom du nouveau fichier.
+  /V           Verifie que les nouveaux fichiers sont bien enregistr‚s.
+  /Y           Supprime la question de confirmation de r‚‚criture d'une
+               destination d‚j… existente.
+  /-Y          Causes prompting to confirm you want to overwrite an
+               existing destination file.
 
-Le commutateur /Y peut-être pr‚d‚fini dans la variable d'environnement COPYCMD.
-Cela peut ‚tre outrepass‚ avec /-Y sur la ligne.
+The switch /Y may be preset in the COPYCMD environment variable.
+This may be overridden with /-Y on the command line.
 
-Pour concat‚ner des fichiers, spécifiez un seul fichier de destination,
-mais plusieurs fichiers sources <utilisez les caract‚res g‚n‚riques
-ou le format fichier1+fichier2+fichier3>.
+To append files, specify a single file for destination, but multiple files
+for source (using wildcards or file1+file2+file3 format).
 .
 
 :TEXT_CMDHELP_CTTY
-Change le p‚riph‚rique terminal utilis‚ pour controler votre syst‚me.
+Change le p‚rif‚rique utilis‚ pour contr“ler le systŠme.
 
-CTTY ph‚riph
+CTTY p‚rif‚rique
 
-  ph‚riph   Le p‚riph‚rique terminal que vous voulez utiliser, comme COM1.
+ p‚rif‚rique  Le p‚rif‚rique que vous voulez utiliser, comme COM1.
 .
 
-:TEXT_CMDHELP_DATE
-Affiche ou définit la date du syst‚me.
+:TEXT_CMDHELP_DATE#1
+Affiche ou rŠgle la date.
 
-DATE [date]
+DATE [/D] [date]
 
-DATE sans paramŠtre affiche la date actuelle et demande une
-nouvelle date. Appuyer sur ENTRER pour conserver la mˆme date.
+Tapez DATE sans paramŠtres pour afficher la date actuelle et une demande
+de nouvelle date. Appuyez sur ENTREE pour garder la mˆme date.
+
+/D Bloque l'interactivit‚ de DATE.
 .
 
-:TEXT_CMDHELP_DEL
-Supprime un ou plusieurs fichiers.
+:TEXT_CMDHELP_DEL#2
+Efface un ou plusieurs fichiers.
 
-DEL [lecteur:][chem]nom de fichier [/P]
-ERASE [lecteur:][chem]nom de fichier [/P]
+DEL [lecteur:][chemin]fichier [/P] [/V]
+ERASE [lecteur:][chemin]fichier [/P] [/V]
 
-  [lecteur:][chem]nom de fichier   Sp‚cifie le ou les fichier<s> … supprimer.
-                                   Sp‚cifiez plusieurs fichiers en utilisant
-                                   des caract‚res g‚n‚riques.
-                     
-  /P		 		   Demande confirmation avant de supprimer
-                                   chaque fichier.
+  [lecteur:][chemin]fichier Specifie le/les fichier(s) … effacer. Vous pouvez
+                            sp‚cifier plusieurs fichier … l'aide de masques.
+  /P    Demande confirmation avant d'‚ffacer chaque fichier.
+  /V    Affiche tous les fichiers effac‚s.
 .
 
-:TEXT_CMDHELP_DIR
-Affiche une liste des fichiers et des sous-r‚pertoires dans un r‚pertoire.
+:TEXT_CMDHELP_DIR#4
+Displays a list of files and subdirectories in a directory.
 
-DIR [lecteur:][chem][nom de fichier] [/P] [/W] [/A[[:]attributs]]
-  [/O[[:]ordretri]] [/S] [/B] [/L] [/V]
+DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
+  [/O[[:]sortorder]] [/S] [/B] [/L] [/V]
 
-  [lecteur:][chem][nom de fichier]	
-            Sp‚cifie le lecteur, r‚pertoire, et/ou les fichiers … afficher.
-            (Sp‚cifications de fichiers ‚tendus ou multiples accept‚es.)
- /P         Marque un arrˆt apr‚s chaque ‚cran d'information.
- /W         Affiche sur cinq colonnes.
- /A         Affiches les fichiers dot‚s des attributs sp‚cifi‚s.
- attributs  D  R‚pertoires                R  Fichier en lecture seule
-            H  Fichiers cach‚s            A  Fichier prˆt … archiver
-            S  Fichiers systŠme           -  Pr‚fixe signifiant non
- /O         Affiche les fichiers selon un ordre tri‚.
- ordretri    N  Par nom (alphab‚tique)       S  Par taille (croissante)
-             E  Par exetension (alphab‚t.)   D  Par date et heure (chronolog.)
-             G  R‚pertoire en tˆte           -  Pr‚fixe pour l'ordre inverse
-             A  Par date de dernier acc‚s (chronolog.)
- /S         Affiches les fichiers du r‚pertoire spécifi‚
-            et de tous ses sous-r‚pertoires.
- /B         Utilise le format abr‚g‚  (pas de pr‚sentation ni de r‚sum‚).
- /L         Affiche en minuscule.
- /V         Commentaires suppl‚mentaires.
+  [drive:][path][filename]
+            Specifies drive, directory, and/or files to list.
+            (Could be enhanced file specification or multiple filespecs.)
+ /P         Pauses after each screenful of information.
+ /W         Uses wide list format.
+ /A         Displays files with specified attributes. (Defaults to /ADHSRA)
+ attributes  D  Directories                R  Read-only files
+             H  Hidden files               A  Files ready for archiving
+             S  System files               -  Prefix meaning not
+ /O         List by files in sorted order.
+ sortorder   N  By name (alphabetic)       S  By size (smallest first)
+             E  By extension (alphabetic)  D  By date & time (earliest first)
+             G  Group directories first    -  Prefix to reverse order
+             U  Unsorted		   Defaults to /ONG
+ /S         Displays files in specified directory and all subdirectories.
+ /B         Uses bare format (no heading information or summary).
+ /L         Uses lowercase.
+ /Y or /4   Display 4-digit year.
 
-Les commutateur peuvent ˆtre initialis‚ dans la variable d'environnement
-DIRCMD. Fixez les options en pr‚fixant le commutateur par -, ex /-W.
+Switches may be preset in the DIRCMD environment variable.  Override
+preset switches by prefixing any switch with - (hyphen)--for example, /-W.
 .
 
-:TEXT_CMDHELP_DOSKEY
-Edite des lignes de commande, rapelle des lignes de commande, cr‚e des macros.
+:TEXT_CMDHELP_DOSKEY#1
+The external DOSKEY utility had been incorporated into FreeCOM.
+Use cursor UP,& DOWN keys to recall the history and HISTORY to display it.
+Use cursor LEFT,& RIGHT and the END and HOME keys to navigate within
+the command line and toggle INSERT between overstrike and insert mode.
+Use the TAB key to complete the current word as filename; use it twice
+to show all matching files.
+.
 
-DOSKEY [/commutateur ...] [nommacro=[texte]]
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
+Edits command lines, recalls command lines, and creates macros
 
-  /BUFSIZE:taille Taille des macros et du tampon de commande          (d‚faut:512)
-  /ECHO:on|off    Acti./D‚ac. par echo des expansions des macros      (d‚faut:on)
-  /FILE:fichier   Sp‚cifie un fichier contenant une liste de macros
-  /HISTORY        Affiche toutes les lignes de commandes stock‚es en m‚moire
-  /INSERT         Ins‚re de nouveaux caract‚res dans la ligne en cours
-  /KEYSIZE:taille Taille du tampon de frappe continue au clavier      (d‚faut:15)
-  /LINE:size      Taille maximale du tampon de ligne d'édition        (defaut:128)
-  /MACROS         Affiche toutes les macros DOSKey
-  /OVERSTRIKE     Remplace la ligne en cours par de nouveaux caract.  (default)
-  /REINSTALL      Installe une nouvelle copie de DOSKey
-  nommacro        Sp‚cifie un nom pour une macro cr‚e
-  text            Sp‚cifie les commandes assign‚es … la macro
+DOSKEY [/switch ...] [macroname=[text]]
 
-Les touches de directions HAUT et BAS rapellent les commandes
-     Echap efface la commande en cours
-	F7 affiche l'historique de la commande
-    Alt+F7 efface l'historique de la commande
- [carac]F8 recherche les commandes commen‡ant par [caract‚re]
-        F9 s‚lectionne une commande par son num‚ro
-   Alt+F10 efface lers d‚finitions de la macro
+  /BUFSIZE:size Sets size of macro and command buffer            (default:512)
+  /ECHO:on|off  Enables/disables echo of macro expansions        (default:on)
+  /FILE:file    Specifies file containing a list of macros
+  /HISTORY      Displays all commands stored in memory
+  /INSERT       Inserts new characters into line when typing
+  /KEYSIZE:size Sets size of keyboard type-ahead buffer          (default:15)
+  /LINE:size    Sets maximum size of line edit buffer            (default:128)
+  /MACROS       Displays all DOSKey macros
+  /OVERSTRIKE   Overwrites new characters onto line when typing  (default)
+  /REINSTALL    Installs a new copy of DOSKey
+  macroname     Specifies a name for a macro you create
+  text          Specifies commands you want to assign to the macro
 
-Codes utilisés dans les définitions de macross DOSKey :
-        $T ‚éparateur de commandes (si plusieurs commandes dans une macro)
-     $1-$9 Paramˆtre rempla‡able : Equivalent … %1-%9 dans les fichiers
-	   de commandes
-        $* Caract‚re remplac‚ par tout ce qui suit le nom de la macro sur la
-	   ligne de commande
+  UP,DOWN arrows recall commands
+      Esc clears current command
+       F7 displays command history
+   Alt+F7 clears command history
+[chars]F8 searches for command beginning with [chars]
+       F9 selects a command by number
+  Alt+F10 clears macro definitions
+
+The following are special codes you can use in DOSKey macro definitions:
+  $T     Command separator: allows multiple commands in a macro
+  $1-$9  Batch parameters: equivalent to %1-%9 in batch programs
+  $*     Symbol replaced by everything following macro name on the command line
 .
 
 :TEXT_CMDHELP_ECHO
-Affcihe des messages … l'écran ou active/d‚active l'affichage des commandes.
+Displays messages, or turns command-echoing on or off.
 
   ECHO [ON | OFF]
   ECHO [message]
 
-ECHO sans paramŠtre affiche l'‚tat actuel de la commande.
+Type ECHO without parameters to display the current echo setting.
 .
 
 :TEXT_CMDHELP_EXIT
-Quitte FreeDOS (interpr‚teur de commande).
-Au revoir
+Quit le shell FreeDOS sauf si charg‚ avec /P.
 
 EXIT
 .
 
 :TEXT_CMDHELP_FOR
-Ex‚cute une commande sur chaque fichier d'un ensemble de fichiers.
+Runs a specified command for each file in a set of files.
 
-FOR %variable IN (ens) DO commande [param]
+FOR %variable IN (set) DO command [command-parameters]
 
-  %variable  ParamŠtre remplaçable.
-  (ens)      Ensemble dde fichiers s‚par‚s par des espaces. CaractŠres
-	     générique permis.
-  commande   Commande … ex‚cuter pour chaque fichier.
-  param      ParamŠtre ou commutateur pour la commande sp‚cifi‚e.
+  %variable  Specifies a replaceable parameter.
+  (set)      Specifies a set of one or more files.  Wildcards may be used.
+  command    Specifies the command to carry out for each file.
+  command-parameters
+             Specifies parameters or switches for the specified command.
 
-Pour utiliser FOR dans les fichiers de commandes, sp‚cifiez %% variable
-au lieu de %variable.
+To use the FOR command in a batch program, specify %%variable instead of
+%variable.
+
+For example:
+  FOR %f IN (---start--- a*.* ---end---) DO ECHO - %f -
 .
 
 :TEXT_CMDHELP_GOTO
-Dirige FreeDOS vers une ligne ayant une ‚tiquette dans un fichier de commandes.
+Directs the command shell to a labelled line in a batch program.
 
-GOTO ‚tiquette
+GOTO label
 
-  étiquette   ChaŒne utilisée comme ‚tiquette dans le fichier de commandes.
+  label   Specifies a text string used in the batch program as a label.
 
-Les ‚tiquettes sont seules sur une ligne, pr‚c‚d‚es par deux-points (:).
+You type a label on a line by itself, beginning with a colon.
 .
 
-:TEXT_CMDHELP_HISTORY
-Historique des commandes.
+:TEXT_CMDHELP_HISTORY#1
+History command.
+
+HISTORY [size]
+
+Without "size" the current contents of the command line history
+buffer is displayed.
+With the size, the size of the history buffer is changed.
 .
 
 :TEXT_CMDHELP_IF
-Effectue un traitement conditionnel dans un fichier de commande.
+Performs conditional processing in batch programs.
 
-IF [NOT] ERRORLEVEL nombre commande
-IF [NOT] chaŒne1==chaŒne2 commande
-IF [NOT] EXIST fichier commande
+IF [NOT] ERRORLEVEL number command
+IF [NOT] string1==string2 command
+IF [NOT] EXIST filename command
 
-  NOT               Sp‚cifie que FreeDOS ex‚cute la commande
-		    seulement si elle est fausse.
-  ERRORLEVEL nombre Condition vraie si le dernier programme ex‚cut‚ a renvoy‚
-                    un code de sortie sup‚rieur ou ‚gal au nombre sp‚cifi‚.
-  commande          Commande … executer si la condition est satisfaite.
-  chaîne1==chaîne2  Condition vraie si les chaŒnes sp‚cifi‚es concordent.
-  EXIST filename    Condition vraie si le fichier spécifié existe.
+  NOT               Specifies that the command shell should carry out the
+                    command only if the condition is false.
+  ERRORLEVEL number Specifies a true condition if the last program run
+                    returned an exit code equal to or greater than the
+                    number specified.
+  command           Specifies the command to carry out if the condition is
+                    met.
+  string1==string2  Specifies a true condition if the specified text
+                    strings match.
+  EXIST filename    Specifies a true condition if the specified filename
+                    exists.
 .
 
 :TEXT_CMDHELP_LH
-Charge un programme dans la zone de m‚moire sup‚rieure.
+Loads a program into the upper memory area.
 
-LOADHIGH [lecteur:][chem]fichier [param]
-LOADHIGH [/L:r‚gion1[,taillemin1][;r‚gion2[,taillemin2]...] [/S]]
-         [lecteur:][chem]fichier [param]
+LOADHIGH [drive:][path]filename [parameters]
+LOADHIGH [/L:region1[,minsize1][;region2[,minsize2]...] [/S]]
+         [drive:][path]filename [parameters]
 
-/L:région1[,taillemin1][;région2[,taillemin2]...
-            Sp‚cifie la ou les r‚gions de la m‚moire dans lesquelles vous
-            souhaitez charger le programme. R‚gion1 sp‚cifie la nombre de
-            la premi‚re r‚gion m‚moire; taillemin ,sp‚cifie la taille
-            minimum, si pr‚sent pour la r‚gion1. R‚gion2 et taillemin2
-            sp‚cifient le nombre et la taille minimaux de la seconde
-            r‚gion, si pr‚sent. Vous pouvez sp‚cifiez autant de 
-            r‚gions que vous le voulez.
+/L:region1[,minsize1][;region2[,minsize2]]...
+            Specifies the region(s) of memory into which to load the
+            program.  Region1 specifies the number of the first memory
+            region; minsize1 specifies the minimum size, if any, for
+            region1.  Region2 and minsize2 specify the number and minimum
+            size of the second region, if any.  You can specify as many
+            regions as you want.
 
-/S          R‚duit un UMB … sa taille minimale pendant le chargement du
-	    programme.
+/S          Shrinks a UMB to its minimum size while the program is
+            loading.
 
-[lecteur:][repertoirefichier
-            Sp‚cifie l'emplacement et le nom du programme.
+[drive:][path]filename
+            Specifies the location and name of the program.
 .
 
 :TEXT_CMDHELP_LOADFIX
-Charge un programme dans les premiers 64K de la m‚moire, et ex‚cute 
-le programme.
+Loads a program above the first 64K of memory, and runs the program.
 
-LOADFIX [lecteur:][chem]fichier
+LOADFIX [drive:][path]filename
 
-Utilis‚ LOADFIX pour charger un programme si vous recevez le message
-"Ligne de commande corronpu" quand vous essayer de le charger en m‚moire
-basse.
+Use LOADFIX to load a program if you have received the message "Packed
+file corrupt" when trying to load it in low memory.
 .
 
 :TEXT_CMDHELP_MD
-Cr‚er un repertoire.
+Cr‚e un r‚pertoire.
 
-MKDIR [lecteur:]repertoire
-MD [lecteur:]repertoire
+MKDIR [lecteur:]chemin
+MD [lecteur:]chemin
 .
 
 :TEXT_CMDHELP_PATH
-Affiche ou définit le chemin de recherche des fichiers ex‚cutables.
+Displays or sets a search path for executable files.
 
-PATH [[lecteur:]chem[;...]]
+PATH [[drive:]path[;...]]
 PATH ;
 
-Entrez 'PATH ;' pour effacer les paramŠtres du chemin de recherche et forcer
-Freedos … rechercher seulement dans le r‚pertoire actif.
-Entrez 'PATH' sans paramŠtre pour afficher le chemin de recherche actuel.
+Type PATH ; to clear all search-path settings and direct the command shell
+to search only in the current directory.
+Type PATH without parameters to display the current path.
 .
 
 :TEXT_CMDHELP_PAUSE
-Interrompt l'ex‚cution d'un fichier de commande et affiche le message
-"Appuyez sur une touche pour continuer..." ou un autre message.
+Suspends processing of a batch program and displays the message:
+"Press any key to continue...." or an optional specified message.
 
 PAUSE [message]
 .
 
 :TEXT_CMDHELP_PROMPT
-Modifie l'invite de FreeDOS.
+Changes the command prompt.
 
-PROMPT [texte]
+PROMPT [text]
 
-  texte    Sp‚cifie la nouvelle invite.
+  text    Specifies a new command prompt.
 
-L'invite peut contenir des caractŠres normaux, ainsi que les codes suivants :
+Prompt can be made up of normal characters and the following special
+codes:
 
-  $Q   = (signe ‚gal)
-  $$   $ (signe dollar)
-  $T   Heure actuelle
-  $D   Date du jour
-  $P   Lecteur et chemin d'acc‚s actifs
-  $V   Numéro de version de FreeDOS
-  $N   Lecteur Actif
-  $G   > (signe 'plus grand que')
-  $L   < (signe 'plus petit que')
-  $B   | (barre verticale)
-  $H   Backspace (efface le caractŠre pr‚cedent)
-  $E   CaractŠre Echap (code ASCII code 27)
-  $_   Retour chariot et saut de ligne
+  $Q   = (equal sign)
+  $$   $ (dollar sign)
+  $T   Current time
+  $D   Current date
+  $P   Current drive and path
+  $V   the FreeDOS command shell version number
+  $N   Current drive
+  $G   > (greater-than sign)
+  $L   < (less-than sign)
+  $B   | (pipe)
+  $H   Backspace (erases previous character)
+  $E   Escape code (ASCII code 27)
+  $_   Carriage return and linefeed
 
-PROMPT sans paramŠtre rétablit l'invite … sa valeur par défaut.
+Type PROMPT without parameters to reset the prompt to the default setting.
+.
+
+:TEXT_CMDHELP_PUSHD
+Pushes current directory onto the directory stack, with the option to
+change current working directory.
+
+PUSHD [[drive:]path]
+  Where [drive:]path is a path to which you wish to change.
+.
+
+:TEXT_CMDHELP_POPD
+Pops a directory off of the directory stack, and changes to it.
+
+POPD [*]
+  The '*' parameter clears the directory stack.
+.
+
+:TEXT_CMDHELP_DIRS
+Affiche le contenu de la pile de r‚pertoires.
+
+DIRS
 .
 
 :TEXT_CMDHELP_RD
-Supprime (efface) un r‚pertoire.
+Efface un r‚pertoire.
 
-RMDIR [lecteur:]chem
-RD [lecteur:]chem
+RMDIR [lecteur:]chemin
+RD [lecteur:]chemin
 .
 
 :TEXT_CMDHELP_REM
-Enregistre un commantaire dans un fichier de commande ou dans CONFIG.SYS
+Records comments (remarks) in a batch file or CONFIG.SYS.
 
-REM [commentaire]
+REM [comment]
 .
 
 :TEXT_CMDHELP_REN
-Renomes un fichier/r‚pertoire or des fichiers/r‚peroires.
+Renames a file/directory or files/directories.
 
-RENAME [lecteur:][chem][r‚pertoire1 | fichier1] [r‚pertoire2 | fichier2]
-REN [lecteur:][chem][r‚pertoire1 | fichier1] [r‚pertoire2 | fichier2]
+RENAME [drive:][path][directoryname1 | filename1] [directoryname2 | filename2]
+REN [drive:][path][directoryname1 | filename1] [directoryname2 | filename2]
 
-Remarque : vous ne pouvez pas sp‚cifier un nouveau lecteur ou
-un nouveau chemin pour le fichier cible.
+Note that you cannot specify a new drive or path for your destination. Use
+the MOVE command for that purpose.
 .
 
-:TEXT_CMDHELP_SET
-Affiche, d‚finit, ou supprime les variables d'environnement FreeDOS.
+:TEXT_CMDHELP_SET#1
+Displays, sets, or removes environment variables.
 
-SET [variable[= | space][chaîne]]
+SET [/C] [/P] [variable=[string]]
 
-  variable  Nom de la variable d'environnement.
-  chaîne    ChaŒne de caractéres … effectuer … la nouvelle variable.
+  variable  Specifies the environment-variable name.
+  string    Specifies a series of characters to assign to the variable.
 
-* Si vous ajouter un '=', mais pas de chaŒne, alors la variable est supprim‚
-  de l'environnemt.
-* Maintenant vous pouvez utilis‚ un espace … la place de '=' pour
-cr‚er/changer une variable.
+* If no string is specified, the variable is removed from the environment.
 
-SET sans paramŠtre affiche les variables d'environnement d‚finies.
+Type SET without parameters to display the current environment variables.
+
+/C forces to keep the case of the variable; by default the variable is
+uppercased, if it is not located in the environment already, otherwise
+the case is retained.
+
+/P prompt the user with string, and assigns the user input to the variable.
 .
 
-:TEXT_CMDHELP_SHIFT
-Change la position des paramŠtres rempla‡ables dans un fichier de commandes.
+:TEXT_CMDHELP_SHIFT#1
+Changes the position of replaceable parameters in a batch file.
 
-SHIFT
+SHIFT [DOWN]
+
+DOWN shifts the argument window toward the beginning (%0); otherwise
+toward the end.
 .
 
-:TEXT_CMDHELP_TIME
-Affiche ou defini l'heure syst‚me.
+:TEXT_CMDHELP_TIME#1
+Displays or sets the system time.
 
-TIME [time]
+TIME [/T] [time]
 
-TIME sans param‚tre affiche l'heure actuelle et demande une
-nouvelle heure. Appuyer sur ENTREE pour conserver la même heure
+Type TIME with no parameters to display the current time setting and a
+prompt for a new one.  Press ENTER to keep the same time.
+
+/T prevents TIME from becoming interactive.
 .
 
 :TEXT_CMDHELP_TRUENAME
-Affiche le chemin d'acc‚s complet d'un fichier.
+Displays the full path name of the path specified.
 
-TRUENAME [lecteur:][chem][fichier]
+TRUENAME [drive:][path][filename]
 .
 
 :TEXT_CMDHELP_TYPE
 Affiche le contenu d'un fichier texte.
 
-TYPE [lecteur:][chem]fichier
+TYPE [lecteur:][chemin]fichier
 .
 
 :TEXT_CMDHELP_VER
-Affiche la version de FreeDOS et d'autres information.
+Affiche la version du shell FreeDOS et d'autres informations.
 
 VER [/R] [/W] [/D] [/C]
 
- /R         Affiche la version du kernel et d'autres informations.
- /W         Garantie de  FreeDOS.
- /D         Information de redistribuation de FreeDOS.
- /C         Les personnes qui ont contribu‚ … FreeDOS.
+ /R         Montre la version du noyeau et d'autres informations.
+ /W         Garantie du shell FreeDOS.
+ /D         Informations sur la redistribution du shell FreeDOS.
+ /C         Contributeurs du shell FreeDOS.
 .
 
 :TEXT_CMDHELP_VERIFY
-Ordonne … FreeDOS de vérifier si les fichiers sont ‚crit correctement sur
-un disque.
+Tells the FreeDOS file system whether to verify that your files are
+written correctly to a disk.
 
 VERIFY [ON | OFF]
 
-Entrez VERIFY sans paramŠtre pour afficher les paramètres en cours de VERIFY.
+Type VERIFY without a parameter to display the current VERIFY setting.
 .
 
 :TEXT_CMDHELP_FDDEBUG
-Si la fonction d‚bogage est compil‚ dans FreeDOS, cette command retourne
-les sorties de d‚gogage si la commande est activ‚.
+If debugging is compiled into FreeDOS, this command will turn debug
+output on or off, or tell you if it is on or off.
 
-FDDEBUG [ON | OFF]
+FDDEBUG [ON | OFF | file]
 
-Entrez FDDEBUG sans paramŠtre pour afficher les paramŠtre actuel de FDDEBUG.
+Type FDDEBUG without a parameter to display the current debug output
+setting.
+If a file is specified, all debug output is redirected into that file;
+the output is appended to the file, if it already exists. The special
+names "stdout" and "stderr" may be used to redirect the output
+to the standard output or standard error stream.
 .
 
 :TEXT_CMDHELP_VOL
-Affiche le nom et le num‚ro de s‚rie du volume, s'ils existent.
+Affiche l'‚tiquette du volume ainsi que le num‚ro de s‚rie, si ils existent.
 
 VOL [lecteur:]
 .
 
-:TEXT_CMDHELP_QUESTION
-Affiche une liste des commandes disponibles dans l'environnement.
+:TEXT_CMDHELP_QUESTION#1
+Displays a list of commands and features available with in the shell.
 
-? [/?]
+?
+?command [argument]
+
+The first variant displays any available internal command and feature.
+The second one will prompt whether or not to execute the specified
+command as if trace mode would be active.
+.
+
+:TEXT_CMDHELP_WHICH
+Searches and displays the executable file for each specified command.
+
+WHICH command...
+.
+
+:TEXT_CMDHELP_MEMORY#1
+Displays the internal memory used by FreeCOM internally.
+
+MEMORY
+
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+The COPY destination must not contain plus ('+') characters.
+.
+
+:TEXT_DELETE_FILE#1%
+Effacement du fichier "%s".
+.
+
+:TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
+Impossible d'‚crire au fichier '%s';
+le disque serait-il satur‚? (%lu octets requis)
+.
+
+# Displayed for BIGcopy(), when copying takes quite a long time.
+# **_NO_END if the input file size is unknown.
+# Both must end in \r rather than \n!!
+:TEXT_COPY_COPIED_NO_END#0%
+copi‚ %luKB/???KB\r\
+.
+:TEXT_COPY_COPIED#0%
+copi‚ %luKB/%luKB\r\
+.
+
+:TEXT_ERROR_FCOM_IS_DEVICE#0%
+FreeCOM cannot be a device: "%s"
+.
+:TEXT_ERROR_FCOM_INVALID#0%
+This file is no valid FreeCOM or of an incompatible version:
+%s
+.
+
+:TEXT_ERROR_LOADING_STRINGS
+Failed to load the strings resource into memory, the location
+pointed to in %COMSPEC% seems to be invalid. Please specify another
+location of FreeCOM to try to load the strings from, e.g.:
+C:\\COMMAND.COM
+or just hit enter to cancel to load the strings.
+.
+
+:TEXT_TERMINATING
+Terminating now.
+.
+
+:TEXT_HIDDEN_CRITER#0%
+%u Critical Error requests suppressed.
+.
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+Exit code (ERRORLEVEL): %u, reason: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+DOS API error\
+.
+:TEXT_EXIT_REASON_0
+terminated normally\
+.
+:TEXT_EXIT_REASON_1
+terminated by ^Break\
+.
+:TEXT_EXIT_REASON_2
+terminated by critical error\
+.
+:TEXT_EXIT_REASON_3
+gone resident\
 .
