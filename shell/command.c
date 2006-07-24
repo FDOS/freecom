@@ -21,7 +21,7 @@
 #include <sys\stat.h>
 
 #include <dfn.h>
-#include "../include/lfnfuncs.h"
+/*#include "../include/lfnfuncs.h"*/
 
 #include "../include/command.h"
 #include "../include/batch.h"
@@ -96,7 +96,9 @@ static void execute(char *first, char *rest)
 
   char *fullname;
   char *extension;
+#if 0
   void interrupt (*old2e)();
+#endif
 
   assert(first);
   assert(rest);
@@ -171,14 +173,22 @@ static void execute(char *first, char *rest)
 #endif
 		/* Install the dummy (always abort) handler */
 #ifdef FEATURE_XMS_SWAP
-	setvect(0x23, (void interrupt(*)()) lowlevel_cbreak_handler);
+    setvect(0x23, (void interrupt(*)())
+            MK_FP(FP_SEG(lowlevel_cbreak_handler)-0x10,
+            FP_OFF(lowlevel_cbreak_handler)+0x100));
+    /*
+     * some tools expect this interrupt to  have the same segment as the
+     * command.com PSP, but FreeCOM is an exe...
+     */
 #else
 	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
 #endif
 #ifdef FEATURE_XMS_SWAP
+#if 0
     old2e = getvect( 0x2E );
     if( peekb( FP_SEG( old2e ), FP_OFF( old2e ) ) == 0xCF )
         setvect( 0x2E, ( void interrupt(*)() )lowlevel_int_2e_handler );
+#endif
 #endif
     result = exec(fullname, rest, 0);
 	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
