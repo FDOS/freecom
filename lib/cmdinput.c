@@ -44,7 +44,7 @@ static void my_setcursortype( unsigned short state )
    int cur_mode;
 
    regs.r_ax = 0x0F00;
-   intr( 0x21, &regs );
+   intr( 0x10, &regs );
    cur_mode = regs.r_ax & 0xFF;
    regs.r_ax = 0x0100;
    /* ch == start line. cl == end line */
