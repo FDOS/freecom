@@ -6,7 +6,7 @@
 #include <io.h>
 
 /* define DEBUG to add debugging code */
-#ifndef DEBUG			/* possibly already defined via command line */
+#ifndef DEBUG           /* possibly already defined via command line */
 //#define DEBUG
 #endif
 
@@ -18,7 +18,7 @@
 /* #define NO_CONTEXT_ERROR */
 
 /* Define to enable enhanced input (prerequisite of History and Filename
-	completion */
+    completion */
 #define FEATURE_ENHANCED_INPUT
 
 /* Define to enable history (aka DOSKEY); requires: Enhanced Input */
@@ -48,14 +48,14 @@
 #define FEATURE_NLS
 
 /* Define to enable F5/F8 key test on startup if /P is present on
-	command line */
-#define FEATURE_BOOT_KEYS
+    command line */
+/* #define FEATURE_BOOT_KEYS */
 
 /* Command line logging feature */
 /* #define FEATURE_CALL_LOGGING */
 
 /* Preserves last directory (CD, CHDIR, CDD, PUSHD, POPD);
-	"CD -" chdir's there */
+    "CD -" chdir's there */
 #define FEATURE_LAST_DIR
 
 /* Enables CDD to a filepath (ignores filename portion) */
@@ -65,8 +65,8 @@
  */
 #define FEATURE_INSTALLABLE_COMMANDS
 /* How often gets the MUX-AE called, when an installable command
-	extension rewrote the command. */
-#define MUX_AE_MAX_REPEAT_CALL	32
+    extension rewrote the command. */
+#define MUX_AE_MAX_REPEAT_CALL  32
 
 /* Name of the executable */
 #define COM_NAME "COMMAND.COM"
@@ -76,7 +76,7 @@
 #define LOG_FILE "C:\\FreeCom.log"
 
 /* Define to number of loops when to redirect to CON if the
-	shells hangs in the "hangForEver()" loop
+    shells hangs in the "hangForEver()" loop
    Undefine to remove this feature */
 #define FEATURE_AUTO_REDIRECT_TO_CON 5
 
@@ -84,12 +84,12 @@
 #define BATCH_NESTLEVEL_MIN 5
 
 /* Define to support kernel-supported swapout of FreeCOM
-	see DOCS\K-SWAP.TXT
+    see DOCS\K-SWAP.TXT
 */
 #define FEATURE_KERNEL_SWAP_SHELL
 
 /* Define to support XMS-only swap support of FreeCOM
-	This setting is incompatible with the above one!
+    This setting is incompatible with the above one!
 */
 /* #define FEATURE_XMS_SWAP */
 
@@ -97,14 +97,14 @@
 #define DIRSTACK_DEFAULT_SIZE 256
 
 /* Use this errorlevel if an external program was terminated by
-	^C or ^Break --> DOS error code interrupted system call */
+    ^C or ^Break --> DOS error code interrupted system call */
 #define CBREAK_ERRORLEVEL 0x5F
 
 /* Use these filemode while searching for file completion */
 #define FILE_SEARCH_MODE FA_RDONLY | FA_ARCH | FA_DIREC
 
 /* If no /E: is specified, always keep this amount of bytes
-	free within the environment */
+    free within the environment */
 #define ENVIRONMENT_KEEP_FREE 256
 
 
@@ -112,7 +112,7 @@
   PATTERN: how the string is constructed for the ID (with \n)
   OUTOFMEMORY: string to issue on out-of-memory condition (no \n)
   ID_: the error ID when no default pattern is to be created, but
-  	the out-of-memory string is to be displayed
+    the out-of-memory string is to be displayed
 */
 #define MSG_DFL_PATTERN "String #%u\n"
 #define MSG_DFL_OUTOFMEMORY "Out of memory!"
@@ -181,15 +181,12 @@
 
  */
 
-#define myintdos( a, b ) int86( 0x21, a, b )
-#define myintdosx( a, b, c ) int86x( 0x21, a, b, c )
-
 /********
-	***** Resolve dependencies
-	***** Don't change without change the appropriate sources!
-	************/
+    ***** Resolve dependencies
+    ***** Don't change without change the appropriate sources!
+    ************/
 #if defined(INCLUDE_CMD_PUSHD) || defined(INCLUDE_CMD_POPD)
-#define	INCLUDE_CMD_CDD
+#define INCLUDE_CMD_CDD
 #endif
 
 /* Not available with TURBOC++ 1.0 or earlier: */
@@ -205,7 +202,7 @@
 
 /* Define if your compiler does not have 'dosdate_t' or 'dostime_t' */
 #ifdef _TC_EARLY_
-	/* TC++1 */
+    /* TC++1 */
 #define _NO__DOS_DATE
 #define _NO__DOS_TIME
 #define _NO_FMEMCHR
@@ -213,7 +210,7 @@
 #endif
 
 
-	/* set by MKDIST.BAT */
+    /* set by MKDIST.BAT */
 #ifdef IGNORE_ENHANCED_INPUT
 #undef FEATURE_ENHANCED_INPUT
 #endif
@@ -243,7 +240,7 @@
 
 #if sizeof(char*) > sizeof(short)
 /* Compiling in Large memory model --> turn of Warning:
-	"Conversation may lose significant digits"	*/
+    "Conversation may lose significant digits"  */
 #pragma warn -sig
 #endif
 
