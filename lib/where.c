@@ -6,6 +6,9 @@
     This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
     $Log$
+    Revision 1.10  2006/08/06 20:05:28  blairdude
+    Fixed bug where a directory could be found in %PATH% parsing.
+
     Revision 1.9  2006/08/06 05:04:45  blairdude
     Fixed (hopefully) bug in %PATH% parsing routing and A:/B: random accessing bug.
 
@@ -75,14 +78,19 @@
 static char *__addcomexebat( char * file )
 {
     static char tmpname[ MAXPATH ];
+    unsigned attr = 0;
 
     sprintf( tmpname, "%s.COM", file );
-    if( access( tmpname, 0 ) == 0 ) return( tmpname );
+    if( ( attr = dfnstat( tmpname ) )  != 0 && !( attr & DFN_DIRECTORY ) )
+        return( tmpname );
     sprintf( tmpname, "%s.EXE", file );
-    if( access( tmpname, 0 ) == 0 ) return( tmpname );
+    if( ( attr = dfnstat( tmpname ) )  != 0 && !( attr & DFN_DIRECTORY ) )
+        return( tmpname );
     sprintf( tmpname, "%s.BAT", file );
-    if( access( tmpname, 0 ) == 0 ) return( tmpname );
-    if( access( file, 0 ) == 0 ) return( strcpy( tmpname, file ) );
+    if( ( attr = dfnstat( tmpname ) )  != 0 && !( attr & DFN_DIRECTORY ) )
+        return( tmpname );
+    if( ( attr = dfnstat( file ) ) != 0 && !( attr & DFN_DIRECTORY ) )
+        return( strcpy( tmpname, file ) );
     return( NULL );
 }
 
