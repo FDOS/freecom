@@ -1307,7 +1307,7 @@ RD [dysk:]ûcießka
 .
 
 :TEXT_CMDHELP_REM
-Umoßliwa wstawianie komentarzy (uwag) w plikach wsadowych oraz w CONFIG.SYS
+Umoßliwa wstawianie komentarzy do plik¢w wsadowych oraz w CONFIG.SYS
 
 REM [komentarz]
 .
@@ -1447,7 +1447,7 @@ Kasowanie pliku "%s".
 
 :TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
 Nie moßna pisaç do pliku '%s';
-prawdopodobnie dysk zapeíniony? (%lu wymaganych bajt¢w)
+dysk prawdopodobnie peíny? (%lu wymaganych bajt¢w)
 .
 
 # Displayed for BIGcopy(), when copying takes quite a long time.
@@ -1492,13 +1492,13 @@ Exit code (ERRORLEVEL): %u, reason: %u (%s)
 DOS API error\
 .
 :TEXT_EXIT_REASON_0
-terminated normally\
+zako§czono poprawnie\
 .
 :TEXT_EXIT_REASON_1
 terminated by ^Break\
 .
 :TEXT_EXIT_REASON_2
-terminated by critical error\
+zako§czono krytycznym bíëdem\
 .
 :TEXT_EXIT_REASON_3
 gone resident\

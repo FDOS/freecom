@@ -258,7 +258,7 @@ Regi¢n de memoria no v lida %d - ser  ignorada.
 Se debe especificar ON u OFF.
 .
 
-:TEXT_ERROR_BAD_VERABLE
+:TEXT_ERROR_BAD_VARIABLE
 Especificaci¢n de variable no v lida.
 .
 
@@ -417,8 +417,8 @@ Consultar los mensajes de error indicados arriba para entender el motivo
 de este problema.
 .
 
-:TEXT_ERROR_CWD_FAILED
-Unidad %c: no responde, o no hay memoria interna suficiente.
+:TEXT_ERROR_CWD_FAILED#1%
+La unidad %c: no responde.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE
@@ -473,6 +473,18 @@ Contexto no hallado tras el intercambio. Se crear  uno nuevo, aunque
 las alias, etc. locales se han perdido.
 .
 
+:TEXT_ERROR_PERMISSION_DENIED#1%
+%s: Permiso denegado
+.
+
+:TEXT_ERROR_NO_SUCH_FILE#1%
+%s: No existe tal archivo o diretorio
+.
+
+:TEXT_ERROR_UNKNOWN_ERROR#1%
+%s: Error desconocido
+.
+
 #
 # Informational messages
 #
@@ -508,6 +520,13 @@ La salida de DEBUG se imprimir  a '%s'.
 El estado de BREAK es %s
 .
 
+:TEXT_MSG_LFNFOR_STATE#0%
+LFNFOR es %s
+.
+
+:TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
+Autocompletar con LFN (nombres largos de archivo) es %s
+.
 :TEXT_MSG_CURRENT_DATE
 La fecha actual es %s
 .
@@ -592,6 +611,16 @@ aabbccdd      d      a    b
 # Note: This prompt ignores DOS NLS intentionally in order to
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_APPEND_FILE#1%
+SsNnTtCc{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+¨A¤adir a '%s' (S¡/No/Todo/Cancelar) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
 :PROMPT_DELETE_FILE#1
 SsNnTtCc{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
@@ -643,8 +672,8 @@ Directorio de %s
 :TEXT_DIR_LINE_FILENAME_WIDE#1
 %-15s\
 .
-:TEXT_DIR_LINE_FILENAME_BARE
-%-13s
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
 .
 :TEXT_DIR_LINE_FILENAME_SINGLE#1
 %-13s\
@@ -736,6 +765,9 @@ Caracter¡sticas disponibles:
 .
 :TEXT_SHOWCMD_FEATURE_LAST_DIR#1
 [£ltimo directorio utilizado] \
+.
+:TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
+[nombres largos de archivo] \
 .
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
 [kernel swap] \
@@ -1199,6 +1231,16 @@ IF [NOT] EXIST nombrearchivo orden
   EXIST nombrearchivo La condici¢n es verdadera si el archivo dado existe.
 .
 
+:TEXT_CMDHELP_LFNFOR
+Activa/Desactiva nombres largos de archivo para FOR o para autocompletar.
+
+LFNFOR [ON | OFF]
+LFNFOR COMPLETE [ON | OFF]
+
+Introduzca LFNFOR o LFNFOR COMPLETE sin par metros para mostrar el estado
+actual de LFNFOR.
+.
+
 :TEXT_CMDHELP_LH
 Carga un programa en memoria superior.
 
@@ -1453,3 +1495,62 @@ El par metro de destino de COPY no debe contener el car cter suma ('+').
 Eliminando archivo "%s".
 .
 
+
+:TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
+No se puede escribir el archivo '%s';
+Probablemente el disco est  lleno (se requieren %lu bytes)
+.
+
+# Displayed for BIGcopy(), when copying takes quite a long time.
+# **_NO_END if the input file size is unknown.
+# Both must end in \r rather than \n!!
+:TEXT_COPY_COPIED_NO_END#0%
+copiados %luKB/???KB\r\
+.
+:TEXT_COPY_COPIED#0%
+copiados %luKB/%luKB\r\
+.
+
+:TEXT_ERROR_FCOM_IS_DEVICE#0%
+FreeCOM no puede ser un dispositivo: "%s"
+.
+:TEXT_ERROR_FCOM_INVALID#0%
+Este archivo no es un FreeCOM v lido, o la versi¢n no es compatible:
+%s
+.
+
+:TEXT_ERROR_LOADING_STRINGS
+Error al cargar las cadenas de caracteres en memoria, la ruta
+indicada en %COMSPEC% no parece v lida. Por favor, especifique otra
+ruta hacia FreeCOM para tratar de recargar las cadenas, por ejemplo:
+C:\\COMMAND.COM
+o pulse ENTER para cancelar la carga de dichas cadenas.
+.
+
+:TEXT_TERMINATING
+Abortando ejecuci¢n.
+.
+
+:TEXT_HIDDEN_CRITER#0%
+Se han eliminado %u peticiones de Error Cr¡tico.
+.
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+C¢digo de salida (ERRORLEVEL): %u, motivo: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+Error en el API del DOS\
+.
+:TEXT_EXIT_REASON_0
+salida con normalidad\
+.
+:TEXT_EXIT_REASON_1
+salida por ^Break\
+.
+:TEXT_EXIT_REASON_2
+salida por error cr¡tico\
+.
+:TEXT_EXIT_REASON_3
+salida residente en memoria\
+.
