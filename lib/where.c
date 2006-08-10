@@ -6,6 +6,9 @@
     This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
     $Log$
+    Revision 1.11  2006/08/10 18:13:29  blairdude
+    Improved PATH handling routine (thanks to Arkady for patch)
+
     Revision 1.10  2006/08/06 20:05:28  blairdude
     Fixed bug where a directory could be found in %PATH% parsing.
 
@@ -75,75 +78,82 @@
 #include "../err_fcts.h"
 #include "../include/misc.h"
 
-static char *__addcomexebat( char * file )
+/* Don't conflict with BC/TC's searchpath function */
+static char *_searchpath(const char *name)
 {
-    static char tmpname[ MAXPATH ];
-    unsigned attr = 0;
+    static char buf [MAXPATH + 4];
+    const char *envptr = getEnv ("PATH");
+    char *pname, *p;
+    size_t len = strlen (name);
 
-    sprintf( tmpname, "%s.COM", file );
-    if( ( attr = dfnstat( tmpname ) )  != 0 && !( attr & DFN_DIRECTORY ) )
-        return( tmpname );
-    sprintf( tmpname, "%s.EXE", file );
-    if( ( attr = dfnstat( tmpname ) )  != 0 && !( attr & DFN_DIRECTORY ) )
-        return( tmpname );
-    sprintf( tmpname, "%s.BAT", file );
-    if( ( attr = dfnstat( tmpname ) )  != 0 && !( attr & DFN_DIRECTORY ) )
-        return( tmpname );
-    if( ( attr = dfnstat( file ) ) != 0 && !( attr & DFN_DIRECTORY ) )
-        return( strcpy( tmpname, file ) );
-    return( NULL );
-}
+    /* copy name at end of buffer */
+    if (len > sizeof(buf) - 5)            /* enough space in buf? */
+        return NULL;
+    pname = strcpy(buf + sizeof(buf) - 5 - len, name);
 
-/* The return value is overwritten on subsequent calls */
-static char *_searchpath( const char *name )
-{
-    char *envptr = getEnv( "PATH" );
-    static char file[ MAXPATH ], *retpt;
-
-    strcpy( file, name );
-    if( ( retpt = __addcomexebat( file ) ) != NULL ) return( retpt );
-    while( envptr && envptr[0] ) {    /* While there are paths left to parse */
-        char *tok = strchr( envptr, ';' );
-        int toklen;
-        if( tok == NULL ) toklen = strlen( envptr );
-        else toklen = tok - envptr;
-        memcpy( file, envptr, toklen );
-        strcpy( file+toklen, "\\" );
-        strcat( file, name );
-        if( ( retpt = __addcomexebat( file ) ) != NULL ) return( retpt );
-        envptr = tok;
-        if( envptr ) envptr++;    /* Move on to the next one */
+    /* check for explicit suffix in name */
+    for(p = buf + sizeof(buf) - 5, *p = '.'; ;) {
+        if(p == pname) break;
+        --p;
+        if(*p == '\\' || *p == '/' || *p == ':') break;
+        if(*p == '.') {
+            buf[sizeof(buf) - 5] = '\0';     /* explicit suffix found */
+            break;
+        }
     }
-    return( NULL );
+
+    /* check current directory, then all entries in PATH */
+    for(p = pname;;) {
+        if(buf[sizeof(buf) - 5] == '.') {
+            strcpy(buf + sizeof(buf) - 4, "COM");
+            if(dfnstat(p) & DFN_FILE) return p;
+            strcpy(buf + sizeof(buf) - 4, "EXE");
+            if(dfnstat(p) & DFN_FILE) return p;
+            strcpy(buf + sizeof (buf) - 4, "BAT");
+        }
+        if(dfnstat(p) & DFN_FILE) return p;
+
+        /* find next PATH entry, which fit in buf */
+        for(;;) {
+            if(envptr == NULL || pname == buf) return NULL;
+            while(*envptr == ';') ++envptr;    /* skip sequence of ';' */
+            if(*envptr == '\0') return NULL;   /* no more PATH entries? */
+
+            /* count PATH entry len */
+            len = 0;
+            do {
+                ++len;
+                ++envptr;
+            } while(*envptr && *envptr != ';');
+
+            /* add separator, if necessary, between name and path */
+            p = pname;
+            if(envptr[-1] != '\\' &&
+               envptr[-1] != '/'  &&
+               envptr[-1] != ':') {
+                --p;
+                *p = '\\';
+            }
+
+                /* add path to name */
+            if(len <= p - buf) {
+                p = memcpy(p - len, envptr - len, len);
+                break;
+            }
+        }
+    }
 }
 
 char *find_which(const char * const fname)
-{   char *p;
+{
     static char *buf = 0;
-
-#if 0
-    critEnableRepeatCheck();
-    if(0 == (p = dfnsearch(fname, 0, 0))) {
-        if(errno == ENOMEM) {
-            error_out_of_memory();
-        }
-        critEndRepCheck();
-        return 0;
-    }
-
-#else
-    if( 0 == ( p = _searchpath( fname ) ) ) return( 0 );
-#endif
+    char *p = _searchpath(fname);
+    if( 0 == p ) return( 0 );
     free(buf);
 #ifdef FEATURE_LONG_FILENAMES
     buf = abspath(getshortfilename(p), 1);
 #else
     buf = abspath(p, 1);
-#endif
-#if 0
-    free(p);
-
-    critEndRepCheck();
 #endif
     return buf;
 }
