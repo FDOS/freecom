@@ -5,9 +5,12 @@
 	This file bases on MISC.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.6  2006/09/04 20:14:23  blairdude
+	Support for BC
+
 	Revision 1.5  2006/06/17 06:10:31  blairdude
 	Optimization
-
+	
 	Revision 1.4  2006/06/13 02:10:19  blairdude
 	Cleaned up some code, moved write in outc to fwrite to make everybody happy (thanks to Arkady for the reports)
 	
@@ -46,12 +49,11 @@
 
 #include "../config.h"
 
-#include <assert.h>
-#include <conio.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
-#include <fcntl.h>
+#include <string.h> /* strlen */
+#include <stdlib.h> /* free */
+#include <fcntl.h>  /* O_WRONLY */
+#include <stdarg.h>
+#include <io.h>     /* _open, _write, _close */
 
 #include "../include/batch.h"
 #include "../include/misc.h"

@@ -313,7 +313,8 @@ void dumpString(const int stringId)
 
 /* map a backslash sequence */
 int mapBSEscape(char ** const s)
-{	char *p, *q;
+{	char *p;
+    const char *q;
 	int ch;
 
 	p = *s;

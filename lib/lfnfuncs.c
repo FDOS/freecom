@@ -4,7 +4,6 @@
 
 #include "../config.h"
 
-#include <assert.h>
 #include <dir.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -12,6 +11,7 @@
 #include <dos.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <string.h>
 #include <suppl.h>
 #include <dfn.h>
@@ -19,12 +19,9 @@
 
 #define __LFNFUNCS_C
 
+#include "suppl.h"
 #include "../include/misc.h"
 #include "../include/lfnfuncs.h"
-#include "../strings.h"
-#include "../err_fcts.h"
-#include "../include/cmdline.h"
-#include "../include/openf.h"
 
 
 #ifdef FEATURE_LONG_FILENAMES
