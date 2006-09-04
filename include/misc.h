@@ -94,6 +94,12 @@ unsigned allocMemBlk(const unsigned size, const unsigned mode);
 void freeSysBlk(const unsigned segm);
 
 void myperror(const char *msg);
+void myfnsplit(const char *path, char *drv, char *dir, char *name, char *ext);
+void myfnmerge(char *path,
+               const char *drive,
+               const char *dir,
+               const char *fname,
+               const char *ext);
 
 char far *_fstpcpy(char far *dst, const char far *src);
 void partstrlower(char *str);
@@ -112,21 +118,19 @@ void restoreSession(void);
 void saveSession(void);
 
 int samefile(const char * const f1, const char * const f2);
-/* void fillComp(char * const dst, const char *pattern, const char *src, int len); */
-char *fillFnam(const char * const pattern, const char * const fnam);
+void fillFnam(char *dest, const char * const pattern, const char * const fnam);
 int is_fnchar(const int c);
 int is_fnstr(const char * const s);
 int is_pathdelim(const int c);
 int is_empty(const char *s);
-/* int is_quote(const int c);*/
 #define is_quote(c)	((c) == '"')
 char *skipfnam(const char * const fnam);
 
 FILE *tempfile(void);
 void rmtmpfile(void);
 
-unsigned mywherex( void );
-unsigned mywherey( void );
+unsigned mywherex(void);
+unsigned mywherey(void);
 
 /************* Imported from LH.ASM        */
 
