@@ -53,7 +53,7 @@ void myfnsplit( const char *path,
             end = p;
             break;
         }
-    if ( ext ) for( s = end; ( *ext = *s++ ); ) ext++;
+    if ( ext ) for( s = end; ( *ext = *s++ ) != '\0'; ) ext++;
 
     for( p = end; p > path; )
         if( *--p == '\\'/* || *p == '/'*/) {
