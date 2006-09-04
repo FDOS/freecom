@@ -21,7 +21,7 @@
 #include <sys\stat.h>
 
 #include <dfn.h>
-/*#include "../include/lfnfuncs.h"*/
+#include "../include/lfnfuncs.h"
 
 #include "../include/command.h"
 #include "../include/batch.h"
@@ -83,6 +83,17 @@ int swapContext = TRUE;					/* may destroy external context */
 unsigned char __supportlfns = 1;
 #endif
 
+#ifdef FEATURE_SWITCHAR
+char switchar(void)
+{
+    _AX = 0x3700;
+
+    geninterrupt(0x21);
+
+    return(_AL == 0x00 ? _DL : '/');
+}
+#endif
+
 static void execute(char *first, char *rest)
 {
   /*
@@ -96,9 +107,7 @@ static void execute(char *first, char *rest)
 
   char *fullname;
   char *extension;
-#if 0
   void interrupt (*old2e)();
-#endif
 
   assert(first);
   assert(rest);
@@ -184,11 +193,11 @@ static void execute(char *first, char *rest)
 	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
 #endif
 #ifdef FEATURE_XMS_SWAP
-#if 0
     old2e = getvect( 0x2E );
-    if( peekb( FP_SEG( old2e ), FP_OFF( old2e ) ) == 0xCF )
-        setvect( 0x2E, ( void interrupt(*)() )lowlevel_int_2e_handler );
-#endif
+    if( peekb( FP_SEG( old2e ), FP_OFF( old2e ) ) == 0xCF && !canexit )
+        setvect( 0x2E, ( void interrupt(*)() )
+                 MK_FP(FP_SEG(lowlevel_int_2e_handler)-0x10,
+                 FP_OFF(lowlevel_int_2e_handler)+0x100));
 #endif
     result = exec(fullname, rest, 0);
 	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
@@ -394,14 +403,39 @@ void parsecommandline(char *s, int redirect)
   {                             /* Question after the variables expansion
                                    and make sure _all_ executed commands will
                                    honor the trace mode */
+    /* 
+     * Commands may be nested ("if errorlevel 1 echo done>test"). To
+     * prevent redirecting FreeCOM prompts to user file, temporarily
+     * revert redirection.
+     */
+    int redir_fdin, redir_fdout, answer;
+
+    if (oldinfd != -1) {
+        redir_fdin = dup (0);
+        dup2 (oldinfd,  0);
+    }
+    if (oldoutfd != -1) {
+        redir_fdout = dup (1);
+        dup2 (oldoutfd, 1);
+    }
+
     printprompt();
     fputs(s, stdout);
     /* If the user hits ^Break, it has the same effect as
        usually: If he is in a batch file, he is asked if
        to abort all the batchfiles or just the current one */
-	if(userprompt(PROMPT_YES_NO) != 1)
-      /* Pressed either "No" or ^Break */
-      return;
+    answer = userprompt(PROMPT_YES_NO);
+
+    if (oldinfd  != -1) {
+        dup2 (redir_fdin,  0);
+        close (redir_fdin);
+    }
+    if (oldoutfd != -1) {
+        dup2 (redir_fdout, 1);
+        close (redir_fdout);
+    }
+
+    if (answer != 1) return;              /* "No" or ^Break   */
   }
 
   if(!redirect) {
