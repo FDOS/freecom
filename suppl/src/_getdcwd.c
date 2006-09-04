@@ -51,6 +51,8 @@ co: Micro-C, Pacific HiTech C
 */
 
 #include "initsupl.loc"
+#include "../../config.h"
+#undef FEATURE_LONG_FILENAMES
 
 #ifdef _MICROC_
 #define COMPILE 1
@@ -129,7 +131,7 @@ putDrive:
 
 char *_getdcwd(int drive, char Xbuf[], unsigned length)
 {	char *buf;
-	USEREGS
+	struct REGPACK r;
 
 	DBG_ENTER("_getdcwd", Suppl_portable)
 	DBG_ARGUMENTS( ("drv=%d, buf=%s, len=%u", drive, buf? "passed": "allocate", length) )
@@ -148,33 +150,27 @@ char *_getdcwd(int drive, char Xbuf[], unsigned length)
 #endif
 		strcpy(buf, "A:\\");
 		*buf += drive? drive - 1: getdisk();
-		_SI = FP_OFF(&buf[3]);
-		_DX = drive;
-		_DS = FP_SEG(buf);
+		r.r_si = FP_OFF(&buf[3]);
+		r.r_dx = drive;
+		r.r_ds = FP_SEG(buf);
 #ifdef FEATURE_LONG_FILENAMES
-#if 0
-		_AX = 0x7147;
-#endif
+		r.r_ax = 0x7147;
 #else
-        _AX = 0x4700;
+        r.r_ax = 0x4700;
 #endif
-		geninterrupt(0x21);
+		intr(0x21, &r);
 #ifdef FEATURE_LONG_FILENAMES
-#if 0
-		if(_CFLAG || _AX = 0x7100) {				/* Get path failed */
-            _AX = 0x4700;
-            geninterrupt(0x21);
+		if((r.r_flags & 1) || r.r_ax == 0x7100) {				/* Get path failed */
+            r.r_ax = 0x4700;
+            intr(0x21, &r);
 #endif
-#endif
-            if(_CFLAG) {
+            if(r.r_flags & 1) {
     			if(!Xbuf) free(buf);
     			chkHeap
     			DBG_RETURN_S( 0)
             }
 #ifdef FEATURE_LONG_FILENAMES
-#if 0
 		}
-#endif
 #endif
 	}
 	chkHeap
