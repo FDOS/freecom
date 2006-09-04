@@ -259,24 +259,27 @@ static void printLFNname(char *shortName, char *ext)
 	 , path
 	 , shortName
 	 , *ext ? '.' : 0x0
-	 , ext);
+	 , *ext ? ext : 0x0);
 
     dprintf(("[LFN: path %s\n",pathbuffer)); 
 	
       /* LFN get canonical LFN */
 	r.r_ax = 0x7160;
-	r.r_cx = 0x02;
+	r.r_cx = 0x8002;
 	r.r_si = FP_OFF( pathbuffer );
     r.r_ds = FP_SEG( pathbuffer );
 	r.r_di = FP_OFF( longname );
     r.r_es = FP_SEG( longname );
-    r.r_flags = 1;
 	intr(0x21, &r);
 	
     if( r.r_flags & 1 || r.r_ax == 0x7100 || !__supportlfns ) {
         dprintf(("[LFN: not supported %x]\n",r.r_ax)); 
 		return;
 	}
+
+    if(samefile(longname, ".")) strcpy(longname, "\\.");
+
+    if(dfnstat("..") != 0 && samefile(longname, "..")) strcpy(longname, "\\..");
 	
 	printf(" %.30s ", &strrchr(longname, '\\')[1]);
 }
