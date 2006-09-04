@@ -18,7 +18,11 @@
 #define isoptdelim(ch) (isspace(ch) || iscntrl(ch))
 
 /* What option character COMMAND shell honor, used within arguments too */
+#ifdef FEATURE_SWITCHAR
+#define isoptch(ch) (ch == switchar())
+#else
 #define isoptch(ch) (ch == '/')
+#endif
 
 /* Test if an argument is an option */
 #define isoption(string)  isoptch(*(string))
@@ -30,6 +34,8 @@ extern unsigned currCmdHelpScreen;
 char *trimcl(char *str);
 char *ltrimcl(const char *str);
 void rtrimcl(char * const str);
+
+char switchar(void);
 
 /*
  * Callback function invoked when an option is scanned

@@ -37,6 +37,9 @@
 /* Define to enable usage of LFNs */
 #define FEATURE_LONG_FILENAMES
 
+/* Define to enable usage or the DOS switch character in option processing */
+#define FEATURE_SWITCHAR
+
 /* Define to enable printing of environment variables for "SET VAR" syntax */
 /* (Like Win2k's cmd.exe does) */
 #define FEATURE_CMD_SET_PRINT
