@@ -28,9 +28,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.7  2006/09/04 20:03:14  blairdude
+	Support compiler oddity (Arkady)
+
 	Revision 1.6  2004/08/18 17:18:10  skaus
 	chg: res_r.c: don#('t use relative seek; fails under NTFSdos [Tom Ehlert]
-
+	
 	Revision 1.4  2002/11/05 19:34:38  skaus
 	chg: enumResources(): handle fnam == 0 (file open error)
 	
@@ -82,7 +85,7 @@
 
 int enumFileResources(const char *const fnam
 	, res_majorid_t id
-	, int (*fct)()
+	, res_callbackp_t fct
 	, void * const arg)
 {	resource_t res;
 	unsigned long pos;
