@@ -18,7 +18,7 @@
 #include "../include/lfnfuncs.h"
 
 #ifdef FEATURE_LONG_FILENAMES
-static int chdir( const char *s )
+int chdir( const char *s )
 { return( lfn_mrc_dir( getshortfilename( s ), 0x3B00 ) ); }
 #endif
 
