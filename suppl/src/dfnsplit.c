@@ -98,11 +98,13 @@ fi(le): dfnsplit.c
 */
 
 #include "initsupl.loc"
+#include "../../config.h"
 
 #ifndef _MICROC_
 #include <string.h>
 #include <stdlib.h>
 #include <dos.h>
+
 #endif
 #include "dfn.loc"
 #include "dynstr.h"
@@ -222,3 +224,4 @@ int dfnsplit(const char * const fnam, char ** const dr, char ** const path
 	chkHeap
 	DBG_RETURN_I( !NUL)
 }
+
