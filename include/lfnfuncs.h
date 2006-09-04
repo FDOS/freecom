@@ -15,13 +15,13 @@ struct lfnffblk {
         unsigned short ac_time; /* time of last file access   */
         unsigned short ac_date; /* date of last file access   */
         unsigned short lfnax;   /* DOS LFN search handle      */
-        unsigned char  lfnsup;  /* DOS LFN support status     */
-        char ff_reserved[10];   /* reserved for use by DOS    */
+        char ff_reserved[11];   /* reserved for use by DOS    */
         char ff_attrib;         /* attribute byte for file    */
         unsigned short ff_ftime;/* time of last write to file */
         unsigned short ff_fdate;/* date of last write to file */
         unsigned long  ff_fsize;/* length of file in bytes    */
         char ff_name[256];      /* null-terminated filename   */
+        unsigned char  lfnsup;  /* DOS LFN support status     */
 };
 
 #ifdef __LFNFUNCS_C
