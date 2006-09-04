@@ -106,7 +106,7 @@ char *dfntruename(const char * const fnam)
 	if((h = eno_malloc(DFN_FILENAME_BUFFER_LENGTH)) != 0) {
 #ifdef FEATURE_LONG_FILENAMES
         r.r_ax = 0x7160;
-        r.r_cx = 0x02;
+        r.r_cx = 0x8002;
 #else
 		r.r_ax = 0x6000;
 #endif
