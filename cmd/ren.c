@@ -156,7 +156,7 @@ int cmd_rename(char *param)
 #else
         char s_drv[ MAXDRIVE ], s_dir[ MAXDIR ], d_drv[ MAXDRIVE ],
              d_dir[ MAXDIR ], d_fil[ MAXFILE ], d_ext[ MAXEXT ], sn[ MAXPATH ],
-             dn[ MAXPATH ], *newname;
+             dn[ MAXPATH ], newname[MAXPATH];
 
         myfnsplit( argv[ 0 ], s_drv, s_dir, NULL, NULL );
         myfnsplit( argv[ 1 ], d_drv, d_dir, d_fil, d_ext );
@@ -181,11 +181,14 @@ int cmd_rename(char *param)
 #endif
 
 		do {
-			if((newname = fillFnam(dn, ff.ff_name)) == 0) {
+            fillFnam(newname, dn, ff.ff_name);
+#if 0
+			if(newname[0] == 0) {
 				error_out_of_memory();
 				ec = E_NoMem;
 				break;
 			}
+#endif
 			myfnmerge( sn, s_drv, s_dir, ff.ff_name, NULL );
 			dprintf(("rename(%s, %s)\n", sn, newname) );
 			if(rename(sn, newname) != 0) {
@@ -193,7 +196,8 @@ int cmd_rename(char *param)
 				ec = E_Other;
 				break;
 			}
-			free(newname); newname = 0;
+			/*free(newname);*/
+            newname[0] = 0;
 		} while(FINDNEXT(&ff) == 0);
 
 	errRet:
