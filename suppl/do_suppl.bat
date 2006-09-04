@@ -40,7 +40,7 @@ rem DEL *.c
 rem DEL *.h
 DEL *.obj
 DEL objlist.txt
-DEL %CFG% tccdos.cfg
+del %CFG%>nul
 rem FOR %%A in (*.*) DO DEL %%A
 rem FOR %%A in (NLS\*.*) DO DEL %%A
 rem RMDIR nls
