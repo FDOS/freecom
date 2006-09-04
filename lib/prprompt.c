@@ -5,9 +5,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.8  2006/09/04 19:35:42  blairdude
+	Print long filename current directory
+
 	Revision 1.7  2006/06/13 02:10:19  blairdude
 	Cleaned up some code, moved write in outc to fwrite to make everybody happy (thanks to Arkady for the reports)
-
+	
 	Revision 1.6  2006/06/12 14:43:59  blairdude
 	Fix for potential bug noticed by Arkady
 	
@@ -63,6 +66,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <io.h>
+
+#include <dfn.h>
 
 #include "../include/context.h"
 #include "../include/command.h"
@@ -128,12 +133,34 @@ void displayPrompt(const char *pr)
           }
         case 'P':
           {
-			char *p;
+#ifdef FEATURE_LONG_FILENAMES
+            char pathname[MAXDIR];
+            struct REGPACK r;
+            fprintf(stdout, "%c:\\", getdisk() + 'A');
 
-			if((p = cwd(0)) != 0) {
-				fputs(p, stdout);
-				free(p);
-			}
+            r.r_ax = 0x7147;
+            r.r_dx = 0;
+            r.r_si = FP_OFF(pathname);
+            r.r_ds = FP_SEG(pathname);
+
+            intr(0x21, &r);
+
+            if(r.r_flags & 1 || r.r_ax == 0x7100) {
+                r.r_ax = 0x4700;
+                intr(0x21, &r);
+            }
+
+            if(r.r_flags & 1) break;
+
+            fputs(pathname, stdout);
+#else
+            char *p;
+
+            if((p = cwd(0)) != 0) {
+                fputs(p, stdout);
+                free(p);
+            }
+#endif
 
             break;
           }
@@ -175,3 +202,4 @@ void displayPrompt(const char *pr)
 	free(expanded);
 #endif
 }
+
