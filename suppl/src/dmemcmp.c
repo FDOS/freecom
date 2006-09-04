@@ -57,7 +57,7 @@ int MemiCmp(const byte *s, const byte *p, unsigned len)
 	if(s == 0)
 		DBG_RETURN_I(-1)
 
-	while(!(result = toUpper(*s++) - toUpper(*p++)) && --len);
+	while((result = toUpper(*s++) - toUpper(*p++)) == 0 && --len);
 
 	DBG_RETURN_I( result)
 }

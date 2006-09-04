@@ -78,7 +78,7 @@ int env_strinsert(word segm, const char * const buf, const int index)
 	if(env_freeCount(segm) <= (len = strlen(buf) + 1))
 		DBG_RETURN_I( ESUPPL_NOMEM)			/* not enough room */
 
-	if(!(ofs = env_string(segm, index)))
+	if((ofs = env_string(segm, index)) == 0)
 		DBG_RETURN_I( ESUPPL_NOENT)		/* string number too high */
 
 	/* Move the following strings out of the way */

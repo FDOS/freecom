@@ -73,8 +73,8 @@ int env_strcpy(word segm, char * const buf, const int len, const int index)
 
 	DBG_ARGUMENTS( ("effective env=%u", segm) )
 
-	if(!(ofs = env_string(segm, index))
-	 || ofs == env_firstFree(segm))
+	if((ofs = env_string(segm, index)) == 0 ||
+	    ofs == env_firstFree(segm))
 		DBG_RETURN_I( ESUPPL_NOENT)			/* string number too high */
 
 	_fmemcpy(TO_FP(buf), MK_FP(segm, ofs), len);

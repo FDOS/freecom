@@ -80,8 +80,8 @@ char *env_strdup(word segm, const int index)
 
 	DBG_ARGUMENTS( ("effective env=%u", segm) )
 
-	if(!(ofs = env_string(segm, index))
-	 || ofs == env_firstFree(segm)) {
+	if((ofs = env_string(segm, index)) == 0 ||
+	    ofs == env_firstFree(segm)) {
 		eno_set(ENOENT);
 		DBG_RETURN_S( 0)						/* string number too high */
 	}

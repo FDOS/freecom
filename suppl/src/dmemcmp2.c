@@ -64,7 +64,7 @@ int MemFCmp(const void *s, const void *p, unsigned len)
 	if(a == 0)
 		DBG_RETURN_I(-1)
 
-	while(!(result = toFUpper(*a++) - toFUpper(*b++)) && --len);
+	while((result = toFUpper(*a++) - toFUpper(*b++)) == 0 && --len);
 
 	DBG_RETURN_I( result)
 }

@@ -56,8 +56,14 @@ static char const rcsid[] =
 #endif
 
 #pragma argsused
+
+#if defined __TURBOC__ && __TURBOC__ <= 0x201
+# define offsetof(s_name, m_name) (size_t)&(((s_name*)0)->m_name)
+#endif
+
 static int checkItem(void *arg, word segm)
 {
+    (void)arg;
 	if((peekb(segm, offsetof(struct MCB, mcb_type)) != 'M'
 	  && peekb(segm, offsetof(struct MCB, mcb_type)) != 'Z')
 	 || peekw(segm, offsetof(struct MCB, mcb_size)) >= ~segm) {

@@ -78,7 +78,7 @@ int env_strput(word segm, const char * const buf, const int index)
 
 	DBG_ARGUMENTS( ("effective env=%u", segm) )
 
-	if(!(ofs = env_string(segm, index)))
+	if((ofs = env_string(segm, index)) == 0)
 		DBG_RETURN_I( ESUPPL_NOENT)			/* string number too high */
 
 	if(index == (cnt = env_strcounter(segm, 0))) {	/* append string */

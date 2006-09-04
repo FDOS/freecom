@@ -41,7 +41,7 @@ fi(le): dbgm_sr.c
 
 #include "initsupl.loc"
 
-#ifdef __TURBOC__
+#if __TURBOC__ > 0x201
 
 #include <alloc.h>
 #include <conio.h>

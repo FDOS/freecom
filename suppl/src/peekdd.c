@@ -60,7 +60,7 @@ static char const rcsid[] =
 peekdd(word segm, word ofs, word *hi, word *lo)
 { 	word h, l, res;
 
-	res = !!(h = peekw(segm, ofs + 2));
+    res = (h = peekw (segm, ofs + 2)) != 0;
 	if((l = peekw(segm, ofs)) != 0)
 		res |= 2;
 	if(hi) *hi = h;

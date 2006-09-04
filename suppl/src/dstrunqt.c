@@ -121,7 +121,7 @@ int StrUnquoteTokenAppend(const char **s, const STR_QUOTES * const quotes
 	int ch;
 	FLAG fullQuote;
 	int endQuote;
-	char *q;
+	const char *q;
 
 	DBG_ENTER("StrUnquoteToken", Suppl_dynstr)
 
