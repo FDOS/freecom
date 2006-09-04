@@ -25,7 +25,7 @@
    passed in case or uppercased, whereas upCaseValue determines
    if the value the user passes in (with the /P option) is
    stored as typed or uppercased. */
-static int optC, promptUser, upCaseValue;
+static int optC, promptUser, upCaseValue, optExecute;
 
 #pragma argsused
 optScanFct(opt_set)
@@ -40,6 +40,7 @@ optScanFct(opt_set)
 		return E_Other;
 #endif
   case 'P': return optScanBool(promptUser);
+  case 'E': return optScanBool(optExecute);
   }
   optErr();
   return E_Useage;
@@ -47,10 +48,10 @@ optScanFct(opt_set)
 
 int cmd_set(char *param)
 {	char *value;
-	char *promptBuf = 0;
+	char *promptBuf = 0, tempcmd[255];
 	int ret;
 
-	optC = promptUser = upCaseValue = 0;
+	optC = promptUser = upCaseValue = optExecute = 0;
 
 	if(leadOptions(&param, opt_set, 0) != E_None)
 		return 1;
@@ -96,6 +97,27 @@ int cmd_set(char *param)
 		value[1] = '\0';	/* strip trailing newlines */
 		value = promptBuf;
 	}
+    if (optExecute) {
+        char *tempfile = tmpfn();
+        FILE *fhandle;
+
+        if (!tempfile) return (1);
+        sprintf (tempcmd, "%s>%s", value, tempfile);
+        parsecommandline (tempcmd, TRUE);
+        fhandle = fopen (tempfile, "r");
+        if (!fhandle) {
+            unlink (tempfile);
+            free (tempfile);
+            return (1);
+        }
+        fgets (tempcmd, 255, fhandle);
+        value = strchr(tempcmd, '\n');
+        if (value) *value = '\0';
+        value = tempcmd;
+        fclose (fhandle);
+        unlink (tempfile);
+        free (tempfile);
+    }
 
 	/* If the value is just blanks, it means to delete the value;
 		but otherwise even leading and trailing spaces must be kept */
