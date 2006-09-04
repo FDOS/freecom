@@ -14,9 +14,12 @@
 	This file bases on COPY.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.5  2006/09/04 19:34:08  blairdude
+	Use static-sized buffers for safety
+
 	Revision 1.4  2006/06/19 01:37:06  blairdude
 	Fixed some bugs in LFN support, copy now fully supports long filenames
-
+	
 	Revision 1.3  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -62,6 +65,7 @@
 #include <dfn.h>
 
 #include "../include/command.h"
+#include "../include/misc.h"
 #include "../include/lfnfuncs.h"
 
 static void fillComp(char * const dst
@@ -111,19 +115,29 @@ ende:
 #endif
 }
 
-char *fillFnam(const char * const pattern
+void fillFnam(char *dest, const char * const pattern
  , const char * const fnam)
-{ char *dr, *pa, *fn, *ex;
+{ 
+#if 0
+  char *dr, *pa, *fn, *ex;
   char *pfn, *pex;
+#else
+  char dr[MAXDRIVE], pa[MAXDIR], fn[MAXFILE], ex[MAXEXT], pfn[MAXFILE],
+       pex[MAXEXT];
+#endif
   char dfn[MAXFILE], dex[MAXEXT];
-  char *p;
 
   assert(fnam);
   assert(pattern);
 
   if(strchr(pattern, '?') == 0 && strchr(pattern, '*') == 0)
+#if 0
     return strdup(pattern);
+#else
+    strcpy(dest, pattern);
+#endif
 
+#if 0
   if(!dfnsplit(pattern, &dr, &pa, &fn, &ex))
     return 0;
 
@@ -134,12 +148,21 @@ char *fillFnam(const char * const pattern
     free(pa);
     return 0;
   }
+#else
+  myfnsplit(pattern, dr, pa, fn, ex);
+  myfnsplit(fnam, 0, 0, pfn, pex);
+#endif
 
   fillComp(dfn, fn, pfn, MAXFILE);
   fillComp(dex, ex, pex, MAXEXT);
 
+#if 0
   p = dfnmerge(0, dr, pa, dfn, dex);
+#else
+  myfnmerge(dest, dr, pa, dfn, dex);
+#endif
 
+#if 0
   free(pfn);
   free(pex);
   free(dr);
@@ -148,4 +171,5 @@ char *fillFnam(const char * const pattern
   free(ex);
 
   return p;
+#endif
 }
