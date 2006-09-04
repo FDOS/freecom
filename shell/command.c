@@ -194,7 +194,7 @@ static void execute(char *first, char *rest)
 #endif
 #ifdef FEATURE_XMS_SWAP
     old2e = getvect( 0x2E );
-    if( peekb( FP_SEG( old2e ), FP_OFF( old2e ) ) == 0xCF && !canexit )
+    if( *(unsigned char far *)getvect( 0x2E) == 0xCF && !canexit) /* IRET? */
         setvect( 0x2E, ( void interrupt(*)() )
                  MK_FP(FP_SEG(lowlevel_int_2e_handler)-0x10,
                  FP_OFF(lowlevel_int_2e_handler)+0x100));
