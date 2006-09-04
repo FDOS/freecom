@@ -121,7 +121,7 @@ typedef int (*LookupFct)(char *, char *, size_t);
  *		else: (index + 1) of the found word, the word matches
  *			the entry within the supplied function
  */
-size_t lookupwd_(const char * const wd, const MSGID *arr
+size_t lookupwd_(const char * const wd, const MSGID *const arr
 	, inM(int cmpfct, int (*cmpfct)(char *, char *, size_t)));
 
 #endif

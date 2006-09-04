@@ -53,7 +53,7 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
-void suppl_log_change(suppl_log_sptr_t state)
+void suppl_log_change(suppl_log_csptr_t state)
 {	suppl_log_sptr_t p;
 
 	assert(state);

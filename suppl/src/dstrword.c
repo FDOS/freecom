@@ -64,7 +64,7 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
-char *StrWord(char * const s)
+char *StrWord(char *s)
 {	char *p;
 
 	DBG_ENTER("StrWord", Suppl_dynstr)

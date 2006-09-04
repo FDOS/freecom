@@ -44,7 +44,7 @@ int _fMemiCmp(const byte far * dest, const byte far * src, unsigned length);
 #endif
 
 int StriCmp(const char *s1, const char *s2);
-char *StrUpr(char s[]);
+char *StrUpr(char *s);
 char *MemUpr(char buf[], unsigned length);
 void _fStrUpr(const word dseg, word dofs);
 void _fMemUpr(const word dseg, word dofs, unsigned length);

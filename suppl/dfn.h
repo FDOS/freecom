@@ -97,8 +97,8 @@ char *dfntruename(const char * const fn);
 char *dfnsearch(const char * const fname, const char * const path, const char * const ext);
 int dfnmatchcomponent(const char *fnam, const char *pattern);
 int dfnmatchcomponent2(const char *fnam, const char *pattern);
-int dfnmatchext(const char *fnam, const char *pattern);
-int dfnmatchext2(const char *fnam, const char *pattern);
+int dfnmatchext(const char *const fnam, const char *pattern);
+int dfnmatchext2(const char *const fnam, const char *pattern);
 int dfnmatch(const char *fnam, const char *pattern);
 int dfnmatch2(const char *fnam, const char *pattern);
 int dfnmatchEx(const char *fnam
@@ -121,7 +121,7 @@ int dfndelim2(const int ch);
 char *dfnglobfilename(DFN_GLOB * const dir);
 char *dfnglobfullfilename(DFN_GLOB * const dir);
 DFN_GLOB *dfnglobinit(const char * const pattern, unsigned flags);
-int dfnglobread(DFN_GLOB *dir);
+int dfnglobread(DFN_GLOB *const dir);
 void dfnglobfree(DFN_GLOB *dir);
 
 #endif

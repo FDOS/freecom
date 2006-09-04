@@ -57,7 +57,7 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
-char *StrFUpr(char * const s)
+char *StrFUpr(char *s)
 {	char *p;
 
 	DBG_ENTER("StrFUpr", Suppl_nls)

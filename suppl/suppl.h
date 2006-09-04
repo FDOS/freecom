@@ -101,7 +101,7 @@ int fputmc(int ch, int cnt, FILE *f);
 */
 
 
-word DOSalloc(const word length, const int mode);
+word DOSalloc(word length, int mode);
 /* Allocate a chunk of memory directly via the DOS API.
 	length is the number of paragraphes that shall be allocated.
 	mode is the allocation strategy to be used.
@@ -121,7 +121,7 @@ word DOSalloc(const word length, const int mode);
 				if 0x10 of mode was set: the largest unallocated block
 */
 
-int DOSresize(const word segm, const word length);
+int DOSresize(word segm, word length);
 /* Resize a chunk of memory directly via the DOS API.
 	segm is the segment to resize, it must be allocated via the DOS API
 		or a comparable function, like DOSalloc(), allocBlk().

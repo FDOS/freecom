@@ -140,8 +140,8 @@ int Feof(FILE *fp);
  *	Return:
  *		0: on success
  */
-int FFget(void * const buf, size_t len, FILE *f);
-int FFput(const void * const buf, size_t len, FILE *f);
+int FFget(void * const buf, size_t len, FILE *const f);
+int FFput(const void * const buf, size_t len, FILE *const f);
 
 /*
  * Commit a file

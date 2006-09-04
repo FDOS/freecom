@@ -61,7 +61,7 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
-void env_subVarOffset(word segm, const word offset)
+void env_subVarOffset(word segm, word offset)
 {	register unsigned moveStart;
 
 	DBG_ENTER("env_subVarOffset", Suppl_env)

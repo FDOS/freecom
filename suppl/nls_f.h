@@ -41,7 +41,7 @@ int _fMemFCmp(unsigned const dseg, unsigned dofs
 int _fMemFCmp(const void far * dest, const void far * src, unsigned length);
 #endif
 
-char *StrFUpr(char s[]);
+char *StrFUpr(char *s);
 void *MemFUpr(void * const buf, unsigned length);
 
 #endif

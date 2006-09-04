@@ -109,7 +109,7 @@ void env_setGlbSeg_(const word segm);
 #endif
 
 word env_create(const unsigned length);
-void env_delete(const word segm);
+void env_delete(word segm);
 void env_clear(word segm);
 int cpyenv(const char * const var, char * const dst, const unsigned length);
 int env_get(word segm, const char * const var, char * const dst, const unsigned length);
@@ -152,7 +152,7 @@ int env_nullStrings(word segm);
 /* int env_strings(const word segm); */
 #define env_strings(segm)	env_strcounter((segm), 0)
 int env_strcounter(word segm, int diff);
-word env_string(const word segm, int stringNr);
+word env_string(word segm, int stringNr);
 int env_strcpy(word segm, char * const buf, const int len, const int stringNr);
 char *env_strdup(word segm, const int stringNr);
 int env_strput(word segm, const char * const buf, const int stringNr);
@@ -164,7 +164,7 @@ int env_strinsert(word segm, const char * const buf, const int stringNr);
 
 
 word env_findVar(const word segm, const char * const var);
-void env_subVarOffset(const word segm, const word offset);
+void env_subVarOffset(word segm, word offset);
 int env_appVar(word segm, const char * const name, const char * const value);
 
 int env_check(const word segm);
