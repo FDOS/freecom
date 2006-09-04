@@ -19,6 +19,7 @@
  *
  * 2001/02/17 ska
  * add: interactive command flag
+ 
  * bugfix: copy 1 + 2 + 3 <-> only first and last file is stored
  */
 
@@ -228,7 +229,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 { char mode[3], *p;
   struct ffblk ff;
   struct CopySource *h;
-  char *rDest, *rSrc;
+  char rDest[MAXPATH], rSrc[MAXPATH];
   FILE *fin, *fout;
   int rc, asc;
   char *buf;
@@ -237,6 +238,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   struct ftime fileTime;
   char *srcFile;
   FLAG wildcarded;
+  FLAG isfirst = 1;
   FLAG singleFileCopy = src->app == NULL;
 
   assert(dst);
@@ -257,81 +259,68 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   mode[2] = '\0';
 
   do {
-    if((rDest = fillFnam(dst, srcFile)) == 0)
+//    if( wildcarded && !strpbrk( dst, "*?" ) && !isfirst ) openMode = 'a';
+    fillFnam(rDest, dst, srcFile);
+    if(rDest[0] == 0)
       return 0;
     h = src;
     do {  /* to prevent to open a source file for writing, e.g.
           for COPY *.c *.?    */
-      if((rSrc = fillFnam(h->fnam, srcFile)) == 0) {
-        free(rDest);
+      fillFnam(rSrc, h->fnam, srcFile);
+      if(rSrc[0] == 0) {
         return 0;
       }
       rc = samefile(rDest, rSrc);
-      free(rSrc);
       if(rc < 0) {
         error_out_of_memory();
-        free(rDest);
         return 0;
       } else if(rc) {
         error_selfcopy(rDest);
-        free(rDest);
         return 0;
       }
     } while((h = h->app) != 0);
 
     if(interactive_command		/* Suppress prompt if in batch file */
-     && openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != 0) {
+       && openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != 0) {
     	int destIsDevice = isadev(fileno(fout));
 
       fclose(fout);
       if(!destIsDevice) {	/* Devices do always exist */
-        if( access( rSrc, 0 ) != 0) { /* Source doesn't exist */
-        /* 
-         * For some reason, passing rSrc directly to error_open_file
-         * prints what seems to be garble... bug in compiler? memory leak?
-         */
-            char newFname[MAXPATH];
-            strcpy( newFname, rSrc );
-            error_open_file( newFname );
-            free( rSrc );
-            free( rDest );
+        if( dfnstat( rSrc ) == 0) { /* Source doesn't exist */
+            error_open_file( rSrc );
             return 0;
         } else {
           	switch(userprompt(PROMPT_OVERWRITE_FILE, rDest)) {
 	    	default:	/* Error */
 		    case 4:	/* Quit */
-    			  free(rDest);
 	    		  return 0;
 		    case 3:	/* All */
 			    optY = 1;
     		case 1: /* Yes */
 	    		break;
 		    case 2:	/* No */
-			    free(rDest);
     			continue;
     		}
         }
 	  }
     }
     if(cbreak) {
-      free(rDest);
       return 0;
     }
     mode[0] = openMode;
     mode[1] = 'b';
     if((fout = fdevopen(rDest, mode)) == 0) {
       error_open_file(rDest);
-      free(rDest);
       return 0;
     }
     mode[0] = 'r';
     h = src;
     keepFTime = (h->app == 0);
     do {
-      if((rSrc = fillFnam(h->fnam, srcFile)) == 0) {
+      fillFnam(rSrc, h->fnam, srcFile);
+      if(rSrc[0] == 0) {
         fclose(fout);
         unlink(rDest);		/* if device -> no removal, ignore error */
-        free(rDest);
         return 0;
       }
       mode[1] = (asc = h->flags & ASCII) != 0? 't': 'b';
@@ -339,9 +328,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       if((fin = fdevopen(rSrc, mode)) == 0) {
         error_open_file(rSrc);
         fclose(fout);
-        free(rSrc);
         unlink(rDest);		/* if device -> no removal, ignore error */
-        free(rDest);
         return 0;
       }
       if(isadev(fileno(fin))) {
@@ -363,9 +350,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       if(cbreak) {
         fclose(fin);
         fclose(fout);
-        free(rSrc);
         unlink(rDest);		/* if device -> no removal, ignore error */
-        free(rDest);
         return 0;
       }
 
@@ -440,11 +425,9 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       if(cbreak)
         rc = 0;
       fclose(fin);
-      free(rSrc);
       if(!rc) {
         fclose(fout);
         unlink(rDest);		/* if device -> no removal, ignore error */
-        free(rDest);
         return 0;
       }
     } while((h = h->app) != 0);
@@ -459,11 +442,9 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     if(rc) {
       error_write_file(rDest);
       unlink(rDest);		/* if device -> no removal, ignore error */
-      free(rDest);
       return 0;
     }
-    free(rDest);
-  } while(wildcarded && FINDNEXT(&ff) == 0);
+  } while(wildcarded && FINDNEXT(&ff) == 0 && !(isfirst = 0));
 
   FINDSTOP(&ff);
 
