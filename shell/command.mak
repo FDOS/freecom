@@ -1,12 +1,10 @@
 .AUTODEPEND
 
-CFG = TCCDOS.CFG
 CFG_DEPENDENCIES = COMMAND.MAK ..\strings.h
 
-all: $(CFG) command.exe
-
-##>> Modify this file with your local settings
 !include "..\config.mak"
+
+all: $(CFG) command.exe
 
 command.exe : $(CFG) batch.obj \
 	cmdtable.obj \

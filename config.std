@@ -1,7 +1,9 @@
 ## is the base path ("root") of Turbo C++ v1.01
 ## Note: Use upper-case letters, otherwise some make variants
 ## map \t into tab character!
-CC_BASE_PATH = C:\TCPP101
+#-CC_BASE_PATH = C:\TC		# Turbo C
+CC_BASE_PATH = C:\TCPP		# Turbo C++
+#-CC_BASE_PATH = C:\BCPP	# Borland C++
 
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
@@ -9,12 +11,15 @@ SUPPL_INC_PATH = ..\SUPPL
 SUPPL_LIB_PATH = $(SUPPL_INC_PATH)
 
 ## Program locations
-BINPATH = $(CC_BASE_PATH)\BIN
+#-BINPATH = $(CC_BASE_PATH)	# Turbo C
+BINPATH = $(CC_BASE_PATH)\BIN	# Turbo/Borland C++
 LIBPATH = $(CC_BASE_PATH)\LIB
 INCLUDEPATH = $(CC_BASE_PATH)\INCLUDE;$(SUPPL_INC_PATH)
 
 ## Which programs to use
-CC = $(BINPATH)\TCC +$(CFG)
+CFG = TURBOC.CFG
+CC = $(BINPATH)\TCC		# Turbo C/C++
+#-CC = $(BINPATH)\BCC		# Borland C++
 AR = $(BINPATH)\Tlib
 LD = $(BINPATH)\Tlink
 NASM = nasm.exe
@@ -41,6 +46,9 @@ __XMS_SWAP = -DXMS_SWAP=1
 ##
 ## (*) Note: Should be detected by CONFIG.H automatically for Turbo C
 ##     and Borland C compilers.
+##
+## !!! For Turbo C, should be used -a- option (there are no other ways
+##     to turn on byte alignment). Also, should be removed -b option.
 ##
 $(CFG): $(CFG_DEPENDENCIES) ..\CONFIG.MAK
   copy &&|

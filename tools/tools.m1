@@ -1,3 +1,2 @@
-CFG = TCCDos.Cfg
 CFG_DEPENDENCIES = tools.mak
 

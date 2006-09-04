@@ -1,13 +1,10 @@
 .AUTODEPEND
 
-#		*Translator Definitions*
-CFG = TCCDOS.CFG
 CFG_DEPENDENCIES = strings.mak
 
-all : strings.h strings.err
-
-## Configuration parameters
 !include "..\config.mak"
+
+all : strings.h strings.err
 
 MMODEL = c
 

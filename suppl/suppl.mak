@@ -1,4 +1,3 @@
-CFG = TCCDos.Cfg
 CFG_DEPENDENCIES = suppl.mak
 
 !include "..\config.mak"
@@ -11,7 +10,7 @@ suppl_$(SHELL_MMODEL).lib: # suppl.tgz untar.exe
 	echo SET CC=$(CC)>>vars.bat
 	echo SET CFLAGS=$(CFLAGS)>>vars.bat
 	echo SET AR=$(AR)>>vars.bat
-	echo >compile.me
+	echo.>compile.me
 
 clean :
 	clnsuppl.bat
