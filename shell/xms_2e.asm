@@ -3,6 +3,17 @@
 ;	variant
 ; int process_input(int xflag, char *commandline)
 
+%if 1
+
+segment _TEXT class=CODE
+
+global _lowlevel_int_2e_handler
+    _lowlevel_int_2e_handler:
+        mov ax, 0FFFFh
+        iret
+
+%else
+
 segment _TEXT class=CODE
 
 extern _residentCS, _mySS, _mySP, _XMSsave, _XMSdriverAdress, _SwapTransientSize, _my2e_parsecommandline, SWAPXMSdirection, _SwapResidentSize
@@ -73,3 +84,4 @@ swaperr:
         mov ax,0FFFFh
 finish:
         iret
+%endif
