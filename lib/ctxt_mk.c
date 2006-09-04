@@ -11,8 +11,6 @@
 
 #include "../config.h"
 
-//#include <environ.h>
-
 #include "../include/command.h"
 #include "../include/context.h"
 #include "../include/crossjmp.h"

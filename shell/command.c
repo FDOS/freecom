@@ -798,10 +798,6 @@ int process_input(int xflag, char *commandline)
       parsecommandline(parsedline, TRUE);
       if(tracethisline)
       	--tracemode;
-#if 0 	// Why do this here -- shallt be done before display the prompt
-      if (echothisline || echo)
-        putchar('\n');
-#endif
     }
   }
   while (!canexit || !exitflag);

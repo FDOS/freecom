@@ -85,7 +85,6 @@ void *memccpy(void *s1, const void *s2, int ch, size_t len);
 #define longsgn(a) (longtst(a) && ((int*)(a))[1])
 
 #define fartbl dword		/* pointer to far table */
-//char dpeekc(fartbl fartable, int idx);
 #define dpeekc(tbl,idx) (char)dpeekb((tbl), (idx))
 int dpeekb(fartbl fartable, int idx);
 word dpeekw(fartbl fartable, int idx);
@@ -146,7 +145,6 @@ int DOSfree(const word segm);
 		!0: DOS error code
 */
 
-//word allocBlk(const unsigned length, const int allocMode);
 #define allocBlk(length,allocMode) DOSalloc(BLK_byte2para(length), allocMode)
 /* Allocates a block of memory using the DOSalloc() function.
 	The only difference is the ¯length® parameter:
@@ -165,7 +163,6 @@ word resizeBlk(const word segm, const unsigned length);
 		the block can contain only 0..65535 bytes (up to 64KB).
 */
 
-//int freeBlk(const word segm);
 #define freeBlk DOSfree
 /* Free the segment using the DOSfree() function.
 	No differences, only for completeness.

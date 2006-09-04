@@ -38,8 +38,6 @@
 
 #include "../config.h"
 
-//#define NODEL
-
 #include <assert.h>
 #include <ctype.h>
 #include <dir.h>

@@ -7,7 +7,7 @@
 
 /* define DEBUG to add debugging code */
 #ifndef DEBUG           /* possibly already defined via command line */
-//#define DEBUG
+/*#define DEBUG*/
 #endif
 
 /* Define to enable the alias command, and aliases. */

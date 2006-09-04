@@ -49,7 +49,7 @@ co(mpilers): Micro-C only
 #ifdef _MICROC_
 #include <stdio.h>
 #include <file.h>
-//#include <portable.h>
+/* #include <portable.h> */
 #include "supplio.loc"
 
 #include "suppldbg.h"

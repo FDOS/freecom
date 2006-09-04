@@ -126,7 +126,7 @@ int cmd_date(char *param)
 			break;
 		
 		error_invalid_date();
-		// force input the next time around.
+		/* force input the next time around. */
 		param = 0;
 	}
 

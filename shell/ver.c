@@ -114,9 +114,9 @@ int cmd_ver(char *rest)
           }
           else
           {
-//            displayString(TEXT_MSG_VER_LATER_FREEDOS
-/*             , regs.r_cx >> 8, regs.r_cx & 0xFF, regs.r_bx & 0xFF);*/
-//             , 2, 0, regs.r_bx & 0xFF );
+/*            displayString(TEXT_MSG_VER_LATER_FREEDOS
+             , regs.r_cx >> 8, regs.r_cx & 0xFF, regs.r_bx & 0xFF);
+             , 2, 0, regs.r_bx & 0xFF ); */
              regs.r_ax = 0x33FF;
              intr( 0x21, &regs );
              printf( "%Fs", MK_FP( regs.r_dx, regs.r_ax ) );

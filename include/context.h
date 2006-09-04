@@ -80,7 +80,6 @@ extern ctxt_info_t ctxt_info[];
 void ctxtCreate(void);			/* Create the local context */
 void ctxtCreateMemBlock(unsigned length);
 int ctxtAddStatus(const Context_Tag tag);
-//int ctxtChgSize(const unsigned newsize);
 int ctxtPop(const Context_Tag, char ** const);
 int ctxtPush(const Context_Tag, const char * const);
 int ctxtGet(const int, const Context_Tag, const unsigned, char ** const);

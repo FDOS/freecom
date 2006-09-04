@@ -5,9 +5,12 @@
 	This file bases on FILECOMP.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2006/09/04 21:22:32  blairdude
+	Got rid of all '//' comments
+
 	Revision 1.3  2006/06/26 19:54:12  blairdude
 	Long filename filename completion can be enabled with LFNFOR COMPLETE ON
-
+	
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -54,7 +57,7 @@
 
 void complete_filename(char *str, unsigned charcount)
 {
-  // variables found within code
+  /* variables found within code */
   struct ffblk file;
   #undef ffblk
 
@@ -71,27 +74,27 @@ void complete_filename(char *str, unsigned charcount)
 
   assert(str);
 
-  // expand current file name
+  /* expand current file name */
   count = charcount - 1;
   if (count < 0)
     makelower = count = 0;
   else
   {
-    // if last character is lower case, then make lookup lower case.
+    /* if last character is lower case, then make lookup lower case. */
     makelower = islower(str[count]);
   }
 
-  while (count > 0 && str[count] != ' ')  // find front of word
+  while (count > 0 && str[count] != ' ')  /* find front of word */
 
     count--;
 
-  if (str[count] == ' ')        // if not at beginning, go forward 1
+  if (str[count] == ' ')        /* if not at beginning, go forward 1 */
 
     count++;
 
   start = count;
 
-  // extract directory from word
+  /* extract directory from word */
   strcpy(directory, &str[start]);
   curplace = strlen(directory) - 1;
   while (curplace >= 0 && directory[curplace] != '\\' &&
@@ -103,7 +106,7 @@ void complete_filename(char *str, unsigned charcount)
 
   strcpy(path, &str[start]);
 
-  // look for a . in the filename
+  /* look for a . in the filename */
   for (count = strlen(directory); path[count] != 0; count++)
     if (path[count] == '.')
     {
@@ -115,7 +118,7 @@ void complete_filename(char *str, unsigned charcount)
   else
     strcat(path, "*.*");
 
-  curplace = 0;                 // current fname
+  curplace = 0;                 /* current fname */
 
 #ifdef FEATURE_LONG_FILENAMES
   if( lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
@@ -124,13 +127,13 @@ void complete_filename(char *str, unsigned charcount)
 #else
   if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
 #endif
-  {                             // find anything
+  {                             /* find anything */
 
     do
     {
       if (file.ff_name[0] == '.' &&
           (!file.ff_name[1] ||
-          (file.ff_name[1] == '.' && !file.ff_name[2]))) // ignore . and ..
+          (file.ff_name[1] == '.' && !file.ff_name[2]))) /* ignore . and .. */
 
         continue;
 

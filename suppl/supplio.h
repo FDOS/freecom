@@ -63,7 +63,6 @@
 
 typedef long fpos_t;
 
-//int fsetpos(FILE * const fp, const fpos_t * const pos);
 #define fsetpos(stream,position) fseek((stream), *(position), 0)
 int fgetpos(FILE * const fp, fpos_t * const pos);
 /* fsetpos() is similar to fseek() and fgetpos() to ftell(), though,
@@ -98,7 +97,7 @@ int fgetpos(FILE * const fp, fpos_t * const pos);
 #define Fput(buf,size,fp) fwrite((buf), 1, (size), (fp))
 #define Fgetpos(fp,pos) fgetpos((fp), (pos))
 #define Fsetpos(fp,pos) fsetpos((fp), (pos))
-#define Fsetmode(fp,mode) 	// overcome Micro-C bug with R&W files
+#define Fsetmode(fp,mode) 	/* overcome Micro-C bug with R&W files */
 #define Fseeki(fp,ofs)	fseek((fp), (long)(ofs), SEEK_CUR)
 #define Fseekc(fp,pos)	Fseeki((fp), (ofs))
 #define Fpseekc(fp,pos)	Fseeki((fp), *(ofs))
@@ -215,7 +214,6 @@ char *Ftmpdir(void);
 		else: pointer to pathname
 */
 
-//void Fposcpy(fpos_t * const dst, const fpos_t * const src);
 #ifdef _MICROC_
 #define Fposcpy(dst,src)	longcpy(dst, src)
 #else
@@ -239,7 +237,6 @@ int Fposcmp(const fpos_t * const pos1, const fpos_t * const pos2);
 		>0: if pos1 > pos2
 */
 
-// void Fppos2dword(const fpos_t const *fpos, dword * const longPosp)
 #ifdef _MICROC_
 #define Fpos2dword(fpos,longPos) Fposcpy(fpos, longPos)
 #define Fppos2dword(fpos,longPos) Fposcpy(fpos, longPos)

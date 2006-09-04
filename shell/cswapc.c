@@ -58,7 +58,7 @@
 #include <dos.h>
 #include <stdio.h>
 #include <string.h>
-#include <process.h>		// _cexit()
+#include <process.h>		/* _cexit() */
 
 #include <mcb.h>
 #include <suppl.h>
@@ -110,19 +110,19 @@ static int XMScopy(
 {
 	assert(XMSdriverAdress);
 
-//	asm push si;
-	/* asm lea si,length
+/*	asm push si;
+	asm lea si,length
 	asm mov ah,0bh;	*/
 	_SI = (unsigned)&length;
 	_AH = 0xb;
 	XMSrequest();
-//	asm pop si;
+/*	asm pop si; */
 
 	return _AX;		/* shut up warning */
 }
 
 
-//#pragma warn -asc
+/* #pragma warn -asc */
 
 /* cannot use inline assembly without external assembler in TC++1 */
 void XMSinit(void)

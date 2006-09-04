@@ -255,7 +255,7 @@ int initialize(void)
   if((offs = env_string(0, 0)) != 0) {    /* OK, environment filled */
 		/* this fails for MSDOS, if the environment is empty: passed one:
 		   00 00 01 00 a:command.com 00 */   
-//    if (*(char far *)MK_FP(env_glbSeg, offs) == 0)
+/*    if (*(char far *)MK_FP(env_glbSeg, offs) == 0) */
     if (peekb(env_glbSeg, offs) == 0)	/* empty ergv[0] assume broken */
       offs++;							/* MSDOS environment */
     grabComFilename(0, (char far *)MK_FP(env_glbSeg, offs));
@@ -512,7 +512,7 @@ int initialize(void)
 		autoexec = user_autoexec? user_autoexec: AUTO_EXEC;
 
 		showinfo = 0;
-//		short_version();
+/*		short_version(); */
 		cmd_ver(NULL);
 
 		if(skipAUTOEXEC) {		/* /D option */
@@ -570,7 +570,7 @@ int initialize(void)
 
   if (showinfo)
   {
-//    short_version();
+/*    short_version(); */
     cmd_ver(NULL);
 /* #ifndef DEBUG		No more commands
     putchar('\n');

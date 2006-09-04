@@ -35,7 +35,7 @@
 
 #include <portable.h>
 #include "msgs.h"
-//#include "msgs.lng"
+/*#include "msgs.lng"*/
 
 #define errexit exit(125)
 
@@ -97,7 +97,7 @@ typedef int (*LookupFct)(char *, char *, size_t);
  *			the entry within the array
  */
 #define lookupword(wd,arr) lookupwd_((wd), (arr), nM((LookupFct))aF(memcmp))
-//size_t lookupword(const char * const wd, const char * const * const arr);
+/*size_t lookupword(const char * const wd, const char * const * const arr);*/
 
 /*
  *	Lookup word case-insensitively
@@ -110,7 +110,7 @@ typedef int (*LookupFct)(char *, char *, size_t);
  *			the match is performed with the MemiCmp() function
  */
 #define lookupwordi(wd,arr) lookupwd_((wd), (arr), nM((LookupFct))aF(MemiCmp))
-//size_t lookupwordi(const char * const wd, const char * const * const arr);
+/*size_t lookupwordi(const char * const wd, const char * const * const arr);*/
 
 /*
  *	Lookup word user-specific

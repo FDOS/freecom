@@ -42,10 +42,10 @@
  *	See SUPPLDBG.H	for more details.
  */
 	/* Enable all debug/logging features of SUPPL */
-// #define SUPPL_DBG_ALL
+/* #define SUPPL_DBG_ALL */
 #define SUPPL_DBG_HEAP
 #define SUPPL_DBG_MEMORY
-// #define SUPPL_LOG_MEMORY
+/* #define SUPPL_LOG_MEMORY */
 #define SUPPL_LOG_FUNCTION
 
 	/* Prevent possible program crashes:
@@ -59,8 +59,8 @@
 		CLOSE superceeds FLUSH.
 	*/
 #define DBG_ALWAYS_CLOSELOG
-// #define DBG_ALWAYS_FLUSHLOG
-// #define SYSLOG_ALWAYS_FLUSHLOG
+/* #define DBG_ALWAYS_FLUSHLOG */
+/* #define SYSLOG_ALWAYS_FLUSHLOG */
 
 	/* Mark all files of this library as part of it */
 #define DBG_LIBRARY Suppl_SUPPL

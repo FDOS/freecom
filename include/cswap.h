@@ -37,7 +37,6 @@ extern word far myPID;
 extern word far residentCS;
 extern word far origPPID;
 
-//extern int far DosEXEC(void);	
 extern int far XMSexec(void);	
 extern void far terminateFreeCOMHook(void);
 extern void far XMSrequest(void);

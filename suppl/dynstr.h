@@ -237,7 +237,6 @@ size_t StrnLen(const char * const s, size_t len);
 char *StrDupe(const char * const beg, const char * const end);
 
 #define StrEnd Strend
-//char *StrEnd(char *str);
 
 
 extern void *Emalloc(size_t len);

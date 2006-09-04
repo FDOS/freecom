@@ -118,7 +118,6 @@ int optScanInteger_(const char * const optstr, int bool, const char *arg, int *v
   optScanInteger_(optstr, bool, strarg, &(var))
 
 int scanOption(optScanner fct, void * const ag, char *rest);
-//int parseOptions(optScanner fct, void * const arg, char **argv, int *argc, int *optcnt);
 int leadOptions(char **line, optScanner fct, void * const arg);
 char **scanCmdline(char *line, optScanner fct, void * const arg, int *argc, int *opts);
 

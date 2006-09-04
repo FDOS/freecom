@@ -6,9 +6,12 @@
 	This file bases on FILECOMP.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.7  2006/09/04 21:22:32  blairdude
+	Got rid of all '//' comments
+
 	Revision 1.6  2006/06/26 19:54:12  blairdude
 	Long filename filename completion can be enabled with LFNFOR COMPLETE ON
-
+	
 	Revision 1.5  2006/06/13 02:10:19  blairdude
 	Cleaned up some code, moved write in outc to fwrite to make everybody happy (thanks to Arkady for the reports)
 	
@@ -67,7 +70,7 @@
 
 int show_completion_matches(char *str, unsigned charcount)
 {
-  // varibles found within code
+  /* varibles found within code */
   struct ffblk file;
   #undef ffblk
 
@@ -81,22 +84,22 @@ int show_completion_matches(char *str, unsigned charcount)
 
   assert(str);
 
-  // expand current file name
+  /* expand current file name */
   count = charcount - 1;
   if (count < 0)
     count = 0;
 
-  while (count > 0 && str[count] != ' ')  // find front of word
+  while (count > 0 && str[count] != ' ')  /* find front of word */
 
     count--;
 
-  if (str[count] == ' ')        // if not at beginning, go forward 1
+  if (str[count] == ' ')        /* if not at beginning, go forward 1 */
 
     count++;
 
   start = count;
 
-  // extract directory from word
+  /* extract directory from word */
   strcpy(directory, &str[start]);
   curplace = strlen(directory) - 1;
   while (curplace >= 0 && directory[curplace] != '\\' &&
@@ -108,7 +111,7 @@ int show_completion_matches(char *str, unsigned charcount)
 
   strcpy(path, &str[start]);
 
-  // look for a . in the filename
+  /* look for a . in the filename */
   for (count = strlen(directory); path[count] != 0; count++)
     if (path[count] == '.')
     {
@@ -120,7 +123,7 @@ int show_completion_matches(char *str, unsigned charcount)
   else
     strcat(path, "*.*");
 
-  curplace = 0;                 // current fname
+  curplace = 0;                 /* current fname */
 
 #ifdef FEATURE_LONG_FILENAMES
   if( lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
@@ -129,13 +132,13 @@ int show_completion_matches(char *str, unsigned charcount)
 #else
   if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
 #endif
-  {                             // find anything
+  {                             /* find anything */
 
     outc('\n');
     count = found_dot = 0; /* Use found_dot as waslfn */
     do
     {
-      if (file.ff_name[0] == '.') // ignore . and ..
+      if (file.ff_name[0] == '.') /* ignore . and .. */
 
         continue;
 
@@ -144,7 +147,7 @@ int show_completion_matches(char *str, unsigned charcount)
       else
         strcpy(fname, file.ff_name);
 
-//      displayString(TEXT_FILE_COMPLATION_DISPLAY, fname);
+/*      displayString(TEXT_FILE_COMPLATION_DISPLAY, fname); */
 #ifdef FEATURE_LONG_FILENAMES
       if( ( found_dot = strlen( fname ) ) > 13 && count > 1 ) {
         outc( '\n' );
