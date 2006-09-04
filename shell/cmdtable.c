@@ -61,12 +61,6 @@ struct CMD internalCommands[] =
         {"BREAK",    0,             cmd_break     , TEXT_CMDHELP_BREAK},
 #endif
 
-#ifdef FEATURE_LONG_FILENAMES
-#ifdef INCLUDE_CMD_LFNFOR
-        {"LFNFOR",   0,             cmd_lfnfor    , TEXT_CMDHELP_LFNFOR},
-#endif
-#endif
-
         {"CALL", CMD_SPECIAL_DIR | CMD_BATCHONLY, cmd_call, TEXT_CMDHELP_CALL},
 
 #ifdef INCLUDE_CMD_CHDIR
@@ -134,6 +128,12 @@ struct CMD internalCommands[] =
 #endif
 
   {"IF", 0, cmd_if, TEXT_CMDHELP_IF},
+
+#ifdef FEATURE_LONG_FILENAMES
+#ifdef INCLUDE_CMD_LFNFOR
+  {"LFNFOR", 0, cmd_lfnfor, TEXT_CMDHELP_LFNFOR},
+#endif
+#endif
 
 #ifdef INCLUDE_CMD_FAKELOADHIGH
   {"LH", CMD_SPECIAL_DIR, cmd_call, TEXT_CMDHELP_CALL},
