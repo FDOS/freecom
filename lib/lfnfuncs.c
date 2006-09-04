@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <suppl.h>
+#include <dfn.h>
+#include <sstr.h>
 
 #define __LFNFUNCS_C
 
@@ -43,56 +45,64 @@
 const char * getshortfilename( const char *longfilename )
 {
     static char shortfilename[ 128 ];
+    struct REGPACK r;
 
 /* This function causes an invalid opcode when working with NUL */
 /* access() doesn't even work here */
     if( _close( _open( longfilename, 0 ) ) == 0 ) return( longfilename );
-    
-    _PUSH_DS;
 
-    _DS = FP_SEG( longfilename );
-    _SI = FP_OFF( longfilename );
-    _ES = FP_SEG( shortfilename );
-    _DI = FP_OFF( shortfilename );
-    _CL = 0x01; /* Get short filename */
-    _CH = 0x80; /* Include substed drive letters rather than path to them */
-    _AX = 0x7160;/* LFN truename function */
-    _STC;
+    r.r_ds = FP_SEG( longfilename );
+    r.r_si = FP_OFF( longfilename );
+    r.r_es = FP_SEG( shortfilename );
+    r.r_di = FP_OFF( shortfilename );
+    r.r_cx = 0x8001; /* Get short filename */
+    r.r_ax = 0x7160;/* LFN truename function */
 
-    geninterrupt( 0x21 );
+    intr( 0x21, &r );
 
-    _POP_DS;
-
-    return( ( _CFLAG || _AX == 0x7100 || !__supportlfns ) ?
+    return( ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 || !__supportlfns ) ?
             longfilename : shortfilename );
+}
+
+static int mycreatnew( const char * filename, int mode )
+{
+    struct REGPACK r;
+
+    r.r_ds = FP_SEG( filename );
+    r.r_dx = FP_OFF( filename );
+    r.r_cx = mode;
+    r.r_ax = 0x5B00;
+
+    intr( 0x21, &r );
+
+    if( ( r.r_flags & 1 ) ) r.r_ax = 0xFFFF;
+    
+    return( r.r_ax );
 }
 
 static void __creat_or_truncate( const char * filename, int mode )
 {
     int handle;
+    struct REGPACK r;
 
     if( !__supportlfns ) {
-        _close( creatnew( filename, mode ) );
+        _close( mycreatnew( filename, mode ) );
         return;
     }
 
-    _PUSH_DS;
-    _DS = FP_SEG( filename );
-    _SI = FP_OFF( filename );
-    _BX = O_WRONLY;
-    _CX = mode;
-    _DX = 0x10;
-    _AX = 0x716C;
-    _STC;
+    r.r_ds = FP_SEG( filename );
+    r.r_si = FP_OFF( filename );
+    r.r_bx = O_WRONLY;
+    r.r_cx = mode;
+    r.r_dx = 0x10;
+    r.r_ax = 0x716C;
 
-    geninterrupt( 0x21 );
+    intr( 0x21, &r );
 
-    _POP_DS;
-
-    if( _CFLAG || _AX == 0x7100 )
-        handle = ( access( getshortfilename( filename ), 0 ) == 0 ) ?
-                 -1 : creatnew( filename, mode );
-    else handle = _AX;
+    if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 )
+        handle = ( dfnstat( getshortfilename( filename ) ) != 0 ) ?
+                 -1 : mycreatnew( filename, mode );
+    else handle = r.r_ax;
     /*
      * Win2k always returns handle == 2, which is a bug.
      * File handle 2 is already used for stderr
@@ -102,47 +112,9 @@ static void __creat_or_truncate( const char * filename, int mode )
     if( handle != 2 )_close( handle );
 }
 
-#if 0 /* these functions aren't used at all in the FreeCOM source code */
-int lfn_chmod( const char *filename, int func, ... )
-{
-    int attrib = 0;
-    va_list vargs;
-
-    va_start( vargs, func );
-    if( func )attrib = va_arg( vargs, int );
-    va_end( vargs );
-
-    return( _chmod( getshortfilename( filename ), func, attrib ) );
-}
-
-int lfn_creat( const char *filename, int mode )
-{
-    __creat_or_truncate( filename, mode );
-    return( _open( getshortfilename( filename ), O_BINARY|O_RDWR|O_TRUNC ) );
-}
-
-int lfncreat( const char *filename, int amode )
-{
-    __creat_or_truncate( filename,
-                         ( !( amode & S_IWRITE ) ) ? FA_RDONLY : 0 );
-    return( _open( getshortfilename( filename ), _fmode|O_RDWR|O_TRUNC ) );
-
-}
-
-int lfncreatnew( const char *filename, int mode )
-{
-    if( access( getshortfilename( filename ), 0 ) == 0 ) {
-        errno = EEXIST;
-        return( -1 );
-    }
-    __creat_or_truncate( filename, mode );
-    return( _open( getshortfilename( filename ), O_RDWR ) );
-}
-#endif
-
 FILE * lfnfopen( const char *filename, const char *mode )
 {
-    if( strchr( mode, 'a' ) || strchr( mode, 'w' ) )
+    if( strpbrk( mode, "aw" ) )
         __creat_or_truncate( filename, 0 );
     return( fopen( getshortfilename( filename ), mode ) );
 }
@@ -156,7 +128,7 @@ int lfnopen( const char *filename, int access, ... )
     if( access & O_CREAT ) {
         access &= ~O_CREAT; /* Remove the O_CREAT bit */
 
-        __creat_or_truncate( filename, va_arg( vargs, unsigned ) );
+        __creat_or_truncate( filename, !( va_arg( vargs, unsigned ) & S_IWRITE ) ? FA_RDONLY : 0 );
     }
     va_end( vargs );
 
@@ -165,42 +137,12 @@ int lfnopen( const char *filename, int access, ... )
 
 int lfnrename( const char *oldfilename, const char *newfilename )
 {   /* Must use the actual interrupt for this */
-#if 0 /* _REGISTER usage here fails */
-    printf( "%s, %s\n", oldfilename, newfilename ); /* Debug */
-    _PUSH_DS;
-
-    _DS = FP_SEG( oldfilename );
-    _DX = FP_OFF( oldfilename );
-    _ES = FP_SEG( newfilename );
-    _DI = FP_OFF( newfilename );
-    _AX = 0x7156;
-    _STC;
-
-    geninterrupt( 0x21 );
-
-    _POP_DS;
-
-    if( _CFLAG || _AX == 0x7100 ) {
-        _PUSH_DS;
-
-        _DS = FP_SEG( oldfilename );
-        _AH = 0x56;
-
-        geninterrupt( 0x21 );
-
-        _POP_DS;
-
-        if( _CFLAG ) {
-            errno = _AX;
-            printf( "%s, %s\n", oldfilename, newfilename );
-
-            return( -1 );
-        }
-    }
-
-    return( 0 );
-#else
     struct REGPACK r;
+
+    if(dfnstat(newfilename) != 0) {
+        errno = EACCES;
+        return( -1 );
+    }
 
     r.r_ds = FP_SEG( oldfilename );
     r.r_dx = FP_OFF( oldfilename );
@@ -222,7 +164,6 @@ int lfnrename( const char *oldfilename, const char *newfilename )
     }
 
     return( 0 );
-#endif
 }
 
 static void convert_to_ffblk( struct lfnffblk *dosblock,
@@ -246,25 +187,22 @@ static void convert_to_ffblk( struct lfnffblk *dosblock,
 int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
 {
     struct locffblk lfnblock;
+    struct REGPACK r;
 
     buf->lfnax = buf->lfnsup = 0; /* Zero find handle and LFN-supported flag */
 
     if( !__supportlfns )
         return( findfirst( path, ( struct ffblk * )buf, attr ) );
 
-    _PUSH_DS;
-    _DS = FP_SEG( path );
-    _DX = FP_OFF( path );       /* path goes in DS:DX */
-    _ES = FP_SEG( &lfnblock );
-    _DI = FP_OFF( &lfnblock );  /* LFN find block goes in ES:DI */
-    _SI = 1;                    /* Use DOS date/time format */
-    _CX = attr;
-    _AX = 0x714E;               /* LFN Findfirst */
-    _STC;
+    r.r_ds = FP_SEG( path );
+    r.r_dx = FP_OFF( path );       /* path goes in DS:DX */
+    r.r_es = FP_SEG( &lfnblock );
+    r.r_di = FP_OFF( &lfnblock );  /* LFN find block goes in ES:DI */
+    r.r_si = 1;                    /* Use DOS date/time format */
+    r.r_cx = attr;
+    r.r_ax = 0x714E;               /* LFN Findfirst */
 
-    geninterrupt( 0x21 );
-
-    _POP_DS;
+    intr( 0x21, &r );
 
     /*
      * If ax = 7100, there is probably an LFN TSR but no LFN support for
@@ -272,13 +210,14 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
      * the old findfirst.  Also if the function fails, it could be because of
      * no LFN TSR so fall back to the old findfirst.
      */
-    if( _CFLAG || ( buf->lfnax  = _AX ) == 0x7100 )
+    if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 )
         return( findfirst( path, ( struct ffblk * )buf, attr ) );
 
     /*
      * If there was no failure, the next step is to move the values from the
      * LFN block into the non-lfn block
      */
+    buf->lfnax = r.r_ax;
     buf->lfnsup = 1;
     convert_to_ffblk( buf, &lfnblock );
     /*
@@ -291,6 +230,7 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
 int lfnfindnext( struct lfnffblk *buf )
 {
     struct locffblk lfnblock;
+    struct REGPACK r;
 
     /*
      * Before going through the possibly unnecessary steps of calling the LFN
@@ -301,17 +241,17 @@ int lfnfindnext( struct lfnffblk *buf )
         return( findnext( ( struct ffblk * )buf ) );
     }
 
-    _ES = FP_SEG( &lfnblock );
-    _DI = FP_OFF( &lfnblock );          /* The LFN find block */
-    _BX = buf->lfnax;                   /* The lfn handle set by findfirst */
-    _SI = 1;                            /* Use DOS times */
-    _AX = 0x714F;
+    r.r_es = FP_SEG( &lfnblock );
+    r.r_di = FP_OFF( &lfnblock );          /* The LFN find block */
+    r.r_bx = buf->lfnax;                   /* The lfn handle set by findfirst */
+    r.r_si = 1;                            /* Use DOS times */
+    r.r_ax = 0x714F;
 
-    geninterrupt( 0x21 );
+    intr( 0x21, &r );
 
     /* Check for errors */
-    if( _CFLAG ) {
-        errno = _AX;
+    if( ( r.r_flags & 1 ) ) {
+        errno = r.r_ax;
         return( -1 );
     }
     convert_to_ffblk( buf, &lfnblock );
@@ -320,20 +260,22 @@ int lfnfindnext( struct lfnffblk *buf )
 
 int lfnfindclose( struct lfnffblk *buf )
 {
+    struct REGPACK r;
+
     /* Let's check if LFN was used; if not, there is no need for findclose */
-    if( !buf->lfnsup ) return( 0 );
+    if( !buf->lfnsup || !__supportlfns ) return( 0 );
 
-    _BX = buf->lfnax;        /* Findfirst handle */
-    _AX = 0x71A1;            /* LFN findclose */
+    r.r_bx = buf->lfnax;        /* Findfirst handle */
+    r.r_ax = 0x71A1;            /* LFN findclose */
 
-    geninterrupt( 0x21 );
+    intr( 0x21, &r );
 
     /*
      * Check for errors (which really shouldn't be a problem anyways
      * except for bad code)
      */
-    if( _CFLAG ) {
-        errno = _AX;
+    if( ( r.r_flags & 1 ) ) {
+        errno = r.r_ax;
         return( -1 );
     }
     return( 0 );
