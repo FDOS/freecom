@@ -6,8 +6,4 @@
 
 #include "../include/command.h"
 
-#pragma argsused
-int cmd_rem(char *param)
-{
-  return 0;
-}
+int cmd_rem (char * param) { (void)param; return 0; }

@@ -253,9 +253,7 @@ struct bcontext *newBatchContext(void)
  *  The current implementation keeps the batchfile open, which is not
  *  the standard behaviour.
  */
-#pragma argsused
-int batch(char *fullname, char *firstword, char *param)
-{
+int batch (char * fullname, char * firstword, char * param) {
   /*
    * Start batch file execution
    *

@@ -34,13 +34,12 @@ struct {
 
 #include "../lib/res_r.c"		/* make a single file project */
 
-#pragma argsused
-static int getInfo(res_majorid_t major
-	, res_minorid_t minor
-	, unsigned long length
-	, FILE* f
-	, void *arg)
-{
+static int getInfo (res_majorid_t major,
+                    res_minorid_t minor,
+                    unsigned long length,
+                    FILE * f,
+                    void *const arg) {
+        (void)arg;
 	if(major == RES_ID_INFO && minor == 0) {
 		if(length >= INT_MAX) {
 			puts("Info resource is too large");

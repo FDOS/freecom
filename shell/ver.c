@@ -33,10 +33,7 @@
 
 #include "../config.h"
 
-#include <assert.h>
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include <dos.h>
 
 #include "../include/command.h"
@@ -63,9 +60,10 @@ void short_version(void)
 
 static int optR, optW, optD, optC;
 
-#pragma argsused
 optScanFct(opt_ver)
-{ switch(ch) {
+{
+  (void)arg;
+  switch(ch) {
   case 'R': return optScanBool(optR);
   case 'W': return optScanBool(optW);
   case 'D': return optScanBool(optD);
@@ -81,9 +79,7 @@ optScanFct(opt_ver)
  *
  *
  */
-#pragma argsused
-int cmd_ver(char *rest)
-{
+int cmd_ver (char * rest) {
   char **argv;
   int argc, opts, ec = E_None;
 

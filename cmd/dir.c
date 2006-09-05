@@ -169,7 +169,7 @@
 #include <dirent.h>
 #endif
 
-#include <dfn.h>
+#include "dfn.h"
 
 #define __LFNFUNCS_C
 #include "../include/lfnfuncs.h"
@@ -486,9 +486,10 @@ done:;
 	return E_None;
 }
 
-#pragma argsused
 optScanFct(opt_dir)
-{ switch(ch) {
+{
+  (void)arg;
+  switch(ch) {
   case 'S': return optScanBool(optS);
   case 'P': return optScanBool2(optP);  /* multiple uses, /P /P, do not cancel, only /-P */
   case 'W': return optScanBool(optW);
@@ -570,8 +571,9 @@ static int flush_nl(void)
  */
 static int dir_print_header(int drive)
 {
-	/* one byte alignment */
-#pragma -a-
+
+# include "algnbyte.h"
+
   struct media_id
   {
     int info_level;
@@ -581,8 +583,9 @@ static int dir_print_header(int drive)
     char file_sys[8];
   }
   media;
-	/* standard alignment */
-#pragma -a.
+
+# include "algndflt.h"
+
   struct ffblk f;
   struct REGPACK r;
   int currDisk;
@@ -1220,9 +1223,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
  *
  * internal dir command
  */
-#pragma argsused
-int cmd_dir(char *rest)
-{
+int cmd_dir (char * rest) {
   char **argv;
   int argc, opts;
   int rv;                       /* return value */
@@ -1273,9 +1274,7 @@ int cmd_dir(char *rest)
  *
  * internal vol command
  */
-#pragma argsused
-int cmd_vol(char *rest)
-{
+int cmd_vol (char * rest) {
   int drive;
 
   assert(rest);

@@ -99,7 +99,6 @@ void fmemcpy(void far *d1, void far *s1, unsigned len)
 }
 #endif
 
-#pragma argsused
 static int XMScopy(
         long length,
         short shandle,

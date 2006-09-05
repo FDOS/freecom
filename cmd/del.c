@@ -39,7 +39,6 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <ctype.h>
 #include <dir.h>
 #include <dos.h>
 #include <io.h>
@@ -47,7 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <dfn.h>
+#include "dfn.h"
 
 #include "../include/lfnfuncs.h"
 #include "../include/cmdline.h"
@@ -61,9 +60,9 @@
 
 static int optP, verbose;
 
-#pragma argsused
 optScanFct(opt_del)
 {
+  (void)arg;
   switch(ch) {
   case 'P': return optScanBool(optP);
   case 'V': return optScanBool(verbose);

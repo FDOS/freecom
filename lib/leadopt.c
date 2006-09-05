@@ -5,9 +5,12 @@
 	This file bases on CMDLINE.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.4  2006/09/05 01:44:33  blairdude
+	Massive patches from Arkady that I'm way too lazy to sort through.  If anything happens, Arkady can answer for it.
+
 	Revision 1.3  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.2  2001/12/03 20:10:52  skaus
 	bugfix: if FREECOM.COM /P without AUTOEXEC.BAT --> assert() failure.
 	
@@ -40,16 +43,14 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <ctype.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "../include/command.h"
 #include "../err_fcts.h"
 #include "../include/cmdline.h"
 
-int leadOptions(char **Xline, optScanner fct, void * arg)
-{ int ec = E_None;
+int leadOptions (char **Xline, optScanner fct, void *const arg){
+  int ec = E_None;
   char *p, *q, *line;
 
   assert(Xline);

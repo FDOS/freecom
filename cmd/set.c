@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <environ.h>
-#include <nls_c.h>
+#include "environ.h"
+#include "nls_c.h"
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
@@ -27,9 +27,10 @@
    stored as typed or uppercased. */
 static int optC, promptUser, upCaseValue, optExecute;
 
-#pragma argsused
 optScanFct(opt_set)
-{ switch(ch) {
+{
+  (void)arg;
+  switch(ch) {
   /* case 'A': return optScanBool(optA); arithmetic expression */
   case 'C': return optScanBool(optC);
   case 'U': return optScanBool(upCaseValue);

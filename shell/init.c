@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <mcb.h>
-#include <environ.h>
-#include <dfn.h>
+#include "mcb.h"
+#include "environ.h"
+#include "dfn.h"
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
@@ -82,10 +82,11 @@ static int showhelp = 0, internalBufLen = 0, inputBufLen = 0,
 /* static int newEnvSize = 0;          Min environment table size */
 static char *user_autoexec = 0;
 
-#pragma argsused
 optScanFct(opt_init)
-{ int ec = E_None;
+{
+  int ec = E_None;
 
+  (void)arg;
   switch(ch) {
   case '?': showhelp = 1; return E_None;
   case '!': return optScanBool(fddebug);

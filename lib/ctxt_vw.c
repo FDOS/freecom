@@ -22,9 +22,8 @@ typedef struct {
 
 /* Because new items are appended to the context, the items
 	are automatically sorted ascending */
-#pragma argsused
-static int view(void *arg, word segm, word ofs)
-{
+
+static int view (void * arg, word segm, word ofs) {
 	assert(segm);
 	if(ctxtProbeItemTag(segm, ofs, ((view_t*)arg)->tag)) {
 		++((view_t*)arg)->count;

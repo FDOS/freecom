@@ -7,9 +7,12 @@
 	Returns: DOS error code of DOS-4B
 
 	$Log$
+	Revision 1.7  2006/09/05 01:44:33  blairdude
+	Massive patches from Arkady that I'm way too lazy to sort through.  If anything happens, Arkady can answer for it.
+
 	Revision 1.6  2004/10/25 19:37:34  skaus
 	fix: LH: Errorlevel of program effects LH's error reporting {Eric Auer}
-
+	
 	Revision 1.5  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
 	
@@ -59,8 +62,8 @@
 #include "../include/cswap.h"
 #include "../include/nls.h"
 
-/* align one byte */
-#pragma option -a-
+#include "algnbyte.h"
+
 struct ExecBlock
 {
   word segOfEnv;
@@ -68,8 +71,8 @@ struct ExecBlock
   struct fcb far *fcb1,
     far * fcb2;
 };
-/* default alignment */
-#pragma option -a.
+
+#include "algndflt.h"
 
 int lowLevelExec(char far * cmd, struct ExecBlock far * bl);
 

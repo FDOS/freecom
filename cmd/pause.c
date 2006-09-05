@@ -21,18 +21,14 @@
 
 #include "../config.h"
 
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <io.h>
 
 #include "../include/batch.h"
 #include "../include/command.h"
 #include "../strings.h"
 
-int cmd_pause(char *param)
-{
-
+int cmd_pause (char * param) {
 	if(param && *param)
         write( 1, param, strlen(param) );
 	else

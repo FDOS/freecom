@@ -37,9 +37,10 @@
 static int optS = 0;		/* force to swap out FreeCOM during call */
 static int optN = 0;		/* force to NOT swap (superceeds optS) */
 
-#pragma argsused
 optScanFct(opt_call)
-{ switch(ch) {
+{
+  (void)arg;
+  switch(ch) {
   case 'S': return optScanBool(optS);
   case 'N': return optScanBool(optN);
   case 'Y': return optScanBool(tracemode);
@@ -48,9 +49,6 @@ optScanFct(opt_call)
   return E_Useage;
 }
 
-
-int cmd_call(char *param)
-{
 /*
  * Perform CALL command.
  *
@@ -59,10 +57,11 @@ int cmd_call(char *param)
  * If No batch file was opened then remove our newly allocted
  * context block.
  */
-
+int cmd_call (char * param) {
 	struct bcontext *n = newBatchContext();
 	int ec;
 
+        (void)param;
 	if (n == 0) {
 		/* Not in a batch file */
 		return 1;

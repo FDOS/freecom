@@ -10,15 +10,14 @@
 #include <assert.h>
 #include <ctype.h>
 
-#include <environ.h>
-
+#include "environ.h"
 #include "../include/context.h"
 
-#pragma argsused
-static int scan(void *arg, word segm, word ofs)
-{	Context_Tag tag;
+static int scan (void * arg, word segm, word ofs) {
+        Context_Tag tag;
 	ctxt_info_t *info;
 
+        (void)arg;
 	assert(segm);
 	assert(ofs != (word)-1);
 

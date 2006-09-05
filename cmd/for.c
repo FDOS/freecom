@@ -122,14 +122,14 @@ varfound:
 	return OK;
 }
 
-#pragma argsused
-static int doFOR(char *varname, char *varE, char *param, char *paramE
-	, char *cmd, int flags)
-{	/* char *oldContents;
+static int doFOR (char * varname, char * varE, char * param, char * paramE,
+                  char *cmd, int flags) {
+        /* char *oldContents;
 	char **argv;			/* pattern list * /
 	int argc;
 	int rv;	*/
 
+        (void)flags;
 	assert(varname);
 	assert(varE);
 	assert(param);

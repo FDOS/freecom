@@ -8,9 +8,8 @@
 #include "../include/command.h"
 #include "../strings.h"
 
-#pragma argsused
-int cmd_doskey(char *param)
-{
-	displayString(TEXT_MSG_DOSKEY);
-	return 0;
+int cmd_doskey (char * param) {
+    (void)param;
+    displayString (TEXT_MSG_DOSKEY);
+    return 0;
 }

@@ -36,9 +36,9 @@
 
 /*#define DEBUG*/
 
-#include <dfn.h>
-#include <suppl.h>
-#include <supplio.h>
+#include "dfn.h"
+#include "suppl.h"
+#include "supplio.h"
 
 #include "../include/lfnfuncs.h"
 #include "../include/command.h"
@@ -65,9 +65,9 @@ static char *destFile;     /* destination file/directory/pattern */
 
 static int optY, optV, optA, optB;
 
-#pragma argsused
 optScanFct(opt_copy)
 {
+  (void)arg;
   switch(ch) {
   case 'Y': return optScanBool(optY);
   case 'V': return optScanBool(optV);
@@ -76,10 +76,12 @@ optScanFct(opt_copy)
   optErr();
   return E_Useage;
 }
-#pragma argsused
-optScanFct(opt_copy1)
-{ int ec, *opt, *optReset;
 
+optScanFct(opt_copy1)
+{
+  int ec, *opt, *optReset;
+
+  (void)arg;
   switch(ch) {
 #ifndef NDEBUG
   default:

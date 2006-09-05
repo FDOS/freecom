@@ -9,10 +9,4 @@
 
 #include "../include/command.h"
 
-#pragma argsused
-int force_exit(char *rest)
-{
-  canexit = exitflag = 1;
-
-  return 0;
-}
+int force_exit (char * rest) { (void)rest; canexit = exitflag = 1; return 0; }

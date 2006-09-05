@@ -37,8 +37,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <mcb.h>
-#include <suppl.h>
+#include "mcb.h"
+#include "suppl.h"
 
 #include "../include/cmdline.h"
 #include "../include/command.h"
@@ -584,10 +584,10 @@ static int loadfix_prepare(void)
 
 #endif
 
-
-#pragma argsused
 optScanFct(opt_lh)
-{ switch(ch) {
+{
+  (void)arg;
+  switch(ch) {
   case 'S': return optScanBool(optS);
   case 'L': return optScanString(optL);
   }

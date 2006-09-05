@@ -5,9 +5,12 @@
 	This file bases on INIT.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.7  2006/09/05 01:44:33  blairdude
+	Massive patches from Arkady that I'm way too lazy to sort through.  If anything happens, Arkady can answer for it.
+
 	Revision 1.6  2006/06/22 06:39:43  blairdude
 	The FOR command now supports long filenames through LFNFOR (off by default), as in MS-DOS 7.0.  Since REN is buggy with long filenames at the moment, this change also ensures that it is compiled without long filename support.  the '?' command also now shows whether or not FreeCOM was compiled with long filename support or not (as it is becoming a major feature).
-
+	
 	Revision 1.5  2006/06/12 04:55:42  blairdude
 	All putchar's now use outc which first flushes stdout and then uses write to write the character to the console.  Some potential bugs have been fixed ( Special thanks to Arkady for noticing them :-) ).  All CONIO dependencies have now been removed and replaced with size-optimized functions (for example, mycprintf, simply opens "CON" and directly writes to the console that way, and mywherex and mywherey use MK_FP to access memory and find the cursor position).  FreeCOM is now
 	significantly smaller.
@@ -51,7 +54,6 @@
 
 #include "../config.h"
 
-#include <assert.h>
 #include <stdio.h>
 
 #include "../include/command.h"
@@ -59,12 +61,11 @@
 #include "../include/misc.h"
 #include "../strings.h"
 
-#pragma argsused
-int showcmds(char *rest)
-{
+int showcmds (char * rest) {
   struct CMD *cmdptr;
   int y;
 
+  (void)rest;
   displayString(TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS);
   y = 0;
   cmdptr = internalCommands;

@@ -38,7 +38,6 @@
 
 #include "../config.h"
 
-#include <assert.h>
 #include <dos.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,9 +52,10 @@
 
 static int noPrompt = 0;
 
-#pragma argsused
 optScanFct(opt_date)
-{ switch(ch) {
+{
+  (void)arg;
+  switch(ch) {
   case 'D':
   case 'T': return optScanBool(noPrompt);
   }

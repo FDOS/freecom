@@ -35,10 +35,8 @@ static void displayTag1(int string, Context_Tag tag)
 	 	? info->c_nummax - info->c_nummin : 0);
 }
 
-
-#pragma argsused
-int cmd_memory(char *param)
-{
+int cmd_memory (char * param) {
+        (void)param;
 	displayString(TEXT_MEMORY_ENVIRONMENT
 		, mcb_length(env_glbSeg), env_freeCount(env_glbSeg));
 	displayString(TEXT_MEMORY_CONTEXT

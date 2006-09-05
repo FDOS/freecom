@@ -13,19 +13,14 @@
 #include <assert.h>
 #include <string.h>
 
-#include <environ.h>
-#include <fmemory.h>
-
+#include "environ.h"
+#include "fmemory.h"
 #include "../include/context.h"
 #include "../include/misc.h"
 
-int ctxtGet(int remove
-	, const Context_Tag tag
-	, const unsigned num
-	, char ** const buf)
-{
-	word ofs;
-	word segm;
+int ctxtGet (const int remove, const Context_Tag tag,
+             const unsigned num, char ** const buf) {
+        word ofs, segm;
 	char name[CTXT_ITEMNAME_LENGTH];
 
 	ctxtCheckInfoTag(tag);

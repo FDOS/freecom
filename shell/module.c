@@ -7,9 +7,8 @@
 
 #include "../config.h"
 
-#include <string.h>
-#include <mcb.h>
-#include <suppl.h>
+#include "mcb.h"
+#include "suppl.h"
 
 #include "../include/command.h"
 #include "../include/debug.h"
@@ -20,15 +19,14 @@
 
 #ifdef FREECOM_NEED_MODULES
 
-#pragma argsused
-static int loadModule(res_majorid_t major
-	, res_minorid_t minor
-	, unsigned long length
-	, FILE* f
-	, void *arg)
-{	
+static int loadModule (res_majorid_t major,
+                       res_minorid_t minor,
+                       unsigned long length,
+                       FILE * f,
+                       void *const arg) {	
 	word segm;
 
+        (void)major;
 	if(length > 0xfffful) {
 		dprintf(("[CRITER resource too large.]\n"));
 		return 0;

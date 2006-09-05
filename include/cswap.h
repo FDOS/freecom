@@ -9,8 +9,7 @@
 
 #include "../include/misc.h"
 
-/* align one byte */
-#pragma option -a-
+#include "algnbyte.h"
 struct ParamDosExec {
 	unsigned short envSeg;
 	void far *cmdtail;
@@ -19,8 +18,7 @@ struct ParamDosExec {
 	void far *overlPtr1;
 	void far *overlPtr2;	
 	};
-/* default alignment */
-#pragma option -a.
+#include "algndflt.h"
 
 extern char far dosFCB1[128];			/* must be setup correctly */
 extern char far dosFCB2[128];		
