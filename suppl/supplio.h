@@ -214,11 +214,7 @@ char *Ftmpdir(void);
 		else: pointer to pathname
 */
 
-#ifdef _MICROC_
-#define Fposcpy(dst,src)	longcpy(dst, src)
-#else
 #define Fposcpy(dst,src)	memcpy((dst), (src), sizeof(fpos_t))
-#endif
 /* Copy the value of one position to another location
 */
 
@@ -237,13 +233,8 @@ int Fposcmp(const fpos_t * const pos1, const fpos_t * const pos2);
 		>0: if pos1 > pos2
 */
 
-#ifdef _MICROC_
-#define Fpos2dword(fpos,longPos) Fposcpy(fpos, longPos)
-#define Fppos2dword(fpos,longPos) Fposcpy(fpos, longPos)
-#else
 #define Fpos2dword(fpos,longPos) (longPos) = (dword)(fpos);
 #define Fppos2dword(fpos,longPos) *(longPos) = (dword)(fpos);
-#endif
 /* Extract the file position from a (fpos_t) type
 
 	Note: There is _NO_ reverse function.

@@ -22,10 +22,10 @@
 
  */
 
-#if !defined(__DATEFUNC_H)
-#define __DATEFUNC_H
+#ifndef H__DATEFUNC_
+#define H__DATEFUNC_
 
-#ifdef _NO__DOS_DATE
+#if defined _NO__DOS_DATE || (defined __TURBOC__ && __TURBOC__ <= 0x296) /* TC/TC++ 1.01 */
 
 struct dosdate_t
 {
@@ -38,5 +38,5 @@ struct dosdate_t
 unsigned _dos_setdate(struct dosdate_t *);
 void _dos_getdate(struct dosdate_t *);
 
-#endif
-#endif
+#endif /* _NO__DOS_DATE */
+#endif /* H__DATEFUNC_ */

@@ -8,9 +8,12 @@
 	This file bases on MESSAGES.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.8  2006/09/11 00:07:22  blairdude
+	Fixed compilation completely with Turbo C
+
 	Revision 1.7  2004/06/29 21:57:20  skaus
 	fix: /LOW option
-
+	
 	Revision 1.6  2004/06/29 14:14:56  skaus
 	fix: help screen of internal commands causes "Unknown command error" {Bernd Blaauw}
 	
@@ -96,18 +99,19 @@ void unloadMsgs(void)
 /* Called if the resource locator found a resource with a matching
 	major ID --> we ignore all the rest of IDs and probe for the
 	validation string at the beginning of the resource data */
-#pragma argsused
-static int loadStrings(res_majorid_t major
-	, res_minorid_t minor
-	, long length
-	, FILE* f
-	, void * const arg)
-{	loadStatus *ls = arg;
+
+static int loadStrings (res_majorid_t major,
+		        res_minorid_t minor,
+		        long length,
+			FILE* f,
+			void *const arg) {
+	loadStatus *ls = arg;
 	char fdid[sizeof(STRINGS_ID)];
 	string_size_t len, firstStr;
 	string_index_t far*idx;
 	int i;
 
+	(void)major, (void)minor;
 	if((unsigned long)length >= 0x10000ul
 	 || (unsigned)length < STRINGS_HEADER_SIZE) {
 		*ls = STRINGS_SIZE_MISMATCH;

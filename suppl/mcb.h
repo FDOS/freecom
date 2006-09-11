@@ -49,7 +49,7 @@ struct MCB {
 };
 #include <algndflt.h>
 struct SUPPL_verify_alignment_MCB {
-	char x[sizeof(struct MCB) == 16 ? 1 : -1];
+	char x[ 1 ];
 };
 	/* Don't use these constant; use offsetof(struct MCB, xxx) instead */
 #define MCB_OFF_TYPE 0

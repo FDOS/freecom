@@ -16,6 +16,7 @@
 #include <suppl.h>
 #include <dfn.h>
 #include <sstr.h>
+#include <io.h>
 
 #define __LFNFUNCS_C
 

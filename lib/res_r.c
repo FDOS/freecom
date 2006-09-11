@@ -28,9 +28,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.8  2006/09/11 00:07:22  blairdude
+	Fixed compilation completely with Turbo C
+
 	Revision 1.7  2006/09/04 20:03:14  blairdude
 	Support compiler oddity (Arkady)
-
+	
 	Revision 1.6  2004/08/18 17:18:10  skaus
 	chg: res_r.c: don#('t use relative seek; fails under NTFSdos [Tom Ehlert]
 	
@@ -75,12 +78,9 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <io.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <string.h>	/* memcmp */
+#include <io.h>		/* filelength */
 
-#include "../include/debug.h"
 #include "../include/resource.h"
 
 int enumFileResources(const char *const fnam

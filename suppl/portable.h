@@ -22,19 +22,17 @@
 
 */
 
-#ifndef __PORTABLE_H
-#define __PORTABLE_H
+#ifndef H__PORTABLE_
+#define H__PORTABLE_
 
-#include <regproto.h>
+#include <limits.h>
+#include "regproto.h"
+
 #define NUL '\0'
 #define MK_OSVERS(major,minor) ((major << 8) | (minor))
 
-#ifdef FARDATA
 #undef FARDATA
-#endif
-#ifdef FARCODE
 #undef FARCODE
-#endif
 
 #ifdef _MICROC_
 
@@ -141,4 +139,38 @@ int longcmp(long d1, long d2);
 #define strend(s)	strchr((s), '\0')
 #endif
 
+/*----------------------------------------------------------------------*/
+
+#define LOCAL static
+
+#define lonibble(v) (0x0f & (v))
+#define hinibble(v) (0xf0 & (v))
+
+#if CHAR_BIT == 8
+# define lobyte(v) ((UBYTE)(v))
+#else
+# define lobyte(v) ((UBYTE)(0xff & (v)))
 #endif
+#define hibyte(v) lobyte ((UWORD)(v) >> 8u)
+
+#if USHRT_MAX == 0xFFFF
+# define loword(v) ((unsigned short)(v))
+#else
+# define loword(v) (0xFFFF & (unsigned)(v))
+#endif
+#define hiword(v) loword ((v) >> 16u)
+
+#define MK_UWORD(hib,lob) (((UWORD)(hib) <<  8u) | (UBYTE)(lob))
+#define MK_ULONG(hiw,low) (((ULONG)(hiw) << 16u) | (UWORD)(low))
+
+/*----------------------------------------------------------------------*/
+
+#define MK_PTR(type,seg,ofs) ((type FAR*) MK_FP (seg, ofs))
+#if __TURBOC__ > 0x201
+# define MK_SEG_PTR(type,seg) ((type _seg*) (seg))
+#else
+# define _seg FAR
+# define MK_SEG_PTR(type,seg) MK_PTR (type, seg, 0)
+#endif
+
+#endif /* H__PORTABLE_ */

@@ -30,9 +30,12 @@
 	This file bases on OPENF.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/09/11 00:07:22  blairdude
+	Fixed compilation completely with Turbo C
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -61,12 +64,7 @@
 
 #include "../config.h"
 
-#include <assert.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "../include/resource.h"
-#include "../include/debug.h"
 #include "../include/command.h"
 
 int enumResources(res_majorid_t id

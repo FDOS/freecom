@@ -59,8 +59,8 @@ unsigned _fstpcpy(unsigned const dseg, unsigned dofs
 #include <portable.h>
 #include "fmemory.h"
 
-char far *_fstpcpy(char far * const dst, const char far * const src)
-{	char far *p;
+char far *_fstpcpy (char far* dst, const char far* src) {
+	char far *p;
 	const char far *q;
 
 	p = dst - 1;

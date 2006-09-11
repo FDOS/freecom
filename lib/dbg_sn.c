@@ -5,9 +5,12 @@
 	This file bases on DEBUG.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/09/11 00:07:22  blairdude
+	Fixed compilation completely with Turbo C
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -36,12 +39,11 @@
 
 #include "../config.h"
 
-#include <stdio.h>
+#ifdef DEBUG
 
-#include "../include/debug.h"
-
-void dbg_outsn(const char * const s)
-{	if(s)	fputs(s, dbg_logfile);
-	putc('\n', dbg_logfile);
-	fflush(dbg_logfile);
+void dbg_outsn (const char *const s) {
+	if (s) fputs (s, dbg_logfile);
+	dbg_outs ("\n");
 }
+
+#endif /* DEBUG */

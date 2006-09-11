@@ -16,11 +16,10 @@
 
 #include <stdio.h>
 
-	/* one-byte alignment */
-#pragma -a-
+#include "algnbyte.h"
+
 typedef unsigned res_minorid_t;	/* must be exactly unsigned 16bit */
-		/* force 16bit enum */
-#pragma -b
+
 typedef enum {
 	RES_ID_NONE = -0x7ffe,
 	RES_ID_ANY = -0x7fff,
@@ -28,7 +27,6 @@ typedef enum {
 	RES_ID_CRITER,
 	RES_ID_INFO
 } res_majorid_t;
-#pragma -b.
 
 typedef struct {		/* type of a control area */
 	unsigned long res_length;
@@ -36,8 +34,8 @@ typedef struct {		/* type of a control area */
 	res_minorid_t res_minorID;
 	unsigned char res_cookie[8];	/* NOT '\0' terminated! */
 } resource_t;
-	/* standard alignment */
-#pragma -a.
+
+#include "algndflt.h"
 
 typedef int (*res_callbackp_t)(res_majorid_t, res_minorid_t
  , unsigned long, FILE *, void *);

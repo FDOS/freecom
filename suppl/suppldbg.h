@@ -130,7 +130,7 @@
    corruption. Note: The macro must be used without semicolon!
 */
 #undef chkHeap
-#ifdef __TURBOC__
+#if __TURBOC__ > 0x201
 #include <alloc.h>
 #ifdef NDEBUG
 #define chkHeap	suppl_testHeap();  chkMem

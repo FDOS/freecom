@@ -5,9 +5,12 @@
 	This file bases on DEBUG.C of FreeCOM v0.81 beta 1.
 
 	$Log$
+	Revision 1.3  2006/09/11 00:07:22  blairdude
+	Fixed compilation completely with Turbo C
+
 	Revision 1.2  2004/02/01 13:52:17  skaus
 	add/upd: CVS $id$ keywords to/of files
-
+	
 	Revision 1.1  2001/04/12 00:33:53  skaus
 	chg: new structure
 	chg: If DEBUG enabled, no available commands are displayed on startup
@@ -36,16 +39,12 @@
 
 #include "../config.h"
 
-#include <conio.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <alloc.h>
+#ifdef DEBUG
 
-#include "../include/debug.h"
+#include <stdarg.h>
 
 FILE *dbg_logfile = stdout;
-char *dbg_logname = 0;
+char *dbg_logname /*= NULL*/;
 
 void dbg_print(const char * const fmt, ...)
 {	va_list ap;
@@ -55,3 +54,5 @@ void dbg_print(const char * const fmt, ...)
 	va_end(ap);
 	fflush(dbg_logfile);
 }
+
+#endif /* DEBUG */

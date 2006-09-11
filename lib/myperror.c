@@ -1,5 +1,7 @@
 /* Smaller PERROR replacement for FreeCOM (only used in REN and DEL) */
 
+#include "../config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>

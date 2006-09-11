@@ -22,10 +22,10 @@
 
  */
 
-#if !defined(__TIMEFUNC_H)
-#define __TIMEFUNC_H
+#ifndef H__TIMEFUNC_
+#define H__TIMEFUNC_
 
-#ifdef _NO__DOS_TIME
+#if defined _NO__DOS_TIME || (defined __TURBOC__ && __TURBOC__ <= 0x296) /* TC/TC++ 1.01 */
 
 /* The time structure, compatible with dostime_t */
 struct dostime_t
@@ -39,6 +39,5 @@ struct dostime_t
 unsigned _dos_settime(struct dostime_t *);
 void _dos_gettime(struct dostime_t *);
 
-#endif
-
-#endif
+#endif /* _NO__DOS_TIME */
+#endif /* H__TIMEFUNC_ */

@@ -52,20 +52,14 @@
 
 #include "../config.h"
 
-/*#define XMSALLOCSIZE 128*/	/* 128Kb available */
-
 #include <assert.h>
-#include <dos.h>
-#include <stdio.h>
-#include <string.h>
-#include <process.h>		/* _cexit() */
-
-#include <mcb.h>
 #include <suppl.h>
-
+#include <mcb.h>
 #include "../include/command.h"
+
 #include "../include/cswap.h"
-#include "../include/misc.h"
+
+/*#define XMSALLOCSIZE 128*/	/* 128Kb available */
 
 #if 0
 	#define MK_FP(seg,ofs)	((void far *) \
@@ -140,7 +134,7 @@ void XMSinit(void)
 	/* Fetch the size of the message segment */
 	segm = msgSegment();
 	if(segm) {
-		mcb = (struct MCB _seg *)SEG2MCB(segm);
+		mcb = MK_SEG_PTR (struct MCB, SEG2MCB (segm));
 		msglen = mcb->mcb_size;
 	} else {
 		msglen = 0;		/* do not load messages into XMS?? */
@@ -171,7 +165,7 @@ void XMSinit(void)
 		 + (FP_OFF(&SWAPresidentEnd) + 0x0f) / 16
 		 - _psp + 1;
 
-	mcb = (struct MCB _seg*)SEG2MCB(_psp);
+	mcb = MK_SEG_PTR (struct MCB, SEG2MCB (_psp));
 	xms_block_size = SwapTransientSize = mcb->mcb_size;
 
 	xms_block_size += msglen;		/* both messages and FreeCOM into

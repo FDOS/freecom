@@ -146,27 +146,16 @@ int DOSfree(const word segm);
 */
 
 #define allocBlk(length,allocMode) DOSalloc(BLK_byte2para(length), allocMode)
-/* Allocates a block of memory using the DOSalloc() function.
-	The only difference is the ¯length® parameter:
-		Here it is the requested length of the block in bytes, thus,
-		the block can contain only 0..65535 bytes (up to 64KB).
-*/
 
 #ifdef _MICROC_
 word resizeBlk(const word segm, const unsigned length);
 #else
 #define resizeBlk(segm,length) DOSresize(segm, BLK_byte2para(length))
 #endif
-/* Resizes the segment using the DOSresize() function.
-	The only difference is the ¯length® parameter:
-		Here it is the requested length of the block in bytes, thus,
-		the block can contain only 0..65535 bytes (up to 64KB).
-*/
 
 #define freeBlk DOSfree
-/* Free the segment using the DOSfree() function.
-	No differences, only for completeness.
-*/
+/* Free the segment using the DOSfree() function. */
+/* No differences, only for completeness. */
 
 unsigned BLK_byte2para(const unsigned bytes);
 /* Return the number of paragraphes that will be needed to store ¯bytes®

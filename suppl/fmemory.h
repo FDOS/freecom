@@ -81,7 +81,7 @@ char *_fdupstr(const char far * const s);
 unsigned _fstpcpy(unsigned const dseg, unsigned dofs
  , unsigned const sseg, unsigned sofs, unsigned length)
 #else	/* !_MICROC_ */
-char far* _fstpcpy(char far* const dst, const char far* const src);
+char far* _fstpcpy (char far* dst, const char far* src);
 #endif	/* _MICROC_ */
 
 #endif

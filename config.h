@@ -3,8 +3,6 @@
  *
  */
 
-#include <io.h>
-
 /* define DEBUG to add debugging code */
 #ifndef DEBUG           /* possibly already defined via command line */
 /*#define DEBUG*/

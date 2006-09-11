@@ -107,7 +107,6 @@ static void execute(char *first, char *rest)
 
   char *fullname;
   char *extension;
-  void interrupt (*old2e)();
 
   assert(first);
   assert(rest);
@@ -193,7 +192,6 @@ static void execute(char *first, char *rest)
 	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
 #endif
 #ifdef FEATURE_XMS_SWAP
-    old2e = getvect( 0x2E );
     if( *(unsigned char far *)getvect( 0x2E) == 0xCF && !canexit) /* IRET? */
         setvect( 0x2E, ( void interrupt(*)() )
                  MK_FP(FP_SEG(lowlevel_int_2e_handler)-0x10,

@@ -2,8 +2,8 @@
 
 #ifndef FEATURE_XMS_SWAP
 
-#ifndef __KSWAP__H
-#define __KSWAP__H
+#ifndef H__KSWAP__
+#define H__KSWAP__
 
 #include <portable.h>
 
@@ -31,9 +31,6 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline);
 /* Restore the kswap argument block */
 int kswapLoadStruc(void);
 
-	/* Default alignment */
-#pragma -a.
+#endif /* H__KSWAP__ */
 
-#endif
-
-#endif
+#endif /* FEATURE_XMS_SWAP */

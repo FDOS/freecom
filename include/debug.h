@@ -8,30 +8,27 @@
 	dbg_printmem()	--> displays the memory and how it changed
 */
 
-#ifndef __DEBUG__H
-#define __DEBUG__H
+#ifndef H__DEBUG__
+#define H__DEBUG__
+
+#ifdef DEBUG		/* DEBUG ENABLED */
 
 #include <stdio.h>
 
 extern FILE *dbg_logfile;
-
-#ifdef DEBUG
 extern int fddebug;
-		/* DEBUG ENABLED */
 
-#define dprintf(p)  if (fddebug) dbg_print p
-void dbg_printmem(void);
-void dbg_print(const char * const fmt, ...);
-void dbg_outc(int ch);
-void dbg_outs(const char * const s);
-void dbg_outsn(const char * const s);
+#define dprintf(p) if (fddebug) dbg_print p
+void dbg_printmem (void);
+void dbg_print    (const char fmt [], ...);
+void dbg_outc     (int ch);
+void dbg_outs     (const char *const s);
+void dbg_outsn    (const char *const s);
 
-#else
-		/* NO DEBUG */
+#else			/* NO DEBUG */
 
 #define dprintf(p)
 #define dbg_printmem()
 
-#endif	/* defined(DEBUG) */
-
-#endif
+#endif /* DEBUG */
+#endif /* H__DEBUG__ */

@@ -10,8 +10,9 @@
 
 #include "../config.h"
 
+#include "portable.h"
 #ifdef _TC_EARLY_
-#include <fmemory.h>
+# include "fmemory.h"
 #endif
 
 #define BUFFER_SIZE 10*1024
@@ -115,7 +116,7 @@ main(int argc, char **argv)
 		return 41;
 	}
 
-	icmd = (unsigned char _seg*)(r.r_ax - 1);
+	icmd = MK_SEG_PTR (unsigned char, r.r_ax - 1);
 	*(unsigned far *)&icmd[1] = 8;		/* make it system property */
 	_fmemcpy(&icmd[8], &buf[offName + 1], 8);
 	_fmemcpy(&icmd[16], buf, len);

@@ -236,8 +236,7 @@ char *StrChr(const char * const s, int ch);
 size_t StrnLen(const char * const s, size_t len);
 char *StrDupe(const char * const beg, const char * const end);
 
-#define StrEnd Strend
-
+/* #define StrEnd Strend */
 
 extern void *Emalloc(size_t len);
 extern void *Ecalloc(size_t len);

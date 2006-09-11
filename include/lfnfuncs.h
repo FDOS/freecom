@@ -2,12 +2,14 @@
  * Header file for the long filename-related functions
  */
 
-#ifndef __LFNFUNCS_H
-#define __LFNFUNCS_H
+#ifndef H__LFNFUNCS_
+#define H__LFNFUNCS_
 
 #ifdef __TURBOC__ /* OpenWatcom has an LFN CLIB Extension available */
 
 #ifdef FEATURE_LONG_FILENAMES
+
+#include <stdio.h>
 
 struct lfnffblk {
         unsigned short cr_time; /* time of file creation      */
@@ -41,7 +43,7 @@ struct locffblk {
     char sfn[14];
 };
 
-#endif
+#endif /* __LFNFUNCS_C */
 
 const char * getshortfilename( const char *longfilename );
 int          lfn_chmod( const char *filename, int func, ... );
@@ -92,10 +94,8 @@ extern unsigned char lfncomplete;
 #define MAXEXT  255
 #define MAXPATH 260
 
-#endif
+#endif /* __LFNFUNCS_C */
 
-#endif
-
-#endif
-
-#endif
+#endif /* FEATURE_LONG_FILENAMES */
+#endif /* __TURBOC__ */
+#endif /* H__LFNFUNCS_ */

@@ -261,7 +261,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   mode[2] = '\0';
 
   do {
-//    if( wildcarded && !strpbrk( dst, "*?" ) && !isfirst ) openMode = 'a';
+/*    if( wildcarded && !strpbrk( dst, "*?" ) && !isfirst ) openMode = 'a'; */
     fillFnam(rDest, dst, srcFile);
     if(rDest[0] == 0)
       return 0;
