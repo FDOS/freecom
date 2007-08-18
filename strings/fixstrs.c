@@ -378,7 +378,7 @@ printf("FIXSTRS: loading file %s\n", fnam);
 			return 41;
 		}
 			/* Cut trailing control characters */
-		while (--p >= temp && *p < ' ');
+		while (--p >= temp && iscntrl(*p));
 		p[1] = '\0';
 
 		switch (state) {
