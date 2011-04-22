@@ -254,7 +254,7 @@ _lowlevel_err_handler:
 	iret
 %else
 	push dx
-	push es, ds, bp, si, di, cx, bx, ax
+	pushm es, ds, bp, si, di, cx, bx, ax
 
 	mov cx, cs
 	mov ds, cx		; DS := local code/data segment
@@ -480,7 +480,7 @@ _lowlevel_err_handler:
 	dec BYTE [1234h]
 repCheckDecAddr EQU $-2
 ?iretNow:
-	pop es, ds, bp, si, di, cx, bx
+	popm es, ds, bp, si, di, cx, bx
 	pop dx
 	iret
 
@@ -547,7 +547,7 @@ repCheckDecAddr EQU $-2
 ?oB_loop:
 	cmp al, '%'
 	je ?oB_special
-?oB_dump
+?oB_dump:
 	printALtoConsole
 ?oB_2:
 	inc bx

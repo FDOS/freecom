@@ -55,7 +55,7 @@ segment _TEXT
 _lowLevelExec:
 	push    bp
 	mov     bp, sp
-	push    si, di, ds
+	pushm   si, di, ds
 
 	lds     dx, [bp+4+2*@CodeSize]      ; load file name
 	les     bx, [bp+8+2*@CodeSize]      ; load parameter block
@@ -73,11 +73,9 @@ _lowLevelExec:
 	xor     ax, ax       ; otherwise, clear AX
 
 exec_error:
-	pop    si, di, ds
+	popm    si, di, ds
 	pop     bp
 	ret
 
 saveSP dw 0
 saveSS dw 0
-
-	end

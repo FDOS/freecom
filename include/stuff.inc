@@ -2,7 +2,7 @@
 ;; Both take the registers in the same order, "F"==Flags
 ;; Push pushes left to right; pop right to left
 
-%macro push 2-*
+%macro pushm 2-*
 %rep %0
 %ifidni %1,f
 	pushf
@@ -12,7 +12,7 @@
 %rotate 1 
 %endrep 
 %endmacro
-%macro pop 2-*
+%macro popm 2-*
 %rep %0
 %rotate -1 
 %ifidni %1,f

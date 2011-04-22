@@ -28,7 +28,7 @@ OBJ10= fstrdup.obj fstrlen.obj _getdcwd.obj mcb_1st.obj mcb_is.obj \
 mcb_leng.obj  mcb_nxt.obj
 OBJ11= mcb_walk.obj stpcat.obj stpcpy.obj toupperx.obj
 
-CFLAGS = $(CFLAGS) -I..
+CC = $(CC) -I..
 
 suppl_$(SHELL_MMODEL).lib: $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) \
 $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11)
