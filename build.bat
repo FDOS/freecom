@@ -45,6 +45,9 @@ echo Building SUPPL library
 if exist compile.me del compile.me >NUL
 make -fsuppl.mak all
 if errorlevel 1 goto ende
+cd src
+make -fsuppl.mak all
+if errorlevel 1 goto ende
 if exist compile.me call do_suppl.bat
 if errorlevel 1 goto ende
 if not exist all_done goto ende
