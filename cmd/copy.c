@@ -240,7 +240,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   struct ftime fileTime;
   char *srcFile;
   FLAG wildcarded;
-  FLAG isfirst = 1;
+  /*FLAG isfirst = 1;*/
   FLAG singleFileCopy = src->app == NULL;
 
   assert(dst);
@@ -446,7 +446,8 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       unlink(rDest);		/* if device -> no removal, ignore error */
       return 0;
     }
-  } while(wildcarded && FINDNEXT(&ff) == 0 && !(isfirst = 0));
+  } while(wildcarded && FINDNEXT(&ff) == 0);
+  /*} while(wildcarded && FINDNEXT(&ff) == 0 && !(isfirst = 0)); */
 
   FINDSTOP(&ff);
 
