@@ -1,0 +1,127 @@
+/*
+    This file is part of SUPPL - the supplemental library for DOS
+    Copyright (C) 1996-2000 Steffen Kaiser
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free
+    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+/* $Id$
+   $Locker$	$Name$	$State$
+
+   SUPPL message implementation
+
+	Declares the default message handler.
+
+*/
+
+#ifndef __MSGS_INC
+#define __MSGS_INC
+
+#ifndef _MICROC_
+#include <stdlib.h>
+#endif
+#include <stdio.h>
+
+#include <portable.h>
+#include "msgs.h"
+/*#include "msgs.lng"*/
+
+#define errexit exit(125)
+
+#define error(msg,param)	fprintf(stderr, msg, param); errexit
+#define error0(msg)			fputs(msg, stderr); errexit
+#define warning(msg,param)	fprintf(stderr, msg, param)
+#define warning0(msg)		fputs(msg, stderr)
+
+#define msgLock(msg) (msg)
+#define msgUnlock(msg)
+
+#ifdef _MICROC_
+#define MSGID char *
+#else
+typedef char const * MSGID;
+#endif
+
+extern const char I_wdInc[];
+extern const char I_sgnPlus[];
+extern const char I_wdDec[];
+extern const char I_sgnMinus[];
+extern const char I_wdOff[];
+extern const char I_wdFalse[];
+extern const char I_wdNo[];
+extern const char I_wdClear[];
+extern const char I_wdOn[];
+extern const char I_wdTrue[];
+extern const char I_wdYes[];
+extern const char I_wdSet[];
+extern const char I_wdToggle[];
+extern const char I_wdSwitch[];
+extern const char I_TcfgErr[];
+extern const char I_TcfgNone[];
+extern const char I_TcfgStr[];
+extern const char I_TcfgExpStr[];
+extern const char I_TcfgInt[];
+extern const char I_TcfgBool[];
+extern const char I_TcfgExpInt[];
+extern const char I_TcfgExpBool[];
+
+extern const char I_success[];
+extern const char I_error[];
+extern const char I_failure[];
+
+#ifdef _MICROC_
+#define LookupFct int
+#else
+typedef int (*LookupFct)(char *, char *, size_t);
+#endif
+
+
+/*
+ *	Lookup word case-sensitively
+ *	The array contains entries to be retrieved dynamically if possible.
+ *
+ *	Return:
+ *		0: not found
+ *		else: (index + 1) of the found word, the word matches 100%
+ *			the entry within the array
+ */
+#define lookupword(wd,arr) lookupwd_((wd), (arr), nM((LookupFct))aF(memcmp))
+/*size_t lookupword(const char * const wd, const char * const * const arr);*/
+
+/*
+ *	Lookup word case-insensitively
+ *	The array contains entries to be retrieved dynamically if possible.
+ *
+ *	Return:
+ *		0: not found
+ *		else: (index + 1) of the found word, the word matches
+ *			the entry within the array case-insentitively
+ *			the match is performed with the MemiCmp() function
+ */
+#define lookupwordi(wd,arr) lookupwd_((wd), (arr), nM((LookupFct))aF(MemiCmp))
+/*size_t lookupwordi(const char * const wd, const char * const * const arr);*/
+
+/*
+ *	Lookup word user-specific
+ *	The array contains entries to be retrieved dynamically if possible.
+ *
+ *	Return:
+ *		0: not found
+ *		else: (index + 1) of the found word, the word matches
+ *			the entry within the supplied function
+ */
+size_t lookupwd_(const char * const wd, const MSGID *const arr
+	, inM(int cmpfct, int (*cmpfct)(char *, char *, size_t)));
+
+#endif
