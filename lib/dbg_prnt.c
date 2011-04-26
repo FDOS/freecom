@@ -46,7 +46,7 @@
 FILE *dbg_logfile = stdout;
 char *dbg_logname /*= NULL*/;
 
-void dbg_print(const char * const fmt, ...)
+void dbg_print(const char fmt[], ...)
 {	va_list ap;
 
 	va_start(ap, fmt);

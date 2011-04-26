@@ -49,6 +49,7 @@
 
 #include <conio.h>	/* cputs */
 #include <alloc.h>	/* heapcheck, coreleft, farcoreleft */
+#include <stdlib.h>	/* abort */
 
 #if sizeof(void*) != sizeof(void far*)
 #define DISP_NEAR

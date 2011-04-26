@@ -68,7 +68,7 @@ void getInfoValues(void)
 	unsigned *pu;
 
 	ival.alias = ival.hist = ival.dirs = ~0;
-	ival.extraSpace = 2 * 1024;
+	ival.extraSpace = 2 * 1024 / 16;
 	ival.bufsize = 256;
 	ival.heapPos = ~0;
 
@@ -211,15 +211,14 @@ main(int argc, char **argv)
 	assert(info);
 	/* Decompose the info resource */
 	getInfoValues();
-	minSize = ival.extraSpace				/* default stuff */
-		+ 5 * (unsigned long)ival.bufsize	/* command lines */
+	minSize = 5 * (unsigned long)ival.bufsize	/* command lines */
 		+ 3 * (64 + 3 + 8 + 5)				/* filenames */
 		+ 256								/* env var buffer %PATH% etc */
 		;
 	addUns(ival.alias);
 	addUns(ival.hist);
 	addUns(ival.dirs);
-	if(minSize >= INT_MAX) {
+	if(minSize > UINT_MAX) {
 		puts("Estimated minimum heap size exceeds 64KB.\n"
 			"There is most probably a corrupted info resource.");
 		return 71;

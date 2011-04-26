@@ -41,7 +41,9 @@ int mk_rd_dir(char *param, int (*func) (const char *), char *fctname)
 	int argc, opts;
 	int rv;
 
+#ifndef FEATURE_LONG_FILENAMES
 	assert(func);
+#endif
 
 	if((argv = scanCmdline(param, 0, 0, &argc, &opts)) == 0)
 		return 1;

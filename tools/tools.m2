@@ -8,7 +8,7 @@ icmd : load_icd.exe icmd_1.icd icmd_2.icd icmd_3.icd
 
 #		*Implicit Rules*
 .c.exe:
-  $(CC) $(CFLAGS) $<  $(SUPPL_LIB_PATH)\SUPPL_S.LIB
+  $(CC) $(CFLAGS) $<  $(SUPPL_LIB_PATH)\SUPPL_$(SHELL_MMODEL).LIB
 .c.obj:
   $(CC) $(CFLAGS) -c {$< }
 .asm.com:

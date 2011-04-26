@@ -26,16 +26,20 @@ char buf[3*1024];
 #include "../lib/res_w.c"		/* Make this a single file project */
 
 int scanMapFile(const char * const fnam
-	, unsigned long * const pos
+	, unsigned long * const hpos
+	, unsigned long * const spos
 	, unsigned *extraSpace)
 {	FILE *map;
 	char *w1, *w2, *w3, *w5;
+	unsigned long v;
 
-	assert(pos);
+	assert(hpos);
+	assert(spos);
 	assert(fnam);
 	assert(extraSpace);
 
 	*extraSpace = 0;
+	*hpos = *spos = 0;
 
 	if((map = fopen(fnam, "rt")) == 0) {
 		printf("Failed to open file: %s\n", fnam);
@@ -45,23 +49,25 @@ int scanMapFile(const char * const fnam
 		if((w1 = strtok(buf, " \t\r\n")) != 0
 		 && (w2 = strtok(0, " \t\r\n")) != 0) {
 		 	if((w3 = strtok(0, " \t\r\n")) == 0) {
-				if(strcmp(w2, "__heaplen") == 0) {
+				if(strcmp(w2, "__heaplen") == 0 ||
+				   strcmp(w2, "__stklen") == 0) {
 					unsigned long n1, n2;
 
 					n1 = strtoul(w1, &w1, 16);
 					if(w1 && *w1 == ':') {
 						n2 = strtoul(w1 + 1, &w1, 16);
 						if(w1 == 0 || *w1 == 0) {
-							*pos = (unsigned long)n1 * 16 + n2;
-							fclose(map);
-							return 0;
+							v = (unsigned long)n1 * 16 + n2;
+							if (w2[2] == 'h')
+								*hpos = v;
+							else
+								*spos = v;
 						}
 					}
 				}
 			} else if((strtok(0, " \t\r\n")) != 0
 			 && (w5 = strtok(0, " \t\r\n")) != 0) {
-				if(strcmp(w5, "BSS") == 0
-				 || strcmp(w5, "STACK") == 0) {
+				if(strcmp(w5, "BSS") == 0) {
 				 	unsigned long n;
 				 	char *p = 0;
 
@@ -79,16 +85,20 @@ int scanMapFile(const char * const fnam
 	}
 
 	fclose(map);
-	printf("No valid entry of _heaplen found in: %s\n", fnam);
-	*pos = 0;
+	if (*hpos == 0)
+		printf("No valid entry of _heaplen found in: %s\n", fnam);
+	if (*spos == 0)
+		printf("No valid entry of _stklen found in: %s\n", fnam);
 	return 0;
 }
 
 int addImageDisplacement(const char * const fnam
+	, unsigned long spos
 	, unsigned long * const pos
 	, unsigned *extraSpace)
 {	FILE *f;
 	struct EXE_header exe;
+	unsigned stacksize;
 
 	assert(fnam);
 	assert(pos);
@@ -101,8 +111,21 @@ int addImageDisplacement(const char * const fnam
 		printf("Read error from: %s\n", fnam);
 		return 52;
 	}
+	if (*pos)
+		*pos += exe.header * 16;
+	if (spos) {
+		spos += exe.header * 16;
+		if(fseek(f, spos, SEEK_SET) != 0) {
+			printf("Failed to seek to stack size offset in %s\n", fnam);
+			return 62;
+		}
+		if(fread(&stacksize, sizeof(stacksize), 1, f) != 1) {
+			printf("Read error from: %s\n", fnam);
+			return 72;
+		}
+		*extraSpace += (stacksize+15)/16;
+	}
 	fclose(f);
-	*pos += exe.header * 16;
 	if(exe.extraMin > *extraSpace)
 		*extraSpace = exe.extraMin;
 	return 0;
@@ -169,7 +192,7 @@ void dumpTagU(int ttype, unsigned tvalue)
 
 main(int argc, char **argv)
 {	char *txtFile = 0;
-	unsigned long heapPos;
+	unsigned long heapPos, stackPos;
 	int rc;
 	unsigned extraSpace;
 
@@ -182,9 +205,11 @@ main(int argc, char **argv)
 		puts("Useage: INFORES resfile mapfile exefile");
 		return 127;
 	}
-	if((rc = scanMapFile(argv[2], &heapPos, &extraSpace)) != 0)
+	if((rc = scanMapFile(argv[2], &heapPos, &stackPos, &extraSpace)) != 0)
 		return rc;
-	if((rc = addImageDisplacement(argv[3], &heapPos, &extraSpace)) != 0)
+	/* convert extraSpace to paragraphs */
+	extraSpace = (extraSpace + 15)/16;
+	if((rc = addImageDisplacement(argv[3], stackPos, &heapPos, &extraSpace)) != 0)
 		return rc;
 
 	if(txtFile && (txt = fopen(txtFile, "wt")) == 0) {
