@@ -1,10 +1,11 @@
-.AUTODEPEND
-
 CFG_DEPENDENCIES = suppl.mak
 
 !include "..\..\config.mak"
 
-all : suppl_$(SHELL_MMODEL).lib
+SUPPL=suppl_$(SHELL_MMODEL)
+CC = $(CC) -I..
+
+all : ..\$(SUPPL).lib
 
 OBJ1 = addu.obj byte2par.obj cntry.obj dfndeli2.obj dfndelim.obj dfnexpan.obj \
 dfnfnam.obj
@@ -48,19 +49,37 @@ gm_res.obj
 DOBJ10 = gm_dup.obj gm_chgm.obj gm_gtmem.obj nlstime.obj strnum.obj \
 s_skipws.obj s_skipwd.obj
 
-CC = $(CC) -I..
+echolib.bat: ..\..\scripts\echolib.bat
+	copy ..\..\scripts\echolib.bat
 
-suppl_$(SHELL_MMODEL).lib: $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) \
+# Prepare Linker Response File
+objlist.txt: echolib.bat
+	..\..\scripts\rmfiles objlist.txt
+	echolib objlist.txt $(OBJ1)
+	echolib objlist.txt $(OBJ2)
+	echolib objlist.txt $(OBJ3)
+	echolib objlist.txt $(OBJ4)
+	echolib objlist.txt $(OBJ5)
+	echolib objlist.txt $(OBJ6)
+	echolib objlist.txt $(OBJ7)
+	echolib objlist.txt $(OBJ8)
+	echolib objlist.txt $(OBJ9)
+	echolib objlist.txt $(OBJ10)
+	echolib objlist.txt $(OBJ11)
+	echolib objlist.txt $(DOBJ1)
+	echolib objlist.txt $(DOBJ2)
+	echolib objlist.txt $(DOBJ3)
+	echolib objlist.txt $(DOBJ4)
+	echolib objlist.txt $(DOBJ5)
+	echolib objlist.txt $(DOBJ6)
+	echolib objlist.txt $(DOBJ7)
+	echolib objlist.txt $(DOBJ8)
+	echolib objlist.txt $(DOBJ9)
+	echolib objlist.txt $(DOBJ10)
+
+# Create the library
+..\$(SUPPL).lib: $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) \
 $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(DOBJ1) $(DOBJ2) $(DOBJ3) $(DOBJ4) \
-$(DOBJ5) $(DOBJ6) $(DOBJ7) $(DOBJ8) $(DOBJ9) $(DOBJ10)
-	cd ..
-	echo SET CFG=$(CFG)>vars.bat
-	echo SET SUPPL=suppl_$(SHELL_MMODEL)>>vars.bat
-	echo SET CC=$(CC)>>vars.bat
-	echo SET CFLAGS=$(CFLAGS)>>vars.bat
-	echo SET AR=$(AR)>>vars.bat
-    echo >compile.me
-
-clean :
-	cd ..
-	clnsuppl.bat
+$(DOBJ5) $(DOBJ6) $(DOBJ7) $(DOBJ8) $(DOBJ9) $(DOBJ10) objlist.txt
+	..\..\scripts\rmfiles ..\$(SUPPL).lib
+	$(AR) /C ..\$(SUPPL).LIB @objlist.txt, ..\$(SUPPL).lst

@@ -11,9 +11,9 @@ call %0 .\ lastmake.mk context.h_c context.inc strings.h command.com infores
 call %0 strings\ strings.h   strings.err strings.dat
 call %0 strings\ strings.lib strings.lst strings.log
 call %0 criter\  criter criter1 context.def context.inc context.h_c
-call %0 cmd\     cmds.lib    cmds.lst
-call %0 lib\     freecom.lib freecom.lst
-call %0 shell\   command.exe command.map
+call %0 cmd\     cmds.lib    cmds.lst    cmds.rsp    echolib.bat
+call %0 lib\     freecom.lib freecom.lst freecom.rsp echolib.bat
+call %0 shell\   command.exe command.map command.rsp echoto.bat
 call %0 tools\   tools.mak
 
 call %0 strings\*.     cfg obj     exe

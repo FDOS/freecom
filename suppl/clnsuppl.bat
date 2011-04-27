@@ -7,6 +7,7 @@ IF NOT EXIST src\NUL goto noSrc
 
 cd src
 FOR %%A in (*.obj) DO DEL %%A
+for %%a in (objlist.txt echolib.bat *.cfg) do if exist %%a del %%a>nul
 rem FOR %%A in (NLS\*.*) DO DEL %%A
 rem RMDIR nls
 CD ..

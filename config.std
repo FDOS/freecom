@@ -1,3 +1,6 @@
+# Comment out for Turbo C 2.01 Make
+.AUTODEPEND
+
 ## is the base path ("root") of Turbo C++ v1.01
 ## Note: Use upper-case letters, otherwise some make variants
 ## map \t into tab character!
@@ -14,7 +17,7 @@ SUPPL_LIB_PATH = $(SUPPL_INC_PATH)
 #-BINPATH = $(CC_BASE_PATH)	# Turbo C
 BINPATH = $(CC_BASE_PATH)\BIN	# Turbo/Borland C++
 LIBPATH = $(CC_BASE_PATH)\LIB
-INCLUDEPATH = $(CC_BASE_PATH)\INCLUDE;$(SUPPL_INC_PATH)
+INCLUDEPATH = -I$(CC_BASE_PATH)\INCLUDE -I$(SUPPL_INC_PATH)
 
 ## Which programs to use
 CFG = TURBOC.CFG
@@ -40,7 +43,7 @@ DEBUG=-UDEBUG -DNDEBUG
 !endif
 
 !if $(XMS_SWAP)
-__XMS_SWAP = -DXMS_SWAP=1
+__XMS_SWAP = -DXMS_SWAP
 !endif
 
 # Default configuration
@@ -57,24 +60,11 @@ __XMS_SWAP = -DXMS_SWAP=1
 ##     to turn on byte alignment). Also, should be removed -b option.
 ##
 $(CFG): $(CFG_DEPENDENCIES) ..\CONFIG.MAK
-  copy &&|
--1-
--a
--f-
--ff-
--K
--w+
--O
--Z
--b-
--I$(INCLUDEPATH)
--L$(LIBPATH)
--m$(SHELL_MMODEL)
-$(DEBUG)
-$(__XMS_SWAP)
-| $(CFG)
-
-
+	..\scripts\echoto $(CFG) -1- -a -f- -ff- -K -w+ -O -Z -b-
+	..\scripts\echoto $(CFG) $(INCLUDEPATH)
+	..\scripts\echoto $(CFG) -L$(LIBPATH)
+	..\scripts\echoto $(CFG) -m$(SHELL_MMODEL)
+	..\scripts\echoto $(CFG) $(DEBUG) $(__XMS_SWAP)
 #-k-
 
 #		*Implicit Rules*
@@ -82,5 +72,8 @@ $(__XMS_SWAP)
   $(CC) $< 
 .c.obj:
   $(CC) -c {$< }
+# For Turbo C 2.01 Make use:
+#.c.obj:
+#  $(CC) -c $<
 .asm.obj:
 	$(NASM) $(NASMFLAGS) -f obj -DMODEL=$(SHELL_MMODEL) $<

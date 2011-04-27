@@ -45,18 +45,12 @@ echo Checking SUPPL library
 cd suppl
 if exist skip goto endSuppl
 echo Building SUPPL library
-if exist compile.me del compile.me >NUL
 make -fsuppl.mak %MKOPT% all
 if errorlevel 1 goto ende
 cd src
 make -fsuppl.mak %MKOPT% all
 if errorlevel 1 goto ende
-if exist compile.me call do_suppl.bat
-if errorlevel 1 goto ende
-if not exist all_done goto ende
-if exist compile.bat del compile.bat >NUL
-if exist linkme.bat del linkme.bat >NUL
-if exist suppl.bat del suppl.bat >NUL
+cd ..
 :endSuppl
 cd ..
 
@@ -72,12 +66,8 @@ echo.
 echo Making STRINGS resource
 echo.
 cd strings
-if exist mkSTRLIB.Bat del mkSTRLIB.Bat >NUL
 make -fstrings.mak %MKOPT% -DLNG=%LNG% all
 if errorlevel 1 goto ende
-if exist mkSTRLIB.Bat call mkSTRLIB.Bat
-if errorlevel 1 goto ende
-if exist mkSTRLIB.Bat del mkSTRLIB.Bat >NUL
 cd ..
 
 echo.

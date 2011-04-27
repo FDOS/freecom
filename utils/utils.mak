@@ -1,5 +1,3 @@
-.AUTODEPEND
-
 CFG_DEPENDENCIES = utils.mak
 
 !include "..\config.mak"

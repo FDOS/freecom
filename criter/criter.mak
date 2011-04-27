@@ -1,5 +1,3 @@
-.AUTODEPEND
-
 CFG_DEPENDENCIES = criter.mak
 
 !include "..\config.mak"
