@@ -522,11 +522,11 @@ int initialize(void)
 		} else {
 			if(exist(autoexec)) {
 #ifdef FEATURE_BOOT_KEYS
-				struct REGPACK r;
+				IREGS r;
 				int key;
 
 				r.r_ax = 0x3000;	/* Get DOS version & OEM ID */
-				intr(0x21, &r);
+				intrpt(0x21, &r);
 				if(!tracemode	/* /Y --> F8 on CONFIG.SYS */
 				 || ((r.r_bx & 0xff00) == 0xfd00	/* FreeDOS >= build 2025 */
 				      && !(r.r_cx > 0x101 || (r.r_bx & 0xff) > 24))) {

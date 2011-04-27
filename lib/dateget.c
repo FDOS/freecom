@@ -44,17 +44,18 @@
 
 #include <assert.h>
 #include <dos.h>
+#include <portable.h>
 #include "../include/datefunc.h"
 
 void _dos_getdate(struct dosdate_t *d)
 {
-  struct REGPACK r;
+  IREGS r;
 
   assert(d);
 
   r.r_ax = 0x2A00;
 
-  intr(0x21, &r);
+  intrpt(0x21, &r);
 
   d->year = r.r_cx;
   d->month = r.r_dx >> 8;

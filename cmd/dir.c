@@ -245,7 +245,7 @@ static int need_nl;
 #ifdef FEATURE_LONG_FILENAMES
 static void printLFNname(char *shortName, char *ext)
 {
-    struct REGPACK r;
+    IREGS r;
     char pathbuffer[128];
 	char longname[270];
 	int pathlen;
@@ -270,7 +270,7 @@ static void printLFNname(char *shortName, char *ext)
     r.r_ds = FP_SEG( pathbuffer );
 	r.r_di = FP_OFF( longname );
     r.r_es = FP_SEG( longname );
-	intr(0x21, &r);
+	intrpt(0x21, &r);
 	
     if( r.r_flags & 1 || r.r_ax == 0x7100 || !__supportlfns ) {
         dprintf(("[LFN: not supported %x]\n",r.r_ax)); 
@@ -587,7 +587,7 @@ static int dir_print_header(int drive)
 # include "algndflt.h"
 
   struct ffblk f;
-  struct REGPACK r;
+  IREGS r;
   int currDisk;
   int rv;
 
@@ -618,7 +618,7 @@ static int dir_print_header(int drive)
   r.r_bx = drive + 1;
   r.r_ds = FP_SEG(&media);
   r.r_dx = FP_OFF(&media);
-  intr( 0x21, &r );
+  intrpt( 0x21, &r );
 
   /* print drive info */
  	displayString(TEXT_DIR_HDR_VOLUME, drive + 'A');
@@ -707,7 +707,7 @@ static int print_total
 static int dir_print_free(unsigned long dirs)
 {
   char buffer[32];
-  struct REGPACK r;
+  IREGS r;
   struct {
   	unsigned short whatever;
   	unsigned short version;
@@ -739,7 +739,7 @@ static int dir_print_free(unsigned long dirs)
   r.r_es = FP_SEG(&FAT32_Free_Space);
   r.r_di = FP_OFF(&FAT32_Free_Space);
   r.r_cx = sizeof(FAT32_Free_Space);
-  intr( 0x21, &r);
+  intrpt( 0x21, &r);
 
   /* Note: RBIL carry clear and al==0 also means unimplemented 
      alternately carry set and ax==undefined (usually unchanged) for unimplemented
@@ -771,7 +771,7 @@ static int dir_print_free(unsigned long dirs)
   }  
   r.r_ax = 0x3600;
   r.r_dx = toupper(*path) - 'A' + 1;
-  intr(0x21, &r);
+  intrpt(0x21, &r);
   convert((unsigned long)r.r_ax * r.r_bx * r.r_cx, buffer);
 output:
   displayString(TEXT_DIR_FTR_BYTES_FREE, buffer);

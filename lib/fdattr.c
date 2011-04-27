@@ -42,15 +42,16 @@
  */
 
 #include <dos.h>
+#include <portable.h>
 #include "../config.h"
 
 int fdattr(const int fd)
 {
-  struct REGPACK r;
+  IREGS r;
 
   r.r_ax = 0x4400;              /* Get handle information */
   r.r_bx = fd;
-  intr(0x21, &r);
+  intrpt(0x21, &r);
   return (!( r.r_flags & 1 ) )         /* call OK */
   ? r.r_dx          /* attributes */
   : 0;            /* error */

@@ -53,7 +53,7 @@ unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
 size_t farread(void far*buf, size_t length, FILE *f)
 {
 #if 0
-    struct REGPACK r;
+    IREGS r;
 #endif
 
 	/* synchronize FILE* with file descriptor in order to be able to
@@ -67,7 +67,7 @@ size_t farread(void far*buf, size_t length, FILE *f)
 	r.r_cx = length;              /* size of block to read */
 	r.r_ds = FP_SEG(buf);         /* segment of buffer to read block to */
 	r.r_dx = FP_OFF(buf);         /* offset of buffer to read block to */
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
     return( ( r.r_flags & 1 ) ? 0 : r.r_ax );
 #else
     return( DOSreadwrite( fileno( f ), buf, length, 0x3F00 ) );

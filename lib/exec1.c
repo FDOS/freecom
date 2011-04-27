@@ -59,7 +59,7 @@
 #endif
 
 void setErrorLevel(int rc)
-{	struct REGPACK rp;
+{	IREGS rp;
 
 	dprintf(("[exec: DOS error code of exec(): %d]\n", rc));
 
@@ -68,7 +68,7 @@ void setErrorLevel(int rc)
 		int exitReason;		/* else we use the global variable */
 #endif
 		rp.r_ax = 0x4d00;           /* get return code */
-		intr(0x21, &rp);
+		intrpt(0x21, &rp);
 		rc = rp.r_ax & 0xFF;
 		exitReason = (rp.r_ax >> 8) & 0xFF;
 			/*	0 -> normal

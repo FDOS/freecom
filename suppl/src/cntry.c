@@ -171,7 +171,7 @@ Country *nlsInfo(void)
 Country *nlsNewInfo(void)
 {	unsigned char buf[50];
 #if 1
-    struct REGPACK r;
+	IREGS r;
 
 	DBG_ENTER("nlsNewInfo", Suppl_nls)
 
@@ -186,11 +186,11 @@ Country *nlsNewInfo(void)
 	r.r_bx = r.r_dx = 0xffff;
 #define DOS(val) r.r_ax = 0x6500 | (val);	\
 	r.r_cx = sizeof(buf);					\
-    intr( 0x21, &r );                       \
+    intrpt( 0x21, &r );                       \
 	if(0 == ( r.r_flags & 1 ) ? r.r_ax : 0)
 #else
 #ifdef _MICROC_
-	struct REGPACK r;
+	IREGS r;
 
 	DBG_ENTER("nlsNewInfo", Suppl_nls)
 
@@ -203,7 +203,7 @@ Country *nlsNewInfo(void)
 	intrpt(0x21, r);							\
 	if(!errnr)
 #else /*#	!(defined(_MICROC_)) */
-	struct REGPACK r;
+	IREGS r;
 
 	DBG_ENTER("nlsNewInfo", Suppl_nls)
 
@@ -214,7 +214,7 @@ Country *nlsNewInfo(void)
 	r.r_ax = 0x6500;
 #define DOS(val) r.r_ax = 0x6500 | (val);	\
 	r.r_cx = sizeof(buf);					\
-	intr(0x21, &r);					\
+	intrpt(0x21, &r);					\
 	if(!errnr)
 #define errnr (r.r_flags & 1)? r.r_ax : 0)
 #endif /*#	defined(_MICROC_) */

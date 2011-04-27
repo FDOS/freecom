@@ -27,11 +27,11 @@
 /* Lock kswap feature within kernel and invalidate a previous external prg
     Return:  FALSE  no swap feature within kernel */
 int kswapInit(void)
-{   struct REGPACK r;
+{   IREGS r;
 
     r.r_ax = 0x4bfe;        /* Get kswap argument structure segm */
     r.r_dx = 'FD';
-    intr(0x21, &r);
+    intrpt(0x21, &r);
 
     if(!( r.r_flags & 1 )) {
         dprintf(("[KSWAP: using kernel swapping support (KSSF eventually at %04x)]\n", r.r_ax));
@@ -68,7 +68,7 @@ static void kswapSetISR(void)
 }
 
 void kswapRegister(kswap_p ctxt)
-{   struct REGPACK r;
+{   IREGS r;
 
     dprintf(("[KSWAP: Registering static context at: 0x%04x]\n", (word)ctxt));
     assert(ctxt);
@@ -83,7 +83,7 @@ void kswapRegister(kswap_p ctxt)
     r.r_ax = 0x4bfd;    /* Set kswap argument structure segm */
     r.r_bx = (word)ctxt;
     r.r_dx = 'FD';
-    intr(0x21, &r);
+    intrpt(0x21, &r);
     if(r.r_flags & 1) { /* failed */
         swapOnExec = ERROR;     /* cannot register -> cannot use */
         dprintf(("[KSWAP: Registering failed, kernel swap deactivated]\n"));

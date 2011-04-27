@@ -396,6 +396,7 @@ DoExec(char *command,char *cmdtail)
 /* Using the original exit() function crashes in TC++ v1.01 */
 void exit()
 {
+	USEREGS
 	extern void exitfct(void);	/* from INIT.C */
 
 	exitfct();					/* restore the old owner_psp */

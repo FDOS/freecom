@@ -27,11 +27,11 @@
 #include "../include/misc.h"
 
 int appendDisable(void)
-{	struct REGPACK r;
+{	IREGS r;
 	int state;
 #if 1
 	r.r_ax = 0xb700;		/* APPEND installation check */
-	intr(0x2f, &r);
+	intrpt(0x2f, &r);
 #endif
 #if 0
     r.x.ax = 0xB700;
@@ -52,7 +52,7 @@ int appendDisable(void)
 
 	/* APPEND is loaded */
 	r.r_ax = 0xb706;		/* Get APPEND function state */
-	intr(0x2f, &r);
+	intrpt(0x2f, &r);
 
 	dprintf(("[MUX-B7: get state 0x%04x]\n", r.r_bx));
 
@@ -61,7 +61,7 @@ int appendDisable(void)
 
 		r.r_ax = 0xb707;		/* Set APPEND function state */
 		r.r_bx = state & ~1;
-		intr(0x2f, &r);
+		intrpt(0x2f, &r);
 
 		dprintf(("MUX-B7: set state 0x%04x]\n", r.r_bx));
 	}

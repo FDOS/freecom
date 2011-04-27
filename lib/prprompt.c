@@ -135,7 +135,7 @@ void displayPrompt(const char *pr)
           {
 #ifdef FEATURE_LONG_FILENAMES
             char pathname[MAXDIR];
-            struct REGPACK r;
+            IREGS r;
             fprintf(stdout, "%c:\\", getdisk() + 'A');
 
             r.r_ax = 0x7147;
@@ -143,11 +143,11 @@ void displayPrompt(const char *pr)
             r.r_si = FP_OFF(pathname);
             r.r_ds = FP_SEG(pathname);
 
-            intr(0x21, &r);
+            intrpt(0x21, &r);
 
             if(r.r_flags & 1 || r.r_ax == 0x7100) {
                 r.r_ax = 0x4700;
-                intr(0x21, &r);
+                intrpt(0x21, &r);
             }
 
             if(r.r_flags & 1) break;

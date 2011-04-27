@@ -24,7 +24,7 @@ main(int argc, char **argv)
 	unsigned *p;
 	FILE *f;
 	char *q;
-	struct REGPACK r;
+	IREGS r;
 	unsigned char _seg *icmd;
 
 	if(argc != 2) {
@@ -104,13 +104,13 @@ main(int argc, char **argv)
 	len = offName + strlen(q) + 2;
 
 	r.r_ax = 0x352f;
-	intr(0x21, &r);
+	intrpt(0x21, &r);
 	*(void far**)&buf[offPtr] = MK_FP(r.r_es, r.r_bx);
 
 	/* Add into memory */
 	r.r_ax = 0x4800;
 	r.r_bx = (len + 15) / 16;
-	intr(0x21, &r);
+	intrpt(0x21, &r);
 	if(r.r_flags & 1) {
 		puts("Error allocating memory for resident portion of command");
 		return 41;
@@ -124,7 +124,7 @@ main(int argc, char **argv)
 	r.r_ds = r.r_ax;
 	r.r_dx = 0;
 	r.r_ax = 0x252f;
-	intr(0x21, &r);
+	intrpt(0x21, &r);
 
 	printf("Installable Command %s loaded to 0x%04x\n"
 	 , &buf[offName + 1], r.r_ds);

@@ -60,12 +60,12 @@ int cmd_cls (char * param) {
 	/* Output stream is neither a file nor NUL nor CLOCK$ */
 	if(((fdattr(1) ^ 0x80) & (0x80 | 0x08 | 0x04)) == 0) {
 		/* Now roll the screen */
-        struct REGPACK r;
+		IREGS r;
 		r.r_ax = 0x0600;	/* Scroll window up // entire window */
 		r.r_bx = 0x0700;	/* Attribute to write */
 		r.r_cx = 0x0000;	/* Upper left */
 		r.r_dx = ((SCREEN_ROWS - 1) << 8) | (SCREEN_COLS - 1); /* Lower right */
-		intr(0x10, &r);
+		intrpt(0x10, &r);
 		goxy(1, 1);			/* home the cursor */
 	}
 

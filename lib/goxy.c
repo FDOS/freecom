@@ -48,11 +48,13 @@
 
 #include <assert.h>
 #include <dos.h>
+#include <portable.h>
 
 #include "../include/misc.h"
 
 void goxy(const unsigned char x, const unsigned char y)
 {
+    USEREGS
     _AH = 0x0F;
     geninterrupt( 0x10 );
     _AH = 0x02;

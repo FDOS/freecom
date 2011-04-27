@@ -97,9 +97,9 @@ int cmd_ver (char * rest) {
   /* arguments are simply ignored */
 
   if(optR) {                         /* version information */
-        struct REGPACK regs;
+        IREGS regs;
         regs.r_ax = 0x3000;
-        intr(0x21, &regs);
+        intrpt(0x21, &regs);
         displayString(TEXT_MSG_VER_DOS_VERSION, regs.r_ax & 0xFF, regs.r_ax >> 8);
 
         if ((regs.r_bx >> 8) == 0xfd)
@@ -114,7 +114,7 @@ int cmd_ver (char * rest) {
              , regs.r_cx >> 8, regs.r_cx & 0xFF, regs.r_bx & 0xFF);
              , 2, 0, regs.r_bx & 0xFF ); */
              regs.r_ax = 0x33FF;
-             intr( 0x21, &regs );
+             intrpt( 0x21, &regs );
              printf( "%Fs", MK_FP( regs.r_dx, regs.r_ax ) );
              /* "%Fs" may only work in Turbo C's printf */
           }

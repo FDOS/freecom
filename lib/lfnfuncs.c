@@ -43,7 +43,7 @@
 const char * getshortfilename( const char *longfilename )
 {
     static char shortfilename[ 128 ];
-    struct REGPACK r;
+    IREGS r;
 
 /* This function causes an invalid opcode when working with NUL */
 /* access() doesn't even work here */
@@ -56,7 +56,7 @@ const char * getshortfilename( const char *longfilename )
     r.r_cx = 0x8001; /* Get short filename */
     r.r_ax = 0x7160;/* LFN truename function */
 
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
 
     return( ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 || !__supportlfns ) ?
             longfilename : shortfilename );
@@ -64,14 +64,14 @@ const char * getshortfilename( const char *longfilename )
 
 static int mycreatnew( const char * filename, int mode )
 {
-    struct REGPACK r;
+    IREGS r;
 
     r.r_ds = FP_SEG( filename );
     r.r_dx = FP_OFF( filename );
     r.r_cx = mode;
     r.r_ax = 0x5B00;
 
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
 
     if( ( r.r_flags & 1 ) ) r.r_ax = 0xFFFF;
     
@@ -81,7 +81,7 @@ static int mycreatnew( const char * filename, int mode )
 static void __creat_or_truncate( const char * filename, int mode )
 {
     int handle;
-    struct REGPACK r;
+    IREGS r;
 
     if( !__supportlfns ) {
         _close( mycreatnew( filename, mode ) );
@@ -95,7 +95,7 @@ static void __creat_or_truncate( const char * filename, int mode )
     r.r_dx = 0x10;
     r.r_ax = 0x716C;
 
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
 
     if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 )
         handle = ( dfnstat( getshortfilename( filename ) ) != 0 ) ?
@@ -135,7 +135,7 @@ int lfnopen( const char *filename, int access, ... )
 
 int lfnrename( const char *oldfilename, const char *newfilename )
 {   /* Must use the actual interrupt for this */
-    struct REGPACK r;
+    IREGS r;
 
     if(dfnstat(newfilename) != 0) {
         errno = EACCES;
@@ -148,12 +148,12 @@ int lfnrename( const char *oldfilename, const char *newfilename )
     r.r_di = FP_OFF( newfilename );
     r.r_ax = 0x7156;
 
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
 
     if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) {
         r.r_ax = 0x5600;
 
-        intr( 0x21, &r );
+        intrpt( 0x21, &r );
 
         if( ( r.r_flags & 1 ) ) {
             errno = r.r_ax;
@@ -185,7 +185,7 @@ static void convert_to_ffblk( struct lfnffblk *dosblock,
 int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
 {
     struct locffblk lfnblock;
-    struct REGPACK r;
+    IREGS r;
 
     buf->lfnax = buf->lfnsup = 0; /* Zero find handle and LFN-supported flag */
 
@@ -200,7 +200,7 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
     r.r_cx = attr;
     r.r_ax = 0x714E;               /* LFN Findfirst */
 
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
 
     /*
      * If ax = 7100, there is probably an LFN TSR but no LFN support for
@@ -228,7 +228,7 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
 int lfnfindnext( struct lfnffblk *buf )
 {
     struct locffblk lfnblock;
-    struct REGPACK r;
+    IREGS r;
 
     /*
      * Before going through the possibly unnecessary steps of calling the LFN
@@ -245,7 +245,7 @@ int lfnfindnext( struct lfnffblk *buf )
     r.r_si = 1;                            /* Use DOS times */
     r.r_ax = 0x714F;
 
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
 
     /* Check for errors */
     if( ( r.r_flags & 1 ) ) {
@@ -258,7 +258,7 @@ int lfnfindnext( struct lfnffblk *buf )
 
 int lfnfindclose( struct lfnffblk *buf )
 {
-    struct REGPACK r;
+    IREGS r;
 
     /* Let's check if LFN was used; if not, there is no need for findclose */
     if( !buf->lfnsup || !__supportlfns ) return( 0 );
@@ -266,7 +266,7 @@ int lfnfindclose( struct lfnffblk *buf )
     r.r_bx = buf->lfnax;        /* Findfirst handle */
     r.r_ax = 0x71A1;            /* LFN findclose */
 
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
 
     /*
      * Check for errors (which really shouldn't be a problem anyways

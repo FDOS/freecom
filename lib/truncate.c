@@ -26,11 +26,11 @@
 #include "../include/misc.h"
 
 int truncate(int fd)
-{	struct REGPACK r;
+{	IREGS r;
 
 	r.r_ax = 0x4000;	/* Write to file descriptor */
 	r.r_bx = fd;
 	r.r_cx = 0;			/* Indicates "truncate" */
-    intr( 0x21, &r );
+	intrpt( 0x21, &r );
 	return r.r_ax;
 }

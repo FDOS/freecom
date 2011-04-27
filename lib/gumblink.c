@@ -48,5 +48,5 @@ int dosGetUMBLinkState(void)
 
 	_AX = 0x5802;			/* get UMB link */
 	geninterrupt(0x21);
-	return _FLAGS & 1 ? 0 : _AX;
+	return _CFLAG ? 0 : _AX;
 }

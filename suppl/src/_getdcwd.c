@@ -131,7 +131,7 @@ putDrive:
 
 char *_getdcwd(int drive, char Xbuf[], unsigned length)
 {	char *buf;
-	struct REGPACK r;
+	IREGS r;
 
 	DBG_ENTER("_getdcwd", Suppl_portable)
 	DBG_ARGUMENTS( ("drv=%d, buf=%s, len=%u", drive, buf? "passed": "allocate", length) )
@@ -158,11 +158,11 @@ char *_getdcwd(int drive, char Xbuf[], unsigned length)
 #else
         r.r_ax = 0x4700;
 #endif
-		intr(0x21, &r);
+		intrpt(0x21, &r);
 #ifdef FEATURE_LONG_FILENAMES
 		if((r.r_flags & 1) || r.r_ax == 0x7100) {				/* Get path failed */
             r.r_ax = 0x4700;
-            intr(0x21, &r);
+            intrpt(0x21, &r);
 #endif
             if(r.r_flags & 1) {
     			if(!Xbuf) free(buf);

@@ -73,7 +73,7 @@
 	the executation is aborted. */
 int runExtension(char * const command, char * const line)
 {	int clen, llen;
-	struct REGPACK r;
+	IREGS r;
 	char *p;
 	int rc = 0;			/* Default: is no extension */
 
@@ -106,7 +106,7 @@ int runExtension(char * const command, char * const line)
 	r.r_si = FP_OFF(command) - 1;
 	r.r_di = 0;				/* Magic value 4dos v4 */
 
-    intr(0x2F, &r);
+    intrpt(0x2F, &r);
 
 	switch(r.r_ax & 0xFF) {
 	case 0x00:		/* No appropriate extension found */
@@ -118,7 +118,7 @@ int runExtension(char * const command, char * const line)
 
 	case 0xFF:		/* Is an extension -> execute the Installable Command */
 		r.r_ax = 0xae01;
-        intr(0x2F, &r);
+        intrpt(0x2F, &r);
 		invalidateNLSbuf();
 		if(command[-1] == 0)		/* The command had been processed */
 			rc = 1;				/* Stop interpreting the command */

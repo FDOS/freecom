@@ -48,5 +48,5 @@ int dosGetAllocStrategy(void)
 
 	_AX = 0x5800;			/* get allocation strategy */
 	geninterrupt(0x21);
-	return _FLAGS & 1 ? 0 : _AX;
+	return _CFLAG & 1 ? 0 : _AX;
 }

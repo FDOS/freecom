@@ -48,17 +48,18 @@
 #ifdef _NO__DOS_TIME
 
 #include <dos.h>
+#include <portable.h>
 #include "../include/timefunc.h"
 
 unsigned _dos_settime(struct dostime_t *t)
 {
-  struct REGPACK r;
+  IREGS r;
 
   r.r_ax = 0x2D00;
   r.r_cx = ( ( t->hour & 0xFF ) << 8 ) | ( t->minute & 0xFF );
   r.r_dx = ( ( t->second & 0xFF ) << 8 ) | ( t->hsecond & 0xFF );
 
-  intr(0x21, &r);
+  intrpt(0x21, &r);
 
   if (( r.r_ax & 0xFF ) == 0xFF)           /* Error occured setting time */
     return -1;

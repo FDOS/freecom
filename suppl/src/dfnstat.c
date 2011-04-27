@@ -66,7 +66,7 @@ static char const rcsid[] =
 #endif
 
 int dfnstat(const char * const fnam)
-{	struct REGPACK r;
+{	IREGS r;
 	int attr;
 
 	DBG_ENTER("dfnstat", Suppl_dfn)
@@ -81,7 +81,7 @@ int dfnstat(const char * const fnam)
 	 	/* Probe if the drive is ready */
 	 	r.r_ax = 0x4409;
 	 	r.r_bx = toupper(*fnam) - 'A' + 1;
-        intr( 0x21, &r );
+        intrpt( 0x21, &r );
         if( r.r_flags & 1 ) {
 			eno_setOSerror(r.r_ax);
 			DBG_RETURN_I( 0)
@@ -92,7 +92,7 @@ int dfnstat(const char * const fnam)
 	r.r_ax = 0x4300;		/* get file attributes */
 	r.r_ds = FP_SEG(fnam);
 	r.r_dx = FP_OFF(fnam);
-    intr( 0x21, &r );
+	intrpt( 0x21, &r );
 	if( r.r_flags & 1 ) {
 		eno_setOSerror(r.r_ax);
 		DBG_RETURN_I( 0)			/* call failed */

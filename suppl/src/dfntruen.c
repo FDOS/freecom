@@ -94,7 +94,7 @@ static char const rcsid[] =
 
 char *dfntruename(const char * const fnam)
 {	char *h;
-	struct REGPACK r;
+	IREGS r;
 
 	DBG_ENTER("dfntruename", Suppl_dfn)
 
@@ -115,11 +115,11 @@ char *dfntruename(const char * const fnam)
 		r.r_es = FP_SEG(h);
 		r.r_di = FP_OFF(h);
 		chkHeap
-        intr( 0x21, &r );
+        intrpt( 0x21, &r );
 #ifdef FEATURE_LONG_FILENAMES
         if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) {
             r.r_ax = 0x6000;
-            intr( 0x21, &r );
+            intrpt( 0x21, &r );
 #endif
 		if(( r.r_flags & 1 ) ? r.r_ax : 0) {		/* failed */
 			eno_setOSerror( r.r_ax);

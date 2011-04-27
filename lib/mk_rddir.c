@@ -17,14 +17,14 @@
 #ifdef FEATURE_LONG_FILENAMES
 int lfn_mrc_dir( const char *path, int func )
 {
-	struct REGPACK r;
+	IREGS r;
     r.r_ax = func;
     r.r_dx = FP_OFF( path );
 	r.r_ds = FP_SEG( path );
-    intr( 0x21, &r );
+    intrpt( 0x21, &r );
     if( func == 0x7139 && ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) ) {
         r.r_ax = func << 8;
-        intr( 0x21, &r );
+        intrpt( 0x21, &r );
     }
     return( -( r.r_flags & 1 ) );
 }

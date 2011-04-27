@@ -64,7 +64,7 @@
 static unsigned char iobuf[CMD_SIZE + 2] = { CMD_SIZE, '\0'};
 
 void readcommandDOS(char * const str, int maxlen)
-{	struct REGPACK r;
+{	IREGS r;
 
 	assert(str);
 	assert(maxlen);
@@ -80,7 +80,7 @@ void readcommandDOS(char * const str, int maxlen)
 	r.r_ax = 0xa00;
 	r.r_ds = FP_SEG(iobuf);
 	r.r_dx = FP_OFF(iobuf);
-	intr(0x21, &r);
+	intrpt(0x21, &r);
 
 	dprintf(("[CMDINPUT characters max:%u out:%u]\n", iobuf[0], iobuf[1]));
 	if(iobuf[1]) 		/* could bug if == 0 */

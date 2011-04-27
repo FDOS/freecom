@@ -42,14 +42,15 @@
 #ifdef _NO__DOS_TIME
 
 #include <dos.h>
+#include <portable.h>
 #include "../include/timefunc.h"
 
 void _dos_gettime(struct dostime_t *t)
 {
-  struct REGPACK r;
+  IREGS r;
 
   r.r_ax = 0x2C00;
-  intr(0x21, &r);
+  intrpt(0x21, &r);
 
   t->hour = r.r_cx >> 8;
   t->minute = r.r_cx & 0xFF;

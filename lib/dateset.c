@@ -44,11 +44,12 @@
 
 #include <assert.h>
 #include <dos.h>
+#include <portable.h>
 #include "../include/datefunc.h"
 
 unsigned _dos_setdate(struct dosdate_t *d)
 {
-  struct REGPACK r;
+  IREGS r;
 
   assert(d);
   r.r_ax = 0x2B00;
@@ -56,7 +57,7 @@ unsigned _dos_setdate(struct dosdate_t *d)
   r.r_dx = d->month << 8;
   r.r_dx += d->day & 0xFF;
 
-  intr(0x21, &r);
+  intrpt(0x21, &r);
 
   if (r.r_ax & 0x00FF)
     return 1;

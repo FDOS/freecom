@@ -52,9 +52,9 @@
 
 static int mygetch( void )
 {
-    struct REGPACK regs;
+    IREGS regs;
     regs.r_ax = 0x0700;
-    intr(0x21, &regs);
+    intrpt(0x21, &regs);
     return (regs.r_ax)&0xFF;
 }
 

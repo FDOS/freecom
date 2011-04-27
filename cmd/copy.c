@@ -131,14 +131,14 @@ static void killContext(void)
 unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
                              unsigned short func )
 {
-	struct REGPACK r;
+	IREGS r;
 
 	r.r_ax = func;
 	r.r_bx = fd;
 	r.r_cx = size;
 	r.r_dx = FP_OFF(buffer);
     r.r_ds = FP_SEG(buffer);
-	intr(0x21, &r);
+	intrpt(0x21, &r);
     return( ( r.r_flags & 1 ) ? 0xFFFF : r.r_ax );
 }
 

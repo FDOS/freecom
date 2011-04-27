@@ -40,11 +40,11 @@ unsigned mywherey (void) {
 
 static void my_setcursortype( unsigned short state )
 {
-   struct REGPACK regs;
+   IREGS regs;
    int cur_mode;
 
    regs.r_ax = 0x0F00;
-   intr( 0x10, &regs );
+   intrpt( 0x10, &regs );
    cur_mode = regs.r_ax & 0xFF;
    regs.r_ax = 0x0100;
    /* ch == start line. cl == end line */
@@ -69,7 +69,7 @@ static void my_setcursortype( unsigned short state )
              break;
 #endif
    }
-   intr( 0x10, &regs );
+   intrpt( 0x10, &regs );
 }
 
 #define wherex mywherex

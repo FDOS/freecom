@@ -86,6 +86,7 @@ unsigned char __supportlfns = 1;
 #ifdef FEATURE_SWITCHAR
 char switchar(void)
 {
+    USEREGS
     _AX = 0x3700;
 
     geninterrupt(0x21);

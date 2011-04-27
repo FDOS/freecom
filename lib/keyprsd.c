@@ -46,11 +46,11 @@
 
 int keypressed(void)
 {
-  struct REGPACK r;
+  IREGS r;
 
   r.r_ax = 0x0100;
 
-  intr(0x16, &r);
+  intrpt(0x16, &r);
 
   /* Check the zero flag.  Z=0 means a key was pressed; Z=1 means no key */
   if (r.r_flags & 0x40)

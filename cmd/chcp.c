@@ -32,7 +32,8 @@
 #include "../strings.h"
 
 int cmd_chcp(char *param)
-{	unsigned curCP, sysCP;
+{	USEREGS
+	unsigned curCP, sysCP;
 
 	_AX = 0x6601;
 	geninterrupt(0x21);

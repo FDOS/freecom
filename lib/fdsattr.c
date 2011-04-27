@@ -22,16 +22,17 @@
  */
 
 #include <dos.h>
+#include <portable.h>
 #include "../config.h"
 
 int fdsetattr(const int fd, const int attr)
 {
-  struct REGPACK r;
+  IREGS r;
 
   r.r_ax = 0x4401;              /* Get handle information */
   r.r_bx = fd;
   r.r_dx = attr;
-  intr(0x21, &r);
+  intrpt(0x21, &r);
   return ( r.r_flags & 1 )         /* call failed */
   ? r.r_ax          /* error code */
   : 0;            /* OK */

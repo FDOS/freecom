@@ -24,11 +24,11 @@
 
 void appendRestore(const int state)
 {	if(state & 1) {		/* Re-enable DOS/APPEND */
-		struct REGPACK r;
+		IREGS r;
 
 		r.r_ax = 0xb707;		/* Set APPEND function state */
 		r.r_bx = state;
-		intr(0x2f, &r);
+		intrpt(0x2f, &r);
 
 		dprintf(("MUX-B7: set state 0x%04x]\n", state) );
 	}
