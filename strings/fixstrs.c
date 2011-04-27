@@ -141,7 +141,7 @@ struct {
 string_count_t cnt = 0;		/* current string number */
 string_count_t maxCnt = 0;	/* number of strings within array */
 
-#if sizeof(char*) != 4
+#if defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
 #error "This program must be compiled with far data pointers"
 #endif
 

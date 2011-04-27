@@ -53,11 +53,13 @@ int enumFileResources(const char * const fnam, res_majorid_t id
 void startResource(FILE *f, res_majorid_t majorID, res_minorid_t minorID);
 void endResource(FILE *f);
 
+#ifdef __TURBOC__
 #if sizeof(res_majorid_t) != 2
 #error "res_id_t must be exactly 16bit!"
 #endif
 #if sizeof(res_minorid_t) != 2
 #error "res_id_t must be exactly 16bit!"
+#endif
 #endif
 
 #endif

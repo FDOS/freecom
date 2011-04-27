@@ -51,7 +51,7 @@
 #include <alloc.h>	/* heapcheck, coreleft, farcoreleft */
 #include <stdlib.h>	/* abort */
 
-#if sizeof(void*) != sizeof(void far*)
+#if defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
 #define DISP_NEAR
 #endif
 

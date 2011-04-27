@@ -15,11 +15,12 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <limits.h>
 
 #include "../include/command.h"
 #include "../include/context.h"
 
-#if sizeof(unsigned) != 2
+#if UINT_MAX != 65535U
 #error "sizeof(unsigned) != 2 is not supported"
 #endif
 

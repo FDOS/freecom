@@ -24,6 +24,8 @@ ctxt_info_t ctxt_info[] = {
 	,{ ALIAS_DEFAULT_SIZE, 0, 0, 0 }
 };
 
+#ifdef __TURBOC__
 #if sizeof(ctxt_info) / sizeof(ctxt_info_t) != CTXT_TAG_ALIAS - CTXT_FIRST_TAG + 1
 #error "Not all tags have an ctxt_info entry"
+#endif
 #endif

@@ -34,6 +34,7 @@ started
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 
 /*ska: no resource in this project! #include "../resource.h"*/
 
@@ -51,10 +52,10 @@ typedef struct {
 
 typedef unsigned short word;		/* MUST BE EXACTLY unsigned 16bit */
 typedef unsigned char byte;			/* MUST BE EXACTLY unsigned 8bit */
-#if sizeof(word) != 2
+#if USHRT_MAX != 65535U
 #error "word must be exactly an unsigned 16-bit value"
 #endif
-#if sizeof(byte) != 1
+#if UCHAR_MAX != 255
 #error "byte must be exactly an unsigned 8-bit value"
 #endif
 
@@ -90,7 +91,7 @@ strings special[] = {
 	,{ NULL, NULL }
 };
 
-#if sizeof(char*) != 4
+#if defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
 #error "This program must be compiled with far data pointers"
 #endif
 

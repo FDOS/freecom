@@ -205,10 +205,12 @@
 #define FEATURE_XMS_SWAP
 #endif
 
-#if sizeof(char*) > sizeof(short)
+#ifdef __TURBOC__
+#if defined(__COMPACT__) || defined(__LARGE__) || defined(__HUGE__)
 /* Compilando em modelo de memória larga --> deslisga AVISO:
 	"Convesão pode perder digitos significantes"	*/
 #pragma warn -sig
+#endif
 #endif
 
 #include "../include/debug.h"

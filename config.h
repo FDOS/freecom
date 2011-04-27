@@ -239,10 +239,12 @@
 #define FEATURE_XMS_SWAP
 #endif
 
-#if sizeof(char*) > sizeof(short)
+#ifdef __TURBOC__
+#if defined(__COMPACT__) || defined(__LARGE__) || defined(__HUGE__)
 /* Compiling in Large memory model --> turn of Warning:
     "Conversation may lose significant digits"  */
 #pragma warn -sig
+#endif
 #endif
 
 #include "../include/debug.h"
