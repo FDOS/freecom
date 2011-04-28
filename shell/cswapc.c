@@ -208,7 +208,7 @@ void XMSinit(void)
 #if 0
 		{
 		extern void interrupt far ZeroDivideInterrupt();
-		setvect(0,ZeroDivideInterrupt);
+		set_isr(0,ZeroDivideInterrupt);
         }
 #endif
         {

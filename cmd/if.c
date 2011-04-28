@@ -26,11 +26,12 @@
 
 #include <assert.h>
 #include <ctype.h>
-#include <dir.h>
 #include <dos.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <suppl.h>
 
 #include "../include/lfnfuncs.h"
 #include "../include/batch.h"
@@ -158,7 +159,7 @@ int cmd_if(char *param)
 
 		/* check if strings differ */
 		if ( ((pp - r) == len) &&
-		     ((ignore_case && strncmpi(param, r, len) == 0) ||
+		     ((ignore_case && strnicmp(param, r, len) == 0) ||
 		      (memcmp(param, r, len) == 0)) )
 			x_flag = X_EXEC;
 	}

@@ -61,7 +61,12 @@ add: version number of strings and logfile entries
 
 
 #include <ctype.h>
+#ifdef __TURBOC__
 #include <dir.h>
+#else
+#include <direct.h>
+#include <io.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -150,7 +155,7 @@ char temp[1024];
 static const char besFromChar[] =
  "abcdefghijklmnopqrstuvwxyz,.[{}]\\?0";
 static const char besToChar[] =
- "\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z,.[{}]\\?";
+ "\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x0\y\z,.[{}]\\?";
 
 symKey symkeys[] = {		/* symbolic keynames, uppercased! */
 	 { KEY_CTL_C,	"BREAK" }		/* Pseudo-^Break */
@@ -260,7 +265,11 @@ unsigned fromxdigit(int ch)
 	return toupper(ch) - 'A';
 }
 
+#ifdef __TURBOC__
 #define join(s1,s2)	strcpy(stpcpy(temp, s1), s2);
+#else
+#define join(s1,s2)	strcat(strcpy(temp, s1), s2);
+#endif
 void pxerror(const char * const msg1, const char * const msg2)
 {	join(msg1, msg2);
 	perror(temp);
@@ -821,7 +830,11 @@ strings.lib .LIBRARY : ", fdmake);
 			fprintf(fdmake, "\\\n\t" objfmt, cnt);
 		}
 		for(cnt = 0; cnt < maxCnt - 1; ++cnt)
+#ifdef __TURBOC__
 			fprintf(ftc101, "+" objfmt " &\n", cnt);
+#else
+			fprintf(ftc101, "+" objfmt "\n", cnt);
+#endif
 		fprintf(ftc101, "+" objfmt " \n", cnt);
 		/********************** epilogue */
 

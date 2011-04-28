@@ -85,6 +85,7 @@ extern unsigned _psp_(void);
 #define set_isrfct(num,fct) setiva((num), (isr)(fct))
 #define get_isr(num,var) ((var) = getiva(num))
 #define set_isr(num,var) setiva((num), (var))
+#define ASMINTERRUPT isr
 
 /* calling an interrupt */
 typedef struct {

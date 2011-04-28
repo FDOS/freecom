@@ -64,6 +64,18 @@
 
 #include "algnbyte.h"
 
+#ifdef __WATCOMC__
+struct fcb     {
+	char    bytes[0x25];
+};
+
+char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option);
+#pragma aux parsfnm = \
+	"mov ah, 29h" \
+	"int 21h" \
+	parm [si] [es di] [ax] value [si] modify [ax es]
+#endif
+
 struct ExecBlock
 {
   word segOfEnv;
@@ -74,7 +86,7 @@ struct ExecBlock
 
 #include "algndflt.h"
 
-int lowLevelExec(char far * cmd, struct ExecBlock far * bl);
+int cdecl lowLevelExec(char far * cmd, struct ExecBlock far * bl);
 
 int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 {

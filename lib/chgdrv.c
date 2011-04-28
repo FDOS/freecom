@@ -52,7 +52,6 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <dir.h>
 
 #include "../err_fcts.h"
 #include "../include/misc.h"

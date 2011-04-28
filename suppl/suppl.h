@@ -213,6 +213,7 @@ char *stpcpy(char * const dst, const char * const src);
 */
 
 /* different names */
+#ifndef ffblk
 struct ffblk {
     char        ff_reserved[21];
     byte        ff_attrib;
@@ -221,7 +222,26 @@ struct ffblk {
     long        ff_fsize;
     char        ff_name[13];
 };
+#endif
 
+#define findfirst(pattern,buf,attrib) _dos_findfirst((pattern), (attrib)	\
+	, (struct find_t*)(buf))
+#define findnext(buf) _dos_findnext((struct find_t*)(buf))
+
+#define FA_RDONLY _A_RDONLY
+#define FA_ARCH _A_ARCH
+#define FA_SYSTEM _A_SYSTEM
+#define FA_HIDDEN _A_HIDDEN
+#define FA_DIREC _A_SUBDIR
+#define FA_LABEL _A_VOLID
+
+#ifndef MAXDIR
+#define MAXDIR 66               /* 64: path; +1: root sign; +1: NUL terminator */
+#define MAXDRIVE 3              /* 1: drive letter; +1: ':'; +1: NUL terminator */
+#define MAXFILE 9               /* 8: name; +1: NUL terminator */
+#define MAXEXT 5                /* 3: name; +1: dot; +1: NUL terminator */
+#define MAXPATH (MAXDIR + MAXDRIVE + MAXNAME + MAXEXT - 3)
+#endif
 #endif	/* WATCOMC */
 
 

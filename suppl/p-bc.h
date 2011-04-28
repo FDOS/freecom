@@ -19,6 +19,9 @@
 /* Portable include file for Turbo/Borland C */
 #ifdef __TURBOC__
 
+#ifndef ffblk
+#include <dir.h>
+#endif
 
 /* Global argc/argv variables */
 #define G_ARGV _argv		/* global char **argv	variable */
@@ -44,6 +47,7 @@ typedef void interrupt (far *isr)();
 #define set_isrfct(num,fct) setvect((num), (isr)(fct))
 #define get_isr(num,var) ((var) = getvect(num))
 #define set_isr(num,var) setvect((num), (var))
+#define ASMINTERRUPT interrupt
 
 /* calling interrupt */
 typedef struct REGPACK IREGS;

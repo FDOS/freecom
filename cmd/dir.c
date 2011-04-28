@@ -155,7 +155,6 @@
 #include <assert.h>
 #include <conio.h>
 #include <ctype.h>
-#include <dir.h>
 #include <dos.h>
 #include <io.h>
 #include <stdio.h>
@@ -165,7 +164,7 @@
 #include <sys/types.h>
 
 /* Not available with TURBOC++ 1.0 or earlier: */
-#if ( (!defined(__TURBOC__)) || (__TURBOC__ > 0x297) )
+#if ( (!defined(__WATCOMC__) && !defined(__TURBOC__)) || (__TURBOC__ > 0x297) )
 #include <dirent.h>
 #endif
 

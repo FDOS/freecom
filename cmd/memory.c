@@ -7,7 +7,9 @@
 
 #include "../config.h"
 
+#ifdef __TURBOC__
 #include <alloc.h>
+#endif
 
 #include <environ.h>
 #include <mcb.h>
@@ -48,7 +50,9 @@ int cmd_memory (char * param) {
 /*	displayTag1(TEXT_MEMORY_CTXT_BATCH, CTXT_TAG_BATCH);
 	not used, yet -- 2001/06/11 ska*/
 	displayTag1(TEXT_MEMORY_CTXT_SWAPINFO, CTXT_TAG_SWAPINFO);
+#ifdef __TURBOC__
 	displayString(TEXT_MEMORY_HEAP, (unsigned long)coreleft());
+#endif
 
 	return 0;
 }

@@ -100,7 +100,11 @@ char temp[256];
 	/* keep it a single-file project */
 /*ska: no resource in this project! #include "../res_w.c"*/
 
+#ifdef __TURBOC__
 #define join(s1,s2)	strcpy(stpcpy(temp, s1), s2);
+#else
+#define join(s1,s2)	strcat(strcpy(temp, s1), s2);
+#endif
 void pxerror(char *msg1, char *msg2)
 {	join(msg1, msg2);
 	perror(temp);

@@ -63,7 +63,7 @@ static void kswapSetISR(void)
         as it is an internal one (no part of the module) */
     *(void far* far*)MK_FP(_psp, 0x12) =
      MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter);
-    setvect(0x24, (void interrupt(*)())
+    set_isr(0x24, (void interrupt(*)())
      MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter));
 }
 

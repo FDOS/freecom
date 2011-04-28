@@ -29,7 +29,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dir.h>
 #include <io.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -237,7 +236,13 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   char *buf;
   size_t len;
   FLAG keepFTime;
+#if defined(__WATCOMC__) && __WATCOMC__ < 1280
+  unsigned short date, time;
+#elif defined(__TURBOC__)
   struct ftime fileTime;
+#else
+  unsigned date, time;
+#endif
   char *srcFile;
   FLAG wildcarded;
   /*FLAG isfirst = 1;*/
@@ -344,7 +349,11 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 		  }
       }
       if(keepFTime)
+#ifdef __TURBOC__
         if(getftime(fileno(fin) , &fileTime))
+#else
+        if(_dos_getftime(fileno(fin) , &date , &time))
+#endif
           keepFTime = 0; /* if error: turn it off */
 
       displayString(TEXT_MSG_COPYING, rSrc
@@ -438,7 +447,11 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     }
     fflush(fout);
     if(keepFTime)
+#ifdef __TURBOC__
       setftime(fileno(fout), &fileTime);
+#else
+      _dos_setftime(fileno(fout), date, time);
+#endif
     rc = ferror(fout);
     fclose(fout);
     if(rc) {

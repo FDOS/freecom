@@ -56,6 +56,7 @@ typedef void (__interrupt __far *isr)();
 #define set_isrfct(num,fct) _dos_setvect((num), (isr)(fct))
 #define get_isr(num,var) ((var) = _dos_getvect(num))
 #define set_isr(num,var) _dos_setvect((num), (var))
+#define ASMINTERRUPT interrupt cdecl
 
 /* calling an interrupt */
 typedef struct {

@@ -58,10 +58,10 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <dir.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include <suppl.h>
 #include <dfn.h>
 
 #include "../include/command.h"

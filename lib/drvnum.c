@@ -41,7 +41,6 @@
 
 #include <assert.h>
 #include <ctype.h>
-#include <dir.h>
 
 #include "../include/misc.h"
 

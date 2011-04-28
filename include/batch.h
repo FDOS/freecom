@@ -10,9 +10,7 @@
 */
 
 #include <stdio.h>
-#ifndef __PACIFIC__
-#include <dir.h>
-#endif
+#include <suppl.h>
 
 #define __LFNFUNCS_C
 #include "../include/lfnfuncs.h"

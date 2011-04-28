@@ -44,7 +44,6 @@
 
 #include <assert.h>
 #include <ctype.h>
-#include <dir.h>
 #include <dos.h>
 #include <stdio.h>
 #include <string.h>
@@ -52,6 +51,7 @@
 #include "../include/lfnfuncs.h"
 #undef findfirst
 #undef findnext
+#include <suppl.h>
 #include "../include/command.h"
 #include "../strings.h"
 

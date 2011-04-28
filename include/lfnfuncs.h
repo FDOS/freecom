@@ -5,7 +5,8 @@
 #ifndef H__LFNFUNCS_
 #define H__LFNFUNCS_
 
-#ifdef __TURBOC__ /* OpenWatcom has an LFN CLIB Extension available */
+/*#ifdef __TURBOC__*/ /* OpenWatcom has an LFN CLIB Extension available 
+			 but not used yet */
 
 #ifdef FEATURE_LONG_FILENAMES
 
@@ -80,6 +81,8 @@ extern unsigned char lfncomplete;
 #define open              lfnopen
 #define rename            lfnrename
 #define stat( x, y )      stat( getshortfilename( x ), y )
+#undef  findfirst
+#undef  findnext
 #define findfirst         lfnfindfirst
 #define findnext          lfnfindnext
 #define findclose         lfnfindclose
@@ -97,5 +100,5 @@ extern unsigned char lfncomplete;
 #endif /* __LFNFUNCS_C */
 
 #endif /* FEATURE_LONG_FILENAMES */
-#endif /* __TURBOC__ */
+/*#endif*/ /* __TURBOC__ */
 #endif /* H__LFNFUNCS_ */

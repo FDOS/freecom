@@ -15,11 +15,11 @@
 #include <process.h>
 #include <time.h>
 #include <errno.h>
-#include <dir.h>
 #include <fcntl.h>
 #include <io.h>
 #include <sys\stat.h>
 
+#include <suppl.h>
 #include <dfn.h>
 #include "../include/lfnfuncs.h"
 
@@ -182,7 +182,7 @@ static void execute(char *first, char *rest)
 #endif
 		/* Install the dummy (always abort) handler */
 #ifdef FEATURE_XMS_SWAP
-    setvect(0x23, (void interrupt(*)())
+    set_isr(0x23, (void interrupt(*)())
             MK_FP(FP_SEG(lowlevel_cbreak_handler)-0x10,
             FP_OFF(lowlevel_cbreak_handler)+0x100));
     /*
@@ -190,16 +190,16 @@ static void execute(char *first, char *rest)
      * command.com PSP, but FreeCOM is an exe...
      */
 #else
-	setvect(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
+	set_isr(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
 #endif
 #ifdef FEATURE_XMS_SWAP
     if( *(unsigned char far *)getvect( 0x2E) == 0xCF && !canexit) /* IRET? */
-        setvect( 0x2E, ( void interrupt(*)() )
+        set_isr( 0x2E, ( void interrupt(*)() )
                  MK_FP(FP_SEG(lowlevel_int_2e_handler)-0x10,
                  FP_OFF(lowlevel_int_2e_handler)+0x100));
 #endif
     result = exec(fullname, rest, 0);
-	setvect(0x23, cbreak_handler);		/* Install local CBreak handler */
+	set_isrfct(0x23, cbreak_handler);		/* Install local CBreak handler */
 	/* The external command might has killed the string area. */
 	env_nullStrings(0);
 

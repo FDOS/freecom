@@ -18,6 +18,20 @@
 #include "../include/command.h"
 #include "../strings.h"
 
+#ifdef __WATCOMC__
+void setverify(char a);
+#pragma aux setverify = \
+	"mov ah,0x2e" \
+	"mov dl,0" \
+	"int 0x21" \
+	parm [al] modify exact [ah dl]
+char getverify(void);
+#pragma aux getverify = \
+	"mov ah,0x54" \
+	"int 0x21" \
+	value [al] modify exact [ah]
+#endif
+
 int cmd_verify(char *param)
 {
   switch(onoffStr(param)) {

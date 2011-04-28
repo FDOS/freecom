@@ -15,11 +15,11 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <string.h>
-#include <dir.h>
 
 /*#define DEBUG*/
 
 #include <dfn.h>
+#include <suppl.h>
 #include <supplio.h>
 
 #include "../include/lfnfuncs.h"

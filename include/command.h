@@ -45,7 +45,6 @@ enum InternalErrorCodes {
 #define OwnerPSP (*(unsigned far *)MK_FP(_psp, 0x16))
 
 extern const char shellver[];
-extern const char shelldate[];
 extern const char shellname[];
 
 #define FINDFIRST(path,attrib,ffblk) findfirst(path,attrib,ffblk)
@@ -70,8 +69,8 @@ enum
 };
 
 /* prototypes for INIT.C */
-extern void interrupt dummy_criter_handler();
-extern void interrupt cbreak_handler();
+extern void ASMINTERRUPT dummy_criter_handler();
+extern void ASMINTERRUPT cbreak_handler();
 /* extern void initCBreak(void);*/
 
 /* prototypes for COMMAND.C */

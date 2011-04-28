@@ -39,13 +39,13 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <dir.h>
 #include <dos.h>
 #include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "suppl.h"
 #include "dfn.h"
 
 #include "../include/lfnfuncs.h"

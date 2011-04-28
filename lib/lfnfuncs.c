@@ -4,7 +4,6 @@
 
 #include "../config.h"
 
-#include <dir.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -27,7 +26,8 @@
 
 #ifdef FEATURE_LONG_FILENAMES
 
-#ifdef __TURBOC__ /* OpenWatcom has an LFN CLIB Extension available */
+/*#ifdef __TURBOC__*/ /* OpenWatcom has an LFN CLIB Extension available 
+			 but not used yet */
 
 #define _STC     __emit__(0xF9)
 #define _PUSH_DS __emit__(0x1E)
@@ -279,6 +279,6 @@ int lfnfindclose( struct lfnffblk *buf )
     return( 0 );
 }
 
-#endif
+/* #endif */
 
 #endif

@@ -73,7 +73,7 @@
 #include "../include/strings.typ"
 #include "../include/cswap.h"
 
-static unsigned msgSegm = 0;    /* strings segment if loaded */
+unsigned msgSegm = 0;                   /* strings segment if loaded */
 string_count_t strCnt = 0;		/* number of strings */
 
 /* Remove the string segment from memory */

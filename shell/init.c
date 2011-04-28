@@ -194,16 +194,16 @@ int initialize(void)
 
 	/* Install the dummy handlers for Criter and ^Break */
 /*	initCBreak(); */
-	setvect(0x23, cbreak_handler);
+	set_isrfct(0x23, cbreak_handler);
 #ifdef FEATURE_XMS_SWAP
 	/* There is no special handler for FreeCOM currently
 		--> activate the real one */
-	setvect(0x24, lowlevel_err_handler);
+	set_isrfct(0x24, lowlevel_err_handler);
 	{	extern word far criter_repeat_checkarea;
 		registerCriterRepeatCheckAddr(&criter_repeat_checkarea);
 	}
 #else
-	setvect(0x24, dummy_criter_handler);
+	set_isrfct(0x24, dummy_criter_handler);
 #endif
 
   /* DOS shells patch the PPID to the own PID, how stupid this is, however,
@@ -392,7 +392,7 @@ int initialize(void)
 #ifdef FEATURE_XMS_SWAP
 	if(autofail) {
 		dprintf(("[INIT: Activate AutoFail handler]\n"));
-		setvect(0x24, autofail_err_handler);
+		set_isrfct(0x24, autofail_err_handler);
 	}
 #endif
 
@@ -487,7 +487,7 @@ int initialize(void)
 	/* overlPtr2;		not used by this exec */
 #else
 	/* re-use the already loaded Module */
-	setvect(0x24, (void interrupt(*)())
+	set_isr(0x24, (void interrupt(*)())
 	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter));
 #endif
 

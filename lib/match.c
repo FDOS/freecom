@@ -66,7 +66,7 @@ int match_(char ** const Xp, const char * const word, int len)
 	assert(word && *word);
 	assert(len > 0);
 
-	if(strncmpi(p = *Xp, word, len) == 0) {
+	if(strnicmp(p = *Xp, word, len) == 0) {
 		/* line begins with string, now test if it is a word */
 		p += len;
 		if(*p) {

@@ -4,8 +4,6 @@
 
 #include "../config.h"
 
-#include <dir.h>
-
 #include "../include/command.h"
 #include "../include/misc.h"
 

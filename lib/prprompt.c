@@ -60,13 +60,13 @@
 
 #include <assert.h>
 #include <ctype.h>
-#include <dir.h>
 #include <dos.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <io.h>
 
+#include <suppl.h>
 #include <dfn.h>
 
 #include "../include/context.h"

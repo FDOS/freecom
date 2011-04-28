@@ -106,6 +106,7 @@ struct DWORD {
 #define set_isrfct(num,fct) set_vector((num), get_cs(), &(fct))
 #define get_isr(num,var) get_vector((num), &(var).hi, &(var).lo)
 #define set_isr(num,var) set_vector((num), (var).hi, (var).lo)
+#define ASMINTERRUPT
 
 #define IREGS struct REGPACK
 #define intrpt intr
