@@ -124,12 +124,10 @@ int env_ovrVarOffset(word segm, word ofs, const char *varname
 int env_insVarOffset(word segm, word ofs, const char * const varname
 	, const char * const value);
 
-#ifndef NO_ENV_REPLACE_PROTOTYPE
 #ifdef _MICROC_
 register word env_replace(word env /*, int mode, word segm/length*/);
 #else
 word env_replace(word env, int mode, ... /*word segm/length*/);
-#endif
 #endif
 
 int env_matchVar(word segm, char * const var);

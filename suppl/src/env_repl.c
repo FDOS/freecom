@@ -86,8 +86,7 @@ fi(le): env_repl.c
 #include <portable.h>
 #include "mcb.h"
 #include "suppl.h"
-#define NO_ENV_REPLACE_PROTOTYPE
-#include "environ.loc"		/* don't include the prototype of env_replace() */
+#include "environ.loc"
 #include "fmemory.h"
 #include "eno.loc"
 
@@ -99,9 +98,10 @@ static char const rcsid[] =
 #endif
 
 #ifdef _MICROC_
-register unsigned env_replace(unsigned XOenv /*, int mode, unsigned segm/length*/)
+register wor env_replace(word XOenv /*, int mode, unsigned segm/length*/)
 #else
-unsigned env_replace(unsigned Oenv, int mode, unsigned Xsegm)
+#include <stdarg.h>
+word env_replace(word Oenv, int mode, ...)
 #endif
 {	unsigned env, segm;
 	DBG_ENTER1
@@ -115,7 +115,12 @@ unsigned env_replace(unsigned Oenv, int mode, unsigned Xsegm)
 	mode = ((unsigned *)env)[1];
 	segm = ((unsigned *)env)[2];
 #else
-	segm = Xsegm;				/* ensure that this parameter is valid */
+	{
+		va_list ap;
+		va_start(ap, mode);
+		segm = va_arg(ap, unsigned);
+		va_end(ap);
+	}
 #endif
 
 	DBG_ENTER2("env_replace", "env")
