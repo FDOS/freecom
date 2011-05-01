@@ -73,6 +73,12 @@ typedef struct {
 } IREGS;
 #define intrpt(num,regs) intr((num), (union REGPACK*)(regs))
 
+#ifdef __WATCOMC__
+unsigned CS_(void);
+#pragma aux CS_ = "mov ax, cs" value[ax];
+#define _CS CS_()
+#endif
+
 /* get/set current working drive */
 extern short getdisk(void);
 #pragma aux getdisk = \

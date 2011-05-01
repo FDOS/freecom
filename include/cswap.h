@@ -35,11 +35,17 @@ extern word far myPID;
 extern word far residentCS;
 extern word far origPPID;
 
-extern int far XMSexec(void);	
-extern void far terminateFreeCOMHook(void);
+extern int far cdecl XMSexec(void);	
+extern void far cdecl terminateFreeCOMHook(void);
 extern void far XMSrequest(void);
 
+#ifdef __WATCOMC__
+extern unsigned long (far *far XMSdriverAdress)(unsigned request,
+						unsigned dx, void *si);
+#pragma aux XMSdriverAdress = parm [ax] [dx] [si]
+#else
 extern unsigned (far *far XMSdriverAdress)(void);
+#endif
 	
 extern far SWAPresidentEnd;          /* label: end of resident code */
 extern unsigned short far SwapResidentSize;	  /* paras of the swap handler */	

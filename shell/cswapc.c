@@ -106,12 +106,16 @@ static int XMScopy(
 /*	asm push si;
 	asm lea si,length
 	asm mov ah,0bh;	*/
+#ifdef __TURBOC__
 	_SI = (unsigned)&length;
 	_AH = 0xb;
 	XMSrequest();
 /*	asm pop si; */
 
 	return _AX;		/* shut up warning */
+#else
+	return XMSdriverAdress(0xb00, 0, &length);
+#endif
 }
 
 
@@ -120,7 +124,14 @@ static int XMScopy(
 /* cannot use inline assembly without external assembler in TC++1 */
 void XMSinit(void)
 {
+	USEREGS
+#ifdef __WATCOMC__
+	unsigned long res;
+	unsigned long (far *xmsaddr)(unsigned request, unsigned dx, void *si);
+	#pragma aux xmsaddr = parm [ax] [dx] [si]
+#else
 	unsigned (far *xmsaddr)(void);
+#endif
 	unsigned xmshandle;
 	unsigned msglen, segm;
 	struct MCB _seg *mcb;
@@ -177,10 +188,16 @@ void XMSinit(void)
 /*	asm	mov ah, 09	*/
 /*	asm mov dx, XMSALLOCSIZE; */		/* will do for first try */
 
+#ifdef __WATCOMC__
+	res = xmsaddr(0x900, xms_block_size + 1, NULL);
+	_AX = res & 0xffff;
+	_DX = res >> 16;
+#else
 	_DX = xms_block_size + 1;
 	_AH = 9;
 
 	(*xmsaddr)();
+#endif
 
 	if(_AX) {			/* Got the XMS block */
 /*	asm or ax,ax			*/
@@ -211,10 +228,12 @@ void XMSinit(void)
 		set_isr(0,ZeroDivideInterrupt);
         }
 #endif
+#ifdef __TURBOC__
         {
         extern void _restorezero(void);
         _restorezero();
         }
+#endif
 
 		if(msglen
 			/* Because the STRINGS resource never changes,
@@ -251,9 +270,13 @@ void XMSexit(void)
 	if(initialized == INIT_SUCCEEDED) {
 		/* asm     mov dx, XMSsave.dhandle;
 		asm     mov ah, 0ah;   			/* free XMS memory */
+#ifdef __WATCOMC__
+		XMSdriverAdress(0xa00, XMSsave.dhandle, NULL);
+#else
 		_DX = XMSsave.dhandle;
 		_AH = 0xa;   			/* free XMS memory */
 		XMSrequest();
+#endif
 	}
 
 }
