@@ -32,4 +32,4 @@ void displayExitcode(void)
 	}
 }
 
-#endif DISP_EXITCODE
+#endif /* DISP_EXITCODE */

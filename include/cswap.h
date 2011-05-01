@@ -47,7 +47,7 @@ extern unsigned long (far *far XMSdriverAdress)(unsigned request,
 extern unsigned (far *far XMSdriverAdress)(void);
 #endif
 	
-extern far SWAPresidentEnd;          /* label: end of resident code */
+extern unsigned char far SWAPresidentEnd;          /* label: end of resident code */
 extern unsigned short far SwapResidentSize;	  /* paras of the swap handler */	
 extern unsigned short far SwapTransientSize;  /* paras of total command */	
 

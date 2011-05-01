@@ -845,7 +845,7 @@ static void hangForever(void)
 }
 
 int _Cdecl my2e_parsecommandline( char *s ) {
-    s[ s[ 0 ] ] = '\0';
+    s[ (unsigned char)s[ 0 ] ] = '\0';
 /*    printf("_my2e_parsecommandline( %s )\n", s );*/
     parsecommandline( &s[ 1 ], 1 );
     return( errorlevel );

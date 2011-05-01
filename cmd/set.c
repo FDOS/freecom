@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <io.h>
 
 #include "environ.h"
 #include "nls_c.h"

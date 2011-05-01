@@ -10,7 +10,7 @@ LIBLIST = /l=
 ECHOLIB = echo >>
 
 CFG = watcomc.cfg
-CFLAGS1 = -os-s
+CFLAGS1 = -os-s-wx
 
 #		*Implicit Rules*
 .obj.exe:

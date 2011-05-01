@@ -26,7 +26,7 @@
 
 #include "../config.h"
 
-main(void)
+int main(void)
 {
 	fputs("all : $(CFG) ptchsize.exe", stdout);
 #ifdef FEATURE_KERNEL_SWAP_SHELL

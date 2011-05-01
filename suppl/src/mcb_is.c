@@ -46,7 +46,7 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
-static isMCBcomp(void *arg, word mcb)
+static int isMCBcomp(void *arg, word mcb)
 {	return mcb == (unsigned)arg;
 }
 

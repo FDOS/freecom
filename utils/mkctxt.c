@@ -161,7 +161,7 @@ static int match_(char **Xp, char *w)
 	return 0;
 }
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	char *p, *name, *value;
 	int err;

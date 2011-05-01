@@ -243,8 +243,8 @@ extern void *Ecalloc(size_t len);
 extern void *Erealloc(void *p, size_t size);
 void *Esetsize(void **const p, size_t);
 void *Eresize_(void **const p, size_t);
-#define Esetsize(poi,size)	Esetsize_(&(void*)(poi), (size))
-#define Eresize(poi,size)	Eresize_(&(void*)(poi), (size))
+#define Esetsize(poi,size)	Esetsize_((void**)&(poi), (size))
+#define Eresize(poi,size)	Eresize_((void**)&(poi), (size))
 extern char *Estrdup(const char * const str);
 #define Estrchg(var,str) Estrchg_(&(var),(str))
 extern char *Estrchg_(char ** const pvar, const char * const str);

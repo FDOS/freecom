@@ -51,7 +51,7 @@ extern struct bcontext *bc;
 void exit_batch(void);
 void exit_all_batch(void);
 
-extern setBatchParams(char *s);
+extern int setBatchParams(char *s);
 
 extern struct bcontext *newBatchContext(void);
 /* static void initBatchContext(struct bcontext *b); */

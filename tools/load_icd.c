@@ -10,6 +10,7 @@
 
 #include "../config.h"
 
+#include "suppl.h"
 #include "portable.h"
 #ifdef _TC_EARLY_
 # include "fmemory.h"
@@ -18,7 +19,7 @@
 #define BUFFER_SIZE 10*1024
 const char id[] = "INSTALLABLE COMMAND - ICD v1.0";
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {	unsigned char *buf, *h;
 	size_t len, offName, offPtr;
 	unsigned *p;

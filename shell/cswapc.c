@@ -268,8 +268,10 @@ void XMSexit(void)
 /*	unsigned handle = XMSsave.dhandle; */
 
 	if(initialized == INIT_SUCCEEDED) {
-		/* asm     mov dx, XMSsave.dhandle;
+#if 0
+		asm     mov dx, XMSsave.dhandle;
 		asm     mov ah, 0ah;   			/* free XMS memory */
+#endif
 #ifdef __WATCOMC__
 		XMSdriverAdress(0xa00, XMSsave.dhandle, NULL);
 #else

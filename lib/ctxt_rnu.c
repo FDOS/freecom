@@ -17,7 +17,7 @@
 static int renumber(void *arg, word segm, word ofs)
 {	char buf[CTXT_ITEMNAME_LENGTH];
 
-#define tag (Context_Tag)arg
+#define tag (Context_Tag)(int)arg
 
 	assert(segm);
 	assert(ofs != (word)-1);

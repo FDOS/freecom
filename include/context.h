@@ -73,7 +73,7 @@ extern ctxt_info_t ctxt_info[];
 	because just <tag>= is not valid as _item_, but may contain
 	status information */
 #define ctxtProbeItemTag(segm,ofs,tag)							\
-	(peekb((segm), (ofs)) == (unsigned char)(Context_Tag)(tag)	\
+	(peekb((segm), (ofs)) == (unsigned char)(Context_Tag)(int)(tag)	\
 		 && peekb((segm), (ofs) + 1) != '=')
 #define CTXT_ITEMNAME_LENGTH (sizeof(unsigned) * 2 + 2)
 

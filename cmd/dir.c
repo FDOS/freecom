@@ -221,7 +221,7 @@ static int dispLFN;
 #ifdef FEATURE_DESCRIPT_ION
 static int descriptionExists;
 static FILE *fDescription;
-void showDescription(const char *shortName, char *ext);
+static void showDescription(const char *shortName, char *ext);
 #endif
 
 static struct ffblk _seg *orderArray;
@@ -392,7 +392,7 @@ static void showDescription(const char *shortName, char *ext)
 
 /* The DIR command accepts more than one /A options, the later ones
 	replaces former ones */
-static scanAttr(const char *p)
+static int scanAttr(const char *p)
 {	unsigned attr;
 
 	attrMask = attrMatch = 0;	/* purge previous /A*** */
@@ -433,7 +433,7 @@ done:
 
     
     
-static scanOrder(const char *p)
+static int scanOrder(const char *p)
 {
 	if(!p || !*p)
 		p = DEFAULT_SORT_ORDER;

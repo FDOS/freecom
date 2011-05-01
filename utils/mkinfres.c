@@ -190,7 +190,7 @@ void dumpTagU(int ttype, unsigned tvalue)
 {	dumpTag(ttype, 2, &tvalue);
 }
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {	char *txtFile = 0;
 	unsigned long heapPos, stackPos;
 	int rc;

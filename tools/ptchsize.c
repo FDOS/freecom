@@ -167,7 +167,7 @@ void addSize(unsigned *size, char * const Xp)
 	*size += (unsigned)n;
 }
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {	struct EXE_header exe;
 	unsigned tosize;
 
