@@ -1,6 +1,7 @@
 CFG_DEPENDENCIES = suppl.mak
 
-!include "..\config.mak"
+TOP=..
+!include "$(TOP)/config.mak"
 
 all : src\$(CFG)
 

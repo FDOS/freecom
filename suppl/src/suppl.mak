@@ -1,6 +1,7 @@
 CFG_DEPENDENCIES = suppl.mak
 
-!include "..\..\config.mak"
+TOP=../..
+!include "$(TOP)/config.mak"
 
 SUPPL=suppl_$(SHELL_MMODEL)
 CC = $(CC) -I..
@@ -53,33 +54,33 @@ echolib.bat: ..\..\scripts\echolib.bat
 	copy ..\..\scripts\echolib.bat
 
 # Prepare Linker Response File
-objlist.txt: echolib.bat
+objlist.txt: echolib.bat suppl.mak
 	..\..\scripts\rmfiles objlist.txt
-	echolib objlist.txt $(OBJ1)
-	echolib objlist.txt $(OBJ2)
-	echolib objlist.txt $(OBJ3)
-	echolib objlist.txt $(OBJ4)
-	echolib objlist.txt $(OBJ5)
-	echolib objlist.txt $(OBJ6)
-	echolib objlist.txt $(OBJ7)
-	echolib objlist.txt $(OBJ8)
-	echolib objlist.txt $(OBJ9)
-	echolib objlist.txt $(OBJ10)
-	echolib objlist.txt $(OBJ11)
-	echolib objlist.txt $(DOBJ1)
-	echolib objlist.txt $(DOBJ2)
-	echolib objlist.txt $(DOBJ3)
-	echolib objlist.txt $(DOBJ4)
-	echolib objlist.txt $(DOBJ5)
-	echolib objlist.txt $(DOBJ6)
-	echolib objlist.txt $(DOBJ7)
-	echolib objlist.txt $(DOBJ8)
-	echolib objlist.txt $(DOBJ9)
-	echolib objlist.txt $(DOBJ10)
+	$(ECHOLIB) objlist.txt $(OBJ1)
+	$(ECHOLIB) objlist.txt $(OBJ2)
+	$(ECHOLIB) objlist.txt $(OBJ3)
+	$(ECHOLIB) objlist.txt $(OBJ4)
+	$(ECHOLIB) objlist.txt $(OBJ5)
+	$(ECHOLIB) objlist.txt $(OBJ6)
+	$(ECHOLIB) objlist.txt $(OBJ7)
+	$(ECHOLIB) objlist.txt $(OBJ8)
+	$(ECHOLIB) objlist.txt $(OBJ9)
+	$(ECHOLIB) objlist.txt $(OBJ10)
+	$(ECHOLIB) objlist.txt $(OBJ11)
+	$(ECHOLIB) objlist.txt $(DOBJ1)
+	$(ECHOLIB) objlist.txt $(DOBJ2)
+	$(ECHOLIB) objlist.txt $(DOBJ3)
+	$(ECHOLIB) objlist.txt $(DOBJ4)
+	$(ECHOLIB) objlist.txt $(DOBJ5)
+	$(ECHOLIB) objlist.txt $(DOBJ6)
+	$(ECHOLIB) objlist.txt $(DOBJ7)
+	$(ECHOLIB) objlist.txt $(DOBJ8)
+	$(ECHOLIB) objlist.txt $(DOBJ9)
+	$(ECHOLIB) objlist.txt $(DOBJ10)
 
 # Create the library
 ..\$(SUPPL).lib: $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) \
 $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(DOBJ1) $(DOBJ2) $(DOBJ3) $(DOBJ4) \
 $(DOBJ5) $(DOBJ6) $(DOBJ7) $(DOBJ8) $(DOBJ9) $(DOBJ10) objlist.txt
 	..\..\scripts\rmfiles ..\$(SUPPL).lib
-	$(AR) /C ..\$(SUPPL).LIB @objlist.txt, ..\$(SUPPL).lst
+	$(AR) /C ..\$(SUPPL).LIB @objlist.txt $(LIBLIST)..\$(SUPPL).lst

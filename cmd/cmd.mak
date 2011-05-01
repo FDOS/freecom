@@ -1,6 +1,7 @@
 CFG_DEPENDENCIES = cmd.mak
 
-!include "..\config.mak"
+TOP=..
+!include "$(TOP)/config.mak"
 
 all: $(CFG) cmds.lib
 
@@ -49,14 +50,14 @@ OBJ5 =	rmdir.obj \
 echolib.bat : ..\scripts\echolib.bat
 	copy ..\scripts\echolib.bat
 
-cmds.rsp : echolib.bat
+cmds.rsp : echolib.bat cmd.mak
 	..\scripts\rmfiles cmds.rsp
-	echolib cmds.rsp $(OBJ1)
-	echolib cmds.rsp $(OBJ2)
-	echolib cmds.rsp $(OBJ3)
-	echolib cmds.rsp $(OBJ4)
-	echolib cmds.rsp $(OBJ5)
+	$(ECHOLIB) cmds.rsp $(OBJ1)
+	$(ECHOLIB) cmds.rsp $(OBJ2)
+	$(ECHOLIB) cmds.rsp $(OBJ3)
+	$(ECHOLIB) cmds.rsp $(OBJ4)
+	$(ECHOLIB) cmds.rsp $(OBJ5)
 
 cmds.lib : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) cmds.rsp
 	..\scripts\rmfiles cmds.lib
-	$(AR) cmds.lib /c @cmds.rsp, cmds.lst 
+	$(AR) cmds.lib /c @cmds.rsp $(LIBLIST) cmds.lst 

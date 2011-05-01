@@ -1,7 +1,8 @@
 CFG_DEPENDENCIES = utils.mak
 
-!include "..\config.mak"
+TOP=..
+!include "$(TOP)/config.mak"
 
 all: $(CFG) mktools.exe mkctxt.exe chunk.exe mkinfres.exe
 
-mktools.c : ..\config.h
+mktools.exe : ..\config.h

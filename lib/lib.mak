@@ -2,7 +2,8 @@
 
 CFG_DEPENDENCIES = lib.mak
 
-!include "..\config.mak"
+TOP=..
+!include "$(TOP)/config.mak"
 
 all: freecom.lib
 
@@ -254,40 +255,40 @@ echolib.bat : ..\scripts\echolib.bat
 
 freecom.rsp : echolib.bat $(OBJ16) $(OBJ17) $(OBJ18) $(OBJ19) $(OBJ20) \
 $(OBJ21) $(OBJ22) $(OBJ23) $(OBJ24) $(OBJ25) $(OBJ26) $(OBJ27) $(OBJ28) \
-$(OBJ29)
+$(OBJ29) lib.mak
 	..\scripts\rmfiles freecom.rsp
-	echolib freecom.rsp $(OBJ1)
-	echolib freecom.rsp $(OBJ2)
-	echolib freecom.rsp $(OBJ3)
-	echolib freecom.rsp $(OBJ4)
-	echolib freecom.rsp $(OBJ5)
-	echolib freecom.rsp $(OBJ6)
-	echolib freecom.rsp $(OBJ7)
-	echolib freecom.rsp $(OBJ8)
-	echolib freecom.rsp $(OBJ9)
-	echolib freecom.rsp $(OBJ10)
-	echolib freecom.rsp $(OBJ11)
-	echolib freecom.rsp $(OBJ12)
-	echolib freecom.rsp $(OBJ13)
-	echolib freecom.rsp $(OBJ14)
-	echolib freecom.rsp $(OBJ15)
-	echolib freecom.rsp $(OBJ16)
-	echolib freecom.rsp $(OBJ17)
-	echolib freecom.rsp $(OBJ18)
-	echolib freecom.rsp $(OBJ19)
-	echolib freecom.rsp $(OBJ20)
-	echolib freecom.rsp $(OBJ21)
-	echolib freecom.rsp $(OBJ22)
-	echolib freecom.rsp $(OBJ23)
-	echolib freecom.rsp $(OBJ24)
-	echolib freecom.rsp $(OBJ25)
-	echolib freecom.rsp $(OBJ26)
-	echolib freecom.rsp $(OBJ27)
-	echolib freecom.rsp $(OBJ28)
-	echolib freecom.rsp $(OBJ29)
+	$(ECHOLIB) freecom.rsp $(OBJ1)
+	$(ECHOLIB) freecom.rsp $(OBJ2)
+	$(ECHOLIB) freecom.rsp $(OBJ3)
+	$(ECHOLIB) freecom.rsp $(OBJ4)
+	$(ECHOLIB) freecom.rsp $(OBJ5)
+	$(ECHOLIB) freecom.rsp $(OBJ6)
+	$(ECHOLIB) freecom.rsp $(OBJ7)
+	$(ECHOLIB) freecom.rsp $(OBJ8)
+	$(ECHOLIB) freecom.rsp $(OBJ9)
+	$(ECHOLIB) freecom.rsp $(OBJ10)
+	$(ECHOLIB) freecom.rsp $(OBJ11)
+	$(ECHOLIB) freecom.rsp $(OBJ12)
+	$(ECHOLIB) freecom.rsp $(OBJ13)
+	$(ECHOLIB) freecom.rsp $(OBJ14)
+	$(ECHOLIB) freecom.rsp $(OBJ15)
+	$(ECHOLIB) freecom.rsp $(OBJ16)
+	$(ECHOLIB) freecom.rsp $(OBJ17)
+	$(ECHOLIB) freecom.rsp $(OBJ18)
+	$(ECHOLIB) freecom.rsp $(OBJ19)
+	$(ECHOLIB) freecom.rsp $(OBJ20)
+	$(ECHOLIB) freecom.rsp $(OBJ21)
+	$(ECHOLIB) freecom.rsp $(OBJ22)
+	$(ECHOLIB) freecom.rsp $(OBJ23)
+	$(ECHOLIB) freecom.rsp $(OBJ24)
+	$(ECHOLIB) freecom.rsp $(OBJ25)
+	$(ECHOLIB) freecom.rsp $(OBJ26)
+	$(ECHOLIB) freecom.rsp $(OBJ27)
+	$(ECHOLIB) freecom.rsp $(OBJ28)
+	$(ECHOLIB) freecom.rsp $(OBJ29)
 
 freecom.lib : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) \
 $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14) $(OBJ15) \
 freecom.rsp
 	..\scripts\rmfiles freecom.lib
-	$(AR) freecom.lib /c @freecom.rsp, freecom.lst
+	$(AR) freecom.lib /c @freecom.rsp $(LIBLIST) freecom.lst

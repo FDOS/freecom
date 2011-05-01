@@ -1,40 +1,10 @@
-# Comment out for Turbo C 2.01 Make
-.AUTODEPEND
-
-## is the base path ("root") of Turbo C++ v1.01
-## Note: Use upper-case letters, otherwise some make variants
-## map \t into tab character!
-#-CC_BASE_PATH = C:\TC		# Turbo C
-CC_BASE_PATH = C:\TCPP		# Turbo C++
-#-CC_BASE_PATH = C:\BCPP	# Borland C++
-
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
 SUPPL_INC_PATH = ..\SUPPL
 SUPPL_LIB_PATH = $(SUPPL_INC_PATH)
 
-## Program locations
-#-BINPATH = $(CC_BASE_PATH)	# Turbo C
-BINPATH = $(CC_BASE_PATH)\BIN	# Turbo/Borland C++
-LIBPATH = $(CC_BASE_PATH)\LIB
-INCLUDEPATH = -I$(CC_BASE_PATH)\INCLUDE -I$(SUPPL_INC_PATH)
-
-## Which programs to use
-CFG = TURBOC.CFG
-CC = $(BINPATH)\TCC		# Turbo C/C++
-#-CC = $(BINPATH)\BCC		# Borland C++
-AR = $(BINPATH)\Tlib
-LD = $(BINPATH)\Tlink
-NASM = nasm.exe
-
-## Add -DDEBUG=1 below to enable debug support for assembly files
-NASMFLAGS =
-## Add -DDEBUG=1 below to enable FreeCOM-debug support for C files
-## Add -DNDEBUG=1 below to disable any debug (even assert)
-CFLAGS =
-
 ## Memory model of FreeCOM
-!if $(DEBUG)
+!if $(DEBUG)0 == 10
 SHELL_MMODEL=l
 DEBUG=-DDEBUG
 !else
@@ -42,7 +12,19 @@ SHELL_MMODEL=s
 DEBUG=-UDEBUG -DNDEBUG
 !endif
 
-!if $(XMS_SWAP)
+!include "$(TOP)/mkfiles/$(COMPILER).mak"
+
+INCLUDEPATH = $(INCLUDEPATH) -I$(SUPPL_INC_PATH)
+
+## Which programs to use
+NASM = $(XNASM)
+
+## Add -DDEBUG=1 below to enable debug support for assembly files
+NASMFLAGS =
+## Add -DDEBUG=1 below to enable FreeCOM-debug support for C files
+## Add -DNDEBUG=1 below to disable any debug (even assert)
+
+!if $(XMS_SWAP)0 == 10
 __XMS_SWAP = -DXMS_SWAP
 !endif
 
@@ -55,25 +37,13 @@ __XMS_SWAP = -DXMS_SWAP
 ##
 ## (*) Note: Should be detected by CONFIG.H automatically for Turbo C
 ##     and Borland C compilers.
-##
-## !!! For Turbo C, should be used -a- option (there are no other ways
-##     to turn on byte alignment). Also, should be removed -b option.
-##
 $(CFG): $(CFG_DEPENDENCIES) ..\CONFIG.MAK
-	..\scripts\echoto $(CFG) -1- -a -f- -ff- -K -w+ -O -Z -b-
+	..\scripts\rmfiles $(CFG)
+	..\scripts\echoto $(CFG) $(CFLAGS1)
 	..\scripts\echoto $(CFG) $(INCLUDEPATH)
-	..\scripts\echoto $(CFG) -L$(LIBPATH)
-	..\scripts\echoto $(CFG) -m$(SHELL_MMODEL)
+	..\scripts\echoto $(CFG) -m$(SHELL_MMODEL) $(MMODEL)
 	..\scripts\echoto $(CFG) $(DEBUG) $(__XMS_SWAP)
-#-k-
 
 #		*Implicit Rules*
-.c.exe:
-  $(CC) $< 
-.c.obj:
-  $(CC) -c {$< }
-# For Turbo C 2.01 Make use:
-#.c.obj:
-#  $(CC) -c $<
 .asm.obj:
 	$(NASM) $(NASMFLAGS) -f obj -DMODEL=$(SHELL_MMODEL) $<
