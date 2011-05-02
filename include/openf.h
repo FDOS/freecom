@@ -37,11 +37,7 @@ int isDeviceName(char * const fnam);
  *      If it is a device name, fnam[] is modified to contain a valid
  *      DOS filename.
  */
-#ifndef OPENF_NO_PROTOTYPE
 int devopen(char * const fnam, int mode, ... /* int oflags */);
-#else
-int devopen(char * const fnam, int mode, int oflags);
-#endif
 
 /*
  *      FIO-style CP/M aware fopen() function

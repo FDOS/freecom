@@ -39,13 +39,19 @@
 
 #include "../config.h"
 #include <io.h>
+#include <stdarg.h>
 
-#define OPENF_NO_PROTOTYPE
 #include "../include/openf.h"
 #include "../include/lfnfuncs.h"
 
-int devopen(char *const fnam, int mode, int omode)
+int devopen(char *const fnam, int mode, ...)
 {
+  va_list ap;
+  int omode;
+
+  va_start(ap, mode);
+  omode = va_arg(ap, int);
+  va_end(ap);
   isDeviceName(fnam);           /* modify fnam if device */
   return open(fnam, mode, omode);
 }
