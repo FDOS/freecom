@@ -165,7 +165,7 @@ static int BIGcopy(FILE *fout, FILE *fin)
 	
 	/* Fetch the largest available buffer */
 	for(size = 60*1024u; size != 0; size -= 4*1024) {
-		buffer = (void _seg*)DOSalloc(size/16,0);
+		buffer = MK_SEG_PTR(void, DOSalloc(size/16,0));
 		if(buffer != NULL)
 			goto ok;
 	}

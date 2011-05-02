@@ -50,7 +50,7 @@ void freeSysBlk (const unsigned segm) {
 
 	assert(segm);
 
-	mcb = (struct MCB _seg *)SEG2MCB(segm);
+	mcb = MK_SEG_PTR(struct MCB, SEG2MCB(segm));
 	mcb->mcb_ownerPSP = _psp;
 	freeBlk(segm);
 	dprintf(("[MEM: deallocated system memory block: %04x]\n", segm));

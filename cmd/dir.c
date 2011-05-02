@@ -1007,7 +1007,7 @@ static int dir_list(int pathlen
     	error_out_of_memory();
     	optO = 0;
 	} else {
-		orderArray = (void _seg*)DOSalloc(0x1000,0);
+		orderArray = MK_SEG_PTR(void, DOSalloc(0x1000,0));
 		if(!orderArray) {
 			free(orderIndex);
 			error_out_of_dos_memory();

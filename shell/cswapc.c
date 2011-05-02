@@ -410,6 +410,9 @@ DoExec(char *command,char *cmdtail)
 
 
 #define FREECOM_NEED_EXIT
+#ifdef __WATCOMC__
+#undef FREECOM_NEED_EXIT
+#endif
 #ifdef __BORLANDC__
 #if __BORLANDC__ >= 0x500
 #undef FREECOM_NEED_EXIT

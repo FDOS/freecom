@@ -48,7 +48,7 @@
 
 /* Macro to convert bytes to paragraphs */
 #define topara(x) (((x) + 0xf) >> 4)
-#define mcbAssign(mcb,wordValue)	(mcb = (struct MCB _seg *)(wordValue))
+#define mcbAssign(mcb,wordValue)	(mcb = MK_SEG_PTR(struct MCB,wordValue))
 	/* skip to next MCB in chain */
 #define mcbNext(mcb)	mcbAssign(mcb, nxtMCB((word)mcb))
 #define DosAlloc(value)	DOSalloc((value), 0xF)
