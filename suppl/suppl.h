@@ -214,6 +214,7 @@ char *stpcpy(char * const dst, const char * const src);
 
 /* different names */
 #ifndef ffblk
+#include <algnbyte.h>
 struct ffblk {
     char        ff_reserved[21];
     byte        ff_attrib;
@@ -222,6 +223,7 @@ struct ffblk {
     long        ff_fsize;
     char        ff_name[13];
 };
+#include <algndflt.h>
 #endif
 
 #define findfirst(pattern,buf,attrib) _dos_findfirst((pattern), (attrib)	\

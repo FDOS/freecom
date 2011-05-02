@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 
+#include <algnbyte.h>
 struct lfnffblk {
         unsigned short cr_time; /* time of file creation      */
         unsigned short cr_date; /* date of file creation      */
@@ -23,12 +24,14 @@ struct lfnffblk {
         unsigned short ff_ftime;/* time of last write to file */
         unsigned short ff_fdate;/* date of last write to file */
         unsigned long  ff_fsize;/* length of file in bytes    */
-        char ff_name[256];      /* null-terminated filename   */
+        char ff_name[260];      /* null-terminated filename   */
         unsigned char  lfnsup;  /* DOS LFN support status     */
 };
+#include <algndflt.h>
 
 #ifdef __LFNFUNCS_C
 
+#include <algnbyte.h>
 struct locffblk {
     long attributes;
     long creattime;
@@ -43,6 +46,7 @@ struct locffblk {
     char lfn[260];
     char sfn[14];
 };
+#include <algndflt.h>
 
 #endif /* __LFNFUNCS_C */
 
