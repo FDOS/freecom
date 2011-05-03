@@ -410,9 +410,6 @@ DoExec(char *command,char *cmdtail)
 
 
 #define FREECOM_NEED_EXIT
-#ifdef __WATCOMC__
-#undef FREECOM_NEED_EXIT
-#endif
 #ifdef __BORLANDC__
 #if __BORLANDC__ >= 0x500
 #undef FREECOM_NEED_EXIT
@@ -422,14 +419,15 @@ DoExec(char *command,char *cmdtail)
 
 #ifdef FREECOM_NEED_EXIT
 /* Using the original exit() function crashes in TC++ v1.01 */
-void exit()
+/* And it uses invalid segment relocations (for FreeCOM!) in OpenWatcom */ 
+void exit(int status)
 {
 	USEREGS
 	extern void exitfct(void);	/* from INIT.C */
 
 	exitfct();					/* restore the old owner_psp */
 
-	_AX = 0x4c00;
+	_AX = 0x4c00 | status;
 	geninterrupt(0x21);
 }
 #endif
