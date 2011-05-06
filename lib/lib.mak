@@ -129,6 +129,7 @@ OBJ15 =	num_fmt.obj\
 	pr_date.obj
 OBJ16 =	pr_prmpt.obj\
 	pr_time.obj\
+	prf.obj\
 	prprompt.obj\
 	readcmd.obj\
 	realnum.obj\

@@ -86,7 +86,7 @@ static int isworddelimiter(unsigned c)
  */
 void outc(char c)
 {
-    fwrite( &c, 1, 1, stdout );
+    putchar( c );
 }
 /* Print a blank to current cursor postion
 	Updates cursor position
