@@ -149,11 +149,8 @@ unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
 	   indicate some progress
 */
 
-static int BIGcopy(FILE *fout, FILE *fin, int asc)
+static int BIGcopy(int fdout, int fdin, int asc)
 {
-	int fdin  = fileno(fin);
-	int fdout = fileno(fout);
-
 	char far *buffer;
 	unsigned size;
 	unsigned rd;
@@ -235,11 +232,10 @@ _exit:
 
 static int copy(char *dst, char *pattern, struct CopySource *src
   , int openMode)
-{ char mode[3];
-  struct ffblk ff;
+{ struct ffblk ff;
   struct CopySource *h;
   char rDest[MAXPATH], rSrc[MAXPATH];
-  FILE *fin, *fout;
+  int fdin, fdout;
   int rc;
   FLAG keepFTime;
 #if defined(__WATCOMC__) && __WATCOMC__ < 1280
@@ -269,10 +265,8 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   	wildcarded = 1;
   }
 
-  mode[2] = '\0';
-
   do {
-/*    if( wildcarded && !strpbrk( dst, "*?" ) && !isfirst ) openMode = 'a'; */
+/*    if( wildcarded && !strpbrk( dst, "*?" ) && !isfirst ) openMode = O_APPEND; */
     fillFnam(rDest, dst, srcFile);
     if(rDest[0] == 0)
       return 0;
@@ -294,10 +288,11 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     } while((h = h->app) != 0);
 
     if(interactive_command		/* Suppress prompt if in batch file */
-       && openMode != 'a' && !optY && (fout = fopen(rDest, "rb")) != 0) {
-    	int destIsDevice = isadev(fileno(fout));
+       && openMode != O_APPEND && !optY
+       && (fdout = open(rDest, O_RDONLY|O_BINARY)) >= 0) {
+    	int destIsDevice = isadev(fdout);
 
-      fclose(fout);
+      close(fdout);
       if(!destIsDevice) {	/* Devices do always exist */
         if( dfnstat( rSrc ) == 0) { /* Source doesn't exist */
             error_open_file( rSrc );
@@ -320,18 +315,15 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     if(cbreak) {
       return 0;
     }
-    mode[0] = openMode;
-    mode[1] = 'b';
-    if((fout = fdevopen(rDest, mode)) == 0) {
+    if((fdout = devopen(rDest, openMode|O_BINARY, S_IREAD|S_IWRITE)) < 0) {
       error_open_file(rDest);
       return 0;
     }
-    mode[0] = 'r';
     keepFTime = 1;
-    if(isadev(fileno(fout))) {
+    if(isadev(fdout)) {
       if(destFlags & BINARY)  {
         /* in forced binary mode character devices are set to raw */
-        fdsetattr(fileno(fout), (fdattr(fileno(fout)) & 0xff) | 0x20);
+        fdsetattr(fdout, (fdattr(fdout) & 0xff) | 0x20);
       }
       keepFTime = 0;
     }
@@ -340,35 +332,35 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     do {
       fillFnam(rSrc, h->fnam, srcFile);
       if(rSrc[0] == 0) {
-        fclose(fout);
+        close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
-      if((fin = fdevopen(rSrc, mode)) == 0) {
+      if((fdin = devopen(rSrc, O_RDONLY|O_BINARY)) < 0) {
         error_open_file(rSrc);
-        fclose(fout);
+        close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
-      if(isadev(fileno(fin))) {
+      if(isadev(fdin)) {
 		keepFTime = 0;		/* Cannot keep file time of devices */
       	if(h->flags & BINARY)
 		  /* in forced binary mode character devices are set to raw */
-		  fdsetattr(fileno(fin), (fdattr(fileno(fin)) & 0xff) | 0x20);
+		  fdsetattr(fdin, (fdattr(fdin) & 0xff) | 0x20);
       }
       if(keepFTime)
 #ifdef __TURBOC__
-        if(getftime(fileno(fin) , &fileTime))
+        if(getftime(fdin , &fileTime))
 #else
-        if(_dos_getftime(fileno(fin) , &date , &time))
+        if(_dos_getftime(fdin , &date , &time))
 #endif
           keepFTime = 0; /* if error: turn it off */
 
       displayString(TEXT_MSG_COPYING, rSrc
 	   , (openMode == 'a' || h != src)? "=>>": "=>", rDest);
       if(cbreak) {
-        fclose(fin);
-        fclose(fout);
+        close(fdin);
+        close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
@@ -377,7 +369,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       rc = 1;
       {
       	FLAG sizeChanged = !(h->flags & ASCII) && singleFileCopy &&
-			!isadev(fileno(fin)) && !isadev(fileno(fout));
+			!isadev(fdin) && !isadev(fdout);
         if(sizeChanged) {	/* faster copy, *MUCH* faster on floppies
 								 change destination filesize to wanted size.
 								 this a) writes all required entries to the
@@ -388,61 +380,54 @@ static int copy(char *dst, char *pattern, struct CopySource *src
         						see RBIL DOS-40 */
         					/* Don't use chsize() as Turbo RTL fills with
         						'\0' bytes, which is not useful here */
-        	lseek(fileno(fout), filelength(fileno(fin)), SEEK_SET);
-        	if(truncate(fileno(fout)) != 0
-        	 || lseek(fileno(fout), 0, SEEK_SET) == -1) {
-				error_write_file_disc_full(rDest, filelength(fileno(fin)));
+        	lseek(fdout, filelength(fdin), SEEK_SET);
+        	if(truncate(fdout) != 0
+        	 || lseek(fdout, 0, SEEK_SET) == -1) {
+				error_write_file_disc_full(rDest, filelength(fdin));
         		rc = 0;
 			} else {
 				dprintf( ("[COPY chsize(%s, %lu)]\n", rDest,
-				 filelength(fileno(fin))) );
+				 filelength(fdin)) );
 			}
 		}
       
         if(rc != 0)
-			switch(BIGcopy(fout, fin, h->flags & ASCII)) {
+			switch(BIGcopy(fdout, fdin, h->flags & ASCII)) {
 			case 0: 
 				if(sizeChanged)
 					/* probably the source file got truncated */
 					/* we silently ignore any failure here, because it is
 						assumed that we never extend, but truncate the file
 						only (or do not change the length at all) */
-					truncate(fileno(fout));
+					truncate(fdout);
 				break;
 			case 1:  error_read_file(rSrc);   rc = 0; break;
 			case 2:  error_write_file(rDest); rc = 0; break;
 			default: error_copy();            rc = 0; break;
 			}
       }
-      if(rc)
-        if(ferror(fin)) {
-          error_read_file(rSrc);
-          rc = 0;
-        } else if(ferror(fout)) {
-          error_write_file(rDest);
-          rc = 0;
-        }
       if(cbreak)
         rc = 0;
-      fclose(fin);
+      close(fdin);
       if(!rc) {
-        fclose(fout);
+        close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
     } while((h = h->app) != 0);
-    if((destFlags & ASCII) && !isadev(fileno(fout))) {   /* append the ^Z as we copied in ASCII mode */
-      putc(0x1a, fout);
+    rc = 0;
+    if((destFlags & ASCII) && !isadev(fdout)) {   /* append the ^Z as we copied in ASCII mode */
+      if (write(fdout, "\x1a", 1) != 1)
+		rc = 1;
     }
-    fflush(fout);
     if(keepFTime)
 #ifdef __TURBOC__
-      setftime(fileno(fout), &fileTime);
+      setftime(fdout, &fileTime);
 #else
-      _dos_setftime(fileno(fout), date, time);
+      _dos_setftime(fdout, date, time);
 #endif
-    rc = ferror(fout);
-    fclose(fout);
+    if(close(fdout) != 0)
+      rc = 1;
     if(rc) {
       error_write_file(rDest);
       unlink(rDest);		/* if device -> no removal, ignore error */
@@ -465,9 +450,9 @@ static int copyFiles(struct CopySource *h)
   if((differ = samefile(h->fnam, dst)) < 0)
     error_out_of_memory();
   else if(!differ)
-    rc = copy(dst, h->fnam, h, 'w');
+    rc = copy(dst, h->fnam, h, O_WRONLY|O_TRUNC|O_CREAT);
   else if(h->app)
-    rc = copy(dst, h->fnam, h->app, 'a');
+    rc = copy(dst, h->fnam, h->app, O_WRONLY|O_APPEND);
   else
     error_selfcopy(dst);
 #undef dst
