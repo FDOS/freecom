@@ -287,6 +287,13 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       }
     } while((h = h->app) != 0);
 
+    /* Concenation of files uses ASCII by default */
+    if(src->app) {
+      for(h = src; h && !h->flags; h = h->app)
+        h->flags = ASCII;
+      if(!destFlags) destFlags = ASCII;
+    }
+
     if(interactive_command		/* Suppress prompt if in batch file */
        && openMode != O_APPEND && !optY
        && (fdout = open(rDest, O_RDONLY|O_BINARY)) >= 0) {
@@ -536,15 +543,6 @@ int cmd_copy(char *rest)
 
   if((argv = scanCmdline(rest, opt_copy, 0, &argc, &opts)) == 0)
     return 1;
-
-  /* scan the trailing '/a' and '/b' options */
-  while(argc > 0 && isoption(argv[argc - 1])) {
-    p = argv[--argc];     /* argv[] must not be changed */
-    if(leadOptions(&p, opt_copy1, 0) != E_None) {
-      freep(argv);
-      return 1;
-    }
-  }
 
   initContext();
 
