@@ -61,6 +61,7 @@ static struct CopySource {
 
 static int appendToFile; /* Append the next file rather than new source */
 static char *destFile;     /* destination file/directory/pattern */
+static int destFlags;
 
 static int optY, optV, optA, optB;
 
@@ -186,7 +187,7 @@ ok:
 		}
 		
 		if(DOSwrite(fdout, buffer, rd) != rd) {
-			retval = 2;
+			if(!isadev(fdout)) retval = 2;
 			goto _exit;
 		}
 			
@@ -232,7 +233,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   struct CopySource *h;
   char rDest[MAXPATH], rSrc[MAXPATH];
   FILE *fin, *fout;
-  int rc, asc;
+  int rc;
   char *buf;
   size_t len;
   FLAG keepFTime;
@@ -321,8 +322,16 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       return 0;
     }
     mode[0] = 'r';
+    keepFTime = 1;
+    if(isadev(fileno(fout))) {
+      if(destFlags & BINARY)  {
+        /* in forced binary mode character devices are set to raw */
+        fdsetattr(fileno(fout), (fdattr(fileno(fout)) & 0xff) | 0x20);
+      }
+      keepFTime = 0;
+    }
     h = src;
-    keepFTime = (h->app == 0);
+    keepFTime = (keepFTime && h->app == 0);
     do {
       fillFnam(rSrc, h->fnam, srcFile);
       if(rSrc[0] == 0) {
@@ -330,7 +339,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
-      mode[1] = (asc = h->flags & ASCII) != 0? 't': 'b';
+      mode[1] = (h->flags & ASCII) != 0? 't': 'b';
     reOpenIn:
       if((fin = fdevopen(rSrc, mode)) == 0) {
         error_open_file(rSrc);
@@ -347,6 +356,9 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 			mode[1] = 't';
 			goto reOpenIn;
 		  }
+      	if(h->flags & BINARY)
+		  /* in forced binary mode character devices are set to raw */
+		  fdsetattr(fileno(fin), (fdattr(fileno(fin)) & 0xff) | 0x20);
       }
       if(keepFTime)
 #ifdef __TURBOC__
@@ -442,7 +454,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
         return 0;
       }
     } while((h = h->app) != 0);
-    if(asc) {   /* append the ^Z as we copied in ASCII mode */
+    if((destFlags & ASCII) && !isadev(fileno(fout))) {   /* append the ^Z as we copied in ASCII mode */
       putc(0x1a, fout);
     }
     fflush(fout);
@@ -651,6 +663,7 @@ int cmd_copy(char *rest)
   	} while(0 != (p = p->app));
   } while(0 != (h = h->nxt));
 
+  destFlags = last->flags;
 	if(last != head) {
 		/* The last argument is to be the destination */
 		if(last->app) {	/* last argument is a + b syntax -> no dst! */
