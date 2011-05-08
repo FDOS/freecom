@@ -149,7 +149,7 @@ unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
 	   indicate some progress
 */
 
-static int BIGcopy(FILE *fout, FILE *fin)
+static int BIGcopy(FILE *fout, FILE *fin, int asc)
 {
 	int fdin  = fileno(fin);
 	int fdout = fileno(fout);
@@ -185,6 +185,12 @@ ok:
 			retval = 1;
 			goto _exit;
 		}
+
+		if(asc) {
+			char far *ctrlz = _fmemchr(buffer, 0x1a, rd);
+			if(ctrlz != 0)
+				rd = ctrlz - buffer;
+		}
 		
 		if(DOSwrite(fdout, buffer, rd) != rd) {
 			if(!isadev(fdout)) retval = 2;
@@ -212,6 +218,7 @@ ok:
 				
 			lastTime = now;
 		}
+		if(rd < size) break;
 	}	
 		
 _exit:		
@@ -228,14 +235,12 @@ _exit:
 
 static int copy(char *dst, char *pattern, struct CopySource *src
   , int openMode)
-{ char mode[3], *p;
+{ char mode[3];
   struct ffblk ff;
   struct CopySource *h;
   char rDest[MAXPATH], rSrc[MAXPATH];
   FILE *fin, *fout;
   int rc;
-  char *buf;
-  size_t len;
   FLAG keepFTime;
 #if defined(__WATCOMC__) && __WATCOMC__ < 1280
   unsigned short date, time;
@@ -339,8 +344,6 @@ static int copy(char *dst, char *pattern, struct CopySource *src
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
-      mode[1] = (h->flags & ASCII) != 0? 't': 'b';
-    reOpenIn:
       if((fin = fdevopen(rSrc, mode)) == 0) {
         error_open_file(rSrc);
         fclose(fout);
@@ -349,13 +352,6 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       }
       if(isadev(fileno(fin))) {
 		keepFTime = 0;		/* Cannot keep file time of devices */
-      	if(mode[1] != 't'					/* in binary mode currently */
-		   && (h->flags & BINARY) == 0) {	/* no forced binary mode */
-			/* character devices are opened in textmode by default */
-			fclose(fin);
-			mode[1] = 't';
-			goto reOpenIn;
-		  }
       	if(h->flags & BINARY)
 		  /* in forced binary mode character devices are set to raw */
 		  fdsetattr(fileno(fin), (fdattr(fileno(fin)) & 0xff) | 0x20);
@@ -379,9 +375,9 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 
       /* Now copy the file */
       rc = 1;
-      if(mode[1] != 't') {    /* binary file */
-      	FLAG sizeChanged = singleFileCopy && !isadev(fileno(fin))
-      	 && !isadev(fileno(fout));
+      {
+      	FLAG sizeChanged = !(h->flags & ASCII) && singleFileCopy &&
+			!isadev(fileno(fin)) && !isadev(fileno(fout));
         if(sizeChanged) {	/* faster copy, *MUCH* faster on floppies
 								 change destination filesize to wanted size.
 								 this a) writes all required entries to the
@@ -404,7 +400,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 		}
       
         if(rc != 0)
-			switch(BIGcopy(fout, fin)) {
+			switch(BIGcopy(fout, fin, h->flags & ASCII)) {
 			case 0: 
 				if(sizeChanged)
 					/* probably the source file got truncated */
@@ -417,25 +413,6 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 			case 2:  error_write_file(rDest); rc = 0; break;
 			default: error_copy();            rc = 0; break;
 			}
-      } else {      /* text file, manually transform '\n' */
-        if(Fmaxbuf((byte**)&buf, &len) == 0) {
-          if(len > INT_MAX)
-            len = INT_MAX;
-          while(fgets(buf, len, fin)) {
-            p = strchr(buf, '\0');
-            if(*--p == '\n') {
-              *p = '\0';
-              fputs(buf, fout);
-              putc('\r', fout);
-              putc('\n', fout);
-            } else
-              fputs(buf, fout);
-          }
-          free(buf);
-        } else {
-          error_out_of_memory();
-          rc = 0;
-        }
       }
       if(rc)
         if(ferror(fin)) {
