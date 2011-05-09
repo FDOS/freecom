@@ -78,14 +78,15 @@ static int mycreatnew( const char * filename, int mode )
     return( r.r_ax );
 }
 
-static void __creat_or_truncate( const char * filename, int mode )
+static int __creat_or_truncate( const char * filename, int mode )
 {
     int handle;
     IREGS r;
 
     if( !__supportlfns ) {
-        _close( mycreatnew( filename, mode ) );
-        return;
+        handle = mycreatnew( filename, mode );
+        _close( handle );
+        return handle;
     }
 
     r.r_ds = FP_SEG( filename );
@@ -108,6 +109,7 @@ static void __creat_or_truncate( const char * filename, int mode )
      * ( as it does for '1' and '0', when redirecting stdin and stdout )
      */
     if( handle != 2 )_close( handle );
+    return handle;
 }
 
 FILE * lfnfopen( const char *filename, const char *mode )
@@ -126,7 +128,9 @@ int lfnopen( const char *filename, int access, ... )
     if( access & O_CREAT ) {
         access &= ~O_CREAT; /* Remove the O_CREAT bit */
 
-        __creat_or_truncate( filename, !( va_arg( vargs, unsigned ) & S_IWRITE ) ? FA_RDONLY : 0 );
+        if( __creat_or_truncate( filename, !( va_arg( vargs, unsigned ) & S_IWRITE ) ? FA_RDONLY : 0 ) != -1)
+            /* created, no need to also truncate */
+	    access &= ~O_TRUNC;
     }
     va_end( vargs );
 
