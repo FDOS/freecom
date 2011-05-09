@@ -149,7 +149,7 @@ int do_printf(FILE *f, const char * fmt, va_list arg)
 {
   int base;
   char s[11], far * p;
-  int c, flag, size, fill;
+  int c, flag, size, fill, precision;
   int longarg;
   long currentArg;
 
@@ -162,15 +162,8 @@ int do_printf(FILE *f, const char * fmt, va_list arg)
     }
 
     longarg = FALSE;
-    size = 0;
     flag = RIGHT;
     fill = ' ';
-
-    if (*fmt == '-')
-    {
-      flag = LEFT;
-      fmt++;
-    }
 
     if (*fmt == '0')
     {
@@ -178,12 +171,43 @@ int do_printf(FILE *f, const char * fmt, va_list arg)
       fmt++;
     }
 
-    while (*fmt >= '0' && *fmt <= '9')
+    if (*fmt == '-')
     {
-      size = size * 10 + (*fmt++ - '0');
+      flag = LEFT;
+      fmt++;
     }
 
-    if (*fmt == 'l')
+    for(;;)
+    {
+      if (*fmt == '*')
+      {
+        precision = va_arg(arg, int);
+        fmt++;
+      }
+      else
+      {
+        precision = 0;
+        while (*fmt >= '0' && *fmt <= '9')
+        {
+          precision = precision * 10 + (*fmt++ - '0');
+        }
+      }
+
+      if(c == '%')
+      {
+        size = precision;
+        precision = -1;
+        if (size < 0)
+        {
+          size = -size;
+          flag = LEFT;
+        }
+      }
+      if((c = *fmt) != '.')break;
+      fmt++;
+    }
+
+    if (c == 'l')
     {
       longarg = TRUE;
       fmt++;
@@ -255,7 +279,7 @@ int do_printf(FILE *f, const char * fmt, va_list arg)
           for (; size > 0; size--)
             handle_char(fill, f);
         }
-        for (; *p != '\0'; p++)
+        for (; *p != '\0' && precision != 0; p++, precision--)
           handle_char(*p, f);
 
         for (; size > 0; size--)
