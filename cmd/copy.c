@@ -156,9 +156,10 @@ static int BIGcopy(int fdout, int fdin, int asc)
 	unsigned rd;
 	int retval = 0;
 								/* stat stuff */
-	unsigned startTime, lastTime=0, now, doStat = 0;
+	unsigned startTime, lastTime=0, now, doStat = 0, deviceIn;
 	unsigned long copied = 0, toCopy = filelength(fdin);
 	char *statString;
+	char far *ctrlz;
 	
 	
 	/* Fetch the largest available buffer */
@@ -172,11 +173,13 @@ static int BIGcopy(int fdout, int fdin, int asc)
 ok:
 	dprintf( ("[MEM: BIGcopy() allocate %u bytes @ 0x%04x]\n"
 	 , size, FP_SEG(buffer)) );
-	statString = getString(isadev(fdin)
+	deviceIn = isadev(fdin);
+	statString = getString(deviceIn
 		? TEXT_COPY_COPIED_NO_END
 		: TEXT_COPY_COPIED);
 	startTime = *(unsigned far *)MK_FP(0x40,0x6c);
 
+	ctrlz = 0;
 	while((rd = DOSread(fdin, buffer, size)) != 0) {
 		if(rd == 0xffff) {
 			retval = 1;
@@ -184,7 +187,7 @@ ok:
 		}
 
 		if(asc) {
-			char far *ctrlz = _fmemchr(buffer, 0x1a, rd);
+			ctrlz = _fmemchr(buffer, 0x1a, rd);
 			if(ctrlz != 0)
 				rd = ctrlz - buffer;
 		}
@@ -215,7 +218,7 @@ ok:
 				
 			lastTime = now;
 		}
-		if(rd < size) break;
+		if(ctrlz || (rd < size && !(deviceIn && asc))) break;
 	}	
 		
 _exit:		
@@ -354,6 +357,9 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       	if(h->flags & BINARY)
 		  /* in forced binary mode character devices are set to raw */
 		  fdsetattr(fdin, (fdattr(fdin) & 0xff) | 0x20);
+      	else
+		  /* make sure to stop at Ctrl-Z */
+		  h->flags |= ASCII;
       }
       if(keepFTime)
 #ifdef __TURBOC__
