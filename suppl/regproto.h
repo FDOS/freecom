@@ -60,7 +60,32 @@
 extern unsigned _FLAGS;
 #define geninterrupt(n)  (_FLAGS = int86(n))
 
+
 #else
+
+#ifdef __WATCOMC__
+#define USEREGS  union REGPACK reg ;
+#define _AH reg.h.ah
+#define _AL reg.h.al
+#define _BH reg.h.bh
+#define _BL reg.h.bl
+#define _CH reg.h.ch
+#define _CL reg.h.cl
+#define _DH reg.h.dh
+#define _DL reg.h.dl
+#define _AX reg.x.ax
+#define _BX reg.x.bx
+#define _CX reg.x.cx
+#define _DX reg.x.dx
+#define _SI reg.x.si
+#define _DI reg.x.di
+#define _DS reg.x.ds
+#define _ES reg.x.es
+#define _CFLAG (reg.x.flags & 1)
+#define geninterrupt(n)  intr(n,&reg)
+
+#else
+
 #define USEREGS  union REGS reg ; struct SREGS sreg ;
 #define _AH reg.h.ah
 #define _AL reg.h.al
@@ -82,6 +107,7 @@ extern unsigned _FLAGS;
 #define _CFLAG reg.x.cflag
 #define geninterrupt(n)  int86x(n,&reg,&reg,&sreg)
 
+#endif /* __WATCOMC__ */
 #endif /* _MICROC_ */
 #endif /* __TURBOC__ */
 /*
