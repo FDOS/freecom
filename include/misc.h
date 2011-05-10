@@ -83,7 +83,7 @@ int mk_rd_dir(char *param, int (*func) (const char *), char *fctname);
 void cutBackslash(char * const s);
 int cd_dir(char *param, int cdd, const char * const fctname);
 enum OnOff onoffStr(char *line);
-size_t farread(void far*buf, size_t length, FILE *f);
+size_t farread(void far*buf, size_t length, int fd);
 unsigned allocPermBlk(const unsigned size, const unsigned mode);
 unsigned allocSysBlk(const unsigned size, const unsigned mode);
 unsigned allocMemBlk(const unsigned size, const unsigned mode);

@@ -157,6 +157,7 @@
 #include <ctype.h>
 #include <dos.h>
 #include <io.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -220,7 +221,7 @@ static int dispLFN;
 
 #ifdef FEATURE_DESCRIPT_ION
 static int descriptionExists;
-static FILE *fDescription;
+static int fDescription;
 static void showDescription(const char *shortName, char *ext);
 #endif
 
@@ -297,7 +298,7 @@ static int descGetNextToken(char *buf, int fn, int maxlen)
 {
   /* skip blank lines and any initial spaces, also exit early on any read error */
   do {
-    if (fread(buf, 1,1,fDescription) != 1)
+    if (read(fDescription, buf, 1) != 1)
     {
       /*printf("[read error]\n");*/
       *buf = '\0';
@@ -312,7 +313,7 @@ static int descGetNextToken(char *buf, int fn, int maxlen)
       maxlen--;
       buf++;
     }
-    if (fread(buf, 1,1,fDescription) != 1)
+    if (read(fDescription, buf, 1) != 1)
       break;
   } while ( (*buf!='\r') && (*buf!='\n') && 
             (*buf!=0x4/*Ctrl-D*/) && (*buf!=26/*Ctrl-Z*/) &&
@@ -323,7 +324,7 @@ static int descGetNextToken(char *buf, int fn, int maxlen)
   if (!fn) 
     while ( (*buf!='\r') && (*buf!='\n') )
     {
-      if (fread(buf, 1,1,fDescription) != 1)
+      if (read(fDescription, buf, 1) != 1)
         break;
     }
 
@@ -340,13 +341,13 @@ static int descGetNextToken(char *buf, int fn, int maxlen)
 static void showDescription(const char *shortName, char *ext)
 {
   char fn[14], dummy[1], buf[128]; /* 4096 is max line size officially supported */
-  assert(fDescription != NULL);
+  assert(fDescription != 0);
 
   if (*shortName == '.') return; /* ignore . and .. entries */
 
   sprintf(fn, "%s%c%s", shortName, (*ext)?'.':0x0, ext); /* fn is 8.3 filename[.extension] */
   fn[13]='\0';
-  rewind(fDescription);  /* start at beginning of unsorted description file */
+  lseek(fDescription, 0, SEEK_SET);  /* start at beginning of unsorted description file */
   while (descGetNextToken(buf,1,sizeof(buf)) && (strcmpi(fn,buf) != 0)) 
     { descGetNextToken(dummy,0,sizeof(dummy)); /* skip rest of this line & try again */ }
 
@@ -1021,7 +1022,7 @@ static int dir_list(int pathlen
   path[pathlen - 1] = '\\';
 #ifdef FEATURE_DESCRIPT_ION
   strcpy(&path[pathlen], "DESCRIPT.ION");
-  descriptionExists = ((fDescription = fopen(path, "rb")) != NULL);
+  descriptionExists = ((fDescription = open(path, O_RDONLY | O_BINARY)) >= 0);
 #endif
   strcpy(&path[pathlen], pattern);
 
@@ -1086,7 +1087,7 @@ static int dir_list(int pathlen
   }
 
   #ifdef FEATURE_DESCRIPT_ION
-    if (descriptionExists) fclose(fDescription);
+    if (descriptionExists) close(fDescription);
   #endif
 
 

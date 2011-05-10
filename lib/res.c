@@ -9,9 +9,9 @@
  *		On "open error: (rc == -1) the alternate filename "altFnam" is
  *		tried, too.
  *		The callback function is called like this:
- *			int fct(res_majorid_t, res_minorid_t, length, FILE*, arg)
+ *			int fct(res_majorid_t, res_minorid_t, length, int, arg)
  *		The "length" parameter specifies the length of the data
- *		block (unsigned long), the file is the resource file opened
+ *		block (unsigned long), the int fd is the resource file opened
  *		in "r+b" modus <<be careful!!>>, "arg" is the pointer passed to
  *		enumREsources().
  *		The callback function may reposition the file, though, the file

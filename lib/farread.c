@@ -50,15 +50,12 @@
 unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
                       unsigned short func );
 
-size_t farread(void far*buf, size_t length, FILE *f)
+size_t farread(void far*buf, size_t length, int fd)
 {
 #if 0
     IREGS r;
 #endif
 
-	/* synchronize FILE* with file descriptor in order to be able to
-		call the DOS API */
-	lseek(fileno(f), ftell(f), SEEK_SET);
 	/* Use DOS API in order to read the strings directly to the
 		far address */
 #if 0
@@ -70,6 +67,6 @@ size_t farread(void far*buf, size_t length, FILE *f)
     intrpt( 0x21, &r );
     return( ( r.r_flags & 1 ) ? 0 : r.r_ax );
 #else
-    return( DOSreadwrite( fileno( f ), buf, length, 0x3F00 ) );
+    return( DOSreadwrite( fd, buf, length, 0x3F00 ) );
 #endif
 }

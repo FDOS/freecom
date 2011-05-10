@@ -62,6 +62,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <io.h>
 
 #include <suppl.h>
 
@@ -103,13 +104,13 @@ void unloadMsgs(void)
 static int loadStrings (res_majorid_t major,
 		        res_minorid_t minor,
 		        long length,
-			FILE* f,
+			int fd,
 			void *const arg) {
 	loadStatus *ls = arg;
 	char fdid[sizeof(STRINGS_ID)];
 	string_size_t len, firstStr;
 	string_index_t far*idx;
-	int i;
+	int i, error;
 
 	(void)major, (void)minor;
 	if((unsigned long)length >= 0x10000ul
@@ -118,19 +119,22 @@ static int loadStrings (res_majorid_t major,
 		return 0;
 	}
 
-	fread(fdid, sizeof(STRINGS_ID) - 1, 1, f);
+	error = 0;
+	if(read(fd, fdid, sizeof(STRINGS_ID) - 1) != sizeof(STRINGS_ID) - 1)
+		error = 1;
 
 	if (memcmp(fdid, STRINGS_ID, sizeof(STRINGS_ID) - 1)) {
 		*ls = STRINGS_ID_MISMATCH;
 		return 0;			/* Continue searching */
 	}
 	/* immediately after the ID a trailer follows */
-	fseek(f, (long)STRINGS_ID_TRAILER, 1);
+	if(lseek(fd, (long)STRINGS_ID_TRAILER, 1) < 0)
+		error = 1;
 
 		/* Read the strings dimensionating parameters */
-	if(ferror(f)
-	 || fread(&strCnt, sizeof(strCnt), 1, f) != 1
-	 || fread(&len, sizeof(len), 1, f) != 1) { /* Read error */
+	if(error
+	 || read(fd, &strCnt, sizeof(strCnt)) != sizeof(strCnt)
+	 || read(fd, &len, sizeof(len)) != sizeof(len)) { /* Read error */
 	 	*ls = STRINGS_READ_ERROR;
 	 	return 0;			/* Continue searching */
 	}
@@ -148,7 +152,7 @@ static int loadStrings (res_majorid_t major,
 		return 0;
 	}
 
-	if(farread(MK_FP(msgSegm, 0), len, f) != len) {
+	if(farread(MK_FP(msgSegm, 0), len, fd) != len) {
 		unloadMsgs();			/* Remove the message segment */
 		*ls = STRINGS_READ_ERROR;
 		return 0;

@@ -79,6 +79,7 @@
 
 #include <assert.h>
 #include <string.h>	/* memcmp */
+#include <fcntl.h>
 #include <io.h>		/* filelength */
 
 #include "../include/resource.h"
@@ -90,14 +91,14 @@ int enumFileResources(const char *const fnam
 {	resource_t res;
 	unsigned long pos;
 	int rc;
-	FILE *f;
+	int fd;
 
 	assert(fct);
 	if(!fnam)
 		return -1;
 
 	rc = 0;
-	if((f = fopen(fnam, "rb")) == 0) {
+	if((fd = open(fnam, O_RDONLY | O_BINARY)) < 0) {
 	 	rc = -1;
 	 	dprintf(("[RES: Failed to open file: %s]\n", fnam));
 #ifdef DEBUG
@@ -108,18 +109,18 @@ int enumFileResources(const char *const fnam
 			the var #("pos#(" is used to indicate the absolute position
 			within the file as relative positioning is failing under
 			NTFSdos {Tom Ehlert} */
-	} else if((pos = filelength(fileno(f))) != (unsigned long)-1L)
+	} else if((pos = filelength(fd)) != (unsigned long)-1L)
    	  while (1) {
 		if(pos <= sizeof(res)				/* file corruption */
 		 		/* read and verify the resource ID block */
-		 || fseek(f, pos -= sizeof(res), SEEK_SET) != 0	/* seek error */
-	     || fread(&res, sizeof(res), 1, f) != 1		/* read error */
+		 || lseek(fd, pos -= sizeof(res), SEEK_SET) < 0		/* seek error */
+	     || read(fd, &res, sizeof(res)) != sizeof(res)		/* read error */
 		 					/* file corruption as magic string is missing */
 		 || memcmp(res.res_cookie, RES_COOKIE, sizeof(res.res_cookie)) != 0
 		 		/* file corruption: not that many bytes left in file */
 		 || pos < res.res_length
 		 		/* failed to position to data block in the file */
-		 || fseek(f, pos -= res.res_length, SEEK_SET) != 0
+		 || lseek(fd, pos -= res.res_length, SEEK_SET) < 0
 		)
 		 	break;
 		 
@@ -127,11 +128,11 @@ int enumFileResources(const char *const fnam
 		 	if ((rc = fct(res.res_majorID
 				 , res.res_minorID
 				 , res.res_length
-				 , f
+				 , fd
 				 , arg)) != 0)
 		    break;
 	}  
 
-	fclose(f);
+	close(fd);
 	return rc;
 }
