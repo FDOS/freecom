@@ -63,6 +63,9 @@ int          lfnfindfirst( const char *path, struct lfnffblk *buf,
                            unsigned attr );
 int          lfnfindnext( struct lfnffblk *buf );
 int          lfnfindclose( struct lfnffblk *buf );
+int          lfnmkdir( const char *path );
+int          lfnrmdir( const char *path );
+int          lfnchdir( const char *path );
 
 extern unsigned char __supportlfns;
 extern unsigned char lfncomplete;
@@ -91,6 +94,9 @@ extern unsigned char lfncomplete;
 #define findnext          lfnfindnext
 #define findclose         lfnfindclose
 #define ffblk             lfnffblk
+#define mkdir             lfnmkdir
+#define rmdir             lfnrmdir
+#define chdir             lfnchdir
 
 #undef MAXFILE
 #undef MAXDIR

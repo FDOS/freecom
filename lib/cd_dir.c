@@ -16,10 +16,6 @@
 #include "../suppl/dfn.h"
 #include "../include/lfnfuncs.h"
 
-#ifdef FEATURE_LONG_FILENAMES
-#define chdir(s) lfn_mrc_dir( getshortfilename( s ), 0x3B00 )
-#endif
-
 int cd_dir(char *param, int cdd, const char * const fctname)
 {	char **argv, *dir;
 	int argc, opts;

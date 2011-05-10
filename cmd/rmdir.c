@@ -6,12 +6,9 @@
 
 #include "../include/command.h"
 #include "../include/misc.h"
+#include "../include/lfnfuncs.h"
 
 int cmd_rmdir(char *param)
 {
-#ifdef FEATURE_LONG_FILENAMES
-    return mk_rd_dir( param, 0x3A00, "RMDIR" );
-#else
 	return mk_rd_dir(param, rmdir, "RMDIR");
-#endif
 }
