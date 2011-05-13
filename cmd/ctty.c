@@ -83,13 +83,13 @@ int cmd_ctty(char *param)
   devAttr(2);
 #endif
 
-  if((f = devopen(param, O_RDWR)) < 0) {
+  if((f = devopen(param, O_RDWR|O_BINARY)) < 0) {
     error_no_rw_device(param);
     return 1;
   }
 
   if(((attr = fdattr(f)) & 0x80) == 0
-   || write(f, "\r\n", 2) != 2) {		/* need \r as in bin mode */
+   || _write(f, "\r\n", 2) != 2) {		/* need \r as in bin mode */
     close(f);
     error_no_rw_device(param);
     return 1;

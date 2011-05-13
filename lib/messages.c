@@ -152,7 +152,7 @@ static int loadStrings (res_majorid_t major,
 		return 0;
 	}
 
-	if(farread(MK_FP(msgSegm, 0), len, fd) != len) {
+	if(farread(fd, MK_FP(msgSegm, 0), len) != len) {
 		unloadMsgs();			/* Remove the message segment */
 		*ls = STRINGS_READ_ERROR;
 		return 0;

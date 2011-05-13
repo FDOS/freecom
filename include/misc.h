@@ -83,7 +83,14 @@ int mk_rd_dir(char *param, int (*func) (const char *), char *fctname);
 void cutBackslash(char * const s);
 int cd_dir(char *param, int cdd, const char * const fctname);
 enum OnOff onoffStr(char *line);
-size_t farread(void far*buf, size_t length, int fd);
+#ifndef __TURBOC__
+#ifndef _open
+#define _open dos_open
+#endif
+int dos_open(const char *pathname, int flags);
+#endif
+size_t farread(int fd, void far*buf, size_t length);
+size_t farwrite(int fd, void far*buf, size_t length);
 unsigned allocPermBlk(const unsigned size, const unsigned mode);
 unsigned allocSysBlk(const unsigned size, const unsigned mode);
 unsigned allocMemBlk(const unsigned size, const unsigned mode);

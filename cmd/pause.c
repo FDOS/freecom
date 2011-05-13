@@ -30,7 +30,7 @@
 
 int cmd_pause (char * param) {
 	if(param && *param)
-        write( 1, param, strlen(param) );
+        _write( 1, param, strlen(param) );
 	else
 		displayString(TEXT_MSG_PAUSE);
 

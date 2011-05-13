@@ -43,6 +43,7 @@
 #include <assert.h>
 #include <dos.h>
 #include <io.h>
+#include <fcntl.h>
 #include <stdio.h>
 
 #include "../include/misc.h"
@@ -50,23 +51,71 @@
 unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
                       unsigned short func );
 
-size_t farread(void far*buf, size_t length, int fd)
+#ifdef __TURBOC__
+static unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
+                             unsigned short func )
 {
-#if 0
-    IREGS r;
-#endif
+	IREGS r;
 
+	r.r_ax = func;
+	r.r_bx = fd;
+	r.r_cx = size;
+	r.r_dx = FP_OFF(buffer);
+    r.r_ds = FP_SEG(buffer);
+	intrpt(0x21, &r);
+    return( ( r.r_flags & 1 ) ? 0xFFFF : r.r_ax );
+}
+
+
+size_t farread(int fd, void far*buf, size_t length)
+{
 	/* Use DOS API in order to read the strings directly to the
 		far address */
-#if 0
-	r.r_ax = 0x3f00;              /* read from file descriptor */
-	r.r_bx = fileno(f);           /* file descriptor */
-	r.r_cx = length;              /* size of block to read */
-	r.r_ds = FP_SEG(buf);         /* segment of buffer to read block to */
-	r.r_dx = FP_OFF(buf);         /* offset of buffer to read block to */
-    intrpt( 0x21, &r );
-    return( ( r.r_flags & 1 ) ? 0 : r.r_ax );
-#else
     return( DOSreadwrite( fd, buf, length, 0x3F00 ) );
-#endif
 }
+
+size_t farwrite(int fd, void far*buf, size_t length)
+{
+    return( DOSreadwrite( fd, buf, length, 0x3F00 ) );
+}
+#else
+size_t farread(int fd, void far*buf, size_t length)
+{
+	/* Use DOS API in order to read the strings directly to the
+		far address */
+	size_t bytes;
+	if( _dos_read(fd, buf, length, &bytes) )
+		return 0xffff;
+	return bytes;
+}
+
+size_t farwrite(int fd, void far*buf, size_t length)
+{
+	size_t bytes;
+	if( _dos_write(fd, buf, length, &bytes) )
+		return 0xffff;
+	return bytes;
+}
+
+int dos_open(const char *pathname, int flags)
+{
+	int handle;
+	int result = _dos_open(pathname, flags,	&handle);
+	return (result == 0 ? handle : -1);
+}
+
+int _read(int fd, void *buf, unsigned int len)
+{
+	return farread(fd, buf, len);
+}
+
+int _write(int fd, const void *buf, unsigned int len)
+{
+	return farwrite(fd, buf, len);
+}
+
+int _close(int fd)
+{
+	return _dos_close(fd);
+}
+#endif

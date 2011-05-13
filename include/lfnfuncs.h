@@ -76,7 +76,12 @@ extern unsigned char lfncomplete;
 #define chmod( x, y )     chmod( getshortfilename( x ), y )
 #define creattemp( x, y ) creattemp( getshortfilename( x ), y )
 #define dfnstat( x )      dfnstat( getshortfilename( x ) )
+#ifdef __TURBOC__
 #define _open( x, y )     _open( getshortfilename( x ), y )
+#else
+#undef _open
+#define _open( x, y )     dos_open( getshortfilename( x ), y )
+#endif
 #define unlink( x )       unlink( getshortfilename( x ) )
 #define _chmod            lfn_chmod
 #define _creat            lfn_creat

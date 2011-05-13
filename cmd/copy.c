@@ -125,24 +125,6 @@ static void killContext(void)
 	faster copy, using large (far) buffers
 */
 
-#define DOSread(x, y, z) DOSreadwrite( x, y, z, 0x3F00 )
-#define DOSwrite(x, y, z) DOSreadwrite( x, y, z, 0x4000 )
-
-unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
-                             unsigned short func )
-{
-	IREGS r;
-
-	r.r_ax = func;
-	r.r_bx = fd;
-	r.r_cx = size;
-	r.r_dx = FP_OFF(buffer);
-    r.r_ds = FP_SEG(buffer);
-	intrpt(0x21, &r);
-    return( ( r.r_flags & 1 ) ? 0xFFFF : r.r_ax );
-}
-
-
 /*
 	a) this copies data, using a 60K buffer
 	b) if transfer is slow (or on a huge file),
@@ -180,7 +162,7 @@ ok:
 	startTime = *(unsigned far *)MK_FP(0x40,0x6c);
 
 	ctrlz = 0;
-	while((rd = DOSread(fdin, buffer, size)) != 0) {
+	while((rd = farread(fdin, buffer, size)) != 0) {
 		if(rd == 0xffff) {
 			retval = 1;
 			goto _exit;
@@ -192,7 +174,7 @@ ok:
 				rd = ctrlz - buffer;
 		}
 		
-		if(DOSwrite(fdout, buffer, rd) != rd) {
+		if(farwrite(fdout, buffer, rd) != rd) {
 			if(!isadev(fdout)) retval = 2;
 			goto _exit;
 		}
@@ -430,7 +412,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     } while((h = h->app) != 0);
     rc = 0;
     if((destFlags & ASCII) && !isadev(fdout)) {   /* append the ^Z as we copied in ASCII mode */
-      if (write(fdout, "\x1a", 1) != 1)
+      if (_write(fdout, "\x1a", 1) != 1)
 		rc = 1;
     }
     if(keepFTime)
