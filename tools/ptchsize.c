@@ -37,7 +37,7 @@ struct {
 int getInfo (res_majorid_t major,
                     res_minorid_t minor,
                     unsigned long length,
-                    FILE * f,
+                    int fd,
                     void *const arg) {
         (void)arg;
 	if(major == RES_ID_INFO && minor == 0) {
@@ -49,7 +49,7 @@ int getInfo (res_majorid_t major,
 			puts("Out of memory");
 			return 101;
 		}
-		if(fread(info, (unsigned)length, 1, f) != 1) {
+		if(read(fd, info, (unsigned)length) != (unsigned)length) {
 			puts("Read error from file");
 			return 102;
 		}

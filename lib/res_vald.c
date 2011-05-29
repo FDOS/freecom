@@ -28,9 +28,9 @@
 static int test_fct (res_majorid_t major,
 		     res_minorid_t minor,
 		     long length,
-		     FILE* f,
+		     int fd,
 		     void *const arg) {
-	(void)major, (void)length, (void)f, (void)arg;
+	(void)major, (void)length, (void)fd, (void)arg;
 	assert(major == RES_ID_STRINGS);
 	return minor == STRING_RESOURCE_MINOR_ID? 1 : 2;
 }
