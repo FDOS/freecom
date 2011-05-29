@@ -22,7 +22,7 @@
 static int loadModule (res_majorid_t major,
                        res_minorid_t minor,
                        unsigned long length,
-                       FILE * f,
+                       int fd,
                        void *const arg) {	
 	word segm;
 
@@ -51,7 +51,7 @@ static int loadModule (res_majorid_t major,
 			dprintf(("[Out of memory loading CRITER module.]\n"));
 			return 0;
 		}
-		if(farread(MK_FP(segm, 0), (unsigned)length, f) != (unsigned)length) {
+		if(farread(fd, MK_FP(segm, 0), (unsigned)length) != (unsigned)length) {
 		  	dprintf(("[Error reading CRITER module.]\n"));
 		  	freeSysBlk(segm);
 			return 0;
