@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <io.h>
+#include <fcntl.h>
 
 #include "environ.h"
 #include "nls_c.h"
@@ -101,22 +102,26 @@ int cmd_set(char *param)
 	}
     if (optExecute) {
         char *tempfile = tmpfn();
-        FILE *fhandle;
+        int fd, len;
 
         if (!tempfile) return (1);
         sprintf (tempcmd, "%s>%s", value, tempfile);
         parsecommandline (tempcmd, TRUE);
-        fhandle = fopen (tempfile, "r");
-        if (!fhandle) {
+        fd = _open (tempfile, O_RDONLY);
+        if (fd < 0) {
             unlink (tempfile);
             free (tempfile);
             return (1);
         }
-        fgets (tempcmd, 255, fhandle);
-        value = strchr(tempcmd, '\n');
-        if (value) *value = '\0';
+        len = _read(fd, tempcmd, 254);
+        if (len >= 0) {
+            value = memchr(tempcmd, '\n', len);
+            if (value) len = value - tempcmd;
+	    if (len > 0 && tempcmd[len-1] == '\r') len--;
+            tempcmd[len] = '\0';
+        }
         value = tempcmd;
-        fclose (fhandle);
+        close (fd);
         unlink (tempfile);
         free (tempfile);
     }
