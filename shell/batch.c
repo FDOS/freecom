@@ -79,7 +79,8 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <stdio.h>
+#include <io.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
@@ -156,7 +157,7 @@ static void clearBatchContext(struct bcontext *b)
 	assert(b);
 
   if (b->bfile)
-    fclose(b->bfile);
+    close(b->bfile);
   if (b->bfnam)
     free(b->bfnam);
   if (b->bfirst)
@@ -318,6 +319,40 @@ int batch (char * fullname, char * firstword, char * param) {
   return 0;
 }
 
+static int getbline(int fd, char *textline, int len, int bufsize)
+{
+  /* get line from batchfile, and fill textline buffer if necessary */
+  /* input:
+	 fd = file descriptor
+	 textline = buffer
+	 len = length of previous line, if len>0 the buffer needs to be shifted.
+	 bufsize = total length of the buffer, except for trailing '\n'.
+	 output:
+	 returns static variable size = active length of buffer, or 0 if error.
+	 textline contains a batch file window on demand.
+  */
+  static int size;
+  if (len == 0)
+	size = len;
+  else if (size >= len) {
+	size -= len;
+	if (size > 0) {
+	  memmove(textline, &textline[len], size+1);
+	  if (textlineEnd(textline, size))
+	    return size;
+	}
+  }
+  if (size < bufsize) {
+	int sz = _read(fd, &textline[size], bufsize - size);
+	if (sz >= 0) {
+	  size += sz;
+	  textline[size] = '\n';
+	  return size;
+	}
+  }
+  return 0;
+}
+
 char *readbatchline(int *eflag, char *textline, int size)
 {
   /*
@@ -334,6 +369,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
   char *first;
   char *ip;
+  int len;
 
   if (bc == 0)               /* No batch */
     return 0;
@@ -345,6 +381,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
   ip = "";                      /* make sure ip != NULL in the first
   									iteration of the loop */
+  len = 0;
   while (bc)
   {
     first = 0;               /* by default return "no file" */
@@ -458,7 +495,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     if (!bc->bfile)
     {                           /* modifyable batchfiles */
-      if ((bc->bfile = fopen(bc->bfnam, "rb")) == 0)
+      if ((bc->bfile = _open(bc->bfnam, O_RDONLY)) == 0)
       {
         error_bfile_vanished(bc->bfnam);
         exit_batch();
@@ -469,8 +506,9 @@ char *readbatchline(int *eflag, char *textline, int size)
       {
         bc->brewind = 0;        /* fopen() position at start of file */
         bc->blinecnt = 0;
+        bc->bpos = 0;		
       }
-      else if (fsetpos(bc->bfile, &bc->bpos))
+      else if (lseek(bc->bfile, bc->bpos, SEEK_SET) == -1)
       {                         /* end of file reached */
         /* so says MS COMMAND */
         exit_batch();
@@ -478,15 +516,16 @@ char *readbatchline(int *eflag, char *textline, int size)
       }
     }
     else if(bc->brewind) {
-    	rewind(bc->bfile);
+    	lseek(bc->bfile, 0, SEEK_SET);
     	bc->brewind = 0;
     	bc->blinecnt = 0;
+    	bc->bpos = 0;		
     }
 
     assert(ip != 0);
     ++bc->blinecnt;
     if (chkCBreak(BREAK_BATCHFILE)      /* User break */
-        || fgets(textline, size, bc->bfile) == 0     /* End of file.... */
+        || getbline(bc->bfile, textline, len, size-1) == 0  /* End of file.... */
         || (ip = textlineEnd(textline, size)) == 0)  /* line too long */
     {
       if (!ip)
@@ -499,7 +538,9 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     /* Strip leading spaces and \n chars */
 /*    rtrimsp(textline);	must not remove trailing spaces */
-	first = strchr(textline, '\0');
+	first = memchr(textline, '\n', size);
+	len = first + 1 - textline;
+	bc->bpos += len;
 	while(--first >= textline && ( *first == '\n' || *first == '\r' ) );
 	first[1] = '\0';
     first = ltrimcl(textline);
@@ -541,8 +582,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
   if (bc && bc->bclose)
   {                             /* modifyable batchfiles - ska */
-    fgetpos(bc->bfile, &bc->bpos);
-    fclose(bc->bfile);
+    close(bc->bfile);
     bc->bfile = 0;
     bc->bclose = 0;
   }

@@ -18,7 +18,7 @@
 struct bcontext
 {
   struct bcontext *prev;
-  FILE *bfile;
+  int bfile;
   char *bfnam;                  /* abs filename of batchfile */
   char *bfirst;                 /* name of batchfile as typed on cmd line */
   char *forproto;				/* command to execute */
@@ -30,11 +30,7 @@ struct bcontext
 #else
   struct ffblk *ffind;			/* already started FOR wildcard expand loop */
 #endif
-#ifndef __PACIFIC__
-  fpos_t bpos;                  /* position within file if bfile == NULL */
-#else
-  unsigned long bpos;           /* position within file if bfile == NULL */
-#endif
+  long bpos;                    /* position within file if bfile == NULL */
   long blinecnt;                /* line counter */
   int shiftlevel;				/* number of skipped arguments */
   int echo;                     /* Preserve echo flag across batch calls */
