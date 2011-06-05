@@ -19,6 +19,7 @@ if "%1"=="-r" call clean.bat
 if "%1"=="-r" shift
 if "%1"=="clean" clean.bat
 if "%1"=="clean" goto ende
+if "%1"=="-h" goto help
 
 :loop_commandline
 if "%1"=="xms-swap" goto special
@@ -41,9 +42,10 @@ if not "%1" == "" goto loop_commandline
 
 if not "%1"=="-h" goto run
 
+:help
 echo Build FreeCOM
 echo Usage: %0 [-r] [clean] [xms-swap] [debug] [language]
-echo -r: Rebuilt -- Clean before proceed
+echo -r: Rebuild -- Clean before proceed
 echo clean: Remove *.OBJ, *.COM, *.LIB, etc. files, then exit
 echo xms-swap: Build FreeCOM with XMS-Only Swap support
 echo debug: Build FreeCOM with debug settings.
@@ -152,7 +154,7 @@ echo.
 tools\ptchsize.exe command.com +6KB
 
 echo.
-echo All done. COMMAND.COM is ready for useage!
+echo All done. COMMAND.COM is ready for usage!
 echo.
 if NOT "%XMS_SWAP%"=="" goto ende
 
