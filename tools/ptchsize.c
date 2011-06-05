@@ -32,6 +32,7 @@ struct {
 	unsigned long heapPos;
 } ival;
 
+#define PTCHSIZE
 #include "../lib/res_r.c"		/* make a single file project */
 
 int getInfo (res_majorid_t major,

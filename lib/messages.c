@@ -120,7 +120,7 @@ static int loadStrings (res_majorid_t major,
 	}
 
 	error = 0;
-	if(read(fd, fdid, sizeof(STRINGS_ID) - 1) != sizeof(STRINGS_ID) - 1)
+	if(_read(fd, fdid, sizeof(STRINGS_ID) - 1) != sizeof(STRINGS_ID) - 1)
 		error = 1;
 
 	if (memcmp(fdid, STRINGS_ID, sizeof(STRINGS_ID) - 1)) {
@@ -133,8 +133,8 @@ static int loadStrings (res_majorid_t major,
 
 		/* Read the strings dimensionating parameters */
 	if(error
-	 || read(fd, &strCnt, sizeof(strCnt)) != sizeof(strCnt)
-	 || read(fd, &len, sizeof(len)) != sizeof(len)) { /* Read error */
+	 || _read(fd, &strCnt, sizeof(strCnt)) != sizeof(strCnt)
+	 || _read(fd, &len, sizeof(len)) != sizeof(len)) { /* Read error */
 	 	*ls = STRINGS_READ_ERROR;
 	 	return 0;			/* Continue searching */
 	}
