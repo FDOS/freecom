@@ -819,14 +819,13 @@ static void hangForever(void)
       The "cannot_exit" state must be honored, though.
       Also, it cannot be considered that the string area is
       available -- 1999/07/06 ska*/
-    fcloseall();  /* prepare the external termination */
   for(;;) {
 #ifdef FEATURE_AUTOREDIRECT_TO_CON
     if(--i == 0)
       cmd_ctty("CON");
 #endif
 #if 0
-    puts(   /* fcloseall() leaves the standard streams open */
+    puts(
      "\r\n\r\n"
      "The shell is about to be terminated, though, this is\r\n"
      "forbidden (usually by enabling the \"/P\" option).\r\n"

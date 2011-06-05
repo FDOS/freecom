@@ -112,12 +112,14 @@ static int __creat_or_truncate( const char * filename, int mode )
     return handle;
 }
 
+#if defined(DEBUG) || defined(FEATURE_CALL_LOGGING)
 FILE * lfnfopen( const char *filename, const char *mode )
 {
     if( strpbrk( mode, "aw" ) )
         __creat_or_truncate( filename, 0 );
     return( fopen( getshortfilename( filename ), mode ) );
 }
+#endif
 
 int lfnopen( const char *filename, int access, ... )
 {
