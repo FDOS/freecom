@@ -22,7 +22,8 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <stdio.h>
+#include <io.h>
+#include <fcntl.h>
 #include <string.h>
 
 #include "../include/cmdline.h"
@@ -36,7 +37,7 @@ int cmd_type(char *param)
 	char buf[256];
 	char **argv;
 	int argc, opts, ec = E_None;
-	FILE *f;
+	int fd, len;
 
 	if((argv = scanCmdline(param, 0, 0, &argc, &opts)) == 0)
 		return 1;
@@ -52,21 +53,32 @@ int cmd_type(char *param)
 	}
 
 	for(argc = 0; argv[argc]; ++argc) {
-		if((f = fdevopen(argv[argc], "rt")) == 0) {
+		if((fd = devopen(argv[argc], O_RDONLY|O_BINARY)) == 0) {
 			error_sfile_not_found(argv[argc]);
 			ec = E_Other;
 			break;
 		}
 
-		while(fgets(buf, sizeof(buf), f)) {
+		while((len = _read(fd, buf, sizeof(buf))) >= 0) {
+			char *bufp, *p;
 			if(cbreak) {
-				fclose(f);
+				close(fd);
 				ec = E_CBreak;
 				goto errRet;
 			}
-			fputs(buf, stdout);
+			bufp = buf;
+			for(p = buf; p < buf+len; p++) {
+				if(*p == 26) break; /* CTRL-Z */
+				if(*p == '\r' || *p == '\n') {
+					if(p > bufp) _write(1, bufp, p - bufp);
+					if(*p == '\n') _write(1, "\r\n", 2);
+					bufp = p + 1;
+				}
+			}
+			_write(1, bufp, p - bufp);
+			if (len < sizeof(buf) || *p == 26) break;
 		}
-		fclose(f);
+		close(fd);
 		if(cbreak) {
 			ec = E_CBreak;
 			break;
