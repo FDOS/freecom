@@ -815,7 +815,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
       if (strcmp(file->ff_name, ".") == 0 || strcmp(file->ff_name, "..") == 0)
         return E_None;
       if (optS)
-        fputs(path, stdout);
+        outs(path);
       displayString(TEXT_DIR_LINE_FILENAME_BARE, file->ff_name);
       rv = incline();
     }
@@ -865,7 +865,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 			return E_NoMem;
 		}
         outc(' ');
-		fputs(p, stdout);
+		outs(p);
 		free(p);
 		p = nls_maketime(NLS_MAKE_SHORT_AMPM, hour, minute, -1, 0);
 		if(!p) {
@@ -873,7 +873,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
 			return E_NoMem;
 		}
         outc(' ');
-		fputs(p, stdout);
+		outs(p);
 		free(p);
 		#ifdef FEATURE_LONG_FILENAMES
             if( dispLFN )

@@ -241,7 +241,8 @@ unsigned msgSegment(void)              /* load messages into memory */
 			{	char *buf = malloc(128 + 1);
 
 				if(!buf) {
-					fputs(TEXT_ERROR_OUT_OF_MEMORY, stderr);
+					_write(2, TEXT_ERROR_OUT_OF_MEMORY,
+					   strlen(TEXT_ERROR_OUT_OF_MEMORY));
 					break;
 				} else {
 					int orgEcho = echo;

@@ -60,6 +60,7 @@ void display_errno_fnam_error(const char * const fnam);
 void displayExitcode(void);
 
 void outc( char c );
+void outs( const char *s );
 int cgetchar(void);
 int vcgetchar(void);
 int vcgetcstr(const char *const legalCh);

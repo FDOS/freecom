@@ -76,7 +76,7 @@ int cmd_which(char *param)
 
 	for(i = 0; i < argc; ++i) {
 		assert(arg[i]);
-		fputs(arg[i], stdout);
+		outs(arg[i]);
 		if((p = find_which(arg[i])) != 0) {
 			outc('\t');
 			puts(p);

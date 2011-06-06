@@ -121,7 +121,7 @@ void displayPrompt(const char *pr)
         case 'D':
           {	 char *p;
           	 if((p = curDateLong()) != 0) {
-          	 	fputs(p, stdout);
+          	 	outs(p);
           	 	free(p);
           	 }
             break;
@@ -152,12 +152,12 @@ void displayPrompt(const char *pr)
 
             if(r.r_flags & 1) break;
 
-            fputs(pathname, stdout);
+            outs(pathname);
 #else
             char *p;
 
             if((p = cwd(0)) != 0) {
-                fputs(p, stdout);
+                outs(p);
                 free(p);
             }
 #endif
@@ -169,7 +169,7 @@ void displayPrompt(const char *pr)
             char *p;
 
             if((p = curTime()) != 0) {
-				fputs(p, stdout);
+				outs(p);
 				free(p);
 			}
 

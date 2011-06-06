@@ -423,7 +423,7 @@ void parsecommandline(char *s, int redirect)
     }
 
     printprompt();
-    fputs(s, stdout);
+    outs(s);
     /* If the user hits ^Break, it has the same effect as
        usually: If he is in a batch file, he is asked if
        to abort all the batchfiles or just the current one */

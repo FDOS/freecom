@@ -98,9 +98,9 @@ static void outblank(void)
 /* Print string to current cursor position
 	Updates cursor position
  */
-static void outs(const char * const s)
+void outs(const char * const s)
 {	assert(s);
-	fputs(s, stdout);
+	printf("%s", s);
 }
 /* Print string to cursor position and append one blank
 	Updates cursor postion

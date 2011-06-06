@@ -84,7 +84,7 @@ int cmd_set(char *param)
 
 	if(promptUser) {	/* -> Display the value, then read and assign */
 		assert(value);
-		fputs(value, stdout);
+		outs(value);
 		promptBuf = malloc(promptBuffer);
 		if(!promptBuf) {
 			error_out_of_memory();
