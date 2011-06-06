@@ -60,8 +60,6 @@ int vcgetcstr(const char *const legalCh)
 
 	assert(legalCh);
 
-	fflush(stdout);               /* Make sure the pending output arrives the
-								   screen as we bypass the stdio interface */
 	while ((ch = vcgetchar()) == 0 || !strchr(legalCh, ch))
 		beep();                     /* hit erroreous character */
 	outc('\n');                /* advance to next line */

@@ -54,8 +54,6 @@
 int cmd_cls (char * param) {
     (void)param;
     outc( '\xc' ); /* ^L Form feed */
-	fflush(stdout);
-	fflush(stderr);
 
 	/* Output stream is neither a file nor NUL nor CLOCK$ */
 	if(((fdattr(1) ^ 0x80) & (0x80 | 0x08 | 0x04)) == 0) {

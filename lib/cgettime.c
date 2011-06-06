@@ -58,7 +58,6 @@ static void outnum(int num)
 		if(num > 0)
 			fputmc('\b', num, stdout);
 	}
-	fflush(stdout);
 }
 
 

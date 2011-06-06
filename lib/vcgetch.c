@@ -60,7 +60,6 @@ int vcgetchar(void)
 	ch = cgetchar();
 	outc(isprint(ch) ? ch : ' ');
 	outc('\b');
-	fflush(stdout);
 
 	return cbreak? KEY_CTL_C: ch;
 }

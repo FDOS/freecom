@@ -40,6 +40,7 @@ co(mpilers):
 #include "initsupl.loc"
 
 #include <stdio.h>
+#include <string.h>
 #include <portable.h>
 
 #include "suppldbg.h"
@@ -56,15 +57,24 @@ static char const rcsid[] =
 int fputmc(int ch, int cnt, FILE *f)
 {	DBG_ENTER("fputmc", Suppl_supplio)
 
+	int i;
+	char buf[80];
 	assert(f);
 
 	DBG_ARGUMENTS( ("ch='%c' (0x%02x), cnt=%u", isprint(ch)? ch: ' ', ch & 0xff, cnt) )
 
 	if(!cnt) DBG_RETURN_I( ch)
 
-	while(--cnt)
-		if(putc(ch, f) == EOF)
+	i = sizeof(buf)-1;
+	if (cnt < sizeof(buf)-1) i = cnt;
+	memset(buf, ch, i);
+	buf[i] = '\0';
+	while(cnt > 0) {
+		if(fprintf(f, "%s", buf) == EOF)
 			DBG_RETURN_I( EOF)
+		cnt -= sizeof(buf)-1;
+		if (cnt < sizeof(buf)-1) buf[cnt] = '\0';
+	}
 
 	DBG_RETURN_I( ch)
 }

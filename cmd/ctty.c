@@ -99,10 +99,6 @@ int cmd_ctty(char *param)
 		now; STDIN and STDOUT flag are the most lowest two bits  */
 	fdsetattr(f, (attr & 0xFF) | 0x03);
 
-  fflush(stdin);      /* prepare asynchroneous changes of internal fd's */
-  fflush(stdout);
-  fflush(stderr);
-
   /* Now change the file descriptors:
     0 := rdonly
     1,2 := wronly

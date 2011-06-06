@@ -8,6 +8,7 @@
 #include <conio.h>
 #include <dos.h>
 #include <stdio.h>
+#include <io.h>
 #include <string.h>
 
 #include "../include/command.h"
@@ -86,7 +87,7 @@ static int isworddelimiter(unsigned c)
  */
 void outc(char c)
 {
-    putchar( c );
+	if (c == '\n') _write(1, "\r\n", 2); else _write(1, &c, 1);
 }
 /* Print a blank to current cursor postion
 	Updates cursor position

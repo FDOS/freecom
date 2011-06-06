@@ -29,6 +29,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <io.h>
 #include <string.h>
 
 #define FALSE 0
@@ -42,17 +43,23 @@ static int do_printf(FILE *f, const char *, register va_list);
 
 static void flushbuf(FILE *f)
 {
-  *charp = 0;
+  _write(fileno(f), pbuf, charp - pbuf);
   charp = pbuf;
-  fputs(charp, f);
+}
+
+int puts(const char *s)
+{
+  return printf("%s\n", s);
 }
 
 /* special handler to switch between sprintf and printf */
 static void handle_char(int c, FILE *f)
 {
+  if (c == '\n')
+    *charp++ = '\r';
   *charp++ = c;
   /* flush buffer for '\n' or if full */
-  if (f && (charp - pbuf == 79 || c == '\n'))
+  if (f && (charp - pbuf >= 79 || c == '\n'))
     flushbuf(f);
 }
 
@@ -119,7 +126,6 @@ int printf(const char * fmt, ...)
   return vfprintf(stdout, fmt, arg);
 }
 
-#if !defined(NDEBUG) || defined(DEBUG)
 int fprintf(FILE *f, const char * fmt, ...)
 {
   va_list arg;
@@ -127,7 +133,6 @@ int fprintf(FILE *f, const char * fmt, ...)
   va_start(arg, fmt);
   return vfprintf(f, fmt, arg);
 }
-#endif
 
 int sprintf(char * buff, const char * fmt, ...)
 {

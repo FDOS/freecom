@@ -179,12 +179,6 @@ int initialize(void)
 
 	dprintf( ("[INIT: initialise()]\n") );
 
-#ifdef __WATCOMC__
-	/* stdout is by default line-buffered for Watcom, but unbuffered for
-	   Turbo C */
-	setbuf(stdout, NULL);
-#endif
-
 /* Set up the host environment of COMMAND.COM */
 
 	/* Give us shell privileges */
