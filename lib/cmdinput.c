@@ -266,7 +266,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 		case KEY_CTL_C:       		/* ^C */
 		case KEY_ESC:              /* clear str  Make this callable! */
 
-			clrcmdline(str, maxlen, orgx, orgy);
+			clrcmdline(str, maxlen);
 			current = charcount = 0;
 
 			if(ch == KEY_CTL_C && !echo) {
@@ -313,7 +313,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			if(!histGet(--histLevel, prvLine, sizeof(prvLine)))
 				++histLevel;		/* failed -> keep current command line */
 			else {
-				clrcmdline(str, maxlen, orgx, orgy);
+				clrcmdline(str, maxlen);
 				strcpy(str, prvLine);
 				current = charcount = strlen(str);
 				outs(str);
@@ -323,7 +323,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 		case KEY_DOWN:             /* get next command from buffer */
 			if(histLevel) {
-				clrcmdline(str, maxlen, orgx, orgy);
+				clrcmdline(str, maxlen);
 				strcpy(prvLine, str);
 				histGet(++histLevel, str, maxlen);
 				current = charcount = strlen(str);
@@ -333,7 +333,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 		case KEY_F5: /* keep cmdline in F3/UP buffer and move to next line */
 			strcpy(prvLine, str);
-			clrcmdline(str, maxlen, orgx, orgy);
+			clrcmdline(str, maxlen);
 			outc('@');
 			if(orgy >= MAX_Y) {
 				outc('\n');			/* Force scroll */

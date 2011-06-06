@@ -44,13 +44,12 @@
 
 #include "../include/misc.h"
 
-void clrcmdline(char * const str, const int maxlen
- , const unsigned orgx, const unsigned orgy)
+void clrcmdline(char * const str, const int maxlen)
 {
 	assert(str);
 
-	goxy(orgx, orgy);
-	fputmc(' ', strlen(str) + 1, stdout);
+	fputmc('\b', strlen(str), stdout);
+	fputmc(' ', strlen(str), stdout);
+	fputmc('\b', strlen(str), stdout);
 	memset(str, 0, maxlen);
-	goxy(orgx, orgy);
 }
