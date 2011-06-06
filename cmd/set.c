@@ -91,7 +91,7 @@ int cmd_set(char *param)
 			error_out_of_memory();
 			return E_NoMem;
 		}
-		len = _read(1, promptBuf, promptBuffer);
+		len = _read(0, promptBuf, promptBuffer);
 		if(cbreak || len < 0) {
 			free(promptBuf);
 			return E_CBreak;
