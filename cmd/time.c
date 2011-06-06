@@ -28,7 +28,7 @@
 #include "../config.h"
 
 #include <dos.h>
-#include <stdio.h>
+#include <io.h>
 #include <stdlib.h>
 
 #include "../include/cmdline.h"
@@ -89,12 +89,14 @@ int cmd_time(char *param)
 
 	while(1) {
 		if(!param) {
+			int len;
 			if(noPrompt) return 0;
 
 			displayString(TEXT_MSG_ENTER_TIME);
-			fgets(s, sizeof(s), stdin);
-			if (cbreak)
+			len = _read(0, s, sizeof(s) - 1);
+			if (cbreak || len < 0)
 				return 1;
+			s[len] = '\0';
 			param = s;
 		}
 		if(my_settime(param))

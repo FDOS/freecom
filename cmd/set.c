@@ -83,6 +83,7 @@ int cmd_set(char *param)
 	}
 
 	if(promptUser) {	/* -> Display the value, then read and assign */
+		int len;
 		assert(value);
 		outs(value);
 		promptBuf = malloc(promptBuffer);
@@ -90,12 +91,12 @@ int cmd_set(char *param)
 			error_out_of_memory();
 			return E_NoMem;
 		}
-		fgets(promptBuf, promptBuffer, stdin);
-		if(cbreak) {
+		len = _read(1, promptBuf, promptBuffer);
+		if(cbreak || len < 0) {
 			free(promptBuf);
 			return E_CBreak;
 		}
-		value = strchr(promptBuf, '\0');
+		value = &promptBuf[len];
 		while(--value >= promptBuf && (*value == '\n' || *value == '\r'));
 		value[1] = '\0';	/* strip trailing newlines */
 		value = promptBuf;
