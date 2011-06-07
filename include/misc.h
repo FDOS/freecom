@@ -11,6 +11,11 @@
 #include <stdio.h>
 #include <portable.h>
 
+#undef stdin
+#undef stdout
+#undef stderr
+extern FILE *stdin, *stdout, *stderr;
+
 #include "../include/datefunc.h"
 #include "../include/timefunc.h"
 
