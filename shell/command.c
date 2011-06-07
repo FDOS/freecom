@@ -390,7 +390,7 @@ void parsecommandline(char *s, int redirect)
   char *fname1 = 0;
   char *nextcmd;
 
-  int of_attrib = O_CREAT | O_TRUNC | O_TEXT | O_WRONLY;
+  int of_attrib = O_CREAT | O_TRUNC | O_WRONLY;
   int num;
 
   assert(s);
@@ -461,7 +461,7 @@ void parsecommandline(char *s, int redirect)
   if (in)                       /* redirect input from this file name */
   {
     close(0);
-    if (0 != devopen(in, O_TEXT | O_RDONLY, S_IREAD))
+    if (0 != devopen(in, O_RDONLY))
     {
 		error_redirect_from_file(in);
       goto abort;
@@ -477,7 +477,7 @@ void parsecommandline(char *s, int redirect)
     close(1);                   /* Close current output file */
     if ((fname0 = tmpfn()) == 0)
       goto abort;
-    open(fname0, O_CREAT | O_TRUNC | O_TEXT | O_WRONLY, S_IREAD | S_IWRITE);
+    _creat(fname0, 0);
 
     nextcmd = s + strlen(s) + 1;
     docommand(s);
@@ -489,7 +489,7 @@ void parsecommandline(char *s, int redirect)
     killtmpfn(fname1);          /* fname1 can by NULL */
     fname1 = fname0;
     fname0 = 0;
-    open(fname1, O_TEXT | O_RDONLY, S_IREAD);
+    _open(fname1, O_RDONLY);
 
     s = nextcmd;
   }
@@ -499,15 +499,11 @@ void parsecommandline(char *s, int redirect)
   if (out)                      /* Final output to here */
   {
     close(1);
-    if (1 != devopen(out, of_attrib, S_IREAD | S_IWRITE))
+    if (1 != devopen(out, of_attrib))
     {
 		error_redirect_to_file(out);
       goto abort;
     }
-
-    if (of_attrib & O_APPEND)
-      lseek(1, 0, SEEK_END);
-
   }
   else if (oldoutfd != -1)      /* Restore original stdout */
   {

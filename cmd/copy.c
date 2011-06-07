@@ -282,7 +282,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 
     if(interactive_command		/* Suppress prompt if in batch file */
        && openMode != O_APPEND && !optY
-       && (fdout = open(rDest, O_RDONLY|O_BINARY)) >= 0) {
+       && (fdout = _open(rDest, O_RDONLY)) >= 0) {
     	int destIsDevice = isadev(fdout);
 
       close(fdout);
@@ -308,7 +308,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     if(cbreak) {
       return 0;
     }
-    if((fdout = devopen(rDest, openMode|O_BINARY, S_IREAD|S_IWRITE)) < 0) {
+    if((fdout = devopen(rDest, openMode)) < 0) {
       error_open_file(rDest);
       return 0;
     }
@@ -329,7 +329,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
-      if((fdin = devopen(rSrc, O_RDONLY|O_BINARY)) < 0) {
+      if((fdin = devopen(rSrc, O_RDONLY)) < 0) {
         error_open_file(rSrc);
         close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */

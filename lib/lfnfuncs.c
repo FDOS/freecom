@@ -62,29 +62,13 @@ const char * getshortfilename( const char *longfilename )
             longfilename : shortfilename );
 }
 
-static int mycreatnew( const char * filename, int mode )
-{
-    IREGS r;
-
-    r.r_ds = FP_SEG( filename );
-    r.r_dx = FP_OFF( filename );
-    r.r_cx = mode;
-    r.r_ax = 0x5B00;
-
-    intrpt( 0x21, &r );
-
-    if( ( r.r_flags & 1 ) ) r.r_ax = 0xFFFF;
-    
-    return( r.r_ax );
-}
-
 static int __creat_or_truncate( const char * filename, int mode )
 {
     int handle;
     IREGS r;
 
     if( !__supportlfns ) {
-        handle = mycreatnew( filename, mode );
+        handle = dos_creatnew( filename, mode );
         _close( handle );
         return handle;
     }
@@ -100,7 +84,7 @@ static int __creat_or_truncate( const char * filename, int mode )
 
     if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 )
         handle = ( dfnstat( getshortfilename( filename ) ) != 0 ) ?
-                 -1 : mycreatnew( filename, mode );
+                 -1 : dos_creatnew( filename, mode );
     else handle = r.r_ax;
     /*
      * Win2k always returns handle == 2, which is a bug.
@@ -121,22 +105,10 @@ FILE * lfnfopen( const char *filename, const char *mode )
 }
 #endif
 
-int lfnopen( const char *filename, int access, ... )
+int lfn_creat( const char *filename, int attr )
 {
-    va_list vargs;
-
-    va_start( vargs, access );
-
-    if( access & O_CREAT ) {
-        access &= ~O_CREAT; /* Remove the O_CREAT bit */
-
-        if( __creat_or_truncate( filename, !( va_arg( vargs, unsigned ) & S_IWRITE ) ? FA_RDONLY : 0 ) != -1)
-            /* created, no need to also truncate */
-	    access &= ~O_TRUNC;
-    }
-    va_end( vargs );
-
-    return( open( getshortfilename( filename ), access ) );
+    __creat_or_truncate( filename, attr );
+    return( _open( getshortfilename( filename ), O_WRONLY ) );
 }
 
 int lfnrename( const char *oldfilename, const char *newfilename )

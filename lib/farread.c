@@ -104,6 +104,35 @@ int dos_open(const char *pathname, int flags)
 	return (result == 0 ? handle : -1);
 }
 
+int dos_creat(const char *pathname, int attr)
+{
+	int handle;
+	int result = _dos_creat(pathname, attr, &handle);
+	return (result == 0 ? handle : -1);
+}
+
+int dos_creatnew(const char *pathname, int attr)
+{
+#ifdef __WATCOMC__
+	int handle;
+	int result = _dos_creatnew(pathname, attr, &handle);
+	return (result == 0 ? handle : -1);
+#else
+	IREGS r;
+
+	r.r_ds = FP_SEG( pathname );
+	r.r_dx = FP_OFF( pathname );
+	r.r_cx = mode;
+	r.r_ax = 0x5B00;
+
+	intrpt( 0x21, &r );
+
+	if( ( r.r_flags & 1 ) ) r.r_ax = 0xFFFF;
+
+	return( r.r_ax );
+#endif
+}
+
 int _read(int fd, void *buf, unsigned int len)
 {
 	return farread(fd, buf, len);

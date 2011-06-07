@@ -57,6 +57,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "../include/misc.h"
 #include "../include/openf.h"
 
 /*
@@ -90,7 +91,7 @@ int isDeviceName(char *const fnam)
 
     /* open with read access only to prevent from creating
        disk fiels accidently */
-    if ((fd = open(fnam, O_RDONLY)) >= 0)
+    if ((fd = _open(fnam, O_RDONLY)) >= 0)
     {                           /* open OK */
       int rv;
 

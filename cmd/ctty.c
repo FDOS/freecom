@@ -83,7 +83,7 @@ int cmd_ctty(char *param)
   devAttr(2);
 #endif
 
-  if((f = devopen(param, O_RDWR|O_BINARY)) < 0) {
+  if((f = devopen(param, O_RDWR)) < 0) {
     error_no_rw_device(param);
     return 1;
   }

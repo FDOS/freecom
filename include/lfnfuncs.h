@@ -84,8 +84,9 @@ extern unsigned char lfncomplete;
 #endif
 #define unlink( x )       unlink( getshortfilename( x ) )
 #define _chmod            lfn_chmod
+#undef _creat
 #define _creat            lfn_creat
-#define creat             lfncreat
+#undef creatnew
 #define creatnew          lfncreatnew
 #define fopen             lfnfopen
 #define remove            unlink

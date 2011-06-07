@@ -40,7 +40,7 @@ int validResFile(const char * const fnam)
 
 	assert(fnam);
 
-	if((fd = open(fnam, O_RDONLY | O_BINARY)) < 0)
+	if((fd = _open(fnam, O_RDONLY)) < 0)
 		return 1;
 
 	if(isadev(fd)) {

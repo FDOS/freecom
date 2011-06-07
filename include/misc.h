@@ -87,8 +87,14 @@ enum OnOff onoffStr(char *line);
 #ifndef __TURBOC__
 #ifndef _open
 #define _open dos_open
+#define _creat dos_creat
 #endif
 int dos_open(const char *pathname, int flags);
+int dos_creat(const char *pathname, int flags);
+int dos_creatnew(const char *pathname, int flags);
+#endif
+#ifndef creatnew
+#define creatnew dos_creatnew
 #endif
 size_t farread(int fd, void far*buf, size_t length);
 size_t farwrite(int fd, void far*buf, size_t length);

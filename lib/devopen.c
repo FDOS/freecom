@@ -39,19 +39,23 @@
 
 #include "../config.h"
 #include <io.h>
-#include <stdarg.h>
+#include <fcntl.h>
 
 #include "../include/openf.h"
 #include "../include/lfnfuncs.h"
+#include "../include/misc.h"
 
-int devopen(char *const fnam, int mode, ...)
+int devopen(char *const fnam, int mode)
 {
-  va_list ap;
-  int omode;
+  int fd;
 
-  va_start(ap, mode);
-  omode = va_arg(ap, int);
-  va_end(ap);
   isDeviceName(fnam);           /* modify fnam if device */
-  return open(fnam, mode, omode);
+  fd = -1;
+  if(mode & (O_CREAT|O_TRUNC) != O_CREAT|O_TRUNC)
+    fd = _open(fnam, mode & ~(O_APPEND|O_CREAT|O_TRUNC));
+  if(fd == -1 && (mode & O_CREAT))
+    return _creat(fnam, 0);
+  if (mode & O_APPEND)
+    lseek(fd, 0, SEEK_END);
+  return fd;
 }

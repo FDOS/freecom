@@ -106,7 +106,7 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
 
           if ((ch == '>') && (*sp == '>'))      /* Append request ? */
           {
-            *ofatt = O_CREAT | O_APPEND | O_TEXT | O_WRONLY;
+            *ofatt = O_CREAT | O_APPEND | O_WRONLY;
             sp++;
           }
 
