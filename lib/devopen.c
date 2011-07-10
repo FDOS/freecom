@@ -40,6 +40,7 @@
 #include "../config.h"
 #include <io.h>
 #include <fcntl.h>
+#include <dos.h>
 
 #include "../include/openf.h"
 #include "../include/lfnfuncs.h"

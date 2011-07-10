@@ -96,8 +96,8 @@ enum OnOff onoffStr(char *line);
 #endif
 int dos_open(const char *pathname, int flags);
 int dos_creat(const char *pathname, int flags);
-int dos_creatnew(const char *pathname, int flags);
 #endif
+int dos_creatnew(const char *pathname, int flags);
 #ifndef creatnew
 #define creatnew dos_creatnew
 #endif

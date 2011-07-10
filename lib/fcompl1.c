@@ -47,6 +47,9 @@
 #include <dos.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef __TURBOC__
+#include <dir.h>
+#endif
 
 #include "../include/lfnfuncs.h"
 #undef findfirst

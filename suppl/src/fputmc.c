@@ -55,10 +55,10 @@ static char const rcsid[] =
 #endif
 
 int fputmc(int ch, int cnt, FILE *f)
-{	DBG_ENTER("fputmc", Suppl_supplio)
-
-	int i;
+{	int i;
 	char buf[80];
+	DBG_ENTER("fputmc", Suppl_supplio)
+
 	assert(f);
 
 	DBG_ARGUMENTS( ("ch='%c' (0x%02x), cnt=%u", isprint(ch)? ch: ' ', ch & 0xff, cnt) )
