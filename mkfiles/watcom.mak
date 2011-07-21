@@ -10,10 +10,10 @@ LIBLIST = /l=
 ECHOLIB = echo >>
 
 CFG = watcomc.cfg
-CFLAGS1 = -os-s-wx-bt=DOS
+CFLAGS1 = -os-s-wx
 
 #		*Implicit Rules*
 .obj.exe:
   $(BINPATH)\wlink sys DOS f $< lib $(SUPPL_LIB_PATH)\SUPPL_$(SHELL_MMODEL).LIB op q
 .c.obj:
-  $(CC) $< @$(CFG)
+  $(CC) $< -bt=dos @$(CFG)
