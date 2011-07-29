@@ -102,9 +102,14 @@ int dos_read(int fd, void *buf, unsigned int len);
 int dos_write(int fd, const void *buf, unsigned int len);
 #define dos_close _dos_close
 #endif
+#define sfnfindfirst(path,attrib,ffblk) findfirst(path,attrib,ffblk)
+#define sfnfindnext(ffblk)  findnext(ffblk)
 #ifndef dos_open
 #define dos_open sfn_open
 #define dos_creat sfn_creat
+#define dos_findfirst sfnfindfirst
+#define dos_findnext sfnfindnext
+#define dos_findclose(ffblk)
 #endif
 int dos_creatnew(const char *pathname, int flags);
 size_t farread(int fd, void far*buf, size_t length);

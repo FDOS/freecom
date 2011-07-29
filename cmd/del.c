@@ -77,7 +77,7 @@ int cmd_del(char *param)
 	int i;
 	unsigned count = 0;
 
-	struct ffblk f;
+	struct dos_ffblk f;
 
 	/* Make fullname somewhat larger to ensure that appending
 		a matched name, one backslash and one hope. */
@@ -154,7 +154,7 @@ int cmd_del(char *param)
 				}
 			}
 
-			if (FINDFIRST(fullname, &f, FA_ARCH)) {
+			if (dos_findfirst(fullname, &f, FA_ARCH)) {
 				error_sfile_not_found(fullname);
 			} else do {
 				strcpy(p, f.ff_name);       /* Make the full path */
@@ -190,12 +190,12 @@ int cmd_del(char *param)
 					++count;
 #endif
 
-			} while (FINDNEXT(&f) == 0);
+			} while (dos_findnext(&f) == 0);
 		} while(++i < argc && *arg[i]);/* arg[i] can be NULL with LFNS?? */
 	}
 
 errRet:
-    FINDSTOP(&f);
+    dos_findclose(&f);
 
 	if(echo)
 		dispCount(count, TEXT_MSG_DEL_CNT_FILES);

@@ -168,7 +168,7 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
     buf->lfnax = buf->lfnsup = 0; /* Zero find handle and LFN-supported flag */
 
     if( !__supportlfns )
-        return( findfirst( path, ( struct ffblk * )buf, attr ) );
+        return( sfnfindfirst( path, ( struct ffblk * )buf, attr ) );
 
     r.r_ds = FP_SEG( path );
     r.r_dx = FP_OFF( path );       /* path goes in DS:DX */
@@ -187,7 +187,7 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
      * no LFN TSR so fall back to the old findfirst.
      */
     if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 )
-        return( findfirst( path, ( struct ffblk * )buf, attr ) );
+        return( sfnfindfirst( path, ( struct ffblk * )buf, attr ) );
 
     /*
      * If there was no failure, the next step is to move the values from the
@@ -214,7 +214,7 @@ int lfnfindnext( struct lfnffblk *buf )
      * previous call to findfirst.
      */
     if( !buf->lfnsup || !__supportlfns ) {
-        return( findnext( ( struct ffblk * )buf ) );
+        return( sfnfindnext( ( struct ffblk * )buf ) );
     }
 
     r.r_es = FP_SEG( &lfnblock );

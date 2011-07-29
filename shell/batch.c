@@ -405,13 +405,13 @@ char *readbatchline(int *eflag, char *textline, int size)
       fv1 = fv = getArgCur(0);
 
 	if (bc->ffind) {          /* First already done fo do next */
+        if(
 #ifdef FEATURE_LONG_FILENAMES
-        if( lfnfor ? lfnfindnext( bc->ffind ) != 0 :
-                     FINDNEXT( ( struct ffblk * )bc->ffind ) != 0 ) {
-            FINDSTOP( bc->ffind );
-#else
-		if(FINDNEXT(bc->ffind) != 0) {		/* no next file */
+            lfnfor ? lfnfindnext( bc->ffind ) != 0 :
 #endif
+			sfnfindnext((struct ffblk *)bc->ffind) != 0) /* no next file */
+        {
+          dos_findclose( bc->ffind );
           free(bc->ffind);      /* free the buffer */
           bc->ffind = 0;
           bc->shiftlevel++;     /* On to next list element */
@@ -426,25 +426,19 @@ char *readbatchline(int *eflag, char *textline, int size)
         /* Wild file spec, find first (or next) file name */
 
 	  /*  For first find, allocate a find first block */
-#ifdef FEATURE_LONG_FILENAMES
-          if ((bc->ffind = (struct lfnffblk *)malloc(sizeof(struct lfnffblk)))
-#else
-          if ((bc->ffind = (struct ffblk *)malloc(sizeof(struct ffblk)))
-#endif
-           == 0)
+          if ((bc->ffind = malloc(sizeof(*bc->ffind))) == 0)
           {
             error_out_of_memory();
             exit_batch();		/* kill this FOR context */
             break;
           }
 
+         if(
 #ifdef FEATURE_LONG_FILENAMES
-         if( lfnfor ? lfnfindfirst( fv, bc->ffind, FA_NORMAL ) == 0 :
-                      FINDFIRST( fv, ( struct ffblk * )bc->ffind, FA_NORMAL )
-                      == 0 ) {
-#else
-         if(FINDFIRST(fv, bc->ffind, FA_NORMAL) == 0) {
+             lfnfor ? lfnfindfirst( fv, bc->ffind, FA_NORMAL ) == 0 :
 #endif
+                      sfnfindfirst( fv, ( struct ffblk * )bc->ffind, FA_NORMAL )
+                      == 0 ) {
          	/* found a file */
          	*dfnfilename(fv) = '\0';	/* extract path */
         	fv = bc->ffind->ff_name;

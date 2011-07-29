@@ -47,13 +47,6 @@ enum InternalErrorCodes {
 extern const char shellver[];
 extern const char shellname[];
 
-#define FINDFIRST(path,attrib,ffblk) findfirst(path,attrib,ffblk)
-#define FINDNEXT(ffblk)  findnext(ffblk)
-#ifdef FEATURE_LONG_FILENAMES
-#define FINDSTOP(ffblk) lfnfindclose(ffblk)
-#else
-#define FINDSTOP(ffblk)
-#endif
 #ifndef FA_NORMAL
 #define FA_NORMAL 0
 #endif

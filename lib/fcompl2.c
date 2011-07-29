@@ -65,8 +65,6 @@
 #endif
 
 #include "../include/lfnfuncs.h"
-#undef findfirst
-#undef findnext
 #include <suppl.h>
 #include "../include/command.h"
 #include "../strings.h"
@@ -74,8 +72,7 @@
 int show_completion_matches(char *str, unsigned charcount)
 {
   /* varibles found within code */
-  struct ffblk file;
-  #undef ffblk
+  struct dos_ffblk file;
 
   int found_dot = 0;
   int curplace = 0;
@@ -128,13 +125,12 @@ int show_completion_matches(char *str, unsigned charcount)
 
   curplace = 0;                 /* current fname */
 
+  if(
 #ifdef FEATURE_LONG_FILENAMES
-  if( lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
-                    findfirst( path, ( struct ffblk * )&file, FILE_SEARCH_MODE )
-                    == 0 )
-#else
-  if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
+      lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
 #endif
+                    sfnfindfirst( path, ( struct ffblk * )&file, FILE_SEARCH_MODE )
+                    == 0 )
   {                             /* find anything */
 
     outc('\n');
@@ -170,13 +166,12 @@ int show_completion_matches(char *str, unsigned charcount)
         count = 0;
       }
     }
+    while(
 #ifdef FEATURE_LONG_FILENAMES
-    while( lfncomplete ? lfnfindnext( &file ) == 0 :
-                         findnext( ( struct ffblk * )&file ) == 0 );
-#else
-    while (FINDNEXT(&file) == 0);
+           lfncomplete ? lfnfindnext( &file ) == 0 :
 #endif
-    FINDSTOP(&file);
+                         sfnfindnext( ( struct ffblk * )&file ) == 0 );
+    dos_findclose(&file);
 
     if (mywherex() > 1)
       outc('\n');

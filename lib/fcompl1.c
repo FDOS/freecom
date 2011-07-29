@@ -52,8 +52,6 @@
 #endif
 
 #include "../include/lfnfuncs.h"
-#undef findfirst
-#undef findnext
 #include <suppl.h>
 #include "../include/command.h"
 #include "../strings.h"
@@ -61,8 +59,7 @@
 void complete_filename(char *str, unsigned charcount)
 {
   /* variables found within code */
-  struct ffblk file;
-  #undef ffblk
+  struct dos_ffblk file;
 
   int found_dot = 0;
   int curplace = 0;
@@ -123,13 +120,12 @@ void complete_filename(char *str, unsigned charcount)
 
   curplace = 0;                 /* current fname */
 
+  if(
 #ifdef FEATURE_LONG_FILENAMES
-  if( lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
-                    findfirst( path, ( struct ffblk * )&file, FILE_SEARCH_MODE )
-                    == 0 )
-#else
-  if (FINDFIRST(path, &file, FILE_SEARCH_MODE) == 0)
+      lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
 #endif
+                    sfnfindfirst( path, ( struct ffblk * )&file, FILE_SEARCH_MODE )
+                    == 0 )
   {                             /* find anything */
 
     do
@@ -163,13 +159,12 @@ void complete_filename(char *str, unsigned charcount)
           }
       }
     }
+    while(
 #ifdef FEATURE_LONG_FILENAMES
-    while( lfncomplete ? lfnfindnext( &file ) == 0 :
-                         findnext( ( struct ffblk * )&file ) == 0 );
-#else
-    while (FINDNEXT(&file) == 0);
+      lfncomplete ? lfnfindnext( &file ) == 0 :
 #endif
-    FINDSTOP(&file);
+                    sfnfindnext( ( struct ffblk * )&file ) == 0 );
+    dos_findclose(&file);
 
     strcpy(&str[start], directory);
     strcat(&str[start], maxmatch);

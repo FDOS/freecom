@@ -85,12 +85,13 @@ extern unsigned char lfncomplete;
 #define open              lfnopen
 #define rename            lfnrename
 #define stat( x, y )      stat( getshortfilename( x ), y )
-#undef  findfirst
-#undef  findnext
-#define findfirst         lfnfindfirst
-#define findnext          lfnfindnext
-#define findclose         lfnfindclose
-#define ffblk             lfnffblk
+#undef  dos_findfirst
+#undef  dos_findnext
+#undef  dos_findclose
+#define dos_findfirst     lfnfindfirst
+#define dos_findnext      lfnfindnext
+#define dos_findclose     lfnfindclose
+#define dos_ffblk         lfnffblk
 #define mkdir             lfnmkdir
 #define rmdir             lfnrmdir
 #define chdir             lfnchdir

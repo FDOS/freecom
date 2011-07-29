@@ -107,7 +107,7 @@ int cmd_rename(char *param)
 {	
 	char **argv;
 	int argc, opts, ec = E_None;
-	struct ffblk ff;
+	struct dos_ffblk ff;
 	int appState;
 
 	if((argv = scanCmdline(param, 0, 0, &argc, &opts)) == 0)
@@ -121,7 +121,7 @@ int cmd_rename(char *param)
 	else if(argc > 2) {
 		error_too_many_parameters(param);
 		ec = E_Useage;
-	} else if(FINDFIRST(argv[0], &ff
+	} else if(dos_findfirst(argv[0], &ff
 		 , FA_NORMAL|FA_DIREC|FA_ARCH|FA_SYSTEM|FA_RDONLY|FA_HIDDEN) != 0) {
 			error_sfile_not_found(argv[0]);
 		/* ec == E_None */
@@ -198,10 +198,10 @@ int cmd_rename(char *param)
 			}
 			/*free(newname);*/
             newname[0] = 0;
-		} while(FINDNEXT(&ff) == 0);
+		} while(dos_findnext(&ff) == 0);
 
 	errRet:
-        FINDSTOP(&ff);
+        dos_findclose(&ff);
 #if 0 /* free(newname) isn't even necessary because it is free'd above */
 		free(s_drv); free(s_dir); free(s_fil); free(s_ext);
 		free(d_drv); free(d_dir); free(d_fil); free(d_ext);

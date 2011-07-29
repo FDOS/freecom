@@ -65,7 +65,7 @@ int cmd_if(char *param)
 	/* Check for 'exist' form */
 
 	if(matchtok(param, "exist")) {
-		struct ffblk f;
+		struct dos_ffblk f;
 
 		if(!*param) {
 			/* syntax error */
@@ -76,9 +76,9 @@ int cmd_if(char *param)
 		pp = skip_word(param);
 		*pp++ = '\0';
 
-		if(FINDFIRST(param, &f, FA_NORMAL|FA_ARCH|FA_SYSTEM|FA_RDONLY|FA_HIDDEN) == 0)
+		if(dos_findfirst(param, &f, FA_NORMAL|FA_ARCH|FA_SYSTEM|FA_RDONLY|FA_HIDDEN) == 0)
 			x_flag = X_EXEC;
-        FINDSTOP(&f);
+        dos_findclose(&f);
 	}
 
 	/* Check for 'errorlevel' form */

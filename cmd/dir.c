@@ -624,7 +624,7 @@ static int dir_print_header(int drive)
  	displayString(TEXT_DIR_HDR_VOLUME, drive + 'A');
 
 
-  if (FINDFIRST("\\*.*", &f, FA_LABEL) == 0)
+  if (sfnfindfirst("\\*.*", &f, FA_LABEL) == 0)
   {
         /* Added to remove "." from labels which are longer than
            8 characters (as DOS does), but must pad name with spaces. */
@@ -1026,7 +1026,7 @@ static int dir_list(int pathlen
 #endif
   strcpy(&path[pathlen], pattern);
 
-  if (FINDFIRST(path, &file, attrMay) == 0) {
+  if (sfnfindfirst(path, &file, attrMay) == 0) {
   	int printDirectoryEntry = !optB;
 /* For counting columns of output */
   cDir.linecount = 0;
@@ -1083,7 +1083,7 @@ static int dir_list(int pathlen
 			rv = DisplaySingleDirEntry(&file, &cDir);
     }
   }
-  while (rv == E_None && FINDNEXT(&file) == 0);
+  while (rv == E_None && sfnfindnext(&file) == 0);
   }
 
   #ifdef FEATURE_DESCRIPT_ION
@@ -1117,7 +1117,7 @@ static int dir_list(int pathlen
 		  path[pathlen - 1] = '\\';		*/
       strcpy(&path[pathlen], "*.*");
       	/* Import attributes S & H from "maybe" */
-      if (FINDFIRST(path, &file, attrMay | FA_DIREC) == 0) do {
+      if (sfnfindfirst(path, &file, attrMay | FA_DIREC) == 0) do {
         if((file.ff_attrib & FA_DIREC) != 0 /* is directory */
          && strcmp(file.ff_name, ".") != 0  /* not cur dir */
          && strcmp(file.ff_name, "..") != 0) {  /* not parent dir */
@@ -1128,7 +1128,7 @@ static int dir_list(int pathlen
            , &dircount, &filecount, &bytecount
            );
         }
-      } while (rv == E_None && FINDNEXT(&file) == 0);
+      } while (rv == E_None && sfnfindnext(&file) == 0);
   }
 
     *dcnt += dircount;

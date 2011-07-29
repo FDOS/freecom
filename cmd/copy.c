@@ -218,7 +218,7 @@ _exit:
 
 static int copy(char *dst, char *pattern, struct CopySource *src
   , int openMode)
-{ struct ffblk ff;
+{ struct dos_ffblk ff;
   struct CopySource *h;
   char rDest[MAXPATH], rSrc[MAXPATH];
   int fdin, fdout;
@@ -243,7 +243,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
   if(strpbrk(pattern, "*?") == 0) {
   	srcFile = dfnfilename(pattern);
   	wildcarded = 0;
-  } else if(FINDFIRST(pattern, &ff, FA_RDONLY | FA_ARCH) != 0) {
+  } else if(dos_findfirst(pattern, &ff, FA_RDONLY | FA_ARCH) != 0) {
     error_sfile_not_found(pattern);
     return 0;
   } else {
@@ -429,10 +429,10 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       unlink(rDest);		/* if device -> no removal, ignore error */
       return 0;
     }
-  } while(wildcarded && FINDNEXT(&ff) == 0);
+  } while(wildcarded && dos_findnext(&ff) == 0);
   /*} while(wildcarded && FINDNEXT(&ff) == 0 && !(isfirst = 0)); */
 
-  FINDSTOP(&ff);
+  dos_findclose(&ff);
 
   return 1;
 }
