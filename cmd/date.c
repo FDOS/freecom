@@ -117,7 +117,7 @@ int cmd_date(char *param)
 			 , "-", "-"
 #endif
 			);
-			len = _read(0, s, sizeof(s) - 1);
+			len = dos_read(0, s, sizeof(s) - 1);
 			if(cbreak || len < 0)
 				return 1;
 			s[len] = '\0';

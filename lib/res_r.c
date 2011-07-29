@@ -83,7 +83,11 @@
 #include <io.h>		/* filelength */
 
 #include "../include/resource.h"
-#ifndef PTCHSIZE
+#ifdef PTCHSIZE
+#define dos_open open
+#define dos_read read
+#define dos_close close
+#else
 #include "../include/misc.h"
 #endif
  
@@ -104,7 +108,7 @@ int enumFileResources(const char *const fnam
 #ifdef PTCHSIZE
 	if((fd = open(fnam, O_RDONLY | O_BINARY)) < 0) {
 #else
-	if((fd = _open(fnam, O_RDONLY)) < 0) {
+	if((fd = dos_open(fnam, O_RDONLY)) < 0) {
 #endif
 	 	rc = -1;
 	 	dprintf(("[RES: Failed to open file: %s]\n", fnam));
@@ -121,7 +125,7 @@ int enumFileResources(const char *const fnam
 		if(pos <= sizeof(res)				/* file corruption */
 		 		/* read and verify the resource ID block */
 		 || lseek(fd, pos -= sizeof(res), SEEK_SET) < 0		/* seek error */
-	     || _read(fd, &res, sizeof(res)) != sizeof(res)		/* read error */
+	     || dos_read(fd, &res, sizeof(res)) != sizeof(res)		/* read error */
 		 					/* file corruption as magic string is missing */
 		 || memcmp(res.res_cookie, RES_COOKIE, sizeof(res.res_cookie)) != 0
 		 		/* file corruption: not that many bytes left in file */
@@ -140,6 +144,6 @@ int enumFileResources(const char *const fnam
 		    break;
 	}  
 
-	close(fd);
+	dos_close(fd);
 	return rc;
 }

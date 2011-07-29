@@ -48,7 +48,7 @@ FILE *stdin = (FILE *)0, *stdout= (FILE *)1, *stderr = (FILE *)2;
 
 static void flushbuf(FILE *f)
 {
-  _write(fileno(f), pbuf, charp - pbuf);
+  dos_write(fileno(f), pbuf, charp - pbuf);
   charp = pbuf;
 }
 

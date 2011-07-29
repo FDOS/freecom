@@ -53,8 +53,6 @@ struct locffblk {
 const char * getshortfilename( const char *longfilename );
 int          lfn_chmod( const char *filename, int func, ... );
 int          lfn_creat( const char *filename, int mode );
-int          lfncreat( const char *filename, int amode );
-int          lfncreatnew( const char *filename, int mode );
 FILE *       lfnfopen( const char *filename, const char *mode );
 int          lfnopen( const char *filename, int access, ... );
 int          lfnrename( const char *oldfilename, const char *newfilename );
@@ -76,18 +74,12 @@ extern unsigned char lfncomplete;
 #define chmod( x, y )     chmod( getshortfilename( x ), y )
 #define creattemp( x, y ) creattemp( getshortfilename( x ), y )
 #define dfnstat( x )      dfnstat( getshortfilename( x ) )
-#ifdef __TURBOC__
-#define _open( x, y )     _open( getshortfilename( x ), y )
-#else
-#undef _open
-#define _open( x, y )     dos_open( getshortfilename( x ), y )
-#endif
+#undef dos_open
+#define dos_open( x, y )  sfn_open( getshortfilename( x ), y )
 #define unlink( x )       unlink( getshortfilename( x ) )
 #define _chmod            lfn_chmod
-#undef _creat
-#define _creat            lfn_creat
-#undef creatnew
-#define creatnew          lfncreatnew
+#undef dos_creat
+#define dos_creat         lfn_creat
 #define fopen             lfnfopen
 #define remove            unlink
 #define open              lfnopen

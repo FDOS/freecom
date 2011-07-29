@@ -91,7 +91,7 @@ int cmd_set(char *param)
 			error_out_of_memory();
 			return E_NoMem;
 		}
-		len = _read(0, promptBuf, promptBuffer);
+		len = dos_read(0, promptBuf, promptBuffer);
 		if(cbreak || len < 0) {
 			free(promptBuf);
 			return E_CBreak;
@@ -108,13 +108,13 @@ int cmd_set(char *param)
         if (!tempfile) return (1);
         sprintf (tempcmd, "%s>%s", value, tempfile);
         parsecommandline (tempcmd, TRUE);
-        fd = _open (tempfile, O_RDONLY);
+        fd = dos_open (tempfile, O_RDONLY);
         if (fd < 0) {
             unlink (tempfile);
             free (tempfile);
             return (1);
         }
-        len = _read(fd, tempcmd, 254);
+        len = dos_read(fd, tempcmd, 254);
         if (len >= 0) {
             value = memchr(tempcmd, '\n', len);
             if (value) len = value - tempcmd;
@@ -122,7 +122,7 @@ int cmd_set(char *param)
             tempcmd[len] = '\0';
         }
         value = tempcmd;
-        close (fd);
+        dos_close (fd);
         unlink (tempfile);
         free (tempfile);
     }

@@ -47,7 +47,7 @@ const char * getshortfilename( const char *longfilename )
 
 /* This function causes an invalid opcode when working with NUL */
 /* access() doesn't even work here */
-    if( _close( _open( longfilename, 0 ) ) == 0 ) return( longfilename );
+    if( dos_close( sfn_open( longfilename, 0 ) ) == 0 ) return( longfilename );
 
     r.r_ds = FP_SEG( longfilename );
     r.r_si = FP_OFF( longfilename );
@@ -69,7 +69,7 @@ static int __creat_or_truncate( const char * filename, int mode )
 
     if( !__supportlfns ) {
         handle = dos_creatnew( filename, mode );
-        _close( handle );
+        dos_close( handle );
         return handle;
     }
 
@@ -92,7 +92,7 @@ static int __creat_or_truncate( const char * filename, int mode )
      * Fortunately, FreeCOM never actually expects to get file handle 2
      * ( as it does for '1' and '0', when redirecting stdin and stdout )
      */
-    if( handle != 2 )_close( handle );
+    if( handle != 2 )dos_close( handle );
     return handle;
 }
 
@@ -108,7 +108,7 @@ FILE * lfnfopen( const char *filename, const char *mode )
 int lfn_creat( const char *filename, int attr )
 {
     __creat_or_truncate( filename, attr );
-    return( _open( getshortfilename( filename ), O_WRONLY ) );
+    return( sfn_open( getshortfilename( filename ), O_WRONLY ) );
 }
 
 int lfnrename( const char *oldfilename, const char *newfilename )

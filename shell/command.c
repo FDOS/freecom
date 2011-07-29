@@ -431,11 +431,11 @@ void parsecommandline(char *s, int redirect)
 
     if (oldinfd  != -1) {
         dup2 (redir_fdin,  0);
-        close (redir_fdin);
+        dos_close (redir_fdin);
     }
     if (oldoutfd != -1) {
         dup2 (redir_fdout, 1);
-        close (redir_fdout);
+        dos_close (redir_fdout);
     }
 
     if (answer != 1) return;              /* "No" or ^Break   */
@@ -460,7 +460,7 @@ void parsecommandline(char *s, int redirect)
 
   if (in)                       /* redirect input from this file name */
   {
-    close(0);
+    dos_close(0);
     if (0 != devopen(in, O_RDONLY))
     {
 		error_redirect_from_file(in);
@@ -474,22 +474,22 @@ void parsecommandline(char *s, int redirect)
   /* Now do all but the last pipe command */
   while (num-- > 1)
   {
-    close(1);                   /* Close current output file */
+    dos_close(1);               /* Close current output file */
     if ((fname0 = tmpfn()) == 0)
       goto abort;
-    _creat(fname0, 0);
+    dos_creat(fname0, 0);
 
     nextcmd = s + strlen(s) + 1;
     docommand(s);
 
-    close(1);
+    dos_close(1);
     dup2(oldoutfd, 1);
 
-    close(0);
+    dos_close(0);
     killtmpfn(fname1);          /* fname1 can by NULL */
     fname1 = fname0;
     fname0 = 0;
-    _open(fname1, O_RDONLY);
+    dos_open(fname1, O_RDONLY);
 
     s = nextcmd;
   }
@@ -498,7 +498,7 @@ void parsecommandline(char *s, int redirect)
 
   if (out)                      /* Final output to here */
   {
-    close(1);
+    dos_close(1);
     if (1 != devopen(out, of_attrib))
     {
 		error_redirect_to_file(out);
@@ -507,9 +507,9 @@ void parsecommandline(char *s, int redirect)
   }
   else if (oldoutfd != -1)      /* Restore original stdout */
   {
-    close(1);
+    dos_close(1);
     dup2(oldoutfd, 1);
-    close(oldoutfd);
+    dos_close(oldoutfd);
     oldoutfd = -1;
   }
 
@@ -518,17 +518,17 @@ void parsecommandline(char *s, int redirect)
 abort:
   if (oldinfd != -1)            /* Restore original STDIN */
   {
-    close(0);
+    dos_close(0);
     dup2(oldinfd, 0);
-    close(oldinfd);
+    dos_close(oldinfd);
     oldinfd = -1;
   }
 
   if (oldoutfd != -1)           /* Restore original STDOUT */
   {
-    close(1);
+    dos_close(1);
     dup2(oldoutfd, 1);
-    close(oldoutfd);
+    dos_close(oldoutfd);
     oldoutfd = -1;
   }
 

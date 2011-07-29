@@ -298,7 +298,7 @@ static int descGetNextToken(char *buf, int fn, int maxlen)
 {
   /* skip blank lines and any initial spaces, also exit early on any read error */
   do {
-    if (_read(fDescription, buf, 1) != 1)
+    if (dos_read(fDescription, buf, 1) != 1)
     {
       /*printf("[read error]\n");*/
       *buf = '\0';
@@ -313,7 +313,7 @@ static int descGetNextToken(char *buf, int fn, int maxlen)
       maxlen--;
       buf++;
     }
-    if (_read(fDescription, buf, 1) != 1)
+    if (dos_read(fDescription, buf, 1) != 1)
       break;
   } while ( (*buf!='\r') && (*buf!='\n') && 
             (*buf!=0x4/*Ctrl-D*/) && (*buf!=26/*Ctrl-Z*/) &&
@@ -324,7 +324,7 @@ static int descGetNextToken(char *buf, int fn, int maxlen)
   if (!fn) 
     while ( (*buf!='\r') && (*buf!='\n') )
     {
-      if (_read(fDescription, buf, 1) != 1)
+      if (dos_read(fDescription, buf, 1) != 1)
         break;
     }
 
@@ -1022,7 +1022,7 @@ static int dir_list(int pathlen
   path[pathlen - 1] = '\\';
 #ifdef FEATURE_DESCRIPT_ION
   strcpy(&path[pathlen], "DESCRIPT.ION");
-  descriptionExists = ((fDescription = _open(path, O_RDONLY)) >= 0);
+  descriptionExists = ((fDescription = dos_open(path, O_RDONLY)) >= 0);
 #endif
   strcpy(&path[pathlen], pattern);
 
@@ -1087,7 +1087,7 @@ static int dir_list(int pathlen
   }
 
   #ifdef FEATURE_DESCRIPT_ION
-    if (descriptionExists) close(fDescription);
+    if (descriptionExists) dos_close(fDescription);
   #endif
 
 

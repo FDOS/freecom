@@ -91,13 +91,13 @@ int isDeviceName(char *const fnam)
 
     /* open with read access only to prevent from creating
        disk fiels accidently */
-    if ((fd = _open(fnam, O_RDONLY)) >= 0)
+    if ((fd = dos_open(fnam, O_RDONLY)) >= 0)
     {                           /* open OK */
       int rv;
 
       /* check for character device */
       rv = isadev(fd);
-      close(fd);
+      dos_close(fd);
       if (rv)
         return 1;               /* is device name */
     }

@@ -120,7 +120,7 @@ static int loadStrings (res_majorid_t major,
 	}
 
 	error = 0;
-	if(_read(fd, fdid, sizeof(STRINGS_ID) - 1) != sizeof(STRINGS_ID) - 1)
+	if(dos_read(fd, fdid, sizeof(STRINGS_ID) - 1) != sizeof(STRINGS_ID) - 1)
 		error = 1;
 
 	if (memcmp(fdid, STRINGS_ID, sizeof(STRINGS_ID) - 1)) {
@@ -133,8 +133,8 @@ static int loadStrings (res_majorid_t major,
 
 		/* Read the strings dimensionating parameters */
 	if(error
-	 || _read(fd, &strCnt, sizeof(strCnt)) != sizeof(strCnt)
-	 || _read(fd, &len, sizeof(len)) != sizeof(len)) { /* Read error */
+	 || dos_read(fd, &strCnt, sizeof(strCnt)) != sizeof(strCnt)
+	 || dos_read(fd, &len, sizeof(len)) != sizeof(len)) { /* Read error */
 	 	*ls = STRINGS_READ_ERROR;
 	 	return 0;			/* Continue searching */
 	}
@@ -241,7 +241,7 @@ unsigned msgSegment(void)              /* load messages into memory */
 			{	char *buf = malloc(128 + 1);
 
 				if(!buf) {
-					_write(2, TEXT_ERROR_OUT_OF_MEMORY,
+					dos_write(2, TEXT_ERROR_OUT_OF_MEMORY,
 					   strlen(TEXT_ERROR_OUT_OF_MEMORY));
 					break;
 				} else {

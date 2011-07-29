@@ -65,7 +65,7 @@ static void mycprintf( char *fmt, ... )
 {
     va_list args;
     char buffer[ 512 ];
-    int consolehandle = _open( "CON", O_WRONLY );
+    int consolehandle = dos_open( "CON", O_WRONLY );
     /* 
      * Just as cprintf _ensures_ printing directly to the console, so will
      * opening the console and writing to it do the same
@@ -73,8 +73,8 @@ static void mycprintf( char *fmt, ... )
 
     va_start( args, fmt );
     vsprintf( buffer, fmt, args );
-    _write( consolehandle, buffer, strlen( buffer ) );
-    _close( consolehandle );
+    dos_write( consolehandle, buffer, strlen( buffer ) );
+    dos_close( consolehandle );
     va_end( args );
 }
 

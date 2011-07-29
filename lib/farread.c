@@ -97,33 +97,28 @@ size_t farwrite(int fd, void far*buf, size_t length)
 	return bytes;
 }
 
-int dos_open(const char *pathname, int flags)
+int sfn_open(const char *pathname, int flags)
 {
 	int handle;
 	int result = _dos_open(pathname, flags,	&handle);
 	return (result == 0 ? handle : -1);
 }
 
-int dos_creat(const char *pathname, int attr)
+int sfn_creat(const char *pathname, int attr)
 {
 	int handle;
 	int result = _dos_creat(pathname, attr, &handle);
 	return (result == 0 ? handle : -1);
 }
 
-int _read(int fd, void *buf, unsigned int len)
+int dos_read(int fd, void *buf, unsigned int len)
 {
 	return farread(fd, buf, len);
 }
 
-int _write(int fd, const void *buf, unsigned int len)
+int dos_write(int fd, const void *buf, unsigned int len)
 {
 	return farwrite(fd, buf, len);
-}
-
-int _close(int fd)
-{
-	return _dos_close(fd);
 }
 #endif
 

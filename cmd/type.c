@@ -59,10 +59,10 @@ int cmd_type(char *param)
 			break;
 		}
 
-		while((len = _read(fd, buf, sizeof(buf))) >= 0) {
+		while((len = dos_read(fd, buf, sizeof(buf))) >= 0) {
 			char *bufp, *p;
 			if(cbreak) {
-				close(fd);
+				dos_close(fd);
 				ec = E_CBreak;
 				goto errRet;
 			}
@@ -70,15 +70,15 @@ int cmd_type(char *param)
 			for(p = buf; p < buf+len; p++) {
 				if(*p == 26) break; /* CTRL-Z */
 				if(*p == '\r' || *p == '\n') {
-					if(p > bufp) _write(1, bufp, p - bufp);
-					if(*p == '\n') _write(1, "\r\n", 2);
+					if(p > bufp) dos_write(1, bufp, p - bufp);
+					if(*p == '\n') dos_write(1, "\r\n", 2);
 					bufp = p + 1;
 				}
 			}
-			_write(1, bufp, p - bufp);
+			dos_write(1, bufp, p - bufp);
 			if (len < sizeof(buf) || *p == 26) break;
 		}
-		close(fd);
+		dos_close(fd);
 		if(cbreak) {
 			ec = E_CBreak;
 			break;

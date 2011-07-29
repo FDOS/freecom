@@ -40,15 +40,15 @@ int validResFile(const char * const fnam)
 
 	assert(fnam);
 
-	if((fd = _open(fnam, O_RDONLY)) < 0)
+	if((fd = dos_open(fnam, O_RDONLY)) < 0)
 		return 1;
 
 	if(isadev(fd)) {
-		close(fd);
+		dos_close(fd);
 		return 2;
 	}
 
-	close(fd);
+	dos_close(fd);
 	if(enumFileResources(fnam
 	 , RES_ID_STRINGS, test_fct, (void*)0) != 1)
 		return 3;

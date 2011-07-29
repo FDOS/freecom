@@ -89,8 +89,8 @@ int cmd_ctty(char *param)
   }
 
   if(((attr = fdattr(f)) & 0x80) == 0
-   || _write(f, "\r\n", 2) != 2) {		/* need \r as in bin mode */
-    close(f);
+   || dos_write(f, "\r\n", 2) != 2) {		/* need \r as in bin mode */
+    dos_close(f);
     error_no_rw_device(param);
     return 1;
   }
@@ -111,10 +111,10 @@ int cmd_ctty(char *param)
   */
   failed = dup2(f, 2);   /* no redirection support */
   if(oldinfd != -1)
-  	close(oldinfd);
+  	dos_close(oldinfd);
   oldinfd = f;
   if(oldoutfd != -1)
-  	close(oldoutfd);
+  	dos_close(oldoutfd);
   if((oldoutfd = dup(f)) == -1)
   	failed = 1;
 

@@ -87,7 +87,7 @@ static int isworddelimiter(unsigned c)
  */
 void outc(char c)
 {
-	if (c == '\n') _write(1, "\r\n", 2); else _write(1, &c, 1);
+	if (c == '\n') dos_write(1, "\r\n", 2); else dos_write(1, &c, 1);
 }
 /* Print a blank to current cursor postion
 	Updates cursor position

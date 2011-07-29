@@ -157,7 +157,7 @@ static void clearBatchContext(struct bcontext *b)
 	assert(b);
 
   if (b->bfile)
-    close(b->bfile);
+    dos_close(b->bfile);
   if (b->bfnam)
     free(b->bfnam);
   if (b->bfirst)
@@ -343,7 +343,7 @@ static int getbline(int fd, char *textline, int len, int bufsize)
 	}
   }
   if (size < bufsize) {
-	int sz = _read(fd, &textline[size], bufsize - size);
+	int sz = dos_read(fd, &textline[size], bufsize - size);
 	if (sz >= 0) {
 	  size += sz;
 	  textline[size] = '\n';
@@ -495,7 +495,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
     if (!bc->bfile)
     {                           /* modifyable batchfiles */
-      if ((bc->bfile = _open(bc->bfnam, O_RDONLY)) == 0)
+      if ((bc->bfile = dos_open(bc->bfnam, O_RDONLY)) == 0)
       {
         error_bfile_vanished(bc->bfnam);
         exit_batch();
@@ -582,7 +582,7 @@ char *readbatchline(int *eflag, char *textline, int size)
 
   if (bc && bc->bclose)
   {                             /* modifyable batchfiles - ska */
-    close(bc->bfile);
+    dos_close(bc->bfile);
     bc->bfile = 0;
     bc->bclose = 0;
   }

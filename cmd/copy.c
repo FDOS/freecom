@@ -282,10 +282,10 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 
     if(interactive_command		/* Suppress prompt if in batch file */
        && openMode != O_APPEND && !optY
-       && (fdout = _open(rDest, O_RDONLY)) >= 0) {
+       && (fdout = dos_open(rDest, O_RDONLY)) >= 0) {
     	int destIsDevice = isadev(fdout);
 
-      close(fdout);
+      dos_close(fdout);
       if(!destIsDevice) {	/* Devices do always exist */
         if( dfnstat( rSrc ) == 0) { /* Source doesn't exist */
             error_open_file( rSrc );
@@ -325,13 +325,13 @@ static int copy(char *dst, char *pattern, struct CopySource *src
     do {
       fillFnam(rSrc, h->fnam, srcFile);
       if(rSrc[0] == 0) {
-        close(fdout);
+        dos_close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
       if((fdin = devopen(rSrc, O_RDONLY)) < 0) {
         error_open_file(rSrc);
-        close(fdout);
+        dos_close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
@@ -355,8 +355,8 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       displayString(TEXT_MSG_COPYING, rSrc
 	   , (openMode == 'a' || h != src)? "=>>": "=>", rDest);
       if(cbreak) {
-        close(fdin);
-        close(fdout);
+        dos_close(fdin);
+        dos_close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
@@ -404,16 +404,16 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       }
       if(cbreak)
         rc = 0;
-      close(fdin);
+      dos_close(fdin);
       if(!rc) {
-        close(fdout);
+        dos_close(fdout);
         unlink(rDest);		/* if device -> no removal, ignore error */
         return 0;
       }
     } while((h = h->app) != 0);
     rc = 0;
     if((destFlags & ASCII) && !isadev(fdout)) {   /* append the ^Z as we copied in ASCII mode */
-      if (_write(fdout, "\x1a", 1) != 1)
+      if (dos_write(fdout, "\x1a", 1) != 1)
 		rc = 1;
     }
     if(keepFTime)
@@ -422,7 +422,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 #else
       _dos_setftime(fdout, date, time);
 #endif
-    if(close(fdout) != 0)
+    if(dos_close(fdout) != 0)
       rc = 1;
     if(rc) {
       error_write_file(rDest);

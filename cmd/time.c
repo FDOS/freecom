@@ -93,7 +93,7 @@ int cmd_time(char *param)
 			if(noPrompt) return 0;
 
 			displayString(TEXT_MSG_ENTER_TIME);
-			len = _read(0, s, sizeof(s) - 1);
+			len = dos_read(0, s, sizeof(s) - 1);
 			if (cbreak || len < 0)
 				return 1;
 			s[len] = '\0';
