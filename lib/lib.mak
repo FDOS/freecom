@@ -68,8 +68,7 @@ OBJ8 =	drvnum.obj\
 	exec.obj\
 	exec1.obj\
 	farread.obj\
-	fcompl1.obj\
-	fcompl2.obj\
+	filecomp.obj\
 	fdattr.obj
 OBJ9 =	fdevopen.obj\
 	fdsattr.obj\

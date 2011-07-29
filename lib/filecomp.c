@@ -56,7 +56,7 @@
 #include "../include/command.h"
 #include "../strings.h"
 
-void complete_filename(char *str, unsigned charcount)
+static int do_complete(char *str, unsigned charcount, int show)
 {
   /* variables found within code */
   struct dos_ffblk file;
@@ -125,29 +125,56 @@ void complete_filename(char *str, unsigned charcount)
       lfncomplete ? lfnfindfirst( path, &file, FILE_SEARCH_MODE ) == 0 :
 #endif
                     sfnfindfirst( path, ( struct ffblk * )&file, FILE_SEARCH_MODE )
-                    == 0 )
-  {                             /* find anything */
+                    != 0 )
+    /* no match found */
+    return 0;
 
-    do
+  /* find anything */
+  if (show)
+  {
+    outc('\n');
+    count = found_dot = 0; /* Use found_dot as waslfn */
+  }
+  do
+  {
+    if (file.ff_name[0] == '.' &&
+        (!file.ff_name[1] ||
+        (file.ff_name[1] == '.' && !file.ff_name[2]))) /* ignore . and .. */
+      continue;
+
+    if (show)
     {
-      if (file.ff_name[0] == '.' &&
-          (!file.ff_name[1] ||
-          (file.ff_name[1] == '.' && !file.ff_name[2]))) /* ignore . and .. */
-
-        continue;
-
+      if (file.ff_attrib == FA_DIREC)
+        sprintf(fname, "[%s]", file.ff_name);
+      else
+        strcpy(fname, file.ff_name);
+/*      displayString(TEXT_FILE_COMPLATION_DISPLAY, fname); */
+#ifdef FEATURE_LONG_FILENAMES
+      if( ( found_dot = strlen( fname ) ) > 13 && count > 1 ) {
+        outc( '\n' );
+        count = 0;
+      }
+#endif
+      printf("%-14s", fname);
+      if( 
+#ifdef FEATURE_LONG_FILENAMES
+          found_dot > 13 ||
+#endif
+          ++count == 5)
+      {
+        outc('\n');
+        count = 0;
+      }
+    }
+    else
+    {
       strcpy(fname, file.ff_name);
       if (makelower)
         strlwr(fname);
-
-      if (file.ff_attrib == FA_DIREC)
-        strcat(fname, "\\");
-      else
-        strcat(fname, " ");
+      strcat(fname, file.ff_attrib == FA_DIREC ? "\\" : " ");
 
       if (!maxmatch[0] && perfectmatch)
         strcpy(maxmatch, fname);
-
       else
       {
         for (count = 0; maxmatch[count] && fname[count]; count++)
@@ -159,19 +186,38 @@ void complete_filename(char *str, unsigned charcount)
           }
       }
     }
-    while(
+  }
+  while(
 #ifdef FEATURE_LONG_FILENAMES
-      lfncomplete ? lfnfindnext( &file ) == 0 :
+    lfncomplete ? lfnfindnext( &file ) == 0 :
 #endif
-                    sfnfindnext( ( struct ffblk * )&file ) == 0 );
-    dos_findclose(&file);
+                  sfnfindnext( ( struct ffblk * )&file ) == 0 );
+  dos_findclose(&file);
 
+  if (show)
+  {
+    if (mywherex() > 1)
+      outc('\n');
+  }
+  else
+  {
     strcpy(&str[start], directory);
     strcat(&str[start], maxmatch);
-
-    if (!perfectmatch)
-      beep();
   }
-  else                          /* no match found */
-    beep();
+
+  if (!show && !perfectmatch)
+    return 0;
+  return 1;
+}
+
+void complete_filename(char *str, unsigned charcount)
+{
+  if (!do_complete(str, charcount, 0)) beep();
+}
+
+int show_completion_matches(char *str, unsigned charcount)
+{
+  int ret = do_complete(str, charcount, 1);
+  if (!ret) beep_low();
+  return ret;
 }
