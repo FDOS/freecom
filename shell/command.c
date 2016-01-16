@@ -624,7 +624,7 @@ int expandEnvVars(char *ip, char * const line)
 				/* overflow check: parsedline has that many character
 				  "on reserve" */
 				cp += sprintf(cp, "%u", errorlevel);
-			  } else if(matchtok(ip, "_CWD")) {
+			  } else if(matchtok(ip, "_CWD") || matchtok(ip, "CD")) {
 			  	if(0 == (evar = cwd(0))) {
 				    return 0;
 			  	} else {
