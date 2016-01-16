@@ -39,6 +39,10 @@
 #include "../include/command.h"
 #include "../err_fcts.h"
 
+#ifdef XMS_SWAP
+#include "../include/cswap.h"
+#endif
+
 int cmd_if(char *param)
 {
 
@@ -66,6 +70,7 @@ int cmd_if(char *param)
 
 	if(matchtok(param, "exist")) {
 		struct dos_ffblk f;
+		isr olderrhandler;
 
 		if(!*param) {
 			/* syntax error */
@@ -76,9 +81,20 @@ int cmd_if(char *param)
 		pp = skip_word(param);
 		*pp++ = '\0';
 
+		/* don't show abort/retry/fail if no disk in drive */
+		get_isr(0x24, olderrhandler);
+#ifdef XMS_SWAP
+		set_isrfct(0x24, autofail_err_handler);  /* always fails */
+#else
+		set_isrfct(0x24, dummy_criter_handler);  /* always fails */
+#endif
+
 		if(dos_findfirst(param, &f, FA_NORMAL|FA_ARCH|FA_SYSTEM|FA_RDONLY|FA_HIDDEN) == 0)
 			x_flag = X_EXEC;
-        dos_findclose(&f);
+		dos_findclose(&f);
+        
+		/* restore critical error handler */
+		set_isrfct(0x24, olderrhandler);
 	}
 
 	/* Check for 'errorlevel' form */
