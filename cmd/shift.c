@@ -29,18 +29,18 @@
 
 int cmd_shift(char *param)
 {
-	if(bc == 0) {
-		/*!! not in batch - error */
+	struct bcontext *b = activeBatchContext();
 
+	if(!b)
+		/* not in batch - error */
 		return 1;
-	}
 
 	assert(param);
 	if(stricmp(param, "down") == 0) {
-		if(bc->shiftlevel)
-			bc->shiftlevel--;
+		if(b->shiftlevel)
+			b->shiftlevel--;
 	} else                          /* shift up */
-		bc->shiftlevel++;
+		b->shiftlevel++;
 
 	return 0;
 }
