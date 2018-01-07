@@ -94,7 +94,7 @@ void myfnmerge( char *path, const char *drive, const char *dir,
 
     if( *fname ) {
         strcat( path, fname );
-        if( *ext ) {
+        if( ext && *ext ) {
 #if 0 /* Unused */
             if( *ext != '.' ) strcat( path, "." );
 #endif
