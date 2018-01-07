@@ -50,7 +50,7 @@
 #define topara(x) (((x) + 0xf) >> 4)
 #define mcbAssign(mcb,wordValue)	(mcb = MK_SEG_PTR(struct MCB,wordValue))
 	/* skip to next MCB in chain */
-#define mcbNext(mcb)	mcbAssign(mcb, nxtMCB((word)mcb))
+#define mcbNext(mcb)	mcbAssign(mcb, nxtMCB(FP_SEG(mcb)))
 #define DosAlloc(value)	DOSalloc((value), 0xF)
 
 enum error_codes
@@ -360,7 +360,7 @@ static int findUMBRegions(void)
          * the size of the whole region. */
 
         struct MCB _seg *umb_mcb;
-        mcbAssign(umb_mcb, (word)mcb - 1);
+        mcbAssign(umb_mcb, FP_SEG(mcb) - 1);
 
         if((umb_mcb->mcb_type == 'Z' || umb_mcb->mcb_type == 'M')
          && !_fmemcmp(umb_mcb->mcb_name, "UMB     ", 8))
@@ -373,7 +373,7 @@ static int findUMBRegions(void)
               region->end--;
             region++;
             region->start = 0;
-            mcbAssign(mcb, (word)umb_mcb + umb_mcb->mcb_size);
+            mcbAssign(mcb, FP_SEG(umb_mcb) + umb_mcb->mcb_size);
             if (sig == 'Z')
               break;
             continue;
