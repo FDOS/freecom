@@ -5,12 +5,14 @@
 #ifndef FREECOM_COMMAND_H
 #define FREECOM_COMMAND_H
 
+#define MAX_INTERNAL_COMMAND_SIZE 256
+
+#ifndef MKINFRES
 #include <dos.h>
 #include <stdio.h>
 #include <fmemory.h>
 #include "../include/misc.h"
 
-#define MAX_INTERNAL_COMMAND_SIZE 256
 #define MAX_EXTERNAL_COMMAND_SIZE 125
 	/* The maximal external command line is:
 		  128: overall space for the command line)
@@ -195,5 +197,6 @@ int cmd_beep(char *);
 int get_redirection(char *, char **, char **, int *);
 
 int batch(char *, char *, char *);
+#endif
 
 #endif
