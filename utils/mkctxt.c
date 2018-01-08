@@ -57,6 +57,9 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#ifdef __GNUC__
+#define memicmp strncasecmp
+#endif
 
 static char *typename = NULL;	/* Current typedef */
 static char *pkg = NULL;	/* Current package */

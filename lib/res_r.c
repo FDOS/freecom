@@ -80,13 +80,27 @@
 #include <assert.h>
 #include <string.h>	/* memcmp */
 #include <fcntl.h>
+#ifndef __GNUC__
 #include <io.h>		/* filelength */
+#endif
 
 #include "../include/resource.h"
 #ifdef PTCHSIZE
 #define dos_open open
 #define dos_read read
 #define dos_close close
+#ifdef __GNUC__
+#define O_BINARY 0
+#include <sys/types.h>
+#include <unistd.h>
+static long int filelength(int fd)
+{
+  long int cur = lseek(fd, 0, SEEK_CUR);
+  long int fsize = lseek(fd, 0, SEEK_END);
+  lseek(fd, cur, SEEK_SET);
+  return fsize;
+}
+#endif
 #else
 #include "../include/misc.h"
 #endif

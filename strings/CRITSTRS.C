@@ -38,9 +38,9 @@ started
 
 /*ska: no resource in this project! #include "../resource.h"*/
 
-#define fDAT "STRINGS.ERR"
-#define fTXT "DEFAULT.ERR"
-#define fEXT ".ERR"
+#define fDAT "strings.err"
+#define fTXT "DEFAULT.err"
+#define fEXT ".err"
 
 
 #define MAXSTRINGS       256
@@ -99,6 +99,14 @@ char temp[256];
 
 	/* keep it a single-file project */
 /*ska: no resource in this project! #include "../res_w.c"*/
+
+#ifdef __GNUC__
+static void strupr(char *s)
+{
+  for (; *s; s++)
+    *s = toupper(*s);
+}
+#endif
 
 #ifdef __TURBOC__
 #define join(s1,s2)	strcpy(stpcpy(temp, s1), s2);

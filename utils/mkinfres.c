@@ -13,6 +13,7 @@
 #include <string.h>
 
 #include "../config.h"
+#define MKINFRES
 #include "../include/command.h"
 #include "../include/res.h"
 #include "../include/infores.h"

@@ -61,8 +61,17 @@ add: version number of strings and logfile entries
 
 
 #include <ctype.h>
-#ifdef __TURBOC__
+#if defined(__TURBOC__)
 #include <dir.h>
+#elif defined(__GNUC__)
+#include <unistd.h>
+#define stricmp strcasecmp
+#define mkdir(x) mkdir(x, 0777)
+static char *strupr(char *s)
+{
+  for (; *s; s++)
+    *s = toupper(*s);
+}
 #else
 #include <direct.h>
 #include <io.h>
@@ -77,10 +86,10 @@ add: version number of strings and logfile entries
 #include "../include/resource.h"
 #include "../include/keys.h"
 
-#define logfile "STRINGS.LOG"
-#define fDAT "STRINGS.DAT"
+#define logfile "strings.log"
+#define fDAT "strings.dat"
 #define fTXT "DEFAULT.LNG"
-#define fH "STRINGS.H"
+#define fH "strings.h"
 #define fEXT ".LNG"
 #define fDMAKEFILE "makefile"
 #define fTCMAKEFILE "strings.rsp"
@@ -103,7 +112,7 @@ const char id[]="FreeDOS STRINGS v";
 const char promptID[] = "PROMPT_";
 #define promptIDlen (sizeof(promptID) - 1)
 
-#define STRINGLIB_DIR "STRINGS"
+#define STRINGLIB_DIR "strings"
 #define stringdir cfile
 #define cfilename (&cfile[sizeof(STRINGLIB_DIR)])
 #define cfmt "str%04x.c"
@@ -155,7 +164,7 @@ char temp[1024];
 static const char besFromChar[] =
  "abcdefghijklmnopqrstuvwxyz,.[{}]\\?0";
 static const char besToChar[] =
- "\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x0\y\z,.[{}]\\?";
+ "\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\x0\v\w\x0\y\z,.[{}]\\?";
 
 symKey symkeys[] = {		/* symbolic keynames, uppercased! */
 	 { KEY_CTL_C,	"BREAK" }		/* Pseudo-^Break */
@@ -414,7 +423,7 @@ printf("FIXSTRS: loading file %s\n", fnam);
 				}
 				vstring.length = text.length = 0;
 				version = (vers && *++vers)? atoi(vers): 0;
-				if(strchr(vers, '%'))
+				if(vers && strchr(vers, '%'))
 					strg[cnt].flags |= PERFORM_VALIDATION;
 				if(memcmp(strg[cnt].name, promptID, promptIDlen) == 0)
 					state = GETTING_PROMPT_LINE_1;
@@ -798,7 +807,7 @@ puts("FIXSTRS: building STRINGS resource");
 		mkdir(stringdir);
 #define fdmake inc
 #define ftc101 dat
-		cfilename[-1] = '\\';
+		cfilename[-1] = '/';
 		strcpy(cfilename, fDMAKEFILE);
 		if((fdmake = fopen(cfile, "wt")) == NULL) {
 			pxerror("creating ", cfile);
