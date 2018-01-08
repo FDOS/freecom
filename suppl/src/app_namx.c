@@ -39,7 +39,7 @@ in(itialized by): appInitEnvEx
 
 #ifndef _MICROC_
 #endif
-#include "appName.loc"
+#include "appname.loc"
 
 #include "suppldbg.h"
 

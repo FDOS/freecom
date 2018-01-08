@@ -17,7 +17,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <io.h>
-#include <sys\stat.h>
+#include <sys/stat.h>
 
 #include <suppl.h>
 #include <dfn.h>

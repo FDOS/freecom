@@ -26,7 +26,7 @@
 #ifndef __FMEMORY_H
 #define __FMEMORY_H
 
-#include <SUPL_DEF.H>
+#include <supl_def.h>
 
 #ifdef _MICROC_				/* for use for Micro-C only */
 

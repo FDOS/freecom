@@ -33,11 +33,11 @@
 #include <mcb.h>
 #include <environ.h>
 
-#include "..\err_fcts.h"
-#include "..\include\command.h"
-#include "..\include\context.h"
-#include "..\include\crossjmp.h"
-#include "..\include\misc.h"
+#include "../err_fcts.h"
+#include "../include/command.h"
+#include "../include/context.h"
+#include "../include/crossjmp.h"
+#include "../include/misc.h"
 
 static unsigned ctxtSavedSize;
 static void *ctxtSavePtr;
