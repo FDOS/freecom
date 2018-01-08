@@ -11,6 +11,6 @@
 
 #include "../include/resource.h"
 
-int enumResources(res_majorid_t id, int (*fct)(), void * const arg);
+int enumResources(res_majorid_t id, res_callbackp_t fct, void * const arg);
 
 #endif

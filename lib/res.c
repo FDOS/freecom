@@ -3,7 +3,7 @@
  *
  *	Contains all functions specific for FreeCOM
  *
- *	int enumResources(altFnam, res_majorid_t, int (*fct)(), void * arg)
+ *	int enumResources(altFnam, res_majorid_t, res_callbackp_t fct, void * arg)
  *		Searches for all resources of the specified major ID in the
  *		primary resource file, which is usually the execuatble itself.
  *		On "open error: (rc == -1) the alternate filename "altFnam" is
@@ -68,7 +68,7 @@
 #include "../include/command.h"
 
 int enumResources(res_majorid_t id
-	, int (*fct)()
+	, res_callbackp_t fct
 	, void * const arg)
 {
 	dprintf(("[RES: searching file '%s']\n", comResFile()));

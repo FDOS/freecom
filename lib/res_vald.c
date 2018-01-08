@@ -27,7 +27,7 @@
 
 static int test_fct (res_majorid_t major,
 		     res_minorid_t minor,
-		     long length,
+		     unsigned long length,
 		     int fd,
 		     void *const arg) {
 	(void)major, (void)length, (void)fd, (void)arg;

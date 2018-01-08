@@ -49,7 +49,7 @@ typedef int (*res_callbackp_t)(res_majorid_t, res_minorid_t
 
 
 int enumFileResources(const char * const fnam, res_majorid_t id
- , int (*fct)(), void * const arg);
+ , res_callbackp_t fct, void * const arg);
 void startResource(FILE *f, res_majorid_t majorID, res_minorid_t minorID);
 void endResource(FILE *f);
 
