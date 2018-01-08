@@ -47,7 +47,7 @@ OBJ5 =	rmdir.obj \
 	verify.obj \
 	which.obj 
 
-echolib.bat : ..\scripts\echolib.bat
+echolib.bat : ../scripts/echolib.bat
 	copy ..\scripts\echolib.bat
 
 cmds.rsp : echolib.bat cmd.mak

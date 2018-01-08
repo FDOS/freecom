@@ -5,4 +5,4 @@ TOP=..
 
 all: $(CFG) mktools.exe mkctxt.exe chunk.exe mkinfres.exe
 
-mktools.exe : ..\config.h
+mktools.exe : ../config.h

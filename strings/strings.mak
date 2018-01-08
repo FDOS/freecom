@@ -6,11 +6,11 @@ TOP=..
 
 all : strings.h strings.err strings.lib
 
-strings.h : default.lng fixstrs.exe
+strings.h : DEFAULT.LNG fixstrs.exe
 	fixstrs.exe /lib $(LNG)
 	copy strings.h ..
 
-strings.err : default.err critstrs.exe
+strings.err : DEFAULT.err critstrs.exe
 	critstrs.exe $(LNG)
 
 strings.lib: strings.h strings.err
@@ -29,7 +29,7 @@ strings.lib: strings.h strings.err
 
 fixstrs.exe: $(CFG) fixstrs.c
 
-critstrs.exe: $(CFG) critstrs.c
+critstrs.exe: $(CFG) CRITSTRS.C
 
 #		*Individual File Dependencies*
 fixstrs.obj: $(CFG) fixstrs.c

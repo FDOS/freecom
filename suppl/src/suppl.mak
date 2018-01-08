@@ -6,7 +6,7 @@ TOP=../..
 SUPPL=suppl_$(SHELL_MMODEL)
 CC = $(CC) -I..
 
-all : ..\$(SUPPL).lib
+all : ../$(SUPPL).lib
 
 OBJ1 = addu.obj byte2par.obj cntry.obj dfndeli2.obj dfndelim.obj dfnexpan.obj \
 dfnfnam.obj
@@ -50,7 +50,7 @@ gm_res.obj
 DOBJ10 = gm_dup.obj gm_chgm.obj gm_gtmem.obj nlstime.obj strnum.obj \
 s_skipws.obj s_skipwd.obj
 
-echolib.bat: ..\..\scripts\echolib.bat
+echolib.bat: ../../scripts/echolib.bat
 	copy ..\..\scripts\echolib.bat
 
 # Prepare Linker Response File
@@ -79,7 +79,7 @@ objlist.txt: echolib.bat suppl.mak
 	$(ECHOLIB) objlist.txt $(DOBJ10)
 
 # Create the library
-..\$(SUPPL).lib: $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) \
+../$(SUPPL).lib: $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) \
 $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(DOBJ1) $(DOBJ2) $(DOBJ3) $(DOBJ4) \
 $(DOBJ5) $(DOBJ6) $(DOBJ7) $(DOBJ8) $(DOBJ9) $(DOBJ10) objlist.txt
 	..\..\scripts\rmfiles ..\$(SUPPL).lib

@@ -1,4 +1,4 @@
-CFG_DEPENDENCIES = COMMAND.MAK ..\strings.h
+CFG_DEPENDENCIES = command.mak ../strings.h
 
 TOP=..
 !include "$(TOP)/config.mak"
@@ -28,7 +28,7 @@ OBJ4 =	redir.obj\
 LIBS = 	$(SUPPL_LIB_PATH)\suppl_$(SHELL_MMODEL).lib ..\cmd\cmds.lib \
 ..\lib\freecom.lib ..\strings\strings.lib $(LIBC)
 
-echoto.bat: ..\scripts\echoto.bat
+echoto.bat: ../scripts/echoto.bat
 	copy ..\scripts\echoto.bat
 
 command.rsp : echoto.bat

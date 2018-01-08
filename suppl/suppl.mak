@@ -3,9 +3,9 @@ CFG_DEPENDENCIES = suppl.mak
 TOP=..
 !include "$(TOP)/config.mak"
 
-all : src\$(CFG)
+all : src/$(CFG)
 
-src\$(CFG) : $(CFG)
+src/$(CFG) : $(CFG)
 	copy $(CFG) src
 
 clean :

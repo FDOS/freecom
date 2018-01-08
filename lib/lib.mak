@@ -250,7 +250,7 @@ OBJ29 =	err81.obj\
 	err85.obj\
 	err86.obj
 
-echolib.bat : ..\scripts\echolib.bat
+echolib.bat : ../scripts/echolib.bat
 	copy ..\scripts\echolib.bat
 
 freecom.rsp : echolib.bat $(OBJ16) $(OBJ17) $(OBJ18) $(OBJ19) $(OBJ20) \
