@@ -291,4 +291,4 @@ freecom.lib : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) \
 $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14) $(OBJ15) \
 freecom.rsp
 	..\scripts\rmfiles freecom.lib
-	$(AR) freecom.lib /c @freecom.rsp $(LIBLIST) freecom.lst
+	$(AR) freecom.lib @freecom.rsp $(LIBLIST) freecom.lst

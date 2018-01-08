@@ -60,4 +60,4 @@ cmds.rsp : echolib.bat cmd.mak
 
 cmds.lib : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) cmds.rsp
 	..\scripts\rmfiles cmds.lib
-	$(AR) cmds.lib /c @cmds.rsp $(LIBLIST) cmds.lst 
+	$(AR) cmds.lib @cmds.rsp $(LIBLIST) cmds.lst 

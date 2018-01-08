@@ -4,7 +4,7 @@ LIBPATH = $(CC_BASE_PATH)\LIB
 INCLUDEPATH = -I$(CC_BASE_PATH)\H
 CC = $(BINPATH)\wcc -zq		# Turbo C/C++
 CL = $(BINPATH)\wcl -zq
-AR = $(BINPATH)\wlib /n
+AR = $(BINPATH)\wlib /n /c
 LD = wlinker /ma/nologo
 LIBLIST = /l=
 ECHOLIB = echo >>

@@ -19,7 +19,7 @@ strings.lib: strings.h strings.err
 	..\..\scripts\rmfiles $(CFG)
 	$(CL) -c *.c
 	..\..\scripts\rmfiles strings.lib
-	$(AR) strings.lib /c @strings.rsp $(LIBLIST) strings.lst
+	$(AR) strings.lib @strings.rsp $(LIBLIST) strings.lst
 	copy strings.lib ..
 	copy strings.lst ..
 	echo Purging temporary directory of strings library

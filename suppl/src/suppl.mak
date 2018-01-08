@@ -83,4 +83,4 @@ objlist.txt: echolib.bat suppl.mak
 $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(DOBJ1) $(DOBJ2) $(DOBJ3) $(DOBJ4) \
 $(DOBJ5) $(DOBJ6) $(DOBJ7) $(DOBJ8) $(DOBJ9) $(DOBJ10) objlist.txt
 	..\..\scripts\rmfiles ..\$(SUPPL).lib
-	$(AR) /C ..\$(SUPPL).LIB @objlist.txt $(LIBLIST)..\$(SUPPL).lst
+	$(AR) ..\$(SUPPL).LIB @objlist.txt $(LIBLIST)..\$(SUPPL).lst
