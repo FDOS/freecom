@@ -8,8 +8,8 @@
  */
 
 
-typedef unsigned string_count_t;	/* number of strings */
-typedef unsigned string_size_t;		/* number of size of strings */
+typedef unsigned short string_count_t;	/* number of strings */
+typedef unsigned short string_size_t;	/* number of size of strings */
 typedef struct 
 {
   string_count_t index;

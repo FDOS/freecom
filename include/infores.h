@@ -62,11 +62,11 @@ typedef struct {
 
 #include <algnbyte.h>
 struct EXE_header {
-	unsigned sig, lastFill, numBlocks, numReloc;
-	unsigned header;
-	unsigned extraMin, extraMax;
-	unsigned fSS, fSP, checksum, fIP, fCS;
-	unsigned offReloc, ovrlyNum;
+	unsigned short sig, lastFill, numBlocks, numReloc;
+	unsigned short header;
+	unsigned short extraMin, extraMax;
+	unsigned short fSS, fSP, checksum, fIP, fCS;
+	unsigned short offReloc, ovrlyNum;
 };
 #include <algndflt.h>
 

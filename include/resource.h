@@ -18,15 +18,16 @@
 
 #include "algnbyte.h"
 
-typedef unsigned res_minorid_t;	/* must be exactly unsigned 16bit */
+typedef unsigned short res_minorid_t;	/* must be exactly unsigned 16bit */
 
-typedef enum {
+enum {
 	RES_ID_NONE = -0x7ffe,
 	RES_ID_ANY = -0x7fff,
 	RES_ID_STRINGS = 0,
 	RES_ID_CRITER,
 	RES_ID_INFO
-} res_majorid_t;
+};
+typedef short res_majorid_t;
 
 typedef struct {		/* type of a control area */
 	unsigned long res_length;
