@@ -157,5 +157,5 @@ echo All done. COMMAND.COM is ready for usage!
 echo
 if [ -z "$XMS_SWAP"]; then
   echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
-  echo ./build.sh -r xms-swap %LNG%
+  echo ./build.sh -r xms-swap $LNG
 fi
