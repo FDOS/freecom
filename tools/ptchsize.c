@@ -29,7 +29,11 @@ unsigned long minSize;
 
 struct {
 	unsigned alias, hist, dirs, bufsize, extraSpace;
+#ifdef __LP64__
+	unsigned int heapPos;
+#else
 	unsigned long heapPos;
+#endif
 } ival;
 
 #define PTCHSIZE

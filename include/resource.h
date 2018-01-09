@@ -19,6 +19,11 @@
 #include "algnbyte.h"
 
 typedef unsigned short res_minorid_t;	/* must be exactly unsigned 16bit */
+#ifdef __LP64__
+typedef unsigned int res_length_t;
+#else
+typedef unsigned long res_length_t;
+#endif
 
 enum {
 	RES_ID_NONE = -0x7ffe,
@@ -30,7 +35,7 @@ enum {
 typedef short res_majorid_t;
 
 typedef struct {		/* type of a control area */
-	unsigned long res_length;
+	res_length_t res_length;
 	res_majorid_t res_majorID;
 	res_minorid_t res_minorID;
 	unsigned char res_cookie[8];	/* NOT '\0' terminated! */
