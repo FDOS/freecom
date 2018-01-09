@@ -103,7 +103,7 @@ void unloadMsgs(void)
 
 static int loadStrings (res_majorid_t major,
 		        res_minorid_t minor,
-		        long length,
+		        unsigned long length,
 			int fd,
 			void *const arg) {
 	loadStatus *ls = arg;
