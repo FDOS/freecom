@@ -305,7 +305,7 @@ _lowlevel_err_handler:
 	push cx
 	mov cx, 8
 	mov di, ??_c
-	add si, 10
+	add si, byte 10
 ??__e:
 	lodsb
 	cmp al, 32
@@ -345,7 +345,7 @@ _lowlevel_err_handler:
 	jz ?noCharDevice
 			; fetch the name of the character device
 		mov cx, 8		; max eight characters to display
-		add si, 10		; located at offset 10
+		add si, byte 10		; located at offset 10
 		mov di, ??strargA
 		mov ah, ' '
 		cld
