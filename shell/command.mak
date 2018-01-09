@@ -25,21 +25,21 @@ OBJ3 =	batch.obj\
 	module.obj
 OBJ4 =	redir.obj\
 	ver.obj
-LIBS = 	$(SUPPL_LIB_PATH)\suppl_$(SHELL_MMODEL).lib ..\cmd\cmds.lib \
-..\lib\freecom.lib ..\strings\strings.lib $(LIBC)
+LIBS = 	$(SUPPL_LIB_PATH)$(DIRSEP)suppl_$(SHELL_MMODEL).lib ..$(DIRSEP)cmd$(DIRSEP)cmds.lib \
+..$(DIRSEP)lib$(DIRSEP)freecom.lib ..$(DIRSEP)strings$(DIRSEP)strings.lib $(LIBC)
 
 echoto.bat: ../scripts/echoto.bat
-	copy ..\scripts\echoto.bat
+	$(CP) ..$(DIRSEP)scripts$(DIRSEP)echoto.bat .
 
 command.rsp : echoto.bat
-        ..\scripts\rmfiles command.rsp
-	echoto command.rsp $(OBJ1)+
-	echoto command.rsp $(OBJ2)+
-	echoto command.rsp $(OBJ3)+
-	echoto command.rsp $(OBJ4)
-	echoto command.rsp command.exe
-	echoto command.rsp command.map
-	echoto command.rsp $(LIBS)
+	$(RMFILES) command.rsp
+	$(ECHOTO0) command.rsp $(OBJ1)+
+	$(ECHOTO0) command.rsp $(OBJ2)+
+	$(ECHOTO0) command.rsp $(OBJ3)+
+	$(ECHOTO0) command.rsp $(OBJ4)
+	$(ECHOTO0) command.rsp command.exe
+	$(ECHOTO0) command.rsp command.map
+	$(ECHOTO0) command.rsp $(LIBS)
 
 command.exe : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) command.rsp
 	$(LD) @command.rsp

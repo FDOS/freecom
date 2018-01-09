@@ -6,7 +6,7 @@ TOP=..
 all : src/$(CFG)
 
 src/$(CFG) : $(CFG)
-	copy $(CFG) src
+	$(CP) $(CFG) src
 
 clean :
 	clnsuppl.bat

@@ -8,7 +8,7 @@ all : strings.h strings.err strings.lib
 
 strings.h : DEFAULT.LNG fixstrs.exe
 	fixstrs.exe /lib $(LNG)
-	copy strings.h ..
+	$(CP) strings.h ..
 
 strings.err : DEFAULT.err critstrs.exe
 	critstrs.exe $(LNG)
@@ -16,14 +16,14 @@ strings.err : DEFAULT.err critstrs.exe
 strings.lib: strings.h strings.err
 	cd strings
 	echo Making STRINGS library
-	..\..\scripts\rmfiles $(CFG)
+	$(RMFILES2) $(CFG)
 	$(CL) -c *.c
-	..\..\scripts\rmfiles strings.lib
+	$(RMFILES2) strings.lib
 	$(AR) strings.lib @strings.rsp $(LIBLIST) strings.lst
-	copy strings.lib ..
-	copy strings.lst ..
+	$(CP) strings.lib ..
+	$(CP) strings.lst ..
 	echo Purging temporary directory of strings library
-	..\..\scripts\rmfiles strings.*	makefile errlist *.obj *.c
+	$(RMFILES2) strings.*	makefile errlist *.obj *.c
 	cd ..
 	rmdir strings
 

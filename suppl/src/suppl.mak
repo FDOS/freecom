@@ -51,11 +51,11 @@ DOBJ10 = gm_dup.obj gm_chgm.obj gm_gtmem.obj nlstime.obj strnum.obj \
 s_skipws.obj s_skipwd.obj
 
 echolib.bat: ../../scripts/echolib.bat
-	copy ..\..\scripts\echolib.bat
+	$(CP) ..$(DIRSEP)..$(DIRSEP)scripts$(DIRSEP)echolib.bat .
 
 # Prepare Linker Response File
 objlist.txt: echolib.bat suppl.mak
-	..\..\scripts\rmfiles objlist.txt
+	$(RMFILES2) objlist.txt
 	$(ECHOLIB) objlist.txt $(OBJ1)
 	$(ECHOLIB) objlist.txt $(OBJ2)
 	$(ECHOLIB) objlist.txt $(OBJ3)
@@ -82,5 +82,5 @@ objlist.txt: echolib.bat suppl.mak
 ../$(SUPPL).lib: $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) \
 $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(DOBJ1) $(DOBJ2) $(DOBJ3) $(DOBJ4) \
 $(DOBJ5) $(DOBJ6) $(DOBJ7) $(DOBJ8) $(DOBJ9) $(DOBJ10) objlist.txt
-	..\..\scripts\rmfiles ..\$(SUPPL).lib
-	$(AR) ..\$(SUPPL).LIB @objlist.txt $(LIBLIST)..\$(SUPPL).lst
+	$(RMFILES2) ..$(DIRSEP)$(SUPPL).lib
+	$(AR) ..$(DIRSEP)$(SUPPL).lib @objlist.txt $(LIBLIST)..$(DIRSEP)$(SUPPL).lst

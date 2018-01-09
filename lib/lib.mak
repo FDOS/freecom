@@ -251,12 +251,12 @@ OBJ29 =	err81.obj\
 	err86.obj
 
 echolib.bat : ../scripts/echolib.bat
-	copy ..\scripts\echolib.bat
+	$(CP) ..$(DIRSEP)scripts$(DIRSEP)echolib.bat .
 
 freecom.rsp : echolib.bat $(OBJ16) $(OBJ17) $(OBJ18) $(OBJ19) $(OBJ20) \
 $(OBJ21) $(OBJ22) $(OBJ23) $(OBJ24) $(OBJ25) $(OBJ26) $(OBJ27) $(OBJ28) \
 $(OBJ29) lib.mak
-	..\scripts\rmfiles freecom.rsp
+	$(RMFILES) freecom.rsp
 	$(ECHOLIB) freecom.rsp $(OBJ1)
 	$(ECHOLIB) freecom.rsp $(OBJ2)
 	$(ECHOLIB) freecom.rsp $(OBJ3)
@@ -290,5 +290,5 @@ $(OBJ29) lib.mak
 freecom.lib : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) \
 $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14) $(OBJ15) \
 freecom.rsp
-	..\scripts\rmfiles freecom.lib
+	$(RMFILES) freecom.lib
 	$(AR) freecom.lib @freecom.rsp $(LIBLIST) freecom.lst
