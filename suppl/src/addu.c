@@ -46,7 +46,11 @@ va: !0 if arethemtic overflow occured\item 0: no overflow
 
 int addu(nM(unsigned * const) u1, nM(const unsigned) u2)
 {
-#ifdef _TC_EARLY_
+#if defined(__GNUC__)
+	int ret;
+	asm("add %2, %1; sbb %0, %0": "=r"(ret), "+m"(*u1): "r"(u2));
+	return ret;
+#elif defined(_TC_EARLY_)
 	*u1 += u2;			/* Is translated into exactly what's written
 							in #else branch */
 	__emit__(0x1b,0xc0);		/* SBB AX, AX */

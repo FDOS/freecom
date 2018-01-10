@@ -40,7 +40,7 @@
 #include <string.h>
 
 #else	/* !_TC_LATER_ */
-#if defined(_PAC_NOCLIB_) || defined(_TC_EARLY_)
+#if defined(_PAC_NOCLIB_) || defined(_TC_EARLY_) || defined(__GNUC__)
 
 #ifdef _PAC_NOCLIB_
 #include <stdlib.h>

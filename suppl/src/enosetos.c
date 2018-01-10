@@ -58,7 +58,7 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
-#ifdef __TURBOC__
+#if defined(__TURBOC__) || defined(__GNUC__)
 extern char _dosErrorToSV [];
 #elif __WATCOMC__
 extern  int __set_errno_dos(unsigned int err);

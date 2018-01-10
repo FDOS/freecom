@@ -116,7 +116,9 @@ int env_get(word segm, const char * const var, char * const dst, const unsigned 
 char *dupvar(const char * const var);
 char *env_dupvar(word segm, const char * const var);
 char *env_fetch(word segm, const char * const var);
+#ifndef __GNUC__
 int putenv(const char *var);
+#endif
 #define chgenv(name,value) env_change(0,name,value)
 int env_change(word segm, const char * const var, const char * const value);
 int env_ovrVarOffset(word segm, word ofs, const char *varname

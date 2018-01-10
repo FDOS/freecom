@@ -133,6 +133,10 @@ int longcmp(long d1, long d2);
 #include "p-watcom.h"
 #endif
 
+#ifdef __GNUC__
+#include "p-gcc.h"
+#endif
+
 #endif	/* _MICROC_ */
 
 #ifndef strend

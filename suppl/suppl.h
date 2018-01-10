@@ -325,6 +325,9 @@ void ctrlbrk(int (*fct)(void));
 #ifdef _TC_EARLY_
 #define COMPILE
 #endif
+#ifdef __GNUC__
+#define COMPILE
+#endif
 
 #ifdef COMPILE
 #undef COMPILE

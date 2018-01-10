@@ -60,7 +60,7 @@ int Fmaxbuf(byte ** const Xbuf, size_t * const Xlen)
 	assert(Xbuf);
 	assert(Xlen);
 
-	len = 32 * 1024;			/* try to allocate 32KB */
+	len = 32 * 1024u;			/* try to allocate 32KB */
 	chkHeap
 	while((buf = malloc(len)) == 0)
 		if((len >>= 1) < 16) {

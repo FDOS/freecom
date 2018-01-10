@@ -94,8 +94,10 @@ word DOSalloc(word length, int mode)
 			/* FreeDOS doesn't change the flags if the API call fails */
     /* /// Modified to use __emit__(), which doesn't require an assembler,
        if we're compiling with TurboC.  - Ron Cemer */
-#ifdef _TC_EARLY_
+#if defined(_TC_EARLY_)
         __emit__((unsigned char)0xf9);      /* stc */
+#elif defined __GNUC__
+		asm volatile ("stc\n");
 #else
 		asm {
 			stc
@@ -123,8 +125,10 @@ word DOSalloc(word length, int mode)
 				flags */
     /* /// Modified to use __emit__(), which doesn't require an assembler,
        if we're compiling with TurboC.  - Ron Cemer */
-#ifdef _TC_EARLY_
+#if defined(_TC_EARLY_)
         __emit__((unsigned char)0xf8);      /* clc */
+#elif defined __GNUC__
+		asm volatile ("stc\n");
 #else
 		asm {
 			clc

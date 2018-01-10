@@ -63,7 +63,7 @@ extern unsigned _FLAGS;
 
 #else
 
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__) || defined(__GNUC__)
 #define USEREGS  union REGPACK reg ;
 #define _AH reg.h.ah
 #define _AL reg.h.al
@@ -130,7 +130,7 @@ extern unsigned _FLAGS;
 #define asmLabel(a) } a: asm {
 #define asmName(a,b) a
 
-#if defined(__POWERC) || (defined(__TURBOC__) && !defined(__BORLANDC__))
+#if defined(__POWERC) || (defined(__TURBOC__) && !defined(__BORLANDC__)) || defined(__GNUC__)
 #define FAR far
 #else
 #define FAR _far

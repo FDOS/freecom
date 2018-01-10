@@ -19,6 +19,7 @@ DEBUG=-DDEBUG
 SHELL_MMODEL=s
 DEBUG=-UDEBUG -DNDEBUG
 !endif
+SHELL_MMODEL_COMP=$(SHELL_MMODEL)
 
 !include "$(TOP)/mkfiles/$(COMPILER).mak"
 
@@ -49,7 +50,7 @@ $(CFG): $(CFG_DEPENDENCIES) ../config.mak
 	$(RMFILES) $(CFG)
 	$(ECHOTO) $(CFG) $(CFLAGS1)
 	$(ECHOTO) $(CFG) $(INCLUDEPATH)
-	$(ECHOTO) $(CFG) -m$(SHELL_MMODEL) $(MMODEL)
+	$(ECHOTO) $(CFG) -m$(SHELL_MMODEL_COMP) $(MMODEL)
 	$(ECHOTO) $(CFG) $(DEBUG) $(__XMS_SWAP)
 
 #		*Implicit Rules*

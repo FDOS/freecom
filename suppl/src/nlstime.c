@@ -55,7 +55,7 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
-#if defined(_MICROC_) || defined(_TC_EARLY_)
+#if defined(_MICROC_) || defined(_TC_EARLY_) || defined(__GNUC__)
 #undef HAVE_DOSTIME
 #else
 #define HAVE_DOSTIME

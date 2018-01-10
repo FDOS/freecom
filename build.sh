@@ -55,6 +55,9 @@ while (( "$#" )); do
     wc)
 	export COMPILER=watcom
 	;;
+    gcc)
+	export COMPILER=gcc
+	;;
     *)
 	break
 	;;
@@ -69,7 +72,7 @@ echo Building FreeCOM for language $LNG
 
 if [ -z "$MAKE" ]; then
     case "$COMPILER" in
-	watcom)
+	watcom|gcc)
 	    export MAKE="wmake -ms -h -f"
 	    ;;
 	*)

@@ -39,8 +39,8 @@ char *eno_strdup(const char * const fnam);
 void *eno_malloc(const size_t len);
 void *eno_realloc(void * const poi, const size_t len);
 
-#ifndef _MICROC_
+#if !defined(_MICROC_) && !defined(__GNUC__)
 char *eno_fdupstr(const char far * const s);
-#endif	/* !_MICROC_ */
+#endif	/* !_MICROC_ && !__GNUC__ */
 
 #endif
