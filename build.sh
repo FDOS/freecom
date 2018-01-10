@@ -27,9 +27,9 @@ if [ -z "$WATCOM" ]; then
 fi
 export PATH=$PATH:.
 
-if [ -f lastmake.mk ] || [ "$1" == "-r" ]; then source clean.sh; fi
-if [ "$1" == "-r" ]; then source clean.sh; shift; fi
-if [ "$1" == "clean" ]; then source clean.sh; exit 0; fi
+if [ -f lastmake.mk ] || [ "$1" == "-r" ]; then ./clean.sh; fi
+if [ "$1" == "-r" ]; then ./clean.sh; shift; fi
+if [ "$1" == "clean" ]; then ./clean.sh; exit 0; fi
 
 while (( "$#" )); do
   case "$1" in
@@ -155,7 +155,7 @@ tools/ptchsize.exe command.com +6KB
 echo
 echo All done. COMMAND.COM is ready for usage!
 echo
-if [ -z "$XMS_SWAP"]; then
+if [ -z "$XMS_SWAP" ]; then
   echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
   echo ./build.sh -r xms-swap $LNG
 fi
