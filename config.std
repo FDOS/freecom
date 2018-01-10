@@ -21,6 +21,9 @@ DEBUG=-UDEBUG -DNDEBUG
 !endif
 SHELL_MMODEL_COMP=$(SHELL_MMODEL)
 
+## Add -DDEBUG=1 below to enable debug support for assembly files
+NASMFLAGS =
+
 !include "$(TOP)/mkfiles/$(COMPILER).mak"
 
 INCLUDEPATH = $(INCLUDEPATH) -I$(SUPPL_INC_PATH)
@@ -28,8 +31,6 @@ INCLUDEPATH = $(INCLUDEPATH) -I$(SUPPL_INC_PATH)
 ## Which programs to use
 NASM = $(XNASM)
 
-## Add -DDEBUG=1 below to enable debug support for assembly files
-NASMFLAGS =
 ## Add -DDEBUG=1 below to enable FreeCOM-debug support for C files
 ## Add -DNDEBUG=1 below to disable any debug (even assert)
 
@@ -55,4 +56,4 @@ $(CFG): $(CFG_DEPENDENCIES) ../config.mak
 
 #		*Implicit Rules*
 .asm.obj:
-	$(NASM) $(NASMFLAGS) -f obj -DMODEL=$(SHELL_MMODEL) $<
+	$(NASM) -f obj $(NASMFLAGS) -DMODEL=$(SHELL_MMODEL) $<
