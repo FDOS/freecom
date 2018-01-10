@@ -182,7 +182,7 @@ static void execute(char *first, char *rest)
 #endif
 		/* Install the dummy (always abort) handler */
 #ifdef FEATURE_XMS_SWAP
-    set_isr(0x23, (void interrupt(*)())
+    set_isrfct(0x23,
             MK_FP(FP_SEG(lowlevel_cbreak_handler)-0x10,
             FP_OFF(lowlevel_cbreak_handler)+0x100));
     /*
@@ -190,14 +190,14 @@ static void execute(char *first, char *rest)
      * command.com PSP, but FreeCOM is an exe...
      */
 #else
-	set_isr(0x23, (void interrupt(*)()) kswapContext->cbreak_hdlr);
+	set_isrfct(0x23, kswapContext->cbreak_hdlr);
 #endif
 #ifdef FEATURE_XMS_SWAP
     {
     isr v;
     get_isr(0x2e, v);
     if( *(unsigned char far *)v == 0xCF && !canexit) /* IRET? */
-        set_isr( 0x2E, ( void interrupt(*)() )
+        set_isrfct( 0x2E,
                  MK_FP(FP_SEG(lowlevel_int_2e_handler)-0x10,
                  FP_OFF(lowlevel_int_2e_handler)+0x100));
     }
@@ -839,7 +839,13 @@ static void hangForever(void)
   }
 }
 
-int _Cdecl my2e_parsecommandline( char *s ) {
+#ifdef __GNUC__
+int my2e_parsecommandline( char *s, ... ) asm("_my2e_parsecommandline");
+int my2e_parsecommandline( char *s, ... )
+#else
+int _Cdecl my2e_parsecommandline( char *s )
+#endif
+{
     s[ (unsigned char)s[ 0 ] ] = '\0';
 /*    printf("_my2e_parsecommandline( %s )\n", s );*/
     parsecommandline( &s[ 1 ], 1 );

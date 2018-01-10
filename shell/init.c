@@ -487,7 +487,7 @@ int initialize(void)
 	/* overlPtr2;		not used by this exec */
 #else
 	/* re-use the already loaded Module */
-	set_isr(0x24, (void interrupt(*)())
+	set_isrfct(0x24,
 	 MK_FP(FP_SEG(kswapContext->cbreak_hdlr), kswapContext->ofs_criter));
 #endif
 
