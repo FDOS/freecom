@@ -84,7 +84,7 @@ kswap_p modContext(void)
 		dprintf(("[CRITER loaded to segment 0x%04x.]\n", segm));
 #endif
 
-	return (kswap_p)segm;
+	return (kswap_p)MK_SEG_PTR(kswap_t, segm);
 }
 
 #endif

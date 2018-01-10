@@ -36,7 +36,7 @@ int kswapInit(void)
     if(!( r.r_flags & 1 )) {
         dprintf(("[KSWAP: using kernel swapping support (KSSF eventually at %04x)]\n", r.r_ax));
         if(r.r_bx)   {          /* segment found */
-            kswapContext = (kswap_p)r.r_bx;
+            kswapContext = (kswap_p)MK_SEG_PTR(kswap_t, r.r_bx);
                 /* invalidate external program if this shell
                                 aborts accidently */
             kswapContext->prg = 0;
@@ -47,7 +47,7 @@ int kswapInit(void)
     } else if(r.r_ax == 5) {    /* Access denied -> there exists a
                         static context with embedded Criter, but this
                         copy of FreeCOM is NOT allowed to alter it */
-        kswapContext = (kswap_p)r.r_bx;
+        kswapContext = (kswap_p)MK_SEG_PTR(kswap_t, r.r_bx);
         dprintf(("[KSWAP: static context found at 0x%04x]\n", r.r_bx));
     }
 
