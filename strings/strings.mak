@@ -23,7 +23,7 @@ strings.lib: strings.h strings.err
 	$(CP) strings.lib ..
 	$(CP) strings.lst ..
 	echo Purging temporary directory of strings library
-	$(RMFILES2) strings.*	makefile errlist *.obj *.c
+	$(RMFILES2) strings.*	makefile errlist *.obj *.c *.o
 	cd ..
 	rmdir strings
 

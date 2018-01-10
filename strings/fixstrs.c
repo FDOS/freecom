@@ -116,7 +116,11 @@ const char promptID[] = "PROMPT_";
 #define stringdir cfile
 #define cfilename (&cfile[sizeof(STRINGLIB_DIR)])
 #define cfmt "str%04x.c"
+#ifdef GCC
+#define objfmt "str%04x.o"
+#else
 #define objfmt "str%04x.obj"
+#endif
 char cfile[] = STRINGLIB_DIR "\0str45678.obj";
 
 /*
@@ -839,12 +843,18 @@ strings.lib .LIBRARY : ", fdmake);
 			fprintf(fdmake, "\\\n\t" objfmt, cnt);
 		}
 		for(cnt = 0; cnt < maxCnt - 1; ++cnt)
-#ifdef __TURBOC__
+#if defined(__TURBOC__)
 			fprintf(ftc101, "+" objfmt " &\n", cnt);
+#elif defined(GCC)
+			fprintf(ftc101, objfmt "\n", cnt);
 #else
 			fprintf(ftc101, "+" objfmt "\n", cnt);
 #endif
+#if defined(GCC)
+		fprintf(ftc101, objfmt " \n", cnt);
+#else
 		fprintf(ftc101, "+" objfmt " \n", cnt);
+#endif
 		/********************** epilogue */
 
 		fputs("\n\
