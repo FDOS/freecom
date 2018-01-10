@@ -64,29 +64,46 @@
 
 #include "algnbyte.h"
 
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__) || defined(__GNUC__)
 struct fcb     {
 	char    bytes[0x25];
 };
 
+#ifdef __WATCOMC__
 char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option);
 #pragma aux parsfnm = \
 	"mov ah, 29h" \
 	"int 21h" \
 	parm [si] [es di] [ax] value [si] modify [ax es]
+#else /* __GNUC__ */
+static char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option)
+{
+  char *ret;
+  asm("mov %%bx, %%es; mov %%dx, %%di; int $0x21" :
+      "=S"(ret) :
+      "Rah"((unsigned char)0x29), "j"(fcbptr), "Ral"((unsigned char)(option)),
+      "S"(cmdline) :
+      "ax", "di", "es", "cc", "memory");
+  return ret;
+}
+#endif
 #endif
 
 struct ExecBlock
 {
   word segOfEnv;
   char far *cmdLine;
-  struct fcb far *fcb1,
-    far * fcb2;
+  struct fcb far *fcb1;
+  struct fcb far *fcb2;
 };
 
 #include "algndflt.h"
 
+#ifdef __GNUC__
+int lowLevelExec(char far * cmd, struct ExecBlock far * bl, ...) asm("_lowLevelExec");
+#else
 int cdecl lowLevelExec(char far * cmd, struct ExecBlock far * bl);
+#endif
 
 int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 {

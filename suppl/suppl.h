@@ -206,7 +206,7 @@ char *stpcat(char * const dst, const char * const src);
 #endif
 
 
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__) || defined(__GNUC__)
 char *stpcpy(char * const dst, const char * const src);
 /*	Copy src into dst
 	Return pointer to '\0' terminator of dst
@@ -226,6 +226,7 @@ struct ffblk {
 #include <algndflt.h>
 #endif
 
+#ifdef __WATCOMC__
 #define findfirst(pattern,buf,attrib) _dos_findfirst((pattern), (attrib)	\
 	, (struct find_t*)(buf))
 #define findnext(buf) _dos_findnext((struct find_t*)(buf))
@@ -236,6 +237,19 @@ struct ffblk {
 #define FA_HIDDEN _A_HIDDEN
 #define FA_DIREC _A_SUBDIR
 #define FA_LABEL _A_VOLID
+
+#else /* __GNUC__ */
+
+int findfirst(const char * const pattern, struct ffblk *ff, int attrib);
+int findnext(struct ffblk *ff);
+
+#define FA_RDONLY   0x01
+#define FA_ARCH     0x20
+#define FA_SYSTEM   0x04
+#define FA_HIDDEN   0x02
+#define FA_DIREC    0x10
+#define FA_LABEL    0x08
+#endif
 
 #ifndef MAXDIR
 #define MAXDIR 66               /* 64: path; +1: root sign; +1: NUL terminator */

@@ -10,6 +10,7 @@
 #ifndef MKINFRES
 #include <dos.h>
 #include <stdio.h>
+#include <portable.h>
 #include <fmemory.h>
 #include "../include/misc.h"
 
@@ -71,8 +72,15 @@ extern void ASMINTERRUPT cbreak_handler();
 /* prototypes for COMMAND.C */
 extern int interactive_command;
 extern int persistentMSGs;
+#ifdef __GNUC__
+#define RESIDENT(x) (*(typeof(x) far *)MK_FP(residentCS, (size_t)&(x)))
+extern int CBreakCounter asm("_CBreakCounter");
+extern unsigned residentCS asm("_residentCS");
+#define ctrlBreak RESIDENT(CBreakCounter)
+#else
 extern int far CBreakCounter;
 #define ctrlBreak CBreakCounter
+#endif
 /* extern int ctrlBreak;*/
 extern int exitflag;
 extern unsigned int echo;       /* The echo flag */

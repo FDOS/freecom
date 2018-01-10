@@ -43,6 +43,7 @@
 #include <assert.h>
 
 #include <string.h>
+#include <portable.h>
 #include <fmemory.h>
 
 #include "../include/nls.h"

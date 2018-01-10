@@ -32,6 +32,20 @@ char getverify(void);
 	value [al] modify exact [ah]
 #endif
 
+#ifdef __GNUC__
+static inline void setverify(char a)
+{
+	asm volatile("int $0x21":: "Rah"((char)0x2e), "Rdl"((char)0), "Ral"(a));
+}
+
+static inline char getverify(void)
+{
+	char ret;
+	asm volatile("int $0x21": "=Ral"(ret): "Rah"((char)0x54));
+	return ret;
+}
+#endif
+
 int cmd_verify(char *param)
 {
   switch(onoffStr(param)) {

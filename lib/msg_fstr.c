@@ -48,6 +48,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <portable.h>
 #include <fmemory.h>
 
 #include "../include/misc.h"

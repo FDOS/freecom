@@ -32,6 +32,7 @@
 #include <io.h>
 #include <string.h>
 #include <../include/misc.h>
+#include <fmemory.h>
 
 #define FALSE 0
 #define TRUE 1
@@ -158,7 +159,8 @@ int vsprintf(char *buff, const char * fmt, va_list arg)
 int do_printf(FILE *f, const char * fmt, va_list arg)
 {
   int base;
-  char s[11], far * p;
+  char s[11];
+  char far * p;
   int c, flag, size, fill, precision;
   int longarg;
   long currentArg;
@@ -235,9 +237,9 @@ int do_printf(FILE *f, const char * fmt, va_list arg)
 
       case 'p':
         {
-          unsigned short w0 = va_arg(arg, unsigned short);
+          unsigned short w0 = va_arg(arg, unsigned int);
           char *tmp = charp;
-          sprintf(s, "%04x:%04x", va_arg(arg, unsigned short), w0);
+          sprintf(s, "%04x:%04x", va_arg(arg, unsigned int), w0);
           p = s;
           charp = tmp;
           goto do_outputstring;

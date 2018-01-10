@@ -48,10 +48,7 @@
 
 #include "../include/misc.h"
 
-unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
-                      unsigned short func );
-
-#ifdef __TURBOC__
+#if defined(__TURBOC__) || defined(__GNUC__)
 static unsigned DOSreadwrite(int fd, void far *buffer, unsigned size,
                              unsigned short func )
 {

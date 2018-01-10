@@ -25,7 +25,7 @@
 #ifndef H__DATEFUNC_
 #define H__DATEFUNC_
 
-#if defined _NO__DOS_DATE || (defined __TURBOC__ && __TURBOC__ <= 0x296) /* TC/TC++ 1.01 */
+#if defined _NO__DOS_DATE || (defined __TURBOC__ && __TURBOC__ <= 0x296) || defined(__GNUC__) /* TC/TC++ 1.01 or GCC */
 
 struct dosdate_t
 {
