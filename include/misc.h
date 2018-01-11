@@ -97,6 +97,7 @@ enum OnOff onoffStr(char *line);
 #define strcmpi strcasecmp
 #define strnicmp strncasecmp
 #define memicmp strncasecmp
+#define lseek _lseek
 #endif
 #define sfn_open _open
 #define sfn_creat _creat

@@ -13,9 +13,9 @@ extern long int _lseek(int fd, long int pos, int whence);
 
 static inline long int filelength(int fd)
 {
-  long int cur = lseek(fd, 0, SEEK_CUR);
-  long int fsize = lseek(fd, 0, SEEK_END);
-  lseek(fd, cur, SEEK_SET);
+  long int cur = _lseek(fd, 0, SEEK_CUR);
+  long int fsize = _lseek(fd, 0, SEEK_END);
+  _lseek(fd, cur, SEEK_SET);
   return fsize;
 }
 #endif
