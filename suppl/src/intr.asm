@@ -77,5 +77,5 @@ intr_1:
 		pop	di
 		pop	si
 		pop	bp
-		ret
+		ret	4
 %endif
