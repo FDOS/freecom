@@ -79,7 +79,7 @@ void _fmemmove(unsigned dseg, unsigned dofs
 }
 
 #else
-#if defined(_PAC_NOCLIB_) || defined(_TC_EARLY_)
+#if defined(_PAC_NOCLIB_) || defined(_TC_EARLY_) || defined(__GNUC__)
 #include <portable.h>
 #include "fmemory.h"
 
@@ -122,7 +122,11 @@ void _fmemmove(void far * const s1, const void far * const s2
 	/*
 	 * without the typecasts TC++1 ignores the segment portions completely
 	 */
+#ifdef __GNUC__
+	if(p > q && p <= h) {
+#else
 	if((char huge*)p > (char huge*)q && (char huge*)p <= (char huge*)h) {
+#endif
 		/* overlapping areas */
 		p += length;
 		q += length;

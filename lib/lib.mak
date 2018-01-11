@@ -162,7 +162,8 @@ OBJ19 =	timeget.obj\
 OBJ20 =	unquote.obj\
 	vcgetch.obj\
 	vcgetstr.obj\
-	where.obj
+	where.obj\
+	delay.obj
 OBJ21 =	err1.obj\
 	err2.obj\
 	err3.obj\

@@ -65,15 +65,23 @@ enum
 };
 
 /* prototypes for INIT.C */
-extern void ASMINTERRUPT dummy_criter_handler();
-extern void ASMINTERRUPT cbreak_handler();
+extern void ASMINTERRUPT dummy_criter_handler()
+#ifdef __GNUC__
+asm("_dummy_criter_handler")
+#endif
+;
+extern void ASMINTERRUPT cbreak_handler()
+#ifdef __GNUC__
+asm("_cbreak_handler")
+#endif
+;
 /* extern void initCBreak(void);*/
 
 /* prototypes for COMMAND.C */
 extern int interactive_command;
 extern int persistentMSGs;
 #ifdef __GNUC__
-#define RESIDENT(x) (*(typeof(x) far *)MK_FP(residentCS, (size_t)&(x)))
+#define RESIDENT(x) (*(typeof(x) far *)MK_FP(_CS, (size_t)&(x)))
 extern int CBreakCounter asm("_CBreakCounter");
 extern unsigned residentCS asm("_residentCS");
 #define ctrlBreak RESIDENT(CBreakCounter)

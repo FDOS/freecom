@@ -25,7 +25,7 @@
 #else
 #pragma pack(1);
 #endif
-#elif defined(_MSC_VER) || defined(_QC)
+#elif defined(_MSC_VER) || defined(_QC) || defined(__GNUC__)
     #pragma pack(1)
 #elif defined(__ZTC__)
     #pragma ZTC align 1

@@ -54,9 +54,16 @@ void _fmemcpy(unsigned const dseg, unsigned const dofs
 
 #else
 
-#ifdef _TC_EARLY_
+#if defined(_TC_EARLY_) || defined(__GNUC__)
 #include <portable.h>
 #include "fmemory.h"
+
+#ifdef __GNUC__
+static void __attribute__((noinline)) store(byte far *p, byte c)
+{
+	*p = c;
+}
+#endif
 
 void _fmemcpy(void far * const s1, const void far * const s2, unsigned length)
 {	byte far*p;
@@ -65,7 +72,11 @@ void _fmemcpy(void far * const s1, const void far * const s2, unsigned length)
 	if(length) {
 		p = s1;
 		q = s2;
+#ifdef __GNUC__ /* XX does not compile */
+		do store(p++, *q++);
+#else
 		do *p++ = *q++;
+#endif
 		while(--length);
 	}
 }

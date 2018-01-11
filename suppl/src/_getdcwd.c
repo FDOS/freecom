@@ -63,6 +63,9 @@ co: Micro-C, Pacific HiTech C
 #ifdef _TC_EARLY_
 #define COMPILE 4
 #endif
+#ifdef __GNUC__
+#define COMPILE 8
+#endif
 
 #ifdef COMPILE
 #include <portable.h>
@@ -124,7 +127,9 @@ putDrive:
 
 #else
 
-#include <dir.h>		/* getdisk() */
+#ifndef __GNUC__
+#include <dir.h>               /* getdisk() */
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include "suppl.h"

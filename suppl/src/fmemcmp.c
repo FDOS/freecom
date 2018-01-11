@@ -61,7 +61,7 @@ int _fmemcmp(unsigned const dseg, unsigned dofs
 
 #else
 
-#if defined(_PAC_NOCLIB_) || defined(_TC_EARLY_)
+#if defined(_PAC_NOCLIB_) || defined(_TC_EARLY_) || defined(__GNUC__)
 #include <portable.h>
 #include "fmemory.h"
 

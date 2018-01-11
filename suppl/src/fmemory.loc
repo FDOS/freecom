@@ -32,7 +32,7 @@
 #define fargPass(name)	 name/**/_segm,  name/**/_ofs
 #endif
 
-#ifdef _TC_EARLY_
+#if defined(_TC_EARLY_) || defined(__GNUC__)
 #define COMPILE
 
 #define fargDecl(type,name)	type far * const  name

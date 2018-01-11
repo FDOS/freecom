@@ -39,5 +39,9 @@ struct dostime_t
 unsigned _dos_settime(struct dostime_t *);
 void _dos_gettime(struct dostime_t *);
 
+#ifdef __GNUC__
+void delay(unsigned ms);
+#endif
+
 #endif /* _NO__DOS_TIME */
 #endif /* H__TIMEFUNC_ */

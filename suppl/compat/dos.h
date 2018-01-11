@@ -3,9 +3,6 @@
 #ifndef __DOS_H
 #define __DOS_H
 
-#include <unistd.h>
-#define delay(x) usleep(x*1000UL)
-
 static inline unsigned char inportb (unsigned short int port)
 {
 	unsigned char v;

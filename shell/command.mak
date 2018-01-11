@@ -25,8 +25,9 @@ OBJ3 =	batch.obj\
 	module.obj
 OBJ4 =	redir.obj\
 	ver.obj
-LIBS = 	$(SUPPL_LIB_PATH)$(DIRSEP)suppl_$(SHELL_MMODEL).lib ..$(DIRSEP)cmd$(DIRSEP)cmds.lib \
-..$(DIRSEP)lib$(DIRSEP)freecom.lib ..$(DIRSEP)strings$(DIRSEP)strings.lib $(LIBC)
+LIBS = 	..$(DIRSEP)cmd$(DIRSEP)cmds.lib ..$(DIRSEP)lib$(DIRSEP)freecom.lib \
+..$(DIRSEP)strings$(DIRSEP)strings.lib \
+$(SUPPL_LIB_PATH)$(DIRSEP)suppl_$(SHELL_MMODEL).lib $(LIBC)
 
 echoto.bat: ../scripts/echoto.bat
 	$(CP) ..$(DIRSEP)scripts$(DIRSEP)echoto.bat .

@@ -28,7 +28,8 @@ OBJ9 = fmemchr.obj fmemcmp.obj fmemcpy.obj fmemove.obj fnorm.obj fputmc.obj \
 fstrcpy.obj
 OBJ10= fstrdup.obj fstrlen.obj _getdcwd.obj mcb_1st.obj mcb_is.obj \
 mcb_leng.obj  mcb_nxt.obj
-OBJ11= mcb_walk.obj stpcat.obj stpcpy.obj toupperx.obj
+OBJ11= mcb_walk.obj stpcat.obj stpcpy.obj toupperx.obj filefind.obj \
+invokedo.obj intr.obj
 
 DOBJ1 = app_ievx.obj app_ini_.obj app_name.obj app_namx.obj app_vars.obj \
 dbgf_chg.obj

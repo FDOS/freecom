@@ -83,6 +83,22 @@ int swapContext = TRUE;					/* may destroy external context */
 unsigned char __supportlfns = 1;
 #endif
 
+#ifdef __GNUC__
+int dup(int fd)
+{
+  int ret;
+  asm volatile("int $0x21" : "=a"(ret): "Rah"((char)0x45), "b"(fd));
+  return ret;
+}
+
+int dup2(int oldfd, int newfd)
+{
+  asm volatile("int $0x21" :
+	       : "Rah"((char)0x46), "b"(oldfd), "c"(newfd): "ax");
+  return 0;
+}
+#endif
+
 #ifdef FEATURE_SWITCHAR
 char switchar(void)
 {

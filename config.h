@@ -202,7 +202,7 @@
 #endif
 
 /* Define if your compiler does not have 'dosdate_t' or 'dostime_t' */
-#ifdef _TC_EARLY_
+#if defined(_TC_EARLY_) || defined(__GNUC__)
     /* TC++1 */
 #define _NO__DOS_DATE
 #define _NO__DOS_TIME

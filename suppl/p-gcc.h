@@ -142,4 +142,18 @@ static inline void _dos_setvect(int intno, void far *vect)
 	asm volatile("push %%ds; mov %%bx, %%ds; int $0x21; pop %%ds" :
 		     : "Rah"((char)0x25), "Ral"((char)intno), "j"(vect));
 }
+
+static inline void far *getdta(void)
+{
+	void far *dta;
+	asm("mov $0x2f, %%ah; int $0x21; mov %%es, %%dx; mov %%bx, %%ax" :
+	    "=A"(dta) :: "bx", "es");
+	return dta;
+}
+
+static inline void setdta(void far *dta)
+{
+	asm("push %%ds; mov %%bx, %%ds; int $0x21; pop %%ds" :
+	    : "Rah"((unsigned char)0x1a), "j"(dta));
+}
 #endif
