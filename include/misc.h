@@ -15,6 +15,8 @@
 #undef stdout
 #undef stderr
 extern FILE *stdin, *stdout, *stderr;
+#undef fileno
+#define fileno(f) ((int)(f))
 
 #include "../include/datefunc.h"
 #include "../include/timefunc.h"

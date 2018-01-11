@@ -726,9 +726,10 @@ int process_input(int xflag, char *commandline)
       if (0 == (ip = readbatchline(&echothisline, readline,
                       MAX_INTERNAL_COMMAND_SIZE)))
       { /* if no batch input then... */
+      int attr;
       if (xflag   /* must not go interactive */
-       || (fdattr(0) & 0x84) == 0x84  /* input is NUL device */
-       || feof(stdin))    /* no further input */
+       || ((attr = fdattr(0)) & 0x84) == 0x84  /* input is NUL device */
+       || (attr & 0xc0) == 0x80) /* no further input */
       {
         free(readline);
         break;

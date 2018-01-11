@@ -44,8 +44,6 @@ static char * ltob(long, char *, int);
 static int do_printf(FILE *f, const char *, register va_list);
 
 FILE *stdin = (FILE *)0, *stdout= (FILE *)1, *stderr = (FILE *)2;
-#undef fileno
-#define fileno(f) ((int)(f))
 
 static void flushbuf(FILE *f)
 {
