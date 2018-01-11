@@ -54,7 +54,7 @@ char *nls_makedate (int mode, int year, int month, int day) {
 
 	switch(nlsBuf->datefmt) {
 	case 0:			/* mm/dd/yy */
-		sprintf(buf, "%.2u%s%.2u%s%02u", month, nlsBuf->dateSep, day
+		sprintf(buf, "%02u%s%02u%s%02u", month, nlsBuf->dateSep, day
 		 , nlsBuf->dateSep, year);
 		break;
 	case 1:			/* dd/mm/yy */
@@ -68,7 +68,7 @@ char *nls_makedate (int mode, int year, int month, int day) {
 		break;
 	}
 #else
-	sprintf(buf, "%.2u-%.2u-%02u", month, day, year);
+	sprintf(buf, "%02u-%02u-%02u", month, day, year);
 #endif
 
 	return strdup(buf);
