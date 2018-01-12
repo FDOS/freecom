@@ -57,6 +57,9 @@ _lowLevelExec:
 	mov     bp, sp
 	pushm   si, di, ds
 
+%ifidn __OUTPUT_FORMAT__, elf
+	push    es
+%endif
 	lds     dx, [bp+4+2*@CodeSize]      ; load file name
 	les     bx, [bp+8+2*@CodeSize]      ; load parameter block
 	mov     ax, 4b00h
@@ -73,6 +76,9 @@ _lowLevelExec:
 	xor     ax, ax       ; otherwise, clear AX
 
 exec_error:
+%ifidn __OUTPUT_FORMAT__, elf
+	pop     es
+%endif
 	popm    si, di, ds
 	pop     bp
 	ret
