@@ -63,15 +63,23 @@
 
 #define probefn(path) mktempfile(path, 0)
 
+static char *probefnEnv(char *var)
+{
+  char *p;
+  char *fn = probefn(p = getEnv(var));
+  free(p);
+  return fn;
+}
+
 char *tmpfn(void)
 {	USEREGS
   char *fn;                     /* filename */
   static char buf[] = "?:\\";
 
-  if ((fn = probefn(getEnv("TEMP"))) == 0
-      && (fn = probefn(getEnv("TMP"))) == 0
-      && (fn = probefn(getEnv("TEMPDIR"))) == 0
-      && (fn = probefn(getEnv("TMPDIR"))) == 0
+  if ((fn = probefnEnv("TEMP")) == 0
+      && (fn = probefnEnv("TMP")) == 0
+      && (fn = probefnEnv("TEMPDIR")) == 0
+      && (fn = probefnEnv("TMPDIR")) == 0
       && (fn = probefn("\\TEMP")) == 0
       && (fn = probefn("\\TMP")) == 0
       && (fn = probefn(".")) == 0)

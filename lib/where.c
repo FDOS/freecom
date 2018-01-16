@@ -84,7 +84,7 @@
 
 char *find_which (const char *const name) {
   static char *pbuf = NULL;		/* previously returned pointer	*/
-  const char *envptr;			/* content of PATH env variable	*/
+  char *envptr, *path;			/* content of PATH env variable	*/
   char buf [MAXPATH + 4];		/* buffer for PATH entry + name	*/
   char *pname, *p;
   size_t len;
@@ -114,6 +114,7 @@ char *find_which (const char *const name) {
   p = pname, envptr = NULL;
   if (p [1] != ':' && *p != '\\' && *p != '/')
     envptr = getEnv ("PATH");
+  path = envptr;
 
   /* check current directory, then all entries in PATH */
   for (;;) {
@@ -125,7 +126,7 @@ char *find_which (const char *const name) {
 					    if (dfnstat (p) & DFN_FILE) break;
 
     /* find next PATH entry, which fit in buf */
-    if (envptr == NULL || pname == buf) return pbuf;
+    if (envptr == NULL || pname == buf) { free(path); return pbuf; }
     do {
       while (*envptr == ';') ++envptr;		/* skip sequence of ';'	*/
       if (*envptr == '\0') return pbuf;		/* no more PATH entries? */
@@ -144,6 +145,7 @@ char *find_which (const char *const name) {
     /* add path before name */
     p = memcpy (p - len, envptr - len, len);
   }
+  free(path);
 
   /* file found, now convert its path to full-qualified absolute one */
 #ifdef FEATURE_LONG_FILENAMES

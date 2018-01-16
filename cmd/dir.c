@@ -1227,6 +1227,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
  */
 int cmd_dir (char * rest) {
   char **argv;
+  char *p;
   int argc, opts;
   int rv;                       /* return value */
   unsigned long dircount;
@@ -1240,9 +1241,12 @@ int cmd_dir (char * rest) {
   attrMay = ATTR_DEFAULT;
 
   /* read the parameters from env */
-  if ((argv = scanCmdline(getEnv("DIRCMD"), opt_dir, 0, &argc, &opts))
-   == 0)
+  if ((argv = scanCmdline(p = getEnv("DIRCMD"), opt_dir, 0, &argc, &opts))
+   == 0) {
+    free(p);
     return 1;
+  }
+  free(p);
   freep(argv);    /* ignore any parameter from env var */
 
   line = 0;

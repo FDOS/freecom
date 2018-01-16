@@ -636,6 +636,7 @@ int expandEnvVars(char *ip, char * const line)
 				if(cp >= parsedMax(strlen(evar)))
 				  return 0;
 				cp = stpcpy(cp, evar);
+				free(evar);
 			  } else if(matchtok(ip, "ERRORLEVEL")) {
 				/* overflow check: parsedline has that many character
 				  "on reserve" */
@@ -707,9 +708,11 @@ int process_input(int xflag, char *commandline)
   do
   {
 #ifdef FEATURE_LONG_FILENAMES
-    if( toupper( *getEnv( "LFN" ) ) == 'N' )
+    char *lfn = getEnv("LFN");
+    if( lfn && toupper( *lfn ) == 'N' )
          __supportlfns = 0;
     else __supportlfns = 1;
+    free(lfn);
 #endif
   	interactive_command = 0;		/* not directly entered by user */
   	echothisline = tracethisline = 0;

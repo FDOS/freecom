@@ -2,9 +2,7 @@
 
  *  Return the value of the variable
  *
- *  The value will be overwritten the next time, getEnv() is called,
- *  because it will be duplicated into dynamic memory fromout the
- *  environment segment.
+ *  The returned pointer needs to be freed by the caller.
  *
  *  If the case-insensitive match is used, the var[] array is updated with
  *  the variable name that was retrieved.
@@ -61,10 +59,6 @@
 
 char *getEnv(char var[])
 {
-  static char *lastVal1 = 0;
-  static char *lastVal2 = 0;
-  static char *lastVal3 = 0;
-
   assert(var);
 
   /* To have case-sensitive variable names, just delete the
@@ -78,9 +72,5 @@ char *getEnv(char var[])
 
   /* var now contains the correct variable name and we can be
      sure that's there */
-  free(lastVal3);
-  lastVal3 = lastVal2;
-  lastVal2 = lastVal1;
-
-  return lastVal1 = dupvar(var);
+  return dupvar(var);
 }

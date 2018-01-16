@@ -67,6 +67,7 @@ int cmd_set(char *param)
             error_env_var_not_found( param );
             return( 1 );
         }
+        free(value);
         return( 0 );
 #else
 		error_syntax(0);

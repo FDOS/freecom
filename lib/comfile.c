@@ -37,6 +37,7 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <string.h>
 
 #include "../include/command.h"
 #include "../include/misc.h"
@@ -45,6 +46,6 @@ char *comFile(void)
 { char *fnam;
 
   if(inInit || (fnam = getEnv("COMSPEC")) == 0)
-    return ComPath;
+    return strdup(ComPath);
   return fnam;
 }

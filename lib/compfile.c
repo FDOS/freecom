@@ -61,6 +61,7 @@ char *comPathFile(const char * fnam)
 
   memcpy(h, com, pathLen);
   strcpy(h + pathLen, fnam);
+  free(com);
 
   return h;
 }

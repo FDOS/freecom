@@ -20,7 +20,7 @@ char *comResFile(void)
        static char *p = 0;
 
        free(p);
-       if((p = strdup(comFile())) != 0) {
+       if((p = comFile()) != 0) {
            assert(strlen(p) == isSwapFile + 3);
            memcpy(p + isSwapFile, "SWP", 3);
            if(exist(p))

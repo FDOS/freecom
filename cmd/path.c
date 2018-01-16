@@ -37,6 +37,7 @@ int cmd_path(char *param)
 	if(!param || !*(p = ltrimcl(param)) && !strchr(param, ';')) {
 		p = getEnv(PATHVAR);
 		displayString(p? TEXT_MSG_PATH: TEXT_MSG_PATH_NONE, p);
+		free(p);
 		return 0;
 	}
 

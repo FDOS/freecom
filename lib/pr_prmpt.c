@@ -17,4 +17,5 @@ void printprompt(void)
 	pr = getEnv(PROMPTVAR);        /* get PROMPT environment var. */
 
 	displayPrompt(pr? pr: DEFAULT_PROMPT);
+	free(pr);
 }

@@ -203,6 +203,7 @@ static int doFOR (char * varname, char * varE, char * param, char * paramE,
 			/* getEnv() will also update the varname array with the current
 				case of the particular characters */
 		rv = ecMkc("SET /C %@VERBATIM()", varname, "=", oldContents, (char*)0);
+		free(oldContents);
 	}
 
 	if(rv == E_None) {
