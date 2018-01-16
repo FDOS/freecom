@@ -57,7 +57,8 @@ int scanMapFile(const char * const fnam
 					n1 = strtoul(w1, &w1, 16);
 					if(w1 && *w1 == ':') {
 						n2 = strtoul(w1 + 1, &w1, 16);
-						if(w1 == 0 || *w1 == 0) {
+						if(w1 == 0 || *w1 == 0 ||
+						   (*w1 == '+' && w1[1] == 0)) {
 							v = (unsigned long)n1 * 16 + n2;
 							if (w2[2] == 'h')
 								*hpos = v;
@@ -88,8 +89,10 @@ int scanMapFile(const char * const fnam
 	fclose(map);
 	if (*hpos == 0)
 		printf("No valid entry of _heaplen found in: %s\n", fnam);
+#ifdef __TURBOC__
 	if (*spos == 0)
 		printf("No valid entry of _stklen found in: %s\n", fnam);
+#endif
 	return 0;
 }
 

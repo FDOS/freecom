@@ -48,7 +48,9 @@ static unsigned oldPSP;
 #endif
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
-#ifdef DEBUG
+#if defined(__WATCOMC__)
+unsigned _heaplen = 0; /* NOT in BSS */
+#elif defined(DEBUG)
 extern unsigned _heaplen;
 #endif
 
@@ -210,6 +212,11 @@ int initialize(void)
     because then DOS won't terminate them, e.g. when a Critical Error
     occurs that is not detected by COMMAND.COM */
 
+#ifdef __WATCOMC__
+	/* minimum block size requested for HEAP from DOS */
+	_amblksiz = _heaplen;
+#endif
+	
 	dbg_printmem();
 #ifdef DEBUG
 	{ void* p;

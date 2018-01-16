@@ -127,7 +127,7 @@ void addUns_(unsigned long *minVal, unsigned val)
 		*minVal += val;
 }
 
-void addSize(unsigned *size, char * const Xp)
+void addSize(unsigned short *size, char * const Xp)
 {	unsigned long n;
 	char *p = Xp;
 
@@ -174,7 +174,7 @@ void addSize(unsigned *size, char * const Xp)
 
 int main(int argc, char **argv)
 {	struct EXE_header exe;
-	unsigned tosize;
+	unsigned short tosize;
 
 	if(argc <= 1) {
 		puts("Patch heap size into FreeCOM executable\n"
@@ -269,6 +269,8 @@ int main(int argc, char **argv)
 
 	printf("Patching '%s' to heap size of %u bytes\n"
 	 , argv[1], tosize);
+#ifdef __TURBOC__
+	/* Watcom already has extraMin minimal and dynamically adjusts its MCB*/
 	if(tosize)
 		exe.extraMin = exe.extraMax = ival.extraSpace + tosize / 16;
 	else {
@@ -281,6 +283,7 @@ int main(int argc, char **argv)
 			"File most probably corrupted now: %s\n", argv[1]);
 		return 77;
 	}
+#endif
 
 	if(fseek(freecom, ival.heapPos, SEEK_SET) != 0) {
 		printf("Failed to seek to heap size offset in %s\n", argv[1]);
