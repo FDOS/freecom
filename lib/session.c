@@ -48,7 +48,7 @@ void saveSession(void)
 		ctxtSavedSize = mcb_length(ctxt);
 		dprintf(("[MEM: save context: %u bytes from 0x%04x]\n"
 		 , ctxtSavedSize, ctxt)); 
-		ctxtSavePtr = malloc(ctxtSavedSize);
+		ctxtSavePtr = realloc(ctxtSavePtr, ctxtSavedSize);
 		if(ctxtSavePtr) {
 			_fmemcpy(ctxtSavePtr, MK_FP(ctxt,0), ctxtSavedSize);		
 			DOSfree(ctxt);
@@ -65,7 +65,5 @@ void restoreSession(void)
 		dprintf(("[MEM: restore context: %u bytes]\n", ctxtSavedSize));
 		ctxtCreateMemBlock(ctxtSavedSize);
 		_fmemcpy( MK_FP(ctxt,0), ctxtSavePtr, ctxtSavedSize);		
-		free(ctxtSavePtr);
-		ctxtSavePtr = 0;
 	}
 }
