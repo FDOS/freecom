@@ -332,13 +332,9 @@ static void docommand(char *line)
     if(cmdptr && cmdptr->name) {    /* internal command found */
 
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-	cp = realloc(buf, ARGS_BUFFER_SIZE);
-#ifndef NDEBUG
-	if(cp != buf) {
-		dprintf( ("[INTERNAL error: realloc() returned wrong result]") );
-		buf = cp;
-	}
-#endif
+	rest = strdup(rest);
+	free(buf);
+	buf = rest;
 #else
 	free(buf);  buf = 0;	/* no further useage of this buffer */
 #endif
