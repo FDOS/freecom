@@ -10,7 +10,7 @@ CP = cp
 CC_BASE_PATH = $(WATCOM)
 !ifdef __LINUX__
 BINPATH = $(CC_BASE_PATH)/binl
-LD = $(CL) -l=dos -fe=command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -\"op map,statics,verbose\" $#
+LD = $(CL) -l=dos -fe=command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -\"op map,statics,verbose,stack=4k\" $#
 !else
 BINPATH = $(CC_BASE_PATH)\BINW
 LD = wlinker /ma/nologo

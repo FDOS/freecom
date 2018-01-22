@@ -1,5 +1,5 @@
 @echo off
 ms2wlink %1 %2 %3 %4 %5 %6 %7 %8 %9 ,,,, > tmp.lnk
-echo op map,statics,verbose >> tmp.lnk
+echo op map,statics,verbose,stack=4k >> tmp.lnk
 call wlink @tmp.lnk
 del tmp.lnk
