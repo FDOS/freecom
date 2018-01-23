@@ -229,7 +229,11 @@ int main(int argc, char **argv)
 		return 71;
 	}
 
-	if(argc == 2 || ival.heapPos == ~0) {
+	if(argc == 2
+#ifndef GCC
+	   || ival.heapPos == ~0
+#endif
+	   ) {
 		prUns(ival.alias, "Aliases");
 		prUns(ival.hist, "Command line history");
 		prUns(ival.dirs, "Directory stack");
@@ -269,10 +273,16 @@ int main(int argc, char **argv)
 
 	printf("Patching '%s' to heap size of %u bytes\n"
 	 , argv[1], tosize);
-#ifdef __TURBOC__
+#if defined(__TURBOC__) || defined(GCC)
 	/* Watcom already has extraMin minimal and dynamically adjusts its MCB*/
-	if(tosize)
+	if(tosize) {
+#ifdef GCC
+		/* need to adjust SP */
+		unsigned startbss = 0x10000 - exe.extraMax * 16;
+		exe.fSP = startbss + ival.extraSpace * 16 + tosize;
+#endif
 		exe.extraMin = exe.extraMax = ival.extraSpace + tosize / 16;
+	}
 	else {
 		exe.extraMax = 0xffff;
 		exe.extraMin = ival.extraSpace;
@@ -285,6 +295,7 @@ int main(int argc, char **argv)
 	}
 #endif
 
+#ifndef GCC
 	if(fseek(freecom, ival.heapPos, SEEK_SET) != 0) {
 		printf("Failed to seek to heap size offset in %s\n", argv[1]);
 		return 42;
@@ -295,6 +306,7 @@ int main(int argc, char **argv)
 			"File most probably corrupted now: %s\n", argv[1]);
 		return 75;
 	}
+#endif
 
 	fflush(freecom);
 	if(ferror(freecom)) {

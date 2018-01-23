@@ -69,12 +69,12 @@ int scanMapFile(const char * const fnam
 				}
 			} else if((strtok(0, " \t\r\n")) != 0
 			 && (w5 = strtok(0, " \t\r\n")) != 0) {
-				if(strcmp(w5, "BSS") == 0) {
+				if(strcmp(w5, "BSS") == 0 || strcmp(w1, ".bss") == 0) {
 				 	unsigned long n;
 				 	char *p = 0;
 
 				 	n = strtoul(w3, &p, 16);
-				 	if(p && *p == 'H') {
+				 	if(p && (*p == 'H' || w1[0]=='.')) {
 				 		if(n > UINT_MAX || (n += *extraSpace) > UINT_MAX) {
 				 			puts("Extra space exceeds range");
 				 			return 56;
@@ -130,8 +130,13 @@ int addImageDisplacement(const char * const fnam
 		*extraSpace += (stacksize+15)/16;
 	}
 	fclose(f);
+#ifdef GCC
+	stacksize = 4*1024;
+	*extraSpace += stacksize / 16;
+#else
 	if(exe.extraMin > *extraSpace)
 		*extraSpace = exe.extraMin;
+#endif
 	return 0;
 }
 
