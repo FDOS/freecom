@@ -32,7 +32,7 @@ extern unsigned char far dosCMDNAME[128];
 extern byte far canexit;
 extern void far * far termAddr;
 extern word far myPID;
-extern word far residentCS;
+extern word residentCS;
 extern word far origPPID;
 
 extern int far cdecl XMSexec(void);	

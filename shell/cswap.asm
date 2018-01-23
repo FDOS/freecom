@@ -66,9 +66,8 @@ _XMSsave	times 8 DW 0
 _termAddr:
 terminationAddressOffs	DW 0
 terminationAddressSegm	DW 0
-	global _myPID, _residentCS
+	global _myPID
 _myPID	DW 0
-_residentCS DW 0
 	global _origPPID
 _origPPID DW 0
 	global _canexit
@@ -444,6 +443,7 @@ _XMSrequest:
 ;; ALL To be called with _far_!!
 		global	_XMSexec
 _XMSexec:
-		push WORD [CS:_residentCS]
+		extern _residentCS
+		push WORD [_residentCS]
 		push WORD real_XMSexec
 		retf

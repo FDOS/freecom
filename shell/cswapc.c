@@ -78,6 +78,7 @@ static enum {
 	,INIT_FAILED
 	,INIT_SUCCEEDED
 } initialized = INIT_NO;
+word residentCS;
 
 int XMSisactive(void)
 {	return initialized == INIT_SUCCEEDED;
