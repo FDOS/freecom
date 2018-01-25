@@ -107,13 +107,15 @@ static int XMScopy(
 /*	asm push si;
 	asm lea si,length
 	asm mov ah,0bh;	*/
-#ifdef __TURBOC__
+#if defined(__TURBOC__)
 	_SI = (unsigned)&length;
 	_AH = 0xb;
 	XMSrequest();
 /*	asm pop si; */
 
 	return _AX;		/* shut up warning */
+#elif defined(__GNUC__)
+	return XMSrequest(0xb00, 0, &length);
 #else
 	return XMSdriverAdress(0xb00, 0, &length);
 #endif
@@ -126,10 +128,12 @@ static int XMScopy(
 void XMSinit(void)
 {
 	USEREGS
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__)
 	unsigned long res;
 	unsigned long (far *xmsaddr)(unsigned request, unsigned dx, void *si);
 	#pragma aux xmsaddr = parm [ax] [dx] [si]
+#elif defined(__GNUC__)
+	void far *xmsaddr;
 #else
 	unsigned (far *xmsaddr)(void);
 #endif
@@ -193,6 +197,10 @@ void XMSinit(void)
 	res = xmsaddr(0x900, xms_block_size + 1, NULL);
 	_AX = res & 0xffff;
 	_DX = res >> 16;
+#elif defined(__GNUC__)
+	asm volatile ("lcall *%2" :
+		      "=a"(_AX), "=d"(_DX) :
+		      "m"(xmsaddr), "a"(0x900), "d"(xms_block_size + 1));
 #else
 	_DX = xms_block_size + 1;
 	_AH = 9;
@@ -273,8 +281,10 @@ void XMSexit(void)
 		asm     mov dx, XMSsave.dhandle;
 		asm     mov ah, 0ah;   			/* free XMS memory */
 #endif
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__)
 		XMSdriverAdress(0xa00, XMSsave.dhandle, NULL);
+#elif defined(__GNUC__)
+		XMSrequest(0xa00, XMSsave.dhandle, NULL);
 #else
 		_DX = XMSsave.dhandle;
 		_AH = 0xa;   			/* free XMS memory */
@@ -416,7 +426,9 @@ DoExec(char *command,char *cmdtail)
 #undef FREECOM_NEED_EXIT
 #endif
 #endif
-
+#ifdef __GNUC__
+#undef FREECOM_NEED_EXIT
+#endif
 
 #ifdef FREECOM_NEED_EXIT
 /* Using the original exit() function crashes in TC++ v1.01 */

@@ -26,9 +26,9 @@
 ;
 ;
 
-;                %include "segs.inc"
+%include "../include/model.inc"
 
-segment _TEXT class=CODE
+segment _TEXT
 
 	global _dosFCB1,_dosFCB2
 _dosFCB1 times 37 db 0
@@ -105,7 +105,7 @@ SWAPXMSdirection:
 	pop  word [_XMSsave+12]
 	pop  word [_XMSsave+10]
 
-	ret
+	retn
 
 
 ;;TODO: DS ought to be equal to SS, DS could be reconstructed from

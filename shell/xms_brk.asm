@@ -2,7 +2,8 @@
 ;	Criter and ^Break handler for external programs for XMS Swap
 ;	variant
 
-segment _TEXT class=CODE
+%include "../include/model.inc"
+segment _TEXT
 
 	global _lowlevel_cbreak_handler
 _lowlevel_cbreak_handler:

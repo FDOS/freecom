@@ -5,7 +5,8 @@
 
 %if 1
 
-segment _TEXT class=CODE
+%include "../include/model.inc"
+segment _TEXT
 
 global _lowlevel_int_2e_handler
     _lowlevel_int_2e_handler:

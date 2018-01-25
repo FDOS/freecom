@@ -185,8 +185,8 @@ int initialize(void)
 
 	/* Give us shell privileges */
 #ifdef FEATURE_XMS_SWAP
-	myPID = _psp;
 	residentCS = _CS;
+	myPID = _psp;
 	termAddr = pspTermAddr;
 	pspTermAddr = terminateFreeCOMHook;
 #endif
@@ -201,9 +201,15 @@ int initialize(void)
 	/* There is no special handler for FreeCOM currently
 		--> activate the real one */
 	set_isrfct(0x24, lowlevel_err_handler);
+#ifdef __GNUC__
+	{	extern word criter_repeat_checkarea asm("_criter_repeat_checkarea");
+		registerCriterRepeatCheckAddr(&RESIDENT(criter_repeat_checkarea));
+	}
+#else
 	{	extern word far criter_repeat_checkarea;
 		registerCriterRepeatCheckAddr(&criter_repeat_checkarea);
 	}
+#endif
 #else
 	set_isrfct(0x24, dummy_criter_handler);
 #endif

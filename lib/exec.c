@@ -144,7 +144,14 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 		_fstrcpy(dosCMDNAME, cmd);
 		dosParamDosExec.envSeg = segOfEnv; 
 
+#ifdef __GNUC__
+		/* call via asm to create a "far call" and so compiler
+		   knows that es is clobbered */
+		asm volatile("push %%cs; call _XMSexec\n": "=a"(retval)::
+			     "bx","cx","dx","es");
+#else
 		retval = XMSexec();
+#endif
 		} else
 #endif
 	{
