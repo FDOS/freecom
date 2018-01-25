@@ -82,7 +82,7 @@ execSP dw 0
 
 execRetval dw 0
 
-first_time db 1
+resize_free db 4ah
 
 global SWAPXMSdirection
 
@@ -137,25 +137,10 @@ real_XMSexec:
 
 		mov es,[currentSegmOfFreeCOM]
 						; first time: shrink current psp
-		cmp byte [first_time],1
-		jne second_time
-
-;;TODO: first_time either 04ah or 049h --> no jumps
-		mov ah,04ah						; resize memory block
+		mov ah,[resize_free]
+		mov byte [resize_free],49h ; change to "free" for next times
 		mov bx,[_SwapResidentSize]
 		int 21h
-
-		mov byte [first_time],0
-		jmp save_done
-
-second_time:							; this memory was allocated
-										; and may be freed
-
-		mov ah,049h						; free memory block
-		int 21h
-
-save_done:
-
 
 		; do exec
 
