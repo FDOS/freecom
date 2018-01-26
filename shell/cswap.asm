@@ -59,8 +59,10 @@ _SwapTransientSize  dw 0
 
 	global _XMSsave, _XMSrestore
 _XMSsave	times 8 DW 0
+_XMSrestore	times 8 DW 0
 %define currentSegmOfFreeCOM	_XMSsave+8
 %define xms_handle	_XMSsave+10
+%define currentSegmOfFreeCOMrestore	_XMSrestore+14
 
 	global _termAddr
 _termAddr:
@@ -83,30 +85,6 @@ execSP dw 0
 execRetval dw 0
 
 resize_free db 4ah
-
-global SWAPXMSdirection
-
-;;TODO make XMSsave two structures in order to drop this subroutine
-SWAPXMSdirection:
-	push word [_XMSsave+4]
-	push word [_XMSsave+6]
-	push word [_XMSsave+8]
-
-	push word [_XMSsave+10]
-	push word [_XMSsave+12]
-	push word [_XMSsave+14]
-
-
-	pop  word [_XMSsave+8]
-	pop  word [_XMSsave+6]
-	pop  word [_XMSsave+4]
-
-	pop  word [_XMSsave+14]
-	pop  word [_XMSsave+12]
-	pop  word [_XMSsave+10]
-
-	retn
-
 
 ;	global real_XMSexec
 real_XMSexec:
@@ -183,14 +161,13 @@ exec_error:
 		sub bx,[currentSegmOfFreeCOM]		; new address - old address
 		push bx					;
 		mov  [currentSegmOfFreeCOM],ax	; new prog address
+		mov  [currentSegmOfFreeCOMrestore],ax
 
-		call SWAPXMSdirection
 								; restore everything to XMS
 		mov ah,0bh
-		mov si,_XMSsave
+		mov si,_XMSrestore
 		callXMS
 
-		call SWAPXMSdirection	; re-construct the XMSsave area
 		pop bx                  ; get relocation factor back
 
 		cmp ax,1

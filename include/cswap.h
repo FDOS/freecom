@@ -108,8 +108,11 @@ struct XMScopy{
 #ifdef __GNUC__
 extern struct XMScopy XMSsave asm("_XMSsave");
 #define XMSsave RESIDENT(XMSsave)
+extern struct XMScopy XMSrestore asm("_XMSrestore");
+#define XMSrestore RESIDENT(XMSrestore)
 #else
 extern struct XMScopy far XMSsave;
+extern struct XMScopy far XMSrestore;
 #endif
 
 /* Handlers in resident portion for external program execution */

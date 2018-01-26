@@ -225,6 +225,11 @@ void XMSinit(void)
 		XMSsave.doffset = msglen * 16l;	/* STRINGS resource preceeds the
 											FreeCOM swap area */
 
+		/* restore: same as above with d and s swapped */
+		XMSrestore.length = SwapTransientSize * 16l;
+		XMSrestore.shandle = xmshandle;
+		XMSrestore.soffset = msglen * 16l;
+
 		swapOnExec = FALSE;				/* to swap is allowed now */
 		defaultToSwap = TRUE;			/* make it the default for XMSwap */
 		initialized = INIT_SUCCEEDED;
