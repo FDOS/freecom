@@ -28,6 +28,22 @@
 
 %include "../include/model.inc"
 
+segment _BSS 			; transient data (in DS)
+
+ 	global _SwapResidentSize
+_SwapResidentSize  resw 1
+
+	global _XMSsave
+_XMSsave	resw 8
+%define currentSegmOfFreeCOMsave	_XMSsave+8
+
+execSS resw 1
+execSP resw 1
+
+segment _DATA
+
+resize_free db 4ah
+
 segment _TEXT
 
 	global _dosFCB1,_dosFCB2
@@ -51,18 +67,13 @@ _dosParamDosExec times 22	db 0
 _XMSdriverAdress dd 0
 %define callXMS		call far [_XMSdriverAdress]
 
- 	global _SwapResidentSize
-_SwapResidentSize  dw 0
-
  	global _SwapTransientSize
 _SwapTransientSize  dw 0
 
-	global _XMSsave, _XMSrestore
-_XMSsave	times 8 DW 0
+	global _XMSrestore
 _XMSrestore	times 8 DW 0
-%define currentSegmOfFreeCOM	_XMSsave+8
-%define xms_handle	_XMSsave+10
-%define currentSegmOfFreeCOMrestore	_XMSrestore+14
+%define xms_handle	_XMSrestore+4
+%define currentSegmOfFreeCOM	_XMSrestore+14
 
 	global _termAddr
 _termAddr:
@@ -79,12 +90,7 @@ _canexit	DB 0		; 1 -> can exit; _else_ --> cannot exit
 _mySS DW 0
 _mySP DW 0
 
-execSS dw 0
-execSP dw 0
-
 execRetval dw 0
-
-resize_free db 4ah
 
 ;	global real_XMSexec
 real_XMSexec:
@@ -122,7 +128,7 @@ exec_error:
 
         mov cx, cs
         mov ss, cx
-        mov  sp,localStack-4	; location on stack of return cs:ip
+        mov  sp,localStack-6	; location on stack of return cs:ip and ds
 
 		; restore:
 
@@ -161,7 +167,6 @@ exec_error:
 		sub bx,[currentSegmOfFreeCOM]		; new address - old address
 		push bx					;
 		mov  [currentSegmOfFreeCOM],ax	; new prog address
-		mov  [currentSegmOfFreeCOMrestore],ax
 
 								; restore everything to XMS
 		mov ah,0bh
@@ -368,31 +373,33 @@ _XMSexec:
 		push si
 		push di
 		push bp
-		push ds
 
+		mov [execSS],ss
+		mov [execSP],sp
+
+						; save everything to XMS
+		mov ah,0bh
+		mov si,_XMSsave
+		call far [cs:_XMSdriverAdress]
+
+;;TODO: test of result
+
+		mov es,[currentSegmOfFreeCOMsave]
+						; first time: shrink current psp
+		mov ah,[resize_free]
+		mov bx,[_SwapResidentSize]
+
+		mov dx, ds
 		mov cx, [_residentCS]
 		mov ds, cx
 
         mov [_mySS],ss  ; 2E
         mov [_mySP],sp  ; 2E
-		mov [execSS],ss
-		mov [execSP],sp
 
 		mov ss, cx		; this stack is definitely large enough AND present
         mov  sp,localStack
-						; save everything to XMS
-		mov ah,0bh
-		mov si,_XMSsave
-		callXMS
 
-;;TODO: test of result
-
-		mov es,[currentSegmOfFreeCOM]
-						; first time: shrink current psp
-		mov ah,[resize_free]
-		mov byte [resize_free],49h ; change to "free" for next times
-		mov bx,[_SwapResidentSize]
-
+		push dx			; save DS of transient portion
 		push cs			; save segment of transient portion
 		push WORD ret_from_resident
 		push cx
@@ -400,18 +407,20 @@ _XMSexec:
 		retf
 
 ret_from_resident:
-                                    ; relocate segment registers
-		mov ax,[execSS]
-		add ax,bx
-		mov ss,ax
-		mov sp,[execSP]
-
-		mov bp,sp
-		add [bp],bx				; ds
-
 		mov ax,[execRetval]
 
+                                    ; relocate segment registers
+		add [bp+4],bx				; ds
 		pop ds
+
+		mov byte [resize_free],49h ; change to "free" for next times
+
+		add [currentSegmOfFreeCOMsave],bx
+		mov cx,[execSS]
+		add cx,bx
+		mov ss,cx
+		mov sp,[execSP]
+
 		pop bp
 		pop di
 		pop	si

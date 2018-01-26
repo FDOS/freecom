@@ -89,11 +89,10 @@ extern unsigned char SWAPresidentEnd asm("_SWAPresidentEnd");          /* label:
 extern unsigned short SwapResidentSize asm("_SwapResidentSize");	  /* paras of the swap handler */
 extern unsigned short SwapTransientSize asm("_SwapTransientSize");  /* paras of total command */
 #define SWAPresidentEnd RESIDENT(SWAPresidentEnd)
-#define SwapResidentSize RESIDENT(SwapResidentSize)
 #define SwapTransientSize RESIDENT(SwapTransientSize)
 #else
 extern unsigned char far SWAPresidentEnd;          /* label: end of resident code */
-extern unsigned short far SwapResidentSize;	  /* paras of the swap handler */	
+extern unsigned short SwapResidentSize;	  /* paras of the swap handler */	
 extern unsigned short far SwapTransientSize;  /* paras of total command */	
 #endif
 
@@ -107,11 +106,10 @@ struct XMScopy{
 
 #ifdef __GNUC__
 extern struct XMScopy XMSsave asm("_XMSsave");
-#define XMSsave RESIDENT(XMSsave)
 extern struct XMScopy XMSrestore asm("_XMSrestore");
 #define XMSrestore RESIDENT(XMSrestore)
 #else
-extern struct XMScopy far XMSsave;
+extern struct XMScopy XMSsave;
 extern struct XMScopy far XMSrestore;
 #endif
 

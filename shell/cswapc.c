@@ -227,6 +227,7 @@ void XMSinit(void)
 
 		/* restore: same as above with d and s swapped */
 		XMSrestore.length = SwapTransientSize * 16l;
+		XMSrestore.doffset = SEG2PHYS_ADDR(_psp);
 		XMSrestore.shandle = xmshandle;
 		XMSrestore.soffset = msglen * 16l;
 
