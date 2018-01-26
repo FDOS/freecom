@@ -108,39 +108,9 @@ SWAPXMSdirection:
 	retn
 
 
-;;TODO: DS ought to be equal to SS, DS could be reconstructed from
-;;	SS at the end of the XMSexec function
 ;	global real_XMSexec
 real_XMSexec:
-						; save ALL registers needed later
-		push si
-		push di
-		push bp
-		push ds
-
-		mov cx, cs
-		mov ds, cx
-
-        mov [_mySS],ss  ; 2E
-        mov [_mySP],sp  ; 2E
-		mov [execSS],ss
-		mov [execSP],sp
-
-		mov ss, cx		; this stack is definitely large enough AND present
-        mov  sp,localStack
-						; save everything to XMS
-		mov ah,0bh
-		mov si,_XMSsave
-		callXMS
-
-;;TODO: test of result
-
-		mov es,[currentSegmOfFreeCOM]
-						; first time: shrink current psp
-		mov ah,[resize_free]
-		mov byte [resize_free],49h ; change to "free" for next times
-		mov bx,[_SwapResidentSize]
-		int 21h
+		int 21h	; shrink/free: first thing done from resident code
 
 		; do exec
 
@@ -174,7 +144,7 @@ exec_error:
 
         mov cx, cs
         mov ss, cx
-        mov  sp,localStack
+        mov  sp,localStack-4	; location on stack of return cs:ip
 
 		; restore:
 
@@ -226,22 +196,8 @@ exec_error:
 		cmp ax,1
 		jnz XMS_trouble_while_swapping_in
 
-                                    ; relocate segment registers
-		mov ax,[execSS]
-		add ax,bx
-		mov ss,ax
-		mov sp,[execSP]
-
 		mov bp,sp
-		add [bp+0],bx				; ds
-		add [bp+10],bx				; ret addr
-
-		mov ax,[execRetval]
-
-		pop ds
-		pop bp
-		pop di
-		pop	si
+		add [bp+2],bx		; relocate return segment
 
 		retf						; done
 
@@ -424,11 +380,62 @@ _XMSrequest:
 ;;		nop
 ;;		push cs			<-> WRONG!!
 ;;		call _XMSexec
+;; now also used to contain code that does not need to be resident.
 
-;; ALL To be called with _far_!!
+;;TODO: DS ought to be equal to SS, DS could be reconstructed from
+;;	SS at the end of the XMSexec function
 		global	_XMSexec
 _XMSexec:
 		extern _residentCS
-		push WORD [_residentCS]
+						; save ALL registers needed later
+		push si
+		push di
+		push bp
+		push ds
+
+		mov cx, [_residentCS]
+		mov ds, cx
+
+        mov [_mySS],ss  ; 2E
+        mov [_mySP],sp  ; 2E
+		mov [execSS],ss
+		mov [execSP],sp
+
+		mov ss, cx		; this stack is definitely large enough AND present
+        mov  sp,localStack
+						; save everything to XMS
+		mov ah,0bh
+		mov si,_XMSsave
+		callXMS
+
+;;TODO: test of result
+
+		mov es,[currentSegmOfFreeCOM]
+						; first time: shrink current psp
+		mov ah,[resize_free]
+		mov byte [resize_free],49h ; change to "free" for next times
+		mov bx,[_SwapResidentSize]
+
+		push cs			; save segment of transient portion
+		push WORD ret_from_resident
+		push cx
 		push WORD real_XMSexec
 		retf
+
+ret_from_resident:
+                                    ; relocate segment registers
+		mov ax,[execSS]
+		add ax,bx
+		mov ss,ax
+		mov sp,[execSP]
+
+		mov bp,sp
+		add [bp],bx				; ds
+
+		mov ax,[execRetval]
+
+		pop ds
+		pop bp
+		pop di
+		pop	si
+		retn						; done (really)

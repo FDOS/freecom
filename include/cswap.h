@@ -60,7 +60,7 @@ extern word far myPID;
 extern word residentCS;
 extern word far origPPID;
 
-extern int far cdecl XMSexec(void);	
+extern int cdecl XMSexec(void);	
 extern void far cdecl terminateFreeCOMHook(void);
 extern void far XMSrequest(void);
 #endif
