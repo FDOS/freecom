@@ -423,7 +423,7 @@ void parsecommandline(char *s, int redirect)
      * prevent redirecting FreeCOM prompts to user file, temporarily
      * revert redirection.
      */
-    int redir_fdin, redir_fdout, answer;
+    int redir_fdin = -1, redir_fdout = -1, answer;
 
     if (oldinfd != -1) {
         redir_fdin = dup (0);

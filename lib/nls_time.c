@@ -67,7 +67,7 @@
 char *nls_maketime(int mode, int hour, int minute, int second, int fraction)
 {	char buf[4 + 4 + sizeof(int) * 8 * 4 + 6];
 	char *p;
-	int i, pm;
+	int i, pm = 0;
 
 #ifdef FEATURE_NLS
 	refreshNLS();

@@ -71,7 +71,7 @@ static int parseOptions(optScanner fct, void * const arg, char **argv, int *argc
   *optcnt = 0;
   argp = argv;
   while((*argp++ = a = *argv++) != 0)
-    if(isoption(a))
+    if(isoption(a)) {
       if((ec = scanOption(fct, arg, a)) == E_None) {
         free(*--argp);  /* ignore (overwrite) it */
         ++*optcnt;
@@ -80,6 +80,7 @@ static int parseOptions(optScanner fct, void * const arg, char **argv, int *argc
         while((*argp++ = *argv++) != 0);
         break;
       }
+    }
 
   *argc -= *optcnt;
   return ec == E_Ignore? E_None: ec;    /* everything done */

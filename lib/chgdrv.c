@@ -65,7 +65,7 @@ int changeDrive(int drive)
     if (getdisk() == drive) 
     	return 0;
 
-	error_invalid_drive(drive);
+    error_invalid_drive(drive);
 
-	return 1;
+    return 1;
 }

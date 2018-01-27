@@ -382,6 +382,7 @@ char *readbatchline(int *eflag, char *textline, int size)
   ip = "";                      /* make sure ip != NULL in the first
   									iteration of the loop */
   len = 0;
+  first = 0;
   while (bc)
   {
     first = 0;               /* by default return "no file" */

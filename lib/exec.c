@@ -141,7 +141,7 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 		_fmemcpy(dosFCB1, &fcb1, sizeof(fcb1));
 		_fmemcpy(dosFCB2, &fcb2, sizeof(fcb1));
 		assert(strlen(cmd) < 128);
-		_fstrcpy(dosCMDNAME, cmd);
+		_fstrcpy((char far *)dosCMDNAME, cmd);
 		dosParamDosExec.envSeg = segOfEnv; 
 
 #ifdef __GNUC__

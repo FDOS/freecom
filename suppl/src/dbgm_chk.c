@@ -55,7 +55,9 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
+#ifndef __GNUC__
 #pragma argsused
+#endif
 
 #if defined __TURBOC__ && __TURBOC__ <= 0x201
 # define offsetof(s_name, m_name) (size_t)&(((s_name*)0)->m_name)

@@ -154,7 +154,7 @@ noPath:;
 					goto errRet;
 			}
 
-			if(!pa || *pa != '\\' && *pa != NUL) {
+			if(!pa || (*pa != '\\' && *pa != NUL)) {
 			/* no path or a relative one */
 				if(!pathPa) {				/* path has no path spec in it */
 					if((dynPath = dfnpath(*dr)) == 0)

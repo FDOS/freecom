@@ -80,7 +80,7 @@ optScanFct(opt_copy)
 
 optScanFct(opt_copy1)
 {
-  int ec, *opt, *optReset;
+  int ec, *opt = NULL, *optReset = NULL;
 
   (void)arg;
   switch(ch) {

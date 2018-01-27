@@ -224,6 +224,11 @@ unsigned msgSegment(void)              /* load messages into memory */
 			break;
 #else	/* Even in non-debugging, an error should
 							be displayed */
+		case STRINGS_NOT_FOUND:
+		case STRINGS_ID_MISMATCH:
+		case STRINGS_READ_ERROR:
+		case STRINGS_SIZE_MISMATCH:
+			break;
 		case STRINGS_OUT_OF_MEMORY:
 			assert(msgSegm == 0);
 			puts("[Out of memory loading STRINGS.]");

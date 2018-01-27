@@ -63,7 +63,7 @@ int cmd_if(char *param)
         ignore_case++;
 
 	/* next check if param string begins with word 'not' */
-	if(matchtok(param, "not"))
+      if(matchtok(param, "not"))
 		negate = X_EXEC;            /* Remember 'NOT' */
 
 	/* Check for 'exist' form */
@@ -180,11 +180,12 @@ int cmd_if(char *param)
 			x_flag = X_EXEC;
 	}
 
-	if(x_flag ^ negate)		/* perform the command */
+	if(x_flag ^ negate) {		/* perform the command */
 		if(!*(pp = ltrimcl(pp)))
 			error_if_command();
 		else
 			parsecommandline(pp, FALSE);
+	}
 
 	return 0;
 }

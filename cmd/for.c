@@ -257,13 +257,13 @@ int cmd_for(char *param)
 	case noCMD:
 		error_for_no_command();
 		return 1;
-#ifdef DEBUG
 	case OK:
 		break;
 	default:
+#ifdef DEBUG
 		dprintf(("[FOR: Invalid return value from checkFOR()]\n"));
-		return 1;
 #endif
+		return 1;
 	}
 
 	return doFOR(varname, varE, param, paramE, cmd, flags);

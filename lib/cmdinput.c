@@ -286,7 +286,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				goxy(1, wherey() + 1);
 			  else
 				goxy(wherex() + 1, wherey());
-				break;
+			  break;
 			}
 			/* cursor-right at end of string grabs the next character
 				from the previous line */

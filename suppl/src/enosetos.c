@@ -85,9 +85,9 @@ int eno_setOSerror(int errnr)
 
 	errno = eno;
 
-	DBG_RETURN_BI(_doserrno = errnr)
+	_doserrno = errnr)
 #elif __WATCOMC__
 	 __set_errno_dos(errnr);
-	 DBG_RETURN_I( errnr)
 #endif
+	 DBG_RETURN_I( errnr)	
 }
