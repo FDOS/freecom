@@ -27,7 +27,7 @@ extern char dosFCB2[128] asm("_dosFCB2");
 extern struct ParamDosExec dosParamDosExec asm("_dosParamDosExec");
 
 #define dosFCB1 RESIDENT(dosFCB1)
-#define dosFCB2 RESIDENT(dosFCB1)
+#define dosFCB2 RESIDENT(dosFCB2)
 #define dosParamDosExec RESIDENT(dosParamDosExec)
 
 extern unsigned char dosCMDNAME[128] asm("_dosCMDNAME");
