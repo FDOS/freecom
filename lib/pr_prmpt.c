@@ -5,6 +5,7 @@
 
 #include "../config.h"
 
+#include <stdlib.h>
 
 #include "../include/command.h"
 #include "../include/misc.h"

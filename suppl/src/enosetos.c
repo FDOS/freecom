@@ -85,7 +85,7 @@ int eno_setOSerror(int errnr)
 
 	errno = eno;
 
-	_doserrno = errnr)
+	_doserrno = errnr;
 #elif __WATCOMC__
 	 __set_errno_dos(errnr);
 #endif

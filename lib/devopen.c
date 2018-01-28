@@ -43,8 +43,8 @@
 #include <dos.h>
 
 #include "../include/openf.h"
-#include "../include/lfnfuncs.h"
 #include "../include/misc.h"
+#include "../include/lfnfuncs.h"
 
 int devopen(char *const fnam, int mode)
 {

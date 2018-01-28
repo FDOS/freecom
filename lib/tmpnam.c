@@ -54,6 +54,7 @@
 #include "../config.h"
 
 #include <dos.h>
+#include <stdlib.h>
 
 #include <portable.h>
 

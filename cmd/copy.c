@@ -172,7 +172,7 @@ ok:
 		if(asc) {
 			ctrlz = _fmemchr(buffer, 0x1a, rd);
 			if(ctrlz != 0)
-				rd = ctrlz - buffer;
+				rd = (unsigned)(ctrlz - buffer);
 		}
 		
 		if(farwrite(fdout, buffer, rd) != rd) {
