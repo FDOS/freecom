@@ -15,4 +15,4 @@ cd ../strings && rm -f *.cfg *.obj *.exe
 cd ../tools   && rm -f tools.mak *.icd *.cfg *.obj *.map *.exe *.com
 cd ../utils   && rm -f *.cfg *.obj *.map *.exe
 for i in cmd lib shell criter; do cd ../$i && rm -f *.obj *.cfg; done
-
+rm -f gnuconf.mak $(find * -name gnumake.mak)

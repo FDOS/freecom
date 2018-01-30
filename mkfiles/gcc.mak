@@ -5,14 +5,14 @@ RMFILES2 = rm -f
 ECHOTO = echo >>
 ECHOTO0 = echo >>
 CP = cp
-NASMFLAGS = $(NASMFLAGS) -felf -o $@
+NASMFLAGS := $(NASMFLAGS) -felf
 SHELL_MMODEL_COMP=cmodel=small
 INCLUDEPATH=-I. -I../compat -I../suppl/compat
 
 CC = ia16-elf-gcc -c
 CL = ia16-elf-gcc -mcmodel=small
 AR = ar crsv
-LD = $(CL) $(CFLAGS1) -o command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -Wl,-Map,command.map $#
+LD = $(CL) $(CFLAGS1) -o command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -Wl,-Map,command.map \#
 LIBLIST = >
 ECHOLIB = echo >>
 
@@ -21,8 +21,10 @@ CFLAGS1 = -Os -Wall -Werror -Wno-pointer-to-int-cast -Wno-incompatible-pointer-t
 
 #		*Implicit Rules*
 .SUFFIXES:
-.SUFFIXES: .c .asm .com .exe .obj
+.SUFFIXES: .C .c .asm .com .exe .obj
 .c.exe:
+	gcc -x c -DGCC -D__GETOPT_H -I../suppl $< -o $@
+.C.exe:
 	gcc -x c -DGCC -D__GETOPT_H -I../suppl $< -o $@
 .c.obj:
 	$(CC) $< @$(CFG) -o $@

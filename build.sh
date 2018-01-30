@@ -72,13 +72,40 @@ echo Building FreeCOM for language $LNG
 
 if [ -z "$MAKE" ]; then
     case "$COMPILER" in
-	watcom|gcc)
+	watcom)
 	    export MAKE="wmake -ms -h -f"
+	    cp tools/tools.m1 tools/tools.m0
+	    ;;
+	gcc)
+	    export MAKE="make -f gnumake.mak"
 	    ;;
 	*)
 	    ;;
     esac
     echo Make is $MAKE.
+fi
+
+# substitutions for GNU Make
+
+gnumake_subst () {
+    sed -e 's@^!@@' \
+	-e 's@^include "\(.*\)"@include \1@' \
+	-e 's@^include $(TOP)/config.mak@include $(TOP)/gnuconf.mak@' \
+	-e 's@if \(.*\) == \(.*\)[\r$]@ifeq (\1,\2)@' \
+	-e 's@^CC =@CC :=@' \
+	-e 's@^INCLUDEPATH =@INCLUDEPATH :=@' \
+	-e 's/\(-f obj.*$<\)/\1 -o $@/' \
+	 < $1/$2 > $1/$3
+}
+
+if $MAKE -? 2>&1 | grep -q gnu; then
+    gnumake_subst . config.mak gnuconf.mak
+    for i in suppl utils strings criter lib cmd; do
+	gnumake_subst $i $i.mak gnumake.mak
+    done
+    gnumake_subst suppl/src suppl.mak gnumake.mak
+    gnumake_subst strings/strings strings.mak gnumake.mak
+    gnumake_subst shell command.mak gnumake.mak
 fi
 
 echo
@@ -146,9 +173,12 @@ echo
 echo Making supplemental tools
 echo
 cd tools
-cat tools.m1 >tools.mak
+cat tools.m1 > tools.mak
 ../utils/mktools.exe >>tools.mak
 cat tools.m2 >>tools.mak
+if $MAKE -? 2>&1 | grep -q gnu; then
+    gnumake_subst . tools.mak gnumake.mak
+fi
 $MAKE tools.mak all
 cd ..
 
