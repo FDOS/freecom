@@ -106,7 +106,9 @@ echo Making STRINGS resource
 echo
 cd strings
 $MAKE strings.mak all
-cd ..
+cd strings
+$MAKE strings.mak all
+cd ../..
 
 echo
 echo Making CRITER resource
