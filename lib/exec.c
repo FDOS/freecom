@@ -146,7 +146,8 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 
 #ifdef __GNUC__
 		/* call via asm to compiler knows that es is clobbered */
-		asm volatile("call _XMSexec\n": "=a"(retval)::
+		asm volatile("pushw %%ss; popw %%ds; call _XMSexec\n":
+			     "=a"(retval)::
 			     "bx","cx","dx","es");
 #else
 		retval = XMSexec();
