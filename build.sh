@@ -74,7 +74,6 @@ if [ -z "$MAKE" ]; then
     case "$COMPILER" in
 	watcom)
 	    export MAKE="wmake -ms -h -f"
-	    cp tools/tools.m1 tools/tools.m0
 	    ;;
 	gcc)
 	    export MAKE="make -f gnumake.mak"
