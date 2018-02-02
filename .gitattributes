@@ -1,0 +1,4 @@
+* text eol=crlf
+*.sh text eol=lf
+*.com -text
+elvis.rc -text
