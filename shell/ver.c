@@ -41,9 +41,18 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "0.84-pre2"
+const char shellver[] = "0.84-pre3 - "
+#if defined(__BORLANDC__)
+	"BORLANDC"
+#elif defined(__TURBOC__)
+	"TURBOC"
+#elif defined(__WATCOMC__)
+	"WATCOMC"
+#elif defined(__GNUC__)
+	"GNUC"
+#endif
 #ifdef FEATURE_XMS_SWAP
-	" XMS_Swap"
+	" - XMS_Swap"
 #endif
 ;
 static const char shelldate[] = __DATE__ " " __TIME__;
