@@ -1,3 +1,145 @@
+v0.84pre3
+fix: Make sure that ds=ss in XMSexec call (Bart)
+The newest ia16-elf-gcc floats ds inside functions and with the inline
+asm doesn't know it's a function call (Bart)
+chg: fmemcpy now compiles properly with ia16-elf-gcc (remove workaround) (Bart)
+chg: Use GNU Make instead of OW wmake to compile with ia16-elf-gcc (Bart)
+chg: Build strings without needing to create/remove the subdirectory (Bart)
+chg: Move xmssave and some related variables to near transient data
+This is possible since the resident code no longer references those
+Be careful to not write to any transient data after the save to XMS (Bart)
+chg: Fix "TODO make XMSsave two structures in order to drop this subroutine"
+(Bart)
+chg: Make XMSexec function near and move 80 resident code bytes to transient
+section. (Bart)
+chg: fix xms-swap TODO: first_time either 04ah or 049h --> no jumps (Bart)
+chg: xms-swap: move residentCS from cs: to ds: (Bart)
+fix: Stack size for OW needs to be 4K instead of default 2K.
+This matches Turbo C's default, and allows for some large stack
+users with LFNs. (Bart)
+chg: Reduce heap memory by only keeping the necessary rest of the command line.
+(Bart)
+chg: Keep the context permanently on the heap via realloc, to reduce
+fragmentation. (Bart)
+chg: Properly patch the heap size for Open Watcom
+The memory layout for OW is different from Turbo C.
+For Turbo, heap is below stack, but for OW it's the reverse.
+Hence OW keeps the data segment much more minimal by default.
+There is however a default sbrk increment of 8096 set by
+_amblksiz. If we set that to 6K instead the heap will stay
+at that size, so TSRs are loaded beyond that point
+(for non-XMS-SWAP that is, with XMS-SWAP it's completely
+different) (Bart)
+chg: getEnv: remove static pointers, caller responsible for free.
+Eliminating the 3-pointer dance and free-ing the environment
+variable pointer as soon as possible reduces heap fragmentation. (Bart)
+fix: Fix farwrite and hence copy for Turbo/GCC (Bart)
+fix: "dir" output for dates with our own printf. It supports %02u but not %.2u.
+Those produce the same result though (Bart)
+chg: port to ia16-elf-gcc (Bart)
+fix: kswap_p is a _seg * pointer so we need MK_SEG_PTR for compilers without
+_seg (Turbo C 2.01, OW). Otherwise the critical error handler is not installed
+correctly for non-xms-swap builds. (Bart)
+chg: Use "add si, byte 10" so old and new NASM generate the same opcodes (Bart)
+fix: Use proper prototypes on enum{File}Resources callback function (Bart)
+chg: allow Linux cross-compilation, port build utils to GCC-Linux (Bart)
+fix: Fix ren for files without extensions (passes NULL ptr for ext) (Bart)
+fix: Fix LOADHIGH for compilers without _seg pointers. Use FP_SEG
+instead of casting the pointer to unsigned, as _seg is defined to far on
+compilers without _seg (e.g. Watcom) (Bart)
+fix: IF EXIST should auto-fail critical errors due to empty drive (Tom & Jeremy)
+add: %CD% as alternative to %_CWD% (Tom)
+fix: Use screen height 25 when 0 returned as current height, from Mateusz
+Viste, bug #131 see http://sourceforge.net/p/freedos/bugs/131/ (Jeremy)
+chg: Merged fcompl1 and fcompl2.c to filecomp.c (Bart)
+chg: Untangle findfirst/next/close definitions to make them more explicit (Bart)
+chg: Consistently use dos_open/dos_close/dos_read/dos_write, etc
+The problem with _open, _read, etc. is that they mean different things
+to Turbo than for OW: Turbo _open is like _dos_open but OW _open is an
+alias for open (Bart)
+chg: Eliminate open() in favor of _open/_creat/dos_creatnew (Bart)
+chg: Eliminate fgets(), replacing with _read() (Bart)
+chg: Use backspaces instead of gotoxy calls to clear a command line (Bart)
+chg: Use _write for all printf style writes in prf.c and for putc(har).
+Remove fflush and setbuf calls (Bart)
+chg: Eliminate fputs everywhere except for prf.c (Bart)
+chg: Eliminate read() by using _read() everywhere (Bart)
+chg: Remove references to fopen / fcloseall for non-debug builds (Bart)
+chg: Use open/read/close instead of fopen/fread/fclose everywhere (Bart)
+fix: EnumFileResources function arguments to all use handles instead of
+streams (Bart)
+fix: Fix loadModule: it should use an int fd for a handle instead of a FILE *.
+(Bart)
+chg: replaced all text mode write()s by binary _write()s to save RTL usage
+space (Bart)
+chg: farread/farwrite cleanup of DOS r/w's (Bart)
+chg: Use handle I/O instead of stream I/O for resources to save space (Bart)
+chg: Change geninterrupt emulation to use intr() instead of int86x() for
+consistency (Bart)
+chg: Centralize LFN functions for mkdir/rmdir/chdir (Bart)
+fix: Support precision flag and size/precision from argument list in abbreviated
+printf function, to fix "dir /lfn" (Bart)
+fix: Don't truncate when not necessary for LFN opens. Works around an FD kernel
+bug were truncating a 0-byte file caused an error (Bart).
+fix: "copy con file" (Bart)
+fix: COPY: trailing /a and /b options only apply to the last (destination)
+file, not globally, when concatenating, "/a" is the default. (Bart)
+chg: Replace stream i/o for COPY by simpler handle i/o, so fileno doesn't need
+to be used all the time.  (Bart)
+chg: Use BIGcopy() for both ascii and binary copies. ASCII just means to check
+for Ctrl-Z, don't mess with line endings, so do that manually using fmemchr.
+When eof is detected, no more reads are needed. (Bart)
+fix: COPY: The /B switch should switch devices to raw mode (see nansi.sys
+documentation). Fix errors given for "copy [/a|/b] file.txt con".  (Bart)
+chg: Use small printf() from the kernel source with a few modifications to do
+some buffering. Saves 3.5K in RTL code for OW. (Bart)
+fix: exit() needs to be overriden for OpenWatcom as well as Turbo C. (Bart)
+fix: Fix direct _seg pointer casts for Open Watcom (and also Turbo C 2.01)(Bart)
+fix: Fix size of LFN in struct locffblk, and make sure the ffblk structs are
+packed (Bart)
+fix: Fix devopen in OW using stdarg.h and proper prototypes (Bart)
+fix: Fix xms-swap for Open Watcom (Bart)
+fix: Set stdout to unbuffered for Watcom as it is by default for Turbo C (Bart)
+fix: Use stdarg.h to avoid messing with prototypes in, and fixing Open Watcom'
+use of env_replace (Bart)
+fix: Update build system to support Open Watcom. Introduce config.b/config.bat
+like in the kernel source to be able to configure make/wmake locations (Bart)
+fix: ISR/dir.h/stpcpy/string/?etverify/parsfnm related changes for OW
+compatibility (Bart)
+chg: Use IREGS/intrpt instead of struct REGPACK/intr everywhere for OW
+compatibility. Similarly, USEREGS simulates geninterrupt (Bart)
+fix: Avoid Turbo C specific use of sizeof in preprocessor expressions (Bart)
+fix: Adjust makefiles to be compatible with TC 2.01's very limited MAKE utility
+(no redirection) (Bart)
+fix: Fix compiler warnings (Bart)
+chg: Handle .obj dependencies for suppl instead of rebuilding every time (Bart)
+chg: Prune unused files from stripped-down suppl (Bart)
+chg: Remove duplicate .h files from suppl source (Bart)
+fix: Do not compare (signed) to ' ' but use iscntrl() - otherwise,
+FIXSTRS may chop trailing non-ASCII (eg Russian) words away (Eric Auer).
+fix: Fixed compilation completely with Turbo C (Blair).
+fix: Got rid of all '//' comments (Blair)
+fix: Support for BC (Blair)
+fix: Fix for compiler oddities (Arkady).
+fix: Fixed bug in Truename (Blair).
+fix: Print long filename current directory (Blair).
+fix: Use safer intr routine rather than directly modify registers (Blair).
+fix: Moved lfnsup to a place where it will not be overwritten (Blair).
+add: Add option to compile to support switch character instead of hardcoded '/'
+(Blair)
+add: The new SET /E feature. (Blair)
+fix: Fixed long filename handling in DIR. (Blair)
+fix: COPY uses static-size buffers now to prevent known problems with dynamic
+allocation. (Blair)
+fix: Improved PATH handling routine (Arkady).
+fix: Fixed (hopefully) bug in %PATH% parsing routing and A:/B: random accessing bug (Blair).
+fix: Fixed bug where a directory could be found in %PATH% parsing (Blair).
+chg: Added Polish translation, updated French&Italian translation (Blair).
+chg: Made RD/MD/CD more buggy-lfn-implementation friendly (Blair).
+chg: Removed usage of CLIB perror function and reduced executable size by nearly
+1 kb.  Since perror was only used in ren and del, and only two possible errnos
+exist, the function can be minimized, and also as an added advantage, the
+errors that were printed can now be translated (Blair).
 v0.84pre2
 add: exec sets CMDLINE if command-line is longer than 125 characters; if setting CMDLINE fails, so does exec. (All DJGPP-compiled apps and various others support CMDLINE for passing parameters)
 chg: Size optimizations
