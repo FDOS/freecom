@@ -353,6 +353,14 @@ exec_error2:
 	;; Note: Because [CS:driverAdress] == [residentCS:driverAdress]
 	;; we need not use a similiar approach as with XMSexec
 _XMSrequest:
+%ifidn __OUTPUT_FORMAT__,elf 	; GCC, calling near with stdcall conv.
+		pop cx		; return address
+		pop ax		; AX
+		pop dx		; DX
+		pop si		; SI
+		push cs
+		push cx		; far return from XMS driver
+%endif
 		jmp far [cs:_XMSdriverAdress]
 
 ;; Added here to make it more easier for the C-part to call functions
@@ -370,6 +378,9 @@ _XMSrequest:
 _XMSexec:
 		extern _residentCS
 						; save ALL registers needed later
+%ifidn __OUTPUT_FORMAT__,elf 	; GCC: need to preserve es
+		push es
+%endif
 		push si
 		push di
 		push bp
@@ -424,4 +435,7 @@ ret_from_resident:
 		pop bp
 		pop di
 		pop	si
+%ifidn __OUTPUT_FORMAT__,elf 	; GCC: need to preserve es
+		pop es
+%endif
 		retn						; done (really)

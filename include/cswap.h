@@ -48,6 +48,7 @@ extern void far * termAddr asm("_termAddr");
 extern word myPID asm("_myPID");
 extern word origPPID asm("_origPPID");
 
+extern int XMSexec(void) asm("_XMSexec");
 extern void terminateFreeCOMHook(void) asm ("_terminateFreeCOMHook");
 
 #define termAddr RESIDENT(termAddr)
@@ -72,14 +73,8 @@ extern unsigned long (far *far XMSdriverAdress)(unsigned request,
 #elif defined(__GNUC__)
 extern unsigned far *XMSdriverAdress asm("_XMSdriverAdress");
 #define XMSdriverAdress RESIDENT(XMSdriverAdress)
-static inline int XMSrequest(unsigned request, unsigned dx, void *si)
-{
-	int ret;
-	asm volatile ("lcall *%1" : "=a"(ret) :
-		      "m"(XMSdriverAdress), "a"(request), "d"(dx), "S"(si) :
-		      "bx");
-	return ret;
-}
+extern unsigned long XMSrequest(unsigned request, unsigned dx, void *si)
+  asm("_XMSrequest");
 #else
 extern unsigned (far *far XMSdriverAdress)(void);
 #endif
