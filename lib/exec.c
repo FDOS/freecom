@@ -74,17 +74,22 @@ char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option);
 #pragma aux parsfnm = \
 	"mov ah, 29h" \
 	"int 21h" \
+	"inc al" \
+	"jnz ok" \
+	"xor si, si" \
+	"ok:" \
 	parm [si] [es di] [ax] value [si] modify [ax es]
 #else /* __GNUC__ */
 static char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option)
 {
   char *ret;
-  asm("mov %%bx, %%es; mov %%dx, %%di; int $0x21" :
-      "=S"(ret) :
-      "Rah"((unsigned char)0x29), "j"(fcbptr), "Ral"((unsigned char)(option)),
-      "S"(cmdline) :
-      "ax", "di", "es", "cc", "memory");
-  return ret;
+  unsigned char opt = option;
+  asm volatile("int $0x21" :
+      "=S"(ret), "+Ral"(opt) :
+      "Rah"((unsigned char)0x29), "e"(FP_SEG(fcbptr)), "D"(FP_OFF(fcbptr)),
+      "Rds"(FP_SEG(cmdline)), "0"(cmdline) :
+      "cc", "memory");
+  return opt == 0xff ? NULL : ret;
 }
 #endif
 #endif

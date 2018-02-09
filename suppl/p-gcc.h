@@ -129,31 +129,30 @@ static inline int _dos_setftime(int fd, unsigned date, unsigned time)
 
 static inline void far *_dos_getvect(int intno)
 {
-	void far *vect;
-	asm volatile("int $0x21; mov %%es, %%dx; mov %%bx, %%ax" :
-		     "=A"(vect) :
-		     "Rah"((char)0x35), "Ral"((char)intno) :
-		     "bx", "es");
-	return vect;  
+	unsigned short seg, off;
+	asm volatile("int $0x21" :
+		     "=e"(seg), "=b"(off) :
+		     "Rah"((char)0x35), "Ral"((char)intno));
+	return MK_FP(seg,off);
 }
 
 static inline void _dos_setvect(int intno, void far *vect)
 {
-	asm volatile("push %%ds; mov %%bx, %%ds; int $0x21; pop %%ds" :
-		     : "Rah"((char)0x25), "Ral"((char)intno), "j"(vect));
+	asm volatile("int $0x21" :
+		     : "Rah"((char)0x25), "Ral"((char)intno),
+		       "Rds"(FP_SEG(vect)), "d"(FP_OFF(vect)));
 }
 
 static inline void far *getdta(void)
 {
-	void far *dta;
-	asm("mov $0x2f, %%ah; int $0x21; mov %%es, %%dx; mov %%bx, %%ax" :
-	    "=A"(dta) :: "bx", "es");
-	return dta;
+	unsigned short seg, off;
+	asm volatile("int $0x21" : "=e"(seg), "=b"(off) : "Rah"((char)0x2f));
+	return MK_FP(seg,off);
 }
 
 static inline void setdta(void far *dta)
 {
-	asm("push %%ds; mov %%bx, %%ds; int $0x21; pop %%ds" :
-	    : "Rah"((unsigned char)0x1a), "j"(dta));
+	asm volatile("int $0x21" :
+		     : "Rah"((char)0x1a), "Rds"(FP_SEG(dta)), "d"(FP_OFF(dta)));
 }
 #endif
