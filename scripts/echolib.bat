@@ -8,6 +8,8 @@ if "%2" == "" goto end
 set STR=%STR% +%2
 goto loop
 :end
-set STR=%STR% &
 
-echo %STR%>> %FILE%
+set AMP=&
+if "%AMP%" == "" set AMP=^^^&
+
+echo %STR% %AMP%>> %FILE%
