@@ -10,7 +10,8 @@ SHELL_MMODEL_COMP=cmodel=small
 INCLUDEPATH=-I. -I../compat -I../suppl/compat
 
 CC = ia16-elf-gcc -c
-CL = ia16-elf-gcc -mcmodel=small -o $@
+CL = ia16-elf-gcc -mcmodel=small
+CLO = -o $@
 AR = ar crsv
 LD = $(CL) $(CFLAGS1) -o command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -Wl,-Map,command.map \#
 LIBLIST = >

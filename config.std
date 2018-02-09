@@ -5,6 +5,7 @@ RMFILES2 = ..\..\scripts\rmfiles
 ECHOTO0 = echoto
 ECHOTO = ..\scripts\echoto
 CP = copy
+CLO =
 
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
