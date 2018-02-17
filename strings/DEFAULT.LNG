@@ -456,7 +456,7 @@ Cannot load Context module or Critical Error handler.
 :TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
 Context out of memory.
 If this error persists, consider to increase some internal buffer,
-such as history, direcory stack etc.
+such as history, directory stack etc.
 .
 
 :TEXT_ERROR_CONTEXT_LENGTH#1%
@@ -632,7 +632,7 @@ Delete '%s' (Yes/No/All/Quit) ? \
 .
 
 :TEXT_UNKNOWN_FILENAME#1
-<<unkown>>\
+<<unknown>>\
 .
 
 :TEXT_DIRSTACK_EMPTY
@@ -906,7 +906,7 @@ Heap                   : free %5lu bytes
 
 ## CHCP
 :TEXT_ERROR_GET_CODEPAGE#1
-Failed to aquire current code page from system.
+Failed to acquire current code page from system.
 .
 :TEXT_ERROR_SET_CODEPAGE#1
 Failed to change current code page.
