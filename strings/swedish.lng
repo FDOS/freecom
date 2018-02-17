@@ -159,12 +159,12 @@ Felaktig storlek '%s'.
 .
 
 :TEXT_HISTORY_EMPTY#1
-Det inga lagrade kommandon hittades.
+Inga lagrade kommandon hittades.
 .
 
 
 :TEXT_ERROR_BAD_MCB_CHAIN
-MCB kedja korrupt, eller inte FreeDOS-kompatibelt system.
+MCB-kedja korrupt, eller inte FreeDOS-kompatibelt system.
 .
 
 :TEXT_ERROR_UNDEFINED_ERROR
@@ -188,7 +188,7 @@ FOR: IN saknas.
 .
 
 :TEXT_ERROR_MISSING_PARENTHESES#1
-En eller båda paranteserna saknas.
+En eller båda parenteserna saknas.
 .
 
 :TEXT_ERROR_DO_MISSING#1
@@ -395,7 +395,7 @@ Context-informationen är borta efter swappning. Context återskapas men alla alia
 #
 
 :TEXT_MSG_PAUSE#1
-Tryck på valfi tangent för att fortsätta . . .\
+Tryck på valfri tangent för att fortsätta . . .\
 .
 
 :TEXT_MSG_HISTORY_SIZE
@@ -403,7 +403,7 @@ Tidigare-buffertens storlek är %d byte.
 .
 
 :TEXT_MSG_DOSKEY
-DOSKEY funktioner är redan aktiverade i prompten.
+DOSKEY-funktioner är redan aktiverade i prompten.
 .
 
 :TEXT_MSG_ECHO_STATE
@@ -415,10 +415,10 @@ VERIFY är %s
 .
 
 :TEXT_MSG_FDDEBUG_STATE
-DEBUG utmatning är %s.
+DEBUG-utmatning är %s.
 .
 :TEXT_MSG_FDDEBUG_TARGET
-DEBUG utmatning skrivs ut till '%s'.
+DEBUG-utmatning skrivs ut till '%s'.
 .
 
 :TEXT_MSG_BREAK_STATE
@@ -469,7 +469,7 @@ Skriv in ny tid: \
 JjNn{CR}{LF}{CBREAK}
 aabb   b   b       b
 Alla filer i '%s' kommer att tas bort!
-Vill ni förtsätta (J/N)? \
+Vill ni fortsätta (J/N)? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -710,7 +710,7 @@ Uppdateringar finns tillgängliga på http://freedos.sourceforge.net/freecom
 :TEXT_MSG_VER_REDISTRIBUTION
 Copyright (C) 1994-2001 Tim Norman och andra.
 
-Detta program är fri programvara; ni kan omdistribuera den och/eller ändra den under reglerna definerade i GNU General Public License som det publiserats av Free Software Foundation; antingen version 2 av licensen, eller om ni önskar, den senaste.
+Detta program är fri programvara; ni kan omdistribuera den och/eller ändra den under reglerna definierade i GNU General Public License som det publicerats av Free Software Foundation; antingen version 2 av licensen, eller om ni önskar, den senaste.
 
 Bug-rapporter skickas till freedos-freecom@lists.sourceforge.net.
 Uppdateringar finns tillgängliga på http://freedos.sourceforge.net/freecom
@@ -737,7 +737,7 @@ Uppdateringar finns tillgängliga på http://freedos.sourceforge.net/freecom
 Kommandoprompten håller på att avslutas, trots att detta\r
 är förbjudet (vanligtvis genom att använda "/P" växeln).\r
 Ni måste starta om datorn, eller om prompten körs i en \r
-multitasking miljö, stänga av processen manuellt.\r
+multitasking-miljö, stänga av processen manuellt.\r
 .
 
 # Displayed during the initialization phase of FreeCOM, if its own
@@ -973,7 +973,7 @@ DIR [enhet:][sökväg][filnamn] [/P] [/W] [/A[[:]attribut]]
  /L         Använder gemener.
  /Y or /4   Visa 4-siffriga årtal.
 
-Växlar kanförinställas med miljövariabeln DIRCMD.  
+Växlar kan förinställas med miljövariabeln DIRCMD.  
 Åsidosätt dessa växlar med - (bindestreck), till exempel /-W.
 .
 
@@ -1018,7 +1018,7 @@ Specialkoder ni kan använda i DOSKey makrodefinitioner:
 .
 
 :TEXT_CMDHELP_ECHO
-Visar meddelanden, eller styr hurvida kommandon som körs ska visas visas på skärmen.
+Visar meddelanden, eller styr huruvida kommandon som körs ska visas på skärmen.
 
   ECHO [ON | OFF]
   ECHO [meddelande]
@@ -1048,7 +1048,7 @@ för %variabel.
 .
 
 :TEXT_CMDHELP_GOTO
-Styr kommandoprompten till en rad med givnen etikett i ett batch-program.
+Styr kommandoprompten till en rad med given etikett i ett batch-program.
 
 GOTO etikett
 
@@ -1067,21 +1067,21 @@ Med "storlek" så ändras tidigare-bufferns storlek.
 .
 
 :TEXT_CMDHELP_IF
-Kör ett kommando i ett kommandoprogram om ett vilkor är sant.
+Kör ett kommando i ett kommandoprogram om ett villkor är sant.
 
 IF [NOT] ERRORLEVEL tal kommando
 IF [NOT] sträng1==sträng2 kommando
 IF [NOT] EXIST filnamn kommando
 
-  NOT               Anger att komandoprompten ska utföra kommandot bara 
-                    om vilkoret är falskt.                   
-  ERRORLEVEL tal    Anger att vilkoret är sant om det sista programmet som 
+  NOT               Anger att kommandoprompten ska utföra kommandot bara 
+                    om villkoret är falskt.                   
+  ERRORLEVEL tal    Anger att villkoret är sant om det sista programmet som 
                     körts returnerat en slutkod som är lika med eller större 
                     än det angivna talet.
-  kommando          Anger ett kommando som ska utföras om vilkoret har uppnåtts.
+  kommando          Anger ett kommando som ska utföras om villkoret har uppnåtts.
   sträng1==sträng2  Anger att villkoret är sant om de angivna textsträngarna 
                     är lika.
-  EXIST filnamn     Anger att villkortet är sant om det angivna filnamnet existerar.
+  EXIST filnamn     Anger att villkoret är sant om det angivna filnamnet existerar.
 .
 
 :TEXT_CMDHELP_LH
@@ -1099,7 +1099,7 @@ LOADHIGH [/L:region1[,minstorlek1][;region2[,minstorlek2]...] [/S]]
             för den andra regionen osv.
             Ni kan ange hur många regioner ni vill.
 
-/S          Krymper en UMB till minimal storlek medans programmet laddas.
+/S          Krymper en UMB till minimal storlek medan programmet laddas.
 
 [enhet:][sökväg]filnamn
             Anger plats och namn för programmet.
@@ -1146,14 +1146,14 @@ PROMPT [text]
 
   text    Bestämmer den nya promptens utseende.
 
-Prompten kan bestå av valiga tecken och följande specialtecken:
+Prompten kan bestå av vanliga tecken och följande specialtecken:
 
   $Q   = (lika med-tecken)
   $$   $ (dollartecken)
   $T   Aktuell tid
   $D   Aktuellt datum
   $P   Aktuell enhet och sökväg
-  $V   FreeDOS kommandoprompts versionsnumber
+  $V   FreeDOS kommandoprompts versionsnummer
   $N   Aktuell enhet
   $G   > (större än-tecken)
   $L   < (mindre än-tecken)
@@ -1177,7 +1177,7 @@ PUSHD [[enhet:]sökväg]
 Tar en katalog från katalogstacken, och ändras till den.
 
 POPD [*]
-  Jockertecken ('*') parametern rensar katalogstacken.
+  Jokertecken ('*') parametern rensar katalogstacken.
 .
 
 :TEXT_CMDHELP_DIRS
@@ -1217,11 +1217,11 @@ SET [/C] [/P] [variabel=[sträng]]
   variabel  Anger miljövariabelns namn.
   sträng    Anger en serie tecken som tilldelas variabeln
 
-* Om ingen sträng anges tas angiven möljövariabel bort.
+* Om ingen sträng anges tas angiven miljövariabel bort.
 
 SET utan parametrar visar aktuella miljövariabler.
 
-/C tvingar SET att behålla information om gemener och VERSALER i variabelnamn; som standard så omvanlas alla gemener till versaler om miljövariabeln inte redan finns, gör den det så behåller den sitt namn.
+/C tvingar SET att behålla information om gemener och VERSALER i variabelnamn; som standard så omvandlas alla gemener till versaler om miljövariabeln inte redan finns, gör den det så behåller den sitt namn.
 
 /P Frågar användaren efter en sträng som sen ges till variabeln.
 .
@@ -1285,9 +1285,9 @@ FDDEBUG [ON | OFF | fil]
 
 Skriv FDDEBUG utan parameter för att visa nuvarande inställningar
 för utmatning av debug-information.
-Om en fil specifiseras kommer all debug-information att skickas till den filen;
+Om en fil specificeras kommer all debug-information att skickas till den filen;
 utmatningen läggs till sist i filen, om den redan finns. De speciella
-namnen "stdout" och "stderr" kan användas för att vidarebefodra utmatningen 
+namnen "stdout" och "stderr" kan användas för att vidarebefordra utmatningen 
 till standard out eller standard error stream.
 .
 
