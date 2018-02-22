@@ -1,3 +1,11 @@
+v0.84pre4
+fix: spelling, by Anders Jonsson <anders.jonsson@norsjovallen.se>
+fix: Edits to Swedish translation file, by Anders Jonsson
+fix: Make echolib.bat compatible with cmd.exe (Tom Ehlert)
+fix: Fix build for GCC-compiled load_icd.exe (Bart)
+fix: parsefnm failures and cleanup other inline asm for OW and GCC (Bart)
+fix: revert change keeping context alwyas on heap (caused out-of-memory) (Bart)
+fix: replace use of inline asm lcall/call for GCC with plain C calls (Bart)
 v0.84pre3
 fix: Make sure that ds=ss in XMSexec call (Bart)
 The newest ia16-elf-gcc floats ds inside functions and with the inline
