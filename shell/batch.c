@@ -334,13 +334,14 @@ static int getbline(int fd, char *textline, int len, int bufsize)
   static int size;
   if (len == 0)
 	size = len;
-  else if (size >= len) {
+  else {
 	size -= len;
 	if (size > 0) {
 	  memmove(textline, &textline[len], size+1);
 	  if (textlineEnd(textline, size))
 	    return size;
-	}
+	} else
+	  size = 0;
   }
   if (size < bufsize) {
 	int sz = dos_read(fd, &textline[size], bufsize - size);
