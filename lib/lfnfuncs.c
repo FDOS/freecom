@@ -107,8 +107,12 @@ FILE * lfnfopen( const char *filename, const char *mode )
 
 int lfn_creat( const char *filename, int attr )
 {
-    __creat_or_truncate( filename, attr );
-    return( sfn_open( getshortfilename( filename ), O_WRONLY ) );
+    int ret = __creat_or_truncate( filename, attr );
+    int fd = sfn_open( getshortfilename( filename ), O_WRONLY );
+    /* need to truncate file if it already existed */
+    if (ret == -1)
+        dos_write(fd, '\0', 0);
+    return fd;
 }
 
 int lfnrename( const char *oldfilename, const char *newfilename )
