@@ -42,8 +42,9 @@
 #ifdef DEBUG
 
 #include <stdarg.h>
+#include "../include/misc.h"
 
-FILE *dbg_logfile = stdout;
+FILE *dbg_logfile = (FILE *)1;
 char *dbg_logname /*= NULL*/;
 
 void dbg_print(const char fmt[], ...)

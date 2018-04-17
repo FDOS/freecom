@@ -48,7 +48,11 @@
 #ifdef DEBUG
 
 #include <conio.h>	/* cputs */
+#ifdef __WATCOMC__
+#include <malloc.h>	/* _heapchk */
+#else
 #include <alloc.h>	/* heapcheck, coreleft, farcoreleft */
+#endif
 #include <stdlib.h>	/* abort */
 
 #if defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
@@ -66,9 +70,21 @@ void dbg_printmem (void) {
 #endif
 	unsigned long farThis;
 
-#if __TURBOC__ > 0x201
-	switch(heapcheck()) {
+#if __TURBOC__ > 0x201 || defined(__WATCOMC__)
+#ifdef __WATCOMC__
+	switch(_heapchk())
+#else
+	switch(heapcheck())
+#endif
+	{
+#ifdef __WATCOMC__
+	case _HEAPBADBEGIN:
+	case _HEAPBADNODE:
+	case _HEAPEND:
+	case _HEAPBADPTR:
+#else
 	case _HEAPCORRUPT:
+#endif
 		cputs("HEAP CORRUPTED. Cannot proceed!\r\n");
 		abort();
 	case _HEAPEMPTY:
@@ -82,10 +98,18 @@ void dbg_printmem (void) {
 	}
 #endif
 
+#ifdef __WATCOMC__
+#ifdef DISP_NEAR
+	nearThis = _memavl();
+#endif
+	_dos_allocmem(0xffff, &farThis);
+	farThis <<= 4;
+#else
 #ifdef DISP_NEAR
 	nearThis = coreleft();
 #endif
 	farThis = farcoreleft();
+#endif
 
 #ifdef DISP_NEAR
 	dprintf(("[free memory: near=%6u far=%13lu]\n", nearThis, farThis));

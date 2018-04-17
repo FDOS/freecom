@@ -71,6 +71,7 @@ struct fcb     {
 
 #ifdef __WATCOMC__
 char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option);
+#if defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
 #pragma aux parsfnm = \
 	"mov ah, 29h" \
 	"int 21h" \
@@ -79,6 +80,16 @@ char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option);
 	"xor si, si" \
 	"ok:" \
 	parm [si] [es di] [ax] value [si] modify [ax es]
+#else
+#pragma aux parsfnm = \
+	"mov ah, 29h" \
+	"int 21h" \
+	"inc al" \
+	"jnz ok" \
+	"xor si, si" \
+	"ok:" \
+	parm [ds si] [es di] [ax] value [ds si] modify [ax es]
+#endif
 #else /* __GNUC__ */
 static char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option)
 {

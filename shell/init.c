@@ -223,7 +223,6 @@ int initialize(void)
 	_amblksiz = _heaplen;
 #endif
 	
-	dbg_printmem();
 #ifdef DEBUG
 	{ void* p;
 		if((p = malloc(5*1024)) == 0)
@@ -231,6 +230,7 @@ int initialize(void)
 		else free(p);
 	}
 #endif
+	dbg_printmem();
 
 #ifdef FEATURE_KERNEL_SWAP_SHELL
 	if(kswapInit()) {		/* re-invoked */
