@@ -14,7 +14,7 @@ SUPPL_LIB_PATH = $(SUPPL_INC_PATH)
 
 ## Memory model of FreeCOM
 !if $(DEBUG)0 == 10
-SHELL_MMODEL=l
+SHELL_MMODEL=m
 DEBUG=-DDEBUG
 !else
 SHELL_MMODEL=s
