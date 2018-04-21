@@ -11,7 +11,7 @@ LD = $(BINPATH)\Tlink /m/s/l /c/d
 LIBLIST = ,
 ECHOLIB = echolib
 
-OBJC0 = $(LIBPATH)\c0s.obj
+OBJC0 = $(LIBPATH)\c0$(SHELL_MMODEL).obj
 LIBC = $(LIBPATH)\c$(SHELL_MMODEL).lib
 
 CFG = TURBOC.CFG
