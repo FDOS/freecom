@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <portable.h>
 
+#ifndef DEBUG
 #define FILE TINYFILE
 typedef void FILE;
 #undef stdin
@@ -36,6 +37,7 @@ int vsprintf(char *buff, const char * fmt, va_list arg);
 int vprintf(const char * fmt, va_list arg);
 int fprintf(FILE *f, const char * fmt, ...);
 int vfprintf(FILE *f, const char * fmt, va_list arg);
+#endif
 
 #include "../include/datefunc.h"
 #include "../include/timefunc.h"

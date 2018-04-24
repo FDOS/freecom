@@ -26,6 +26,8 @@
 /* Cambridge, MA 02139, USA.                                    */
 /****************************************************************/
 
+#ifndef DEBUG
+
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -423,5 +425,6 @@ main()
          testarray[i].highint);
   }
 }
+#endif
 #endif
 

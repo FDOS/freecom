@@ -44,7 +44,7 @@
 #include <stdarg.h>
 #include "../include/misc.h"
 
-FILE *dbg_logfile = (FILE *)1;
+FILE *dbg_logfile = stdout;
 char *dbg_logname /*= NULL*/;
 
 void dbg_print(const char fmt[], ...)
