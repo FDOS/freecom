@@ -40,16 +40,18 @@
 #include <assert.h>
 #include <string.h>
 
-#include <suppl.h>
-
 #include "../include/misc.h"
 
 void clrcmdline(char * const str, const int maxlen)
 {
+	size_t len = strlen(str);
 	assert(str);
 
-	fputmc('\b', strlen(str), stdout);
-	fputmc(' ', strlen(str), stdout);
-	fputmc('\b', strlen(str), stdout);
+	memset(str, '\b', len);
+	dos_write(1, str, len);
+	memset(str, ' ', len);
+	dos_write(1, str, len);
+	memset(str, '\b', len);
+	dos_write(1, str, len);
 	memset(str, 0, maxlen);
 }
