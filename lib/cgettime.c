@@ -41,6 +41,7 @@
 #include <dos.h>
 #include <stdio.h>
 #include <string.h>
+#include <io.h>
 
 #include "../include/misc.h"
 

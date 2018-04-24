@@ -39,6 +39,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <io.h>
 
 #include "../include/misc.h"
 
