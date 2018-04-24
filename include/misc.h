@@ -8,15 +8,34 @@
 #ifndef MISC_H
 #define MISC_H
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <portable.h>
 
+#define FILE TINYFILE
+typedef void FILE;
 #undef stdin
 #undef stdout
 #undef stderr
-extern FILE *stdin, *stdout, *stderr;
+#define stdin ((FILE *)0)
+#define stdout ((FILE *)1)
+#define stderr ((FILE *)2)
 #undef fileno
 #define fileno(f) ((int)(f))
+#define puts tinyputs
+#define printf tinyprintf
+#define sprintf tinysprintf
+#define vsprintf tinyvsprintf
+#define vprintf tinyvprintf
+#define fprintf tinyfprintf
+#define vfprintf tinyvfprintf
+int puts(const char *s);
+int printf(const char * fmt, ...);
+int sprintf(char * buff, const char * fmt, ...);
+int vsprintf(char *buff, const char * fmt, va_list arg);
+int vprintf(const char * fmt, va_list arg);
+int fprintf(FILE *f, const char * fmt, ...);
+int vfprintf(FILE *f, const char * fmt, va_list arg);
 
 #include "../include/datefunc.h"
 #include "../include/timefunc.h"

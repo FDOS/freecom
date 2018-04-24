@@ -43,6 +43,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "../include/misc.h"
 #include "../include/nls.h"
 
 char *nls_makedate (int mode, int year, int month, int day) {
