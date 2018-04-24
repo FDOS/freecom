@@ -42,29 +42,15 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <suppl.h>
-
 #include "../include/misc.h"
-
-static void outnum(int num)
-{	static int lastSize = 0;
-
-	num = printf("%d", num);
-	if(num < lastSize) {
-		fputmc(' ', lastSize - num, stdout);
-		fputmc('\b', lastSize - num, stdout);
-		lastSize = num;
-	} else {
-		if(num > 0)
-			fputmc('\b', num, stdout);
-	}
-}
-
 
 int cgetchar_timed(int secs)
 {
 	struct dostime_t start;
 	struct dostime_t now;
+	int num;
+	static char space[1] = {' '};
+	static char backspaces[2] = {'\b', '\b'};
 
 	start.second = 60;	/* force decrement secs first time in loop */
 	++secs;
@@ -74,7 +60,11 @@ int cgetchar_timed(int secs)
 			if(!--secs)
 				return 0;
 			memcpy(&start, &now, sizeof(now));
-			outnum(secs);
+			printf("%d", secs);
+			num = secs > 8 ? 2 : 1;
+			if(secs == 9)
+				dos_write(1, space, 1);
+			dos_write(1, backspaces, num);
 		}
 		delay(100);
 	}
