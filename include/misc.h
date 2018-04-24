@@ -159,9 +159,6 @@ int is_empty(const char *s);
 #define is_quote(c)	((c) == '"')
 char *skipfnam(const char * const fnam);
 
-FILE *tempfile(void);
-void rmtmpfile(void);
-
 unsigned mywherex(void);
 unsigned mywherey(void);
 

@@ -108,7 +108,7 @@ SRC = absfile.c almemblk.c alprmblk.c alsysblk.c app_get.c app_set.c \
 	pr_date.c pr_prmpt.c pr_time.c prprompt.c readcmd.c realnum.c res.c \
 	res_r.c res_vald.c res_w.c resfile.c rmtmpfil.c rtrimcl.c rtrimsp.c \
 	salloc.c samefile.c scancmd.c scanopt.c session.c showcmds.c skqwd.c \
-	spfnam.c split.c sumblink.c tempfile.c timeget.c timeset.c tmpnam.c \
+	spfnam.c split.c sumblink.c timeget.c timeset.c tmpnam.c \
 	trimcl.c trimsp.c truepath.c truncate.c txtlend.c unquote.c vcgetch.c \
 	vcgetstr.c where.c
 OBJ = absfile.obj almemblk.obj alprmblk.obj alsysblk.obj app_get.obj \
@@ -135,7 +135,7 @@ OBJ = absfile.obj almemblk.obj alprmblk.obj alsysblk.obj app_get.obj \
 	prprompt.obj readcmd.obj realnum.obj res.obj res_r.obj res_vald.obj \
 	res_w.obj resfile.obj rmtmpfil.obj rtrimcl.obj rtrimsp.obj salloc.obj \
 	samefile.obj scancmd.obj scanopt.obj session.obj showcmds.obj skqwd.obj \
-	spfnam.obj split.obj sumblink.obj tempfile.obj timeget.obj timeset.obj \
+	spfnam.obj split.obj sumblink.obj timeget.obj timeset.obj \
 	tmpnam.obj trimcl.obj trimsp.obj truepath.obj truncate.obj txtlend.obj \
 	unquote.obj vcgetch.obj vcgetstr.obj where.obj
 HDR = ..\config.h ..\context.h_c ..\err_fcts.h ..\include/batch.h \
@@ -607,9 +607,6 @@ split.obj : split.c \
 sumblink.obj : sumblink.c \
 	 ../config.h ../include/datefunc.h ../include/debug.h \
 	../include/misc.h ../include/timefunc.h
-tempfile.obj : tempfile.c \
-	 ../config.h ../include/command.h ../include/datefunc.h \
-	../include/debug.h ../include/misc.h ../include/timefunc.h
 timeget.obj : timeget.c \
 	 ../config.h ../include/debug.h ../include/timefunc.h
 timeset.obj : timeset.c \

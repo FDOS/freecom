@@ -149,8 +149,7 @@ OBJ18 =	scanopt.obj\
 	skqwd.obj\
 	spfnam.obj\
 	split.obj\
-	sumblink.obj\
-	tempfile.obj
+	sumblink.obj
 OBJ19 =	timeget.obj\
 	timeset.obj\
 	tmpnam.obj\
