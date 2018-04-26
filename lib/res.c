@@ -71,6 +71,10 @@ int enumResources(res_majorid_t id
 	, res_callbackp_t fct
 	, void * const arg)
 {
-	dprintf(("[RES: searching file '%s']\n", comResFile()));
-	return enumFileResources(comResFile(), id, fct, arg);
+	int ret;
+	char *p = comResFile();
+	dprintf(("[RES: searching file '%s']\n", p));
+	ret = enumFileResources(p, id, fct, arg);
+	free(p);
+	return ret;
 }

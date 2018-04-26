@@ -17,14 +17,13 @@
 
 char *comResFile(void)
 {  if(isSwapFile) {
-       static char *p = 0;
-
-       free(p);
+       char *p;
        if((p = comFile()) != 0) {
            assert(strlen(p) == isSwapFile + 3);
            memcpy(p + isSwapFile, "SWP", 3);
            if(exist(p))
 			   return p;
+           free(p);
        }
    }
 
