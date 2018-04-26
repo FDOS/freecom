@@ -26,8 +26,6 @@
 /* Cambridge, MA 02139, USA.                                    */
 /****************************************************************/
 
-#ifndef DEBUG
-
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -44,6 +42,10 @@ static char *charp, *pbuf;
 static void handle_char(int, FILE *);
 static char * ltob(long, char *, int);
 static int do_printf(FILE *f, const char *, register va_list);
+
+#ifndef DEBUG
+FILE *stdin = (FILE *)0, *stdout= (FILE *)1, *stderr = (FILE *)2;
+#endif
 
 static void flushbuf(FILE *f)
 {
@@ -425,6 +427,5 @@ main()
          testarray[i].highint);
   }
 }
-#endif
 #endif
 

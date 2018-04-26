@@ -9,7 +9,6 @@
 #include <stdio.h>
 
 #include "../include/context.h"
-#include "../include/misc.h"
 
 void ctxtMkItemName(char * const name
 	, const Context_Tag tag
