@@ -18,7 +18,7 @@
 extern FILE *dbg_logfile;
 extern int fddebug;
 
-#define dprintf(p) if (fddebug) dbg_print p
+#define dprintf(p) do { if (fddebug) dbg_print p; } while(0)
 void dbg_printmem (void);
 void dbg_print    (const char fmt [], ...);
 void dbg_outc     (int ch);
