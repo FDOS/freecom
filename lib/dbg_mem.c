@@ -102,8 +102,11 @@ void dbg_printmem (void) {
 #ifdef DISP_NEAR
 	nearThis = _memavl();
 #endif
-	_dos_allocmem(0xffff, &farThis);
-	farThis <<= 4;
+	{
+		unsigned avail;	  
+		_dos_allocmem(0xffff, &avail);
+		farThis = (unsigned long)avail << 4;
+	}
 #else
 #ifdef DISP_NEAR
 	nearThis = coreleft();
