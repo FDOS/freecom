@@ -1010,7 +1010,8 @@ static int dir_list(int pathlen
     	error_out_of_memory();
     	optO = 0;
 	} else {
-		orderArray = MK_SEG_PTR(void, DOSalloc(0x1000,0));
+		/* use last-fit allocation to work well with large model */
+		orderArray = MK_SEG_PTR(void, DOSalloc(0x1000,2));
 		if(!orderArray) {
 			free(orderIndex);
 			error_out_of_dos_memory();
