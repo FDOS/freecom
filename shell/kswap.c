@@ -148,7 +148,9 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
         the shell */
     if(isSwapFile
      || (shellname = env_findVar(segm, "COMSPEC") + 8) == (unsigned)-1 + 8) {
-        ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_SHELLNAME, comResFile());
+        char *p = comResFile();
+        ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_SHELLNAME, p);
+        free(p);
         if((kswapContext->shell /* fetch first in case of failure */
          = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_SHELLNAME)) == 0)
            return FALSE;
