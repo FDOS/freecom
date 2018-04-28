@@ -27,15 +27,16 @@
 ;
 
 %include "../include/model.inc"
+%include "../include/stuff.inc"
 
 segment _BSS 			; transient data (in DS)
 
- 	global _SwapResidentSize
-_SwapResidentSize  resw 1
+ 	cglobal SwapResidentSize
+SwapResidentSize  resw 1
 
-	global _XMSsave
-_XMSsave	resw 8
-%define currentSegmOfFreeCOMsave	_XMSsave+8
+	cglobal XMSsave
+XMSsave	resw 8
+%define currentSegmOfFreeCOMsave	XMSsave+8
 
 execSS resw 1
 execSP resw 1
@@ -46,49 +47,49 @@ resize_free db 4ah
 
 segment _TEXT
 
-	global _dosFCB1,_dosFCB2
-_dosFCB1 times 37 db 0
-_dosFCB2 times 37 db 0
+	cglobal dosFCB1,dosFCB2
+dosFCB1 times 37 db 0
+dosFCB2 times 37 db 0
 
 ;;	global _dosCMDTAIL, _dosCMDNAME		use command line from within PSP
-	global _dosCMDNAME
+	cglobal dosCMDNAME
 ;;_dosCMDTAIL  times 128 db 0
-_dosCMDNAME times 128 db 0
+dosCMDNAME times 128 db 0
  		times 256	db 0
 ;;    global localStack
 localStack:
 
 
-	global _dosParamDosExec
-_dosParamDosExec times 22	db 0
+	cglobal dosParamDosExec
+dosParamDosExec times 22	db 0
 
 
-	global _XMSdriverAdress
-_XMSdriverAdress dd 0
-%define callXMS		call far [_XMSdriverAdress]
+	cglobal XMSdriverAdress
+XMSdriverAdress dd 0
+%define callXMS		call far [XMSdriverAdress]
 
- 	global _SwapTransientSize
-_SwapTransientSize  dw 0
+ 	cglobal SwapTransientSize
+SwapTransientSize  dw 0
 
-	global _XMSrestore
-_XMSrestore	times 8 DW 0
-%define xms_handle	_XMSrestore+4
-%define currentSegmOfFreeCOM	_XMSrestore+14
+	cglobal XMSrestore
+XMSrestore	times 8 DW 0
+%define xms_handle	XMSrestore+4
+%define currentSegmOfFreeCOM	XMSrestore+14
 
-	global _termAddr
-_termAddr:
+	cglobal termAddr
+termAddr:
 terminationAddressOffs	DW 0
 terminationAddressSegm	DW 0
-	global _myPID
-_myPID	DW 0
-	global _origPPID
-_origPPID DW 0
-	global _canexit
-_canexit	DB 0		; 1 -> can exit; _else_ --> cannot exit
+	cglobal myPID
+myPID	DW 0
+	cglobal origPPID
+origPPID DW 0
+	cglobal canexit
+canexit	DB 0		; 1 -> can exit; _else_ --> cannot exit
 
-    global _mySS, _mySP
-_mySS DW 0
-_mySP DW 0
+    cglobal mySS, mySP
+mySS DW 0
+mySP DW 0
 
 execRetval dw 0
 
@@ -102,11 +103,11 @@ real_XMSexec:
 ;;		mov ax, cs
                    		; ds:dx = ASCIZ program name
 ;;		mov ds, ax
-		mov  dx,_dosCMDNAME
+		mov  dx,dosCMDNAME
 		       
                         ; es:bx = parameter block
 		mov es, cx
-		mov bx, _dosParamDosExec
+		mov bx, dosParamDosExec
 
 
 						; our temporary stack
@@ -148,7 +149,7 @@ exec_error:
 		; ignore any errors
 
 		mov ah,48h
-		mov bx,[_SwapTransientSize]
+		mov bx,[SwapTransientSize]
 		int 21h
 
 ;;ska		pushf
@@ -170,7 +171,7 @@ exec_error:
 
 								; restore everything to XMS
 		mov ah,0bh
-		mov si,_XMSrestore
+		mov si,XMSrestore
 		callXMS
 
 		pop bx                  ; get relocation factor back
@@ -213,18 +214,18 @@ terminate_myself:
 		;; DOS-4C for shells
 
 	;; central PSP:0xa hook <-> may be called in every circumstance
-	global _terminateFreeCOMHook
-_terminateFreeCOMHook:
+	cglobal terminateFreeCOMHook
+terminateFreeCOMHook:
 	mov ax, cs				; setup run environment (in this module)
 	mov ss, ax
 	mov sp, localStack
 	mov ds, ax
 
 	; Next time we hit here it's != 1 --> no zero flag --> I_AM_DEAD status
-	dec BYTE [_canexit]
+	dec BYTE [canexit]
 	jnz I_AM_DEAD
 
-	mov ax, [_myPID]		; our own PSP [in case we arrived here
+	mov ax, [myPID]		; our own PSP [in case we arrived here
 	mov es, ax				; in some strange ways]
 
 	; Make sure the current PSP hasn't patched to nonsense already
@@ -239,7 +240,7 @@ _terminateFreeCOMHook:
 	mov [es:0ch], ax
 
 	; Drop our "Shell" privileges
-	mov ax, [_origPPID]		; original parent process ID
+	mov ax, [origPPID]		; original parent process ID
 	mov [es:16h], ax
 
 	; Kill the XMS memory block
@@ -290,8 +291,8 @@ _ZeroDivideInterrupt:
 ;********************************************************************
 ; *************   END OF RESIDENT AREA ******************************
 ;********************************************************************
-	global _SWAPresidentEnd
-_SWAPresidentEnd:
+	cglobal SWAPresidentEnd
+SWAPresidentEnd:
 
 %if 0
 ;
@@ -349,10 +350,10 @@ exec_error2:
 ;; detroying AX already holding the API function number
 
 ;; To be called with _far_!!
-	global _XMSrequest
+	cglobal XMSrequest
 	;; Note: Because [CS:driverAdress] == [residentCS:driverAdress]
 	;; we need not use a similiar approach as with XMSexec
-_XMSrequest:
+XMSrequest:
 %ifidn __OUTPUT_FORMAT__,elf 	; GCC, calling near with stdcall conv.
 		pop cx		; return address
 		pop ax		; AX
@@ -361,7 +362,7 @@ _XMSrequest:
 		push cs
 		push cx		; far return from XMS driver
 %endif
-		jmp far [cs:_XMSdriverAdress]
+		jmp far [cs:XMSdriverAdress]
 
 ;; Added here to make it more easier for the C-part to call functions
 ;; located in the resident part, because:
@@ -374,9 +375,9 @@ _XMSrequest:
 
 ;;TODO: DS ought to be equal to SS, DS could be reconstructed from
 ;;	SS at the end of the XMSexec function
-		global	_XMSexec
-_XMSexec:
-		extern _residentCS
+		cglobal	XMSexec
+XMSexec:
+		cextern residentCS
 						; save ALL registers needed later
 %ifidn __OUTPUT_FORMAT__,elf 	; GCC: need to preserve es
 		push es
@@ -390,22 +391,22 @@ _XMSexec:
 
 						; save everything to XMS
 		mov ah,0bh
-		mov si,_XMSsave
-		call far [cs:_XMSdriverAdress]
+		mov si,XMSsave
+		call far [cs:XMSdriverAdress]
 
 ;;TODO: test of result
 
 		mov es,[currentSegmOfFreeCOMsave]
 						; first time: shrink current psp
 		mov ah,[resize_free]
-		mov bx,[_SwapResidentSize]
+		mov bx,[SwapResidentSize]
 
 		mov dx, ds
-		mov cx, [_residentCS]
+		mov cx, [residentCS]
 		mov ds, cx
 
-        mov [_mySS],ss  ; 2E
-        mov [_mySP],sp  ; 2E
+        mov [mySS],ss  ; 2E
+        mov [mySP],sp  ; 2E
 
 		mov ss, cx		; this stack is definitely large enough AND present
         mov  sp,localStack

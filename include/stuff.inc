@@ -22,3 +22,25 @@
 %endif
 %endrep 
 %endmacro
+
+;; declare global and extern with underscore for OMF, without for ELF
+
+%macro  cglobal 1-*
+%rep %0
+%ifnidn __OUTPUT_FORMAT__,elf
+	%define %1 _%1 
+%endif
+	global	%1
+%rotate 1 
+%endrep 
+%endmacro
+
+%macro  cextern 1-*
+%rep %0
+%ifnidn __OUTPUT_FORMAT__,elf
+	%define %1 _%1 
+%endif
+	extern	%1
+%rotate 1 
+%endrep 
+%endmacro

@@ -59,8 +59,8 @@
 
 segment _TEXT
 ;	GLOBAL _initCBreak
-	GLOBAL _cbreak_handler
-	GLOBAL _CBreakCounter
+	cglobal cbreak_handler
+	cglobal CBreakCounter
 
 ;_initCBreak:
 ;	;; At this point DS is the segment of _ctrlBreak
@@ -68,9 +68,9 @@ segment _TEXT
 ;	ret
 
 ;?freecomSegment DW 0
-_CBreakCounter DW 0
+CBreakCounter DW 0
 
-_cbreak_handler:
+cbreak_handler:
 %ifdef DEBUG
 		dec BYTE [CS:strEnd]
 		jz noRecurs
@@ -89,7 +89,7 @@ noRecurs:
 %endif
 
 		;; ^Break of COMAMND --> just set the variable
-		inc WORD [CS:_CBreakCounter]
+		inc WORD [CS:CBreakCounter]
 
 recurs:
 		clc			;; tell DOS to proceed

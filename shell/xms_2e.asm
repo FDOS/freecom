@@ -6,10 +6,11 @@
 %if 1
 
 %include "../include/model.inc"
+%include "../include/stuff.inc"
 segment _TEXT
 
-global _lowlevel_int_2e_handler
-    _lowlevel_int_2e_handler:
+cglobal lowlevel_int_2e_handler
+    lowlevel_int_2e_handler:
         mov ax, 0FFFFh
         iret
 

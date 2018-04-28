@@ -21,16 +21,16 @@ struct ParamDosExec {
 #include "algndflt.h"
 
 #ifdef __GNUC__
-extern char dosFCB1[128] asm("_dosFCB1");
-extern char dosFCB2[128] asm("_dosFCB2");
+extern char dosFCB1[128];
+extern char dosFCB2[128];
 
-extern struct ParamDosExec dosParamDosExec asm("_dosParamDosExec");
+extern struct ParamDosExec dosParamDosExec;
 
 #define dosFCB1 RESIDENT(dosFCB1)
 #define dosFCB2 RESIDENT(dosFCB2)
 #define dosParamDosExec RESIDENT(dosParamDosExec)
 
-extern unsigned char dosCMDNAME[128] asm("_dosCMDNAME");
+extern unsigned char dosCMDNAME[128];
 #define dosCMDNAME RESIDENT(dosCMDNAME)
 #else
 extern char far dosFCB1[128];			/* must be setup correctly */
@@ -44,12 +44,12 @@ extern unsigned char far dosCMDNAME[128];
 #define dosCMDTAIL  ((char far*)MK_FP(_psp, 0x80))
 
 #ifdef __GNUC__
-extern void far * termAddr asm("_termAddr");
-extern word myPID asm("_myPID");
-extern word origPPID asm("_origPPID");
+extern void far * termAddr;
+extern word myPID;
+extern word origPPID;
 
-extern int XMSexec(void) asm("_XMSexec");
-extern void terminateFreeCOMHook(void) asm ("_terminateFreeCOMHook");
+extern int XMSexec(void);
+extern void terminateFreeCOMHook(void);
 
 #define termAddr RESIDENT(termAddr)
 #define myPID RESIDENT(myPID)
@@ -71,18 +71,17 @@ extern unsigned long (far *far XMSdriverAdress)(unsigned request,
 						unsigned dx, void *si);
 #pragma aux XMSdriverAdress = parm [ax] [dx] [si]
 #elif defined(__GNUC__)
-extern unsigned far *XMSdriverAdress asm("_XMSdriverAdress");
+extern unsigned far *XMSdriverAdress;
 #define XMSdriverAdress RESIDENT(XMSdriverAdress)
-extern unsigned long XMSrequest(unsigned request, unsigned dx, void *si)
-  asm("_XMSrequest");
+extern unsigned long XMSrequest(unsigned request, unsigned dx, void *si);
 #else
 extern unsigned (far *far XMSdriverAdress)(void);
 #endif
 	
 #ifdef __GNUC__
-extern unsigned char SWAPresidentEnd asm("_SWAPresidentEnd");          /* label: end of resident code */
-extern unsigned short SwapResidentSize asm("_SwapResidentSize");	  /* paras of the swap handler */
-extern unsigned short SwapTransientSize asm("_SwapTransientSize");  /* paras of total command */
+extern unsigned char SWAPresidentEnd;          /* label: end of resident code */
+extern unsigned short SwapResidentSize;	  /* paras of the swap handler */
+extern unsigned short SwapTransientSize;  /* paras of total command */
 #define SWAPresidentEnd RESIDENT(SWAPresidentEnd)
 #define SwapTransientSize RESIDENT(SwapTransientSize)
 #else
@@ -99,21 +98,20 @@ struct XMScopy{
         long  doffset;
         } ;
 
+extern struct XMScopy XMSsave;
 #ifdef __GNUC__
-extern struct XMScopy XMSsave asm("_XMSsave");
-extern struct XMScopy XMSrestore asm("_XMSrestore");
+extern struct XMScopy XMSrestore;
 #define XMSrestore RESIDENT(XMSrestore)
 #else
-extern struct XMScopy XMSsave;
 extern struct XMScopy far XMSrestore;
 #endif
 
 /* Handlers in resident portion for external program execution */
 #ifdef __GNUC__
-extern void ASMINTERRUPT lowlevel_cbreak_handler() asm("_lowlevel_cbreak_handler");
-extern void ASMINTERRUPT lowlevel_err_handler() asm("_lowlevel_err_handler");
-extern void ASMINTERRUPT autofail_err_handler() asm("_autofail_err_handler");
-extern void ASMINTERRUPT lowlevel_int_2e_handler() asm("_lowlevel_int_2e_handler");
+extern void ASMINTERRUPT lowlevel_cbreak_handler();
+extern void ASMINTERRUPT lowlevel_err_handler();
+extern void ASMINTERRUPT autofail_err_handler();
+extern void ASMINTERRUPT lowlevel_int_2e_handler();
 #else
 extern void far ASMINTERRUPT lowlevel_cbreak_handler();
 extern void far ASMINTERRUPT lowlevel_err_handler();

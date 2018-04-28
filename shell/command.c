@@ -856,7 +856,6 @@ static void hangForever(void)
 }
 
 #ifdef __GNUC__
-int my2e_parsecommandline( char *s, ... ) asm("_my2e_parsecommandline");
 int my2e_parsecommandline( char *s, ... )
 #else
 int _Cdecl my2e_parsecommandline( char *s )

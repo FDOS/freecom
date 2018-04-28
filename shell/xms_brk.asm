@@ -3,8 +3,9 @@
 ;	variant
 
 %include "../include/model.inc"
+%include "../include/stuff.inc"
 segment _TEXT
 
-	global _lowlevel_cbreak_handler
-_lowlevel_cbreak_handler:
+	cglobal lowlevel_cbreak_handler
+lowlevel_cbreak_handler:
 %include "../criter/dmy_cbrk.asm"

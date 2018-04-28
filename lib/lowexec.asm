@@ -50,9 +50,9 @@
 %include "../include/stuff.inc"
 
 segment _TEXT
-	GLOBAL _lowLevelExec
+	cglobal lowLevelExec
 
-_lowLevelExec:
+lowLevelExec:
 	push    bp
 	mov     bp, sp
 	pushm   si, di, ds

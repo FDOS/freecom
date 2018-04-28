@@ -240,14 +240,14 @@ StrErrCodes		EQU 15
 ;		else: as normal INT-24 handler
 
 %ifdef XMS_SWAP_CRITER
-	global _autofail_err_handler
-_autofail_err_handler:
+	cglobal autofail_err_handler
+autofail_err_handler:
 	mov al, FAIL
 	iret
 %endif
 
-	global _lowlevel_err_handler
-_lowlevel_err_handler:
+	cglobal lowlevel_err_handler
+lowlevel_err_handler:
 %ifdef AUTO_FAIL
 	;; most simple <-> return AL := 3
 	mov al, FAIL
@@ -650,8 +650,8 @@ dummyByte:	;; This byte is destroyed, when no repeatCheck AutoFail is
 ;;		counting the number of 0xFF bytes the immediately after the module
 ;;		got loaded into memory
 %ifdef XMS_SWAP_CRITER
-	global _criter_repeat_checkarea
-_criter_repeat_checkarea:
+	cglobal criter_repeat_checkarea
+criter_repeat_checkarea:
 %endif
 ?repCheck	DW -1	;; disabled
 TIMES HIDE_CRITER_DRIVES DB -1		;; not displayed already

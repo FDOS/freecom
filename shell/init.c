@@ -202,7 +202,7 @@ int initialize(void)
 		--> activate the real one */
 	set_isrfct(0x24, lowlevel_err_handler);
 #ifdef __GNUC__
-	{	extern word criter_repeat_checkarea asm("_criter_repeat_checkarea");
+	{	extern word criter_repeat_checkarea;
 		registerCriterRepeatCheckAddr(&RESIDENT(criter_repeat_checkarea));
 	}
 #else

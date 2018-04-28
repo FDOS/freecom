@@ -65,16 +65,8 @@ enum
 };
 
 /* prototypes for INIT.C */
-extern void ASMINTERRUPT dummy_criter_handler()
-#ifdef __GNUC__
-asm("_dummy_criter_handler")
-#endif
-;
-extern void ASMINTERRUPT cbreak_handler()
-#ifdef __GNUC__
-asm("_cbreak_handler")
-#endif
-;
+extern void ASMINTERRUPT dummy_criter_handler();
+extern void ASMINTERRUPT cbreak_handler();
 /* extern void initCBreak(void);*/
 
 /* prototypes for COMMAND.C */
@@ -86,8 +78,8 @@ extern int persistentMSGs;
 #else
 #define RESIDENT(x) (*(typeof(x) far *)MK_FP(_CS, (size_t)&(x)))
 #endif
-extern int CBreakCounter asm("_CBreakCounter");
-extern word residentCS asm("_residentCS");
+extern int CBreakCounter;
+extern word residentCS;
 #define ctrlBreak RESIDENT(CBreakCounter)
 #else
 extern int far CBreakCounter;
@@ -100,7 +92,7 @@ extern int tracemode;                   /* debug script? */
 extern int autofail;
 #ifdef FEATURE_XMS_SWAP
 #ifdef __GNUC__
-extern byte canexit asm("_canexit");
+extern byte canexit;
 #define canexit RESIDENT(canexit)
 #else
 extern byte far canexit;

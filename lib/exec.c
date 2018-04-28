@@ -116,7 +116,7 @@ struct ExecBlock
 #include "algndflt.h"
 
 #ifdef __GNUC__
-int lowLevelExec(char far * cmd, struct ExecBlock far * bl, ...) asm("_lowLevelExec");
+int lowLevelExec(char far * cmd, struct ExecBlock far * bl, ...);
 #else
 int cdecl lowLevelExec(char far * cmd, struct ExecBlock far * bl);
 #endif
