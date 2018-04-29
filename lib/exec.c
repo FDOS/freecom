@@ -115,11 +115,7 @@ struct ExecBlock
 
 #include "algndflt.h"
 
-#ifdef __GNUC__
-int lowLevelExec(char far * cmd, struct ExecBlock far * bl, ...);
-#else
 int cdecl lowLevelExec(char far * cmd, struct ExecBlock far * bl);
-#endif
 
 int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 {

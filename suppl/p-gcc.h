@@ -28,9 +28,14 @@
 
 #ifdef __FAR
 #define far __far
+#ifndef __IA16_FEATURE_FAR_STATIC_STORAGE
+#error Please upgrade ia16-elf-gcc to get support for far static storage
+#endif
 #else
 #define far
 #endif
+
+#define cdecl __attribute__((cdecl))
 
 /* Global argc/argv variables */
 #define G_ARGV _argv		/* global char **argv	variable */

@@ -855,11 +855,7 @@ static void hangForever(void)
   }
 }
 
-#ifdef __GNUC__
-int my2e_parsecommandline( char *s, ... )
-#else
-int _Cdecl my2e_parsecommandline( char *s )
-#endif
+int cdecl my2e_parsecommandline( char *s )
 {
     s[ (unsigned char)s[ 0 ] ] = '\0';
 /*    printf("_my2e_parsecommandline( %s )\n", s );*/
