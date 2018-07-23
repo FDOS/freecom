@@ -52,6 +52,7 @@
 #include <dos.h>
 
 #include "../include/command.h"
+#include "../err_fcts.h"
 
 #ifdef DISP_EXITCODE
 	extern int exitReason;	/* global variable, defined in dispexit.c, set in exec1.c */
@@ -84,10 +85,25 @@ void setErrorLevel(int rc)
 		if(ctrlBreak && !rc)	/* Make sure this condition is reflected */
 			rc = CBREAK_ERRORLEVEL;
 	}
+	else {
 #ifdef DISP_EXITCODE
-	else
 		exitReason = -1;
 #endif
+		switch (rc) {
+		case 7: /* DE_MCBDESTRY */
+			error_bad_mcb_chain();
+			break;
+		case 8: /* DE_NOMEM */
+			error_out_of_dos_memory();
+			break;
+		case 13: /* DE_INVLDDATA */
+			error_exe_corrupt();
+			break;
+		default:
+			error_unknown(rc);
+			break;
+		}
+	}
 
 	errorlevel = rc;	/* assign DOS error code, if the call failed itself */
 #ifdef DISP_EXITCODE

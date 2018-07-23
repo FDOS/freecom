@@ -1546,3 +1546,6 @@ terminated by critical error\
 :TEXT_EXIT_REASON_3
 gone resident\
 .
+:TEXT_ERROR_EXE_CORRUPT
+EXE file corrupt\
+.

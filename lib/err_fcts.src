@@ -84,3 +84,4 @@ error_copy_plus_destination:=TEXT_ERROR_COPY_PLUS_DESTINATION
 error_invalid_parameter(const char * const str):=TEXT_ERROR_INVALID_PARAMETER, str
 error_fcom_is_device(const char * const fnam):=TEXT_ERROR_FCOM_IS_DEVICE, fnam
 error_fcom_invalid(const char * const fnam):=TEXT_ERROR_FCOM_INVALID, fnam
+error_exe_corrupt:=TEXT_ERROR_EXE_CORRUPT

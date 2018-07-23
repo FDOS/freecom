@@ -248,7 +248,8 @@ OBJ29 =	err81.obj\
 	err83.obj\
 	err84.obj\
 	err85.obj\
-	err86.obj
+	err86.obj\
+	err87.obj
 
 echolib.bat : ../scripts/echolib.bat
 	$(CP) ..$(DIRSEP)scripts$(DIRSEP)echolib.bat .
