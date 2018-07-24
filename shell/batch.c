@@ -486,6 +486,10 @@ char *readbatchline(int *eflag, char *textline, int size)
       *eflag = echo;
 
       first = textline;
+      if(*first == '@') {	/* don't echo this line */
+        first = ltrimcl(first + 1);
+        *eflag = 0;
+      }
       break;
     }
 
