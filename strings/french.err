@@ -3,8 +3,8 @@
 # Critical error national customization file
 #
 #       Language: French
-#       Codepage: 852
-#       Author:   Mateusz Viste "Fox"
+#       Codepage: 850
+#       Author:   Mateusz Viste
 #
 # The critical error (criter) handler receives some information
 # from the kernel about what error condition happens, generates some
@@ -28,12 +28,12 @@
 # 	a number 0 through N, and must correspond to the number passed in
 # 	lowbyte(DI) to the criter handler (see RBIL INT-24 for details)
 # %A -> drive letter (for block devices); name of device (character devices)
-# 
+#
 # Below the line describing the error the user is prompted for the action
 # to proceed. This line is dynamically constructed depending on which
 # action are available at all. The full line may look like this:
 # 	(A)bort, (I)gnore, (R)etry, (F)ail?_
-# 
+#
 # The individual words are defined by ABORT, IGNORE, RETRY, FAIL. They
 # should indicate which user response keys is associated with them;
 # suggested is to use the first letter and enclose it in parenthesises.
@@ -41,13 +41,13 @@
 # for all slots.
 # The "? " sequence is defined by QUESTION.
 # The order of the actions is fixed and cannot be customized.
-# 
+#
 # With each action a number of user response keys must be associated.
 # They can be enumerated with the KEYS_ABORT, KEYS_IGNORE, ...
 # strings. Because the key is searched in the same format as returned
 # by INT-16-00, both upper and lower case must be specified and
 # certain special keys cannot be used.
-# 
+#
 # The individual error strings are defined by the #: lines, where
 # the hash sign '#' refers to the number the kernel passes to the
 # criter handler. The UNKNOWN string is displayed for all error
@@ -63,9 +63,9 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: Erreur %1 lecteur %A: %2 area: %3
+BLOCK_DEVICE: Erreur %1 lecteur %A: %2 zone : %3
 S3
-CHAR_DEVICE: Erreur %1 device %A: %3
+CHAR_DEVICE: Erreur %1 lecteur %A: %3
 
 ## kind of operation
 S0
@@ -105,23 +105,23 @@ S13
 DELIMITER: , %.
 
 ## Error strings
-UNKNOWN: Unknown error code
+UNKNOWN: Code d'erreur inconnu
 S15
-0: write-protection violation attempted
+0: tentative de violation de protection en ‚criture
 1: unit‚ inconnue pour pilote
 2: lecteur non prˆt
 3: commande inconnue donn‚e au pilote
 4: erreur de donn‚es (mauvais CRC)
-5: bad device driver request structure length
+5: mauvaise structure de taille pour le requˆte de pilote de p‚riph‚rique
 6: erreur de recherche
 7: type de support inconnu
 8: secteur non trouv‚
-9: imprimante … cours de papier
+9: imprimante … court de papier
 10: erreur d'‚criture
 11: erreur de lecture
 12: erreur g‚n‚rale
 13: violation de partage
-14: lock violation
+14: violation de verrou
 15: changement de disque invalide
 16: FCB indisponible
 17: tampon de partage satur‚
