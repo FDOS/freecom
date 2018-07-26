@@ -1,0 +1,1535 @@
+# $Id$
+#
+# FreeCOM national customization file
+#
+#	Language: Slovene
+#	Codepage: 852
+#	Author:   Matej Horvat (http://matejhorvat.si/)
+# 
+# This file is used to generate all the messages that command.com
+# outputs.  This file is the input to the fixstrs program, and it
+# outputs strings.h and strings.dat.  The .DAT file is appended to
+# the command.exe file, and then renamed to command.com.  The .H
+# file contains all the info for the program to retreive the
+# messages.
+#
+# The format of this file is simple.  Blank lines and lines starting
+# with "#" are ignored.
+# Each message starts with a label name that will be used to refer to
+# the message in the program.  A label starts with a colon ":".
+# A label has a version ID attached to it delimited by a hash sign, e.g.:
+#	:TEXT_LABEL#1
+# This version is incremented each time the contents of the string has
+# undergo a larger change. The same language definition may contain the
+# same label up to one time, regardless of the version. FIXSTRS compares
+# both the label and the version ID and both must match.
+# A missing version is assumed as "#0".
+# If there is a percent sign (%) appended to the version, the printf()
+# format string %-style placeholders are compared for the strings. The
+# sign need to be set in DEFAULT.LNG only.
+#
+# All lines after the label are the message until a line with a
+# single "." or "," in the first column.  The difference is the
+# period (".") signifies that there will be a final carrage return when
+# the message is displayed, but a comma does not.
+#
+# The body may contain backslash escape sequences as known from C; there
+# are the usual \# (where '#' is a lowercase letter except 'x' or one of
+# "[]{}?"), \\ (to embed a backslash itself)
+# \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
+# character), \, and \. (to specify a period or comma in the first column
+# of a line) and the single \ at the end of the line to suppress to append
+# a newline character. Note: There is NO octal sequence except the short \0!
+# There is a known bug (or feature): [ignore the very first hash mark]
+#:TEXT_LABEL#2
+#
+#\
+#,
+# Although the first data line appends the newline, the second does not,
+# though the comma removes the newline from the first line.
+
+# Defining prompts
+# Some prompts may cause an user interaction. Those ones should be in sync
+# with the issued text. To define how to interprete a pressed key, they
+# are mapped into metakeys like that: [ignore first hash sign]
+
+## Return value: a -> Yes; else -> No
+#:PROMPT_YES_NO#1
+#YyNn\n\r{CBREAK}
+#aabb b b       b
+# (Yes/No) ? \
+#.
+
+# All strings, which label start with "PROMPT_", are parsed as prompts.
+# The first two lines of the body are special; the first one enumerates all
+# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# range from 'a' through 'z'; spaces are ignored; everything else cause
+# an error. The comment preceeding the prompt definition associates the
+# metakeys with their meaning.
+# The remaining lines of the body contain the text to be displayed.
+#
+# Above example defines a native Yes/No prompt with a space behind the question
+# mark and no appended newline.
+# The metakey 'a' means "User answered with 'Yes'" and 'b' means no.
+# The keys 'Y' and 'y' are mapped to metakey 'a' (aka Yes) and the keys
+# 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
+# The spaces between the 'b's in the second line had been inserted to
+# align them with the corresponding keys of the first line, hence in order
+# to enhance readibility of the association between the pressed keys and their
+# mapping into a metakey.
+#
+# The first line (pressed keys) has to enumerate the ASCII value as returned
+# by DOS or BIOS (INT-10); special keys normally expressed with ASCII code zero,
+# but a non-zero scancode are NOT supported; this limit includes for instance
+# the function keys F1 through F12 and the cursor keys and it is not possible
+# to differ between the number pad and normal keys.
+# The keys may be enumerated by their ASCII character, by a backslash sequence,
+# or a symbolic name enclosed in curly brackets (see FIXSTRS.C "symkeys[]"
+# array about the supported symnames).
+
+
+#
+#  These are error messages
+#
+## Issued if a single character option is unknown
+:TEXT_ERROR_INVALID_SWITCH#0%
+Neveljavna moßnost /%c
+.
+
+## Issued if a longname option is unknown
+:TEXT_ERROR_INVALID_LSWITCH#0%
+Neveljavna moßnost /%s
+.
+
+## Issued if the context, the type of argument etc. is invalid
+:TEXT_ERROR_ILLFORMED_OPTION#0%
+Nepravilno oblikovana moßnost "%s"
+.
+
+:TEXT_ERROR_OPT_ARG#0%
+Moßnost "%s" ne more imeti argumenta
+.
+
+:TEXT_ERROR_OPT_NOARG#0%
+Moßnost "%s" mora imeti argument
+.
+
+:TEXT_INVALID_NUMBER#0%
+Neveljavna Átevilka v moßnosti "%s"
+.
+
+:TEXT_ERROR_CLOSE_QUOTE#0%
+Manjka konüni narekovaj: %c
+.
+
+:TEXT_ERROR_TEMPFILE
+Ni mogoüe ustvariti zaüasne datoteke
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
+Preveü parametrov: %s
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS
+Preveü parametrov.
+.
+
+:TEXT_ERROR_INVALID_PARAMETER#0%
+Neveljaven parameter: %s
+.
+
+:TEXT_ERROR_PATH_NOT_FOUND
+Poti ni mogoüe najti.
+.
+
+:TEXT_ERROR_FILE_NOT_FOUND
+Datoteke ni mogoüe najti.
+.
+
+:TEXT_ERROR_SFILE_NOT_FOUND#0%
+Datoteke ni mogoüe najti: %s
+.
+
+:TEXT_ERROR_REQ_PARAM_MISSING#0%
+Zahtevan parameter manjka.
+.
+
+:TEXT_ERROR_INVALID_DRIVE#0%
+Neveljaven pogon %c:.
+.
+
+:TEXT_ERROR_BADCOMMAND#2%
+Neveljaven ukaz ali datoteka: %s
+.
+
+:TEXT_ERROR_OUT_OF_MEMORY
+Ni dovolj spomina.
+.
+
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+Ni mogoüe dodeliti spomina za DOS.
+.
+
+:TEXT_ERROR_CANNOTPIPE
+Ni mogoüe preusmerjati izhoda; ni mogoüe odpreti zaüasne datoteke.
+.
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE#0%
+Vrstica %ld v datoteki %s je predolga.
+.
+
+:TEXT_ERROR_BFILE_VANISHED#0%
+Ukazne datoteke "%s" ni mogoüe najti.
+.
+
+:TEXT_ERROR_BFILE_LABEL#0%
+Ukazna datoteka %s ne vsebuje oznake %s.
+.
+
+:TEXT_ERROR_DIRFCT_FAILED#1%
+%s ni uspel za "%s".
+.
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ENV_VAR#0%
+Ni mogoüe nastaviti okoljske spremenljivke %s.
+Je okolje polno?
+.
+:TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
+Okoljske spremenljivke %s ni mogoüe najti.
+.
+:TEXT_ERROR_NO_ENVIRONMENT
+Ni okolja. Morda ni dovolj spomina. Uporabite moßnost /E.
+.
+
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1%
+Ni mogoüe nastaviti sopomenke "%s". Je spomin za sopomenke poln?
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1%
+Sopomenke "%s" ni mogoüe najti.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+Ni prostora za sopomenke. Morda ni dovolj spomina.
+.
+
+:TEXT_ERROR_SYNTAX_STR#0%
+Sintaktiüna napaka: %s
+.
+
+:TEXT_ERROR_SYNTAX
+Sintaktiüna napaka.
+.
+
+:TEXT_ERROR_FILENAME_TOO_LONG#0%
+Predolgo ime datoteke: %s
+.
+
+:TEXT_ERROR_SELFCOPY#0%
+Datoteke %s ni mogoüe kopirati nase.
+.
+
+:TEXT_ERROR_COMMAND_TOO_LONG
+Ukazna vrstica je zaradi razÁiritve sopomenk postala predolga!
+.
+
+:TEXT_ERROR_LINE_TOO_LONG
+Ukazna vrstica je daljÁa od 125 znakov.
+.
+
+:TEXT_ERROR_HISTORY_SIZE#1%
+Neveljavna velikost zgodovine: %s
+.
+
+:TEXT_HISTORY_EMPTY#1
+Zgodovina je prazna.
+.
+
+
+:TEXT_ERROR_BAD_MCB_CHAIN
+Veriga MCB je poÁkodovana ali pa sistem ni zdrußljiv z MS-DOS.
+.
+
+:TEXT_ERROR_UNDEFINED_ERROR#0%
+Nedefinirana napaka %d.
+.
+
+:TEXT_ERROR_REGION_WARNING#0%
+Illegal memory region %d - ignored.
+.
+
+:TEXT_ERROR_ON_OR_OFF
+Treba je doloüiti ON ali OFF.
+.
+
+:TEXT_ERROR_BAD_VARIABLE
+Neveljavna specifikacija spremenljivke.
+.
+
+:TEXT_ERROR_IN_MISSING#1
+IN manjka v ukazu FOR.
+.
+
+:TEXT_ERROR_MISSING_PARENTHESES#1
+En ali veü oklepajev manjka.
+.
+
+:TEXT_ERROR_DO_MISSING#1
+DO manjka v ukazu FOR.
+.
+
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+Besedi DO v ukazu FOR ne sledi ukaz.
+.
+
+:TEXT_ERROR_REDIRECT_FROM_FILE#0%
+Ni mogoüe preusmeriti vhoda iz datoteke %s.
+.
+
+:TEXT_ERROR_REDIRECT_TO_FILE#0%
+Ni mogoüe preusmeriti izhoda v datoteko %s.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+Prazna preusmeritev.
+.
+
+:TEXT_ERROR_INVALID_DATE
+Neveljaven datum.
+.
+
+:TEXT_ERROR_INVALID_TIME
+Neveljaven üas.
+.
+
+:TEXT_ERROR_NO_GOTO_LABEL
+Ni doloüene oznake za GOTO.
+.
+
+:TEXT_CTTY_NOTIMPLEMENTED
+Ta COMMAND.COM ne vsebuje ukaza CTTY.
+.
+
+:TEXT_ERROR_NORW_DEVICE#0%
+Naprava "%" ni veljavna ali pa ne omogoüa branja in pisanja.
+.
+
+:TEXT_ERROR_CTTY_DUP#0%
+Failed to change file descriptors to TTY '%s'.
+.
+
+:TEXT_ERROR_L_NOTIMPLEMENTED
+/L Áe ni podprt.
+.
+
+:TEXT_ERROR_U_NOTIMPLEMENTED
+/U Áe ni podprt.
+.
+
+:TEXT_ERROR_WRITING_DEST
+Napaka pri pisanju na cilj.
+.
+
+:TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
+Ni mogoüe odpreti izvora: %s
+.
+
+:TEXT_ERROR_OPEN_FILE#0%
+Ni mogoüe odpreti datoteke "%s"
+.
+
+:TEXT_ERROR_READ_FILE#0%
+Ni mogoüe brati iz datoteke "%s"
+.
+
+:TEXT_ERROR_WRITE_FILE#0%
+Ni mogoüe pisati v datoteko "%s"
+.
+
+:TEXT_ERROR_LEADING_PLUS
+Znak za zdrußevanje, "+", ne more stati pred datotekami.
+.
+
+:TEXT_ERROR_TRAILING_PLUS
+Znak za zdrußevanje, "+", ne more slediti datotekam.
+.
+
+:TEXT_ERROR_NOTHING_TO_DO
+Niü za postoriti.
+.
+
+:TEXT_ERROR_COPY
+COPY ni uspel
+.
+
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: manjka ime datoteke
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: manjka Átevilo
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: neveljavno Átevilo
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: manjka ukaz
+.
+
+:TEXT_NOT_IMPLEMENTED_YET
+Ta funkcija Áe ni podprta.
+.
+
+:TEXT_FAILED_LOAD_STRINGS
+Ni bilo mogoüe naloßiti sporoüil v spomin.
+.
+
+:TEXT_MSG_NOTIMPLEMENTED
+Ta COMMAND.COM ne vsebuje moßnosti /MSG.
+.
+
+:TEXT_MSG_ITEMS_DISPLAYED#1%
+Prikazanih %u elementov.
+.
+
+:TEXT_CORRUPT_COMMAND_LINE
+PoÁkodovana ukazna vrstica. To je notranja napaka in je povezana
+s sistemom, v katerem se izvaja COMMAND.COM. Prosimo, da to
+napako sporoüite.
+.
+
+:TEXT_QUOTED_C_OR_K#1
+Moßnosti /C in /K ni mogoüe citirati, ker se ne upoÁtevata.
+.
+
+:TEXT_INIT_FULLY_QUALIFIED#1%
+Pot do COMMAND.COM mora biti absolutna!
+To pomeni, da mora vsebovati ürko pogona, ki ji sledi "\\".
+Primer: C:\\FDOS
+
+COMMAND.COM trenutno uporablja to pot:
+%s
+.
+
+:TEXT_ERROR_RESTORE_SESSION
+The session information could not be restored, any local settings
+are lost. Please refer to above error messages for the reason
+of this problem.
+.
+
+:TEXT_ERROR_SAVE_SESSION
+The current information cannot be preserved during the call of the
+program. Please refer to above error messages for the reason of
+this problem.
+.
+
+:TEXT_ERROR_CWD_FAILED#1%
+Pogon %c: se ne odziva.
+.
+
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+Izmenjava ni uspela: sopomenke zavzemajo preveü spomina.
+.
+
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+Izmenjava ni uspela: ni mogoüe dodeliti oddaljenega spomina.
+.
+
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+Ni veü prostora za sopomenke.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1%
+Sopomenka "%s" ne obstaja.
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+Ni bilo mogoüe vstaviti sopomenke.
+.
+
+:TEXT_ALIAS_INVALID_NAME#1%
+Neveljavno ime sopomenke "%s".
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+Cannot load Context module or Critical Error handler.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+Context out of memory.
+If this error persists, consider to increase some internal buffer,
+such as history, direcory stack etc.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1%
+Velikost konteksta znaÁa %lu bajtov, kar je veüje od omejitve.
+Spremenjena bo na %u bajtov.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+Failed to add status information into context. This error may indicate
+memory corruption or an incorrectly determined minimum size of
+the context. Please inform the maintainer of FreeCOM at:
+freecom@freedos.org
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+Kontekst je ob izmenjavi izginil. Bil je ponovno ustvarjen,
+toda vse sopomenke itd. so izgubljene.
+.
+
+:TEXT_ERROR_PERMISSION_DENIED#1%
+%s: dostop zavrnjen
+.
+
+:TEXT_ERROR_NO_SUCH_FILE#1%
+%s: datoteka ali imenik ne obstaja
+.
+
+:TEXT_ERROR_UNKNOWN_ERROR#1%
+%s: neznana napaka
+.
+
+#
+# Informational messages
+#
+
+:TEXT_MSG_PAUSE#1
+Pritisnite katerokoli tipko\
+.
+
+:TEXT_MSG_HISTORY_SIZE#0%
+Velikost zgodovine je %d bajtov.
+.
+
+:TEXT_MSG_DOSKEY
+Funkcije DOSKEY so ße omogoüene.
+.
+
+:TEXT_MSG_ECHO_STATE#0%
+ECHO je %s
+.
+
+:TEXT_MSG_VERIFY_STATE#0%
+VERIFY je %s
+.
+
+:TEXT_MSG_FDDEBUG_STATE#0%
+DEBUG output is %s.
+.
+:TEXT_MSG_FDDEBUG_TARGET#0%
+DEBUG output is printed to '%s'.
+.
+
+:TEXT_MSG_BREAK_STATE#0%
+BREAK je %s
+.
+
+:TEXT_MSG_LFNFOR_STATE#0%
+LFNFOR je %s
+.
+
+:TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
+LFN Complete is %s
+.
+
+:TEXT_MSG_CURRENT_DATE#0%
+Trenutni datum je %s
+.
+
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN#1%
+Vnesite nov datum (mm%sdd%s[cc]yy): \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1%
+Vnesite nov datum (dd%smm%s[cc]yy): \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1%
+Vnesite nov datum ([cc]yy%smm%sdd): \
+.
+
+:TEXT_MSG_CURRENT_TIME#0%
+Trenutni üas je %s
+.
+
+:TEXT_STRING_PM#1
+ pm\
+.
+:TEXT_STRING_AM#1
+ am\
+.
+
+:TEXT_MSG_ENTER_TIME#1
+Vnesite nov üas: \
+.
+
+# src-file <operation> target-file
+:TEXT_MSG_COPYING#0%
+%s %s %s
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (Y/N) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1%
+DdNn{CR}{LF}{CBREAK}
+aabb   b   b       b
+Vse datoteke v imeniku "%s" bodo izbrisane.
+Ste prepriüani (D/N)? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+DdNn{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Da=ENTER, Ne=ESC] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+#	by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1%
+DdNnVvQq{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Ctrl+Break pritisnjen.\r
+Prehenam izvajati "%s" (Da/Ne/Vsi)? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1%
+DdNnVvPp{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Naj zamenjam "%s" (Da/Ne/Vse/Prekini)? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_APPEND_FILE#1%
+DdNnVvPp{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Append to '%s' (Da/Ne/Vse/Prekini) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1%
+DdNnVvPp{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Naj izbriÁem "%s" (Da/Ne/Vse/Prekini)? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<neznano>>\
+.
+
+:TEXT_DIRSTACK_EMPTY
+ImeniÁki sklad je prazen.
+.
+
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME#1%
+ Nosilec na pogonu %c \
+.
+:TEXT_DIR_HDR_VOLUME_STRING#0%
+je %s
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+nima oznake
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER#0%
+ Serijska Átevilka nosilca je %04X-%04X
+.
+:TEXT_DIR_FTR_FILES#1%
+%10s datotek\
+.
+:TEXT_DIR_FTR_BYTES#0%
+   %12s bajtov
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+Êtevilo izpisanih datotek:
+.
+:TEXT_DIR_FTR_DIRS#1%
+%10s imenikov\
+.
+:TEXT_DIR_FTR_BYTES_FREE#0%
+ %13s bajtov prostih
+.
+:TEXT_DIR_DIRECTORY#0%
+Imenik %s
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE#0%
+ Imenik %s
+.
+:TEXT_DIR_LINE_FILENAME_WIDE#1%
+%-15s\
+.
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE#1%
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1%
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <DIR> \
+.
+:TEXT_DIR_LINE_SIZE#1%
+   %10s \
+.
+
+:TEXT_FILE_COMPLATION_DISPLAY#1%
+%-14s\
+.
+
+:TEXT_MSG_PATH#0%
+PATH=%s
+.
+:TEXT_MSG_PATH_NONE#1
+Pot iskanja ni definirana.
+.
+
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+ned\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+pon\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+tor\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+sre\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+üet\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+pet\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+sob\
+.
+
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+0 datotek odstranjenih.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+1 datoteka odstranjena.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1%
+%u datotek odstranjenih.
+.
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+Vgrajeni ukazi:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+Funkcije, ki so na voljo:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[sopomenke] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[izboljÁan vnos] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[zgodovina] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[dokonüavanje imen datotek] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[izmenjava] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[start logging] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+[prejÁnji imenik] \
+.
+:TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
+[dolga imena datotek] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[izmenjava z jedrom] \
+.
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[XMS izmenjava] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[default to swap] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[namestljivi ukazi] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+[DOS NLS] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[imeniÁki sklad (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[razhro∫üevanje FreeCOMa] \
+.
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
+
+Pritisnite F8 za naüin sledenja ali F5 za preskoüitev %s... \
+.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
+Preskakujem %s.
+.
+
+:TEXT_MSG_VER_DOS_VERSION#0%
+DOS verzija %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+Jedro FreeDOS (izgradnja 1933 ali starejÁa)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS#0%
+Jedro FreeDOS, verzija %d.%d.%d
+.
+
+
+:TEXT_MSG_VER_WARRANTY
+(C) 1994-2005 Tim Norman in drugi.
+
+Ta program je razpeüavan v upanju, da bo komu uporaben, toda BREZ
+KAKRÊNEGAKOLI JAMSTVA; cel¢ brez jamstva PRODAJNOSTI ali PRIMERNOSTI ZA
+KATERIKOLI NAMEN. Za veü podrobnosti glejte SploÁno dovoljenje GNU (GNU GPL).
+
+Poroüajte o hroÁüih na freedos-freecom@lists.sourceforge.net.
+Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
+.
+
+:TEXT_MSG_VER_REDISTRIBUTION
+(C) 1994-2005 Tim Norman in drugi.
+
+To je prosta programska oprema; razpeüavate in/ali spreminjate jo lahko pod
+pogoji, navedenimi v SploÁnem dovoljenju GNU (GNU GPL), ki ga je izdala
+organizacija Free Software Corporation; slediti morate pogojem verzije 2
+ali novejÁe.
+
+Poroüajte o hroÁüih na  freedos-freecom@lists.sourceforge.net.
+Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
+.
+
+:TEXT_MSG_VER_DEVELOPERS
+FreeCOM, FreeDOSovo ukazno lupino, razvija veliko ljudi; glejte priloßeno
+datoteko HISTORY.TXT.
+
+FreeCOM trenutno vzdrßuje Steffen Kaiser: freecom@freedos.org.
+
+Poroüajte o hroÁüih na freedos-freecom@lists.sourceforge.net.
+Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
+.
+
+
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+The shell is about to be terminated, though, this is\r
+forbidden (usually by enabling the "/P" option).\r
+You must reboot the system or, if this shell runs in\r
+a multitasking environment, terminate this process/task manually.\r
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+FreeCOM executable not found.
+You must specify the complete path to COMMAND.COM
+as the first argument of COMMAND, for instance:
+C:\\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1%
+Okoljski segment:  omejitev %5u bajtov; %5u bajtov prostih
+.
+:TEXT_MEMORY_CONTEXT#1%
+Segment konteksta: omejitev %5u bajtov; %5u bajtov prostih
+.	
+:TEXT_MEMORY_HEAP#1%
+Heap:              %5lu bajtov prostih
+.
+:TEXT_MEMORY_CTXT_ALIAS#1%
+\tSopomenke:       omejitev %5u bajtov, trenutno %5u, %5u elementov
+.
+:TEXT_MEMORY_CTXT_HISTORY#1%
+\tZgodovina:       omejitev %5u bajtov, trenutno %5u, %5u elementov
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1%
+\tImeniÁki sklad:  omejitev %5u bajtov, trenutno %5u, %5u elementov
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1%
+\tPrejÁnji imenik: porabljenih %5u bajtov, %5u elementov
+.
+:TEXT_MEMORY_CTXT_BATCH#1%
+\tBatch nesting  : porabljenih %5u bajtov, %5u elementov
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1%
+\tSwapinfo       : porabljenih %5u bajtov, %5u elementov
+.
+
+
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+Ni mogoüe dobiti podatka o trenutno izbranem kodiranju.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+Ni mogoüe zamenjati kodiranja.
+.
+:TEXT_DISPLAY_CODEPAGE#1%
+Trenutno izbrano kodiranje je %u.
+The system codepage (properly) is: %u.
+.
+
+#
+# Command help text
+#
+
+:TEXT_CMDHELP_ALIAS
+Prikaße, nastavlja, ali odstranjuje sopomenke.
+
+ALIAS [sopomenka[=][definicija]]
+
+  sopomenka   Doloüi ime sopomenke.
+  definicija  Doloüi niz znakov, v katere bo sopomenka razÁirjena.
+
+Vnesite ALIAS brez parametrov, da vidite trenutno definirane sopomenke.
+.
+
+:TEXT_CMDHELP_BEEP
+Zapiska.
+
+BEEP
+.
+
+:TEXT_CMDHELP_BREAK
+Sets or clears extended CTRL+C checking.
+
+BREAK [ON | OFF]
+
+Type BREAK without a parameter to display the current BREAK setting.
+.
+
+:TEXT_CMDHELP_CALL#1
+Calls one batch program from another.
+
+CALL [/S | /N] [/Y] [pogon:][pot]datoteka [batch-parameters]
+
+  batch-parameters   Specifies any command-line information required by
+                     the batch program.
+  /S enforces, /N denies swapping of FreeCOM.
+  /Y enables tracemode during execution of the command.
+.
+
+:TEXT_CMDHELP_CD
+Prikaße ime trenutnega imenika ali pa ga spremeni.
+
+CHDIR [pogon:][pot]
+CHDIR[..]
+CD [pogon:][pot]
+CD[..]
+CD -
+
+  ..  Gre v nadrejeni imenik.
+  -   Gre v prejÁnji imenik, üe je ta funkcija omogoüena.
+
+Vnesite CD pogon:, da vidite trenutni imenik doloüenega pogona.
+Vnesite CD brez parametrov, da vidite trenutni pogon in imenik.
+Glej tudi: CDD
+.
+
+:TEXT_CMDHELP_CDD
+Prikaße ime trenutnega pogona in imenika ali pa ju spremeni.
+
+CDD [pogon:][pot]
+CDD[..]
+
+  ..  Gre v nadrejeni imenik.
+  -   Gre v prejÁnji imenik, üe je ta funkcija omogoüena.
+
+¨e je doloüen samo pogon, se spremeni trenutni pogon; to je edina razlika med
+CDD in CHDIR.
+Vnesite CDD brez parametrov, da vidite trenutni pogon in imenik.
+.
+
+:TEXT_CMDHELP_CHCP
+Prikaße ali spremeni trenutno kodiranje znakov (kodno stran).
+
+CHCP [nnn]
+
+  nnn  Doloüi kodiranje.
+
+Vnesite CHCP brez parametra, da vidite trenutno izbrano kodiranje.
+.
+
+:TEXT_CMDHELP_CLS
+Izprazni zaslon.
+
+CLS
+.
+
+:TEXT_CMDHELP_COMMAND
+Zaßene novo kopijo FreeCOMa.
+
+COMMAND [[pogon:]pot] [naprava] [/E:n] [/L:n] [/U:n] [/P] [/MSG] [/LOW]
+  [/Y [/[C|K] ukaz]]
+
+  [pogon:]pot  Doloüi imenik, ki vsebuje COMMAND.COM.
+  naprava      Doloüi napravo, ki naj bo uporabljena za vhod in izhod.
+  /E:nnnnn     Nastavi zaüetno velikost okolja na n bajtov.
+               (n naj bo med 256 in 32768)
+  /L:n         Doloüi velikost notranjih struktur (zahteva /P).
+               (n naj bo med 128 in 1024)
+  /U:n         Doloüi velikost spomina za vhod (zahteva /P)
+               (n naj bo med 128 in 255)
+  /P           Naredi novo lupino trajno (ne da se je konüati).
+  /MSG         Shrani vsa sporoüila o napakah v spominu (zahteva /P).
+  /LOW         Prisili lupino, da shrani stalen del v nißji del spomina.
+  /Y           Koraka skozi ukazno datoteko, ki jo doloüi /C ali /K.
+  /C ukaz      Izvede naveden ukaz in se konüa.
+  /K ukaz      Izvede naveden ukaz in nadaljuje z izvajanjem.
+.
+
+:TEXT_CMDHELP_COPY
+Kopira eno ali veü datotek na drugo lokacijo.
+
+COPY [/A | /B] izvor [/A | /B] [+ izvor [/A | /B] [+ ...]] [cilj [/A | /B]]
+  [/V] [/Y | /-Y]
+
+  izvor  Doloüi datoteke, ki naj se kopirajo.
+  /A     Doloüi ASCII datoteko z besedilom.
+  /B     Doloüi binarno datoteko.
+  cilj   Doloüi imenik in/ali ime za nove datoteke.
+  /V     Preveri, ali so se datoteke pravilno zapisale.
+  /Y     Ne vpraÁa, ali ßelite zamenjati obstojeüo ciljno datoteko.
+  /-Y    VpraÁa, ali ßelite zamenjati obstojeüo ciljno datoteko.
+
+Moßnost /Y je lahko prednastavljena v spremenljivki COPYCMD.
+Onemogoüite jo lahko z /-Y na ukazni vrstici.
+
+Da zdrußite veü datotek v eno, doloüite samo eno ciljno datoteko, toda veü
+izvornih datotek (z nadomestnimi znaki ali kot datoteka1+datoteka2+datoteka3).
+.
+
+:TEXT_CMDHELP_CTTY
+Zamenja terminal, s katerim upravljate sistem.
+
+CTTY naprava
+
+  naprava  Terminal, ki ga ßelite uporabljati, npr. COM1.
+.
+
+:TEXT_CMDHELP_DATE#1
+Prikaße ali nastavi datum.
+
+DATE [/D] [datum]
+
+Vnesite DATE brez parametrov, da vidite trenutni datum in istoüasno nastavite
+novega. Pritisnite Enter, da obdrßite isti datum.
+
+/D onemogoüi interaktivnost.
+.
+
+:TEXT_CMDHELP_DEL#2
+IzbriÁe eno ali veü datotek.
+
+DEL [pogon:][pot]datoteka [/P] [/V]
+ERASE [pogon:][pot]datoteka [/P] [/V]
+
+  [pogon:][pot]datoteka  Doloüi datoteko za izbris. Veü datotek doloüite z
+                         nadomestnimi znaki.
+  /P                     VpraÁa za potrditev, preden izbriÁe vsako datoteko.
+  /V                     Prikaße izbrisane datoteke.
+.
+
+:TEXT_CMDHELP_DIR#4
+Prikaße seznam datotek in podimenikov v imeniku.
+
+DIR [pogon:][pot][datoteka] [/P] [/W] [/A[[:]atributi]] [/O[[:]razvrstitev]]
+  [/S] [/B] [/L] [/LFN] [/Y|/4]
+
+ [pogon:][pot][datoteka]
+              Doloüi pogon, imenik, in/ali datoteke, ki naj bodo prikazane.
+              Uporabite lahko nadomestne znake ali veü izrazov.
+ /P           Se ustavi po vsakem zaslonu informacij.
+ /W           Êirok seznam.
+ /A           Prikaße datoteke z doloüenimi atributi.
+ atributi      D  imeniki             R  datoteke samo za branje
+               H  skrite datoteke     A  datoteke, pripravljene za arhiviranje
+               S  sistemske datoteke  -  predpona "ne"
+ /O           Doloüi vrstni red.
+ razvrstitev   N  po imenu (abecedno)     S  po velikosti (manjÁi najprej)
+               E  po konünici (abecedno)  D  üasovno (starejÁi najprej)
+               G  najprej imeniki         -  predpona za obratni vrstni red
+               A  po üasu zadnjega dostopa (starejÁi najprej)
+ /S           Prikaße datoteke v doloüenem imeniku in vseh podimenikih.
+ /B           Minimalistiüen format (brez glave in povzetka).
+ /L           Uporabi male ürke.
+ /LFN         Prikaße dolga imena datotek.
+ /Y ali /4    Prikaße letnice s 4 Átevkami.
+
+Moßnosti so lahko prednastavljene v spremenljivki DIRCMD. Onemogoüite jih
+lahko tako, da pred moßnostjo vnesete "-", npr. /-W.
+.
+
+:TEXT_CMDHELP_DOSKEY#1
+Funkcije programa DOSKEY zdaj vsebuje FreeCOM.
+S tipkama gor in dol brskate po zgodovini, z ukazom HISTORY pa vidite celotno
+zgodovino vpisanih ukazov.
+S tipkami levo, desno, Home, in End se pomikate po ukazni vrstici.
+S tipko Insert preklapljate med naüinom vrivanja in prepisovanja.
+S tipko Tab dokonüate ime datoteke na podlagi trenutno vneÁene besede; üe jo
+pritisnete dvakrat, boste videli vse datoteke, ki se z njo ujemajo.
+.
+
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
+Edits command lines, recalls command lines, and creates macros
+
+DOSKEY [/switch ...] [macroname=[text]]
+
+  /BUFSIZE:size Sets size of macro and command buffer            (default:512)
+  /ECHO:on|off  Enables/disables echo of macro expansions        (default:on)
+  /FILE:file    Specifies file containing a list of macros
+  /HISTORY      Displays all commands stored in memory
+  /INSERT       Inserts new characters into line when typing
+  /KEYSIZE:size Sets size of keyboard type-ahead buffer          (default:15)
+  /LINE:size    Sets maximum size of line edit buffer            (default:128)
+  /MACROS       Displays all DOSKey macros
+  /OVERSTRIKE   Overwrites new characters onto line when typing  (default)
+  /REINSTALL    Installs a new copy of DOSKey
+  macroname     Specifies a name for a macro you create
+  text          Specifies commands you want to assign to the macro
+
+  UP,DOWN arrows recall commands
+      Esc clears current command
+       F7 displays command history
+   Alt+F7 clears command history
+[chars]F8 searches for command beginning with [chars]
+       F9 selects a command by number
+  Alt+F10 clears macro definitions
+
+The following are special codes you can use in DOSKey macro definitions:
+  $T     Command separator: allows multiple commands in a macro
+  $1-$9  Batch parameters: equivalent to %1-%9 in batch programs
+  $*     Symbol replaced by everything following macro name on the command line
+.
+
+:TEXT_CMDHELP_ECHO
+Prikazuje sporoüila ali omogoüi ali onemogoüi izpisovanje ukazov.
+
+  ECHO [ON | OFF]
+  ECHO [sporoüilo]
+
+Vnesite ECHO brez parametrov, da izveste trenutno stanje ECHO.
+.
+
+:TEXT_CMDHELP_EXIT
+Konüa FreeCOM, razen üe je ta bil naloßen z moßnostjo /P.
+
+EXIT
+.
+
+:TEXT_CMDHELP_FOR
+Izvede doloüen ukaz za vsako datoteko v mnoßici datotek.
+
+FOR %spremenljivka IN (mnoßica) DO ukaz [parametri]
+
+  %spremenljivka  Doloüi ime spremenljivke.
+  (mnoßica)       Doloüi mnoßico ene ali veü datotek. Uporabite lahko
+                  nadomestne znake.
+  ukaz            Doloüi ukaz, ki naj bo izveden za vsako datoteko.
+  parametri       Doloüi parametre za naveden ukaz.
+
+V ukazni datoteki vnesite %%spremenljivka namesto %spremenljivka.
+
+Primer:
+  FOR %f IN (---zaüetek--- a*.* ---konec---) DO ECHO - %f -
+.
+
+:TEXT_CMDHELP_GOTO
+V ukazni datoteki nadaljuje izvajanje od oznaüene vrstice.
+
+GOTO oznaka
+
+  oznaka  Doloüi oznako vrstice.
+
+Oznaka v vrstici stoji sama, zaüne pa se z dvopiüjem.
+.
+
+:TEXT_CMDHELP_HISTORY#1
+Zgodovina vneÁenih ukazov.
+
+HISTORY [velikost]
+
+Brez velikosti je prikazana celotna zgodovina vneÁenih ukazov.
+Z velikostjo se spremeni velikost spomina, posveüenega zgodovini.
+.
+
+:TEXT_CMDHELP_IF
+V ukazni datoteki izvede ukaz, üe je izpolnjen doloüen pogoj.
+
+IF [NOT] ERRORLEVEL Átevilo ukaz
+IF [NOT] niz1==niz2 ukaz
+IF [NOT] EXIST datoteka ukaz
+
+  NOT                 Doloüi, naj ukazna lupina izvede ukaz, üe pogoj ni
+                      izpolnjen.
+  ERRORLEVEL Átevilo  Ukaz se bo izvedel, üe je zadnji izvedeni ukaz vrnil
+                      napako, katere koda je enaka ali veüja od navedenega
+                      Átevila.
+  niz1==niz2          Ukaz se bo izvedel, üe se niza ujemata.
+  EXIST datoteka      Ukaz se bo izvedel, üe datoteka obstaja.
+  ukaz                Doloüi ukaz, ki naj bo izveden, üe je pogoj izpolnjen.
+.
+
+:TEXT_CMDHELP_LFNFOR
+Vkljuüi ali izkljuüi dolga imena datotek v ukazu FOR ali dokonüavanje imen
+datotek.
+
+LFNFOR [ON | OFF]
+LFNFOR COMPLETE [ON | OFF]
+
+Vnesite LFNFOR ali LFNFOR COMPLETE brez parametra, da vidite trenutno
+nastavitev LFNFOR.
+.
+
+:TEXT_CMDHELP_LH
+Naloßi program v gornji spomin.
+
+LOADHIGH [pogon:][pot]datoteka [parametri]
+LOADHIGH [/L:regija1[,minVelikost1][;regija2[,minVelikost2]...] [/S]]
+         [pogon:][pot]datoteka [parametri]
+
+/L:regija1[,minVelikost1][;regija2[,minVelikost2]...
+    Doloüi regijo oz. regije spomina, v katere naj se naloßi program. Regija1
+    doloüi Átevilo prve regije, minVelikost1 doloüi minimalno velikost (üe
+    sploh) za regijo1. Regija2 in minVelikost2 doloüita Átevilo in minimalno
+    velikost druge regije, üe obstaja. Regij lahko doloüite, kolikor ßelite.
+/S
+  Skrüi UMB na minimalno velikost, medtem ko se program nalaga.
+[pogon:][pot]datoteka
+  Doloüi lokacijo in ime programa.
+.
+
+:TEXT_CMDHELP_LOADFIX
+Naloßi program nad prvih 64K spomina in ga izvede.
+
+LOADFIX [pogon:][pot]datoteka
+
+Uporabite LOADFIX, üe ste prejeli sporoüilo "Packed file corrupt", ko ste ga
+poskuÁali naloßiti v nizek del spomina.
+.
+
+:TEXT_CMDHELP_MD
+Ustvari imenik.
+
+MKDIR [pogon:]pot
+MD [pogon:]pot
+.
+
+:TEXT_CMDHELP_PATH
+Prikaße ali spremeni seznam imenikov, v katerih se iÁüejo programi.
+
+PATH [[pogon:]pot[;...]]
+PATH ;
+
+Vnesite PATH ;, da izpraznite seznam in ukaßete lupini, naj programe iÁüe le
+v trenutnem imeniku.
+Vnesite PATH brez parametrov, da vidite trenutni seznam programskih imenikov.
+.
+
+:TEXT_CMDHELP_PAUSE
+Zaüasno prekine izvajanje ukazne datoteke in prikaße sporoüilo "Pritisnite
+katerokoli tipko" oz. doloüeno sporoüilo.
+
+PAUSE [sporoüilo]
+.
+
+:TEXT_CMDHELP_PROMPT
+Spremeni ukazni poziv.
+
+PROMPT [besedilo]
+
+  besedilo  Doloüi novi ukazni poziv.
+
+Poziv je lahko sestavljen iz katerihkoli znakov in naslednjih posebnih kod:
+
+  $Q  = (enaüaj)
+  $$  $ (dolar)
+  $T  trenutni üas
+  $D  trenutni datum
+  $P  trenutni pogon in imenik
+  $V  verzija FreeCOMa
+  $N  trenutni pogon
+  $G  > ("veü kot")
+  $L  < ("manj kot")
+  $B  | (navpiüna ürta)
+  $H  brisalka (izbriÁe prejÁnji znak)
+  $E  escape (ASCII znak 27)
+  $_  prelom vrstice
+
+Vnesite PROMPT brez parametrov, da ukazni poziv ponastavite.
+.
+
+:TEXT_CMDHELP_PUSHD
+Potisne trenutni imenik na imeniÁki sklad z moßnostjo spreminjanja trenutnega
+imenika.
+
+PUSHD [[pogon:]pot]
+  kjer je [pogon:]pot pot, v katero ßelite.
+.
+
+:TEXT_CMDHELP_POPD
+Vzame imenik z imeniÁkega sklada in ga doloüi za trenutni imenik.
+
+POPD [*]
+  Parameter "*" poüisti imeniÁki sklad.
+.
+
+:TEXT_CMDHELP_DIRS
+Prikaße vsebino imeniÁkega sklada.
+
+DIRS
+.
+
+:TEXT_CMDHELP_RD
+Odstrani (izbriÁe) prazen imenik.
+
+RMDIR [pogon:]pot
+RD [pogon:]pot
+.
+
+:TEXT_CMDHELP_REM
+Oznaüuje komentarje (opombe) v ukazni datoteki ali CONFIG.SYS.
+
+REM [komentar]
+.
+
+:TEXT_CMDHELP_REN
+Preimenuje eno ali veü datotek oz. imenikov.
+
+RENAME [pogon:][pot][imenik1 | datoteka1] [imenik2 | datoteka2]
+REN [pogon:][pot][imenik1 | datoteka1] [imenik2 | datoteka2]
+
+Pri novem imenu ne morete doloüiti novega pogona oz. poti; za ta namen
+uporabite ukaz MOVE.
+.
+
+:TEXT_CMDHELP_SET#1
+Prikaße, nastavi, ali odstrani okoljsko spremenljivko.
+
+SET [/C] [/P] [/E] [/U] [spremenljivka[=[niz]]]
+
+  spremenljivka  Doloüi ime spremenljivke.
+  niz            Doloüi vrednost spremenljivke.
+
+¨e niz ni doloüen, se spremenljivka odstrani iz okolja.
+
+Vnesite SET brez parametrov, da vidite trenutne vrednosti vseh spremenljivk.
+
+Vnesite SET in ime spremenljivke, da vidite njeno vrednost.
+
+/C obdrßi velike in male ürke: navadno se ime datoteke spremeni v velike ürke,
+üe spremenljivka ße obstaja.
+
+/P pozove uporabnika, da vnese niz, in ga dodeli spremenljivki.
+
+/E nastavi spremenljivko na prvo vrstico izhoda programa, ki ga doloüa niz.
+
+/U spremeni vse ürke niza v velike ürke.
+.
+
+:TEXT_CMDHELP_SHIFT#1
+Changes the position of replaceable parameters in a batch file.
+
+SHIFT [DOWN]
+
+DOWN shifts the argument window toward the beginning (%0); otherwise
+toward the end.
+.
+
+:TEXT_CMDHELP_TIME#1
+Prikaße ali nastavi üas.
+
+TIME [/T] [üas]
+
+Vnesite TIME brez parametrov, da vidite trenutni üas in istoüasno nastavite
+novega. Pritisnite Enter, da obdrßite starega.
+
+/T onemogoüi interaktivnost.
+.
+
+:TEXT_CMDHELP_TRUENAME
+Prikaße polno ime doloüene poti.
+
+TRUENAME [pogon:][pot][datoteka]
+.
+
+:TEXT_CMDHELP_TYPE
+Prikaße vsebino datoteke z besedilom.
+
+TYPE [pogon:][pot]datoteka
+.
+
+:TEXT_CMDHELP_VER
+Prikaße verzijo FreeCOMa in druge informacije.
+
+VER [/R] [/W] [/D] [/C]
+
+  /R  Prikaße verzijo jedra in druge informacije.
+  /W  Prikaße informacije o jamstvu.
+  /D  Prikaße pogoje za razpeüavanje FreeCOMa.
+  /C  Prikaße sodelujoüe pri razvoju FreeCOMa.
+.
+
+:TEXT_CMDHELP_VERIFY
+Pove datoteünemu sistemu, naj preveri, ali se datoteke pravilno zapiÁejo
+na disk.
+
+VERIFY [ON | OFF]
+
+Vnesite VERIFY brez parametrov, da vidite trenutno stanje VERIFY.
+.
+
+:TEXT_CMDHELP_FDDEBUG
+If debugging is compiled into FreeDOS, this command will turn debug
+output on or off, or tell you if it is on or off.
+
+FDDEBUG [ON | OFF | datoteka]
+
+Type FDDEBUG without a parameter to display the current debug output
+setting.
+If a file is specified, all debug output is redirected into that file;
+the output is appended to the file, if it already exists. The special
+names "stdout" and "stderr" may be used to redirect the output
+to the standard output or standard error stream.
+.
+
+:TEXT_CMDHELP_VOL
+Prikaße oznako nosilca in njegovo serijsko Átevilko, üe ta obstajata.
+
+VOL [pogon:]
+.
+
+:TEXT_CMDHELP_QUESTION#1
+Prikaße seznam ukazov in funkcij, ki so na voljo v FreeCOMu.
+
+?
+?ukaz [parametri]
+
+Prva oblika prikaße vse vgrajene ukaze in funkcije.
+Druga oblika vpraÁa, ali naj izvede doloüen ukaz, kot v naüinu sledenja.
+.
+
+:TEXT_CMDHELP_WHICH
+PoiÁüe in prikaße datoteko za vsak doloüen ukaz.
+
+WHICH ukaz...
+.
+
+:TEXT_CMDHELP_MEMORY#1
+Prikaße FreeCOMov notranji spomin.
+
+MEMORY
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+Cilj za ukaz COPY ne sme vsebovati znakov "+".
+.
+
+:TEXT_DELETE_FILE#1%
+BriÁem datoteko "%s".
+.
+
+:TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
+Ni mogoüe pisati v datoteko "%s";
+je morda disk poln? (potrebnih je %lu bajtov)
+.
+
+# Displayed for BIGcopy(), when copying takes quite a long time.
+# **_NO_END if the input file size is unknown.
+# Both must end in \r rather than \n!!
+:TEXT_COPY_COPIED_NO_END#0%
+%lu/???K kopiranih\r\
+.
+:TEXT_COPY_COPIED#0%
+%lu/%luK kopiranih\r\
+.
+
+:TEXT_ERROR_FCOM_IS_DEVICE#0%
+FreeCOM ne more biti naprava: "%s"
+.
+:TEXT_ERROR_FCOM_INVALID#0%
+Ta datoteka ni veljaven FreeCOM ali pa ni zdrußljiva verzija:
+%s
+.
+
+:TEXT_ERROR_LOADING_STRINGS
+Failed to load the strings resource into memory, the location
+pointed to in %COMSPEC% seems to be invalid. Please specify another
+location of FreeCOM to try to load the strings from, e.g.:
+C:\\COMMAND.COM
+or just hit enter to cancel to load the strings.
+.
+
+:TEXT_TERMINATING
+Poteka prekinitev.
+.
+
+:TEXT_HIDDEN_CRITER#0%
+%u Critical Error requests suppressed.
+.
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+Exit code (ERRORLEVEL): %u, reason: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+DOS API napaka\
+.
+:TEXT_EXIT_REASON_0
+terminated normally\
+.
+:TEXT_EXIT_REASON_1
+terminated by ^Break\
+.
+:TEXT_EXIT_REASON_2
+terminated by critical error\
+.
+:TEXT_EXIT_REASON_3
+gone resident\
+.

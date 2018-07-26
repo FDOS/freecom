@@ -1,0 +1,130 @@
+# $Id$
+#
+# Critical error national customization file
+#
+# Language: Slovene
+# Codepage: 852
+# Author:   Matej Horvat (http://matejhorvat.si/)
+# 
+# The critical error (criter) handler receives some information
+# from the kernel about what error condition happens, generates some
+# human friendly message from it, requests the user's opinion about
+# how to proceed and, finally, returns to the kernel.
+# 
+# The human friendly message is generated using one of the following
+# templates:
+# BLOCK_DEVICE (for criters on block devices)
+# 	Error %1 drive %A: %2 area: %3
+# -and- CHAR_DEVICE (for criters on character devices)
+# 	Error %1 device %A: %3
+# 
+# Two-character sequences, which first character is a percent sign '%',
+# are placeholders for other information:
+# %% -> a single percent sign
+# %1 -> either READ or WRITE, depending on what kind of operation
+# 	caused the criter
+# %2 -> the kind of area the criter took place on DOS, FAT, ROOT, or DATA
+# %3 -> the actual error string; these are the strings associated to
+# 	a number 0 through N, and must correspond to the number passed in
+# 	lowbyte(DI) to the criter handler (see RBIL INT-24 for details)
+# %A -> drive letter (for block devices); name of device (character devices)
+# 
+# Below the line describing the error the user is prompted for the action
+# to proceed. This line is dynamically constructed depending on which
+# action are available at all. The full line may look like this:
+# 	(A)bort, (I)gnore, (R)etry, (F)ail?_
+# 
+# The individual words are defined by ABORT, IGNORE, RETRY, FAIL. They
+# should indicate which user response keys is associated with them;
+# suggested is to use the first letter and enclose it in parenthesises.
+# The delimiter ", " can be defined with DELIMITER and is the same
+# for all slots.
+# The "? " sequence is defined by QUESTION.
+# The order of the actions is fixed and cannot be customized.
+# 
+# With each action a number of user response keys must be associated.
+# They can be enumerated with the KEYS_ABORT, KEYS_IGNORE, ...
+# strings. Because the key is searched in the same format as returned
+# by INT-16-00, both upper and lower case must be specified and
+# certain special keys cannot be used.
+# 
+# The individual error strings are defined by the #: lines, where
+# the hash sign '#' refers to the number the kernel passes to the
+# criter handler. The UNKNOWN string is displayed for all error
+# numbers not specified.
+#
+# NOTE #1: The percent rule applies to _all_ criter strings!
+# NOTE #2: Each string occupies exactly one line.
+# NOTE #3: Any leading or trailing whitespaces are removed. Prefix the
+#	first or suffix the last whitespace with '%.' (one percent sign and
+#	one dot). This sequence is removed from the string totally.
+# NOTE #4: To embed any character use: %&## (one percent sign,
+#		one ampersand and exactly two hexa-decimal digits)
+
+## Primary strings
+S2
+BLOCK_DEVICE: Napaka pri %1 pogona %A: obmoŸje %2: %3
+S3
+CHAR_DEVICE: Napaka pri %1 naprave %A: %3
+
+## kind of operation
+S0
+READ: branju
+S1
+WRITE: pisanju
+
+## kind of failed area of block devices
+S4
+DOS: DOS
+S5
+FAT: FAT
+S6
+ROOT: korena
+S7
+DATA: podatkov
+
+## action strings
+S8
+IGNORE: (P)rezri
+S9
+RETRY: (Z)nova
+S10
+ABORT: (O)pusti
+S11
+FAIL: (S)podleti
+## keys associated with the actions
+S14 (compacted)
+KEYS_IGNORE: pP
+KEYS_RETRY:  zZ
+KEYS_ABORT:  oO
+KEYS_FAIL:   sS
+## embedded strings
+S12
+QUESTION:  ? %.
+S13
+DELIMITER: , %.
+
+## Error strings
+UNKNOWN: Neznana koda napake
+S15
+0: poskus prekrçitve zaçŸite pred pisanjem
+1: neznana enota za gonilnik
+2: pogon ni pripravljen
+3: gonilnik je prejel neznan ukaz
+4: podatkovna napaka (napaŸen CRC)
+5: napaŸna dol§ina strukture zahteve za gonilnik
+6: napaka pri iskanju
+7: neznana vrsta medija
+8: sektorja ni mogoŸe najti
+9: tiskalnik nima papirja
+10: napaka pri pisanju
+11: napaka pri branju
+12: sploçna napaka
+13: prekrçitev deljenja
+14: prekrçitev zaklepa
+15: neveljavna zamenjava diskete
+16: FCB ni na voljo
+17: medpomnilnik za deljenje prepoln
+18: neujemanje kodiranj
+19: ni veŸ vhoda
+20: ni dovolj prostora na disku
