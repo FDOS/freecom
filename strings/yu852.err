@@ -1,0 +1,130 @@
+# $Id$
+#
+# Critical error national customization file
+#
+#  Language: Serbian / Yugoslavian
+#  Codepage: 852
+#  Author:   Dejan Êtrbac (strbac@phreaker.net)
+#
+# The critical error (criter) handler receives some information
+# from the kernel about what error condition happens, generates some
+# human friendly message from it, requests the user's opinion about
+# how to proceed and, finally, returns to the kernel.
+#
+# The human friendly message is generated using one of the following
+# templates:
+# BLOCK_DEVICE (for criters on block devices)
+#  Error %1 drive %A: %2 area: %3
+# -and- CHAR_DEVICE (for criters on character devices)
+#  Error %1 device %A: %3
+#
+# Two-character sequences, which first character is a percent sign '%',
+# are placeholders for other information:
+# %% -> a single percent sign
+# %1 -> either READ or WRITE, depending on what kind of operation
+#  caused the criter
+# %2 -> the kind of area the criter took place on DOS, FAT, ROOT, or DATA
+# %3 -> the actual error string; these are the strings associated to
+#  a number 0 through N, and must correspond to the number passed in
+#  lowbyte(DI) to the criter handler (see RBIL INT-24 for details)
+# %A -> drive letter (for block devices); name of device (character devices)
+#
+# Below the line describing the error the user is prompted for the action
+# to proceed. This line is dynamically constructed depending on which
+# action are available at all. The full line may look like this:
+#  (A)bort, (I)gnore, (R)etry, (F)ail?_
+#
+# The individual words are defined by ABORT, IGNORE, RETRY, FAIL. They
+# should indicate which user response keys is associated with them;
+# suggested is to use the first letter and enclose it in parenthesises.
+# The delimiter ", " can be defined with DELIMITER and is the same
+# for all slots.
+# The "? " sequence is defined by QUESTION.
+# The order of the actions is fixed and cannot be customized.
+#
+# With each action a number of user response keys must be associated.
+# They can be enumerated with the KEYS_ABORT, KEYS_IGNORE, ...
+# strings. Because the key is searched in the same format as returned
+# by INT-16-00, both upper and lower case must be specified and
+# certain special keys cannot be used.
+#
+# The individual error strings are defined by the #: lines, where
+# the hash sign '#' refers to the number the kernel passes to the
+# criter handler. The UNKNOWN string is displayed for all error
+# numbers not specified.
+#
+# NOTE #1: The percent rule applies to _all_ criter strings!
+# NOTE #2: Each string occupies exactly one line.
+# NOTE #3: Any leading or trailing whitespaces are removed. Prefix the
+#  first or suffix the last whitespace with '%.' (one percent sign and
+#  one dot). This sequence is removed from the string totally.
+# NOTE #4: To embed any character use: %&## (one percent sign,
+#     one ampersand and exactly two hexa-decimal digits)
+
+## Primary strings
+S2
+BLOCK_DEVICE: %&0A%&0A%&0DGreÁka %1 na drajvu %A: - %3
+S3
+CHAR_DEVICE:  %&0A%&0A%&0DGreÁka %1 na ure–aju %A: - %3
+
+## kind of operation
+S0
+READ: pri üitanju
+S1
+WRITE: pri upisu
+
+## kind of failed area of block devices
+S4
+DOS: DOS
+S5
+FAT: FAT
+S6
+ROOT: Root
+S7
+DATA: Podaci
+
+## action strings
+S8
+IGNORE: (I)gnoriÁi
+S9
+RETRY: (P)onovo
+S10
+ABORT: (O)tkaz
+S11
+FAIL: (N)euspeh
+## keys associated with the actions
+S14 (compacted)
+KEYS_IGNORE: iI
+KEYS_RETRY:  pP
+KEYS_ABORT:  oO
+KEYS_FAIL:   nN
+## embedded strings
+S12
+QUESTION:  ? %.
+S13
+DELIMITER: , %.
+
+## Error strings
+UNKNOWN: Nepoznata greÁka
+S15
+0: POKUÊAJ PREKORA¨ENjA ZAÊTITE OD PISANjA
+1: NEPOZNATA JEDINICA ZA DRAJVER
+2: DRAJV NIJE SPREMAN
+3: NEPOZNATA KOMANDA PRENETA DRAJVERU
+4: GREÊKA U PODACIMA (LOÊ CRC)
+5: LOÊA DU¶INA STRUKTURE ZAHTEVA DRAJVERA URE—AJA
+6: GREÊKA PRI TRA¶ENjU (SEEK)
+7: NEPOZNATI TIP MEDIJA
+8: SEKTOR NIJE PRONA—EN
+9: U ÊTAMPACU NEMA PAPIRA
+10: GREÊKA PRI PISANjU
+11: GREÊKA PRI ¨ITANjU
+12: GENERALNI OTKAZ
+13: NARUÊAVANjE RASPODELE
+14: NARUÊAVANjE BLOKADE
+15: NEVA¶ECA PROMENA DISKA
+16: FCB JE NEDOSTUPNA
+17: PREKORA¨ENjE ZAJEDNI¨KOG BAFERA
+18: NEUSAGLAÊENOST KODNIH STRANA
+19: NEDOVOLjNO ULAZA
+20: NEDOVOLjNO DISK PROSTORA
