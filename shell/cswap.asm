@@ -354,14 +354,6 @@ exec_error2:
 	;; Note: Because [CS:driverAdress] == [residentCS:driverAdress]
 	;; we need not use a similiar approach as with XMSexec
 XMSrequest:
-%ifidn __OUTPUT_FORMAT__,elf 	; GCC, calling near with stdcall conv.
-		pop cx		; return address
-		pop ax		; AX
-		pop dx		; DX
-		pop si		; SI
-		push cs
-		push cx		; far return from XMS driver
-%endif
 		jmp far [cs:XMSdriverAdress]
 
 ;; Added here to make it more easier for the C-part to call functions

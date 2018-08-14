@@ -44,7 +44,14 @@ extern unsigned long (far *far XMSdriverAdress)(unsigned request,
 #pragma aux XMSdriverAdress = parm [ax] [dx] [si]
 #elif defined(__GNUC__)
 extern unsigned far *far XMSdriverAdress;
-extern unsigned long XMSrequest(unsigned request, unsigned dx, void *si);
+static inline unsigned long XMSrequest(unsigned request, unsigned dx, void *si)
+{
+	long ret;
+	asm volatile("lcall *%%cs:XMSdriverAdress" :
+		     "=A"(ret) :
+		     "a"(request), "d"(dx), "S"(si));
+	return ret;
+}
 #else
 extern unsigned (far *far XMSdriverAdress)(void);
 extern void far XMSrequest(void);
