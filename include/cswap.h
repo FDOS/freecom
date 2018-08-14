@@ -69,7 +69,7 @@ extern struct XMScopy far XMSrestore;
 extern void far ASMINTERRUPT lowlevel_cbreak_handler();
 extern void far ASMINTERRUPT lowlevel_err_handler();
 extern void far ASMINTERRUPT autofail_err_handler();
-extern void far ASMINTERRUPT lowlevel_int_2e_handler() far;
+extern void far ASMINTERRUPT lowlevel_int_2e_handler();
 
 /* functions */
 word XMSswapmessagesIn(loadStatus *status);
