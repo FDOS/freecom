@@ -1,3 +1,28 @@
+v0.84pre5
+add: Serbian/Yugoslavian for cp852 from freedoslocal (Dejan Strbac)
+add: Slovenian translations from freedoslocal (Matej Horvat)
+add: Turkish translations from freedoslocal.
+fix: Update French translations from freedoslocal (Mateusz Viste)
+fix: [bugs:#192] FOR %i IN (*.*) do @ECHO %i does not work
+fix: [bugs:#209] The shell doesn't display any error if exec fails.
+     It will now say "EXE file corrupt" if the .exe file has a bogus header.
+chg: Reduce ifdef's for GCC, using new ia16-elf-gcc functionality.
+chg: Use cglobal and cextern macros in asm files for globals.
+fix: Use last-fit dosalloc for copy&dir buffers to work well with large model
+fix: Plug memory leak in and around comResFile().
+fix: _dos_allocmem takes a pointer to unsigned, not unsigned long.
+fix: Wrap dprintf macro into do { ... } while (0);
+fix: Use only libc stdio in DEBUG build, not printf from clib.
+chg: Remove no longer used tempfile/rmtmpfile.
+fix: cgetchar_timed and eliminate its call to fputmc.
+chg: Replace fputmc calls by more direct memset/dos_write calls.
+fix: non-small (debug) model compilations for Turbo/Borland.
+chg: Compile debug version in medium memory model instead of large.
+fix: debug version (large model); enable for watcom.
+chg: Create and use sfn_creat() and use instead of dos_creatnew()
+fix: lfn_creat needs to truncate files that already exist.
+fix: hang for batchfiles that do not end with an EOL character.
+     This fixes a hang with Rugxulo's metados.img.
 v0.84pre4
 fix: spelling, by Anders Jonsson <anders.jonsson@norsjovallen.se>
 fix: Edits to Swedish translation file, by Anders Jonsson
