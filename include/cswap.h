@@ -47,9 +47,14 @@ extern unsigned far *far XMSdriverAdress;
 static inline unsigned long XMSrequest(unsigned request, unsigned dx, void *si)
 {
 	long ret;
+	/* N.B. the XMS driver may clobber %bx even if the call is successful,
+	   so we need to mark %bx as clobbered.  Also include %cx, the flags,
+	   and main memory in the clobber list, for good measure.
+		-- tkchia 2018/08/24 */
 	asm volatile("lcall *%%cs:XMSdriverAdress" :
 		     "=A"(ret) :
-		     "a"(request), "d"(dx), "S"(si));
+		     "a"(request), "d"(dx), "S"(si) :
+		     "bx", "cx", "cc", "memory");
 	return ret;
 }
 #else
