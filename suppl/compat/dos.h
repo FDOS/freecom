@@ -42,22 +42,22 @@ extern void intr(int nr, union REGPACK *r);
 
 static inline unsigned getpsp(void)
 {
-	unsigned psp;
+	unsigned psp, scratch;
 	asm volatile("int $0x21" :
-		     "=b"(psp) :
+		     "=a"(scratch), "=b"(psp) :
 		     "Rah"((unsigned char)0x62) :
-		     "ax");
+		     "cc");
 	return psp;
 }
 #define _psp getpsp()
 
 static inline unsigned char getosmajor(void)
 {
-	unsigned char osmajor;
+	unsigned char osmajor, scratch;
 	asm volatile("int $0x21" :
-		     "=Ral"(osmajor) :
-		     "Rah"((unsigned char)0x30) :
-		     "bx", "cx");
+		     "=Ral"(osmajor), "=Rah"(scratch) :
+		     "1"((unsigned char)0x30) :
+		     "bx", "cx", "cc");
 	return osmajor;
 }
 #define _osmajor getosmajor()
