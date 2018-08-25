@@ -93,8 +93,9 @@ int dup(int fd)
 
 int dup2(int oldfd, int newfd)
 {
-  asm volatile("int $0x21" :
-	       : "Rah"((char)0x46), "b"(oldfd), "c"(newfd): "ax");
+  int scratch;
+  asm volatile("int $0x21" : "=a" (scratch) :
+			     "Rah"((char)0x46), "b"(oldfd), "c"(newfd));
   return 0;
 }
 #endif
