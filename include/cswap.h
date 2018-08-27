@@ -53,7 +53,7 @@ static inline unsigned long XMSrequest(unsigned request, unsigned dx, void *si)
 		-- tkchia 2018/08/24 */
 	asm volatile("lcall *%%cs:XMSdriverAdress" :
 		     "=A"(ret) :
-		     "a"(request), "d"(dx), "S"(si) :
+		     "a"(request), "d"(dx), "S"(si), "Rds"(FP_SEG(si)) :
 		     "bx", "cx", "cc", "memory");
 	return ret;
 }
