@@ -130,8 +130,7 @@ void XMSinit(void)
 	USEREGS
 #if defined(__WATCOMC__)
 	unsigned long res;
-	unsigned long (far *xmsaddr)(unsigned request, unsigned dx, void *si);
-	#pragma aux xmsaddr = parm [ax] [dx] [si] modify [bx cx]
+	xmsfunc far *xmsaddr;
 #elif defined(__GNUC__)
 	unsigned long res;
 	void far *xmsaddr;

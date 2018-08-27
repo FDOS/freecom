@@ -39,9 +39,9 @@ extern int cdecl XMSexec(void);
 extern void far cdecl terminateFreeCOMHook(void);
 
 #ifdef __WATCOMC__
-extern unsigned long (far *far XMSdriverAdress)(unsigned request,
-						unsigned dx, void *si);
-#pragma aux XMSdriverAdress = parm [ax] [dx] [si] modify [bx cx]
+typedef unsigned long xmsfunc(unsigned request, unsigned dx, void *si);
+#pragma aux xmsfunc = parm [ax] [dx] [si] modify [bx cx]
+extern xmsfunc far *far XMSdriverAdress;
 #elif defined(__GNUC__)
 extern unsigned far *far XMSdriverAdress;
 static inline unsigned long XMSrequest(unsigned request, unsigned dx, void *si)
