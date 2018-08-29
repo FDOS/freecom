@@ -333,7 +333,9 @@ static void docommand(char *line)
     if(cmdptr && cmdptr->name) {    /* internal command found */
 
 #ifdef FEATURE_INSTALLABLE_COMMANDS
-	rest = strdup(rest);
+	cp = malloc(ARGS_BUFFER_SIZE);
+	strcpy(cp, rest);
+	rest = cp;
 	free(buf);
 	buf = rest;
 #else
