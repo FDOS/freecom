@@ -5,6 +5,7 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <io.h>
 
 #include "../include/misc.h"
 #include "../strings.h"

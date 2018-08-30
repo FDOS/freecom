@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <io.h>
 
 #include "../include/cmdline.h"
 #include "../include/misc.h"

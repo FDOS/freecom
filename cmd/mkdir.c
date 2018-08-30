@@ -4,6 +4,8 @@
 
 #include "../config.h"
 
+#include <sys/stat.h>
+
 #include "../include/command.h"
 #include "../include/misc.h"
 #include "../include/lfnfuncs.h"

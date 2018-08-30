@@ -107,6 +107,10 @@ extern unsigned char lfncomplete;
 
 #endif /* __LFNFUNCS_C */
 
+#else
+
+#define dos_ffblk         ffblk
+
 #endif /* FEATURE_LONG_FILENAMES */
 /*#endif*/ /* __TURBOC__ */
 #endif /* H__LFNFUNCS_ */

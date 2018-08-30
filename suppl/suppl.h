@@ -255,6 +255,7 @@ int findnext(struct ffblk *ff);
 #define MAXDIR 66               /* 64: path; +1: root sign; +1: NUL terminator */
 #define MAXDRIVE 3              /* 1: drive letter; +1: ':'; +1: NUL terminator */
 #define MAXFILE 9               /* 8: name; +1: NUL terminator */
+#define MAXNAME 9
 #define MAXEXT 5                /* 3: name; +1: dot; +1: NUL terminator */
 #define MAXPATH (MAXDIR + MAXDRIVE + MAXNAME + MAXEXT - 3)
 #endif

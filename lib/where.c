@@ -63,6 +63,7 @@
 #include <stdlib.h>	/* free */
 #include <string.h>	/* strlen, strcpy, memcpy */
 
+#include "suppl.h"
 #include "dfn.h"	/* dfnstat, DFN_FILE, dfnfullpath */
 
 #include "../include/lfnfuncs.h" /* getshortfilename */
