@@ -43,6 +43,8 @@ intr:		push	bp			; Standard C entry
 		mov	[cs:intr_1-1], al
 		jmp	short intr_2		; flush the instruction cache
 intr_2:		mov	bx, [bp+6]		; regpack structure
+		mov	ah, [bx+18]		; SZAPC flags
+		sahf
 		mov	ax, [bx]
 		mov	cx, [bx+4]
 		mov	dx, [bx+6]
