@@ -164,7 +164,7 @@ void addSize(unsigned short *size, char * const Xp)
 		}
 	}
 
-	if(n > UINT_MAX || (n + *size) > UINT_MAX) {
+	if(n > USHRT_MAX || (n + *size) > USHRT_MAX) {
 		puts("Sum of sizes exceed 64KB");
 		exit(104);
 	}
@@ -223,7 +223,7 @@ int main(int argc, char **argv)
 	addUns(ival.alias);
 	addUns(ival.hist);
 	addUns(ival.dirs);
-	if(minSize > UINT_MAX) {
+	if(minSize > USHRT_MAX) {
 		puts("Estimated minimum heap size exceeds 64KB.\n"
 			"There is most probably a corrupted info resource.");
 		return 71;

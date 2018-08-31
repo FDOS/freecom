@@ -75,7 +75,7 @@ int scanMapFile(const char * const fnam
 
 				 	n = strtoul(w3, &p, 16);
 				 	if(p && (*p == 'H' || w1[0]=='.')) {
-				 		if(n > UINT_MAX || (n += *extraSpace) > UINT_MAX) {
+				 		if(n > USHRT_MAX || (n += *extraSpace) > USHRT_MAX) {
 				 			puts("Extra space exceeds range");
 				 			return 56;
 				 		}
