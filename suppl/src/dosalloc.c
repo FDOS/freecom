@@ -96,8 +96,8 @@ word DOSalloc(word length, int mode)
        if we're compiling with TurboC.  - Ron Cemer */
 #if defined(_TC_EARLY_)
         __emit__((unsigned char)0xf9);      /* stc */
-#elif defined __GNUC__
-		asm volatile ("stc\n");
+#elif defined(__WATCOMC__) || defined(__GNUC__)
+		reg.x.flags |= 1;
 #else
 		asm {
 			stc
