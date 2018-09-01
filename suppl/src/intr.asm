@@ -26,6 +26,7 @@
 ;
 
 %ifidn __OUTPUT_FORMAT__, elf 	; only for ia16-elf-gcc compilations
+%define COMPILE 1
 
 segment .text
 
@@ -33,16 +34,38 @@ bits 16
 
 global intr
 
-intr:		push	bp			; Standard C entry
+intr:
+
+%elifidni COMPILER, WATCOM 	; and Open Watcom
+%define COMPILE 1
+
+segment _TEXT class=CODE
+
+
+global intr_
+
+intr_:
+%endif
+
+%ifdef COMPILE
+		push	bp			; Standard C entry
+%ifidn __OUTPUT_FORMAT__, elf
 		mov	bp,sp
+		mov	ax, [bp+4]		; interrupt number
+		mov	bx, [bp+6]		; regpack structure
+		push	es
+%else
+		push	bx
+		push	cx
+		mov	bx, dx
+		push	dx
+%endif
 		push	si
 		push	di
-		push	es
 		push	ds
-		mov	ax, [bp+4]		; interrupt number
 		mov	[cs:intr_1-1], al
 		jmp	short intr_2		; flush the instruction cache
-intr_2:		mov	bx, [bp+6]		; regpack structure
+intr_2:
 		mov	ah, [bx+18]		; SZAPC flags
 		sahf
 		mov	ax, [bx]
@@ -62,7 +85,11 @@ intr_1:
 		push	bx
 		mov	bx, sp
 		mov	ds, [ss:bx+6]
+%ifidn __OUTPUT_FORMAT__, elf
 		mov	bx, [ss:bx+20]		; address of REGPACK
+%else
+		mov	bx, [ss:bx+12]		; address of REGPACK
+%endif
 		mov	[bx], ax
 		pop	word [bx+2]
 		mov	[bx+4], cx
@@ -75,9 +102,17 @@ intr_1:
 		pop	word [bx+18]
 
 		pop	ds
-		pop	es
 		pop	di
 		pop	si
+%ifidn __OUTPUT_FORMAT__, elf
+		pop	es
 		pop	bp
 		ret	4
+%else
+		pop	dx
+		pop	cx
+		pop	bx
+		pop	bp
+		ret
+%endif
 %endif
