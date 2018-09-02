@@ -142,7 +142,7 @@ void partstrlower(char *str);
 void readcommand(char * const str, int maxlen);
 void readcommandDOS(char * const str, int maxlen);
 void readcommandEnhanced(char * const str, const int maxlen);
-void convert(unsigned long num, char * const des);
+void convert(unsigned long num, unsigned int billions, char * const des);
 
 void goxy(const unsigned char x, const unsigned char y);
 void clrcmdline(char * const str, const int maxlen);

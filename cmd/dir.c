@@ -244,6 +244,29 @@ static char *path;
 static unsigned line;
 static int need_nl;
 
+/* FAT32: file sizes are less then unsigned long, but accumulated
+          directory sizes may be up to 2 TB
+
+   so here comes simple 'large integer' arithmetic with billions separate
+*/
+
+typedef struct _bignum
+{
+  unsigned long low;
+  unsigned billions;
+} bignum;
+
+static void bignum_add(bignum *big, bignum *to_add)
+{
+  big->billions += to_add->billions;
+  big->low  += to_add->low;
+
+  if (big->low >= 1000000000ul) {	/* carry propagation, school style */
+    big->low -= 1000000000ul;
+    big->billions++;
+  }
+}
+
 #ifdef FEATURE_LONG_FILENAMES
 static void printLFNname(char *shortName, char *ext)
 {
@@ -673,16 +696,16 @@ static int dir_print_header(int drive)
  * print_summary: prints dir summary
  */
 static int print_summary(unsigned long files
-  , unsigned long bytes)
+  , bignum *bytes)
 {
   char buffer[32];
 
   if (optB)
     return 0;
 
-  convert(files, buffer);
+  convert(files, 0, buffer);
   displayString(TEXT_DIR_FTR_FILES, buffer);
-  convert(bytes, buffer);
+  convert(bytes->low, bytes->billions, buffer);
   displayString(TEXT_DIR_FTR_BYTES, buffer);
   need_nl = 1;
   return incline();
@@ -690,7 +713,7 @@ static int print_summary(unsigned long files
 
 static int print_total
     (unsigned long files,
-     unsigned long bytes)
+     bignum *bytes)
 { int rv;
 
   if(optB)
@@ -731,7 +754,7 @@ static int dir_print_free(unsigned long dirs)
 
   /* print number of dirs and bytes free */
 
-  convert(dirs, buffer);
+  convert(dirs, 0, buffer);
   displayString(TEXT_DIR_FTR_DIRS, buffer);
 
   rootname[0] = toupper(*path);
@@ -765,7 +788,7 @@ static int dir_print_free(unsigned long dirs)
                         else                        FAT32_Free_Space.free_clusters >>= 1;
                         }
                 
-                convert(FAT32_Free_Space.free_clusters * clustersize, buffer);
+                convert(FAT32_Free_Space.free_clusters * clustersize, 0, buffer);
 
                 strcat(buffer, " Mega");
                 goto output;
@@ -774,7 +797,7 @@ static int dir_print_free(unsigned long dirs)
   r.r_ax = 0x3600;
   r.r_dx = toupper(*path) - 'A' + 1;
   intrpt(0x21, &r);
-  convert((unsigned long)r.r_ax * r.r_bx * r.r_cx, buffer);
+  convert((unsigned long)r.r_ax * r.r_bx * r.r_cx, 0, buffer);
 output:
   displayString(TEXT_DIR_FTR_BYTES_FREE, buffer);
 
@@ -844,7 +867,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
       }
       else
       {
-        convert(file->ff_fsize, buffer);
+        convert(file->ff_fsize, 0, buffer);
         displayString(TEXT_DIR_LINE_SIZE, buffer);
       }
 
@@ -986,11 +1009,11 @@ static int dir_list(int pathlen
   , char *pattern
   , unsigned long *dcnt
   , unsigned long *fcnt
-  , unsigned long *bcnt
+  , bignum *bcnt
   )
 {
   struct ffblk file;
-  unsigned long bytecount = 0;
+  bignum bytecount = {0};
   unsigned long filecount = 0;
   unsigned long dircount = 0;
   int rv = E_None;
@@ -1072,8 +1095,11 @@ static int dir_list(int pathlen
 		if(file.ff_attrib & FA_DIREC) {
 			dircount++;
 		} else {
+			bignum tmp;
 			filecount++;
-			bytecount += file.ff_fsize;
+			tmp.low = (unsigned long)file.ff_fsize % 1000000000ul;
+			tmp.billions = (unsigned long)file.ff_fsize / 1000000000ul;
+			bignum_add(&bytecount, &tmp);
 		}
 		if(optO) {  
 			_fmemcpy(&orderArray[orderCount], &file, sizeof(file));
@@ -1108,7 +1134,7 @@ static int dir_list(int pathlen
 
 	if(rv == E_None) {
 		if(filecount || dircount)
-			rv = print_summary(filecount, bytecount);
+			rv = print_summary(filecount, &bytecount);
 		else if(!optS) {
 			error_file_not_found();
 			rv = E_Other;
@@ -1137,7 +1163,7 @@ static int dir_list(int pathlen
 
     *dcnt += dircount;
     *fcnt += filecount;
-    *bcnt += bytecount;
+    bignum_add(bcnt, &bytecount);
 
   return rv;
 }
@@ -1145,7 +1171,8 @@ static int dir_list(int pathlen
 
 static int dir_print_body(char *arg, unsigned long *dircount)
 {	int rv;
-	unsigned long filecount, bytecount;
+	unsigned long filecount;
+	bignum bytecount = {0};
 	char *pattern, *cachedPattern;
 	char *p;
 #if 0
@@ -1178,7 +1205,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		return E_NoMem;
 	}
 
-	filecount = bytecount = 0;
+	filecount = 0;
 
 	/* print the header */
 	if((rv = dir_print_header(toupper(path[0]) - 'A')) == 0) {
@@ -1208,7 +1235,7 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 
   if(optS) {
     if(filecount)
-		rv = print_total(filecount, bytecount);
+		rv = print_total(filecount, &bytecount);
     else {
 		error_file_not_found();
 		rv = E_Other;

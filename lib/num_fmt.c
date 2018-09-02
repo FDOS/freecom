@@ -47,7 +47,7 @@
 #include "../include/misc.h"
 #include "../include/nls.h"
 
-void convert(unsigned long num, char * const des)
+void convert(unsigned long num, unsigned int billions, char * const des)
 {
   char temp[sizeof(num) * 8];
   int c = 0;
@@ -65,7 +65,12 @@ void convert(unsigned long num, char * const des)
       if (((c + 1) % 4) == 0)
         temp[30 - c++] = nlsBuf->thousendsSep[0];
       temp[30 - c++] = (char)(num % 10) + '0';
-    } while((num /= 10) != 0);
+      num /= 10;
+      if (c == 11 && num == 0) {
+        num = billions;
+        billions = 0;
+      }
+    } while(num != 0 || billions != 0);
     strcpy(des, &temp[31 - c]);
   }
 }
