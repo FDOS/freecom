@@ -164,6 +164,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <portable.h>
+
 /* Not available with TURBOC++ 1.0 or earlier: */
 #if defined __GNUC__
 #define pause cmdpause
@@ -1033,8 +1035,12 @@ static int dir_list(int pathlen
     	error_out_of_memory();
     	optO = 0;
 	} else {
+#ifdef FARDATA
 		/* use last-fit allocation to work well with large model */
 		orderArray = MK_SEG_PTR(void, DOSalloc(0x1000,2));
+#else
+		orderArray = MK_SEG_PTR(void, DOSalloc(0x1000,0));
+#endif
 		if(!orderArray) {
 			free(orderIndex);
 			error_out_of_dos_memory();

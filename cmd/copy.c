@@ -34,6 +34,8 @@
 #include <sys/stat.h>
 #include <limits.h>
 
+#include <portable.h>
+
 /*#define DEBUG*/
 
 #include "dfn.h"
@@ -147,8 +149,12 @@ static int BIGcopy(int fdout, int fdin, int asc)
 	
 	/* Fetch the largest available buffer */
 	for(size = 60*1024u; size != 0; size -= 4*1024) {
+#ifdef FARDATA
 		/* use last-fit allocation to work well with large model */
 		buffer = MK_SEG_PTR(void, DOSalloc(size/16,2));
+#else
+		buffer = MK_SEG_PTR(void, DOSalloc(size/16,0));
+#endif
 		if(buffer != NULL)
 			goto ok;
 	}
