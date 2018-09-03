@@ -1,23 +1,27 @@
 Compile notes:
 
 NOTE: Use NASM version 0.98.35 or later!
+When building on Windows a native (win32 or win64) version is recommended.
 
 There is a more detailed description located here:
 http://freedos.sourceforge.net/freecom/build48.html
 
-1) Setup TC++ v1.01 (see www.freedos.org, Links page for a reference to
-Borland's museum site).
+1) Setup a compiler: TC++ v1.01 (see www.freedos.org, Links page for a
+reference to Borland's museum site), TC 2.01, Borland C++, Open Watcom
+(www.openwatcom.org), or ia16-elf-gcc (github.com/tkchia/gcc-ia16).
 2) Configure CONFIG.MAK (see below)
 3) Configure CONFIG.H   (see there)
-4) Run BUILD.BAT**
+4) Run BUILD.BAT** or build.sh (cross compilation from Linux)
 (Some newer MAKE variants may require a space between the -f option
  and the makefile name. On trouble try to fix BUILD.BAT.)
 
-** BUILD.BAT accepts to following options:
-C> BUILD.BAT [-r] [clean] [xms-swap] [language]
+** BUILD.BAT and build.sh accept to following options:
+C> BUILD.BAT [-r] [clean] [xms-swap] [debug] [compiler] [language]
 -r		Rebuilt (clean previous files before proceed)
 clean	remove *.COM, *.OBJ, *.LIB etc. files, then exit
 xms-swap	create FreeCOM with XMS-Only Swap support
+debug		enable debug code in FreeCOM
+compiler	one of wc, tc, tcpp, bc (build.sh: wc or gcc only)
 language	sets the specified language as the default build language
 
 You will find two executables in the FreeCOM directory:
@@ -28,19 +32,33 @@ strings table for instance.
 
 NOTE: A message like "Fatal: command line too long" was always caused
 during my tests by an invalid settings in CONFIG.MAK, esp. CC_BASE_PATH
-and NAMS!
+and NASM!
 
-CONFIG.MAK
+CONFIG.BAT (copied from CONFIG.B)
 
 This is the central file to tweak options and environment settings
-regarding of your compiler.
+regarding your compiler.
 
-CC_BASE_PATH
-base path (aka "root") of Turbo C++ v1.01, usually it is sufficient to
-modify this macro and all files (headers and libraries) and programs
-(C compiler and linker) will be found. If not, check the macros at the
-end of the file and/or the useage of $(LIBPATH) within COMMAND.MAK or
-STRINGS.MAK respectively.
+COMPILER
+default compiler to use, if none of tc, tcpp, bc, or wc is given.
+
+TC2_BASE
+TP1_BASE
+BC5_BASE
+WATCOM
+base paths (aka "root") for Turbo C 2.01, Turbo C++ v1.01, or Borland
+C++; usually it is sufficient to modify this macro and all files
+(headers and libraries) and programs (C compiler and linker) will be
+found. If not, check the macros at the end of the file and/or the
+usage of $(LIBPATH) within COMMAND.MAK or STRINGS.MAK respectively.
+For Open Watcom, the WATCOM environment variable can be adjusted, if
+it is not already set.
+
+Update XNASM as needed, if "nasm" is not in your PATH.
+
+CONFIG.MAK (copied from CONFIG.STD)
+
+This is the central file to tweak other options and environment settings.
 
 SUPPL_INC_PATH / SUPPL_LIB_PATH
 To compile this version of command.com, you have to add the SUPPL library.
@@ -52,17 +70,17 @@ pick up the library automatically. Note: See the SUPPL\README.TXT file,
 if you wish to NOT use the integrated SUPPL variant.
 
 
-Update NASM and NASMFLAGS as needed.
+Update NASMFLAGS as needed.
 
 SHELL_MMODEL
 is the memory model used to compile the shell. It should be Small (s),
 unless you want to include debugging support; use Large (l) in such case.
 
-$(CFG): $(CFG_DEPENDENCIES)
+$(CFG): $(CFG_DEPENDENCIES) ../config.mak
 This rule is used to create the default option file for the compiler.
 It should set the header and library search paths and the memory
 model, disable floating
-point arethmetics (as it is not used by FreeCOM). The default char
+point arithmetics (as it is not used by FreeCOM). The default char
 type should be unsigned. There are no known specific alignment
 or optimization settings, configure as you wish.
 
