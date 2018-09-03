@@ -1,3 +1,25 @@
+v0.84pre6
+fix: Revert to first-fit dosalloc for copy&dir buffers for non-large model
+     (Bart)
+fix: Enable reporting of directory sizes up to 2TB (with Tom Ehlert)
+fix: dosalloc: apply carry to flag image for intr(), not directly via stc
+     The carry flag was not preserved before. (Bart)
+fix: Use intr.asm with OW too, to be able to use SZAPC flags on input. (Bart)
+chg: Enable cross-compilation from 64-bit Windows using Open Watcom (Bart)
+fix: ia16-elf-gcc: intr( ) now loads flags before invoking interrupt (TK Chia)
+fix: compilation errors when LFN is disabled. Fixes #5. (Bart)
+fix: Allocate a large enough buffer for the rest of the command line.
+     We need to use a full buffer for the rest to allow for alias expansion.
+     Fixes #6. (Bart)
+fix: GCC: make sure that XMS calls get ds:si, otherwise ds can be wrong. (Bart)
+fix: OW: Use xmsfunc typedef and apply #pragma aux to that.
+     This way XMScopy actually works, and passes the structure in si,
+     so messages are copied correctly. Fixes issues with metados. (Bart)
+fix: keep asm inputs & clobbers separate in gcc port of dup2 (TK Chia)
+fix: ia16-elf-gcc code wrongly assumed XMS driver preserves %bx (TK Chia)
+fix: tell OW that bx/cx can be modified, similar to ia16-elf-gcc (Bart)
+fix: cmd: shift: use correct context, Fixes SF Bug #155 (Wolfram Sang)
+chg: Replace XMSrequest external asm with inline asm for GCC. (Bart)
 v0.84pre5
 add: Serbian/Yugoslavian for cp852 from freedoslocal (Dejan Strbac)
 add: Slovenian translations from freedoslocal (Matej Horvat)
