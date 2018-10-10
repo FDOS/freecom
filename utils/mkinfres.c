@@ -205,7 +205,7 @@ int main(int argc, char **argv)
 	int rc;
 	unsigned extraSpace;
 
-	if(argc > 1 && *argv[1] == '/' && toupper(argv[1][1]) == 'T') {
+	if(argc > 1 && (*argv[1] == '/' || *argv[1] == '-') && toupper(argv[1][1]) == 'T') {
 		txtFile = &argv[1][2];
 		--argc;
 		++argv;

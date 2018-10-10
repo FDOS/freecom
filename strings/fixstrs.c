@@ -63,7 +63,7 @@ add: version number of strings and logfile entries
 #include <ctype.h>
 #if defined(__TURBOC__)
 #include <dir.h>
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && !defined(__MINGW32__)
 #include <unistd.h>
 #define stricmp strcasecmp
 #define mkdir(x) mkdir(x, 0777)
@@ -651,7 +651,7 @@ int main(int argc, char **argv)
 
 	unlink(logfile);
 
-	if(argv[1] && stricmp(argv[1], "/lib") == 0) {
+	if(argv[1] && (stricmp(argv[1], "/lib") == 0 || stricmp(argv[1], "--lib") == 0)) {
 		--argc;
 		++argv;
 		makeLib = 1;

@@ -100,7 +100,7 @@ char temp[256];
 	/* keep it a single-file project */
 /*ska: no resource in this project! #include "../res_w.c"*/
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__MINGW32__)
 static void strupr(char *s)
 {
   for (; *s; s++)
