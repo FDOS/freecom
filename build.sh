@@ -2,6 +2,14 @@
 
 set -e
 
+SED=sed
+NASM=nasm
+#workaround for Windows (set to binary mode)
+if [ "$(expr substr $(uname -s) 1 5)" == 'MINGW' ]; then
+    SED='sed -b'
+fi
+
+
 export SWAP=YES-DXMS-SWAP____________________
 # BEGIN Internal stuff for ska -- If one of these three commands
 #       fail for you, your distribution is broken! Please report.
@@ -19,7 +27,7 @@ if [ ! -f config.mak ]; then
   exit 1
 fi
 
-export XNASM=nasm
+export XNASM="$NASM"
 export COMPILER=watcom
 if [ -z "$WATCOM" ]; then
   export WATCOM=$HOME/watcom
@@ -87,7 +95,7 @@ fi
 # substitutions for GNU Make
 
 gnumake_subst () {
-    sed -e 's@^!@@' \
+    $SED -e 's@^!@@' \
 	-e 's@^include "\(.*\)"@include \1@' \
 	-e 's@^include $(TOP)/config.mak@include $(TOP)/gnuconf.mak@' \
 	-e 's@if \(.*\) == \(.*\)[\r$]@ifeq (\1,\2)@' \
@@ -164,7 +172,7 @@ cd shell
 $MAKE command.mak all
 cd ..
 
-utils/mkinfres.exe /tinfo.txt infores shell/command.map shell/command.exe
+utils/mkinfres.exe -Tinfo.txt infores shell/command.map shell/command.exe
 cat shell/command.exe infores criter/criter1 criter/criter strings/strings.dat > command.com
 [ -f command.com ] || exit 1
 

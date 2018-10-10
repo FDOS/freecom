@@ -7,7 +7,7 @@ TOP=..
 all : strings.h strings.err
 
 strings.h : DEFAULT.LNG fixstrs.exe
-	fixstrs.exe /lib $(LNG)
+	fixstrs.exe --lib $(LNG)
 	$(CP) strings.h ..
 
 strings.err : DEFAULT.err CRITSTRS.exe
