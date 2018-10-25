@@ -83,6 +83,53 @@ int swapContext = TRUE;					/* may destroy external context */
 unsigned char __supportlfns = 1;
 #endif
 
+/*
+	stack checking:
+
+	initialize memory at the bottom of stack to some
+	known state (actually its own address)
+
+	later verify that at least some of this memory is still
+	left unchanged.
+*/
+static void * stack_bottom, * stack_unused;
+void stack_check_init()
+{
+  char current_stack_location;
+  void **barrier;
+
+  /* place a barrier at the bottom of the stack
+     code assumes 4 K right now */
+  stack_bottom = &current_stack_location - 4*1024 + 50;
+  stack_unused    = (char*)(&current_stack_location);
+
+  for (barrier = stack_bottom; barrier < stack_unused ; barrier++)
+    *barrier = barrier;
+}
+int stack_check(const char *commandline)
+{
+  void **barrier;
+
+  for (barrier = stack_bottom; barrier < stack_unused; barrier++)
+    if (*barrier != barrier)
+	break;
+
+  if (barrier < stack_unused) {
+    unsigned stack_left = (char*)barrier - (char*)stack_bottom;
+
+    if (stack_left < 0x300) {
+      fprintf(stderr, "stack left %u after <%.60s>\n",stack_left,commandline);
+      if (stack_left < 0x100) {
+	fprintf(stderr, "hit any key to continue");
+	cgetchar();
+      }
+    }
+
+    stack_unused = barrier;
+  }
+  return 0;
+}
+
 #ifdef __GNUC__
 int dup(int fd)
 {
@@ -817,6 +864,8 @@ int process_input(int xflag, char *commandline)
       if(tracethisline)
       	--tracemode;
     }
+
+    stack_check(parsedline);
   }
   while (!canexit || !exitflag);
 
@@ -871,6 +920,8 @@ int main(void)
   /*
    * * main function
    */
+
+  stack_check_init();
 
   if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
     process_input(0, 0);
