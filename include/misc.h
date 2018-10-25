@@ -130,7 +130,8 @@ unsigned allocMemBlk(const unsigned size, const unsigned mode);
 void freeSysBlk(const unsigned segm);
 
 void myperror(const char *msg);
-void myfnsplit(const char *path, char *drv, char *dir, char *name, char *ext);
+void myfnsplit(const char *path, char *buf,
+               char *drv, char **dir, char **name, char **ext);
 void myfnmerge(char *path,
                const char *drive,
                const char *dir,

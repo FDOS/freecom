@@ -29,10 +29,11 @@
 #include "../err_fcts.h"
 
 void myfnsplit( const char *path,
+                      char *buf,
                       char *drv,
-                      char *dir,
-                      char *name,
-                      char *ext )
+                      char **dir,
+                      char **name,
+                      char **ext )
 {
     const char* end;
     const char* p;
@@ -53,7 +54,10 @@ void myfnsplit( const char *path,
             end = p;
             break;
         }
-    if ( ext ) for( s = end; ( *ext = *s++ ) != '\0'; ) ext++;
+    if ( ext ) {
+        *ext = buf;
+        for( s = end; ( *buf++ = *s++ ) != '\0'; );
+    }
 
     for( p = end; p > path; )
         if( *--p == '\\'/* || *p == '/'*/) {
@@ -66,13 +70,15 @@ void myfnsplit( const char *path,
         }
 
     if( name ) {
-        for( s = p; s < end; ) *name++ = *s++;
-        *name = '\0';
+        *name = buf;
+        for( s = p; s < end; ) *buf++ = *s++;
+        *buf++ = '\0';
     }
 
     if ( dir ) {
-        for( s = path; s < p; ) *dir++ = *s++;
-        *dir = '\0';
+        *dir = buf;
+        for( s = path; s < p; ) *buf++ = *s++;
+        *buf = '\0';
     }
 }
 
@@ -154,12 +160,13 @@ int cmd_rename(char *param)
 		p = strchr(sn, '\0');
 #undef p
 #else
-        char s_drv[ MAXDRIVE ], s_dir[ MAXDIR ], d_drv[ MAXDRIVE ],
-             d_dir[ MAXDIR ], d_fil[ MAXFILE ], d_ext[ MAXEXT ], sn[ MAXPATH ],
-             dn[ MAXPATH ], newname[MAXPATH];
+        char s_drv[ MAXDRIVE ], d_drv[ MAXDRIVE ];
+        char *s_dir, *d_dir, *d_fil, *d_ext;
+        char s_buf[ MAXPATH ], d_buf[ MAXPATH ],
+             sn[ MAXPATH ], dn[ MAXPATH ], newname[MAXPATH];
 
-        myfnsplit( argv[ 0 ], s_drv, s_dir, NULL, NULL );
-        myfnsplit( argv[ 1 ], d_drv, d_dir, d_fil, d_ext );
+        myfnsplit( argv[ 0 ], s_buf, s_drv, &s_dir, NULL, NULL );
+        myfnsplit( argv[ 1 ], d_buf, d_drv, &d_dir, &d_fil, &d_ext );
 #endif
 
 		/* if drive or path in second arg, return with syntax error */
