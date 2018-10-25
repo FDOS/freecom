@@ -163,7 +163,7 @@ int cmd_rename(char *param)
         char s_drv[ MAXDRIVE ], d_drv[ MAXDRIVE ];
         char *s_dir, *d_dir, *d_fil, *d_ext;
         char s_buf[ MAXPATH ], d_buf[ MAXPATH ],
-             sn[ MAXPATH ], dn[ MAXPATH ], newname[MAXPATH];
+             *sn, dn[ MAXPATH ], newname[MAXPATH];
 
         myfnsplit( argv[ 0 ], s_buf, s_drv, &s_dir, NULL, NULL );
         myfnsplit( argv[ 1 ], d_buf, d_drv, &d_dir, &d_fil, &d_ext );
@@ -185,6 +185,8 @@ int cmd_rename(char *param)
 		}
 #else
         myfnmerge( dn, s_drv, s_dir, d_fil, d_ext );
+	/* d_buf no longer used after this */
+	sn = d_buf;
 #endif
 
 		do {

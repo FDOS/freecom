@@ -58,7 +58,6 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <alloca.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -122,7 +121,7 @@ void fillFnam(char *dest, const char * const pattern
 #if 0
   char *dr;
 #else
-  char buf[MAXPATH], pbuf[MAXPATH], dr[MAXDRIVE];
+  char buf[MAXPATH], dr[MAXDRIVE];
 #endif
   char *pa, *fn, *ex;
   char *pfn, *pex;
@@ -151,7 +150,7 @@ void fillFnam(char *dest, const char * const pattern
   }
 #else
   myfnsplit(pattern, buf, dr, &pa, &fn, &ex);
-  myfnsplit(fnam, pbuf, 0, 0, &pfn, &pex);
+  myfnsplit(fnam, dest, 0, 0, &pfn, &pex);
 #endif
 
   fillComp(dfn, fn, pfn, MAXFILE);
