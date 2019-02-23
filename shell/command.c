@@ -92,18 +92,18 @@ unsigned char __supportlfns = 1;
 	later verify that at least some of this memory is still
 	left unchanged.
 */
-static void * stack_bottom, * stack_unused;
+static void **stack_bottom, **stack_unused;
 void stack_check_init()
 {
-  char current_stack_location;
-  void **barrier;
+  void *current_stack_location;
+  volatile void * volatile *barrier;
 
   /* place a barrier at the bottom of the stack
      code assumes 4 K right now */
-  stack_bottom = &current_stack_location - 4*1024 + 50;
-  stack_unused    = (char*)(&current_stack_location);
+  stack_bottom = &current_stack_location - (4*1024 - 50) / sizeof(void *);
+  stack_unused = &current_stack_location;
 
-  for (barrier = stack_bottom; barrier < stack_unused ; barrier++)
+  for (barrier = stack_bottom; (void **)barrier < stack_unused ; barrier++)
     *barrier = barrier;
 }
 int stack_check(const char *commandline)
@@ -112,16 +112,16 @@ int stack_check(const char *commandline)
 
   for (barrier = stack_bottom; barrier < stack_unused; barrier++)
     if (*barrier != barrier)
-	break;
+      break;
 
   if (barrier < stack_unused) {
-    unsigned stack_left = (char*)barrier - (char*)stack_bottom;
+    unsigned stack_left = (barrier - stack_bottom) * sizeof(void *);
 
     if (stack_left < 0x300) {
       fprintf(stderr, "stack left %u after <%.60s>\n",stack_left,commandline);
       if (stack_left < 0x100) {
-	fprintf(stderr, "hit any key to continue");
-	cgetchar();
+        fprintf(stderr, "hit any key to continue");
+        cgetchar();
       }
     }
 
