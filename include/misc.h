@@ -102,11 +102,13 @@ enum OnOff onoffStr(char *line);
 #define lseek _lseek
 #endif
 #define sfn_open _open
+#define sfn_creat _creat
 #define dos_read _read
 #define dos_write _write
 #define dos_close _close
 #else
 int sfn_open(const char *pathname, int flags);
+int sfn_creat(const char *pathname, int flags);
 int dos_read(int fd, void *buf, unsigned int len);
 int dos_write(int fd, const void *buf, unsigned int len);
 #define dos_close _dos_close
@@ -120,8 +122,7 @@ int dos_write(int fd, const void *buf, unsigned int len);
 #define dos_findnext sfnfindnext
 #define dos_findclose(ffblk)
 #endif
-int sfn_creat(const char *pathname, int attr);
-int sfn_creatnew(const char *pathname, int attr);
+int dos_creatnew(const char *pathname, int flags);
 size_t farread(int fd, void far*buf, size_t length);
 size_t farwrite(int fd, void far*buf, size_t length);
 unsigned allocPermBlk(const unsigned size, const unsigned mode);

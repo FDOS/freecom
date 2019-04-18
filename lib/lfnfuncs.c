@@ -67,22 +67,25 @@ static int __creat_or_truncate( const char * filename, int mode )
     int handle;
     IREGS r;
 
-    if( !__supportlfns )
-        return sfn_creat( filename, mode );
+    if( !__supportlfns ) {
+        handle = dos_creatnew( filename, mode );
+        dos_close( handle );
+        return handle;
+    }
 
     r.r_ds = FP_SEG( filename );
     r.r_si = FP_OFF( filename );
     r.r_bx = O_WRONLY;
     r.r_cx = mode;
-    r.r_dx = 0x12;
+    r.r_dx = 0x10;
     r.r_ax = 0x716C;
 
     intrpt( 0x21, &r );
 
     if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 )
-        return ( dfnstat( getshortfilename( filename ) ) != 0 ) ?
-                 -1 : sfn_creat( filename, mode );
-    handle = r.r_ax;
+        handle = ( dfnstat( getshortfilename( filename ) ) != 0 ) ?
+                 -1 : dos_creatnew( filename, mode );
+    else handle = r.r_ax;
     /*
      * Win2k always returns handle == 2, which is a bug.
      * File handle 2 is already used for stderr
@@ -90,26 +93,26 @@ static int __creat_or_truncate( const char * filename, int mode )
      * ( as it does for '1' and '0', when redirecting stdin and stdout )
      */
     if( handle != 2 )dos_close( handle );
-    return -1;
+    return handle;
 }
 
 #if defined(DEBUG) || defined(FEATURE_CALL_LOGGING)
 FILE * lfnfopen( const char *filename, const char *mode )
 {
-    if( strpbrk( mode, "aw" ) ) {
-        int handle = __creat_or_truncate( filename, 0 );
-        if (handle != -1) dos_close(handle);
-    }
+    if( strpbrk( mode, "aw" ) )
+        __creat_or_truncate( filename, 0 );
     return( fopen( getshortfilename( filename ), mode ) );
 }
 #endif
 
 int lfn_creat( const char *filename, int attr )
 {
-    int handle = __creat_or_truncate( filename, attr );
-    if (handle != -1)
-	return( handle );      
-    return( sfn_open( getshortfilename( filename ), O_WRONLY ) );
+    int ret = __creat_or_truncate( filename, attr );
+    int fd = sfn_open( getshortfilename( filename ), O_WRONLY );
+    /* need to truncate file if it already existed */
+    if (ret == -1)
+        dos_write(fd, '\0', 0);
+    return fd;
 }
 
 int lfnrename( const char *oldfilename, const char *newfilename )

@@ -101,6 +101,13 @@ int sfn_open(const char *pathname, int flags)
 	return (result == 0 ? handle : -1);
 }
 
+int sfn_creat(const char *pathname, int attr)
+{
+	int handle;
+	int result = _dos_creat(pathname, attr, &handle);
+	return (result == 0 ? handle : -1);
+}
+
 int dos_read(int fd, void *buf, unsigned int len)
 {
 	return farread(fd, buf, len);
@@ -112,11 +119,11 @@ int dos_write(int fd, const void *buf, unsigned int len)
 }
 #endif
 
-static int sfn_creat_common(const char *pathname, int attr, int new)
+int dos_creatnew(const char *pathname, int attr)
 {
 #ifdef __WATCOMC__
 	int handle;
-	int result = (new ? _dos_creatnew : _dos_creat)(pathname, attr, &handle);
+	int result = _dos_creatnew(pathname, attr, &handle);
 	return (result == 0 ? handle : -1);
 #else
 	IREGS r;
@@ -124,7 +131,7 @@ static int sfn_creat_common(const char *pathname, int attr, int new)
 	r.r_ds = FP_SEG( pathname );
 	r.r_dx = FP_OFF( pathname );
 	r.r_cx = attr;
-	r.r_ax = new ? 0x5B00 : 0x3C00;
+	r.r_ax = 0x5B00;
 
 	intrpt( 0x21, &r );
 
@@ -132,14 +139,4 @@ static int sfn_creat_common(const char *pathname, int attr, int new)
 
 	return( r.r_ax );
 #endif
-}
-
-int sfn_creat(const char *pathname, int attr)
-{
-	return sfn_creat_common(pathname, attr, 0);
-}
-
-int sfn_creatnew(const char *pathname, int attr)
-{
-	return sfn_creat_common(pathname, attr, 1);
 }
