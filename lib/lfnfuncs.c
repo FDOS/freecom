@@ -45,20 +45,19 @@ const char * getshortfilename( const char *longfilename )
     static char shortfilename[ 128 ];
     IREGS r;
 
-/* This function causes an invalid opcode when working with NUL */
-/* access() doesn't even work here */
-    if( dos_close( sfn_open( longfilename, 0 ) ) == 0 ) return( longfilename );
+    if (!__supportlfns) return( longfilename );
 
     r.r_ds = FP_SEG( longfilename );
     r.r_si = FP_OFF( longfilename );
     r.r_es = FP_SEG( shortfilename );
     r.r_di = FP_OFF( shortfilename );
+    shortfilename[0] = '\0';
     r.r_cx = 0x8001; /* Get short filename */
     r.r_ax = 0x7160;/* LFN truename function */
 
     intrpt( 0x21, &r );
 
-    return( ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 || !__supportlfns ) ?
+    return( ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 || !shortfilename[0] ) ?
             longfilename : shortfilename );
 }
 
