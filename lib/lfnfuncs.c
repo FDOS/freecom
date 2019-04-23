@@ -260,7 +260,25 @@ int lfnfindclose( struct lfnffblk *buf )
     return( 0 );
 }
 
-static int lfn_mrc_dir( const char *path, int func )
+int lfnmkdir( const char *path )
+{
+	IREGS r;
+
+    r.r_dx = FP_OFF( path );
+	r.r_ds = FP_SEG( path );
+	r.r_flags = 1;
+    if (__supportlfns) {
+        r.r_ax = 0x7139;
+        intrpt( 0x21, &r );
+	}
+    if ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) {
+        r.r_ax = 0x3900;
+        intrpt( 0x21, &r );
+	}
+    return( -( r.r_flags & 1 ) );
+}
+
+static int lfn_rc_dir( const char *path, int func )
 {
 	IREGS r;
 
@@ -269,26 +287,17 @@ static int lfn_mrc_dir( const char *path, int func )
     r.r_dx = FP_OFF( path );
 	r.r_ds = FP_SEG( path );
     intrpt( 0x21, &r );
-    if( func == 0x7139 && ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) ) {
-        r.r_ax = func << 8;
-        intrpt( 0x21, &r );
-    }
     return( -( r.r_flags & 1 ) );
-}
-
-int lfnmkdir( const char *path )
-{
-	return lfn_mrc_dir( path, ( !__supportlfns ) ? 0x3900 : 0x7139 );
 }
 
 int lfnrmdir( const char *path )
 {
-	return lfn_mrc_dir( path, 0x3a00 );
+	return lfn_rc_dir( path, 0x3a00 );
 }
 
 int lfnchdir( const char *path )
 {
-	return lfn_mrc_dir( path, 0x3b00 );
+	return lfn_rc_dir( path, 0x3b00 );
 }
 
 /* #endif */
