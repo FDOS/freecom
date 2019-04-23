@@ -110,7 +110,7 @@ int lfn_creat( const char *filename, int attr )
     int fd = sfn_open( getshortfilename( filename ), O_WRONLY );
     /* need to truncate file if it already existed */
     if (ret == -1)
-        dos_write(fd, '\0', 0);
+        dos_write(fd, "", 0);
     return fd;
 }
 

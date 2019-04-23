@@ -107,6 +107,7 @@ int sfn_creat(const char *pathname, int attr)
 	int result = _dos_creat(pathname, attr, &handle);
 	return (result == 0 ? handle : -1);
 }
+#endif
 
 int dos_read(int fd, void *buf, unsigned int len)
 {
@@ -115,9 +116,8 @@ int dos_read(int fd, void *buf, unsigned int len)
 
 int dos_write(int fd, const void *buf, unsigned int len)
 {
-	return farwrite(fd, buf, len);
+	return farwrite(fd, (void far *)buf, len);
 }
-#endif
 
 int dos_creatnew(const char *pathname, int attr)
 {
