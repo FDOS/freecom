@@ -142,7 +142,7 @@ char *mktempfile(const char * const path, const char *ext)
   while(dfnstat(newpath)); /* such entry already exists */
 
   /* Make semaphore test */
-  fd = dos_creatnew(newpath, 0);
+  fd = sfn_creatnew(newpath, 0);
   if (fd != -1)
   {                             /* success */
     dos_close(fd);
