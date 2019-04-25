@@ -294,10 +294,11 @@ static int copy(char *dst, char *pattern, struct CopySource *src
 
       dos_close(fdout);
       if(!destIsDevice) {	/* Devices do always exist */
-        if( dfnstat( rSrc ) == 0) { /* Source doesn't exist */
+        if((fdin = devopen(rSrc, O_RDONLY)) < 0) { /* Source doesn't exist */
             error_open_file( rSrc );
             return 0;
         } else {
+	        dos_close(fdin);
           	switch(userprompt(PROMPT_OVERWRITE_FILE, rDest)) {
 	    	default:	/* Error */
 		    case 4:	/* Quit */
