@@ -94,6 +94,9 @@ void fmemcpy(void far *d1, void far *s1, unsigned len)
 }
 #endif
 
+#ifdef __GNUC__
+__attribute__((noinline))
+#endif
 static int XMScopy(
         long length, ...
 /*      short shandle,
