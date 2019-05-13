@@ -191,12 +191,13 @@ static void execute(char *first, char *rest)
   /* search through %PATH% for the binary */
   errno = 0;
   fullname = find_which(first);
-  dprintf(("[find_which(%s) returned %s]\n", first, fullname));
 
   if(!fullname) {
     error_bad_command(first);
     return;
   }
+
+  dprintf(("[find_which(%s) returned %s]\n", first, fullname));
 
   /* check if this is a .BAT file */
   extension = strrchr(dfnfilename(fullname), '.');
