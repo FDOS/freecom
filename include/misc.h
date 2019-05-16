@@ -102,15 +102,13 @@ enum OnOff onoffStr(char *line);
 #define lseek _lseek
 #endif
 #define sfn_open _open
-#define dos_read _read
-#define dos_write _write
 #define dos_close _close
 #else
 int sfn_open(const char *pathname, int flags);
-int dos_read(int fd, void *buf, unsigned int len);
-int dos_write(int fd, const void *buf, unsigned int len);
 #define dos_close _dos_close
 #endif
+int dos_read(int fd, void *buf, unsigned int len);
+int dos_write(int fd, const void *buf, unsigned int len);
 #define sfnfindfirst(path,attrib,ffblk) findfirst(path,attrib,ffblk)
 #define sfnfindnext(ffblk)  findnext(ffblk)
 #ifndef dos_open
@@ -130,7 +128,8 @@ unsigned allocMemBlk(const unsigned size, const unsigned mode);
 void freeSysBlk(const unsigned segm);
 
 void myperror(const char *msg);
-void myfnsplit(const char *path, char *drv, char *dir, char *name, char *ext);
+void myfnsplit(const char *path, char *buf,
+               char *drv, char **dir, char **name, char **ext);
 void myfnmerge(char *path,
                const char *drive,
                const char *dir,
@@ -148,6 +147,7 @@ void goxy(const unsigned char x, const unsigned char y);
 void clrcmdline(char * const str, const int maxlen);
 
 void setErrorLevel(int rc);
+void execute(char *first, char *rest, int lh_lf);
 int exec(const char *, char *, const unsigned);
 void restoreSession(void);
 void saveSession(void);

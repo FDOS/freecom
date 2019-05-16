@@ -3,7 +3,6 @@
 set -e
 
 SED=sed
-NASM=nasm
 #workaround for Windows (set to binary mode)
 if [ "$(expr substr $(uname -s) 1 5)" == 'MINGW' ]; then
     SED='sed -b'

@@ -119,12 +119,12 @@ void fillFnam(char *dest, const char * const pattern
  , const char * const fnam)
 { 
 #if 0
-  char *dr, *pa, *fn, *ex;
-  char *pfn, *pex;
+  char *dr;
 #else
-  char dr[MAXDRIVE], pa[MAXDIR], fn[MAXFILE], ex[MAXEXT], pfn[MAXFILE],
-       pex[MAXEXT];
+  char buf[MAXPATH], dr[MAXDRIVE];
 #endif
+  char *pa, *fn, *ex;
+  char *pfn, *pex;
   char dfn[MAXFILE], dex[MAXEXT];
 
   assert(fnam);
@@ -149,8 +149,8 @@ void fillFnam(char *dest, const char * const pattern
     return 0;
   }
 #else
-  myfnsplit(pattern, dr, pa, fn, ex);
-  myfnsplit(fnam, 0, 0, pfn, pex);
+  myfnsplit(pattern, buf, dr, &pa, &fn, &ex);
+  myfnsplit(fnam, dest, 0, 0, &pfn, &pex);
 #endif
 
   fillComp(dfn, fn, pfn, MAXFILE);

@@ -45,43 +45,49 @@ const char * getshortfilename( const char *longfilename )
     static char shortfilename[ 128 ];
     IREGS r;
 
-/* This function causes an invalid opcode when working with NUL */
-/* access() doesn't even work here */
-    if( dos_close( sfn_open( longfilename, 0 ) ) == 0 ) return( longfilename );
+    if (!__supportlfns) return( longfilename );
 
     r.r_ds = FP_SEG( longfilename );
     r.r_si = FP_OFF( longfilename );
     r.r_es = FP_SEG( shortfilename );
     r.r_di = FP_OFF( shortfilename );
+    shortfilename[0] = '\0';
     r.r_cx = 0x8001; /* Get short filename */
     r.r_ax = 0x7160;/* LFN truename function */
 
     intrpt( 0x21, &r );
 
-    return( ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 || !__supportlfns ) ?
+    return( ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 || !shortfilename[0] ) ?
             longfilename : shortfilename );
 }
 
-static int __creat_or_truncate( const char * filename, int mode )
+/* creates or keeps/truncates the LFN in filename
+   if the LFN already exists and code == 0x12, then truncate it
+   if the LFN already exists and code == 0x10, then do nothing
+   returns 1 if the LFN already exists or has been created, else 0
+   LFN handles are avoided for compatibility with buggy LFN implementations,
+   most notably NTVDM in Windows 2000 and XP.
+*/
+static int __creat_or_truncate( const char * filename, int mode, int code )
 {
     int handle;
     IREGS r;
 
-    if( !__supportlfns )
-        return sfn_creat( filename, mode );
+    if( !__supportlfns ) {
+        return 0;
+    }
 
     r.r_ds = FP_SEG( filename );
     r.r_si = FP_OFF( filename );
     r.r_bx = O_WRONLY;
     r.r_cx = mode;
-    r.r_dx = 0x12;
+    r.r_dx = code;
     r.r_ax = 0x716C;
 
     intrpt( 0x21, &r );
 
     if( ( r.r_flags & 1 ) || r.r_ax == 0x7100 )
-        return ( dfnstat( getshortfilename( filename ) ) != 0 ) ?
-                 -1 : sfn_creat( filename, mode );
+        return r.r_ax == 0x50; /* file already exists for error 0x50 */
     handle = r.r_ax;
     /*
      * Win2k always returns handle == 2, which is a bug.
@@ -90,26 +96,24 @@ static int __creat_or_truncate( const char * filename, int mode )
      * ( as it does for '1' and '0', when redirecting stdin and stdout )
      */
     if( handle != 2 )dos_close( handle );
-    return -1;
+    return 1;
 }
 
 #if defined(DEBUG) || defined(FEATURE_CALL_LOGGING)
 FILE * lfnfopen( const char *filename, const char *mode )
 {
-    if( strpbrk( mode, "aw" ) ) {
-        int handle = __creat_or_truncate( filename, 0 );
-        if (handle != -1) dos_close(handle);
-    }
+    /* only used with "at" in debugging code */
+    if( strpbrk( mode, "aw" ) )
+        __creat_or_truncate( filename, 0, 0x10 );
     return( fopen( getshortfilename( filename ), mode ) );
 }
 #endif
 
 int lfn_creat( const char *filename, int attr )
 {
-    int handle = __creat_or_truncate( filename, attr );
-    if (handle != -1)
-	return( handle );      
-    return( sfn_open( getshortfilename( filename ), O_WRONLY ) );
+    if ( __creat_or_truncate( filename, attr, 0x12 ) )
+        return sfn_open( getshortfilename( filename ), O_WRONLY );
+    return sfn_creat( filename, attr );
 }
 
 int lfnrename( const char *oldfilename, const char *newfilename )
@@ -258,7 +262,25 @@ int lfnfindclose( struct lfnffblk *buf )
     return( 0 );
 }
 
-static int lfn_mrc_dir( const char *path, int func )
+int lfnmkdir( const char *path )
+{
+	IREGS r;
+
+    r.r_dx = FP_OFF( path );
+	r.r_ds = FP_SEG( path );
+	r.r_flags = 1;
+    if (__supportlfns) {
+        r.r_ax = 0x7139;
+        intrpt( 0x21, &r );
+	}
+    if ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) {
+        r.r_ax = 0x3900;
+        intrpt( 0x21, &r );
+	}
+    return( -( r.r_flags & 1 ) );
+}
+
+static int lfn_rc_dir( const char *path, int func )
 {
 	IREGS r;
 
@@ -267,26 +289,17 @@ static int lfn_mrc_dir( const char *path, int func )
     r.r_dx = FP_OFF( path );
 	r.r_ds = FP_SEG( path );
     intrpt( 0x21, &r );
-    if( func == 0x7139 && ( ( r.r_flags & 1 ) || r.r_ax == 0x7100 ) ) {
-        r.r_ax = func << 8;
-        intrpt( 0x21, &r );
-    }
     return( -( r.r_flags & 1 ) );
-}
-
-int lfnmkdir( const char *path )
-{
-	return lfn_mrc_dir( path, ( !__supportlfns ) ? 0x3900 : 0x7139 );
 }
 
 int lfnrmdir( const char *path )
 {
-	return lfn_mrc_dir( path, 0x3a00 );
+	return lfn_rc_dir( path, 0x3a00 );
 }
 
 int lfnchdir( const char *path )
 {
-	return lfn_mrc_dir( path, 0x3b00 );
+	return lfn_rc_dir( path, 0x3b00 );
 }
 
 /* #endif */

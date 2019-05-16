@@ -101,6 +101,8 @@ int sfn_open(const char *pathname, int flags)
 	return (result == 0 ? handle : -1);
 }
 
+#endif
+
 int dos_read(int fd, void *buf, unsigned int len)
 {
 	return farread(fd, buf, len);
@@ -108,9 +110,8 @@ int dos_read(int fd, void *buf, unsigned int len)
 
 int dos_write(int fd, const void *buf, unsigned int len)
 {
-	return farwrite(fd, buf, len);
+	return farwrite(fd, (void far *)buf, len);
 }
-#endif
 
 static int sfn_creat_common(const char *pathname, int attr, int new)
 {
@@ -141,5 +142,5 @@ int sfn_creat(const char *pathname, int attr)
 
 int sfn_creatnew(const char *pathname, int attr)
 {
-	return sfn_creat_common(pathname, attr, 1);
+  return sfn_creat_common(pathname, attr, 1);
 }

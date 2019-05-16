@@ -38,6 +38,7 @@ int main(void)
 #ifdef FEATURE_INSTALLABLE_COMMANDS
 	fputs(" icmd", stdout);
 #endif
+	fputs(" 28.com 50.com", stdout);
 	putchar('\n');
 
 	return 0;

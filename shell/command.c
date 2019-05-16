@@ -83,6 +83,53 @@ int swapContext = TRUE;					/* may destroy external context */
 unsigned char __supportlfns = 1;
 #endif
 
+/*
+	stack checking:
+
+	initialize memory at the bottom of stack to some
+	known state (actually its own address)
+
+	later verify that at least some of this memory is still
+	left unchanged.
+*/
+static void **stack_bottom, **stack_unused;
+void stack_check_init()
+{
+  void *current_stack_location;
+  volatile void * volatile *barrier;
+
+  /* place a barrier at the bottom of the stack
+     code assumes 4 K right now */
+  stack_bottom = &current_stack_location - (4*1024 - 50) / sizeof(void *);
+  stack_unused = &current_stack_location;
+
+  for (barrier = stack_bottom; (void **)barrier < stack_unused ; barrier++)
+    *barrier = barrier;
+}
+int stack_check(const char *commandline)
+{
+  void **barrier;
+
+  for (barrier = stack_bottom; barrier < stack_unused; barrier++)
+    if (*barrier != barrier)
+      break;
+
+  if (barrier < stack_unused) {
+    unsigned stack_left = (barrier - stack_bottom) * sizeof(void *);
+
+    if (stack_left < 0x300) {
+      fprintf(stderr, "stack left %u after <%.60s>\n",stack_left,commandline);
+      if (stack_left < 0x100) {
+        fprintf(stderr, "hit any key to continue");
+        cgetchar();
+      }
+    }
+
+    stack_unused = barrier;
+  }
+  return 0;
+}
+
 #ifdef __GNUC__
 int dup(int fd)
 {
@@ -112,7 +159,7 @@ char switchar(void)
 }
 #endif
 
-static void execute(char *first, char *rest)
+void execute(char *first, char *rest, int lh_lf)
 {
   /*
    * This command (in first) was not found in the command table
@@ -129,8 +176,8 @@ static void execute(char *first, char *rest)
   assert(first);
   assert(rest);
 
-  /* check for a drive change */
-  if ((strcmp(first + 1, ":") == 0) && isalpha(*first))
+  /* check for a drive change (not for loadhigh/loadfix) */
+  if (!lh_lf && (strcmp(first + 1, ":") == 0) && isalpha(*first))
   {
   	changeDrive(*first);
     return;
@@ -144,18 +191,20 @@ static void execute(char *first, char *rest)
   /* search through %PATH% for the binary */
   errno = 0;
   fullname = find_which(first);
-  dprintf(("[find_which(%s) returned %s]\n", first, fullname));
 
   if(!fullname) {
     error_bad_command(first);
     return;
   }
 
+  dprintf(("[find_which(%s) returned %s]\n", first, fullname));
+
   /* check if this is a .BAT file */
   extension = strrchr(dfnfilename(fullname), '.');
   assert(extension);
 
-  if(stricmp(extension, ".bat") == 0) {
+  /* loadhigh/loadfix don't do batch files */
+  if(!lh_lf && stricmp(extension, ".bat") == 0) {
     dprintf(("[BATCH: %s %s]\n", fullname, rest));
     batch(fullname, first, rest);
   } else if(stricmp(extension, ".exe") == 0
@@ -380,7 +429,7 @@ static void docommand(char *line)
           error_out_of_memory();
           goto errRet;
         }
-		execute(cp, rest);
+		execute(cp, rest, 0);
 		free(cp);
       }
 
@@ -817,6 +866,8 @@ int process_input(int xflag, char *commandline)
       if(tracethisline)
       	--tracemode;
     }
+
+    stack_check(parsedline);
   }
   while (!canexit || !exitflag);
 
@@ -871,6 +922,8 @@ int main(void)
   /*
    * * main function
    */
+
+  stack_check_init();
 
   if(setjmp(jmp_beginning) == 0 && initialize() == E_None)
     process_input(0, 0);
