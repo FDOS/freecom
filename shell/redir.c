@@ -74,6 +74,10 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
   while ((ch = *dp++ = *sp++) != 0)
     switch (ch)
     {
+      case '^':               /* escape special character */
+        if (is_redir(*sp))
+          dp[-1] = *sp++;
+        break;
       case '"':               /* No redirects inside quotes */
 /*      case '\'':			single quotes don't quote ska*/
         {
