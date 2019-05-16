@@ -159,7 +159,7 @@ char switchar(void)
 }
 #endif
 
-static void execute(char *first, char *rest)
+void execute(char *first, char *rest, int lh_lf)
 {
   /*
    * This command (in first) was not found in the command table
@@ -176,8 +176,8 @@ static void execute(char *first, char *rest)
   assert(first);
   assert(rest);
 
-  /* check for a drive change */
-  if ((strcmp(first + 1, ":") == 0) && isalpha(*first))
+  /* check for a drive change (not for loadhigh/loadfix) */
+  if (!lh_lf && (strcmp(first + 1, ":") == 0) && isalpha(*first))
   {
   	changeDrive(*first);
     return;
@@ -203,7 +203,8 @@ static void execute(char *first, char *rest)
   extension = strrchr(dfnfilename(fullname), '.');
   assert(extension);
 
-  if(stricmp(extension, ".bat") == 0) {
+  /* loadhigh/loadfix don't do batch files */
+  if(!lh_lf && stricmp(extension, ".bat") == 0) {
     dprintf(("[BATCH: %s %s]\n", fullname, rest));
     batch(fullname, first, rest);
   } else if(stricmp(extension, ".exe") == 0
@@ -428,7 +429,7 @@ static void docommand(char *line)
           error_out_of_memory();
           goto errRet;
         }
-		execute(cp, rest);
+		execute(cp, rest, 0);
 		free(cp);
       }
 

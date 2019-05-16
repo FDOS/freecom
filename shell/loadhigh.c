@@ -192,7 +192,7 @@ static int initialise(void)
 static int lh_lf(char *args)
 {
   int rc;
-  char *fullname, *fnam;
+  char *fnam;
 	int i;	
 
   int old_strat = dosGetAllocStrategy();
@@ -206,29 +206,16 @@ static int lh_lf(char *args)
     {
       if ((rc = parseArgs(args, &fnam, &args)) == OK)
       {
-        /* command line was OK - try to find the file */
-
-        fullname = find_which(fnam);
-      free(fnam);
-
-        if (fullname)
-        {
-          /* a file was found - allocate the memory */
-          if (loadfix_flag)
-            rc = loadfix_prepare();
-          else
-            rc = loadhigh_prepare();
-
-          /* finally, execute the file */
-          if (!rc) {
-            rc = exec(fullname, args, 0);
-            setErrorLevel(rc);
-          }
-
-        }
+        /* command line was OK - allocate the memory */
+        if (loadfix_flag)
+          rc = loadfix_prepare();
         else
-          rc = err_file_not_found;
+          rc = loadhigh_prepare();
 
+        /* finally, execute the file */
+        if (!rc)
+          execute(fnam, args, 1);
+        free(fnam);
       }
     }
 

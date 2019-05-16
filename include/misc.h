@@ -147,6 +147,7 @@ void goxy(const unsigned char x, const unsigned char y);
 void clrcmdline(char * const str, const int maxlen);
 
 void setErrorLevel(int rc);
+void execute(char *first, char *rest, int lh_lf);
 int exec(const char *, char *, const unsigned);
 void restoreSession(void);
 void saveSession(void);
