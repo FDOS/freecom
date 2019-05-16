@@ -86,8 +86,19 @@ static int loadfix_flag;         /* Flag: LOADFIX instead of LOADHIGH? */
 /* This is the loadhigh handler */
 int cmd_loadhigh(char *rest)
 {
+        int ret;
+        int old_link = dosGetUMBLinkState();
+        int oldSwapContext = swapContext;
+
         loadfix_flag = 0;
-        return lh_lf(rest);
+        ret = lh_lf(rest);
+
+        /* Restore UMB link state to its original value. */
+
+        dosSetUMBLinkState(old_link);
+        swapContext = oldSwapContext;
+
+        return ret;
 }
 #endif
 
@@ -143,9 +154,6 @@ static int initialise(void)
   optS = 0;
 
   /* Allocate dynamic memory for some arrays */
-  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == 0)
-    return err_out_of_memory;
-
   if ((block = malloc(256 * sizeof(*block))) == 0)
     return err_out_of_memory;
 
@@ -169,6 +177,9 @@ static int initialise(void)
 	}
 #endif
 
+  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == 0)
+    return err_out_of_memory;
+
   /* find the UMB regions */
 	return findUMBRegions();
 }
@@ -184,9 +195,7 @@ static int lh_lf(char *args)
   char *fullname, *fnam;
 	int i;	
 
-  int old_link = dosGetUMBLinkState();
   int old_strat = dosGetAllocStrategy();
-  int oldSwapContext = swapContext;
 
   assert(args);
   assert(umbRegion == 0);
@@ -237,12 +246,9 @@ static int lh_lf(char *args)
 	umbRegion = 0;
 	block = 0;
 
-  /* Restore UMB link state and DOS malloc strategy to their
-   * original values. */
+  /* Restore DOS malloc strategy to its original value. */
 
-  dosSetUMBLinkState(old_link);
   dosSetAllocStrategy(old_strat);
-  swapContext = oldSwapContext;
 
 
   /* if any error occurred, rc will hold the error code */
@@ -563,7 +569,6 @@ static int loadfix_prepare(void)
 
 static int loadfix_prepare(void)
 {	unsigned bl;
-	int old_strat = dosGetAllocStrategy();
 
 	dosSetAllocStrategy(0x0);
 
@@ -578,7 +583,6 @@ static int loadfix_prepare(void)
 		block[allocatedBlocks++] = bl;
 	}
 
-	dosSetAllocStrategy(old_strat);
 	return OK;
 }
 
