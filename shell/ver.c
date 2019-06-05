@@ -35,13 +35,27 @@
 
 #include <stdio.h>
 #include <dos.h>
+#include <string.h>
+#include "suppl.h"
 
 #include "../include/command.h"
 #include "../include/cmdline.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "0.84-pre6 - "
+#if defined(NEC98)
+# define MACHINE " (PC98)"
+#elif defined(IBMPC)
+# define MACHINE " (IBMPC)"
+#else
+# define MACHINE ""
+#endif
+
+const char shellver[] = "0.84-pre6"
+#if defined(DBCS)
+	"_DBCS"
+#endif
+	" - "
 #if defined(__BORLANDC__)
 	"BORLANDC"
 #elif defined(__TURBOC__)
@@ -54,9 +68,27 @@ const char shellver[] = "0.84-pre6 - "
 #ifdef FEATURE_XMS_SWAP
 	" - XMS_Swap"
 #endif
+	MACHINE
 ;
 static const char shelldate[] = __DATE__ " " __TIME__;
 const char shellname[] = "FreeCom";
+
+#if !defined(IBMPC)
+void middle_version(void)
+{
+  char ssvi[16];
+  const char *s = strchr(shellver, ' ');
+  if (s && shellver[0] != ' ' && (s - shellver) < sizeof(ssvi))
+  {
+    memset(ssvi, 0, sizeof(ssvi));
+    memcpy(ssvi, shellver, s - shellver);
+    printf("\n%s %s"
+          MACHINE
+          " [" __DATE__ "]\n",
+          shellname, ssvi);
+  }
+}
+#endif
 
 #if 0
 void short_version(void)
@@ -95,7 +127,17 @@ int cmd_ver (char * rest) {
 #if 0
   short_version();
 #else
-  printf("\n%s version %s [%s]\n", shellname, shellver, shelldate);
+# if !defined(IBMPC)
+  /* note for NEC98:
+     Some version of MSD.exe (bundled with EPSON DOS 6.2) requires that
+     the first line of ver (without option) must be less than 52 chars.
+  */
+  extern int is_parent_msd;
+  if (is_parent_msd)
+    middle_version();
+  else
+# endif
+  printf("\n%s ver %s [%s]\n", shellname, shellver, shelldate);
 #endif
 
 	optR = optW = optD = optC = 0;

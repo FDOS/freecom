@@ -1,0 +1,1565 @@
+# $Id$
+#
+# FreeCOM national customization file
+#
+#	Language: Japanese
+#	Codepage: 932
+#	Author:   Suzu, Guri, akm, lpproj and all contributors
+# 
+# This file is used to generate all the messages that command.com
+# outputs.  This file is the input to the fixstrs program, and it
+# outputs strings.h and strings.dat.  The .DAT file is appended to
+# the command.exe file, and then renamed to command.com.  The .H
+# file contains all the info for the program to retreive the
+# messages.
+#
+# The format of this file is simple.  Blank lines and lines starting
+# with "#" are ignored.
+# Each message starts with a label name that will be used to refer to
+# the message in the program.  A label starts with a colon ":".
+# A label has a version ID attached to it delimited by a hash sign, e.g.:
+#	:TEXT_LABEL#1
+# This version is incremented each time the contents of the string has
+# undergo a larger change. The same language definition may contain the
+# same label up to one time, regardless of the version. FIXSTRS compares
+# both the label and the version ID and both must match.
+# A missing version is assumed as "#0".
+# If there is a percent sign (%) appended to the version, the printf()
+# format string %-style placeholders are compared for the strings. The
+# sign need to be set in DEFAULT.LNG only.
+#
+# All lines after the label are the message until a line with a
+# single "." or "," in the first column.  The difference is the
+# period (".") signifies that there will be a final carrage return when
+# the message is displayed, but a comma does not.
+#
+# The body may contain backslash escape sequences as known from C; there
+# are the usual \# (where '#' is a lowercase letter except 'x' or one of
+# "[]{}?"), \\ (to embed a backslash itself)
+# \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
+# character), \, and \. (to specify a period or comma in the first column
+# of a line) and the single \ at the end of the line to suppress to append
+# a newline character. Note: There is NO octal sequence except the short \0!
+# There is a known bug (or feature): [ignore the very first hash mark]
+#:TEXT_LABEL#2
+#
+#\
+#,
+# Although the first data line appends the newline, the second does not,
+# though the comma removes the newline from the first line.
+
+# Defining prompts
+# Some prompts may cause an user interaction. Those ones should be in sync
+# with the issued text. To define how to interprete a pressed key, they
+# are mapped into metakeys like that: [ignore first hash sign]
+
+## Return value: a -> Yes; else -> No
+#:PROMPT_YES_NO#1
+#YyNn\n\r{CBREAK}
+#aabb b b       b
+# (Yes/No) ? \
+#.
+
+# All strings, which label start with "PROMPT_", are parsed as prompts.
+# The first two lines of the body are special; the first one enumerates all
+# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# range from 'a' through 'z'; spaces are ignored; everything else cause
+# an error. The comment preceeding the prompt definition associates the
+# metakeys with their meaning.
+# The remaining lines of the body contain the text to be displayed.
+#
+# Above example defines a native Yes/No prompt with a space behind the question
+# mark and no appended newline.
+# The metakey 'a' means "User answered with 'Yes'" and 'b' means no.
+# The keys 'Y' and 'y' are mapped to metakey 'a' (aka Yes) and the keys
+# 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
+# The spaces between the 'b's in the second line had been inserted to
+# align them with the corresponding keys of the first line, hence in order
+# to enhance readibility of the association between the pressed keys and their
+# mapping into a metakey.
+#
+# The first line (pressed keys) has to enumerate the ASCII value as returned
+# by DOS or BIOS (INT-10); special keys normally expressed with ASCII code zero,
+# but a non-zero scancode are NOT supported; this limit includes for instance
+# the function keys F1 through F12 and the cursor keys and it is not possible
+# to differ between the number pad and normal keys.
+# The keys may be enumerated by their ASCII character, by a backslash sequence,
+# or a symbolic name enclosed in curly brackets (see FIXSTRS.C "symkeys[]"
+# array about the supported symnames).
+
+
+#
+#  These are error messages
+#
+## Issued if a single character option is unknown
+:TEXT_ERROR_INVALID_SWITCH#0%
+無効なスイッチです. - /%c
+.
+
+## Issued if a longname option is unknown
+:TEXT_ERROR_INVALID_LSWITCH#0%
+無効なスイッチです. - /%s
+.
+
+## Issued if the context, the type of argument etc. is invalid
+:TEXT_ERROR_ILLFORMED_OPTION#0%
+不正なオプションです: '%s'
+.
+
+:TEXT_ERROR_OPT_ARG#0%
+オプション '%s' には引数を指定できません.
+.
+
+:TEXT_ERROR_OPT_NOARG#0%
+オプション '%s' には引数を指定しなければなりません.
+.
+
+:TEXT_INVALID_NUMBER#0%
+'%s' で無効な数値が指定されています.
+.
+
+:TEXT_ERROR_CLOSE_QUOTE#0%
+クォートで閉じられていません: %c
+.
+
+:TEXT_ERROR_TEMPFILE
+テンポラリファイルを作成できません
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
+パラメータが多すぎます. - '%s'
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS
+パラメータが多すぎます.
+.
+
+:TEXT_ERROR_INVALID_PARAMETER#0%
+無効なパラメータです. - '%s'
+.
+
+:TEXT_ERROR_PATH_NOT_FOUND
+パスが見つかりません.
+.
+
+:TEXT_ERROR_FILE_NOT_FOUND
+ファイルが見つかりません.
+.
+
+:TEXT_ERROR_SFILE_NOT_FOUND#0%
+ファイルが見つかりません. - '%s'
+.
+
+:TEXT_ERROR_REQ_PARAM_MISSING#0%
+必要なパラメータが足りません.
+.
+
+:TEXT_ERROR_INVALID_DRIVE#0%
+%c: は無効なドライブです.
+.
+
+:TEXT_ERROR_BADCOMMAND#2%
+無効なコマンド, またはファイル名です. - '%s'
+.
+
+:TEXT_ERROR_OUT_OF_MEMORY
+メモリが足りません.
+.
+
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+DOSメモリの確保に失敗しました.
+.
+
+:TEXT_ERROR_CANNOTPIPE
+パイプできません！テンポラリファイルを作成できません！
+.
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE#0%
+バッチファイル '%s' の #%ld 行目は長すぎます.
+.
+
+:TEXT_ERROR_BFILE_VANISHED#0%
+バッチファイル '%s' が見つかりません.
+.
+
+:TEXT_ERROR_BFILE_LABEL#0%
+バッチファイル '%s' 内にラベル '%s' がありません.
+.
+
+:TEXT_ERROR_DIRFCT_FAILED#1%
+%s は '%s' が原因で失敗しました.
+.
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ENV_VAR#0%
+環境変数 '%s' が設定できません. 環境領域が一杯になっていませんか？
+.
+:TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
+環境変数 '%s' が見つかりません.
+.
+:TEXT_ERROR_NO_ENVIRONMENT
+環境領域がありません. 環境メモリ不足かもしれません.
+オプション /E を指定してください.
+.
+
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1%
+エイリアス '%s' が設定できません. エイリアス領域が一杯になっていませんか？
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1%
+エイリアス '%s' が見つかりません.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+エイリアス領域がありません. メモリ不足かもしれません.
+.
+
+:TEXT_ERROR_SYNTAX_STR#0%
+構文エラーです. - '%s'
+.
+
+:TEXT_ERROR_SYNTAX
+構文エラーです.
+.
+
+:TEXT_ERROR_FILENAME_TOO_LONG#0%
+ファイル名が長すぎます. - '%s'
+.
+
+:TEXT_ERROR_SELFCOPY#0%
+'%s' それ自体には複写できません.
+.
+
+:TEXT_ERROR_COMMAND_TOO_LONG
+エイリアス展開後のコマンドラインが長すぎます！
+.
+
+:TEXT_ERROR_LINE_TOO_LONG
+コマンドラインが長すぎます. 125文字を超えました.
+.
+
+:TEXT_ERROR_HISTORY_SIZE#1%
+'%s' は無効なヒストリサイズです.
+.
+
+:TEXT_HISTORY_EMPTY#1
+コマンドラインのヒストリが空です.
+.
+
+
+:TEXT_ERROR_BAD_MCB_CHAIN
+MCB chainが壊れたか, MS-DOSと互換性の無いシステムです.
+.
+
+:TEXT_ERROR_UNDEFINED_ERROR#0%
+不明なエラー %d.
+.
+
+:TEXT_ERROR_REGION_WARNING#0%
+%d は無効なメモリ領域です - 無視されます.
+.
+
+:TEXT_ERROR_ON_OR_OFF
+ON か OFF を指定してください.
+.
+
+:TEXT_ERROR_BAD_VARIABLE
+無効な変数指定です.
+.
+
+:TEXT_ERROR_IN_MISSING#1
+FOR: IN が足りません.
+.
+
+:TEXT_ERROR_MISSING_PARENTHESES#1
+かっこが片方もしくは両方ともありません.
+.
+
+:TEXT_ERROR_DO_MISSING#1
+FOR: DO が足りません.
+.
+
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+FOR: DO に続くコマンドがありません.
+.
+
+:TEXT_ERROR_REDIRECT_FROM_FILE#0%
+ファイル '%s' からの入力をリダイレクトできません.
+.
+
+:TEXT_ERROR_REDIRECT_TO_FILE#0%
+ファイル '%s' への出力をリダイレクトできません.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+無意味なリダイレクションです.
+.
+
+:TEXT_ERROR_INVALID_DATE
+無効な日付です.
+.
+
+:TEXT_ERROR_INVALID_TIME
+無効な時刻です.
+.
+
+:TEXT_ERROR_NO_GOTO_LABEL
+GOTOのラベルが指定されていません.
+.
+
+:TEXT_CTTY_NOTIMPLEMENTED
+CTTYはこのCOMMAND.COMでは削除されています.
+.
+
+:TEXT_ERROR_NORW_DEVICE#0%
+読み書きデバイス '%s' が無効か, もしくは存在しません.
+.
+
+:TEXT_ERROR_CTTY_DUP#0%
+ファイルディスクリプタをTTY '%s' に変更できませんでした.
+.
+
+:TEXT_ERROR_L_NOTIMPLEMENTED
+/L は実装されていません.
+.
+
+:TEXT_ERROR_U_NOTIMPLEMENTED
+/U は実装されていません.
+.
+
+:TEXT_ERROR_WRITING_DEST
+書き込み失敗エラーです.
+.
+
+:TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
+読み込み元 '&s' を開くことができません.
+.
+
+:TEXT_ERROR_OPEN_FILE#0%
+ファイル '%s' を開くことができません.
+.
+
+:TEXT_ERROR_READ_FILE#0%
+ファイル '%s' からの読み込みができません.
+.
+
+:TEXT_ERROR_WRITE_FILE#0%
+ファイル '%s' への書き込みができません.
+.
+
+:TEXT_ERROR_LEADING_PLUS
+引数の前にプラス記号 '+' を書くことはできません.
+.
+
+:TEXT_ERROR_TRAILING_PLUS
+プラス記号 '+' の後に引数を続けることはできません.
+.
+
+:TEXT_ERROR_NOTHING_TO_DO
+コピーを行いませんでした.
+.
+
+:TEXT_ERROR_COPY
+COPYに失敗しました.
+.
+
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: ファイル名が足りません.
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: 数値が足りません.
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: 無効な数値です.
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: コマンドがありません.
+.
+
+:TEXT_NOT_IMPLEMENTED_YET
+申し訳ありませんが, まだ実装されていません.
+.
+
+:TEXT_FAILED_LOAD_STRINGS
+メモリにメッセージを読み込めません.
+.
+
+:TEXT_MSG_NOTIMPLEMENTED
+オプション /MSG はこのCOMMAND.COMでは削除されています.
+.
+
+:TEXT_MSG_ITEMS_DISPLAYED#1%
+%u 項目を表示しました.
+.
+
+:TEXT_CORRUPT_COMMAND_LINE
+不正なコマンドラインです. この内部エラーはCOMMAND.COMが動作しているシステムに
+関係しています. ぜひこのエラーを報告してください.
+.
+
+:TEXT_QUOTED_C_OR_K#1
+オプション /C と /K は指定できません. 無視されます.
+.
+
+:TEXT_INIT_FULLY_QUALIFIED#1%
+COMMAND.COMのパスは絶対パスで与えられなければなりません.
+ドライブ文字とそれに続く \\ から始める必要があります.
+例： C:\\FDOS
+
+COMMAND.COMは現在以下のパスを想定しています.
+%s
+.
+
+:TEXT_ERROR_RESTORE_SESSION
+セッション情報が保存できませんでした. ローカルな設定は全部失われます.
+この問題の理由については, 上記のエラーメッセージを参照してください.
+.
+
+:TEXT_ERROR_SAVE_SESSION
+現在のセッション情報はこのプログラムを呼び出している間, 保護されません.
+この問題の理由については, 上記のエラーメッセージを参照してください.
+.
+
+:TEXT_ERROR_CWD_FAILED#1%
+%c: ドライブの応答がありません.
+.
+
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+スワップ失敗: エイリアスに割り当てられているメモリが多すぎます.
+.
+
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+スワップ失敗: farメモリを割り当てられませんでした.
+.
+
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+エイリアス領域が足りません.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1%
+エイリアス '%s' は存在しません
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+エイリアスの展開に失敗しました.
+.
+
+:TEXT_ALIAS_INVALID_NAME#1%
+エイリアス名 '%s' は無効です.
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+コンテキストモジュールまたは致命的エラーハンドラが読み込めません.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+コンテキストメモリ不足です.
+エラーが続くようであれば, ヒストリやディレクトリスタックの内部バッファを
+増やすことを考えてください.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1%
+コンテキストサイズが合計 %lu になり, 最大長を超えています.
+コンテキストサイズを %u に変更します.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+コンテキストにステータス情報を追加できませんでした.
+このエラーはメモリ内容の破壊, もしくはコンテキスト最小サイズの誤検出に
+よるものと思われます.
+ぜひこのエラーをFreeCOMの管理人(freecom@freedos.org)に報告してください.
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+スワップ後にコンテキストが消失しました.
+コンテキストは作成し直されますが, エイリアスなどは失われます.
+.
+
+:TEXT_ERROR_PERMISSION_DENIED#1%
+%s: アクセスは拒否されました.
+.
+
+:TEXT_ERROR_NO_SUCH_FILE#1%
+%s: そのようなファイルまたはディレクトリは存在しません.
+.
+
+:TEXT_ERROR_UNKNOWN_ERROR#1%
+%s: 不明なエラーです.
+.
+
+#
+# Informational messages
+#
+
+:TEXT_MSG_PAUSE#1
+継続する場合は, 何かキーを押してください . . .\
+.
+
+:TEXT_MSG_HISTORY_SIZE#0%
+ヒストリのサイズは %d バイトです.
+.
+
+:TEXT_MSG_DOSKEY
+DOSKEY機能はすでにシェルによって有効になっています.
+.
+
+:TEXT_MSG_ECHO_STATE#0%
+ECHO は %s です.
+.
+
+:TEXT_MSG_VERIFY_STATE#0%
+VERIFY は %s です.
+.
+
+:TEXT_MSG_FDDEBUG_STATE#0%
+DEBUGの出力は %s です.
+.
+:TEXT_MSG_FDDEBUG_TARGET#0%
+DEBUGの出力は '%s' に出力されます.
+.
+
+:TEXT_MSG_BREAK_STATE#0%
+BREAKは %s です.
+.
+
+:TEXT_MSG_LFNFOR_STATE#0%
+LFNFORは %s です.
+.
+
+:TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
+LFN 補完は %s です.
+.
+
+:TEXT_MSG_CURRENT_DATE#0%
+現在の日付は %s です.
+.
+
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN#1%
+新しい日付を入力してください(月%s日%s年): \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1%
+新しい日付を入力してください(日%s月%s年): \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1%
+新しい日付を入力してください(年%s月%s日): \
+.
+
+:TEXT_MSG_CURRENT_TIME#0%
+現在の時刻は %s です.
+.
+
+:TEXT_STRING_PM#1
+ pm\
+.
+:TEXT_STRING_AM#1
+ am\
+.
+
+:TEXT_MSG_ENTER_TIME#1
+新しい時刻を入力してください: \
+.
+
+# src-file <operation> target-file
+:TEXT_MSG_COPYING#0%
+%s %s %s
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (Y/N) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1%
+YyNn{CR}{LF}{CBREAK}
+aabb   b   b       b
+ディレクトリ '%s' のすべてのファイルが削除されます.
+よろしいですか(Y/N)? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+YyNn{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Yes=ENTER, No=ESC] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+#	by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1%
+YyNnAaQq{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Break (STOP) が押されました.\r
+バッチファイル '%s' を中止しますか(Yes/No/All) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1%
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+'%s' を上書きしますか(Yes/No/All/Quit) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_APPEND_FILE#1%
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+'%s' に追加しますか(Yes/No/All/Quit) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1%
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+'%s' を削除しますか(Yes/No/All/Quit) ? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<unkown>>\
+.
+
+:TEXT_DIRSTACK_EMPTY
+ディレクトリスタックは空です.
+.
+
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME#1%
+ ドライブ %c のボリューム \
+.
+:TEXT_DIR_HDR_VOLUME_STRING#0%
+は %s です.
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+ラベルはありません.
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER#0%
+ ボリュームシリアル番号は %04X-%04X です.
+.
+:TEXT_DIR_FTR_FILES#1%
+%10s 個のファイル\
+.
+:TEXT_DIR_FTR_BYTES#0%
+   %12s バイト
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+表示されたファイルの総数:
+.
+:TEXT_DIR_FTR_DIRS#1%
+%10s ディレクトリ
+.
+:TEXT_DIR_FTR_BYTES_FREE#0%
+ %15s バイトの空き容量があります.
+.
+:TEXT_DIR_DIRECTORY#0%
+%s のディレクトリ
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE#0%
+ %s のディレクトリ
+.
+:TEXT_DIR_LINE_FILENAME_WIDE#1%
+%-15s\
+.
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE#1%
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1%
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <DIR> \
+.
+:TEXT_DIR_LINE_SIZE#1%
+   %10s \
+.
+
+:TEXT_FILE_COMPLATION_DISPLAY#1%
+%-14s\
+.
+
+:TEXT_MSG_PATH#0%
+PATH=%s
+.
+:TEXT_MSG_PATH_NONE#1
+PATH が設定されていません.
+.
+
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+日\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+月\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+火\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+水\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+木\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+金\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+土\
+.
+
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+ファイルを削除できません.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+ファイルを削除しました.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1%
+%u 個のファイルを削除しました.
+.
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+利用できるコマンド:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+利用できる機能:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[エイリアス] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[拡張入力] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[ヒストリ] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[ファイル名補完] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[スワップ] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[ログの取得] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+[ディレクトリ履歴] \
+.
+:TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
+[LFN] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[カーネルスワップ] \
+.
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[XMSスワップ] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[標準スワップ] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[コマンドインストール] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+[DOS NLS] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[ディレクトリスタック (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[FreeCOMデバッグ] \
+.
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
+
+F8を押すとトレースモード, F5で %s をバイパスします... \
+.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
+'%s' をバイパスしています.
+.
+
+:TEXT_MSG_VER_DOS_VERSION#0%
+DOS version %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+FreeDOS kernel (build 1933 or prior)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS#0%
+FreeDOS kernel version %d.%d.%d
+.
+
+
+:TEXT_MSG_VER_WARRANTY
+Copyright (C) 1994-2005 Tim Norman and others.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+Send bug reports to freedos-freecom@lists.sourceforge.net.
+Updates are available from http://freedos.sourceforge.net/freecom
+
+日本語メッセージ対応 水城 珠洲
+日本語メッセージに関するバグレポートはminashirojp@yahoo.co.jpに送ってください.
+最新版は http://dos.minashiro.net/freecomj.html から入手できます.
+
+日本語メッセージ 更新ビルド作成 : akm (http://astra.digi2.jp).
+
+FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs)
+.
+
+:TEXT_MSG_VER_REDISTRIBUTION
+Copyright (C) 1994-2005 Tim Norman and others.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+Send bug reports to freedos-freecom@lists.sourceforge.net.
+Updates are available from http://freedos.sourceforge.net/freecom
+
+日本語メッセージ対応 水城 珠洲
+日本語メッセージに関するバグレポートはminashirojp@yahoo.co.jpに送ってください.
+最新版は http://dos.minashiro.net/freecomj.html から入手できます.
+
+日本語メッセージ 更新ビルド作成 : akm (http://astra.digi2.jp).
+
+FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs)
+.
+
+:TEXT_MSG_VER_DEVELOPERS
+
+The FreeDOS Command Shell developed by many developers, please refer
+to the enclosed HISTORY.TXT file.
+
+Currently maintained by Steffen Kaiser mailto:freecom@freedos.org
+
+Send bug reports to freedos-freecom@lists.sourceforge.net.
+Updates are available from http://freedos.sourceforge.net/freecom
+
+FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs)
+.
+
+
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+シェルを終了しようとしましたが, (通常は /P オプションが有効なため)\r
+終了が禁じられています.\r
+システムを再起動するか, マルチタスク環境で実行している場合は手動で\r
+プロセス／タスクを削除する必要があります.\r
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+FreeCOMの実行ファイルが見つかりません.
+COMMANDの先頭引数には, COMMAND.COMの完全なパスを指定する必要があります.
+例:
+C:\\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1%
+環境セグメント         : 最大 %5u バイト; 空き %5u バイト
+.
+:TEXT_MEMORY_CONTEXT#1%
+コンテキストセグメント : 最大 %5u バイト; 空き %5u バイト
+.	
+:TEXT_MEMORY_HEAP#1%
+ヒープ領域             : 空き %5lu バイト
+.
+:TEXT_MEMORY_CTXT_ALIAS#1%
+エイリアス             : 最大 %5u バイト, 現在 %5u バイト, %5u 個の登録
+.
+:TEXT_MEMORY_CTXT_HISTORY#1%
+ヒストリ               : 最大 %5u バイト, 現在 %5u バイト, %5u 個の登録
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1%
+ディレクトリスタック   : 最大 %5u バイト, 現在 %5u バイト, %5u 個の登録
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1%
+過去のﾃﾞｨﾚｸﾄﾘのｷｬｯｼｭ   : %5u バイト使用中, %5u 個の登録
+.
+:TEXT_MEMORY_CTXT_BATCH#1%
+バッチのネスト         : %5u バイト使用中, %5u 個の登録
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1%
+スワップ情報           : %5u バイト使用中, %5u 個の登録
+.
+
+
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+現在のコードページを取得できません.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+現在のコードページを変更できません.
+.
+:TEXT_DISPLAY_CODEPAGE#1%
+現在のコードページは %u です.
+システム標準のコードページは %u です.
+.
+
+#
+# Command help text
+#
+
+:TEXT_CMDHELP_ALIAS
+エイリアスの表示, 設定, 削除を行ないます.
+
+ALIAS [variable[=][string]]
+
+  variable  エイリアス名.
+  string    エイリアスに割り付ける文字列.
+
+
+パラメータを指定しなければ, エイリアスの一覧を表示します.
+.
+
+:TEXT_CMDHELP_BEEP
+ビープ音を鳴らします.
+.
+
+:TEXT_CMDHELP_BREAK
+拡張CTRL+Cチェックを有効, または無効にします.
+
+BREAK [ON | OFF]
+
+パラメータを指定しなければ, 現在の BREAK の設定を表示します.
+.
+
+:TEXT_CMDHELP_CALL#1
+バッチファイルを呼び出します.
+
+CALL [/S | /N] [/Y] [drive:][path]filename [batch-parameters]
+
+  batch-parameters   呼び出されるバッチファイルが必要とするパラメータ
+
+  /S で FreeCOMの強制スワップ, /N でスワップ禁止を指定します.
+  /Y でコマンド実行中のトレースモードが有効になります.
+.
+
+:TEXT_CMDHELP_CD
+カレントディレクトリの表示, または変更を行ないます.
+
+CHDIR [drive:][path]
+CHDIR[..]
+CD [drive:][path]
+CD[..]
+CD -
+
+  ..   親ディレクトリへ変更します.
+  -    もし, ひとつ前のディレクトリに変更する機能が有効であれば,
+       ひとつ前のディレクトリに変更します.
+
+CD drive:と入力すると, 指定されたドライブのカレントディレクトリを表示します.
+パラメータを指定しなければ, カレントドライブのカレントディレクトリを表示します.
+CDDを参照してください.
+.
+
+:TEXT_CMDHELP_CDD
+カレントディレクトリとドライブを表示, または変更します.
+
+CDD [drive:][path]
+CDD[..]
+
+  ..   親ディレクトリへ変更します.
+  -    もし, ひとつ前のディレクトリに変更する機能が有効であれば,    
+       ひとつ前のディレクトリに変更します.
+
+もしドライブ名が指定されていれば, 現在の作業ドライブが変更されます.
+これが "CHDIR" との唯一の違いです.
+パラメータを指定しなければ, カレントドライブとカレントディレクトリを表示します.
+.
+
+:TEXT_CMDHELP_CHCP
+コードページ番号を表示, または設定します.
+
+CHCP [nnn]
+
+  nnn   コードページ番号.
+
+パラメータを指定しなければ, 現在のコードページ番号を表示します.
+.
+
+:TEXT_CMDHELP_CLS
+画面を消去します.
+
+CLS
+.
+
+:TEXT_CMDHELP_COMMAND
+FreeDOS コマンドシェルを新たに起動します.
+
+COMMAND [[drive:]path] [device] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+                       [/LOW] [/Y [/[C|K] command]]
+  [drive:]path  COMMAND.COMがあるディレクトリ.
+  device        コマンドの入出力を行うデバイス.
+  /E:nnnnn      環境領域の初期サイズを nnnnn バイトに設定.
+                (nnnnnは 256 から 32768 の間)
+  /L:nnnn       内部バッファ長を nnnn バイトに設定. (同時に/Pが必須).
+                (nnnnは 128 から 1024 の間)
+  /U:nnn        コマンド入力バッファを nnn バイトに設定. (同時に/Pが必須).
+                (nnnは 128 から 256 の間)
+  /P            新しいコマンドシェルを常駐させます. (終了できません)
+  /MSG          エラーメッセージをメモリに読み込みます. (同時に/Pが必須).
+  /LOW          コマンドシェルの常駐データを下位メモリへ強制的に
+                読み込ませます.
+  /Y            /C または /K で指定されたバッチプログラムを
+                ステップ実行します.
+  /C command    指定されたコマンドを実行し, 終了します.
+  /K command    指定されたコマンドを実行し, 動作を継続します.
+.
+
+:TEXT_CMDHELP_COPY
+ひとつ以上のファイルを別の場所へコピーします.
+
+COPY [/A | /B] source [/A | /B] [+ source [/A | /B] [+ ...]] [destination
+  [/A | /B]] [/V] [/Y | /-Y]
+
+  source       コピー元のファイル.
+  /A           ASCII テキストファイル指定.
+  /B           バイナリファイル指定.
+  destination  コピー先のディレクトリ, またはファイル名.
+  /V           コピー先ファイルが正しく書き込まれているかベリファイします.
+  /Y           コピー先ファイルの上書き時に確認を行いません.
+  /-Y          コピー先ファイルの上書き時に確認を行います.
+
+スイッチ /Y は環境変数 COPYCMD で指定することもできます.
+この設定はコマンドライン上での /-Y 指定で上書きできます.
+
+ファイルを結合するには、コピー元に (ワイルドカードや file1+file2+file3 の
+書式で) 複数のファイルを指定し、コピー先にひとつのファイルを指定します. 
+.
+
+:TEXT_CMDHELP_CTTY
+システムを操作するのに使う端末デバイスを変更します.
+
+CTTY device
+
+  device   COM1のような, 使用したい端末デバイスを指定します.
+.
+
+:TEXT_CMDHELP_DATE#1
+日付の表示, または変更を行ないます.
+
+DATE [/D] [date]
+
+パラメータを指定しなければ, 現在の日付を表示し, 日付設定の入力待ちになります.
+日付を変えない場合は, そのままENTERを押してください.
+
+/D 設定用のプロンプトを表示しません.
+.
+
+:TEXT_CMDHELP_DEL#2
+ファイル(複数可)を削除します.
+
+DEL [drive:][path]filename [/P] [/V]
+ERASE [drive:][path]filename [/P] [/V]
+
+  [drive:][path]filename  削除するファイルを指定します.
+                          ワイルドカードで複数のファイルも指定できます.
+  /P        ファイルを削除する前にプロンプトで確認します.
+  /V        削除するファイルを表示します.
+.
+
+:TEXT_CMDHELP_DIR#4
+ディレクトリ内のファイルとサブディレクトリの一覧を表示します.
+
+DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
+  [/O[[:]sortorder]] [/S] [/B] [/L] [/V]
+
+  [drive:][path][filename]
+        表示したいドライブ, ディレクトリまたはファイルを指定します.
+         (拡張ファイル指定, または複数のファイル指定も可能です)
+ /P     一画面ごとに停止します.
+ /W     ワイド形式 (ファイル名のみを横に詰める) で表示します.
+ /A     表示するファイルの属性を指定します. (デフォルト: /ADHSRA)
+   属性 D  ディレクトリ         R  読み込み専用         H  隠しファイル
+        A  アーカイブファイル   S  システムファイル     -  直後の指定と逆属性
+ /O     ファイルの表示順序を変更します. (デフォルト: /ONG)
+   順番  N      ファイル名(アルファベット) S  ファイルサイズ(小さいものから)
+         E      拡張子(アルファベット)     D  時間(新しいものから)
+         G      ディレクトリから           -  直後の指定を逆順で
+         U      並べ替えない
+ /S     指定されたディレクトリと, その下のすべてのサブディレクトリ中にある
+        ファイルを表示します.
+ /B     ファイル名のみを表示します. (/S 同時指定の場合はフルパス名)
+ /L     ファイル名を小文字で表示します.
+ /Y     年を四桁で表示します.
+環境変数 DIRCMD でスイッチを指定できます. コマンドライン中で各スイッチの前に
+ -(ハイフン)つきで指定すると設定を上書きできます. (例: /-W)
+.
+
+:TEXT_CMDHELP_DOSKEY#1
+外部ユーティリティDOSKEYは, FreeCOMに取り込まれました. 上下カーソルキー
+を用いて履歴を呼び出し, 内容を表示します. 上下カーソル, END, HOMEキーを
+用いてコマンドライン上を移動したり, INSERTキーで挿入と上書きを切り替え
+ながら編集することができます.
+ファイル名の補完にはTABキーが使えますし, 二度押せば補完候補のファイルを
+一覧表示することができます.
+.
+
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
+コマンドラインの編集, 履歴呼び出し, マクロの作成を行ないます.
+
+DOSKEY [/switch ...] [macroname=[text]]
+
+  /BUFSIZE:size マクロとコマンドバッファーのサイズを指定します. (初期値:512)
+  /ECHO:on|off  マクロ展開の表示の有効／無効を指定します.       (初期値:on)
+  /FILE:file    マクロリストを記載したファイルを指定します.
+  /HISTORY      メモリに格納されたすべてのコマンドを表示します.
+  /INSERT       コマンドラインへの入力が挿入モードになります.
+  /KEYSIZE:size キーボードtype-aheadバッファサイズを指定します. (初期値:15)
+  /LINE:size    ライン編集バッファの最大数を指定します.         (初期値:128)
+  /MACROS       すべてのDOSKEYマクロを表示します.
+  /OVERSTRIKE   コマンドラインへの入力が上書きモードになります. (初期値)
+  /REINSTALL    DOSKEYを再インストールします.
+  macroname     作成するマクロ名を指定します.
+  text          マクロに対応するコマンドを指定します.
+
+  上下カーソル コマンドの履歴を呼び出します.
+    エスケープ 現在のコマンドを削除します.
+        F7キー コマンドの履歴を表示します.
+    ALT+F7キー コマンドの履歴を削除します.
+[文字列]F8キー [文字列]で始まるコマンドを検索します.
+        F9キー 番号でコマンドを選択します.
+    ALT+F7キー マクロ定義を削除します.
+
+以下にDOSKEYマクロで使用できるコードを示します.
+  $T     コマンドセパレータ: マクロで複数のコマンドを記述できます.
+  $1-$9  バッチパラメータ: バッチファイルの%1-%9と同等です.
+  $*     コマンドライン上でマクロ名に続くテキストで置き換えられるシンボル.
+.
+
+:TEXT_CMDHELP_ECHO
+メッセージの表示, もしくはコマンドエコーの有無の設定を行います.
+
+  ECHO [ON | OFF]
+  ECHO [message]
+
+パラメータを指定しなければ, 現在のECHOの設定を表示します.
+.
+
+:TEXT_CMDHELP_EXIT
+FreeDOSコマンドシェルを終了します. (/P オプションつきで起動していない場合)
+
+EXIT
+.
+
+:TEXT_CMDHELP_FOR
+ファイルセットの各ファイルに対して, 指定コマンドを実行します.
+
+FOR %variable IN (set) DO command [command-parameters]
+
+  %variable           置き換えられるパラメータを指定します.
+  (set)               ひとつ以上のファイルセット. ワイルドカードも使えます.
+  command             それぞれのファイルに対して実行すべきコマンド.
+  command-parameters  コマンドに必要なパラメータやスイッチ.
+
+バッチファイル内でFOR文を使用するときは, %variable のかわりに
+%%variable と指定します.
+
+例:
+  FOR %f IN (---start--- a*.* ---end---) DO ECHO - %f -
+.
+
+:TEXT_CMDHELP_GOTO
+バッチファイル内で, ラベルで指定された行へ処理を移します.
+
+GOTO label
+
+  label   バッチファイル内にあるラベルを指定します.
+
+コロン (:) で始まる行はラベルとみなされます.
+.
+
+:TEXT_CMDHELP_HISTORY#1
+ヒストリバッファの表示, もしくはサイズ変更を行います.
+
+HISTORY [size]
+
+"size"を指定しなければ, コマンドラインヒストリバッファの内容が表示されます.
+サイズを指定すると, ヒストリバッファのサイズが変更されます.
+.
+
+:TEXT_CMDHELP_IF
+バッチファイルで条件判定を行います.
+
+IF [NOT] ERRORLEVEL number command
+IF [NOT] string1==string2 command
+IF [NOT] EXIST filename command
+
+  NOT               条件が成り立たないときにのみコマンドを実行します.
+  ERRORLEVEL number 最後に実行されたプログラムの終了コードが, 指定された
+                    数以上であれば, コマンドを実行します.
+  command           条件が成立した際に実行するコマンド.
+  string1==string2  文字列が一致した場合にコマンドを実行します.
+  EXIST filename    ファイル名で指定されたファイルが存在すれば, コマンド
+                    を実行します.
+.
+
+:TEXT_CMDHELP_LFNFOR
+FORコマンドやファイル名補完で LFN (長いファイル名) の有効／無効を設定します.
+
+LFNFOR [ON | OFF]
+LFNFOR COMPLETE [ON | OFF]
+
+パラメータを付けずにLFNFORまたはLFNFOR COMPLETEを実行すると, 現在のLFNFORの
+状態を表示します.
+.
+
+:TEXT_CMDHELP_LH
+上位メモリ空間 (UMB) にプログラムを読み込みます.
+
+LOADHIGH [drive:][path]filename [parameters]
+LOADHIGH [/L:region1[,minsize1][;region2[,minsize2]...] [/S]]
+         [drive:][path]filename [parameters]
+
+/L:region1[,minsize1][;region2[,minsize2]]...
+        region1 には最初の記憶領域候補の番号を指定します. 必要ならば,
+        region1の最小空きメモリ容量を minsize1 に指定します.
+        region2, minsize2 には, 2番目の記憶領域の番号, そして必要なら
+        最小空きメモリ容量を指定します.
+        領域候補はいくつでも指定することができます.
+
+/S      プログラムのロード時, UMBの空き容量を指定された最小空き容量に
+        見せかけます.
+
+[drive:][path]filename
+        プログラムの場所と名前を指定します.
+.
+
+:TEXT_CMDHELP_LOADFIX
+プログラムをメモリの先頭64K以降の位置に読み込んで, 実行します.
+
+LOADFIX [drive:][path]filename
+
+もし, 低位メモリにロードしようとして「パックされたファイルが不正です」
+ (Packed file is corrupt) というメッセージを返されたら, LOADFIXを
+使用してください.
+.
+
+:TEXT_CMDHELP_MD
+ディレクトリを作成します.
+
+MKDIR [drive:]path
+MD [drive:]path
+.
+
+:TEXT_CMDHELP_PATH
+実行ファイル検索パスの表示, もしくは設定を行います.
+
+PATH [[drive:]path[;...]]
+PATH ;
+
+PATH ; を実行すると検索パスの設定がすべてクリアされ, コマンドシェルは
+カレントディレクトリのみを検索するようになります.
+パラメータを指定しなければ, 現在のパス設定を表示します.
+.
+
+:TEXT_CMDHELP_PAUSE
+バッチファイルのプロセスを停止し, 「継続する場合は, 何かキーを押してください」
+というメッセージ, もしくは指定されたメッセージを表示します.
+
+PAUSE [message]
+.
+
+:TEXT_CMDHELP_PROMPT
+コマンドプロンプトを変更します.
+
+PROMPT [text]
+
+  text    コマンドプロンプトを指定します.
+
+プロンプトは通常の文字と, 以下に示す特殊コードで構成されます.
+
+  $Q   = (等号)
+  $$   $ (ドル記号)
+  $T   現在の時刻
+  $D   現在の日付
+  $P   現在のドライブとディレクトリ
+  $V   FreeDOSコマンドシェルのバージョン番号
+  $N   現在のドライブ
+  $G   > (不等号：大なり)
+  $L   < (不等号：小なり)
+  $B   | (パイプ記号)
+  $H   バックスペース (直前の一文字削除)
+  $E   エスケープコード (ASCIIコード 27)
+  $_   改行
+
+パラメータを指定しなければ, 初期状態へ戻します.
+(プロンプトの状態は, 環境変数 PROMPT に格納されています)
+.
+
+:TEXT_CMDHELP_PUSHD
+現在のディレクトリをディレクトリスタックへ格納 (プッシュ) し, 
+指定されたディレクトリに移動します.
+
+PUSHD [[drive:]path]
+  移動先を[[drive:]path]に指定します.
+.
+
+:TEXT_CMDHELP_POPD
+ディレクトリスタックからディレクトリを取り出し (ポップ) , その
+ディレクトリに移動します.
+
+POPD [*]
+  '*' を指定すると, ディレクトリスタックをクリアします.
+.
+
+:TEXT_CMDHELP_DIRS
+ディレクトリスタックの内容を表示します.
+
+DIRS
+.
+
+:TEXT_CMDHELP_RD
+ディレクトリを削除します. 空でないディレクトリは削除できません.
+
+RMDIR [drive:]path
+RD [drive:]path
+.
+
+:TEXT_CMDHELP_REM
+バッチファイルやCONFIG.SYSにおいて, コメント行であることを示します.
+
+REM [comment]
+.
+
+:TEXT_CMDHELP_REN
+ファイル (複数可) またはディレクトリの名前を変更します.
+
+RENAME [drive:][path][directoryname1 | filename1] [directoryname2 | filename2]
+REN [drive:][path][directoryname1 | filename1] [directoryname2 | filename2]
+
+変更先に別のドライブやディレクトリは指定できません.
+その場合はMOVEコマンドを使用します.
+.
+
+:TEXT_CMDHELP_SET#1
+環境変数の表示, 設定, 削除を行います.
+
+SET [/C] [/P] [/E] [/U] [variable[=[string]]]
+
+  variable  環境変数名.
+  string    環境変数に割り付ける値.
+
+* 値 (string) が指定されない場合, 環境変数は削除されます.
+
+パラメータを指定せずに SET を実行すると, 現在の環境変数とその値を表示します.
+変数名のみを指定して SET を実行すると, その変数の内容を表示します.
+
+/C は変数名の大文字, 小文字をそのまま保持します. 指定しない場合, すでに同名の
+変数があればそのまま使われますが, 存在しなかった場合はすべて大文字の変数名に
+変換されます.
+
+/P 指定された文字列を表示して入力を待ち, 入力された値を変数に設定します.
+
+/E string で指定されたコマンドを実行し, その出力結果の先頭行を
+   変数に代入します.
+
+/U string で指定された文字列をすべて大文字に変換します.
+.
+
+:TEXT_CMDHELP_SHIFT#1
+バッチファイル内で, 変数の順番をシフトします.
+
+SHIFT [DOWN]
+
+DOWNを指定すると番号の小さいほう(%0)にシフトします.
+指定しなければ番号の大きいほうにシフトします.
+.
+
+:TEXT_CMDHELP_TIME#1
+システム時刻の表示, 設定を行います.
+
+TIME [/T] [time]
+
+パラメータを指定しなければ, 現在の時刻を表示し, 時刻設定の入力待ちになります.
+時刻を変更しない場合は, そのままENTERを押してください.
+
+/T  設定用のプロンプトを表示しません.
+.
+
+:TEXT_CMDHELP_TRUENAME
+指定されたパスのフルパスを表示します.
+
+TRUENAME [drive:][path][filename]
+.
+
+:TEXT_CMDHELP_TYPE
+指定されたテキストファイルを表示します.
+
+TYPE [drive:][path]filename
+.
+
+:TEXT_CMDHELP_VER
+FreeDOSコマンドシェルのバージョンその他の情報を表示します.
+
+VER [/R] [/W] [/D] [/C]
+
+ /R         カーネルバージョンその他の情報を表示します.
+ /W         FreeDOSコマンドシェルの免責    〃
+ /D         FreeDOSコマンドシェルの再配布  〃
+ /C         FreeDOSコマンドシェルの製作 (寄贈) 者  〃
+.
+
+:TEXT_CMDHELP_VERIFY
+ファイルが正しくディスクに書き込まれたかの照合 (べりファイ) を
+行うかどうか, FreeDOSのファイルシステムに指定します. 
+
+VERIFY [ON | OFF]
+
+パラメータを指定しなければ, 現在のVERIFYの設定を表示します.
+.
+
+:TEXT_CMDHELP_FDDEBUG
+FreeDOSがデバッグモードでコンパイルされている場合, このコマンドで
+デバッグ出力のオン, オフの設定, もしくは確認を行えます.
+
+FDDEBUG [ON | OFF | file]
+
+パラメータを指定しなければ, 現在のデバッグ出力の設定を表示します.
+ファイルが指定されている場合, デバッグ出力はファイルにリダイレクトされます.
+ファイルがすでに存在する場合, デバッグ情報はそのファイルに追記されます.
+stdoutとstderrは特別扱いされるファイル名で, デバッグ出力の標準出力もしくは
+標準エラー出力へのリダイレクトに使われます.
+.
+
+:TEXT_CMDHELP_VOL
+ディスクのボリュームラベルやシリアル番号を (存在する場合) 表示します.
+
+VOL [drive:]
+.
+
+:TEXT_CMDHELP_QUESTION#1
+シェル内部で利用可能なコマンドと機能の一覧を表示します.
+
+?
+?command [argument]
+
+最初の例は, 使用できる内部コマンドの一覧を表示します.
+次の例は, トレースモード有効時と同じように, 指定されたコマンドを
+実行するかどうか確認するプロンプトを表示します.
+.
+
+:TEXT_CMDHELP_WHICH
+指定されたコマンドの実行ファイルがどこにあるかを調べます.
+
+WHICH command...
+.
+
+:TEXT_CMDHELP_MEMORY#1
+FreeCOM内部のメモリ使用状況を表示します.
+
+MEMORY
+
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+コピー先にプラス記号 ('+') を含んではいけません.
+.
+
+:TEXT_DELETE_FILE#1%
+削除しています. - "%s%
+.
+
+:TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
+ファイル '%s' が書き込めません.
+ディスクがいっぱいかもしれません. (%lu バイト以上が必要です)
+.
+
+# Displayed for BIGcopy(), when copying takes quite a long time.
+# **_NO_END if the input file size is unknown.
+# Both must end in \r rather than \n!!
+:TEXT_COPY_COPIED_NO_END#0%
+コピー中 %luKB/???KB\r\
+.
+:TEXT_COPY_COPIED#0%
+コピー中 %luKB/%luKB\r\
+.
+
+:TEXT_ERROR_FCOM_IS_DEVICE#0%
+FreeCOMの扱える装置ではありません. : "%s"
+.
+:TEXT_ERROR_FCOM_INVALID#0%
+このファイルは有効なFreeCOMでないか, 互換性のないバージョンです.
+%s
+.
+
+:TEXT_ERROR_LOADING_STRINGS
+文字列リソースの読み込みに失敗しました. %COMSPEC% の指定が正しくないようです.
+文字列を読み込むため, FreeCOMの場所を入力しなおしてください. 例:
+C:\\COMMAND.COM
+
+文字列の読み込みを取り消す場合は Enter (リターン) のみを入力して下さい.
+.
+
+:TEXT_TERMINATING
+終了しています.
+.
+
+:TEXT_HIDDEN_CRITER#0%
+%u 致命的エラー要求が抑制されました.
+.
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+終了コード (ERRORLEVEL): %u, 理由: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+DOS API エラー\
+.
+:TEXT_EXIT_REASON_0
+正常終了\
+.
+:TEXT_EXIT_REASON_1
+^Breakによる中断\
+.
+:TEXT_EXIT_REASON_2
+致命的エラー\
+.
+:TEXT_EXIT_REASON_3
+常駐終了\
+.
+:TEXT_ERROR_EXE_CORRUPT
+不正なEXEファイルです\
+.
+
+# (for prompt $P)
+:TEXT_MSG_CURRENT_DRIVE_NOT_VALID
+現在の作業ドライブが有効でない状態です\
+.

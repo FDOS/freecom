@@ -65,11 +65,23 @@ static unsigned char iobuf[CMD_SIZE + 2] = { CMD_SIZE, '\0'};
 
 void readcommandDOS(char * const str, int maxlen)
 {	IREGS r;
+	int hasDoskey;
 
 	assert(str);
 	assert(maxlen);
 
+	/* check doskey is installed (in every input process) */
+	r.r_ax = 0x4800;
+	r.r_es = 0;
+	intrpt(0x2f, &r);
+	hasDoskey = ((r.r_ax & 0xff) != 0 && r.r_es != 0);
+
 	iobuf[0] = (maxlen < CMD_SIZE)? maxlen: CMD_SIZE;
+	if(hasDoskey) {
+		/* workaround for doskey (RBIL K-2F4810) */
+		if(iobuf[0] > 0x80)
+			iobuf[0] = 0x80;
+	}
 	if(iobuf[1] > iobuf[0])
 		iobuf[1] = iobuf[0];
 
@@ -77,10 +89,18 @@ void readcommandDOS(char * const str, int maxlen)
 	if(echo)
 		printprompt();
 
-	r.r_ax = 0xa00;
-	r.r_ds = FP_SEG(iobuf);
-	r.r_dx = FP_OFF(iobuf);
-	intrpt(0x21, &r);
+	if (hasDoskey) {
+		/* read from doskey */
+		r.r_ax = 0x4810;
+		r.r_ds = FP_SEG(iobuf);
+		r.r_dx = FP_OFF(iobuf);
+		intrpt(0x2f, &r);
+	} else {
+		r.r_ax = 0xa00;
+		r.r_ds = FP_SEG(iobuf);
+		r.r_dx = FP_OFF(iobuf);
+		intrpt(0x21, &r);
+	}
 
 	dprintf(("[CMDINPUT characters max:%u out:%u]\n", iobuf[0], iobuf[1]));
 	if(iobuf[1]) 		/* could bug if == 0 */

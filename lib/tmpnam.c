@@ -87,9 +87,21 @@ char *tmpfn(void)
   {
     /* everything failed --> probe the boot drive */
 
+    _DL = 0xff;                 /* to be safe for old DOS */
     _AX = 0x3305;               /* Get Boot drive, DOS 4+ */
     geninterrupt(0x21);
-    buf[0] = _CFLAG ? 'C' : _DL + 'A' - 1;
+    /* note: func 3305h will not return with setting CF on old DOS (3.x or earlier) */
+#if defined(IBMPC)
+    buf[0] = (_CFLAG || _DL == 0xff) ? 'C' : _DL + 'A' - 1;
+#else
+    if (_CFLAG || _DL == 0xff) {
+      _AX = 0x1900;             /* Get current drive */
+      geninterrupt(0x21);
+      buf[0] = _AL + 'A';
+    }
+    else
+      buf[0] = _DL + 'A' - 1;
+#endif
     fn = probefn(buf);          /* If fn is NULL still, no temporary
                                    file can be created */
     if (!fn)

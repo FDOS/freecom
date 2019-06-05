@@ -73,8 +73,18 @@
 #include "../include/command.h"
 #include "../include/misc.h"
 #include "../err_fcts.h"
+#include "../strings.h"
 
 #define PROMPTVAR "PROMPT"
+
+static void msg_curdrv_not_valid(void)
+{
+#if defined(TEXT_MSG_CURRENT_DRIVE_NOT_VALID)
+    displayError(TEXT_MSG_CURRENT_DRIVE_NOT_VALID);
+#else
+    outs("Current drive is not valid now");
+#endif
+}
 
 void displayPrompt(const char *pr)
 {
@@ -150,7 +160,10 @@ void displayPrompt(const char *pr)
                 intrpt(0x21, &r);
             }
 
-            if(r.r_flags & 1) break;
+            if(r.r_flags & 1) {
+                msg_curdrv_not_valid();
+                break;
+            }
 
             outs(pathname);
 #else
@@ -159,6 +172,9 @@ void displayPrompt(const char *pr)
             if((p = cwd(0)) != 0) {
                 outs(p);
                 free(p);
+            }
+            else {
+                msg_curdrv_not_valid();
             }
 #endif
 

@@ -14,6 +14,44 @@
 #define SCANCODE(key)	(key | 256)
 #define ASCIICODE(key)	(key)
 
+#if defined(NEC98)
+
+#define KEY_F1		SCANCODE(0x62)
+#define KEY_F2		SCANCODE(0x63)
+#define KEY_F3		SCANCODE(0x64)
+#define KEY_F4		SCANCODE(0x65)
+#define KEY_F5		SCANCODE(0x66)
+#define KEY_F6		SCANCODE(0x67)
+#define KEY_F7		SCANCODE(0x68)
+#define KEY_F8		SCANCODE(0x69)
+#define KEY_F9		SCANCODE(0x6a)
+#define KEY_F10		SCANCODE(0x6b)
+#define KEY_F11		SCANCODE(0x52)	/* VF.1 */
+#define KEY_F12		SCANCODE(0x53)	/* VF.2 */
+#define KEY_F13		SCANCODE(0x54)	/* VF.3 */
+#define KEY_F14		SCANCODE(0x55)	/* VF.4 */
+#define KEY_F15		SCANCODE(0x56)	/* VF.5 */
+
+#define KEY_LEFT	SCANCODE(0x3b)
+#define KEY_RIGHT	SCANCODE(0x3c)
+#define KEY_UP		SCANCODE(0x3a)
+#define KEY_DOWN	SCANCODE(0x3d)
+#define KEY_INS		SCANCODE(0x38)
+#define KEY_INSERT	SCANCODE(0x38)
+#define KEY_DEL		SCANCODE(0x39)
+#define KEY_DELETE	SCANCODE(0x39)
+#define KEY_HOME	SCANCODE(0x3e)	/* HOME CLR */
+#define KEY_END		SCANCODE(0x3f)	/* HELP */
+#define KEY_PUP		SCANCODE(0x37)	/* ROLL DOWN */
+#define KEY_PDOWN	SCANCODE(0x36)	/* ROLL UP */	/* 26�܂ł͋t */
+
+#define KEY_CTRL_PRESSED	0x2000
+
+#define KEY_CTRL_LEFT	(KEY_LEFT | KEY_CTRL_PRESSED)
+#define KEY_CTRL_RIGHT	(KEY_RIGHT | KEY_CTRL_PRESSED)
+
+#else /* IBMPC */
+
 #define KEY_F1	SCANCODE(59)
 #define KEY_F2	SCANCODE(60)
 #define KEY_F3	SCANCODE(61)
@@ -41,6 +79,8 @@
 #define KEY_END	SCANCODE(79)
 #define KEY_PUP	SCANCODE(73)
 #define KEY_PDOWN	SCANCODE(81)
+
+#endif
 
 #define KEY_TAB	ASCIICODE('\t')
 #define KEY_NL	ASCIICODE('\n')

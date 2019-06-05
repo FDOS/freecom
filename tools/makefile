@@ -83,7 +83,7 @@ dist : ;
 
 icmd : load_icd.exe icmd_{1 2 3}.icd
 
-%.icd : %.nas ; $(NASM) -f bin -o $@ $<
+%.icd : %.nas ; $(NASM) $(__TARGET) $(__DBCS) -f bin -o $@ $<
 
 icmd_1.icd : icmd_inc.inc icmd_1.nas
 
@@ -103,10 +103,10 @@ __errl:
 ptchldrv.obj : ptchldrv.c
 
 vspawn.com : vspawn.asm
-	$(NASM) $(NASMFLAGS) -f bin -o $@ $(MYASMFLAGS) $<
+	$(NASM) $(NASMFLAGS) $(__TARGET) $(__DBCS) -f bin -o $@ $(MYASMFLAGS) $<
 
 kssf.com : kssf.asm
-	$(NASM) $(NASMFLAGS) -f bin -o $@ $(MYASMFLAGS) $<
+	$(NASM) $(NASMFLAGS) $(__TARGET) $(__DBCS) -f bin -o $@ $(MYASMFLAGS) $<
 
 load_icd.obj : load_icd.c
 

@@ -48,12 +48,26 @@ int keypressed(void)
 {
   IREGS r;
 
+#if defined(NEC98)
   r.r_ax = 0x0100;
+  intrpt(0x18, &r);
 
+  if (!(r.r_bx & 0x0100U))	/* bh=1 pressed bh=0 no key */
+#elif defined(IBMPC)
+  r.r_ax = 0x0100;
   intrpt(0x16, &r);
 
   /* Check the zero flag.  Z=0 means a key was pressed; Z=1 means no key */
   if (r.r_flags & 0x40)
+#else
+  /* DOS generic */
+  r.r_ax = 0x0600;
+  r.r_dx = 0xff;
+  intrpt(0x21, &r);
+
+  /* Check the zero flag.  Z=0 means a key was pressed; Z=1 means no key */
+  if (r.r_flags & 0x40)
+#endif
     return 0;
   else
     return 1;

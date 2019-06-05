@@ -42,6 +42,8 @@
 #include "suppl.h"
 #include "supplio.h"
 
+#include "fmemory.h"
+
 #include "../include/lfnfuncs.h"
 #include "../include/command.h"
 #include "../include/cmdline.h"
@@ -49,6 +51,9 @@
 #include "../include/misc.h"
 #include "../strings.h"
 #include "../include/openf.h"
+#ifdef JAPANESE
+# include "../include/iskanji.h"
+#endif
 
 #define ASCII 1
 #define BINARY 2
@@ -167,7 +172,11 @@ ok:
 	statString = getString(deviceIn
 		? TEXT_COPY_COPIED_NO_END
 		: TEXT_COPY_COPIED);
+#if defined(IBMPC)
 	startTime = *(unsigned far *)MK_FP(0x40,0x6c);
+#else
+	startTime = 0;
+#endif
 
 	ctrlz = 0;
 	while((rd = farread(fdin, buffer, size)) != 0) {
@@ -179,7 +188,7 @@ ok:
 		if(asc) {
 			ctrlz = _fmemchr(buffer, 0x1a, rd);
 			if(ctrlz != 0)
-				rd = (unsigned)(ctrlz - buffer);
+				rd = (unsigned)(unsigned long)(ctrlz - buffer);
 		}
 		
 		if(farwrite(fdout, buffer, rd) != rd) {
@@ -190,7 +199,11 @@ ok:
 						/* statistics */
 		copied += rd;	
 			
-		now = *(unsigned far *)MK_FP(0x40,0x6c);
+#if defined(IBMPC)
+ 		now = *(unsigned far *)MK_FP(0x40,0x6c);
+#else
+		now = startTime;
+#endif
 		
 		if(!doStat
 		 && now - startTime > 15 * 18
@@ -597,7 +610,11 @@ int cmd_copy(char *rest)
 	struct CopySource *p = h;
   	do {
   		char *s = strchr(p->fnam, '\0') - 1;
+#if defined(JAPANESE)
+  		if(*s == '/' || (*s == '\\' && !iskanji(*(s - 1)))		/* forcedly be directory */
+#else
   		if(*s == '/' || *s == '\\'		/* forcedly be directory */
+#endif
   		 || 0 != (dfnstat(p->fnam) & DFN_DIRECTORY)) {
 			char **buf;
 			char *q;

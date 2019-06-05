@@ -48,6 +48,9 @@ fi(le): dstrupr.c
 
 #include <portable.h>
 #include "dynstr.h"
+#if defined(DBCS)
+# include "nls_c.h"
+#endif
 
 #include "suppldbg.h"
 
@@ -62,7 +65,18 @@ char *StrUpr(char *s)
 	DBG_ENTER("StrUpr", Suppl_nls)
 
 	if((p = s) != 0)
+#if defined(DBCS)
+		while(*p) {
+			if (isDbcsLead(*p) && (unsigned char)(p[1]) >= 0x20) {
+				p += 2;
+			} else {
+				*p = toUpper(*p);
+				++p;
+			}
+		}
+#else
 		while((*p = toUpper(*p)) != NUL)
 			++p;
+#endif
 	DBG_RETURN_S( s)
 }

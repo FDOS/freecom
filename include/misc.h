@@ -56,10 +56,18 @@ typedef enum {
 	unsigned far *maxx = MK_FP(0x40, 0x4a);
 	unsigned char far *maxy = MK_FP(0x40, 0x84);
 */
-#define MAX_X (*(unsigned int  far*)MK_FP(0x40, 0x4a))
-#define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84) == 0 ? 25 : *(unsigned char far*)MK_FP(0x40, 0x84)) /* when 0040:0084 contains 0, assume 25 rows (CGA...) */
+#if defined(NEC98)
+# define MAX_X (((*(unsigned char far *)MK_FP(0x0000, 0x053c)) & 2)?40:80)
+# define MAX_Y (*(unsigned char far *)MK_FP(0x0060, 0x0112)+1)
+#elif defined(IBMPC)
+# define MAX_X (*(unsigned int  far*)MK_FP(0x40, 0x4a))
+# define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84) == 0 ? 25 : (*(unsigned char far*)MK_FP(0x40, 0x84)+1))  /* when 0040:0084 contains 0, assume 25 rows (CGA...) */
+#else
+# define MAX_X 80
+# define MAX_Y 25
+#endif
 #define SCREEN_COLS MAX_X
-#define SCREEN_ROWS (MAX_Y + 1)
+#define SCREEN_ROWS MAX_Y
 
 extern FILE *errStream;
 #define outStream stdout
@@ -244,5 +252,26 @@ char *critDriveReport(void);
 void critEnableRepeatCheck(void);
 unsigned critDisableRepeatCheck(void);
 void critEndRepCheck(void);
+
+#if defined(IBMPC) || defined(NEC98) || defined(FMR) || defined(IGNORE_ENHANCED_INPUT)
+/* prf.c */
+int putch_int29(int c);
+int cputs_int29(const char *s);
+# define putch(c) putch_int29(c)
+# define cputs(s) cputs_int29(s)
+/* xtra.c */
+int init_mymachine(void);
+enum MyMachine {
+	MYMACHINE_UNKNOWN = 0,
+	MYMACHINE_IBMPC,
+	MYMACHINE_NEC98,
+	MYMACHINE_FMR
+};
+extern int mymachine;
+void mydelay(unsigned ms);
+void mysound(unsigned f);
+void mynosound(void);
+
+#endif
 
 #endif

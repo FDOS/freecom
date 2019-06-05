@@ -30,6 +30,7 @@ OBJ10= fstrdup.obj fstrlen.obj _getdcwd.obj mcb_1st.obj mcb_is.obj \
 mcb_leng.obj  mcb_nxt.obj
 OBJ11= mcb_walk.obj stpcat.obj stpcpy.obj toupperx.obj filefind.obj \
 invokedo.obj intr.obj
+OBJ12 = nlsmblen.obj
 
 DOBJ1 = app_ievx.obj app_ini_.obj app_name.obj app_namx.obj app_vars.obj \
 dbgf_chg.obj
@@ -68,6 +69,7 @@ objlist.txt: echolib.bat suppl.mak
 	$(ECHOLIB) objlist.txt $(OBJ9)
 	$(ECHOLIB) objlist.txt $(OBJ10)
 	$(ECHOLIB) objlist.txt $(OBJ11)
+	$(ECHOLIB) objlist.txt $(OBJ12)
 	$(ECHOLIB) objlist.txt $(DOBJ1)
 	$(ECHOLIB) objlist.txt $(DOBJ2)
 	$(ECHOLIB) objlist.txt $(DOBJ3)
@@ -81,7 +83,7 @@ objlist.txt: echolib.bat suppl.mak
 
 # Create the library
 ../$(SUPPL).lib: $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) \
-$(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(DOBJ1) $(DOBJ2) $(DOBJ3) $(DOBJ4) \
+$(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(DOBJ1) $(DOBJ2) $(DOBJ3) $(DOBJ4) \
 $(DOBJ5) $(DOBJ6) $(DOBJ7) $(DOBJ8) $(DOBJ9) $(DOBJ10) objlist.txt
 	$(RMFILES2) ..$(DIRSEP)$(SUPPL).lib
 	$(AR) ..$(DIRSEP)$(SUPPL).lib @objlist.txt $(LIBLIST)..$(DIRSEP)$(SUPPL).lst

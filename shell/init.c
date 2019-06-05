@@ -66,6 +66,13 @@ static int fddebug = FDDEBUG_INIT_VALUE;
 int dispExitcode = 0;
 #endif
 
+#if !defined(IBMPC)
+/* NEC98, DOS generic
+   workaround for EPSON DOS 6.2 MSD.exe
+   (see also: ver.c) */
+int is_parent_msd = 0;
+#endif
+
 /* Without resetting the owner PSP, the program is not removed
    from memory */
 void exitfct(void)
@@ -206,6 +213,15 @@ int initialize(void)
 	}
 #else
 	set_isrfct(0x24, dummy_criter_handler);
+#endif
+
+	/* setup for machine specific routines */
+	init_mymachine();
+#if !defined(IBMPC)
+	/* quick check whether the parent is MSD */
+	if (oldPSP > 8) {
+      is_parent_msd = _fmemcmp(MK_FP(oldPSP - 1, 8), "MSD", 4) == 0;
+    }
 #endif
 
   /* DOS shells patch the PPID to the own PID, how stupid this is, however,

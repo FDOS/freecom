@@ -55,8 +55,12 @@ int cmd_cls (char * param) {
     (void)param;
     outc( '\xc' ); /* ^L Form feed */
 
+#if defined(IBMPC) || defined(NEC98)
 	/* Output stream is neither a file nor NUL nor CLOCK$ */
 	if(((fdattr(1) ^ 0x80) & (0x80 | 0x08 | 0x04)) == 0) {
+# if defined(NEC98)
+		cputs_int29("\x1b" "[m" "\x1b" "[2J");
+# else
 		/* Now roll the screen */
 		IREGS r;
 		r.r_ax = 0x0600;	/* Scroll window up // entire window */
@@ -65,7 +69,12 @@ int cmd_cls (char * param) {
 		r.r_dx = ((SCREEN_ROWS - 1) << 8) | (SCREEN_COLS - 1); /* Lower right */
 		intrpt(0x10, &r);
 		goxy(1, 1);			/* home the cursor */
+# endif
 	}
+#else
+	/* DOS generic: do nothing */
+	outc('\r');
+#endif
 
 	return 0;
 }

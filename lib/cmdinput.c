@@ -5,7 +5,6 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <conio.h>
 #include <dos.h>
 #include <stdio.h>
 #include <io.h>
@@ -14,9 +13,18 @@
 #include "../include/command.h"
 #include "../include/keys.h"
 #include "../include/misc.h"
+#if defined(DBCS)
+# include "../suppl/nls_c.h"
+#endif
 
-static unsigned orgx, orgy;		/* start of current line */
-
+#if defined(NEC98)
+unsigned mywherex (void) {
+    return 1U + *(unsigned char far *)MK_FP(0x60, 0x11c);
+}
+unsigned mywherey (void) {
+    return 1U + *(unsigned char far *)MK_FP(0x60, 0x110);
+}
+#elif defined(IBMPC)
 #define MK_PTR(type,seg,ofs) ((type FAR*) MK_FP (seg, ofs))
 /* safer edition of MK_FP (Arkady) */
 typedef struct { unsigned char col, row; } SCRPOS;
@@ -29,49 +37,94 @@ unsigned mywherex (void) {
 unsigned mywherey (void) {
     return _scr_pos_array [_scr_page].row + 1;
 }
-
-#undef _NOCURSOR
-#undef _NORMALCURSOR
-#undef _SOLIDCURSOR
-#undef _HALFCURSOR
-#define _NOCURSOR     3
-#define _HALFCURSOR   2
-#define _NORMALCURSOR 0
-#define _SOLIDCURSOR  1
-
-static void my_setcursortype( unsigned short state )
-{
-   IREGS regs;
-   int cur_mode;
-
-   regs.r_ax = 0x0F00;
-   intrpt( 0x10, &regs );
-   cur_mode = regs.r_ax & 0xFF;
-   regs.r_ax = 0x0100;
-   /* ch == start line. cl == end line */
-
-   switch (state)
-   {
-          case _SOLIDCURSOR :
-             regs.r_cx = (cur_mode == 7) ? 0x010C : 0x0107;
-             break;
-          case _NORMALCURSOR:
-             regs.r_cx = (cur_mode == 7) ? 0x0B0C : 0x0607;
-             break;
-#if 0 /* Unused */
-          case _NOCURSOR    :
-             regs.r_cx = 0x2020;
-             break;
-          case _HALFCURSOR  :
-             regs.r_cx = (cur_mode == 7) ? 0x070C :  0x0407;
-             break;
-          default           :
-             regs.r_cx = state;
-             break;
 #endif
-   }
-   intrpt( 0x10, &regs );
+
+#if defined(NEC98)
+void outc(char c)
+{
+	if (c == '\n') dos_write(1, "\r\n", 2);
+	else dos_write(1, &c, 1);
+	if (mywherex() > MAX_X) {
+	  dos_write(1, "\b\r\n", 3);	/* NEC98: force break */
+	}
 }
+void outs(const char * const s)
+{
+	const char *s1 = (const char *)s;
+	assert(s);
+	while(*s1) outc(*s1++);
+}
+#else
+/* Print string to current cursor position
+	Updates cursor position
+ */
+void outs(const char * const s)
+{	assert(s);
+	printf("%s", s);
+}
+
+/* Print a character to current cursor position
+	Updates cursor postion
+ */
+void outc(char c)
+{
+	if (c == '\n') dos_write(1, "\r\n", 2); else dos_write(1, &c, 1);
+}
+#endif
+
+#ifdef FEATURE_ENHANCED_INPUT
+
+/* set cursor state for insert/overwrite mode */
+#if defined(NEC98)
+
+static void setcursorstate_nec98(int insert)
+{
+	IREGS r;
+
+	/* set cursor blink state (and hide cursor) */
+	r.r_ax = insert ? 0x1001 : 0x1000;
+	intrpt(0x18, &r);
+	if (*(unsigned char far *)MK_FP(0x60, 0x11b))
+	{
+		/* (re-)show cursor */
+		r.r_ax = 0x1100;
+		intrpt(0x18, &r);
+	}
+#if 0
+	extern void nec98_setcursorblink(int blink_rate);
+	nec98_setcursorblink(insert ? 0xff : 0x0d);
+	goxy(mywherex(), mywherey());
+#endif
+}
+
+# define setcursorstate setcursorstate_nec98
+
+#elif defined(IBMPC)
+
+static void setcursorstate_ibmpc(int insert)
+{
+	IREGS r;
+	unsigned char cur_mode = *(unsigned char far *)MK_FP(0x40, 0x49);
+	
+	/* for IBMPC: insert -> _NORMALCURSOR, not insert -> _SOLIDCURSOR */
+	r.r_ax = 0x0100;
+	if (cur_mode == 7)
+		r.r_cx = insert ? 0x0b0c : 0x010c;
+	else
+		r.r_cx = insert ? 0x0607 : 0x0107;
+	intrpt(0x10, &r);
+}
+
+# define setcursorstate setcursorstate_ibmpc
+
+#else
+
+static void setcursorstate_ibmpc(int insert)
+{
+# error need platform-specific setcursorstate()
+}
+
+#endif
 
 #define wherex mywherex
 #define wherey mywherey
@@ -82,13 +135,7 @@ static int isworddelimiter(unsigned c)
 	return c == ' ' || c == '\t';
 }
 
-/* Print a character to current cursor position
-	Updates cursor postion
- */
-void outc(char c)
-{
-	if (c == '\n') dos_write(1, "\r\n", 2); else dos_write(1, &c, 1);
-}
+#if !defined(DBCS)
 /* Print a blank to current cursor postion
 	Updates cursor position
  */
@@ -96,13 +143,6 @@ static void outblank(void)
 {	outc(' ');
 }
 
-/* Print string to current cursor position
-	Updates cursor position
- */
-void outs(const char * const s)
-{	assert(s);
-	printf("%s", s);
-}
 /* Print string to cursor position and append one blank
 	Updates cursor postion
  */
@@ -110,10 +150,93 @@ static void outsblank(const char * const s)
 {	outs(s);
 	outblank();
 }
+#endif
+
+#if defined(NEC98)
+struct skeystate {
+	unsigned keynum;
+	unsigned char newkey[6];
+	unsigned char oldkey[6];
+};
+static struct skeystate skeys[] = {
+	{ 0x19, { 0xff, 0x3a, 0 }, { 0 } },	/* up */
+	{ 0x1a, { 0xff, 0x3b, 0 }, { 0 } },	/* left */
+	{ 0x1b, { 0xff, 0x3c, 0 }, { 0 } },	/* right */
+	{ 0x1c, { 0xff, 0x3d, 0 }, { 0 } },	/* down */
+	{ 0x1d, { 0xff, 0x3e, 0 }, { 0 } },	/* HOME CLR */
+	{ 0x1e, { 0xff, 0x3f, 0 }, { 0 } },	/* HELP */
+};
+
+void prepareSpecialKeys(void)
+{
+	IREGS r;
+	unsigned n;
+	for(n=0; n<sizeof(skeys)/sizeof(skeys[0]); ++n) {
+		r.r_ax = skeys[n].keynum;
+		if (r.r_ax >= 0x15 && r.r_ax <= 0x1f) {
+			r.r_cx = 0x0c;
+			r.r_ds = FP_SEG(&(skeys[n].oldkey[0]));
+			r.r_dx = FP_OFF(&(skeys[n].oldkey[0]));
+			intrpt(0xdc, &r);
+			r.r_cx = 0x0d;
+			r.r_ax = skeys[n].keynum;
+			r.r_ds = FP_SEG(&(skeys[n].newkey[0]));
+			r.r_dx = FP_OFF(&(skeys[n].newkey[0]));
+			intrpt(0xdc, &r);
+		}
+	}
+}
+
+void restoreSpecialKeys(void)
+{
+	IREGS r;
+	unsigned n;
+	for(n=0; n<sizeof(skeys)/sizeof(skeys[0]); ++n) {
+		r.r_ax = skeys[n].keynum;
+		if (r.r_ax >= 0x15 && r.r_ax <= 0x1f) {
+			r.r_cx = 0x0d;
+			r.r_ds = FP_SEG(&(skeys[n].oldkey[0]));
+			r.r_dx = FP_OFF(&(skeys[n].oldkey[0]));
+			intrpt(0xdc, &r);
+		}
+	}
+}
+#endif
+
+static int outs_xyfix(const char * const str, unsigned *ox, unsigned *oy)
+{
+	unsigned max_c = (unsigned)MAX_Y * MAX_X;
+	unsigned where_c = (unsigned)(wherey()-1) * MAX_X + (wherex()-1);
+	unsigned len = strlen(str);
+	int feed = 0;
+	
+	outs(str);
+	where_c += len;
+	if (where_c >= max_c) {
+	  feed = (where_c - max_c) / MAX_X + 1;
+	  *oy -= feed;
+	}
+	return feed;
+}
 
 /* read in a command line */
+#if defined(DBCS)
+# include "cmdinp_d.c"
+#else
+
+static void clrcmdline_oxy(char * const str, const int maxlen, const unsigned charcount, unsigned ox, unsigned oy)
+{
+	unsigned len = charcount ? charcount : strlen(str);
+	goxy(ox, oy);
+	while(len-- > 0) outc(' ');
+	goxy(ox, oy);
+	memset(str, 0, maxlen);
+}
+#define clrcmdline(s,m,cc,ox,oy,cpos)	clrcmdline_oxy(s,m,cc,ox,oy)
+
 void readcommandEnhanced(char * const str, const int maxlen)
 {
+	static unsigned orgx, orgy;		/* start of current line */
 	unsigned char insert = 1;
 	unsigned ch;
 #ifdef FEATURE_FILENAME_COMPLETION
@@ -140,10 +263,13 @@ void readcommandEnhanced(char * const str, const int maxlen)
 	orgy = wherey();
 	memset(str, 0, maxlen);
 
-	_setcursortype(_NORMALCURSOR);
+	setcursorstate(insert);
 
 #ifdef FEATURE_HISTORY
 	histGet(histLevel - 1, prvLine, sizeof(prvLine));
+#endif
+#if defined(NEC98)
+	prepareSpecialKeys();
 #endif
 
 	do {
@@ -187,10 +313,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 		case KEY_INSERT:           /* toggle insert/overstrike mode */
 			insert ^= 1;
-			if (insert)
-			  _setcursortype(_NORMALCURSOR);
-			else
-			  _setcursortype(_SOLIDCURSOR);
+			setcursorstate(insert);
 			break;
 
 		case KEY_DELETE:           /* delete character under cursor */
@@ -235,9 +358,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				current = charcount;
 
 				goxy(orgx, orgy);
-				outs(str);
-				if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
-				  orgy--;
+				outs_xyfix(str, &orgx, &orgy);
 			  } else {                 /* if second TAB, list matches */
 				if (show_completion_matches(str, charcount))
 				{
@@ -266,7 +387,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 		case KEY_CTL_C:       		/* ^C */
 		case KEY_ESC:              /* clear str  Make this callable! */
 
-			clrcmdline(str, maxlen);
+			clrcmdline(str, maxlen, charcount, orgx, orgy, current);
 			current = charcount = 0;
 
 			if(ch == KEY_CTL_C && !echo) {
@@ -313,27 +434,27 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			if(!histGet(--histLevel, prvLine, sizeof(prvLine)))
 				++histLevel;		/* failed -> keep current command line */
 			else {
-				clrcmdline(str, maxlen);
+				clrcmdline(str, maxlen, charcount, orgx, orgy, current);
 				strcpy(str, prvLine);
 				current = charcount = strlen(str);
-				outs(str);
+				outs_xyfix(str, &orgx, &orgy); // outs(str);
 				histGet(histLevel - 1, prvLine, sizeof(prvLine));
 			}
 			break;
 
 		case KEY_DOWN:             /* get next command from buffer */
 			if(histLevel) {
-				clrcmdline(str, maxlen);
+				clrcmdline(str, maxlen, charcount, orgx, orgy, current);
 				strcpy(prvLine, str);
 				histGet(++histLevel, str, maxlen);
 				current = charcount = strlen(str);
-				outs(str);
+				outs_xyfix(str, &orgx, &orgy); // outs(str);
 			}
 			break;
 
 		case KEY_F5: /* keep cmdline in F3/UP buffer and move to next line */
 			strcpy(prvLine, str);
-			clrcmdline(str, maxlen);
+			clrcmdline(str, maxlen, charcount, orgx, orgy, current);
 			outc('@');
 			if(orgy >= MAX_Y) {
 				outc('\n');			/* Force scroll */
@@ -358,7 +479,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			}
 			break;
 
-
+#if defined(KEY_CTRL_LEFT)
 		case KEY_CTRL_LEFT:	/* move cursor left to begin of word */
 			while(current > 0) {
 			  current--;
@@ -372,7 +493,9 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			     break;
 			}
 			break;
+#endif
 
+#if defined(KEY_CTRL_RIGHT)
 		case KEY_CTRL_RIGHT:	/* move cursor right to begin of word */
 			while(current < charcount) {
 			  current++;
@@ -386,6 +509,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			     break;
 			}
 			break;
+#endif
 
 		default:                 /* insert character into string... */
 
@@ -396,11 +520,14 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				for (count = charcount; count > current; count--)
 				  str[count] = str[count - 1];
 				str[current++] = ch;
-				curx = wherex() + 1;
+				curx = wherex();
 				cury = wherey();
-				outs(&str[current - 1]);
-				if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
-				  cury--;
+				cury -= outs_xyfix(&str[current - 1], &orgx, &orgy);
+				++curx;
+				if (curx > MAX_X) {
+				  curx = 1;
+				  ++cury;
+				}
 				goxy(curx, cury);
 				charcount++;
 			  }
@@ -409,7 +536,12 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				if (current == charcount)
 				  charcount++;
 				str[current++] = ch;
+				curx = wherex();
+				cury = wherey();
 				outc(ch);
+				if (wherex() < curx && wherey() == cury) {
+				  orgy--;
+				}
 			  }
 			  if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
 				orgy--;
@@ -423,5 +555,12 @@ void readcommandEnhanced(char * const str, const int maxlen)
 #endif
 	} while(ch != KEY_ENTER);
 
-	_setcursortype(_NORMALCURSOR);
+#if defined(NEC98)
+	restoreSpecialKeys();
+#endif
+	setcursorstate(insert);
 }
+#endif /* !DBCS */
+
+#endif /* defined FEATURE_ENHANCED_INPUT */
+

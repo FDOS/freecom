@@ -49,6 +49,9 @@ fi(le): dstrupr.c
 
 #include <portable.h>
 #include "nls_f.h"
+#if defined(DBCS)
+# include "nls_c.h"
+#endif
 
 #include "suppldbg.h"
 
@@ -63,7 +66,18 @@ char *StrFUpr(char *s)
 	DBG_ENTER("StrFUpr", Suppl_nls)
 
 	if((p = s) != 0)
+#if defined(DBCS)
+		while(*p) {
+			if (isDbcsLead(*p) && (unsigned char)(p[1]) >= 0x20) {
+				p += 2;
+			} else {
+				*p = toFUpper(*p);
+				++p;
+			}
+		}
+#else
 		while((*p = toFUpper(*p)) != NUL)
 			++p;
+#endif
 	DBG_RETURN_S( s)
 }

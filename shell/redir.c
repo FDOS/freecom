@@ -32,6 +32,9 @@
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
+#if defined(DBCS)
+# include "../suppl/nls_c.h"
+#endif
 
 static int is_redir(char c)
 {
@@ -71,7 +74,17 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
 
   /* find and remove all the redirections first */
 
+#if defined(DBCS)
+  while(1) {
+    ch = *dp ++ = *sp++;
+    if (isDbcsLead(ch)) {
+      *dp++ = *sp++;
+      continue;
+    }
+    if (ch == '\0') break;
+#else
   while ((ch = *dp++ = *sp++) != 0)
+#endif
     switch (ch)
     {
       case '^':               /* escape special character */
@@ -116,7 +129,11 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
 
           p = sp = ltrimcl(sp);
 
+#if defined(DBCS)
+          while (*sp && !is_redir(*sp) && !isargdelim(*sp)) sp += MbLen(sp);
+#else
           while (*sp && !is_redir(*sp) && !isargdelim(*sp)) ++sp;
+#endif
           free(*op);            /* ignore any previous one */
           ch = *sp;
           *sp = '\0';
@@ -138,6 +155,9 @@ int get_redirection(char *s, char **ifn, char **ofn, int *ofatt)
         break;
 
     }                           /* end switch */
+#if defined(DBCS)
+  } /* end of while (DBCS) */
+#endif
 
   return num;
 }

@@ -41,7 +41,6 @@ fi(le): dbgm_sr.c
 #include "initsupl.loc"
 
 #ifndef _MICROC_
-#include <conio.h>
 #include <stddef.h>
 #endif
 #include <portable.h>
@@ -61,6 +60,19 @@ static char const rcsid[] =
 
 #if defined __TURBOC__ && __TURBOC__ <= 0x201
 # define offsetof(s_name, m_name) (size_t)&(((s_name*)0)->m_name)
+#endif
+
+#if 1
+static int dos_getc(void)
+{
+    IREGS regs;
+    regs.r_ax = 0x0700;
+    intrpt(0x21, &regs);
+    return (regs.r_ax)&0xFF;
+}
+int cputs_int29(const char *s);
+# define getch dos_getc
+# define cputs cputs_int29
 #endif
 
 static int checkItem(void *arg, word segm)

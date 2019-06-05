@@ -53,6 +53,9 @@
 #include "../include/command.h"
 #include "../err_fcts.h"
 #include "../strings.h"
+#ifdef JAPANESE
+# include "../include/iskanji.h"
+#endif
 
 #ifdef FEATURE_LONG_FILENAMES
 #define abspath( x, y ) abspath( getshortfilename( x ), y )
@@ -126,18 +129,32 @@ int cmd_del(char *param)
 
 			/* check if it is a directory */
 			if(dfnstat(fullname) & DFN_DIRECTORY) {
+#if defined(JAPANESE)
+				if (p[-1] != '\\' || iskanji(p[-2]))
+#else
 				if (p[-1] != '\\')
+#endif
 					*p++ = '\\';
 			}
 
+#if defined(JAPANESE)
+			if(p[-1] == '\\' && !iskanji(p[-2]))    /* delete a whole directory */
+#else
 			if(p[-1] == '\\')    /* delete a whole directory */
+#endif
 				p = stpcpy(p, "*.*");
 
 			/* p := address to copy the filename to to form the fully-qualified
 				filename */
 			/* There is at least one backslash within fullname,
 				because of dfnexpand() */
+#if defined(JAPANESE)
+			do {
+				--p;
+			} while(*p != '\\' || iskanji(*(p - 1))) ;
+#else
 			while(*--p != '\\') ;
+#endif
 			++p;
 
 			/* make sure user is sure if all files are to be

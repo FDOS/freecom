@@ -7,7 +7,6 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <conio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
@@ -26,6 +25,7 @@
 #include "../include/command.h"
 #include "../include/batch.h"
 #include "../include/cmdline.h"
+#include "../include/misc.h"
 #include "../err_fcts.h"
 #include "../strings.h"
 #ifdef FEATURE_NLS
@@ -788,9 +788,11 @@ int process_input(int xflag, char *commandline)
 
       /* Go Interactive */
 		interactive_command = 1;		/* directly entered by user */
+#if defined(IBMPC) || defined(NEC98)
 		/* Ensure the prompt starts at column #0 */
 		if(echo && (mywherex()>1))
 			outc('\n');
+#endif
       readcommand(ip = readline, MAX_INTERNAL_COMMAND_SIZE);
       tracemode = 0;          /* reset trace mode */
       }
@@ -903,9 +905,11 @@ static void hangForever(void)
 	puts(TEXT_MSG_REBOOT_NOW);
 #endif
     beep();
-    delay(9000);  /* Keep the message on the screen for
+#if defined(IBMPC) || defined(NEC98)
+    mydelay(9000);  /* Keep the message on the screen for
               at least 1s, in case FreeCom has some problems
               with the keyboard */
+#endif
   }
 }
 

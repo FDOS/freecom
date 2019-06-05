@@ -46,7 +46,6 @@
 #include "../config.h"
 
 #include <assert.h>
-#include <conio.h>
 #include <ctype.h>
 #include <string.h>
 #include <io.h>

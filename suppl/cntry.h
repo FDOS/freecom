@@ -43,6 +43,9 @@ struct Country_ {		/* local copy of country information */
 	fartbl lowercaseTbl;	/* lowercase for "normal" chars (maybe NULL) */
 	fartbl fupcaseTbl;		/* uppercase for filename characters */
 	fartbl collateTbl;		/* collating table */
+#if defined(DBCS)
+	fartbl dbcsTbl;			/* DBCS table */
+#endif
 
 	fartbl illegalChars;	/* illegal characters in filenames */
 	int illegalLen;			/* illegal characters in filenames */

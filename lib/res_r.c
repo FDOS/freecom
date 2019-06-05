@@ -80,7 +80,7 @@
 #include <assert.h>
 #include <string.h>	/* memcmp */
 #include <fcntl.h>
-#if !defined(__GNUC__) || !defined(PTCHSIZE) || defined(__MINGW32__) || defined(__DJGPP__)
+#if !defined(__GNUC__) || !defined(PTCHSIZE) || defined(__MINGW32__)
 #include <io.h>		/* filelength */
 #endif
 

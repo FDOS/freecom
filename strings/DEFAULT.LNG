@@ -1549,3 +1549,7 @@ gone resident\
 :TEXT_ERROR_EXE_CORRUPT
 EXE file corrupt\
 .
+# (for prompt $P)
+:TEXT_MSG_CURRENT_DRIVE_NOT_VALID
+Current drive is not valid now\
+.

@@ -1,6 +1,7 @@
 @echo off
 set FILE=%1
 set STR=%2
+if "%STR%" == "" goto end_of_script
 
 :loop
 shift
@@ -10,3 +11,5 @@ goto loop
 :end
 
 echo %STR%>> %FILE%
+:end_of_script
+

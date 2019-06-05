@@ -39,6 +39,21 @@ NASM = $(XNASM)
 __XMS_SWAP = -DXMS_SWAP
 !endif
 
+!if $(NO_ENH_INP)0 == 10
+__ENH_INP = -DIGNORE_ENHANCED_INPUT
+!endif
+
+!if $(NEC98)0 == 10
+__TARGET = -DNEC98
+!endif
+!if $(IBMPC)0 == 10
+__TARGET = -DIBMPC
+!endif
+
+!if $(DBCS)0 == 10
+__DBCS = -DDBCS -DJAPANESE
+!endif
+
 # Default configuration
 # added strings.h here because $(CFG) is included everywhere already
 ## Add -D_NO__DOS_DATE if your compiler does not have no dosdate_t (*)
@@ -53,8 +68,10 @@ $(CFG): $(CFG_DEPENDENCIES) ../config.mak
 	$(ECHOTO) $(CFG) $(CFLAGS1)
 	$(ECHOTO) $(CFG) $(INCLUDEPATH)
 	$(ECHOTO) $(CFG) -m$(SHELL_MMODEL_COMP) $(MMODEL)
-	$(ECHOTO) $(CFG) $(DEBUG) $(__XMS_SWAP)
+	$(ECHOTO) $(CFG) $(DEBUG) $(__XMS_SWAP) $(__ENH_INP)
+	$(ECHOTO) $(CFG) $(__TARGET) $(__DBCS)
+ 
 
 #		*Implicit Rules*
 .asm.obj:
-	$(NASM) -f obj $(NASMFLAGS) -DMODEL=$(SHELL_MMODEL) -DCOMPILER=$(COMPILER) $<
+	$(NASM) -f obj $(NASMFLAGS) $(__TARGET) $(__DBCS) -DMODEL=$(SHELL_MMODEL) -DCOMPILER=$(COMPILER) $<

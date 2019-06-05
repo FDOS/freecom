@@ -246,6 +246,21 @@ symKey symkeys[] = {		/* symbolic keynames, uppercased! */
 	,{ 0, ""}
 };
 
+#if defined(DBCS)
+
+static int is_dbcs_lead_default(unsigned char c)
+{	/* single-byted character strings */
+	(void)c;
+	return 0;
+}
+static int is_dbcs_lead_cp932(unsigned char c)
+{	/* Japanese (CP932 shift_jis) */
+	return (0x81 <= c && c <= 0x9f) || (0xe0 <= c && c <= 0xfc);
+}
+
+int (*is_dbcs_lead)(unsigned char c) = is_dbcs_lead_default;
+
+#endif
 
 	/* keep it a single-file project */
 #include "../lib/res_w.c"
@@ -379,6 +394,10 @@ int loadFile(const char * const fnam)
 	dynstring text;			/* Current text */
 	dynstring vstring;		/* Validation string */
 	int version;
+#if defined(DBCS)
+	int in_dbcs = 0;
+	char *upfnam;
+#endif
 
 	text.text = vstring.text = 0;
 
@@ -390,6 +409,18 @@ printf("FIXSTRS: loading file %s\n", fnam);
 		pxerror("opening ", fnam);
 		return 33;
 	}
+
+#if defined(DBCS)
+	is_dbcs_lead = is_dbcs_lead_default;
+	if (upfnam = strdup(fnam))
+	{
+		strupr(upfnam);
+		if (strstr(upfnam, "JAPAN") || strstr(upfnam, "CP932"))
+			is_dbcs_lead = is_dbcs_lead_cp932;
+		free(upfnam);
+		upfnam = NULL;
+	}
+#endif
 
 	linenr = 0;
 	while (fgets(temp, sizeof(temp), fin)) {
@@ -459,7 +490,20 @@ printf("FIXSTRS: loading file %s\n", fnam);
 					return 41;
 				}
 				q = p = temp;
+#if defined(DBCS)
+				in_dbcs = 0;
+#endif
 				while((ch = *p++) != 0)
+#if defined(DBCS)
+				{ /* DBCS: beginning of while */
+					if (in_dbcs) {
+						*q++ = ch;
+						in_dbcs = 0;
+						continue;
+					} else {
+						in_dbcs = is_dbcs_lead((unsigned char)ch);
+					}
+#endif
 					switch(ch) {
 					case '\\':
 						if(*p && (*q++ = mapBSEscape(&p)) == 0) {
@@ -505,6 +549,9 @@ printf("FIXSTRS: loading file %s\n", fnam);
 						*q++ = ch;
 						break;
 					}
+#if defined(DBCS)
+				} /* DBCS: end of while */
+#endif
 				*q = 0;
 				if(q == temp) {
 					fprintf(stderr
@@ -612,7 +659,19 @@ printf("FIXSTRS: loading file %s\n", fnam);
 				}
 				/* Replace backslash escape sequences */
 				p = q = temp;
+#if defined(DBCS)
+				in_dbcs = 0;
+#endif
 				while((ch = *p++) != 0) {
+#if defined(DBCS)
+					if (in_dbcs) {
+						*q++ = ch;
+						in_dbcs = 0;
+						continue;
+					}
+					else
+						in_dbcs = is_dbcs_lead((unsigned char)ch);
+#endif
 					if(ch != '\\')
 						*q++ = ch;
 					else if(!*p) goto noAppendNL;

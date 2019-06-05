@@ -162,7 +162,8 @@ OBJ20 =	unquote.obj\
 	vcgetch.obj\
 	vcgetstr.obj\
 	where.obj\
-	delay.obj
+	delay.obj\
+	xtra.obj
 OBJ21 =	err1.obj\
 	err2.obj\
 	err3.obj\

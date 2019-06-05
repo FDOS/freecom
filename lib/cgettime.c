@@ -67,7 +67,9 @@ int cgetchar_timed(int secs)
 				dos_write(1, space, 1);
 			dos_write(1, backspaces, num);
 		}
-		delay(100);
+#if defined(IBMPC) || defined(NEC98)
+		mydelay(100);
+#endif
 	}
 		/* Because "keypressed()" returned true, getchar() does not block */
 	return cgetchar();

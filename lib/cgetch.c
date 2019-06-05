@@ -44,11 +44,97 @@
 
 #include "../config.h"
 
-#include <conio.h>
+#include <dos.h>
 
 #include "../include/command.h"
 #include "../include/keys.h"
 #include "../include/misc.h"
+
+#if defined(NEC98)
+
+# define kb_ky_sts(index,mask) \
+	(*(unsigned char far *)MK_FP(0,0x52a + (index)) & (mask))
+# define kb_shft_sts	*(unsigned char far *)MK_FP(0,0x53a)
+# define isCtrlPressed	(kb_shft_sts & 0x10)
+
+static int key_to_scan(int k)
+{
+	struct { int key, scancode; } keytbl[] = {
+		{ 0x1b53, KEY_F1 },
+		{ 0x1b54, KEY_F2 },
+		{ 0x1b55, KEY_F3 },
+		{ 0x1b56, KEY_F4 },
+		{ 0x1b57, KEY_F5 },
+		{ 0x1b45, KEY_F6 },
+		{ 0x1b4a, KEY_F7 },
+		{ 0x1b50, KEY_INS /* KEY_F8 */ },
+		{ 0x1b51, KEY_F9 },
+		{ 0x1b5a, KEY_F10 },
+		{ (int)0xff3a, KEY_UP },
+		{ (int)0xff3d, KEY_DOWN },
+		{ (int)0xff3b, KEY_LEFT },
+		{ (int)0xff3c, KEY_RIGHT },
+		{ 0x1b44, KEY_DEL },
+		{ (int)0xff3e, KEY_HOME },
+		{ (int)0xff3f, KEY_END },
+		{ 0, 0 }
+	};
+	int n = 0;
+	while(keytbl[n].key) {
+		if (k == keytbl[n].key)
+			return keytbl[n].scancode;
+		++n;
+	}
+	return k;
+}
+
+static int mykbhit_and_getch(IREGS *r)
+{
+	int loop_doskbhit = 2;
+	while(loop_doskbhit--) {
+		r->r_ax = 0x0600;
+		r->r_dx = 0x00ff;
+		intrpt(0x21, r);
+		if (!(r->r_flags & 0x40)) return r->r_ax;
+	}
+	return 0;
+}
+
+int cgetchar(void)
+{
+	IREGS r;
+	int c = 0, c2, doskbhit;
+	
+	do {
+		doskbhit = mykbhit_and_getch(&r);
+		if (doskbhit) {
+			c = doskbhit & 0xff;
+			switch(c) {
+			case 0x1b:	/* ESC (and prefix for extra key) */
+				if (kb_ky_sts(0, 0x01)) break;
+				/* if not real ESC key was pressed, get next stroke */
+				/* fall-through */
+			case 0xff:	/* internal use for extra key */
+				c2 = mykbhit_and_getch(&r);
+				if (c2) {
+					c = (c << 8) | (c2 & 0xff);
+				}
+				break;
+			}
+			c = key_to_scan(c);
+			if (isCtrlPressed) {
+				if (c == KEY_LEFT) c = KEY_CTRL_LEFT;
+				else if (c == KEY_RIGHT) c = KEY_CTRL_RIGHT;
+			}
+			break;
+		}
+		/* intrpt(0x28, &r); */
+	}while(c == 0);
+	
+	return c;
+}
+
+#else /* IBMPC */
 
 static int mygetch( void )
 {
@@ -60,12 +146,14 @@ static int mygetch( void )
 
 #define getch mygetch
 
-
 int cgetchar(void)
 {	int c;
 
-	if((c = getch()) == 0)
+	c = getch();
+#if defined(IBMPC)
+	if(c == 0)
 		c = SCANCODE(getch());		/* Scan code */
+#endif
 
 	if(c == KEY_CTL_C) {
 		ctrlBreak = 1;
@@ -73,3 +161,5 @@ int cgetchar(void)
 
 	return c;
 }
+#endif
+

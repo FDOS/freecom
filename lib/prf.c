@@ -34,6 +34,10 @@
 #include <../include/misc.h>
 #include <fmemory.h>
 
+#if defined(__TURBOC__) && (__TURBOC__ <= 0x297)
+unsigned _fstrlen(const char far * const s);
+#endif
+
 #define FALSE 0
 #define TRUE 1
 
@@ -310,6 +314,28 @@ int do_printf(FILE *f, const char * fmt, va_list arg)
   va_end(arg);
   return 0;
 }
+
+#if 1
+/* MS-DOS generic direct console output */
+int putch_int29(int c)
+{
+	IREGS r;
+	r.r_ax = c;
+	intrpt(0x29, &r);
+	return c;
+}
+
+int cputs_int29(const char *s)
+{
+	int c = 0;
+	while(1) {
+		if (*s) c = putch_int29(*(unsigned char *)s++);
+		else break;
+	}
+	return c;
+}
+
+#endif
 
 #ifdef TEST
 /*

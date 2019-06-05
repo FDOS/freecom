@@ -2,6 +2,7 @@
 
 set SWAP=YES-DXMS-SWAP____________________
 if NOT "%SWAP%"=="YES-DXMS-SWAP____________________" goto err1
+if exist Z:\rescan.com Z:\rescan
 : BEGIN Internal stuff for ska -- If one of these three commands
 :       fail for you, your distribution is broken! Please report.
 for %%a in (lib\lib.mak cmd\cmd.mak shell\command.mak) do if not exist %%a set SWAP=NO
@@ -20,23 +21,36 @@ if "%1"=="-r" shift
 if "%1"=="clean" clean.bat
 if "%1"=="clean" goto ende
 if "%1"=="-h" goto help
+if "%1"=="-?" goto help
 
 :loop_commandline
 if "%1"=="xms-swap" goto special
+if "%1"=="xmsswap"  goto special
 if "%1"=="debug"    goto special
 if "%1"=="wc"       goto special
 if "%1"=="tc"       goto special
 if "%1"=="tcpp"     goto special
 if "%1"=="bc"       goto special
+if "%1"=="nec98"      goto special
+if "%1"=="ibmpc"      goto special
+if "%1"=="generic"    goto special
+if "%1"=="dbcs"       goto special
+if "%1"=="no-enh"     goto special
 goto run
 
 :special
 if "%1"=="xms-swap" set XMS_SWAP=1
+if "%1"=="xmsswap"  set XMS_SWAP=1
 if "%1"=="debug"    set DEBUG=1
 if "%1"=="wc"       set COMPILER=WATCOM
 if "%1"=="tc"       set COMPILER=TC2
 if "%1"=="tcpp"     set COMPILER=TURBOCPP
 if "%1"=="bc"       set COMPILER=BC5
+if "%1"=="nec98"    set NEC98=1
+if "%1"=="ibmpc"    set IBMPC=1
+if "%1"=="generic"  set GENDOS=1
+if "%1"=="dbcs"     set DBCS=1
+if "%1"=="no-enh"   set NO_ENH_INP=1
 shift
 if not "%1" == "" goto loop_commandline
 
@@ -49,6 +63,11 @@ echo -r: Rebuild -- Clean before proceed
 echo clean: Remove *.OBJ, *.COM, *.LIB, etc. files, then exit
 echo xms-swap: Build FreeCOM with XMS-Only Swap support
 echo debug: Build FreeCOM with debug settings.
+echo generic: Build DOS generic version of FreeCOM.
+echo ibmpc: Build FreeCOM for IBM PC series.
+echo nec98: Build FreeCOM for NEC PC-9801 series.
+echo dbcs: Build FreeCOM with double-byted characters support.
+echo no-enh: Disable enhanced line input (history and filename completion).
 echo You can select for which language to built FreeCOM by setting
 echo the environment variable LNG before running this script, e.g.:
 echo SET LNG=german
@@ -56,6 +75,11 @@ echo selects the German language. For available language see STRINGS\*.LNG
 goto ende
 
 :run
+if not "%GENDOS%" == "1" goto run2
+set NEC98=
+set IBMPC=
+set NO_ENH_INP=1
+:run2
 if not x%1==x set LNG=%1
 if "%lng%"=="" set LNG=english
 echo Building FreeCOM for language %LNG%
@@ -189,3 +213,10 @@ set TP1_BASE=
 set BC5_BASE=
 set XNASM=
 set LNG=
+set GENDOS=
+set FMR=
+set IBMPC=
+set NEC98=
+set DBCS=
+set NO_ENH_INP=
+

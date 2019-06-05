@@ -43,13 +43,18 @@
 
 #include <assert.h>
 #include <dos.h>
+#include <io.h>
 
 #include "../include/misc.h"
 
 void beep(void)
 {
-  sound(900);
-  delay(200); /* 400 */
-  nosound();
-  delay(100);
+#if defined(IBMPC) || defined(NEC98)
+  mysound(900);
+  mydelay(200); /* 400 */
+  mynosound();
+  mydelay(100);
+#else
+  dos_write(1, "\x07" "\x07", 2);
+#endif
 }
