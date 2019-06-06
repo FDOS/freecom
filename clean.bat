@@ -17,10 +17,10 @@ call %0 lib\     freecom.lib freecom.lst freecom.rsp echolib.bat
 call %0 shell\   command.exe command.map command.rsp echoto.bat
 call %0 tools\   tools.mak
 
-call %0 strings\*.     cfg obj     exe
+call %0 strings\*.     cfg obj o     exe
 call %0 strings\strings\*. c obj
-call %0 tools\*.   icd cfg obj map exe com
-call %0 utils\*.       cfg obj map exe
+call %0 tools\*.   icd cfg obj o map exe com
+call %0 utils\*.       cfg obj o map exe
 
 for %%i in (cmd lib shell criter) do if exist %%i\*.obj del %%i\*.obj>nul
 for %%i in (cmd lib shell criter) do if exist %%i\*.cfg del %%i\*.cfg>nul
