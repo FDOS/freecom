@@ -451,7 +451,7 @@ static int loadhigh_prepare(void)
     int found_one = 0;
 
     for (mcbAssign(mcb, region->start)
-     ; FP_SEG(mcb) < region->end && mcb->mcb_type == 'M'
+     ; FP_SEG(mcb) < region->end && mcb->mcb_type == 'M' && mcb->mcb_size > 0
      ; mcbNext(mcb))
     {
       if (!mcb->mcb_ownerPSP)
