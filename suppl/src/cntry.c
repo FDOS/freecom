@@ -211,6 +211,19 @@ void nlsWriteFallback(Country *nls)
 #endif
 }
 
+static int get_dosnlsinfo(IREGS *r, unsigned char *buf, unsigned char val)
+{
+	r->r_ax = 0x6500 | val;
+	memset(buf, 0, 5);
+	r->r_cx = sizeof(buf);
+	intrpt(0x21, r);
+	if (*(unsigned long *)(buf + 1) == 0) { /* workaround for DOS 3.x */
+		r->r_ax = -1;
+		r->r_flags |= 1;
+	}
+	return !(r->r_flags & 1);
+}
+
 Country *nlsNewInfo(void)
 {	unsigned char buf[50];
 #if 1
@@ -227,10 +240,7 @@ Country *nlsNewInfo(void)
 #endif
 	
 	r.r_bx = r.r_dx = 0xffff;
-#define DOS(val) r.r_ax = 0x6500 | (val);	\
-	r.r_cx = sizeof(buf);					\
-    intrpt( 0x21, &r );                       \
-	if(0 == ( r.r_flags & 1 ) ? r.r_ax : 0)
+#define DOS(val) if (get_dosnlsinfo(&r,buf,val))
 #else
 #ifdef _MICROC_
 	IREGS r;

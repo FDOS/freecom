@@ -88,7 +88,7 @@ static int toMTrans(int ch, int len, fartbl iM(*)tbl, int (*fct)(int))
 	/* If len <= 0x80, the table has been filled only with
 		the values from 0x80..0xFF */
 	ch &= 0xFF;
-	return (len <= 0x80 && ch < 0x80)
+	return (len <= 0x80 && ch < 0x80 && !tbl)
 		? (byte)fct(ch)		/* this is the standard case */
 		: dpeekb(tbl, ch);
 }
