@@ -54,8 +54,26 @@
 
 # define kb_ky_sts(index,mask) \
 	(*(unsigned char far *)MK_FP(0,0x52a + (index)) & (mask))
-# define kb_shft_sts	*(unsigned char far *)MK_FP(0,0x53a)
-# define isCtrlPressed	(kb_shft_sts & 0x10)
+# define kb_shift_sts_      *(unsigned char far *)MK_FP(0,0x53a)
+# define isCtrlPressed_     (kb_shift_sts_ & 0x10)
+
+# ifdef __WATCOMC__
+extern unsigned char nec98_kb_shift_sts(void);
+# pragma aux nec98_kb_shift_sts = \
+    "mov ax,0200h" \
+    "int 18h" \
+    value [al] \
+    modify [ax];
+# else
+static unsigned char nec98_kb_shift_sts(void)
+{
+	IREGS r;
+	r.r_ax = 0x0200;
+	intrpt(0x18, &r);
+	return (unsigned char)(r.r_ax);
+}
+# endif
+# define isCtrlPressed (nec98_kb_shift_sts() & 0x10)
 
 static int key_to_scan(int k)
 {
