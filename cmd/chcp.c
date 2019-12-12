@@ -36,10 +36,11 @@ int cmd_chcp(char *param)
 	unsigned curCP, sysCP;
 
 	_AX = 0x6601;
+	_BX = 0xffffU;
 	geninterrupt(0x21);
 	curCP = _BX;
 	sysCP = _DX;
-	if(_CFLAG) {
+	if(_CFLAG || curCP == 0xffffU) {
 		error_get_codepage();
 		return 1;
 	}
