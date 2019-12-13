@@ -65,19 +65,25 @@ static unsigned char iobuf[CMD_SIZE + 2] = { CMD_SIZE, '\0'};
 
 void readcommandDOS(char * const str, int maxlen)
 {	IREGS r;
-	int hasDoskey;
+	int useDoskey = 0;
 
 	assert(str);
 	assert(maxlen);
 
-	/* check doskey is installed (in every input process) */
-	r.r_ax = 0x4800;
-	r.r_es = 0;
-	intrpt(0x2f, &r);
-	hasDoskey = ((r.r_ax & 0xff) != 0 && r.r_es != 0);
+	r.r_ax = 0x4400;
+	r.r_bx = r.r_dx = 0;		/* STDIN */
+	intrpt(0x21, &r);
+	if ((r.r_dx & 0x91) == 0x91) {
+		/* if stdin is not redirected to a file or a device other than default "CON", */
+		/* check doskey is installed (in every input process) */
+		r.r_ax = 0x4800;
+		r.r_es = 0;
+		intrpt(0x2f, &r);
+		useDoskey = ((r.r_ax & 0xff) != 0 && r.r_es != 0);
+	}
 
 	iobuf[0] = (maxlen < CMD_SIZE)? maxlen: CMD_SIZE;
-	if(hasDoskey) {
+	if(useDoskey) {
 		/* workaround for doskey (RBIL K-2F4810) */
 		if(iobuf[0] > 0x80)
 			iobuf[0] = 0x80;
@@ -89,7 +95,7 @@ void readcommandDOS(char * const str, int maxlen)
 	if(echo)
 		printprompt();
 
-	if (hasDoskey) {
+	if (useDoskey) {
 		/* read from doskey */
 		r.r_ax = 0x4810;
 		r.r_ds = FP_SEG(iobuf);
