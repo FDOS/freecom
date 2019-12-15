@@ -67,6 +67,10 @@ enum
 /* prototypes for INIT.C */
 extern void ASMINTERRUPT dummy_criter_handler();
 extern void ASMINTERRUPT cbreak_handler();
+extern void far cdecl terminateFreeCOMHook(void);
+extern void far * far termAddr;
+extern word far myPID;
+extern word far origPPID;
 /* extern void initCBreak(void);*/
 
 /* prototypes for COMMAND.C */

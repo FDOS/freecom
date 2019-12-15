@@ -29,14 +29,9 @@ extern unsigned char far dosCMDNAME[128];
 /*extern unsigned char far dosCMDTAIL[128];*/
 #define dosCMDTAIL  ((char far*)MK_FP(_psp, 0x80))
 
-extern byte far canexit;
-extern void far * far termAddr;
-extern word far myPID;
 extern word residentCS;
-extern word far origPPID;
 
 extern int cdecl XMSexec(void);	
-extern void far cdecl terminateFreeCOMHook(void);
 
 #ifdef __WATCOMC__
 typedef unsigned long xmsfunc(unsigned request, unsigned dx, void *si);

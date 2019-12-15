@@ -5,7 +5,7 @@ TOP=..
 
 all: command.exe
 
-OBJ1 =	$(OBJC0) cb_catch.obj
+OBJ1 =	$(OBJC0) cb_catch.obj termhook.obj
 !if $(XMS_SWAP)0 == 0
 OBJ2 =	dummies.obj
 !else

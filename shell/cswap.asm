@@ -55,9 +55,7 @@ dosFCB2 times 37 db 0
 	cglobal dosCMDNAME
 ;;_dosCMDTAIL  times 128 db 0
 dosCMDNAME times 128 db 0
- 		times 256	db 0
-;;    global localStack
-localStack:
+    extern localStack
 
 
 	cglobal dosParamDosExec
@@ -76,14 +74,6 @@ XMSrestore	times 8 DW 0
 %define xms_handle	XMSrestore+4
 %define currentSegmOfFreeCOM	XMSrestore+14
 
-	cglobal termAddr
-termAddr:
-terminationAddressOffs	DW 0
-terminationAddressSegm	DW 0
-	cglobal myPID
-myPID	DW 0
-	cglobal origPPID
-origPPID DW 0
 	cglobal canexit
 canexit	DB 0		; 1 -> can exit; _else_ --> cannot exit
 
@@ -212,58 +202,18 @@ terminate_myself:
 
 		;; FALL THROUGH for elder FreeCOM kernels that simply ignore
 		;; DOS-4C for shells
+		extern terminateFreeCOMHook
+		jmp terminateFreeCOMHook
 
-	;; central PSP:0xa hook <-> may be called in every circumstance
-	cglobal terminateFreeCOMHook
-terminateFreeCOMHook:
-	mov ax, cs				; setup run environment (in this module)
-	mov ss, ax
-	mov sp, localStack
-	mov ds, ax
-
-	; Next time we hit here it's != 1 --> no zero flag --> I_AM_DEAD status
-	dec BYTE [canexit]
-	jnz I_AM_DEAD
-
-	mov ax, [myPID]		; our own PSP [in case we arrived here
-	mov es, ax				; in some strange ways]
-
-	; Make sure the current PSP hasn't patched to nonsense already
-	mov bx, ax
-	mov ah, 50h				; Set PSP
-	int 21h
-
-	; Reset old termination address
-	mov ax, [terminationAddressOffs]
-	mov [es:0ah], ax
-	mov ax, [terminationAddressSegm]
-	mov [es:0ch], ax
-
-	; Drop our "Shell" privileges
-	mov ax, [origPPID]		; original parent process ID
-	mov [es:16h], ax
-
+	global xms_kill
+xms_kill:
 	; Kill the XMS memory block
 	mov dx, [xms_handle]
 	or dx, dx
 	jz terminate_myself		; no block to deallocate
 	mov ah, 0ah				; deallocate XMS memory block
 	callXMS
-
-	; Now, DOS-4C should proceed correctly
-	jmp short terminate_myself
-
-
-I_AM_DEAD:								; process 0 can't terminate ...
-	mov dx, dead_loop_string
-	mov ah, 9
-	int 21h
-I_AM_DEAD_loop:
-	hlt
-	jmp short I_AM_DEAD_loop
-
-dead_loop_string	DB 13,10,7,'Cannot terminate permanent FreeCOM instance'
-	DB 13,10,'System halted ... reboot or power off now$'
+	ret
 
 ;
 ; as I don't know how to set the old interrupt handler
