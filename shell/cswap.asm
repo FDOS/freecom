@@ -55,8 +55,9 @@ dosFCB2 times 37 db 0
 	cglobal dosCMDNAME
 ;;_dosCMDTAIL  times 128 db 0
 dosCMDNAME times 128 db 0
-    extern localStack
-
+		times 256	db 0
+    global localStack
+localStack:
 
 	cglobal dosParamDosExec
 dosParamDosExec times 22	db 0
@@ -202,7 +203,7 @@ terminate_myself:
 
 		;; FALL THROUGH for elder FreeCOM kernels that simply ignore
 		;; DOS-4C for shells
-		extern terminateFreeCOMHook
+		cextern terminateFreeCOMHook
 		jmp terminateFreeCOMHook
 
 	global xms_kill

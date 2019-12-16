@@ -25,16 +25,12 @@
 
 segment _TEXT
 
- 		times 256	db 0
-    global localStack
-localStack:
-
 	cglobal termAddr
 termAddr:
 terminationAddressOffs	DW 0
 terminationAddressSegm	DW 0
 
-	extern canexit
+	cextern canexit
 	cglobal myPID
 myPID	DW 0
 	cglobal origPPID
@@ -43,13 +39,19 @@ origPPID DW 0
 	;; central PSP:0xa hook <-> may be called in every circumstance
 	cglobal terminateFreeCOMHook
 terminateFreeCOMHook:
+%ifndef XMS_SWAP
+	dec BYTE [canexit]
+%endif
 	mov ax, cs				; setup run environment (in this module)
+	mov ds, ax
+%ifdef XMS_SWAP
+	extern localStack
 	mov ss, ax
 	mov sp, localStack
-	mov ds, ax
 
 	; Next time we hit here it's != 1 --> no zero flag --> I_AM_DEAD status
 	dec BYTE [canexit]
+%endif
 	jnz I_AM_DEAD
 
 	mov ax, [myPID]		; our own PSP [in case we arrived here
