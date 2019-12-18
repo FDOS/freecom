@@ -51,6 +51,9 @@ fi(le): dfnfnam.c
 #include <string.h>
 #endif
 #include "dfn.loc"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 #include "suppldbg.h"
 
@@ -59,8 +62,25 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
+#ifdef TEST_DBCS
+/* test */
+char *dfnfilename2(const char * const fnam);
+char *dfnfilename(const char * const fnam)
+{
+    char *s;
+    printf("\rdfnfilename -\n");
+    printf("src \"%s\"\n", fnam);
+    s= dfnfilename2(fnam);
+    printf("dst \"%s\"\n", s);
+    return s;
+}
+# define dfnfilename dfnfilename2
+#endif
 char *dfnfilename(const char * const fnam)
 {	const char *p;
+#ifdef DBCS
+	const char *s = (const char *)fnam;
+#endif
 
 	DBG_ENTER("dfnfilename", Suppl_dfn)
 
@@ -68,8 +88,18 @@ char *dfnfilename(const char * const fnam)
 
 	DBG_ARGUMENTS( ("fnam=\"%s\"", fnam) )
 
+#ifdef DBCS
+	for(p = s; *s;) {
+		if (dfndelim2(*s))
+			p = s + 1;
+		s += MbLen(fnam);
+	}
+
+	DBG_RETURN_S( (char*)p )
+#else
 	p = strchr(fnam, '\0');
 	while(--p >= fnam && !dfndelim2(*p));
 
 	DBG_RETURN_S( (char*)p + 1)
+#endif
 }

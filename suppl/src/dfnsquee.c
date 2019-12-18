@@ -51,6 +51,9 @@ fi(le): dfnsquee.c
 #endif
 #include "eno.loc"
 #include "dfn.loc"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 #include "dynstr.h"
 
@@ -61,6 +64,20 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
+#ifdef TEST_DBCS
+/* test */
+char *dfnsqueeze2(const char * const fnam);
+char *dfnsqueeze(const char * const fnam)
+{
+    char *s;
+    printf("\rdfnsqueeze -\n");
+    printf("src \"%s\"\n", fnam);
+    s= dfnsqueeze2(fnam);
+    printf("dst \"%s\"\n", s);
+    return s;
+}
+# define dfnsqueeze dfnsqueeze2
+#endif
 char *dfnsqueeze(const char * const fnam)
 {	char *p, *h, *q;
 
@@ -111,6 +128,14 @@ redo:
 #endif
 			}
 		}
+#ifdef DBCS
+		if (isDbcsLead((unsigned char)(*q))) {
+			*p++ = *q++;
+			if (*q != '\0') { *p++ = *q++; }
+			if (*q == '\0') break;
+			continue;
+		}
+#endif
 	} while((*p++ = toFUpper(*q++)) != 0);
 
 	chkHeap

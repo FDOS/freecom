@@ -80,6 +80,9 @@ co(mpilers):
 #include "dynstr.h"
 #include "suppl.h"
 #include "dir.loc"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 #include "suppldbg.h"
 
@@ -88,6 +91,20 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
+#ifdef TEST_DBCS
+/* test */
+char *dfnfullpath2(const char * const fnam);
+char *dfnfullpath(const char * const fnam)
+{
+    char *s;
+    printf("\rdfnfullpath -\n");
+    printf("src \"%s\"\n", fnam);
+    s= dfnfullpath2(fnam);
+    printf("dst \"%s\"\n", s);
+    return s;
+}
+# define dfnfullpath dfnfullpath2
+#endif
 char *dfnfullpath(const char * const fnam)
 {	char *fullpath;
 	char *paths;
@@ -133,7 +150,11 @@ char *dfnfullpath(const char * const fnam)
 	q = paths;
 	while(*q == '\\' && *++q) {
 		/* Check for special directories */
+#ifdef DBCS
+		if((nxtDelim = MbStrchr(q, '\\')) == 0)
+#else
 		if((nxtDelim = strchr(q, '\\')) == 0)
+#endif
 			nxtDelim = strchr(q, '\0');
 		if((cnt = strspn(q, ".")) == nxtDelim - q
 #ifndef FEATURE_LONG_FILENAMES
@@ -142,11 +163,25 @@ char *dfnfullpath(const char * const fnam)
 		) {
 			/* all dots --> special directory */
 			/* Relocate "q" (cnt-1) path components to the left */
+#ifdef DBCS
+			while(1) {
+				q = CharPrev(paths, q);
+				if (q <= paths || --cnt <= 0) break;
+				do {
+					q = CharPrev(paths, q);
+					if (*q == '\\') {
+						++q;
+                        break;
+					}
+				} while (q > paths);
+			}
+#else
 			while(--q > paths && --cnt) {
 				/* search next '\' to the left */
 				while(*--q != '\\');
 				++q;
 			}
+#endif
 			if(*nxtDelim) {
 				/* some components left, move them up */
 				/* Note: *nxtDelim == *q == '\\', but by copying over

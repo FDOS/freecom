@@ -109,6 +109,9 @@ fi(le): dfnsplit.c
 #include "dfn.loc"
 #include "dynstr.h"
 #include "eno.loc"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 #include "suppldbg.h"
 
@@ -117,6 +120,23 @@ static char const rcsid[] =
 	"$Id$";
 #endif
 
+#ifdef TEST_DBCS
+/* test */
+int dfnsplit2(const char * const fnam, char ** const dr, char ** const path, char ** const name, char ** const ext);
+int dfnsplit(const char * const fnam, char ** const dr, char ** const path, char ** const name, char ** const ext)
+{
+    int rc;
+    printf("\rdfnsplit - \n");
+    printf("src \"%s\"\n", fnam);
+    rc = dfnsplit2(fnam, dr, path, name, ext);
+    printf("dr \"%s\"\n", (dr && *dr) ? *dr : "(null)");
+    printf("path \"%s\"\n", (path && *path) ? *path : "(null)");
+    printf("name \"%s\"\n", (name && *name) ? *name : "(null)");
+    printf("exit \"%s\"\n", (ext && *ext) ? *ext : "(null)");
+    return rc;
+}
+# define dfnsplit dfnsplit2
+#endif
 int dfnsplit(const char * const fnam, char ** const dr, char ** const path
 	, char ** const name, char ** const ext)
 {	const char *p, *h;
@@ -185,6 +205,31 @@ int dfnsplit(const char * const fnam, char ** const dr, char ** const path
 				/* strip trailing backslash */
 				chkHeap
 				do {
+#ifdef DBCS
+					unsigned n = MbLen(p);
+					if (n > 1) {
+						while(n--) {
+							++p;
+							if(p >= h) break;
+							*z++ = *p;
+                        }
+					}
+					else {
+						if (dfndelim(ch = *p)) {
+							ch = '\\';
+							while(1) {
+								p += n;
+								if (!dfndelim(*p)) break;
+								n = MbLen(p);
+							}
+						}
+						else {
+							++p;
+						}
+						if(p >= h) break;
+						*z++ = ch;
+					}
+#else
 					if(dfndelim(ch = *p++)) {	/* squeeze */
 						ch = '\\';
 						while(dfndelim(*p++));
@@ -192,6 +237,7 @@ int dfnsplit(const char * const fnam, char ** const dr, char ** const path
 					}
 					if(p >= h) break;
 					*z++ = ch;
+#endif
 				} while(1);
 				if(z == *path)		/* root directory */
 					*z++ = '\\';

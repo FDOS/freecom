@@ -48,8 +48,8 @@ fi(le): dstrupr.c
 
 #include <portable.h>
 #include "dynstr.h"
-#if defined(DBCS)
-# include "nls_c.h"
+#ifdef DBCS
+# include "mbcs.h"
 #endif
 
 #include "suppldbg.h"

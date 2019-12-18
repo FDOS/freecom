@@ -1,8 +1,10 @@
 /* readcommandEnhanced for DBCS */
 
-#if !defined(DBCS)
-#define MbLen(s) (1)
-#define isDbcsLead(ch) (0)
+#ifdef DBCS
+# include "mbcs.h"
+#else
+# define MbLen(s) (1)
+# define isDbcsLead(ch) (0)
 #endif
 
 unsigned curposToXY(const char * const str_top, unsigned curpos, unsigned *offset_x0, unsigned *offset_y0)

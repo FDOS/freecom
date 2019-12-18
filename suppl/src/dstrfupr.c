@@ -49,8 +49,8 @@ fi(le): dstrupr.c
 
 #include <portable.h>
 #include "nls_f.h"
-#if defined(DBCS)
-# include "nls_c.h"
+#ifdef DBCS
+# include "mbcs.h"
 #endif
 
 #include "suppldbg.h"

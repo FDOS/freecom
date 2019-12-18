@@ -38,6 +38,10 @@
 #define Strncmpi	Strnicmp
 #define Memcmpi	Memicmp
 
+#ifdef DBCS
+# include "mbcs.h"
+#endif
+
 
 
 /* Generated string function replacements */
@@ -113,5 +117,26 @@ char *Strend(char *s);
 #define strpbrk Strpbrk
 #define strend Strend
 #endif	/* defined(SUPPL_STR_REMAP) */
+
+#ifdef DBCS
+# if 1
+#  undef Stricmp
+#  undef stricmp
+#  define Stricmp MbStricmp
+#  define stricmp MbStricmp
+# endif
+# if 1
+#  undef Strchr
+#  undef strchr
+#  define Strchr MbStrchr
+#  define strchr MbStrchr
+# endif
+# if 1
+#  undef Strrchr
+#  undef strrchr
+#  define Strrchr MbStrrchr
+#  define strrchr MbStrrchr
+# endif
+#endif /* DBCS */
 
 #endif

@@ -53,13 +53,4 @@ int isodigit(int ch);
 #define isodigit(ch)	((ch) >= '0' && (ch) <= '7')
 int toxdigit(int ch);
 
-/* DBCS support */
-int isDbcsLead(unsigned char ch);
-int MbLen(const char *s);
-#ifdef _MICROC_
-/* not supported: MICROC */
-#else
-int _fMbLen(const char far *s);
-#endif
-
 #endif

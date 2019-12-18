@@ -32,8 +32,8 @@
 #include "../include/cmdline.h"
 #include "../include/command.h"
 #include "../err_fcts.h"
-#if defined(DBCS)
-# include "../suppl/nls_c.h"
+#ifdef DBCS
+# include "../suppl/mbcs.h"
 #endif
 
 static int is_redir(char c)

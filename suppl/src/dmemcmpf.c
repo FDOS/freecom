@@ -42,6 +42,9 @@ fi(le): dmemcmpf.c
 #include <dos.h>
 #endif
 #include <portable.h>
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 #include "dynstr.h"
 
 #include "suppldbg.h"
@@ -82,7 +85,26 @@ int _fMemiCmp(const byte far * dest, const byte far * src, unsigned length)
 	if(src == 0)
 		DBG_RETURN_I(-1)
 
+#ifdef DBCS
+	while(1) {
+		unsigned ns = _fMbLen(src);
+		unsigned nd = _fMbLen(dest);
+		if (ns > 1 || nd > 1) {
+			d = *dest - *src;
+			if (d) break;
+			d = dest[1] - src[1];
+		}
+		else {
+			d = toUpper(*dest) - toUpper(*src);
+		}
+		if (d || length <= ns) break;
+		src += ns;
+		dest += nd;
+		length -= ns;
+	}
+#else
 	while((d = toUpper(*dest++) - toUpper(*src++)) == 0 && --length);
+#endif
 
 	DBG_RETURN_I( d)
 }
