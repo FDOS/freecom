@@ -41,11 +41,7 @@ static char logFilename[] = LOG_FILE;
 #endif
 #endif
 
-#ifdef FEATURE_XMS_SWAP
 #define oldPSP	origPPID
-#else
-static unsigned oldPSP;
-#endif
 char *ComPath;                   /* absolute filename of COMMAND shell */
 
 #if defined(__WATCOMC__)
@@ -79,8 +75,8 @@ void exitfct(void)
 {
 	unloadMsgs();        /* free the message strings segment */
 	OwnerPSP = oldPSP;
-#ifdef FEATURE_XMS_SWAP
 	pspTermAddr = termAddr;
+#ifdef FEATURE_XMS_SWAP
 	XMSexit();
 #endif
 }
@@ -191,12 +187,9 @@ int initialize(void)
 /* Set up the host environment of COMMAND.COM */
 
 	/* Give us shell privileges */
-#ifdef FEATURE_XMS_SWAP
-	residentCS = _CS;
 	myPID = _psp;
 	termAddr = pspTermAddr;
 	pspTermAddr = terminateFreeCOMHook;
-#endif
 	oldPSP = OwnerPSP;
 	atexit(exitfct);
 	OwnerPSP = _psp;

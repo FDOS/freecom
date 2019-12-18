@@ -74,4 +74,5 @@ $(CFG): $(CFG_DEPENDENCIES) ../config.mak
 
 #		*Implicit Rules*
 .asm.obj:
-	$(NASM) -f obj $(NASMFLAGS) $(__TARGET) $(__DBCS) -DMODEL=$(SHELL_MMODEL) -DCOMPILER=$(COMPILER) $<
+	$(NASM) -f obj $(NASMFLAGS) $(__TARGET) $(__DBCS) -DMODEL=$(SHELL_MMODEL) -DCOMPILER=$(COMPILER) $(__XMS_SWAP) $<
+

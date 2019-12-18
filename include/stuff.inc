@@ -1,3 +1,5 @@
+cpu 8086
+
 ;; Multi-Push/Pop
 ;; Both take the registers in the same order, "F"==Flags
 ;; Push pushes left to right; pop right to left
