@@ -84,7 +84,9 @@ mySP DW 0
 
 execRetval dw 0
 
-;	global real_XMSexec
+%ifidn __OUTPUT_FORMAT__,elf
+	cglobal real_XMSexec
+%endif
 real_XMSexec:
 		int 21h	; shrink/free: first thing done from resident code
 
@@ -320,7 +322,6 @@ XMSrequest:
 ;;	SS at the end of the XMSexec function
 		cglobal	XMSexec
 XMSexec:
-		cextern residentCS
 						; save ALL registers needed later
 %ifidn __OUTPUT_FORMAT__,elf 	; GCC: need to preserve es
 		push es
@@ -345,7 +346,12 @@ XMSexec:
 		mov bx,[SwapResidentSize]
 
 		mov dx, ds
-		mov cx, [residentCS]
+%ifidn __OUTPUT_FORMAT__,elf 	; GCC/ELF: can't use seg so use pointer from C
+		cextern preal_XMSexec
+		mov cx, [cs:preal_XMSexec+2]
+%else
+		mov cx, seg mySS
+%endif
 		mov ds, cx
 
         mov [mySS],ss  ; 2E
@@ -355,11 +361,11 @@ XMSexec:
         mov  sp,localStack
 
 		push dx			; save DS of transient portion
-		push cs			; save segment of transient portion
-		push WORD ret_from_resident
-		push cx
-		push WORD real_XMSexec
-		retf
+%ifidn __OUTPUT_FORMAT__,elf 	; GCC/ELF: can't use direct call far
+		call far [cs:preal_XMSexec]
+%else
+		call far real_XMSexec
+%endif
 
 ret_from_resident:
 		mov ax,[execRetval]

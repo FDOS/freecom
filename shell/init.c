@@ -180,9 +180,6 @@ int initialize(void)
 /* Set up the host environment of COMMAND.COM */
 
 	/* Give us shell privileges */
-#ifdef FEATURE_XMS_SWAP
-	residentCS = _CS;
-#endif
 	myPID = _psp;
 	termAddr = pspTermAddr;
 	pspTermAddr = terminateFreeCOMHook;

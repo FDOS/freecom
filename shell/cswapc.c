@@ -78,7 +78,11 @@ static enum {
 	,INIT_FAILED
 	,INIT_SUCCEEDED
 } initialized = INIT_NO;
-word residentCS;
+#ifdef __GNUC__
+/* For other compilers this is defined in cswap.asm but NASM can't deal
+   with relocations in ELF */
+void far * far preal_XMSexec __attribute__((section(".text"))) = real_XMSexec;
+#endif
 
 int XMSisactive(void)
 {	return initialized == INIT_SUCCEEDED;
