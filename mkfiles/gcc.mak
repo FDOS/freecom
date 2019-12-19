@@ -13,7 +13,7 @@ CC = ia16-elf-gcc -c
 CL = ia16-elf-gcc -mcmodel=small
 CLO = -o $@
 AR = ia16-elf-ar crsv
-LD = $(CL) $(CFLAGS1) -o command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -Wl,-Map,command.map \#
+LD = $(CL) $(CFLAGS1) -o command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) command.ld $(LIBS) -Wl,-Map,command.map \#
 LIBLIST = >
 ECHOLIB = echo >>
 

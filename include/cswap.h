@@ -36,7 +36,6 @@ typedef unsigned long xmsfunc(unsigned request, unsigned dx, void *si);
 #pragma aux xmsfunc = parm [ax] [dx] [si] modify [bx cx]
 extern xmsfunc far *far XMSdriverAdress;
 #elif defined(__GNUC__)
-extern far void real_XMSexec(void);
 extern unsigned far *far XMSdriverAdress;
 static inline unsigned long XMSrequest(unsigned request, unsigned dx, void *si)
 {
