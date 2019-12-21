@@ -315,7 +315,7 @@ int do_printf(FILE *f, const char * fmt, va_list arg)
   return 0;
 }
 
-#if 1
+#ifndef IGNORE_ENHANCED_INPUT
 /* MS-DOS generic direct console output */
 int putch_int29(int c)
 {
