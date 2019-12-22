@@ -16,6 +16,9 @@
 #include "../err_fcts.h"
 #include "../suppl/dfn.h"
 #include "../include/lfnfuncs.h"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 int cd_dir(char *param, int cdd, const char * const fctname)
 {	char **argv, *dir;
@@ -47,7 +50,11 @@ int cd_dir(char *param, int cdd, const char * const fctname)
 		/* if path refers to an existing file and not directory, ignore filename portion */
             if (cdd && (dfnstat(argv[0]) & DFN_FILE))
 		{
+#ifdef DBCS
+			dir = MbStrrchr(argv[0], '\\');
+#else
 			dir = strrchr(argv[0], '\\');
+#endif
 			if (dir == NULL)
 			{
 				dir = argv[0];
@@ -61,10 +68,14 @@ int cd_dir(char *param, int cdd, const char * const fctname)
 		}
 #endif
 
+#ifdef DBCS
+		cutBackslash(argv[0]);
+#else
 		dir = strchr(argv[0], '\0');
 		/* take off trailing \ if any, but ONLY if dir is not the root dir */
 		while(dir > &argv[0][1] && *--dir == '\\' && dir[-1] != ':')
 			*dir = '\0';
+#endif
 
 		dir = argv[0];
 

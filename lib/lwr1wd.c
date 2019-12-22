@@ -40,6 +40,9 @@
 #include <ctype.h>
 
 #include "../include/command.h"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 void partstrlower(char *str)
 {	int c;
@@ -47,5 +50,13 @@ void partstrlower(char *str)
 	assert(str);
 
 	while ((c = *str) != '\0' && !isspace(c))
+#ifdef DBCS
+	{
+		int n = MbLen(str);
+		if (n == 1) *str = tolower(c);
+		str += n;
+	}
+#else
 		*str++ = tolower(c);
+#endif
 }

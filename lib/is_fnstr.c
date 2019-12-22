@@ -10,12 +10,19 @@
 #include <assert.h>
 
 #include "../include/misc.h"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 int is_fnstr(const char * const s)
 {	const char *p;
 
 	assert(s);
+#ifdef DBCS
+	for(p = s; *p; p = CharNext(p))
+#else
 	for(p = s; *p; ++p)
+#endif
 		if(!is_fnchar(*p))
 			return 0;
 

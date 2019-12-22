@@ -30,14 +30,25 @@
 #include <string.h>
 
 #include "../include/cmdline.h"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 char *ltrimcl(const char *str)
 { char c;
 
   assert(str);
 
+#ifdef DBCS
+  while ((c = *str) != '\0' && isargdelim(c)) {
+    str = CharNext(str);
+  }
+
+  return (char *)str;           /* strip const */
+#else
   while ((c = *str++) != '\0' && isargdelim(c))
     ;
 
   return (char *)str - 1;		/* strip const */
+#endif
 }

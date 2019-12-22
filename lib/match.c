@@ -58,6 +58,10 @@
 
 #include "../include/cmdline.h"
 #include "../include/misc.h"
+#ifdef DBCS
+# include "suppl.h"
+# include "mbcs.h"
+#endif
 
 int match_(char ** const Xp, const char * const word, int len)
 {	char *p;
@@ -66,7 +70,11 @@ int match_(char ** const Xp, const char * const word, int len)
 	assert(word && *word);
 	assert(len > 0);
 
+#ifdef DBCS
+	if(MbStrnicmp(p = *Xp, word, len) == 0) {
+#else
 	if(strnicmp(p = *Xp, word, len) == 0) {
+#endif
 		/* line begins with string, now test if it is a word */
 		p += len;
 		if(*p) {

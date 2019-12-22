@@ -55,6 +55,9 @@
 #include <suppl.h>
 #include "../include/command.h"
 #include "../strings.h"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 static int do_complete(char *str, unsigned charcount, int show)
 {
@@ -96,6 +99,19 @@ static int do_complete(char *str, unsigned charcount, int show)
 
   /* extract directory from word */
   strcpy(directory, &str[start]);
+#ifdef DBCS
+  curplace = -1;
+  {
+    int cp2 = 0;
+    char c;
+    while((c = directory[cp2]) != '\0') {
+      if (c == '\\' || c == ':') curplace = cp2;
+      cp2 += MbLen(directory + cp2);
+    }
+    directory[curplace + 1] = '\0';
+  }
+  if (curplace < 0) curplace = 0;
+#else
   curplace = strlen(directory) - 1;
   while (curplace >= 0 && directory[curplace] != '\\' &&
          directory[curplace] != ':')
@@ -103,6 +119,7 @@ static int do_complete(char *str, unsigned charcount, int show)
     directory[curplace] = 0;
     curplace--;
   }
+#endif
 
   strcpy(path, &str[start]);
 

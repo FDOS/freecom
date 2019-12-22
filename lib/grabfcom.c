@@ -68,6 +68,9 @@
 #include "../include/command.h"
 #include "../err_fcts.h"
 #include "../include/misc.h"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 int grabComFilename(const int warn, const char far * const fnam)
 {
@@ -109,8 +112,21 @@ int grabComFilename(const int warn, const char far * const fnam)
     	len = strlen(buf);
     }
 
+#ifdef DBCS
+    {
+        char *ppos, *lpos;
+        lpos = ppos = buf + len;
+        while(ppos > buf) {
+          ppos = CharPrev(buf, ppos);
+          if (*ppos == '\\') lpos = ppos;
+          else break;
+        }
+        len = lpos - buf;
+    }
+#else
     while(buf[len - 1] == '\\')
     	--len;
+#endif
     buf[len] = 0;
 
     if(dfnstat(buf) & DFN_DIRECTORY) {

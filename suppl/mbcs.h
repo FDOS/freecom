@@ -14,6 +14,7 @@ int MbLen(const char *s);
 char * MbStrchr(const char *s, int c);
 char * MbStrrchr(const char *s, int c);
 int MbStricmp(const char *s1, const char *s2);
+int MbStrnicmp(const char *s1, const char *s2, size_t length);
 char * CharPrev(const char *base, const char *s);
 #define CharNext(s)    ((char *)(s) + MbLen(s))
 

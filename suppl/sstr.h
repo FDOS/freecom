@@ -126,6 +126,12 @@ char *Strend(char *s);
 #  define stricmp MbStricmp
 # endif
 # if 1
+#  undef Strnicmp
+#  undef strnicmp
+#  define Strnicmp MbStrnicmp
+#  define strnicmp MbStrnicmp
+# endif
+# if 1
 #  undef Strchr
 #  undef strchr
 #  define Strchr MbStrchr

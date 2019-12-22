@@ -101,3 +101,21 @@ int MbStricmp(const char *s1, const char *s2)
 	return d;
 }
 
+int MbStrnicmp(const char *s1, const char *s2, size_t length)
+{
+	int d = 0;
+	while(length--) {
+		int c1, c2;
+		int n1, n2;
+		n1 = MbLen(s1);
+		n2 = MbLen(s2);
+		c1 = (n1 == 1) ? toUpper(*s1) : *s1;
+		c2 = (n2 == 1) ? toUpper(*s2) : *s2;
+		d = c1 - c2;
+		if (d != 0 || (*s1 == '\0' /* && *s2 == '\0' */)) break;
+		s1 += n1;
+		s2 += n2;
+	}
+	return d;
+}
+
