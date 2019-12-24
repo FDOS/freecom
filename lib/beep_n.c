@@ -43,7 +43,6 @@
 
 #include <assert.h>
 #include <dos.h>
-#include <io.h>
 
 #include "../include/misc.h"
 

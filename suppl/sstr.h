@@ -121,15 +121,25 @@ char *Strend(char *s);
 #ifdef DBCS
 # if 1
 #  undef Stricmp
-#  undef stricmp
 #  define Stricmp MbStricmp
-#  define stricmp MbStricmp
+#  ifdef __GNUC__       /* gcc-ia16 + newlib-ia16 */
+#   undef strcasecmp
+#   define strcasecmp MbStricmp
+#  else
+#   undef stricmp
+#   define stricmp MbStricmp
+#  endif
 # endif
 # if 1
 #  undef Strnicmp
-#  undef strnicmp
 #  define Strnicmp MbStrnicmp
-#  define strnicmp MbStrnicmp
+#  ifdef __GNUC__       /* gcc-ia16 + newlib-ia16 */
+#   undef strncasecmp
+#   define strncasecmp MbStricmp
+#  else
+#   undef strnicmp
+#   define strnicmp MbStrnicmp
+#  endif
 # endif
 # if 1
 #  undef Strchr

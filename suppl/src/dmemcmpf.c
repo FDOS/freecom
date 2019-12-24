@@ -87,8 +87,8 @@ int _fMemiCmp(const byte far * dest, const byte far * src, unsigned length)
 
 #ifdef DBCS
 	while(1) {
-		unsigned ns = _fMbLen(src);
-		unsigned nd = _fMbLen(dest);
+		unsigned ns = _fMbLen((char far *)src);
+		unsigned nd = _fMbLen((char far *)dest);
 		if (ns > 1 || nd > 1) {
 			d = *dest - *src;
 			if (d) break;

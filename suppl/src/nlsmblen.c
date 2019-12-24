@@ -10,7 +10,7 @@ int isDbcsLead(unsigned char ch)
 {
 #if defined(DBCS)
 	if (ch >= 0x80) {
-		unsigned char far *db = nlsInfo()->dbcsTbl;
+		unsigned char far *db = (unsigned char far *)(nlsInfo()->dbcsTbl);
 		if (db) while(db[1]) {
 			if (*db <= ch && ch <= db[1])
 				return 1;

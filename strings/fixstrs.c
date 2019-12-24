@@ -168,7 +168,15 @@ char temp[1024];
 static const char besFromChar[] =
  "abcdefghijklmnopqrstuvwxyz,.[{}]\\?0";
 static const char besToChar[] =
+#if 0
  "\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\x0\v\w\x0\y\z,.[{}]\\?";
+#else
+ "\x01" "\x02" "\x03" "\x04" "\x05" "\x06" "\x07" "\x08"  /* abcdefgh */
+ "\x09" "\x0a" "\x0b" "\x0c" "\x0d" "\x0e" "\x0f" "\x10"  /* ijklmnop */
+ "\x11" "\x12" "\x13" "\x14" "\x00" "\x16" "\x17" "\x00"  /* qrstuvwx */
+ "\x19" "\x1a"                                            /* yz */
+ ",.[{}]\\?" ;
+#endif
 
 symKey symkeys[] = {		/* symbolic keynames, uppercased! */
 	 { KEY_CTL_C,	"BREAK" }		/* Pseudo-^Break */
@@ -310,9 +318,9 @@ void dumpCh(FILE * const f, const int ch)
 
 	if((p = strchr(from, ch)) != 0)
 		fprintf(f, "'\\%c'", to[(int)(p - from)]);
-	else if(isprint(ch))
+	else if(ch > 0 && ch < 0x7f && isprint(ch))
 		fprintf(f, " '%c'", ch);
-	else fprintf(f, "0x%02x", ch);
+	else fprintf(f, "0x%02x", (unsigned char)ch);
 }
 
 void dumpString(const int stringId)
@@ -565,7 +573,7 @@ printf("FIXSTRS: loading file %s\n", fnam);
 					 , fnam, strg[cnt].name);
 					 return 55;
 				}
-				len = (char)(q - temp);
+				len = (unsigned char)(q - temp);
 					/* Prompts are PStrings in this form:
 						LKKKKMMMM
 						where number of K's == number of M's == L

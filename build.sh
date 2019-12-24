@@ -53,6 +53,18 @@ while (( "$#" )); do
 	echo selects the German language. For available language see STRINGS\*.LNG
 	exit 0
 	;;
+    dbcs)
+	export DBCS=1
+	;;
+    nec98)
+	export NEC98=1
+	;;
+    ibmpc)
+	export IBMPC=1
+	;;
+    generic)
+	export GENDOS=1
+	;;
     xms-swap)
 	export XMS_SWAP=1
 	;;

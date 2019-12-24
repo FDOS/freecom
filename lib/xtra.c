@@ -20,6 +20,31 @@
 # define _disable disable
 #endif
 
+#ifdef __GNUC__
+static inline unsigned char inportb_gcc (unsigned short port)
+{
+	unsigned char v;
+
+	asm volatile ("inb %w1,%0":"=a" (v):"Nd" (port));
+	return v;
+}
+
+static inline void outportb_gcc (unsigned short port, unsigned char value)
+{
+	asm volatile ("outb %b0,%w1": :"a" (value), "Nd" (port));
+}
+
+# undef inp
+# undef outp
+# define inp inportb_gcc
+# define outp outportb_gcc
+# undef _enable
+# undef _disable
+# define _disable() (void)({asm volatile ("cli");})
+# define _enable() (void)({asm volatile ("sti");})
+#endif
+
+
 int mymachine = MYMACHINE_UNKNOWN;
 
 #if defined(NEC98)
