@@ -47,6 +47,12 @@ resize_free db 4ah
 
 segment _TEXT
 
+%ifidn __OUTPUT_FORMAT__,elf ; GCC/ELF: no seg so use linker script symbol
+extern _TEXTSEG
+%else
+%define _TEXTSEG _TEXT
+%endif
+
 	cglobal dosFCB1,dosFCB2
 dosFCB1 times 37 db 0
 dosFCB2 times 37 db 0
@@ -84,9 +90,6 @@ mySP DW 0
 
 execRetval dw 0
 
-%ifidn __OUTPUT_FORMAT__,elf
-	cglobal real_XMSexec
-%endif
 real_XMSexec:
 		int 21h	; shrink/free: first thing done from resident code
 
@@ -346,12 +349,8 @@ XMSexec:
 		mov bx,[SwapResidentSize]
 
 		mov dx, ds
-%ifidn __OUTPUT_FORMAT__,elf 	; GCC/ELF: can't use seg so use pointer from C
-		cextern preal_XMSexec
-		mov cx, [cs:preal_XMSexec+2]
-%else
-		mov cx, seg mySS
-%endif
+		mov cx, _TEXTSEG
+reloc1 equ $-2
 		mov ds, cx
 
         mov [mySS],ss  ; 2E
@@ -361,11 +360,8 @@ XMSexec:
         mov  sp,localStack
 
 		push dx			; save DS of transient portion
-%ifidn __OUTPUT_FORMAT__,elf 	; GCC/ELF: can't use direct call far
-		call far [cs:preal_XMSexec]
-%else
-		call far real_XMSexec
-%endif
+		call _TEXTSEG:real_XMSexec
+reloc2 equ $-2
 
 ret_from_resident:
 		mov ax,[execRetval]
@@ -389,3 +385,11 @@ ret_from_resident:
 		pop es
 %endif
 		retn						; done (really)
+
+%ifidn __OUTPUT_FORMAT__,elf
+; NASM does not support segment relocations so add them
+; manually
+segment .msdos_mz_reloc
+		dw reloc1, _TEXTSEG
+		dw reloc2, _TEXTSEG
+%endif
