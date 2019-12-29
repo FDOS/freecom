@@ -1,3 +1,49 @@
+v0.84pre7
+fix: Check for Win64 in Watcom makefile via %ProgramFiles(x86) (Bart)
+chg: Build xms-swap by default (Bart)
+fix: Use -fno-builtin for GCC to use libc/overridden functions everywhere (Bart)
+chg: Use -mregparmcall for GCC. Needs adjustment of intr() prototype
+     (still stdcall) (Bart)
+chg: Add linker script command.ld so relocations can be used in NASM code
+     for GCC via _TEXTSEG. (Bart)
+fix: Force 8086-asm; use direct call far real_XMSexec instead of push/push/retf.
+     Fixes #15 (Bart)
+fix: Move termination hook into seperate file and always use independent of XMS.
+     Closes #16 (Bart)
+fix: Fix loadhigh failure when zero-byte free memory block is exist
+     (Sava, lpproj)
+fix: Allow escape of > < | via ^> ^< and ^|. Fixes #12. (Bart)
+fix: Fix build break on msys2 (with *-mingw32-gcc and ia16-elf-gcc)
+     (Sava,lpproj)
+fix: LH/LOADFIX call execute instead of exec and skip bat files. Fixes #8.
+     (Bart)
+fix: LOADFIX: stop manipulating UMB link, use first fit>0x10000. Fixes #10.
+     (Bart)
+fix: dosGetUMBLinkState needs to return state in _AL, not _AX (see #10)
+     (Bart)
+fix: Avoid possible NULL dereference in dprintf. Fixes #9 (Bart)
+fix: XMScopy needs to be declared noinline for GCC to work correctly. (Bart)
+fix: Fix "copy con file" where file already exists. (Bart)
+     We need to use devopen instead of dfnstat to check for src existence.
+fix: Create and use sfn_creat() for dos_creatnew() redone.
+     Also rename dos_creatnew() to sfn_creatnew().
+     Using creat instead of creatnew for file creation avoids
+     the need for truncation using write(), and the handle can
+     be directly used without needing to reopen the file.
+     However, differently from the previous try, LFNs are still reopened for
+     compatibility with Windows 2000/XP. (Bart)
+fix: dos_read and dos_write now call farread/write for all compilers.
+     This is more consistent and fixes truncating writes for GCC. (Bart)
+fix: Fix lfnmkdir to really create LFNs; easiest to separate out. (Bart)
+fix: Don't use expensive open/close to check for SFN.
+     Instead use the boolean, then put in extra check to see if
+     int21/ax=7160 works. (Bart)
+fix: Add stack checking, adapted from Tom Ehlert (Bart)
+fix: Save another 520 bytes of stack by reusing buffers where safe. (Bart)
+fix: myfnsplit(): use common buffer to store dir/name/ext to save stack space.
+     This saves ~1250 bytes of stack and eliminates stack overflows in the
+     ke2041 test in metados. (Bart)
+chg: Generate 28.com and 50.com from assembly language. (Bart)
 v0.84pre6
 fix: Revert to first-fit dosalloc for copy&dir buffers for non-large model
      (Bart)
