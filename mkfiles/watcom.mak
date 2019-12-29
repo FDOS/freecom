@@ -7,12 +7,18 @@ ECHOTO0 = echo >>
 CP = cp
 !endif
 
+!ifdef __NT__
+!ifdef %ProgramFiles(x86)
+!define Win64
+!endif
+!endif
+
 CC_BASE_PATH = $(WATCOM)
 !ifdef __LINUX__
 BINPATH = $(CC_BASE_PATH)/binl
 LD = $(CL) -l=dos -fe=command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -\"op map,statics,verbose,stack=4k\" $#
 !else
-!ifdef __NT__
+!ifdef Win64
 BINPATH = $(CC_BASE_PATH)\BINNT
 !else
 BINPATH = $(CC_BASE_PATH)\BINW
@@ -36,7 +42,7 @@ CFLAGS1 = -os-s-wx
 .SUFFIXES: .c .asm .com .exe .obj
 .c.exe:
   gcc -x c -D__GETOPT_H -I../suppl $< -o $@
-!else ifdef __NT__
+!else ifdef Win64
 .c.exe
   $(BINPATH)\owcc -I../suppl $< -o $@
 !else
