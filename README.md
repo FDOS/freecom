@@ -28,6 +28,12 @@ When you want to build freecom_dbcs with OpenWatcom, you need:
 * OpenWatcom C++ (I'm using ow 1.9)
 * Netwide assembler Win32/Win64 version at https://www.nasm.us/
 
+When you want to build freecom_dbcs with ia16-elf-gcc, you need:
+
+* Linux (i386/amd64) or msys2 on Windows (x86/x64)
+* gcc-ia16 at https://github.com/tkchia/build-ia16/
+* GNU make, gcc toolchain (for the host environment), nasm, bash
+
 When you want to build freecom_dbcs with Turbo C/C++, you need:
 
 * 100% DOS compatible environment (On DOSBox, you will need to use external command.com because of incompatibility with built-in command processor)
@@ -43,14 +49,18 @@ Build step is same as the original FreeCOM (copy config.b to config.bat, copy co
 
 Specifying a platform (either ibmpc, nec98 or generic) is needed.
 
-For example, to build FreeCOM DBCS edition for PC-98 with XMS-Swap and Japanese messages, 
-build command is:
+For example, to build FreeCOM DBCS edition for PC-98 with XMS-Swap and Japanese messages on Windows with OpenWatcom, build command is:
 
-  `build -r dbcs nec98 xms-swap japanese`
+  `build -r dbcs nec98 japanese`
 
-To build DOS generic non-DBCS FreeCom with XMS-Swap (and english messages), build command is:
+To build DOS generic non-DBCS FreeCom without XMS-Swap (and english messages), build command is:
 
-  `build -r generic xms-swap`
+  `build -r generic no-xms-swap`
+
+To build FreeCOM DBCS edition for PC-98 with XMS-Swap and Japanese messages on Linux with gcc-ia16:
+
+  `./build.sh -r dbcs nec98 gcc japanese`
+
 
 ## CREDITS
 
