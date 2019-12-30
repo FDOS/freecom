@@ -18,7 +18,7 @@ LIBLIST = >
 ECHOLIB = echo >>
 
 CFG = gcc.cfg
-CFLAGS1 = -Os -Wall -Werror -Wno-pointer-to-int-cast -Wno-incompatible-pointer-types -mregparmcall -fno-builtin -fno-strict-aliasing -Wno-format -mfar-function-if-far-return-type
+CFLAGS1 = -Os -Wall -Werror -Wno-pointer-to-int-cast -Wno-incompatible-pointer-types -mregparmcall -fno-builtin -fno-strict-aliasing -Wno-format -mfar-function-if-far-return-type -fno-caller-saves -fno-optimize-sibling-calls -fno-move-loop-invariants -fno-tree-loop-optimize -fno-rerun-cse-after-loop
 
 #		*Implicit Rules*
 .SUFFIXES:

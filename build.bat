@@ -23,9 +23,9 @@ if "%1"=="clean" goto ende
 if "%1"=="-h" goto help
 if "%1"=="-?" goto help
 
+set XMS_SWAP=1
 :loop_commandline
-if "%1"=="xms-swap" goto special
-if "%1"=="xmsswap"  goto special
+if "%1"=="no-xms-swap" goto special
 if "%1"=="debug"    goto special
 if "%1"=="wc"       goto special
 if "%1"=="tc"       goto special
@@ -39,8 +39,7 @@ if "%1"=="no-enh"     goto special
 goto run
 
 :special
-if "%1"=="xms-swap" set XMS_SWAP=1
-if "%1"=="xmsswap"  set XMS_SWAP=1
+if "%1"=="no-xms-swap" set XMS_SWAP=
 if "%1"=="debug"    set DEBUG=1
 if "%1"=="wc"       set COMPILER=WATCOM
 if "%1"=="tc"       set COMPILER=TC2
@@ -58,10 +57,10 @@ if not "%1"=="-h" goto run
 
 :help
 echo Build FreeCOM
-echo Usage: %0 [-r] [clean] [xms-swap] [debug] [language]
+echo Usage: %0 [-r] [clean] [no-xms-swap] [dbcs] [nec98] [debug] [language]
 echo -r: Rebuild -- Clean before proceed
 echo clean: Remove *.OBJ, *.COM, *.LIB, etc. files, then exit
-echo xms-swap: Build FreeCOM with XMS-Only Swap support
+echo no-xms-swap: Build FreeCOM without XMS-Only Swap support
 echo debug: Build FreeCOM with debug settings.
 echo generic: Build DOS generic version of FreeCOM.
 echo ibmpc: Build FreeCOM for IBM PC series.
@@ -185,8 +184,8 @@ echo All done. COMMAND.COM is ready for usage!
 echo.
 if NOT "%XMS_SWAP%"=="" goto ende
 
-echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
-echo BUILD.BAT -r xms-swap %LNG%
+echo Note: To build FreeCOM without XMS-Only Swap, re-run
+echo BUILD.BAT -r no-xms-swap %LNG%
 goto ende
 
 :err3

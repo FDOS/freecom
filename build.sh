@@ -38,14 +38,15 @@ if [ -f lastmake.mk ] || [ "$1" == "-r" ]; then ./clean.sh; fi
 if [ "$1" == "-r" ]; then ./clean.sh; shift; fi
 if [ "$1" == "clean" ]; then ./clean.sh; exit 0; fi
 
+export XMS_SWAP=1
 while (( "$#" )); do
   case "$1" in
     -h)
 	echo Build FreeCOM
-	echo Usage: %0 [-r] [clean] [xms-swap] [debug] [language]
+	echo Usage: %0 [-r] [clean] [no-xms-swap] [debug] [language]
 	echo -r: Rebuild -- Clean before proceed
 	echo clean: Remove *.OBJ, *.COM, *.LIB, etc. files, then exit
-	echo xms-swap: Build FreeCOM with XMS-Only Swap support
+	echo no-xms-swap: Build FreeCOM without XMS-Only Swap support
 	echo debug: Build FreeCOM with debug settings.
 	echo You can select for which language to built FreeCOM by setting
 	echo the environment variable LNG before running this script, e.g.:
@@ -65,8 +66,8 @@ while (( "$#" )); do
     generic)
 	export GENDOS=1
 	;;
-    xms-swap)
-	export XMS_SWAP=1
+    no-xms-swap)
+	unset XMS_SWAP
 	;;
     debug)
 	export DEBUG=1
@@ -209,6 +210,6 @@ echo
 echo All done. COMMAND.COM is ready for usage!
 echo
 if [ -z "$XMS_SWAP" ]; then
-  echo Note: To build the XMS-Only Swap featured FreeCOM, re-run
-  echo ./build.sh -r xms-swap $LNG
+  echo Note: To build FreeCOM without XMS-Only Swap, re-run
+  echo ./build.sh -r no-xms-swap $LNG
 fi

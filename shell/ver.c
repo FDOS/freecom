@@ -51,7 +51,7 @@
 # define MACHINE ""
 #endif
 
-const char shellver[] = "0.84-pre6"
+const char shellver[] = "0.84-pre7"
 #if defined(DBCS)
 	"_DBCS"
 #endif
