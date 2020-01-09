@@ -1,9 +1,9 @@
-# $Id$
 #
 # FreeCOM national customization file
 #
-#	Language: Russian. CodePage 866
-#	Author:   Сандул Юрий Валентинович.
+#	Language: Russian
+#	Codepage: CP866
+#	Author:   Petr-Akhlamov
 # 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
@@ -23,6 +23,9 @@
 # same label up to one time, regardless of the version. FIXSTRS compares
 # both the label and the version ID and both must match.
 # A missing version is assumed as "#0".
+# If there is a percent sign (%) appended to the version, the printf()
+# format string %-style placeholders are compared for the strings. The
+# sign need to be set in DEFAULT.LNG only.
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
@@ -88,41 +91,41 @@
 #  These are error messages
 #
 ## Issued if a single character option is unknown
-:TEXT_ERROR_INVALID_SWITCH
-Неверный переключатель. - /%c
+:TEXT_ERROR_INVALID_SWITCH#0%
+Недопустимый ключ. - /%c
 .
 
 ## Issued if a longname option is unknown
-:TEXT_ERROR_INVALID_LSWITCH
-Неверный переключатель. - /%s
+:TEXT_ERROR_INVALID_LSWITCH#0%
+Недопустимый ключ. - /%s
 .
 
 ## Issued if the context, the type of argument etc. is invalid
-:TEXT_ERROR_ILLFORMED_OPTION
-Недопустимая опция: '%s'
+:TEXT_ERROR_ILLFORMED_OPTION#0%
+Неверный параметр: '%s'
 .
 
-:TEXT_ERROR_OPT_ARG
-Опция '%s' не имеет аргумента
+:TEXT_ERROR_OPT_ARG#0%
+Команда '%s' не имеет аргументов
 .
 
-:TEXT_ERROR_OPT_NOARG
-Опция '%s' должна иметь аргумент
+:TEXT_ERROR_OPT_NOARG#0%
+Для команды '%s' необходим аргумент
 .
 
-:TEXT_INVALID_NUMBER
-Неверное число указано в '%s'
+:TEXT_INVALID_NUMBER#0%
+Invalid number specified in '%s'
 .
 
-:TEXT_ERROR_CLOSE_QUOTE
-Ожидается закрывающая кавычка: %c
+:TEXT_ERROR_CLOSE_QUOTE#0%
+Missing closing quote: %c
 .
 
 :TEXT_ERROR_TEMPFILE
 Невозможно создать временный файл
 .
 
-:TEXT_ERROR_TOO_MANY_PARAMETERS_STR
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
 Слишком много параметров. - '%s'
 .
 
@@ -130,8 +133,8 @@
 Слишком много параметров.
 .
 
-:TEXT_ERROR_INVALID_PARAMETER
-Неверный параметр. - '%s'
+:TEXT_ERROR_INVALID_PARAMETER#0%
+Недопустимый параметр. - '%s'
 .
 
 :TEXT_ERROR_PATH_NOT_FOUND
@@ -142,74 +145,73 @@
 Файл не найден.
 .
 
-:TEXT_ERROR_SFILE_NOT_FOUND
+:TEXT_ERROR_SFILE_NOT_FOUND#0%
 Файл не найден. - '%s'
 .
 
-:TEXT_ERROR_REQ_PARAM_MISSING
-Опущен объязательный параметр.
+:TEXT_ERROR_REQ_PARAM_MISSING#0%
+Необходимый параметр отсутствует.
 .
 
-:TEXT_ERROR_INVALID_DRIVE
-Неверный диск %c:.
+:TEXT_ERROR_INVALID_DRIVE#0%
+Недопустимый диск %c:.
 .
 
-:TEXT_ERROR_BADCOMMAND#2
-Неизвестная команда или неверное имя файла - "%s".
+:TEXT_ERROR_BADCOMMAND#2%
+Неправильная команда или имя файла - "%s".
 .
 
 :TEXT_ERROR_OUT_OF_MEMORY
-Не хватает памяти.
+Ошибка. Недостаточно памяти.
 .
 
 :TEXT_ERROR_OUT_OF_DOS_MEMORY#1
-Невозможно выделить память DOS.
+Allocation of DOS memory failed.
 .
 
 :TEXT_ERROR_CANNOTPIPE
-Перенаправление невозможно: Сбой открытия временного файла!
+Cannot pipe!  Cannot open temporary file!
 .
 
-:TEXT_ERROR_LONG_LINE_BATCHFILE
-Строка #%ld в командном файле '%s' слишком длинная.
+:TEXT_ERROR_LONG_LINE_BATCHFILE#0%
+Line #%ld in batchfile '%s' too long.
 .
 
-:TEXT_ERROR_BFILE_VANISHED
-Командный файл '%s' не найден.
+:TEXT_ERROR_BFILE_VANISHED#0%
+Batchfile '%s' not found.
 .
 
-:TEXT_ERROR_BFILE_LABEL
-Командный файл '%s' не содержит метки '%s'.
+:TEXT_ERROR_BFILE_LABEL#0%
+Batchfile '%s' does not contain label '%s'.
 .
 
-:TEXT_ERROR_DIRFCT_FAILED#1
-%s сбой '%s'.
+:TEXT_ERROR_DIRFCT_FAILED#1%
+%s failed for '%s'.
 .
 # The next three errors must remain in this order!
-:TEXT_ERROR_SET_ENV_VAR
-Невозможно установить значение переменной окружения '%s'.
-Возможно, область памяти для переменных окружения переполнена.
+:TEXT_ERROR_SET_ENV_VAR#0%
+Can not set environment variable '%s'.
+Environment full?
 .
-:TEXT_ERROR_ENV_VAR_NOT_FOUND
-Переменная окружения '%s' не найдена.
+:TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
+Environment variable '%s' not found.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
-Не выделена память для переменных окружения.
-Перезапустите командный интерпретатор с опцией: /E.
+No environment. Maybe memory short. Specify /E option.
 .
 
 # The next three errors must remain in this order!
-:TEXT_ERROR_SET_ALIAS#1
-Невозможно задать псевдоним '%s'. Возможно, таблица псевдонимов переполнена.
+:TEXT_ERROR_SET_ALIAS#1%
+Can not set alias '%s'. Alias space full?
 .
-:TEXT_ERROR_ALIAS_NOT_FOUND#1
-Псевдоним '%s' не найден.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1%
+Alias '%s' not found.
 .
 :TEXT_ERROR_NO_ALIAS_SEGMENT#1
-Не выделена память для таблицы псевдонимов.
+No alias space. Maybe memory short.
 .
 
-:TEXT_ERROR_SYNTAX_STR
+:TEXT_ERROR_SYNTAX_STR#0%
 Синтаксическая ошибка. - '%s'
 .
 
@@ -217,261 +219,272 @@
 Синтаксическая ошибка.
 .
 
-:TEXT_ERROR_FILENAME_TOO_LONG
+:TEXT_ERROR_FILENAME_TOO_LONG#0%
 Имя файла слишком длинное. - '%s'
 .
 
-:TEXT_ERROR_SELFCOPY
-Нельзя скопировать '%s' в себя
+:TEXT_ERROR_SELFCOPY#0%
+Нельзя скопировать '%s' в самого себя
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
-Командная строка слишком длинная после псевдонима!
+Command line too long after alias expansion!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
-Строка слишком длинная. Невозможно выполнить команду.
+Commandline longer than 125 characters.
 .
 
-:TEXT_ERROR_HISTORY_SIZE#1
-Неверная длина журнала командных строк '%s'.
+:TEXT_ERROR_HISTORY_SIZE#1%
+Invalid history size '%s'.
 .
 
 :TEXT_HISTORY_EMPTY#1
-Журнал командных строк пустой.
+История командной строки пуста
 .
 
 
 :TEXT_ERROR_BAD_MCB_CHAIN
-Цепочка блоков MCB повреждена, или несовместимая с MS-DOS система.
+MCB chain corrupt, or MS-DOS incompatible system.
 .
 
-:TEXT_ERROR_UNDEFINED_ERROR
-Необъявленная ошибка %d.
+:TEXT_ERROR_UNDEFINED_ERROR#0%
+Неизвестная ошибка %d.
 .
 
-:TEXT_ERROR_REGION_WARNING
-Пропущена повреждённая область памяти %d.
+:TEXT_ERROR_REGION_WARNING#0%
+Illegal memory region %d - ignored.
 .
 
 :TEXT_ERROR_ON_OR_OFF
-Должно быть ON или OFF.
+Must specify ON or OFF.
 .
 
 :TEXT_ERROR_BAD_VARIABLE
-Неверно указана переменная.
+Bad variable specification.
 .
 
 :TEXT_ERROR_IN_MISSING#1
-FOR: Ожидается IN.
+FOR: IN missing.
 .
 
 :TEXT_ERROR_MISSING_PARENTHESES#1
-Одна или две скобки были пропущены.
+One or both parentheses missing.
 .
 
 :TEXT_ERROR_DO_MISSING#1
-FOR: Ожидается DO.
+FOR: DO missing.
 .
 
 :TEXT_ERROR_NO_COMMAND_AFTER_DO#1
-FOR: Не указана команда после утверждения DO.
+FOR: No command after DO statement.
 .
 
-:TEXT_ERROR_REDIRECT_FROM_FILE
-Невозможно перенаправить ввод на файл '%s'.
+:TEXT_ERROR_REDIRECT_FROM_FILE#0%
+Can not redirect input from file '%s'.
 .
 
-:TEXT_ERROR_REDIRECT_TO_FILE
-Невозможно перенаправить вывод в файл '%s'.
+:TEXT_ERROR_REDIRECT_TO_FILE#0%
+Can not redirect output to file '%s'.
 .
 
 :TEXT_ERROR_EMPTY_REDIRECTION#1
-Пустое перенаправление.
+Empty redirection.
 .
 
 :TEXT_ERROR_INVALID_DATE
-Неверная дата.
+Некорректная дата.
 .
 
 :TEXT_ERROR_INVALID_TIME
-Неверное время.
+Некорректное время.
 .
 
 :TEXT_ERROR_NO_GOTO_LABEL
-Не указана метка после GOTO.
+No label specified for GOTO.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
-Команда: CTTY исключена из этого COMMAND.COM.
+The CTTY command has been excluded from this COMMAND.COM.
 .
 
-:TEXT_ERROR_NORW_DEVICE
-Неверное или нечитабельное устройство '%s'.
+:TEXT_ERROR_NORW_DEVICE#0%
+Invalid or no read-write device '%s'.
 .
 
-:TEXT_ERROR_CTTY_DUP
-Невозможно изменить дескриптор файла для TTY '%s'.
+:TEXT_ERROR_CTTY_DUP#0%
+Failed to change file descriptors to TTY '%s'.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
-Опция: /L пока что не поддерживается.
+ключ /L еще не реализован.
 .
 
 :TEXT_ERROR_U_NOTIMPLEMENTED
-Опция: /U пока что не поддерживается.
+ключ /U еще не реализован.
 .
 
 :TEXT_ERROR_WRITING_DEST
-Сбой записи в приёмник.
+Error writing to destination.
 .
 
-:TEXT_ERROR_CANNOT_OPEN_SOURCE
-Невозможно открыть источник. - '%s'
+:TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
+Не удалось открыть исходный код. - '%s'
 .
 
-:TEXT_ERROR_OPEN_FILE
-Невозможно открыть файл '%s'
+:TEXT_ERROR_OPEN_FILE#0%
+Не удалось открыть файл '%s'
 .
 
-:TEXT_ERROR_READ_FILE
-Невозможно прочитать из файла '%s'
+:TEXT_ERROR_READ_FILE#0%
+Не удалось прочитать файл из '%s'
 .
 
-:TEXT_ERROR_WRITE_FILE
-Невозможно записать в файл '%s'
+:TEXT_ERROR_WRITE_FILE#0%
+Не удалось записать файл в '%s'
 .
 
 :TEXT_ERROR_LEADING_PLUS
-Символ объеденения: '+' не может стоять перед аргументом.
+The concatenation character '+' cannot lead the arguments.
 .
 
 :TEXT_ERROR_TRAILING_PLUS
-Симвод объеденения: '+' не может стоять после аргументов.
+The concatenation character '+' cannot trail the arguments.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
-Нечего делать.
+Nothing to do.
 .
 
 :TEXT_ERROR_COPY
-Сбой копирования
+COPY failed
 .
 
 :TEXT_ERROR_IF_EXIST_NO_FILENAME#1
-IF EXIST: Должно быть указано имя файла
+IF EXIST: missing filename
 .
 :TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
-IF ERRORLEVEL: Дожно быть указано число
+IF ERRORLEVEL: missing number
 .
 :TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
-IF ERRORLEVEL: Неверное число
+IF ERRORLEVEL: invalid number
 .
 :TEXT_ERROR_IF_MISSING_COMMAND#1
-IF: Должна быть указана команда
+IF: Missing command
 .
 
 :TEXT_NOT_IMPLEMENTED_YET
-Извините... ...не поддерживается! :-(
+Sorry...not implemented yet.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
-Сбой загрузки сообщений в память.
+Failed to load messages into memory.
 .
 
 :TEXT_MSG_NOTIMPLEMENTED
-Опция: /MSG исключена из этого COMMAND.COM.
+The /MSG option has been excluded from this COMMAND.COM.
 .
 
-:TEXT_MSG_ITEMS_DISPLAYED#1
-%u пунктов выведено на экран.
+:TEXT_MSG_ITEMS_DISPLAYED#1%
+%u items displayed.
 .
 
 :TEXT_CORRUPT_COMMAND_LINE
-Повреждённая командная строка. Это внутренная ошибка COMMAND.COM. Пожайлуста,
-сообщите об этой ошибке.
+Corrupt command line. This is an internal error and is related to
+the system COMMAND.COM runs in. Please report this error.
 .
 
 :TEXT_QUOTED_C_OR_K#1
-Опции: /C и /K не могут быть в кавычках и поэтому проигнорированы.
+The /C and /K options cannot be quoted, they are ignored.
 .
 
-:TEXT_INIT_FULLY_QUALIFIED#1
-Путь к файлу: COMMAND.COM должен быть полным!
-Он должен содержать имя диска и начинатся с обратной косой черты.
-Пример: C:\\FDOS
+:TEXT_INIT_FULLY_QUALIFIED#1%
+The path to COMMAND.COM must be fully qualified!
+That means including drive letter and beginning with a backslash.
+For example: C:\\FDOS
 
-COMMAND.COM использует этот путь:
+COMMAND.COM assumes this path now:
 %s
 .
 
 :TEXT_ERROR_RESTORE_SESSION
-Информация о сеансе была безвозвратно утеряна. Посмотрите предыдущие
-сообщения об ошибках с целью выяснения причины этой ошибки.
+The session information could not be restored, any local settings
+are lost. Please refer to above error messages for the reason
+of this problem.
 .
 
 :TEXT_ERROR_SAVE_SESSION
-Текущая информация не может быть сохранена в текущей программе. Посмотрите
-предудыщие сообщения об ошибках с целью выяснения причины этой ошибки.
+The current information cannot be preserved during the call of the
+program. Please refer to above error messages for the reason of
+this problem.
 .
 
-:TEXT_ERROR_CWD_FAILED
-Диск %c: не отвечает или вычерпана вся внутренная память.
+:TEXT_ERROR_CWD_FAILED#1%
+Диск %c: не отвечает.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE
-Сбой обмена значениями: Псевдонимы занимают слишком много памяти.
+Swapping failed: Aliases allocate too much memory.
 .
 
 
 :TEXT_ERROR_KSWAP_ALLOCMEM
-Сбой обмена значениями: Невозможно выделить дальнюю память.
+Swapping failed: Cannot allocate far memory.
 .
 
 :TEXT_ERROR_ALIAS_OUT_OF_MEM#1
-Исчерпано пространство для псевдонимов.
+Out of alias space.
 .
 
-:TEXT_ERROR_ALIAS_NO_SUCH#1
-Несуществующий псевдоним: '%s'
+:TEXT_ERROR_ALIAS_NO_SUCH#1%
+No such alias: '%s'
 .
 
 :TEXT_ERROR_ALIAS_INSERT#1
-Невозможно вставить псевдоним.
+Failed to insert alias.
 .
 
-:TEXT_ALIAS_INVALID_NAME#1
-Неверное имя псевдонима '%s'.
+:TEXT_ALIAS_INVALID_NAME#1%
+Invalid alias name '%s'.
 .
 
 :TEXT_ERROR_LOADING_CONTEXT#1
-Невозможно загрузить контекстный модуль или обработчик критических ошибок.
+Cannot load Context module or Critical Error handler.
 .
 
 :TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
-Вычерпана память для контекста.
-Если эта ошибка будет появлятся в дельнейшем, попробуйте увеличить
-размер некоторых внутренних буферов, например, журнала команд,
-стек каталогов и т. п. и т. д.
+Context out of memory.
+If this error persists, consider to increase some internal buffer,
+such as history, direcory stack etc.
 .
 
-:TEXT_ERROR_CONTEXT_LENGTH#1
-Размер контекста превысил допустимый предел в %lu байт.
-Уменьшите размер контекста до размера в %u байт.
+:TEXT_ERROR_CONTEXT_LENGTH#1%
+Size of context totals %lu bytes exceeding maximal limit.
+Resizing context to %u bytes.
 .
 
 :TEXT_ERROR_CONTEXT_ADD_STATUS#1
-Сбой операции добавления статистической информации в контекст. Эта ошибка
-может быть из - за повреждения памяти или из - за неверно установленого
-минимального размера контекста. Пожайлуста, осведомите разработчиков FreeCOM
-об этой ошибке на:
-FreeCom@FreeDOS.Org
+Failed to add status information into context. This error may indicate
+memory corruption or an incorrectly determined minimum size of
+the context. Please inform the maintainer of FreeCOM at:
+freecom@freedos.org
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
-Размер контекста теряется после подкачки. Контекст был воссоздан заново, но
-все псевдонимы и другая информация, хранившаяся в кнтексте, была безвозвратно
-утеряна.
+The context is missing after swap. The context is re-created,
+but all aliases etc. are lost.
+.
+
+:TEXT_ERROR_PERMISSION_DENIED#1%
+%s: Permission denied
+.
+
+:TEXT_ERROR_NO_SUCH_FILE#1%
+%s: Нет такого файла или каталога
+.
+
+:TEXT_ERROR_UNKNOWN_ERROR#1%
+%s: Неизвестная ошибка
 .
 
 #
@@ -479,68 +492,76 @@ FreeCom@FreeDOS.Org
 #
 
 :TEXT_MSG_PAUSE#1
-Нажмите любую клавишу . . .\
+Нажмите любую клавишу для продолжения . . .\
 .
 
-:TEXT_MSG_HISTORY_SIZE
-Размер журнала команд составляет %d байт.
+:TEXT_MSG_HISTORY_SIZE#0%
+History size is %d bytes.
 .
 
 :TEXT_MSG_DOSKEY
-Возможности DOSKEY включены в оболочку.
+DOSKEY features are already enabled in the shell.
 .
 
-:TEXT_MSG_ECHO_STATE
-ECHO - %s
+:TEXT_MSG_ECHO_STATE#0%
+ECHO is %s
 .
 
-:TEXT_MSG_VERIFY_STATE
-VERIFY - %s
+:TEXT_MSG_VERIFY_STATE#0%
+VERIFY is %s
 .
 
-:TEXT_MSG_FDDEBUG_STATE
-Вывод DEBUG - %s.
+:TEXT_MSG_FDDEBUG_STATE#0%
+DEBUG output is %s.
 .
-:TEXT_MSG_FDDEBUG_TARGET
-Вывод DEBUG напечатан в '%s'.
-.
-
-:TEXT_MSG_BREAK_STATE
-BREAK - %s
+:TEXT_MSG_FDDEBUG_TARGET#0%
+DEBUG output is printed to '%s'.
 .
 
-:TEXT_MSG_CURRENT_DATE
+:TEXT_MSG_BREAK_STATE#0%
+BREAK is %s
+.
+
+:TEXT_MSG_LFNFOR_STATE#0%
+LFNFOR is %s
+.
+
+:TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
+LFN Complete is %s
+.
+
+:TEXT_MSG_CURRENT_DATE#0%
 Текущая дата: %s
 .
 
 ## The three DATE prompts MUST be in this order!
-:TEXT_MSG_ENTER_DATE_AMERICAN#1
-Введите новую дату (ММ%sДД%s[ВВ]ГГ): \
+:TEXT_MSG_ENTER_DATE_AMERICAN#1%
+Введите новую дату (mm%sdd%s[cc]yy): \
 .
-:TEXT_MSG_ENTER_DATE_EUROPE#1
-Введите новую дату (ДД%sММ%s[ВВ]ГГ): \
+:TEXT_MSG_ENTER_DATE_EUROPE#1%
+Введите новую дату (dd%smm%s[cc]yy): \
 .
-:TEXT_MSG_ENTER_DATE_JAPANESE#1
-Введите новую дату ([ВВ]ГГ%sММ%sДД): \
+:TEXT_MSG_ENTER_DATE_JAPANESE#1%
+Введите новую дату ([cc]yy%smm%sdd): \
 .
 
-:TEXT_MSG_CURRENT_TIME
-Текущее время: %s
+:TEXT_MSG_CURRENT_TIME#0%
+Текущее время %s
 .
 
 :TEXT_STRING_PM#1
- пм\
+ pm\
 .
 :TEXT_STRING_AM#1
- ам\
+ am\
 .
 
 :TEXT_MSG_ENTER_TIME#1
-Введите новое значени времени: \
+Введите новое время: \
 .
 
 # src-file <operation> target-file
-:TEXT_MSG_COPYING
+:TEXT_MSG_COPYING#0%
 %s %s %s
 .
 
@@ -549,11 +570,11 @@ BREAK - %s
 # keep interactive prompt & user-interaction in sync.
 # Used by Delete all (Y/N) --> let ENTER default to NO
 # Return value: a -> Yes; else -> No
-:PROMPT_DELETE_ALL#1
+:PROMPT_DELETE_ALL#1%
 YyNn{CR}{LF}{CBREAK}
 aabb   b   b       b
-Все файлы в каталоге: '%s' будут удалены!
-Вы уверены в правильности своего действия (Y/N)? \
+Все файлы в '%s' будут удалены!
+Вы уверены (Y/N)? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -563,7 +584,7 @@ aabb   b   b       b
 :PROMPT_YES_NO#1
 YyNn{LF}{CR}{CBREAK}{ESC}
 aabb   a   a       b    b
- [Да=ENTER, Нет=ESC] ? \
+ [Yes=ENTER, No=ESC] ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -572,250 +593,261 @@ aabb   a   a       b    b
 # Attention: This prompt is issued via BIOS; any newline MUST be prefixed
 #	by \r!
 # Return value: a -> Yes; b -> No; c -> All; else -> Undefined
-:PROMPT_CANCEL_BATCH#1
+:PROMPT_CANCEL_BATCH#1%
 YyNnAaQq{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
-Была нажата комбинация клавиш: Control-Break.\r
-Прекратить выполнение командного файла '%s' (Yes/No/All)? \
+Был нажат Control-Break.\r
+Завершить пакетный файл '%s' (Yes/No/All) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
 # Note: This prompt ignores DOS NLS intentionally in order to
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
-:PROMPT_OVERWRITE_FILE#1
+:PROMPT_OVERWRITE_FILE#1%
 YyNnAaQq{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Перезаписать: '%s' (Yes/No/All/Quit)? \
+Перезаписать '%s' (Yes/No/All/Quit) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
 # Note: This prompt ignores DOS NLS intentionally in order to
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
-:PROMPT_DELETE_FILE#1
+:PROMPT_APPEND_FILE#1%
 YyNnAaQq{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Уничтожить: '%s' (Yes/No/All/Quit) ? \
+Объединить с '%s' (Yes/No/All/Quit) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1%
+YyNnAaQq{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Удалить '%s' (Yes/No/All/Quit) ? \
 .
 
 :TEXT_UNKNOWN_FILENAME#1
-<<неизвестный>>\
+<<unkown>>\
 .
 
 :TEXT_DIRSTACK_EMPTY
-Стек каталогов пустой.
+Directory stack empty.
 .
 
 ## Strings to construct the DIR output
-:TEXT_DIR_HDR_VOLUME#1
- Метка тома: %c \
+:TEXT_DIR_HDR_VOLUME#1%
+ Том на диске %c \
 .
-:TEXT_DIR_HDR_VOLUME_STRING
-- %s
+:TEXT_DIR_HDR_VOLUME_STRING#0%
+Метка: %s
 .
 :TEXT_DIR_HDR_VOLUME_NONE
 Не имеет метки
 .
-:TEXT_DIR_HDR_SERIAL_NUMBER
- Серийный номер тома - %04X-%04X
+:TEXT_DIR_HDR_SERIAL_NUMBER#0%
+Серийный номер: X-X
 .
-:TEXT_DIR_FTR_FILES#1
-%10s файл(ов)\
+:TEXT_DIR_FTR_FILES#1%
+s файл(ов)\
 .
-:TEXT_DIR_FTR_BYTES
-   %12s байт
+:TEXT_DIR_FTR_BYTES#0%
+   s байт
 .
 :TEXT_DIR_FTR_TOTAL_NUMBER
-Выведено файлов:
+Всего файлов:
 .
-:TEXT_DIR_FTR_DIRS#1
-%10s каталог(ов)\
+:TEXT_DIR_FTR_DIRS#1%
+s папок\
 .
-:TEXT_DIR_FTR_BYTES_FREE
- %15s байт свободно
+:TEXT_DIR_FTR_BYTES_FREE#0%
+ s байт свободно
 .
-:TEXT_DIR_DIRECTORY
-Текущий каталог: %s
+:TEXT_DIR_DIRECTORY#0%
+Каталог: %s
 .
-:TEXT_DIR_DIRECTORY_WITH_SPACE
- Текущий каталог: %s
+:TEXT_DIR_DIRECTORY_WITH_SPACE#0%
+ Каталог: %s
 .
-:TEXT_DIR_LINE_FILENAME_WIDE#1
+:TEXT_DIR_LINE_FILENAME_WIDE#1%
 %-15s\
 .
-:TEXT_DIR_LINE_FILENAME_BARE
-%-13s
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
 .
-:TEXT_DIR_LINE_FILENAME_SINGLE#1
+:TEXT_DIR_LINE_FILENAME_SINGLE#1%
 %-13s\
 .
-:TEXT_DIR_LINE_FILENAME#1
+:TEXT_DIR_LINE_FILENAME#1%
 %-8s %-3s \
 .
 :TEXT_DIR_LINE_SIZE_DIR#1
-        <КАТАЛОГ> \
+        <DIR> \
 .
-:TEXT_DIR_LINE_SIZE#1
-   %10s \
+:TEXT_DIR_LINE_SIZE#1%
+   s \
 .
 
-:TEXT_FILE_COMPLATION_DISPLAY#1
+:TEXT_FILE_COMPLATION_DISPLAY#1%
 %-14s\
 .
 
-:TEXT_MSG_PATH
-Путь=%s
+:TEXT_MSG_PATH#0%
+PATH=%s
 .
 :TEXT_MSG_PATH_NONE#1
-Не указан начальный путь для поиска.
+No search path defined.
 .
 
 ## The following names MUST be in this order!
 :TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
-Вос\
+ВС\
 .
 :TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
-Пон\
+ПН\
 .
 :TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
-Вто\
+ВТ\
 .
 :TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
-Сре\
+СР\
 .
 :TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
-Чет\
+ЧТ\
 .
 :TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
-Пят\
+ПТ\
 .
 :TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
-Суб\
+СБ\
 .
 
 # Displayed by DEL how many files were removed.
 # These three strings must be kept in order!
 :TEXT_MSG_DEL_CNT_FILES#1
-файл не уничтожен.
+файл не удален
 .
 :TEXT_MSG_DEL_CNT_FILES_1#1
-один файл был уничтожен.
+один файл удален.
 .
-:TEXT_MSG_DEL_CNT_FILES_2#1
-%u файлов уничтожено.
+:TEXT_MSG_DEL_CNT_FILES_2#1%
+%u файлов удалено.
 .
 
 :TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
-Доступно для внутренних команд:
+Доступны следующие команды:
 .
 
 :TEXT_MSG_SHOWCMD_FEATURES
 
-Доступные возможности:
+Features available:
 .
 
 ## Displayed within "?" <-> showcmd() to enumerate the included features
 ## Note the trailing single space
 :TEXT_SHOWCMD_FEATURE_ALIASES#1
-[псевдонимы] \
+[aliases] \
 .
 :TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
-[расширенный ввод] \
+[enhanced input] \
 .
 :TEXT_SHOWCMD_FEATURE_HISTORY#1
-[журнал команд] \
+[history] \
 .
 :TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
-[конечное имя файла] \
+[filename completion] \
 .
 :TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
-[подкачано] \
+[swapping] \
 .
 :TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
-[начало входа] \
+[start logging] \
 .
 :TEXT_SHOWCMD_FEATURE_LAST_DIR#1
-[последний каталог] \
+[last dir] \
+.
+:TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
+[long filenames] \
 .
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
-[подкачка ядра] \
+[kernel swap] \
 .
 :TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
-[подкачка XMS] \
+[XMS swap] \
 .
 :TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
-[подкачка по умолчанию] \
-
+[default to swap] \
+.
 :TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
-[установленные команды] \
+[installable commands] \
 .
 :TEXT_SHOWCMD_FEATURE_NLS#1
 [DOS NLS] \
 .
 :TEXT_SHOWCMD_FEATURE_DIRSTACK#1
-[стек каталогов (PUSHD)] \
+[directory stack (PUSHD)] \
 .
 :TEXT_SHOWCMD_FEATURE_DEBUG#1
-[отладка FreeCOM] \
+[FreeCOM debugging] \
 .
 
 :TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
 
-Нажмите F8 для начала трассирования, или F5 для обхода: %s... \
+Press F8 for trace mode, or F5 to bypass %s... \
 .
-:TEXT_MSG_INIT_BYPASSING_AUTOEXEC
-Обойдён: '%s'.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
+Bypassing '%s'.
 .
 
-:TEXT_MSG_VER_DOS_VERSION
+:TEXT_MSG_VER_DOS_VERSION#0%
 Версия DOS: %u.%u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS
-Ядро FreeDOS (сборка 1933 или предшествующая)
+FreeDOS kernel (build 1933 or prior)
 .
 
-:TEXT_MSG_VER_LATER_FREEDOS
-Версия ядра FreeDOS: %d.%d.%d
+:TEXT_MSG_VER_LATER_FREEDOS#0%
+FreeDOS kernel version %d.%d.%d
 .
+
 
 :TEXT_MSG_VER_WARRANTY
-Авторское право (C) 1994-2001 Тим Норман и другие.
+Copyright (C) 1994-2005 Tim Norman and others.
 
-	Эта программа распространяется в надежде, что она
-будет полезной, но БЕЗ КАКИХ - ЛИБО ГАРАНТИЙ; даже без
-подразумеваемых гарантий КОММЕРЧЕСКОЙ ЦЕННОСТИ или ПРИГОДНОСТИ
-ДЛЯ КОНКРЕТНОЙ ЦЕЛИ. Для получения подробных сведений смотрите
-Универсальную Общественную Лицензию GNU.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
 
-Уведомления об ошибках отсылайте на: Fd-FreeCOM@Topica.Com.
-Обновления всегда доступны на http://freedos.sourceforge.net/freecom
+Send bug reports to freedos-freecom@lists.sourceforge.net.
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
-Авторское право (C) 1994-2001 Тим Норман и другие.
+Copyright (C) 1994-2005 Tim Norman and others.
 
-	Это свободная программа; вы можете повторно
-распространять её и/или модифицировать её в соответствии с
-Универсальной Общественной Лицензией GNU, опубликованной
-Фондом Свободного ПО; либо версии 2, либо (по вашему выбору)
-любой более поздней версии.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
 
-Уведомления об ошибках отсылайте на: Fd-FreeCOM@Topica.Com.
-Обновления всегда доступны на http://freedos.sourceforge.net/freecom
+Send bug reports to freedos-freecom@lists.sourceforge.net.
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_DEVELOPERS
 
-В прцессе создания команднной оболочки FreeDOS участвовало много
-разработчиков. Подробности записаны в файле: HISTORY.TXT.
+The FreeDOS Command Shell developed by many developers, please refer
+to the enclosed HISTORY.TXT file.
 
-В данное время отвественным за этот проект является Стефен Кайзер.
-Пишите ему письма на: FreeCOM@FreeDOS.Org
+Currently maintained by Steffen Kaiser mailto:freecom@freedos.org
 
-Уведомления об ошибках отсылайте на: Fd-FreeCOM@Topica.Com.
-Обновления всегда доступны на http://freedos.sourceforge.net/freecom
+Send bug reports to freedos-freecom@lists.sourceforge.net.
+Updates are available from http://freedos.sourceforge.net/freecom
 .
 
 
@@ -826,62 +858,61 @@ aabbccdd      d      a    b
 # All newlines must be prefixed by \r's !
 :TEXT_MSG_REBOOT_NOW#1
 \r\n\r
-Планируется выход из оболочки. Этот выход невозможен, поскольку
-оболочка была запущена с опцией: "/P". Вы должны перезагрузить систему
-или, если вы работаете в мультизадачной среде, то убейте эту задачу
-вручную (например, в Microsoft (R) Windows нажмите мышей на кнопку закрытия
-окна с выполняемым FreeCOM и подтвердите, если это нужно, ваше намерение
-прекратить выполнение этой задачи в диалоговом окне.).
+The shell is about to be terminated, though, this is\r
+forbidden (usually by enabling the "/P" option).\r
+You must reboot the system or, if this shell runs in\r
+a multitasking environment, terminate this process/task manually.\r
 .
 
 # Displayed during the initialization phase of FreeCOM, if its own
 # filename could not be determined.
 :TEXT_MSG_FREECOM_NOT_FOUND#1
-Выполнимый файл FreeCOM не найден. Вы должны указать полный путь к
-файлу: COMMAND.COM в качестве первого параметра, как, например:
+FreeCOM executable not found.
+You must specify the complete path to COMMAND.COM
+as the first argument of COMMAND, for instance:
 C:\\FDOS
 .
 
 
-:TEXT_MEMORY_ENVIRONMENT#1
-Сегмент памяти для переменных окружения    : максимум %5u байт; свободно %5u байт
+:TEXT_MEMORY_ENVIRONMENT#1%
+Environment segment    : max %5u bytes; free %5u bytes
 .
-:TEXT_MEMORY_CONTEXT#1
-Сегмент контекста        : максимум %5u байт; свободноe %5u байт
+:TEXT_MEMORY_CONTEXT#1%
+Context segment        : max %5u bytes; free %5u bytes
 .	
-:TEXT_MEMORY_HEAP#1
-Память                   : свободно %5lu байт
+:TEXT_MEMORY_HEAP#1%
+Heap                   : free %5lu bytes
 .
-:TEXT_MEMORY_CTXT_ALIAS#1
-\tПсевдонимы        : лимит %5u байт, текущий размер %5u байт, %5u пунктов
+:TEXT_MEMORY_CTXT_ALIAS#1%
+\tAliases        : limit %5u bytes, current %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_HISTORY#1
-\tЖурнал команд        : лимит %5u байт, текущий размер %5u байт, %5u пунктов
+:TEXT_MEMORY_CTXT_HISTORY#1%
+\tHistory        : limit %5u bytes, current %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_DIRSTACK#1
-\tСтек каталогов: лимит %5u байт, текущий размер %5u байт, %5u пунктов
+:TEXT_MEMORY_CTXT_DIRSTACK#1%
+\tDirectory stack: limit %5u bytes, current %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_LASTDIR#1
-\tПоследний кеш каталогов : использует  %5u байтт, %5u пунктов
+:TEXT_MEMORY_CTXT_LASTDIR#1%
+\tLast dir cache : used  %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_BATCH#1
-\tВложенность вызовов командных файлов  : использует  %5u байт, %5u пунктов
+:TEXT_MEMORY_CTXT_BATCH#1%
+\tBatch nesting  : used  %5u bytes, %5u items
 .
-:TEXT_MEMORY_CTXT_SWAPINFO#1
-\tИнформация о подкачке       : использует  %5u байт, %5u пунктов
+:TEXT_MEMORY_CTXT_SWAPINFO#1%
+\tSwapinfo       : used  %5u bytes, %5u items
 .
 
 
 ## CHCP
 :TEXT_ERROR_GET_CODEPAGE#1
-Сбой при запросе на текущую кодовую страницу.
+Не удалось получить текущую кодовую страницу из системы.
 .
 :TEXT_ERROR_SET_CODEPAGE#1
-Сбой смены текущей кодовой страницы.
+Не удалось изменить текущую кодовую страницу.
 .
-:TEXT_DISPLAY_CODEPAGE#1
+:TEXT_DISPLAY_CODEPAGE#1%
 Текущая кодовая страница: %u.
-Системная кодовая страница (правильная): %u.
+Системная кодовая страница: %u.
 .
 
 #
@@ -889,591 +920,627 @@ C:\\FDOS
 #
 
 :TEXT_CMDHELP_ALIAS
-Вывод на экран, установка или удаление псевдонимов.
+Отображает, устанавливает, или удаляет псевдонимы.
 
-ALIAS [переманная[=][строка]]
+ALIAS [variable[=][string]]
 
-	переменная  Означает имя псевдонима.
-	строка      Означает набор символов для присвоения псевдониму.
+	variable  Указывает имя псевдонима.
+	string    Задает последовательность символов для присвоения псевдониму.
 
-
-Введите: ALIAS без параметров для вывода на экран объявленных псевдонимов.
+Ввод ALIAS без параметров отобразит текущие псевдонимы.
 .
 
 :TEXT_CMDHELP_BEEP
-Гудок.
+Выводит звуковой сигнал.
 .
 
 :TEXT_CMDHELP_BREAK
-Установка или очистка флага контроля за нажатием CTRL+C.
+Sets or clears extended CTRL+C checking.
 
 BREAK [ON | OFF]
 
-Введите BREAK без параметров позволяет выяснить текущее значение BREAK.
+Type BREAK without a parameter to display the current BREAK setting.
 .
 
 :TEXT_CMDHELP_CALL#1
-Вызов командного файла из другого командного файлв.
+Calls one batch program from another.
 
-CALL [/S | /N] [/Y] [диск:][путь]имя_файла [параметры]
+CALL [/S | /N] [/Y] [drive:][path]filename [batch-parameters]
 
-  параметры   Означает любые значения, требуемые для командного файла.
-  /S включение, /N выключение подкачки для FreeCOM.
-  /Y включает режим трасирования при выполнении команды.
+  batch-parameters   Specifies any command-line information required by
+                     the batch program.
+  /S enforces, /N denies swapping of FreeCOM.
+  /Y enables tracemode during execution of the command.
 .
 
 :TEXT_CMDHELP_CD
-Выводит имя текущей директории или изменяет её.
+Displays the name of or changes the current directory.
 
-CHDIR [диск:][путь]
+CHDIR [drive:][path]
 CHDIR[..]
-CD [диск:][путь]
+CD [drive:][path]
 CD[..]
 CD -
 
-  ..   Переход в родительский каталог.
-  -    Если возможность запоминания "последнего каталога" доступна, то
-       осуществляется переход в последний каталог.
+  ..   Specifies that you want to change to the parent directory.
+  -    If "last directory" feature is enabled, change to last directory.
 
-Введите CD диск: для вывода текущего каталога на указанном диске.
-Введите CD без параметров для вывода текущего диска и пути.
-Смотрите также: CDD
+Type CD drive: to display the current directory in the specified drive.
+Type CD without parameters to display the current drive and directory.
+See also: CDD
 .
 
 :TEXT_CMDHELP_CDD
-Вывод имени текущего каталога и диска или изменяет диск или текущий каталог.
+Displays the name of or changes the current directory and drive.
 
-CDD [диск:][путь]
+CDD [drive:][path]
 CDD[..]
 
-  ..   Переход в родительский каталог.
-  -    Если возможность запоминания "последнего каталога" доступна, то
-       осуществляется переход в последний каталог.
-Если указан диск:, то производится смена такущего диска на указанный. Это
-единственное отличие данной команды от команды: "CHDIR".
-Введите CDD без параметров для вывода текущего диска и пути.
+  ..   Specifies that you want to change to the parent directory.
+  -    If "last directory" feature is enabled, change to last directory.
+
+If drive: is specified, the current working drive is changed; this
+is the only different to "CHDIR".
+Type CD without parameters to display the current drive and directory.
 .
 
 :TEXT_CMDHELP_CHCP
-Вывод или установка номера активной кодовой страницы.
+Изменяет или отображает текущую кодовую страницу.
 
-CHCP [ннн]
+CHCP [nnn]
 
-  ннн   Означает номер кодовой страницы.
+  nnn   Номер кодовой страницы.
 
-Введите CHCP без параметров для вывода номера текущей кодовой страницы.
+Ввод CHCP без параметра отображает номер текущей кодовой страницы.
 .
 
 :TEXT_CMDHELP_CLS
-Очистка экрана.
+Очищает экран.
 
 CLS
 .
 
 :TEXT_CMDHELP_COMMAND
-Запуск новой копии командной оболочки FreeDOS.
+Запускает новую копию оболочки FreeDOS.
 
-COMMAND [[диск:]путь] [устройство] [/E:ннннн] [/L:нннн] [/U:ннн] [/P] [/MSG]
-                       [/LOW] [/Y [/[C|K] команда]]
-  [диск:]путь     Обозначает директорию с файлом: COMMAND.COM.
-  устройство      Означает устройство, используемое для ввода команд и вывода.
-  /E:ннннн        Установка начального размера области памяти для переменных в
-                  ннннн байт.
-                  (Значение: ннннн нужно чтобы было в диапазоне от 256 до
-                  32,768).
-  /L:нннн         Установка начального размера внутренних буферов (требуется
-                  также опиция /P).
-                  (Значение: нннн нужно чтобы было в диапазоне от 128 до
-                  1,024).
-  /U:ннн          Установка размера буффера ввода (требуется также опция /P).
-                  (Значение: ннн нужно чтобы было в диапазоне от 128 до 255).
-  /P              Загрузка интерпретатора команд без возможности выхода из
-                  него.
-  /MSG            Сохранять сообщения об ошибках в памяти (требуется также
-                  опция /P).
-  /LOW            Размещение резидентных данных оболочки в нижних отделах
-                  памяти.
-  /Y              Пошаговое выполнение командного файла, указанного через
-                  опции /C или /K.
-  /C команда      Выполнение команды и возврат.
-  /K команда      Выполнение команды и продолжение выполнения новой копии
-                  оболочки.
+COMMAND [[drive:]path] [device] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+                       [/LOW] [/Y [/[C|K] command]]
+  [drive:]path    Specifies the directory containing COMMAND.COM.
+  device          Specifies the device to use for command input and output.
+  /E:nnnnn        Sets the initial environment size to nnnnn bytes.
+                  (nnnnn should be between 256 and 32,768).
+  /L:nnnn         Specifies internal buffers length (requires /P as well).
+                  (nnnn should be between 128 and 1,024).
+  /U:nnn          Specifies the input buffer length (requires /P as well).
+                  (nnn should be between 128 and 255).
+  /P              Makes the new command shell permanent (can't exit).
+  /MSG            Stores all error messages in memory (requires /P as well).
+  /LOW            Forces the command shell to keep its resident data in
+                  low memory.
+  /Y              Steps through the batch program specified by /C or /K.
+  /C command      Выполняет указанную команду и returns.
+  /K command      Выполняет указанную команду и продолжает работу.
 .
 
 :TEXT_CMDHELP_COPY
-Копирование одного или больше файлов в другое место.
+Копирует один и более файлов в другое местоположение.
 
-COPY [/A | /B] источник [/A | /B] [+ источник [/A | /B] [+ ...]] [приёмник]
+COPY [/A | /B] source [/A | /B] [+ source [/A | /B] [+ ...]] [destination
   [/A | /B]] [/V] [/Y | /-Y]
 
-  источник     Означает один или более файлов для копирования.
-  /A           Исходный файл является текстовым.
-  /B           Исходный файл является двоичным.
-  приёмник     Каталог для размещения файла и/или конечное имя файла(ов).
-  /V           Проверка правильности копирования.
-  /Y           Отключения режима запроса на подтверждение перезаписи
-               существующего конечного файл(а/ов).
-  /-Y          Включение режима запроса на подтверждение перезаписи
-               существующего конечного файла.
+  source       Specifies the file or files to be copied.
+  /A           Indicates an ASCII text file.
+  /B           Indicates a binary file.
+  destination  Specifies the directory and/or filename for the new file(s).
+  /V           Verifies that new files are written correctly.
+  /Y           Suppresses prompting to confirm you want to overwrite an
+               existing destination file.
+  /-Y          Causes prompting to confirm you want to overwrite an
+               existing destination file.
 
-Переключатель /Y может быть задан в переменной окружения: COPYCMD.
-Переключатель /-Y, заданный непосредственно в командной строке, имеет приоритет
-над ним.
+The switch /Y may be preset in the COPYCMD environment variable.
+This may be overridden with /-Y on the command line.
 
-Для объеденения нескольких файлов в один, нужно задать единственный конечный
-файл и несколько исходных файлов (путём использования масок имён файлов или
-строки формата: источник1+источник2+источник3...
+To append files, specify a single file for destination, but multiple files
+for source (using wildcards or file1)Ывн format).
 .
 
 :TEXT_CMDHELP_CTTY
-Изменение устройства, используемого для ввода команд и вывода.
+Changes the terminal device used to control your system.
 
-CTTY устройство
+CTTY device
 
-  устройство   Терминальное устройство для использования (например, CON, AUX,
-COM1, COM2, COM3, COM4, PRN, LPT1, LTP2, CLOCK$ :-) ).
+  device   The terminal device you want to use, such as COM1.
 .
 
 :TEXT_CMDHELP_DATE#1
-Вывод или установка новой даты.
+Отображает или настраивает дату.
 
 DATE [/D] [дата]
 
-Ввод DATE без параметров позволяет получить текущее значение даты и выдать
-запрос на ввод нового значения даты.
-Нажатие клавиши ENTER оставляет значение даты без изменения.
+Ввод DATE без параметров отображает текущую дату и предлагает
+ввести новую. Чтобы оставить текущую дату, нажмите ENTER.
 
-/D вывод даты без запроса на изменение даты.
+/D отображает текущую дату.
 .
 
 :TEXT_CMDHELP_DEL#2
-Уничтожение одного или более файлов.
+Deletes one or more files.
 
-DEL [диск:][путь]имя_файла [/P] [/V]
-ERASE [диск:][путь]имя_файла [/P] [/V]
+DEL [drive:][path]filename [/P] [/V]
+ERASE [drive:][path]filename [/P] [/V]
 
-  [диск:][путь]имя_файла  Обозначает имя файл(а/ов) для удаления. Разрешено
-        использование подстановочных знаков для удаления многих файлов.
-  /P	Вывод запроса на удаление каждого файла.
-  /V	Вывод имён всех удалённых файлов.
+  [drive:][path]filename  Specifies the file(s) to delete.  Specify multiple
+                          files by using wildcards.
+  /P	Prompts for confirmation before deleting each file.
+  /V	Displays all deleted files.
 .
 
 :TEXT_CMDHELP_DIR#4
-Вывод списка файлов и подкаталогов, находящихся в текущем каталоге.
+Displays a list of files and subdirectories in a directory.
 
-DIR [диск:][путь][имя_файла] [/P] [/W] [/A[[:]атрибуты]]
-  [/O[[:]сортировка]] [/S] [/B] [/L] [/V]
+DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
+  [/O[[:]sortorder]] [/S] [/B] [/L] [/V]
 
-  [диск:][путь][имя_файла] Обозначает диск, путь и/или файл(ы) для вывода на
-                           экран (может указыватся один или несколько образцов
-                           имён файлов).
- /P         Пауза после заполнения каждого экрана.
- /W         Вывод списка файлов в несколько столбцов.
- /A         Вывод файлов с заданными атрибутами (по умалчанию маска: /ADHSRA).
- атибуты     D  Каталоги                   R  Файлы только для чтения
-             H  Скрытые файлы              A  Файлы, предназначенные для
-             S  Системные файлы               архивации
-                                           Префикс: "-" имеет значение: "НЕ".
- /O         Сортировка списка файлов (по умолчанию /ONG).
- сортировка  N  По имени (алфавитная)      S  По размеру (начиная с меньших)
-             E  По расширению (алфавитная) D  По дате и времени (начиная с
-             G  Начать список с каталогов     боле старых)
-             U  Без сортировки             Префикс: "-" имеет значения: "НЕ".
-             Интересно, а что выведет команда: DIR /O-U, т. е. не без
-             сортировки? ;-)
- /S         Вывод файлов из заданного каталога и всех его подкаталогов.
- /B         Вывод только имён файлов (без вывода суммарной информации).
- /L         Вывод списка в нижнем регистре.
- /Y или /4  Вывод четырёх цифр года.
+  [drive:][path][filename]
+            Specifies drive, directory, and/or files to list.
+            (Could be enhanced file specification or multiple filespecs.)
+ /P         Pauses after each screenful of information.
+ /W         Uses wide list format.
+ /A         Displays files with specified attributes. (Defaults to /ADHSRA)
+ attributes  D  Directories                R  Read-only files
+             H  Hidden files               A  Files ready for archiving
+             S  System files               -  Prefix meaning not
+ /O         List by files in sorted order.
+ sortorder   N  By name (alphabetic)       S  By size (smallest first)
+             E  By extension (alphabetic)  D  By date & time (earliest first)
+             G  Group directories first    -  Prefix to reverse order
+             U  Unsorted		   Defaults to /ONG
+ /S         Displays files in specified directory and all subdirectories.
+ /B         Uses bare format (no heading information or summary).
+ /L         Uses lowercase.
+ /Y or /4   Display 4-digit year.
 
-Переключатели могут быть заданы в переменной окружения DIRCMD. Чтобы отменить
-их действие, в командную строку следует поместить те же ключи с префиксом:
-"-". Пример: DIR /-W
+Switches may be preset in the DIRCMD environment variable.  Override
+preset switches by prefixing any switch with - (hyphen)--for example, /-W.
 .
 
 :TEXT_CMDHELP_DOSKEY#1
-
-Внешняя утилита: DOSKEY была интегрирована в FreeCOM.
-Используя клавиши перемещения курсора вверх и вниз, вы можете прокручивать
-содержимое журнала команд, введённых вами ранее в командную строку. Во время
-прокрутки вы можете нажать на кливишу: ENTER для выполнения любой команды,
-которая в данный момент находится в командной строке и которую вы получили из
-журнала команд.
-Используя клавиши перемещения курсора влево и вправо, вы можете передвигатся
-по текущей командной строке. Нажатием клавиши: INSERT включается и выключается
-режим вставки/перезаписи символов в командной строке.
-Если вы нажмёте клавишу: TAB, то произведётся поиск файлов в текущем каталоге
-и в командную строку будет вместо текущего слова вставлено имя файла, которое
-более - менее подходит по значению слова. Например, если вы ввели строку:
-DEL VER и нажмёте клавишу: TAB, то строка примет вид: DEL VERSION.TXT, при
-условии, что такой файл существует в текущем каталоге. В противном случае
-ничего не произойдёт. Двойное нажатие клавиши: TAB выводит на экран список
-имён всех файлов и каталогов в текущем каталоге.
+The external DOSKEY utility had been incorporated into FreeCOM.
+Use cursor UP,& DOWN keys to recall the history and HISTORY to display it.
+Use cursor LEFT,& RIGHT and the END and HOME keys to navigate within
+the command line and toggle INSERT between overstrike and insert mode.
+Use the TAB key to complete the current word as filename; use it twice
+to show all matching files.
 .
 
 :TEXT_CMDHELP_ORIGINAL_DOSKEY#1
-Редактирование командных строк, вызов предыдущих введённых команд и создание
-макросов.
+Edits command lines, recalls command lines, and creates macros
 
-DOSKEY [/ключ ...] [имя_макроса=[текст]]
+DOSKEY [/switch ...] [macroname=[text]]
 
-  /BUFSIZE:размер Установка размера буфера для команд и макросов
-                  (по умолчанию 512)
-  /ECHO:ON|OFF    Выбор режима отображения макросов (по умолчанию ON)
-  /FILE:файл      Ссылка на файл, содержащий список макросов
-  /HISTORY        Вывод на экран всех команд, содержащихся в буфере команд
-  /INSERT         Режим вставки вводимых символов в редактируемою строку
-  /KEYSIZE:размер Размер буфера клавиатуры (по умолчанию 15)
-  /LINE:размер    Максимальный размер буфера для строки (по умолчанию 128)
-  /MACROS         Вывод на экран всех макросов DOSKey
-  /OVERSTRIKE     Режим замены вводимых символов (используется по умолчанию)
-  /REINSTALL      Запуск новой копии DOSKey
-  имя_макроса     Имя создаваемого макроса
-  текст           Команды, входящие в состав макроса
+  /BUFSIZE:size Sets size of macro and command buffer            (default:512)
+  /ECHO:on|off  Enables/disables echo of macro expansions        (default:on)
+  /FILE:file    Specifies file containing a list of macros
+  /HISTORY      Displays all commands stored in memory
+  /INSERT       Inserts new characters into line when typing
+  /KEYSIZE:size Sets size of keyboard type-ahead buffer          (default:15)
+  /LINE:size    Sets maximum size of line edit buffer            (default:128)
+  /MACROS       Displays all DOSKey macros
+  /OVERSTRIKE   Overwrites new characters onto line when typing  (default)
+  /REINSTALL    Installs a new copy of DOSKey
+  macroname     Specifies a name for a macro you create
+  text          Specifies commands you want to assign to the macro
 
-  Стрелки: ВВЕРХ и ВНИЗ: восстановление командных строк из памяти
-                    Esc: очистка текущей командной строки
-                     F7: вывод на экран журнала команд
-                 Alt+F7: очистка журнала команд
-            [символы]F8: поиск команды в журнале, начинающейся с указанных
-                         символов
-                     F9: выбор команды по номеру
-                Alt+F10: очистка определений макросов
+  UP,DOWN arrows recall commands
+      Esc clears current command
+       F7 displays command history
+   Alt+F7 clears command history
+[chars]F8 searches for command beginning with [chars]
+       F9 selects a command by number
+  Alt] clears macro definitions
 
-Специальные коды, которые могут быть использованы в макросах DOSKey:
-  $T     Разделитель команд: обеспечивает ввод нескольких команд в одну строку
-  $1-$9  Параметры - эквалиенты параметров %1-%9 в командных файлах
-  $*     Заменяется текстом, стоящим в командной строке за именем макроса
+The following are special codes you can use in DOSKey macro definitions:
+  $T     Command separator: allows multiple commands in a macro
+  $1-$9  Batch parameters: equivalent to %1-%9 in batch programs
+  $*     Symbol replaced by everything following macro name on the command line
 .
 
 :TEXT_CMDHELP_ECHO
-Вывод сообщений и переключение режима отображения команд на экране.
+Displays messages, or turns command-echoing on or off.
 
   ECHO [ON | OFF]
-  ECHO [сообщение]
+  ECHO [message]
 
-Ввод ECHO без параметров позволяет выяснить текущий режим отобраения команд.
+Type ECHO without parameters to display the current echo setting.
 .
 
 :TEXT_CMDHELP_EXIT
-Выход из командной оболочки FreeDOS.
+Quits the FreeDOS command shell unless loaded with /P.
 
 EXIT
 .
 
 :TEXT_CMDHELP_FOR
-Запуск указанной команды для каждого файла из набора.
+Runs a specified command for each file in a set of files.
 
-FOR %переменная IN (набор) DO команда [параметры]
+FOR %variable IN (set) DO command [command-parameters]
 
-  %переменная Подставляемый параметр.
-  (набор)     Набор, включающий один или более файлов. Допускается
-              использование подстановочных знаков.
-  команда     Команда, выполяемая для каждого файла из набора.
-  параметры   Параметры и ключи, необходимые для выполнения команды.
+  %variable  Specifies a replaceable parameter.
+  (set)      Specifies a set of one or more files.  Wildcards may be used.
+  command    Specifies the command to carry out for each file.
+  command-parameters
+             Specifies parameters or switches for the specified command.
 
-При использовании команды: FOR в командном файле, вместо записи: %переменная
-следует использовать: %%переменная.
+To use the FOR command in a batch program, specify %%variable instead of
+%variable.
+
+For example:
+  FOR %f IN (---start--- a*.* ---end---) DO ECHO - %f -
 .
 
 :TEXT_CMDHELP_GOTO
-Передача управления в отмеченную строку командного файла.
+Directs the command shell to a labelled line in a batch program.
 
-GOTO метка
+GOTO label
 
-  метка   Текстовая строка, играющая в командном файле роль метки.
+  label   Specifies a text string used in the batch program as a label.
 
-Метка должна находиться в отдельной строке командного файла и начинаться с
-двоеточия.
+You type a label on a line by itself, beginning with a colon.
 .
 
 :TEXT_CMDHELP_HISTORY#1
-Журнал команд.
+History command.
 
-HISTORY [размер]
+HISTORY [size]
 
-Если не указан параметр: "размер", то на экран выводится текущее содержимое
-журнала команд. Если указано значение параметра: "размер", то изменяется
-размер журнала команд до указанного размера.
+Without "size" the current contents of the command line history
+buffer is displayed.
+With the size, the size of the history buffer is changed.
 .
 
 :TEXT_CMDHELP_IF
-Оператор условного выполнения команд в командных файлах.
+Performs conditional processing in batch programs.
 
-IF [NOT] ERRORLEVEL число команда
-IF [NOT] строка1==строка2 команда
-IF [NOT] EXIST имя_файла команда
+IF [NOT] ERRORLEVEL number command
+IF [NOT] string1==string2 command
+IF [NOT] EXIST filename command
 
-  NOT               Указывает, что команда должна выполнятся лишь в том
-                    случае, если условие ложно.
-  ERRORLEVEL число  Условие истинно, если последняя запущенная рпограмма
-                    завершилась с кодом возврата, равным либо превышающим
-                    указанное число.
-  команда           Команда, которую следует выполнить в случае истинности
-                    условия.
-  строка1==строка2  Условие истинно при совпадении обеих строк.
-  EXIST имя_файла   Условие истинно, если указанный файл существует.
+  NOT               Specifies that the command shell should carry out the
+                    command only if the condition is false.
+  ERRORLEVEL number Specifies a true condition if the last program run
+                    returned an exit code equal to or greater than the
+                    number specified.
+  command           Specifies the command to carry out if the condition is
+                    met.
+  string1==string2  Specifies a true condition if the specified text
+                    strings match.
+  EXIST filename    Specifies a true condition if the specified filename
+                    exists.
+.
+
+:TEXT_CMDHELP_LFNFOR
+Enables/Disables long filenames within the FOR command or filename completion.
+
+LFNFOR [ON | OFF]
+LFNFOR COMPLETE [ON | OFF]
+
+Type LFNFOR or LFNFOR COMPLETE without a parameter to display the current
+LFNFOR setting.
 .
 
 :TEXT_CMDHELP_LH
-Загрузка прогаммы в область верхней памяти (UMB).
+Loads a program into the upper memory area.
 
-LOADHIGH [диск:][путь]имя_файла [параметры]
-LOADHIGH [/L:область1[,мин_размер1][;область2[,мин_размер2]...] [/S]]
-         [диск:][путь]имя_файла [параметры]
+LOADHIGH [drive:][path]filename [parameters]
+LOADHIGH [/L:region1[,minsize1][;region2[,minsize2]...] [/S]]
+         [drive:][path]filename [parameters]
 
-/L:область1[,мин_размер1][;область2[,мин_размер2]]...
-            Указание областей памяти, в которые следует загружать программу.
-            Область1 определяет номер первой из областей памяти, а мин_размер1
-            - необходимый размер блока для области1. Область2 и мин_размер2
-            определяют номер и минимальный размер второй области памяти.
-            Количество указанных областей не ограничено.
+/L:region1[,minsize1][;region2[,minsize2]]...
+            Specifies the region(s) of memory into which to load the
+            program.  Region1 specifies the number of the first memory
+            region; minsize1 specifies the minimum size, if any, for
+            region1.  Region2 and minsize2 specify the number and minimum
+            size of the second region, if any.  You can specify as many
+            regions as you want.
 
-/S          Сжатие области UMB до минимума в процессе загрузки программы.
+/S          Shrinks a UMB to its minimum size while the program is
+            loading.
 
-[диск:][путь]имя_файла Путь к программе и её имя.
+[drive:][path]filename
+            Specifies the location and name of the program.
 .
 
 :TEXT_CMDHELP_LOADFIX
-Загрузка программы в область памяти выше первых 64 КБ и запуск её на
-выполнение.
+Loads a program above the first 64K of memory, and runs the program.
 
-LOADFIX [диск:][путь]имя_файла
+LOADFIX [drive:][path]filename
 
-Используйте LOADFIX для загрузки программ в том случае, если вы получаете
-сообщение: "Packed file corrupt" при попытке загрузки программы в нижнюю
-область памяти.
+Use LOADFIX to load a program if you have received the message "Packed
+file corrupt" when trying to load it in low memory.
 .
 
 :TEXT_CMDHELP_MD
-Создание нового каталога.
+Создание каталога.
 
-MKDIR [диск:]путь
-MD [диск:]путь
+MKDIR [drive:]path
+MD [drive:]path
 .
 
 :TEXT_CMDHELP_PATH
-Вывод на экран и установка пути для поиска выполняемых файлов.
+Отображает или задает путь поиска для исполняемых файлов.
 
-PATH [[диск:]путь[;...]]
+PATH [[drive:]path[;...]]
 PATH ;
 
-Введите PATH ; для очистки текущего пути поиска выполняемых файлов (при этом
-поиск буде производится исключительно в текущем каталоге).
-Введите PATH без параметров для вывода на экран текущего пути поиска
-выполняемых файлов.
+Type PATH ; to clear all search-path settings and direct the command shell
+to search only in the current directory.
+Ввод PATH без параметров отображает текущий путь.
 .
 
 :TEXT_CMDHELP_PAUSE
-Приостановка выполнения командного файла и вывод сообщения:
-"Press any key to continue...." или указанного в качестве параметра сообщения.
+Suspends processing of a batch program and displays the message:
+"Press any key to continue...." or an optional specified message.
 
-PAUSE [сообщение]
+PAUSE [message]
 .
 
 :TEXT_CMDHELP_PROMPT
-Изменение приглашения в командной строке интерпретатора команд.
+Changes the command prompt.
 
-PROMPT [текст]
+PROMPT [text]
 
-  текст    Новое приглашение командной строки.
+  text    Specifies a new command prompt.
 
-Приглашение может включать обычные символы и следующие коды:
+Prompt can be made up of normal characters and the following special
+codes:
 
-  $Q   = (знак равенства)
-  $$   $ (символ доллара)
-  $T   Текущее время
-  $D   Текущая дата
-  $P   Текущие диск и путь
-  $V   Номе версии оболочки FreeDOS
-  $N   Текущий диск
-  $G   > (знак "больше")
-  $L   < (знак "меньше")
-  $B   | (ветикальная черта)
-  $H   Backspace (удаление предыдущего символа)
-  $E   Код Escape (ASCII 27)
-  $_   Возврат каретки и перевод строки
+  $Q   = (equal sign)
+  $$   $ (dollar sign)
+  $T   Current time
+  $D   Current date
+  $P   Current drive and path
+  $V   the FreeDOS command shell version number
+  $N   Current drive
+  $G   > (greater-than sign)
+  $L   < (less-than sign)
+  $B   | (pipe)
+  $H   Backspace (erases previous character)
+  $E   Escape code (ASCII code 27)
+  $_   Carriage return and linefeed
 
-Ввод PROMPT без параметов позволяет восстановить исходный вид приглашения.
+Type PROMPT without parameters to reset the prompt to the default setting.
 .
 
 :TEXT_CMDHELP_PUSHD
-Заталкивание в стек каталогов текущего каталога. Если указан параметр, то
-кроме заталкивания в стек каталогов текущего каталога осуществляется переход
-в указанный в качестве параметра каталог.
+Pushes current directory onto the directory stack, with the option to
+change current working directory.
 
-PUSHD [[диск:]путь]
-  Параметр, указанный как: [диск:]путь обозначает путь к каталогу, в который
-вы хотите перейти.
+PUSHD [[drive:]path]
+  Where [drive:]path is a path to which you wish to change.
 .
 
 :TEXT_CMDHELP_POPD
-Выталкивание из стека каталогов последнего занесённого каталога и переход в
-него.
+Pops a directory off of the directory stack, and changes to it.
 
 POPD [*]
-  Если указан параметр: '*', то производится очистка стека каталогов.
+  The '*' parameter clears the directory stack.
 .
 
 :TEXT_CMDHELP_DIRS
-Вывод на экран содержимого стека каталогов.
+Displays the contents of the directory stack.
 
 DIRS
 .
 
 :TEXT_CMDHELP_RD
-Уничтожение каталога.
+Removes (deletes) an empty directory.
 
-RMDIR [диск:]путь
+RMDIR [drive:]path
 RD [drive:]path
 .
 
 :TEXT_CMDHELP_REM
-Помещение комментариев в командные файлы и файл: CONFIG.SYS.
+Records comments (remarks) in a batch file or CONFIG.SYS.
 
-REM [комментарий]
+REM [comment]
 .
 
 :TEXT_CMDHELP_REN
-Переименование файлов и каталогов.
+Renames a file/directory or files/directories.
 
-RENAME [диск:][путь][каталог1 | имя_файла1] [каталог2 | имя_файла2]
-REN [диск:][путь][каталог1 | имя_файла1] [каталог2 | имя_файла2]
+RENAME [drive:][path][directoryname1 | filename1] [directoryname2 | filename2]
+REN [drive:][path][directoryname1 | filename1] [directoryname2 | filename2]
 
-Указать другой диск или каталог для результатирующего файла или каталога
-нельзя. Для этого существует команда: MOVE.
+Note that you cannot specify a new drive or path for your destination. Use
+the MOVE command for that purpose.
 .
 
 :TEXT_CMDHELP_SET#1
-Вывод на экран, установка и удаление переменных окружения.
+Displays, sets, or removes environment variables.
 
-SET [/C] [/P] [переманная=[строка]]
+SET [/C] [/P] [/E] [/U] [variable[=[string]]]
 
-  переменная Имя переменной окужения.
-  строка     Текст, представляющий собой значение переменной окружения.
+  variable  Specifies the environment-variable name.
+  string    Specifies a series of characters to assign to the variable.
 
-* Если после знака равенства ничего нет, переменная окружения будет удалена.
+* If no string is specified, the variable is removed from the environment.
 
-Введите SET без параметров для вывода на экран содержимое всех переменных
-окружения.
+Type SET without parameters to display the current environment variables.
 
-/C сохранение регистра переменной при работе с ней. По умолчанию имена
-переменных перед работой с ними переводятся в верхний регистр. Например, если
-ввести: SET Work=Test., то эта команда эквалиентна команде: SET WORK=Test., т.
-е. имя переменной перед работой с ней переводится в верхний регистр. Если же
-указан ключ: /C, то перевод в верхний регистр имени переменной выполянтся не
-будет, и команда: SET Work=Test. присвоит значение переменной: Work а не WORK.
+Type SET VAR to display the value of VAR
 
-/P после ввода: "SET переменная=" производится запрос в диалоговом режиме на
-ввод значения переменной.
+/C forces to keep the case of the variable; by default the variable is
+uppercased, if it is not located in the environment already, otherwise
+the case is retained.
+
+/P prompt the user with string, and assigns the user input to the variable.
+
+/E sets the given variable to the first line of output of the command
+pointed to by [string].
+
+/U changes the case of [string] to uppercase.
 .
 
 :TEXT_CMDHELP_SHIFT#1
-Изменение содержимого (сдвиг) подставляемых параметров для командного файла.
+Changes the position of replaceable parameters in a batch file.
 
 SHIFT [DOWN]
 
-DOWN выполняет сдвиг параметров к началу (%0); в других случаях происходит
-сдвиг к концу.
+DOWN shifts the argument window toward the beginning (%0); otherwise
+toward the end.
 .
 
 :TEXT_CMDHELP_TIME#1
-Вывод на экран и установка системного времени
+Отображает или настраивает системное время.
 
 TIME [/T] [время]
 
-Введите TIME без параметров для вывода на экрат текущего времени по часам
-компьютера и установки нового времени в диалоговом режиме. Нажатие клавиши:
-ENTER оставляет время без изменения.
+Ввод TIME без параметров отобразит текущее время и предложит
+ввести новое. Чтобы оставить текущее время, нажмите ENTER.
 
-/T если указан этот ключ, на экран будет выведено текущее время без запроса на
-ввод нового времени.
+/T отображает текущее время.
 .
 
 :TEXT_CMDHELP_TRUENAME
-Вывод определённого точного полного пути от указанного пути.
+Отображает полный путь текущего каталога или указанного файла.
 
-TRUENAME [диск:][путь][имя_файла]
+TRUENAME [диск:][путь][файл]
 .
 
 :TEXT_CMDHELP_TYPE
-Вывод на экран содержимого текстового файла.
+Отображает содержимое текстовых файлов.
 
-TYPE [диск:][путь]имя_файла
+TYPE [диск:][путь]файл
 .
 
 :TEXT_CMDHELP_VER
-Вывод версии командного интерпретатора FreeDOS и другой информации.
+Отображает версию командной строки FreeDOS и другую информацию.
 
 VER [/R] [/W] [/D] [/C]
 
- /R         Вывод версии ядра FreeDOS и другой информации.
- /W         Гарантии, предоставлвемые пользователям оболочки FreeDOS.
- /D         Информация для перераспространения оболочки FreeDOS.
- /C         Список разработчиков, участвующих в создании оболочки FreeDOS.
+ /R         Версия ядра и др. информация.
+ /W        Гарантия FreeDOS command shell.
+ /D         FreeDOS command shell redistribution information.
+ /C         Разработчики FreeDOS command shell.
 .
 
 :TEXT_CMDHELP_VERIFY
-Установка контроля за привильность записи файлов на диск.
+Tells the FreeDOS file system whether to verify that your files are
+written correctly to a disk.
 
 VERIFY [ON | OFF]
 
-Введите VERIFY без параметров для выяснения текущего состояния флага: VERIFY.
+Type VERIFY without a parameter to display the current VERIFY setting.
 .
 
 :TEXT_CMDHELP_FDDEBUG
-Если отладчик вкомпилирован в FreeDOS, эта команда переводит режим вывода
-отладочной информации в состояние: Включено или: Выключено, или сообщит вам,
-есть ли вкомпилированный отладчик или его нет.
+If debugging is compiled into FreeDOS, this command will turn debug
+output on or off, or tell you if it is on or off.
 
-FDDEBUG [ON | OFF | имя_файла]
+FDDEBUG [ON | OFF | file]
 
-Введите FDDEBUG без параметров для выяснения текущего режима отладочного
-вывода. Если указано имя файла, то весь вывод отладочной информации будет
-производится в указанный файл. Если файл уже существует, то вывод будет
-производится в его конец. Зарезервированные псевдоимена файлов: "stdout" и:
-"stderr" могут быть указаны в качестве имени файла для вывода в них (вывод
-отладочной информации в это случае будет производится на экран).
+Type FDDEBUG without a parameter to display the current debug output
+setting.
+If a file is specified, all debug output is redirected into that file;
+the output is appended to the file, if it already exists. The special
+names "stdout" and "stderr" may be used to redirect the output
+to the standard output or standard error stream.
 .
 
 :TEXT_CMDHELP_VOL
-Вывод на экран серийного номера тома и метки тома диска, если она присутствует на
-текущем или указанном диске.
+Отображает метку тома диска и серийный номер, если они существуют.
 
 VOL [диск:]
 .
 
 :TEXT_CMDHELP_QUESTION#1
-Ввыод на экран списка всех команд и возможностей, доступных в данной оболочке.
+Displays a list of commands and features available with in the shell.
 
 ?
-?команда [параметры]
+?command [argument]
 
-Первый вариант команды выводит на экран список всех команд и возможностей,
-доступных в данной оболочке. Второй вариант команды выводит на экран запрос на
-выполнения указанной команды, как если бы режим трасирования был включён.
+The first variant displays any available internal command and feature.
+The second one will prompt whether or not to execute the specified
+command as if trace mode would be active.
 .
 
 :TEXT_CMDHELP_WHICH
-Выводит на экран исполнимый файл, соответствующий внешней команде.
-Пример:
-      WHICH Edit
-      Edit        C:\FREEDOS\EDIT.EXE
+Searches and displays the executable file for each specified command.
 
-WHICH {команда}
+WHICH command...
 .
 
 :TEXT_CMDHELP_MEMORY#1
-Выводит статистику использования внутренней памяти FreeCOM.
+Отображает внутреннюю память используемую FreeCOM.
 
 MEMORY
 
 .
 
 :TEXT_ERROR_COPY_PLUS_DESTINATION#1
-Имя конечного файла не должно сожержать знак: '+'.
+Путь назначения COPY не должен содержать символ плюс ('+').
 .
 
-:TEXT_DELETE_FILE#1
+:TEXT_DELETE_FILE#1%
 Удаление файла "%s".
+.
+
+:TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
+Unable to write to file '%s';
+probably disc full? (%lu bytes required)
+.
+
+# Displayed for BIGcopy(), when copying takes quite a long time.
+# **_NO_END if the input file size is unknown.
+# Both must end in \r rather than \n!!
+:TEXT_COPY_COPIED_NO_END#0%
+скопировано %luKB/???KB\r\
+.
+:TEXT_COPY_COPIED#0%
+скопировано %luKB/%luKB\r\
+.
+
+:TEXT_ERROR_FCOM_IS_DEVICE#0%
+FreeCOM cannot be a device: "%s"
+.
+:TEXT_ERROR_FCOM_INVALID#0%
+This file is no valid FreeCOM or of an incompatible version:
+%s
+.
+
+:TEXT_ERROR_LOADING_STRINGS
+Failed to load the strings resource into memory, the location
+pointed to in %COMSPEC% seems to be invalid. Please specify another
+location of FreeCOM to try to load the strings from, e.g.:
+C:\\COMMAND.COM
+or just hit enter to cancel to load the strings.
+.
+
+:TEXT_TERMINATING
+Terminating now.
+.
+
+:TEXT_HIDDEN_CRITER#0%
+%u Critical Error requests suppressed.
+.
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+Exit code (ERRORLEVEL): %u, reason: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+DOS API error\
+.
+:TEXT_EXIT_REASON_0
+terminated normally\
+.
+:TEXT_EXIT_REASON_1
+terminated by ^Break\
+.
+:TEXT_EXIT_REASON_2
+terminated by critical error\
+.
+:TEXT_EXIT_REASON_3
+gone resident\
 .
