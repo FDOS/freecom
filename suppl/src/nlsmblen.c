@@ -77,8 +77,10 @@ char * MbStrrchr(const char *s, int c)
 char * CharPrev(const char *base, const char *s)
 {
 	const char *p = base;
-	while(p < s) {
-		p += MbLen(p);
+	while(1) {
+		const char *pn = p + MbLen(p);
+		if (pn >= s) break;
+		p = pn;
 	}
 	return (char *)p;
 }
