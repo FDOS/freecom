@@ -40,13 +40,31 @@ unsigned mywherey (void) {
 #endif
 
 #if defined(NEC98)
+char use_int29 = 0;
+static void outc_dos(char c)
+{
+    IREGS r;
+    if (use_int29)
+    {
+        r.r_ax = c;
+        intrpt(0x29, &r);
+    }
+    else
+    {
+        r.r_ax = 0x0200;
+        r.r_dx = c;
+        intrpt(0x21, &r);
+    }
+}
 void outc(char c)
 {
-	if (c == '\n') dos_write(1, "\r\n", 2);
-	else dos_write(1, &c, 1);
-	if (mywherex() > MAX_X) {
-	  dos_write(1, "\b\r\n", 3);	/* NEC98: force break */
-	}
+    if (c == '\n') outc_dos('\r');
+    outc_dos(c);
+    if (mywherex() > MAX_X) {
+        outc_dos('\b');
+        outc_dos('\r');
+        outc_dos('\n');
+    }
 }
 void outs(const char * const s)
 {

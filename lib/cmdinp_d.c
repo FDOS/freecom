@@ -94,6 +94,17 @@ static void clrcmdline_oxy_d(char * const str, const int maxlen, const unsigned 
 #undef clrcmdline
 #define clrcmdline(s,m,cc,ox,oy,cpos)	clrcmdline_oxy_d(s,m,cc,ox,oy)
 
+#if defined NEC98
+static int check_stdout_int29(void)
+{
+	IREGS r;
+	r.r_ax = 0x4400;
+	r.r_bx = 1;
+	r.r_dx = 0;
+	intrpt(0x21, &r);
+	use_int29 = (r.r_dx & 0x90) == 0x90;
+}
+#endif
 
 void readcommandEnhanced(char * const str, const int maxlen)
 {
@@ -119,6 +130,11 @@ void readcommandEnhanced(char * const str, const int maxlen)
 	assert(str);
 	assert(maxlen <= MAX_INTERNAL_COMMAND_SIZE);
 
+#if defined NEC98
+	/* use int 29h for output to default console */
+	/* workaround for some alternative CON drivers, like ktn4 */
+	check_stdout_int29();
+#endif
 	/* if echo off, don't print prompt */
 	if(echo)
 		printprompt();
