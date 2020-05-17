@@ -2,15 +2,15 @@
 #
 # FreeCOM national customization file
 #
-#	Language: English
-#	Codepage: ASCII (7bit) / any codepage
+#	Language: Turkish
+#	Codepage: ASCII (7bit) / CP857
 #	Author:   FreeCOM maintainer
 # 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
 # outputs strings.h and strings.dat.  The .DAT file is appended to
 # the command.exe file, and then renamed to command.com.  The .H
-# file contains all the info for the program to retreive the
+# file contains all the info for the program to retrieve the
 # messages.
 #
 # The format of this file is simple.  Blank lines and lines starting
@@ -30,7 +30,7 @@
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
-# period (".") signifies that there will be a final carrage return when
+# period (".") signifies that there will be a final carriage return when
 # the message is displayed, but a comma does not.
 #
 # The body may contain backslash escape sequences as known from C; there
@@ -49,8 +49,8 @@
 # though the comma removes the newline from the first line.
 
 # Defining prompts
-# Some prompts may cause an user interaction. Those ones should be in sync
-# with the issued text. To define how to interprete a pressed key, they
+# Some prompts may cause a user interaction. Those ones should be in sync
+# with the issued text. To define how to interpret a pressed key, they
 # are mapped into metakeys like that: [ignore first hash sign]
 
 ## Return value: a -> Yes; else -> No
@@ -62,9 +62,9 @@
 
 # All strings, which label start with "PROMPT_", are parsed as prompts.
 # The first two lines of the body are special; the first one enumerates all
-# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# valid keys, the second one assigns arbitrary metakeys. Metakeys may
 # range from 'a' through 'z'; spaces are ignored; everything else cause
-# an error. The comment preceeding the prompt definition associates the
+# an error. The comment preceding the prompt definition associates the
 # metakeys with their meaning.
 # The remaining lines of the body contain the text to be displayed.
 #
@@ -75,7 +75,7 @@
 # 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
 # The spaces between the 'b's in the second line had been inserted to
 # align them with the corresponding keys of the first line, hence in order
-# to enhance readibility of the association between the pressed keys and their
+# to enhance readability of the association between the pressed keys and their
 # mapping into a metakey.
 #
 # The first line (pressed keys) has to enumerate the ASCII value as returned
@@ -103,19 +103,19 @@ Geáersiz anahtar. - /%s
 
 ## Issued if the context, the type of argument etc. is invalid
 :TEXT_ERROR_ILLFORMED_OPTION#0%
-Yanlçü üekillendirilmiü seáenek: '%s'
+Yanlçü oluüturulmuü seáenek: '%s'
 .
 
 :TEXT_ERROR_OPT_ARG#0%
-'%s' seáeneßinin baßçmsçz deßiükeni olamaz
+'%s' seáeneßinin baßçmsçz deßiükeni olamaz.
 .
 
 :TEXT_ERROR_OPT_NOARG#0%
-'%s' seáeneßinin baßçmsçz bir deßiükeni olmalçdçr
+'%s' seáeneßinin baßçmsçz bir deßiükeni olmalç.
 .
 
 :TEXT_INVALID_NUMBER#0%
-'%s' unsurunda geáersiz sayç belirtimi
+'%s' îgesinde geáersiz sayç belirtimi.
 .
 
 :TEXT_ERROR_CLOSE_QUOTE#0%
@@ -123,7 +123,7 @@ Eksik kapama tçrnak iüareti: %c
 .
 
 :TEXT_ERROR_TEMPFILE
-Geáici dosya oluüturulamadç
+Geáici dosya oluüturulamadç.
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
@@ -159,31 +159,31 @@ Geáersiz sÅrÅcÅ %c:.
 .
 
 :TEXT_ERROR_BADCOMMAND#2%
-Yanlçü komut ya da dosya ismi - "%s".
+Yanlçü komut veya dosya adç - "%s".
 .
 
 :TEXT_ERROR_OUT_OF_MEMORY
-Bellek yetersizlißi hatasç.
-.
+Bellek yetersiz hatasç.
+.BATCHFILE
 
 :TEXT_ERROR_OUT_OF_DOS_MEMORY#1
 DOS belleßinin ayrçlmasç baüarçsçz oldu.
 .
 
 :TEXT_ERROR_CANNOTPIPE
-Kanal oluüturulamadç!  Geáici dosya aáçlamadç!
+Kanal oluüturulamadç! Geáici dosya aáçlamadç!
 .
 
 :TEXT_ERROR_LONG_LINE_BATCHFILE#0%
-'%s' batch dosyasçnda satçr #%ld áok uzun.
+'%s' toplu iü dosyasçnda satçr #%ld áok uzun.
 .
 
 :TEXT_ERROR_BFILE_VANISHED#0%
-Batch dosyasç '%s' bulunamadç.
+Toplu iü dosyasç '%s' bulunamadç.
 .
 
 :TEXT_ERROR_BFILE_LABEL#0%
-'%s' batch dosyasç '%s' etiketini iáermemektedir.
+'%s' toplu iü dosyasç '%s' etiketini iáermemekte.
 .
 
 :TEXT_ERROR_DIRFCT_FAILED#1%
@@ -198,7 +198,7 @@ Ortam dolu olmasçn?
 '%s' ortam deßiükeni bulunamadç.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
-Ortam yok. Belki bellek yetersiz kaldç. /E seáeneßini belirtiniz.
+Ortam yok. Belki bellek yetersiz kaldç. /E seáeneßini belirtin.
 .
 
 # The next three errors must remain in this order!
@@ -209,7 +209,7 @@ Ortam yok. Belki bellek yetersiz kaldç. /E seáeneßini belirtiniz.
 '%s' dißer adç bulunamadç.
 .
 :TEXT_ERROR_NO_ALIAS_SEGMENT#1
-Dißer ad alanç yok. Belki bellek yetersiz.
+Dißer ad alanç yok. Bellek yetersiz olabilir.
 .
 
 :TEXT_ERROR_SYNTAX_STR#0%
@@ -221,11 +221,11 @@ Sîz dizimi hatasç.
 .
 
 :TEXT_ERROR_FILENAME_TOO_LONG#0%
-Dosya ismi áok uzun. - '%s'
+Dosya adç áok uzun. - '%s'
 .
 
 :TEXT_ERROR_SELFCOPY#0%
-'%s' kendi Åzerine kopyalanamaz
+'%s' kendi Åzerine kopyalanamaz.
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
@@ -246,7 +246,7 @@ Komut satçrç tariháesi boü.
 
 
 :TEXT_ERROR_BAD_MCB_CHAIN
-MCB zinciri bozuk, ya da MS-DOS ile uyumlu olmayan bir sistem.
+MCB zinciri bozuk, veya MS-DOS ile uyumlu olmayan bir sistem.
 .
 
 :TEXT_ERROR_UNDEFINED_ERROR#0%
@@ -258,11 +258,11 @@ Geáersiz bellek alanç %d - yok sayçldç.
 .
 
 :TEXT_ERROR_ON_OR_OFF
-ON ya da OFF belirtilmesi gerekmektedir.
+ON veya OFF belirtilmesi gerekiyor.
 .
 
 :TEXT_ERROR_BAD_VARIABLE
-Yanlçü deßiüken belirtimi.
+Yanlçü deßiüken belirtildi.
 .
 
 :TEXT_ERROR_IN_MISSING#1
@@ -270,7 +270,7 @@ FOR: IN eksik.
 .
 
 :TEXT_ERROR_MISSING_PARENTHESES#1
-Bir ya da her iki parantez eksik.
+Bir veya her iki parantez eksik.
 .
 
 :TEXT_ERROR_DO_MISSING#1
@@ -310,7 +310,7 @@ CTTY komutu bu COMMAND.COM'dan hariá tutulmuütur.
 .
 
 :TEXT_ERROR_NORW_DEVICE#0%
-Geáersiz ya da okuma-yazma cihazç olmayan '%s'.
+'%s' geáersiz veya okuma-yazma aygçtç deßil.
 .
 
 :TEXT_ERROR_CTTY_DUP#0%
@@ -318,11 +318,11 @@ Dosya tançmlayçcçlarçn TTY'ye deßiütirilmeleri baüarçsçz '%s'.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
-/L henÅz eklenmemiütir.
+/L henÅz eklenmemiü.
 .
 
 :TEXT_ERROR_U_NOTIMPLEMENTED
-/U henÅz eklenmemiütir.
+/U henÅz eklenmemiü.
 .
 
 :TEXT_ERROR_WRITING_DEST
@@ -358,28 +358,28 @@ Yapçlacak hiábir üey yok.
 .
 
 :TEXT_ERROR_COPY
-COPY baüarçsçz oldu
+COPY baüarçsçz oldu.
 .
 
 :TEXT_ERROR_IF_EXIST_NO_FILENAME#1
-IF EXIST: eksik dosya ismi
+IF EXIST: eksik dosya adç.
 .
 :TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
-IF ERRORLEVEL: eksik sayç
+IF ERRORLEVEL: eksik sayç.
 .
 :TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
-IF ERRORLEVEL: geáersiz sayç
+IF ERRORLEVEL: geáersiz sayç.
 .
 :TEXT_ERROR_IF_MISSING_COMMAND#1
-IF: Eksik komut
+IF: Eksik komut.
 .
 
 :TEXT_NOT_IMPLEMENTED_YET
-ôzÅr dileriz... henÅz eklenmemiütir.
+ôzÅr dileriz. ôzellik mevcut deßil.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
-Mesajlarçn belleße yÅklenmesi baüarçsçz oldu.
+òletilerin belleße yÅklenmesi baüarçsçz oldu.
 .
 
 :TEXT_MSG_NOTIMPLEMENTED
@@ -387,7 +387,7 @@ Mesajlarçn belleße yÅklenmesi baüarçsçz oldu.
 .
 
 :TEXT_MSG_ITEMS_DISPLAYED#1%
-%u unsur gîrÅntÅlendi.
+%u îge gîrÅntÅlendi.
 .
 
 :TEXT_CORRUPT_COMMAND_LINE
@@ -402,7 +402,7 @@ Bozuk komut satçrç. Bu dahili bir hatadçr ve COMMAND.COM'un
 :TEXT_INIT_FULLY_QUALIFIED#1%
 COMMAND.COM'a giden yolun tamamen belirtilmiü olmasç gerekmektedir!
 Bu, sÅrÅcÅ harfinin kullançlmasç ve geri eßri áizgi ile baülanmasç demektir.
-Mesela: C:\\FDOS
+Mesela: C:\FDOS
 
 COMMAND.COM üimdi bu yolu varsaymaktadçr:
 %s
@@ -411,26 +411,26 @@ COMMAND.COM üimdi bu yolu varsaymaktadçr:
 :TEXT_ERROR_RESTORE_SESSION
 Oturum verileri geri alçnamadç, tÅm yerel ayarlar kaybedildi.
 LÅtfen bu sorunun sebebini îßrenmek iáin yukarçdaki hata
-mesajlarçnç okuyun.
+iletilerini okuyun.
 .
 
 :TEXT_ERROR_SAVE_SESSION
 GÅncel veriler programçn áaßrçlçüçnda muhafaza edilemedi.
 LÅtfen bu sorunun sebebini îßrenmek iáin yukarçdaki hata
-mesajlarçnç okuyun.
+iletilerini okuyun.
 .
 
 :TEXT_ERROR_CWD_FAILED#1%
-%c: sÅrÅcÅsÅ cevap vermiyor.
+%c: sÅrÅcÅsÅ yançt vermiyor.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE
-Takas baüarçsçz oldu: dißer adlar áok fazla bellek ayçrçyor.
+Takas baüarçsçz oldu: Dißer adlar áok fazla bellek ayçrçyor.
 .
 
 
 :TEXT_ERROR_KSWAP_ALLOCMEM
-Takas baüarçsçz oldu: uzak bellek ayrçlamadç.
+Takas baüarçsçz oldu: Uzak bellek ayrçlamadç.
 .
 
 :TEXT_ERROR_ALIAS_OUT_OF_MEM#1
@@ -438,7 +438,7 @@ Dißer ad alanç yetersiz.
 .
 
 :TEXT_ERROR_ALIAS_NO_SUCH#1%
-Bîyle bir dißer ad (alias) yok: '%s'
+Bîyle bir arma yok: '%s'
 .
 
 :TEXT_ERROR_ALIAS_INSERT#1
@@ -446,16 +446,16 @@ Dißer adçn eklenmesi baüarçsçz oldu.
 .
 
 :TEXT_ALIAS_INVALID_NAME#1%
-Geáersiz dißer ad ismi '%s'.
+Geáersiz dißer ad adç '%s'.
 .
 
 :TEXT_ERROR_LOADING_CONTEXT#1
-Baßlam modÅlÅ veya Kritik Hata yîneticisi yÅklenemedi.
+Baßlam modÅlÅ veya Kritik Hata Yîneticisi yÅklenemedi.
 .
 
 :TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
 Baßlam belleßi yetersiz.
-Bu hata devam ederse herhangi bir dahili tamponu arttçrmayç dÅüÅnÅn,
+Bu hata sÅrerse herhangi bir iá arabelleßi artçrmayç dÅüÅnÅn,
 mesela tariháe, dizin yçßçnç vs. gibi.
 .
 
@@ -472,7 +472,7 @@ freecom@freedos.org
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
-Takas sonrasç baßlam eksik. Baßlam tekrar oluüturuldu,
+Takas sonrasç baßlam eksik. Baßlam tekrar Oluüturuldu,
 fakat tÅm dißer adlar vs. kaybedildi.
 .
 
@@ -487,21 +487,21 @@ fakat tÅm dißer adlar vs. kaybedildi.
 :TEXT_ERROR_UNKNOWN_ERROR#1%
 %s: Bilinmeyen hata
 .
-
+	
 #
 # Informational messages
 #
 
 :TEXT_MSG_PAUSE#1
-Devam etmek iáin herhangi bir tuüa basçnçz . . .\
+SÅrdÅrmek iáin herhangi bir dÅßmeye basçn . . .\
 .
 
 :TEXT_MSG_HISTORY_SIZE#0%
-Tariháe boyutu %d bayttçr.
+Geámiü boyutu %d bayt.
 .
 
 :TEXT_MSG_DOSKEY
-DOSKEY îzellikleri zaten kabukta etkinleütirilmiütir.
+DOSKEY îzellikleri zaten kabukta etkinleütirilmiü.
 .
 
 :TEXT_MSG_ECHO_STATE#0%
@@ -532,7 +532,7 @@ LFN Complete üudur: %s
 .
 
 :TEXT_MSG_CURRENT_DATE#0%
-GÅncel tarih üudur: %s
+GÅncel tarih: %s
 .
 
 ## The three DATE prompts MUST be in this order!
@@ -547,7 +547,7 @@ Yeni tarih gir ([yy]yy%saa%sgg): \
 .
 
 :TEXT_MSG_CURRENT_TIME#0%
-GÅncel zaman üudur: %s
+GÅncel zaman: %s
 .
 
 :TEXT_STRING_PM#1
@@ -574,7 +574,7 @@ Yeni zaman gir: \
 :PROMPT_DELETE_ALL#1%
 YyNn{CR}{LF}{CBREAK}
 aabb   b   b       b
-'%s' iáindeki tÅm dosyalar silinecektir!
+'%s' iáindeki tÅm dosyalar silinecek!
 Emin misiniz (E/H)? \
 .
 
@@ -591,14 +591,14 @@ aabb   a   a       b    b
 # This prompt MUST include the pseudo key CBREAK!
 # Note: This prompt ignores DOS NLS intentionally in order to
 # keep interactive prompt & user-interaction in sync.
-# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+# Attention: This prompt is used via BIOS; any newline MUST be prefixed
 #	by \r!
 # Return value: a -> Yes; b -> No; c -> All; else -> Undefined
-:PROMPT_CANCEL_BATCH#1%
+:PROMPT_CANCEL_toplu iü#1%
 YyNnAaQq{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
 Control-Break'e basçldç.\r
-'%s' batch dosyasç sonlandçrçlsçn mç (Evet/Hayçr/TÅmÅ) ? \
+'%s' toplu iü dosyasç sonlandçrçlsçn mç (Evet/Hayçr/TÅmÅ) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -647,10 +647,10 @@ Dizin yçßçnç boü.
 üudur: %s
 .
 :TEXT_DIR_HDR_VOLUME_NONE
-etiket iáermemektedir
+etiket iáermiyor
 .
 :TEXT_DIR_HDR_SERIAL_NUMBER#0%
- Birimin Seri Numarasç üudur: %04X-%04X
+ Birimin Seri Numarasç: %04X-%04X
 .
 :TEXT_DIR_FTR_FILES#1%
 %10s dosya\
@@ -705,25 +705,25 @@ Hiábir arama yolu tançmlanmamçü.
 
 ## The following names MUST be in this order!
 :TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
-Pazar\
+Paz\
 .
 :TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
-Ptesi\
+Pzt\
 .
 :TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
-Salç\
+Sal\
 .
 :TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
-Äar\
+ÄarÆ\
 .
 :TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
 Per\
 .
 :TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
-Cuma\
+Cum\
 .
 :TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
-Ctesi\
+Cts\
 .
 
 # Displayed by DEL how many files were removed.
@@ -759,7 +759,7 @@ Mevcut îzellikler:
 [tariháe] \
 .
 :TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
-[dosya ismi tamamlanmasç] \
+[dosya adç tamamlanmasç] \
 .
 :TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
 [takas] \
@@ -771,7 +771,7 @@ Mevcut îzellikler:
 [son dizin] \
 .
 :TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
-[uzun dosya isimleri] \
+[uzun dosya adlarç] \
 .
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
 [áekirdek takasç] \
@@ -797,7 +797,7 @@ Mevcut îzellikler:
 
 :TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
 
-òzleme kipi iáin F8 tuüuna veya %s unsurunu atlamak iáin F5 tuüuna basçn... \
+òzleme kipi iáin F8 dÅßmesine veya %s îgesini atlamak iáin F5 dÅßmesine basçn... \
 .
 :TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
 '%s' atlançyor.
@@ -821,18 +821,18 @@ Telif hakkç (C) 1994-2005 Tim Norman ve dißerleri.
 
 Bu program faydalç olacaßç umuduyla, fakat HòÄBòR GARANTò òÄERMEDEN;
 hatta TòCARò ELVERòûLòLòK veya AMACA UYGUNLUK zçmni garantileri de
-verilmeden sunulmaktadçr. Daha fazla detay iáin GNU Genel Kamu Lisansçnç
+verilmeden sunulmaktadçr. Daha fazla ayrçntç iáin GNU Genel Kamu Lisansçnç
 okuyunuz.
 
-Hata raporlarçnç üu adresse gînderiniz: freedos-freecom@lists.sourceforge.net.
+Hata raporlarçnç üu adrese gînderiniz: freedos-freecom@lists.sourceforge.net.
 GÅncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
 Telif hakkç (C) 1994-2005 Tim Norman ve dißerleri.
 
-Bu program îzgÅr yazçlçmdçr, onu ôzgÅr Yazçlçm Vakfçnçn yayçnladçßç
-GNU Genel Kamu Lisansçnçn ya 2. sÅrÅmÅ ya da (sizin seáiminize
+Bu program îzgÅr yazçlçmdçr, onu îzgÅr Yazçlçm Vakfçnçn yayçnladçßç
+GNU Genel Kamu Lisansçnçn ya 2. sÅrÅmÅ veya (sizin seáiminize
 dayalç olarak) herhangi bir daha yeni sÅrÅmÅ kapsamçnda tekrar 
 daßçtabilir ve/veya deßiütirebilirsiniz.
 
@@ -845,11 +845,11 @@ GÅncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
 FreeDOS Komut Kabußu biráok programcç tarafçndan geliütirilmiütir, lÅtfen
 HISTORY.TXT dosyasçna bakçn.
 
-GÅncel olarak bakçmçnç Steffen Kaiser mailto:freecom@freedos.org yapmaktadçr
+ûu anki bakçmcç: Steffen Kaiser mailto:freecom@freedos.org.
 
-Hata raporlarçnç üu adrese gînderiniz: freedos-freecom@lists.sourceforge.net.
-GÅncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
-.
+Hata raporlarç iáin: freedos-freecom@lists.sourceforge.net
+GÅncellemeler iáin: http://freedos.sourceforge.net/freecom 
+
 
 
 # Displayed when the shell is to terminate, but has been started
@@ -861,7 +861,7 @@ GÅncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
 \r\n\r
 Kabuk sona erdirilmek Åzeredir ancak bu yasaktçr\r
 (genellikle "/P" seáeneßini etkinleütirerek).\r
-Sistemi yeniden baülatmançz ya da eßer bu kabuk áoklu gîrev ortamçnda\r
+Sistemi yeniden baülatmançz veya eßer bu kabuk áoklu gîrev ortamçnda\r
 áalçütçrçlçyorsa bu gîrev/iülemi elle sonlandçrmançz gerekir.\r
 .
 
@@ -876,44 +876,44 @@ C:\\FDOS
 
 
 :TEXT_MEMORY_ENVIRONMENT#1%
-Ortam segmenti    : azami %5u bayt; boü %5u bayt
+Ortam segmenti      : Azami %5u bayt; boü %5u bayt
 .
 :TEXT_MEMORY_CONTEXT#1%
-Baßlam segmenti        : azami %5u bayt; boü %5u bayt
+Baßlam segmenti     : Azami %5u bayt; boü %5u bayt
 .	
 :TEXT_MEMORY_HEAP#1%
-Yçßçn                   : boü %5lu bayt
+Yçßçn               : Boü %5lu bayt
 .
 :TEXT_MEMORY_CTXT_ALIAS#1%
-\tDißer adlar        : sçnçr %5u bayt, gÅncel %5u bayt, %5u unsur
+\tDißer adlar       : Sçnçr %5u bayt, gÅncel %5u bayt, %5u îge
 .
 :TEXT_MEMORY_CTXT_HISTORY#1%
-\tTariháe        : sçnçr %5u bayt, gÅncel %5u bayt, %5u unsur
+\tTariháe           : Sçnçr %5u bayt, gÅncel %5u bayt, %5u îge
 .
 :TEXT_MEMORY_CTXT_DIRSTACK#1%
-\tDizin yçßçnç: sçnçr %5u bayt, gÅncel %5u bayt, %5u unsur
+\tDizin yçßçnç      : Sçnçr %5u bayt, gÅncel %5u bayt, %5u îge
 .
 :TEXT_MEMORY_CTXT_LASTDIR#1%
-\tSon dizin yçßçnç : kullançlan  %5u bayt, %5u unsur
+\tSon dizin yçßçnç  : Kullançlan  %5u bayt, %5u îge
 .
-:TEXT_MEMORY_CTXT_BATCH#1%
-\tòá iáe batch   : kullançlan  %5u bayt, %5u unsur
+:TEXT_MEMORY_CTXT_toplu iü#1%
+\tòá iáe toplu iü   : Kullançlan  %5u bayt, %5u îge
 .
 :TEXT_MEMORY_CTXT_SWAPINFO#1%
-\tTakas bilgisi       : kullançlan %5u bayt, %5u unsur
+\tTakas bilgisi     : Kullançlan %5u bayt, %5u îge
 .
 
 
 ## CHCP
 :TEXT_ERROR_GET_CODEPAGE#1
-Sistemden gÅncel sayfa kodu alçnmasç baüarçsçz oldu.
+Sistemden gÅncel kod sayfasç alçnmasç baüarçsçz oldu.
 .
 :TEXT_ERROR_SET_CODEPAGE#1
-GÅncel sayfa kodunun deßiütirilmesi baüarçsçz oldu.
+GÅncel kod sayfasçnçn deßiütirilmesi baüarçsçz oldu.
 .
 :TEXT_DISPLAY_CODEPAGE#1%
-GÅncel sayfa kodu üudur: %u.
-Sistem sayfa kodu (uygun üekilde) üudur: %u.
+GÅncel kod sayfasç: %u.
+Sistem kod sayfasç (uygun üekilde): %u.
 .
 
 #
@@ -925,7 +925,7 @@ Dißer adlarç gîrÅntÅler, ayarlar, kaldçrçr.
 
 ALIAS [deßiüken[=][dize]]
 
-	deßiüken  Dißer ad ismini belirtir.
+	deßiüken  Dißer ad adçnç belirtir.
 	dize      Dißer ada atanacak karakter serisi.
 
 
@@ -933,7 +933,7 @@ GÅncel dißer adlarç gîrÅntÅlemek iáin parametresiz ALIAS yazçn.
 .
 
 :TEXT_CMDHELP_BEEP
-Bip sesi áçkar.
+Bip sesi áçkarçr.
 .
 
 :TEXT_CMDHELP_BREAK
@@ -945,18 +945,18 @@ GÅncel BREAK ayarçnç gîrÅntÅlemek iáin parametresiz BREAK yazçn.
 .
 
 :TEXT_CMDHELP_CALL#1
-Bir batch programçndan baüka bir batch programçnç áaßçrçr.
+Bir toplu iü programçndan baüka bir toplu iü programçnç áaßçrçr.
 
-CALL [/S | /N] [/Y] [sÅrÅcÅ:][yol]dosyaismi [batch-paramet]
+CALL [/S | /N] [/Y] [sÅrÅcÅ:][yol]dosyaadç [toplu iü-paramet]
 
-  batch-parametre    Batch programç tarafçndan ihtiyaá duyulan komut satçrç
+  toplu iü-parametre    toplu iü programç tarafçndan ihtiyaá duyulan komut satçrç
                      verileri belirtir.
   /S zorlar, /N kaldçrçr FreeCOM takasçnç.
   /Y komutun áalçütçrçlmasç sçrasçnda izleme kipini etkinleütirir.
 .
 
 :TEXT_CMDHELP_CD
-GÅncel dizini gîrÅntÅler ya da deßiütirir.
+GÅncel dizini gîrÅntÅler veya deßiütirir.
 
 CHDIR [sÅrÅcÅ:][yol]
 CHDIR[..]
@@ -973,7 +973,7 @@ Ayrçca bakçnçz: CDD
 .
 
 :TEXT_CMDHELP_CDD
-GÅncel dizin ve sÅrÅcÅyÅ gîrÅntÅler ya da deßiütirir.
+GÅncel dizin ve sÅrÅcÅyÅ gîrÅntÅler veya deßiütirir.
 
 CDD [sÅrÅcÅ:][yol]
 CDD[..]
@@ -987,13 +987,13 @@ GÅncel sÅrÅcÅ ve dizini gîrÅntÅlemek iáin parametresiz CD yazçn.
 .
 
 :TEXT_CMDHELP_CHCP
-Etkin sayfa kodu numarasçnç gîrÅntÅler ya da ayarlar.
+Etkin kod sayfasç numarasçnç gîrÅntÅler veya ayarlar.
 
 CHCP [nnn]
 
-  nnn   Bir sayfa kodu numarasç belirtir.
+  nnn   Bir kod sayfasç numarasç belirtir.
 
-Etkin sayfa kodu numarasçnç gîrÅntÅlemek iáin parametresiz CHCP yazçn.
+Etkin kod sayfasç numarasçnç gîrÅntÅlemek iáin parametresiz CHCP yazçn.
 .
 
 :TEXT_CMDHELP_CLS
@@ -1005,27 +1005,27 @@ CLS
 :TEXT_CMDHELP_COMMAND
 FreeDOS komut kabußunun yeni bir kopyasçnç baülatçr.
 
-COMMAND [[sÅrÅcÅ:]yol] [cihaz] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+COMMAND [[sÅrÅcÅ:]yol] [aygçt] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
                        [/LOW] [/Y [/[C|K] command]]
   [sÅrÅcÅ:]yol    COMMAND.COM'un bulundußu dizini belirtir.
-  device          Komut giriüi ve áçkçüç iáin kullançlan cihazç belirtir.
+  device          Komut giriüi ve áçkçüç iáin kullançlan aygçtç belirtir.
   /E:nnnnn        òlk ortam boyutunu nnnnn bayt olarak ayarlar.
-                  (nnnnn 256 ilÉ 32.768 arasçnda olmalçdçr).
+                  (nnnnn 256 ilê 32.768 arasçnda olmalçdçr).
   /L:nnnn         Dahili arabelleßin boyutunu belirtir (/P'de gerekir).
-                  (nnnn 128 ilÉ 1.024 arasçnda olmalçdçr).
+                  (nnnn 128 ilê 1.024 arasçnda olmalçdçr).
   /U:nnn          Girdi arabelleßinin boyutunu belirtir (/P'de gerekir).
-                  (nnn 128 ilÉ 255 arasçnda olmalçdçr).
+                  (nnn 128 ilê 255 arasçnda olmalçdçr).
   /P              Yeni komut kabußunu daimi yapar (áçkçü yapçlamaz).
-  /MSG            TÅm hata mesajlarçnç bellekte depolar (/P'de gerekir).
-  /LOW            Komut kabußunun yerleüik verilerini aüaßç bellekte
+  /MSG            TÅm hata òletilerini bellekte depolar (/P'de gerekir).
+  /LOW            Komut kabußunun yerleüik verilerini Aüaßç bellekte
                   tutmasçnç zorlar.
-  /Y              /C veya /K ile belirtilen batch programç adçmlar.
+  /Y              /C veya /K ile belirtilen toplu iü programç adçmlar.
   /C command      Belirtilen komutu áalçütçrçr ve dîner.
   /K command      Belirtilen komutu áalçütçrçr ve áalçümaya devam eder.
 .
 
 :TEXT_CMDHELP_COPY
-Bir ya da daha fazla dosyalarç baüka bir konuma kopyalar.
+Bir veya daha fazla dosyalarç baüka bir konuma kopyalar.
 
 COPY [/A | /B] kaynak [/A | /B] [+ kaynak [/A | /B] [+ ...]] [hedef
   [/A | /B]] [/V] [/Y | /-Y]
@@ -1033,14 +1033,14 @@ COPY [/A | /B] kaynak [/A | /B] [+ kaynak [/A | /B] [+ ...]] [hedef
   kaynak       Kopyalanacak dosya veya dosyalarç belirtir.
   /A           ASCII metin dosyasçnç belirtir.
   /B           òkili bir dosya belirtir.
-  hedef        Yeni dosyalar iáin dizin ya da dosya ismini belirtir.
+  hedef        Yeni dosyalar iáin dizin veya dosya adçnç belirtir.
   /V           Yeni dosyalarçn doßru yazçldçßçnç denetler.
   /Y           Mevcut olan bir hedef dosyasçnçn Åzerine yazma teyidini
                kaldçrçr.
   /-Y          Mevcut olan bir hedef dosyasçnçn Åzerine yazma teyidini
                zorlar.
 
-/Y anahtarç COPYCMD ortam deßiükeninde întançmlanabilir.
+/Y anahtarç COPYCMD ortam deßiükeninde tançmlanabilir.
 Bu, komut satçrçnda /-Y ile geáersiz kçlçnabilir.
 
 Dosya eklemek iáin hedef olarak tek bir dosya belirtin fakat kaynak iáin
@@ -1048,29 +1048,29 @@ birden fazla dosya belirtin (jokerler veya file1+file2+file3 biáimi).
 .
 
 :TEXT_CMDHELP_CTTY
-Sisteminizi kontrol etmek iáin kullançlan uábirim cihazçnç deßiütirir.
+Sisteminizi kontrol etmek iáin kullançlan uábirim aygçtçnç deßiütirir.
 
-CTTY cihaz
+CTTY aygçt
 
-  cihaz   Mesela COM1 gibi kullanmak istedißiniz uábirim cihazç.
+  aygçt   Mesela COM1 gibi kullanmak istedißiniz uábirim aygçtç.
 .
 
 :TEXT_CMDHELP_DATE#1
-Tarihi gîrÅntÅler ya da ayarlar.
+Tarihi gîrÅntÅler veya ayarlar.
 
 DATE [/D] [tarih]
 
 GÅncel tarih ayarçnç gîrÅntÅlemek ve yenisini girmek iáin bir istem almak
-iáin parametresiz DATE yazçn. Tarihi muhafaza etmek iáin ENTER tuüuna basçn.
+iáin parametresiz DATE yazçn. Tarihi muhafaza etmek iáin ENTER dÅßmesine basçn.
 
-/D seáeneßi, DATE komutunun etkileüimli olmasçna mani olur.
+/D seáeneßi, DATE komutunun etkileüimli olmasçna engel olur.
 .
 
 :TEXT_CMDHELP_DEL#2
-Bir ya da birden áok dosyayç siler.
+Bir veya birden áok dosyayç siler.
 
-DEL [sÅrÅcÅ:][yol]dosyaismi [/P] [/V]
-ERASE [sÅrÅcÅ:][yol]dosyaismi [/P] [/V]
+DEL [sÅrÅcÅ:][yol]dosyaadç [/P] [/V]
+ERASE [sÅrÅcÅ:][yol]dosyaadç [/P] [/V]
 
   [sÅrÅcÅ:][yol]dosyaadç  Silinecek dosyalarç belirtir.  Birden áok dosyayç
                           joker kullanarak belirtebilirsiniz.
@@ -1081,10 +1081,10 @@ ERASE [sÅrÅcÅ:][yol]dosyaismi [/P] [/V]
 :TEXT_CMDHELP_DIR#4
 Herhangi bir dizindeki dosyalarçn ve alt dizinlerin listesini gîrÅntÅler.
 
-DIR [sÅrÅcÅ:][yol][dosyaismi] [/P] [/W] [/A[[:]îznitelikler]]
+DIR [sÅrÅcÅ:][yol][dosyaadç] [/P] [/W] [/A[[:]îznitelikler]]
   [/O[[:]sçralamadÅzeni]] [/S] [/B] [/L] [/V]
 
-  [sÅrÅcÅ:][yol][dosyaismi]
+  [sÅrÅcÅ:][yol][dosyaadç]
             Listelenecek sÅrÅcÅ, dizin ve dosyalarç belirtir.
             (Dosya tançmlamasç ile geliütirilebilir.)
  /P         Her bilgi ekrançndan sonra duraklar.
@@ -1094,44 +1094,44 @@ DIR [sÅrÅcÅ:][yol][dosyaismi] [/P] [/W] [/A[[:]îznitelikler]]
              H  Saklç dosyalar             A  Arüivlenmeye hazçr dosyalar
              S  Sistem dosyalarç           -  hayçr îneki
  /O         Dosyalarç sçralama dÅzenine gîre listeler.
- sortorder   N  òsme gîre (alfabetik)      S  Boyuta gîre (înce kÅáÅßÅ)
+ sortorder   N  Ada gîre (alfabetik)      S  Boyuta gîre (înce kÅáÅßÅ)
              E  Uzantçya gîre (alfabetik)  D  Tarih & zaman (înce eskisi)
-             G  ônce dizinleri grupla      -  Ters sçralama îneki
+             G  înce dizinleri grupla      -  Ters sçralama îneki
              U  Sçralanmamçü		   Varsayçlan /ONG
  /S         Belirtilen dizinde ve tÅm alt dizinlerdeki dosyalarç gîrÅntÅler.
  /B         Yalçn biáimi kullan (baülçk bilgisiz ve îzetsiz).
  /L         KÅáÅk harf kullançr.
  /Y or /4   Seneyi 4 sayçyla gîsterir.
 
-Anahtarlar DIRCMD ortam deßiükeninde înayarlanabilir.  ônayarlç anahtarlar
-herhangi bir anahtarç - (tire) îneki ile geáersiz kçlçnabilir--mesela /-W.
+Anahtarlar DIRCMD ortam deßiükeninde înayarlanabilir. ônayarlç anahtarlar
+herhangi bir anahtarç - (tire) îneki ile geáersiz kçlabilir--mesela /-W.
 .
 
 :TEXT_CMDHELP_DOSKEY#1
 Harici DOSKEY yardçmcç programç FreeCOM'a dahil edilmiütir.
-YUKARI ve AûA¶I tuülarç ile tariháeyi geri alabilir ve HISTORY ile
-gîrÅntÅleyebilirsiniz. SOL, SA¶ ve END ile HOME tuülarçyla komut satçrçnda
+YUKARI ve AñAÙI dÅßmeleri ile tariháeyi geri alabilir ve HISTORY ile
+gîrÅntÅleyebilirsiniz. SOL, SAÙ ve END ile HOME dÅßmeleriyle komut satçrçnda
 gezinebilir ve INSERT ile ekleme veya Åzerine yazma kipine geáebilirsiniz.
-TAB tuüu ile gÅncel sîzcÅßÅ dosya ismi olarak tamamlayabilir; iki kere basarak
+TAB tuüu ile gÅncel sîzcÅßÅ dosya adç olarak tamamlayabilir; iki kere basarak
 tÅm denkleüen dosyalarç gîsterebilirsiniz.
 .
 
 :TEXT_CMDHELP_ORIGINAL_DOSKEY#1
-Komut satçrçnç dÅzenler, geri alçr ve makro oluüturur
+Komut satçrçnç dÅzenler, geri alçr ve makro Oluüturur
 
-DOSKEY [/anahtar ...] [makroismi=[metin]]
+DOSKEY [/anahtar ...] [makroadç=[metin]]
 
-  /BUFSIZE:boyu Makro ve komut arabelleßi bouyutunu ayarlar (varsayçlan:512)
+  /BUFSIZE:boyu	Makro ve komut arabelleßi boyutunu ayarlar (varsayçlan:512)
   /ECHO:on|off  Makro geniüleme yazçmçnç etkinleütir/devre dçüç (varsayçlan:on)
   /FILE:dosya   Makro listesi iáeren dosya belirtir
   /HISTORY      Bellekte muhafaza edilen tÅm komutlarç gîrÅntÅler
-  /INSERT       Yeni karakterleri tuüa basçldçßçnda ekler
+  /INSERT       Yeni karakterleri dÅßmesine basçldçßçnda ekler
   /KEYSIZE:boy. Klavyenin type-ahead arabelleßi boyutu (varsayçlan:15)
   /LINE:boyut   Satçr dÅzenleme arabelleßinin azami boyutu (varsayçlan:128)
   /MACROS       TÅm DOSKEY makrolarçnç gîrÅntÅler
-  /OVERSTRIKE   Yeni karakterleri tuüa basçldçßçnda Åzerine yazar (varsayçlan)
+  /OVERSTRIKE   Yeni karakterleri dÅßmesine basçldçßçnda Åzerine yazar (varsayçlan)
   /REINSTALL    Yeni bir DOSKEY kopyasç kurar
-  makroismi     Oluüturdußunuz makro iáin bir isim belirtir
+  makroadç      Oluüturdußunuz makro iáin bir ad belirtir
   metin         Makroya atamak istedißiniz komutlarç belirtir
 
   YUKARI, AûA¶I oklarç komutlarç geri alçr
@@ -1144,15 +1144,15 @@ DOSKEY [/anahtar ...] [makroismi=[metin]]
 
 Aüaßçdakiler DOSKEY makro tançmlamalarçnda kullanabileceßiniz îzel kodlardçr:
   $T     Komut ayçrçcç: makroda birden áok komuta izin verir
-  $1-$9  Batch parametreleri: batch programlarçnda üuna eüittir: %1-%9
+  $1-$9  toplu iü parametreleri: toplu iü programlarçnda üuna eüittir: %1-%9
   $*     Komut satçrçnda makro adçndan sonra her üey yerine geáen sembol
 .
 
 :TEXT_CMDHELP_ECHO
-Mesaj gîrÅntÅler veya komut yankçsçnç etkinleütirir ya da devre dçüç bçrakçr.
+Mesaj gîrÅntÅler veya komut yankçsçnç etkinleütirir veya devre dçüç bçrakçr.
 
   ECHO [ON | OFF]
-  ECHO [messaj]
+  ECHO [ileti]
 
 GÅncel echo ayarçnç gîrÅntÅlemek iáin parametresiz ECHO yazçn.
 .
@@ -1168,31 +1168,31 @@ Belirtilen komutu bir dosya kÅmesindeki her dosya iáin áalçütçrçr.
 
 FOR %deßiüken IN (kÅme) DO komut [komut-parametreleri]
 
-  %deßiüken  Deßiütirilebilir bir parametre belirtir.
-  (kÅme)     Bir veya birden áok dosya kÅmesi belirtir. Joker kullançlabilir.
-  komut      Her dosya iáin áalçütçrçlacak komutu belirtir.
+  %deßiüken	Deßiütirilebilir bir parametre belirtir.
+  (kÅme)     	Bir veya birden áok dosya kÅmesi belirtir. Joker kullançlabilir.
+  komut      	Her dosya iáin áalçütçrçlacak komutu belirtir.
   komut-parametreleri
-             Belirtilen komut iáin parametre veya anahtar belirtir.
+             	Belirtilen komut iáin parametre veya anahtar belirtir.
 
-FOR komutunu bir batch programçnda kullanmak iáin %deßiüken yerine %%deßiüken
+FOR komutunu bir toplu iü programçnda kullanmak iáin %deßiüken yerine %%deßiüken
 kullançn.
 
-ôrneßin:
+îrneßin:
   FOR %f IN (---baülangçá--- a*.* ---son---) DO ECHO - %f -
 .
 
 :TEXT_CMDHELP_GOTO
-Komut kabußunu bir batch programçnda etiketli bir satçra yînlendirir.
+Komut kabußunu bir toplu iü programçnda etiketli bir satçra yînlendirir.
 
 GOTO etiket
 
-  etiket  Batch programçnda etiket olarak kullançlan bir metin belirtir.
+  etiket	Toplu iü programçnda etiket olarak kullançlan bir metin belirtir.
 
 Etiket bir satçra kendi baüçna iki nokta ile baülayarak yazabilirsiniz.
 .
 
 :TEXT_CMDHELP_HISTORY#1
-History komutu.
+History komutu
 
 HISTORY [boyut]
 
@@ -1202,23 +1202,23 @@ Boyut ile tariháe arabelleßinin boyutu deßiütirilir.
 .
 
 :TEXT_CMDHELP_IF
-Batch programlarçnda koüullu iülemleri yerine getirir.
+toplu iü programlarçnda koüullu iülemleri yerine getirir.
 
 IF [NOT] ERRORLEVEL sayç komut
 IF [NOT] dize1==dize2 komut
-IF [NOT] EXIST dosyaismi komut
+IF [NOT] EXIST dosyaadç komut
 
-  NOT               Komut kabußunun komutu sadece koüul yanlçü ise
-                    áalçütçrmasç gerektißini belirtir.
-  ERRORLEVEL number Son áalçütçrçlan program belirtilene eüit ya da ondan
-                    yÅksek bir áçkçü kodu geri gînderdiyse doßru koüul
-                    belirtir.
-  komut             Eßer koüul karüçlandçysa áalçütçrçlacak komutu
-                    belirtir.
-  dize1==dize2      Belirtilen metin dizeleri eüleüiyorsa doßru bir koüul
-                    belirtir.
-  EXIST dosyaismi   Belirtilen dosya ismi mevcutsa doßru bir koüul
-                    belirtir.
+  NOT			Komut kabußunun komutu sadece koüul yanlçü ise
+                    	áalçütçrmasç gerektißini belirtir.
+  ERRORLEVEL number 	Son áalçütçrçlan program belirtilene eüit veya ondan
+                    	yÅksek bir áçkçü kodu geri gînderdiyse doßru koüul
+                    	belirtir.
+  komut             	Eßer koüul karüçlandçysa áalçütçrçlacak komutu
+                    	belirtir.
+  dize1==dize2      	Belirtilen metin dizeleri eüleüiyorsa doßru bir koüul
+                    	belirtir.
+  EXIST dosyaadç	Belirtilen dosya adç mevcutsa doßru bir koüul
+                    	belirtir.
 .
 
 :TEXT_CMDHELP_LFNFOR
@@ -1226,16 +1226,16 @@ FOR komutu veya dosya adç tamamlamasç iáin uzun adlarç etkinleütir/devre dçüç.
 LFNFOR [ON | OFF]
 LFNFOR COMPLETE [ON | OFF]
 
-GÅncel LFNFOR ayarçnç gîrÅntÅlemek iáin parametresiz LFNFOR ya da LFNFOR 
+GÅncel LFNFOR ayarçnç gîrÅntÅlemek iáin parametresiz LFNFOR veya LFNFOR 
 yazçn.
 .
 
 :TEXT_CMDHELP_LH
 Bir programç Åst bellek alançna yÅkler.
 
-LOADHIGH [sÅrÅcÅ:][yol]dosyaismi [parametreler]
+LOADHIGH [sÅrÅcÅ:][yol]dosyaadç [parametreler]
 LOADHIGH [/L:alan1[,minboyut1][;alan2[,minboyut]...] [/S]]
-         [sÅrÅcÅ:][yol]dosyaismi [parametreler]
+         [sÅrÅcÅ:][yol]dosyaadç [parametreler]
 
 /L:alan1[,minboyut1][;alan2[,minboyut2]]...
             Programçn yÅkleneceßi bellek alanlarçnç belirtir. Alan1
@@ -1248,28 +1248,28 @@ LOADHIGH [/L:alan1[,minboyut1][;alan2[,minboyut]...] [/S]]
 /S          Program yÅklenirken bir UMB'yi en kÅáÅk boyutuna kÅáÅltÅr.
             
 
-[sÅrÅcÅ:][yol]dosyaismi
-            Programçn konumunu ve ismini belirtir.
+[sÅrÅcÅ:][yol]dosyaadç
+            Programçn konumunu ve adçnç belirtir.
 .
 
 :TEXT_CMDHELP_LOADFIX
 Bir programç belleßin ilk 64K'sçnçn Åzerine yÅkler ve onu áalçütçrçr.
 
-LOADFIX [sÅrÅcÅ:][yol]dosyaismi
+LOADFIX [sÅrÅcÅ:][yol]dosyaadç
 
-Bir programç aüaßç belleße yÅklerken "Paketlenmiü dosya bozuk" mesajçnç
+Bir programç Aüaßç belleße yÅklerken "Paketlenmiü dosya bozuk" mesajçnç
 aldçysançz programç LOADFIX kullanarak yÅkleyin.
 .
 
 :TEXT_CMDHELP_MD
-Dizin oluüturur.
+Dizin Oluüturur.
 
 MKDIR [sÅrÅcÅ:]yol
 MD [sÅrÅcÅ:]yol
 .
 
 :TEXT_CMDHELP_PATH
-Äalçütçrçlabilir dosyalar iáin arama yolu gîrÅntÅler ya da ayarlar.
+Äalçütçrçlabilir dosyalar iáin arama yolu gîrÅntÅler veya ayarlar.
 
 PATH [[sÅrÅcÅ:]yol[;...]]
 PATH ;
@@ -1280,8 +1280,8 @@ GÅncel yolu gîrÅntÅlemek iáin parametresiz PATH yazçn.
 .
 
 :TEXT_CMDHELP_PAUSE
-Bir batch programçn iüleyiüini duraklatçr ve aüaßçdaki mesajç gîrÅntÅler:
-"Devam etmek iáin herhangi bir tuüa basçn...." veya baüka bir mesaj.
+Bir toplu iü programçn iüleyiüini duraklatçr ve Aüaßçdaki mesajç gîrÅntÅler:
+"Devam etmek iáin herhangi bir dÅßmesine basçn...." veya baüka bir mesaj.
 
 PAUSE [mesaj]
 .
@@ -1293,7 +1293,7 @@ PROMPT [metin]
 
   metin   Yeni bir komut istemi belirtir.
 
-òstem normal karakterlerden ve aüaßçdaki îzel kodlardan oluüturulabilir:
+òstem normal karakterlerden ve Aüaßçdaki îzel kodlardan Oluüturulabilir:
 
 
   $Q   = (eüit iüareti)
@@ -1351,8 +1351,8 @@ REM [yorum]
 :TEXT_CMDHELP_REN
 Bir dosya/dizini veya dosyalar/dizinleri yeniden adlandçrçr.
 
-RENAME [sÅrÅcÅ:][yol][dizinismi1 | dosyaismi1] [dizinismi2 | dosyismi2]
-REN [sÅrÅcÅ:][yol][dizinismi1 | dosyaismi1] [dizinismi2 | dosyaimi2]
+RENAME [sÅrÅcÅ:][yol][dizinadç1 | dosyaadç1] [dizinadç2 | dosyadç2]
+REN [sÅrÅcÅ:][yol][dizinadç1 | dosyaadç1] [dizinadç2 | dosyaadç2]
 
 Unutmayçn ki hedefiniz iáin yeni bir sÅrÅcÅ veya yol belirtemezsiniz. Bunun
 iáin MOVE komutunu kullançn.
@@ -1363,8 +1363,8 @@ Ortam deßiükenlerini gîrÅntÅler, ayarlar veya kaldçrçr.
 
 SET [/C] [/P] [/E] [/U] [deßiüken[=[dize]]]
 
-  deßiüken  Ortam deßiükeninin ismini belirtir.
-  dize      Deßiükene atanacak karakter serisini belirtir.
+  deßiüken  Ortam deßiükeninin adçnç belirtir.
+  dize      deßiükene atanacak karakter serisini belirtir.
 
 * Eßer hiábir dize belirtilmediyse, deßiüken ortamdan kaldçrçlçr.
 
@@ -1394,26 +1394,26 @@ DOWN argÅman penceresini baüa doßru kaydçrçr (%0); yoksa sona doßru kaydçrçr.
 .
 
 :TEXT_CMDHELP_TIME#1
-Sistem zamançnç gîrÅntÅler ya da ayarlar.
+Sistem zamançnç gîrÅntÅler veya ayarlar.
 
 TIME [/T] [zaman]
 
 GÅncel zamanç gîrmek ve yeni zaman girmek iáin istem almak amacçyla
-parametresiz TIME yazçn. Aynç zamanç muhafaza etmek iáin ENTER tuüuna basçn.
+parametresiz TIME yazçn. Aynç zamanç muhafaza etmek iáin ENTER dÅßmesine basçn.
 
 /T TIME komutunun etkileüimli olmasçna mani olur.
 .
 
 :TEXT_CMDHELP_TRUENAME
-Belirtilen yolun tam yol ismini gîrÅntÅler.
+Belirtilen yolun tam yol adçnç gîrÅntÅler.
 
-TRUENAME [sÅrÅcÅ:][yol][dosyaismi]
+TRUENAME [sÅrÅcÅ:][yol][dosyaadç]
 .
 
 :TEXT_CMDHELP_TYPE
 Metin dosyalarçnçn iáeriklerini gîrÅntÅler.
 
-TYPE [sÅrÅcÅ:][yol]dosyaismi
+TYPE [sÅrÅcÅ:][yol]dosyaadç
 .
 
 :TEXT_CMDHELP_VER
@@ -1438,7 +1438,7 @@ GÅncel VERIFY ayarçnç gîrÅntÅlemek iáin parametresiz VERIFY yazçn.
 
 :TEXT_CMDHELP_FDDEBUG
 Eßer hata ayçklama FreeDOS'la derlendiyse bu komut hata ayçklama áçktçsçnç
-aáçp kapatacak ya da size aáçk ya da kapalç oldußunu gîsterecektir.
+aáçp kapatacak veya size aáçk veya kapalç oldußunu gîsterecektir.
 
 FDDEBUG [ON | OFF | dosya]
 
@@ -1446,7 +1446,7 @@ GÅncel hata ayçklama áçktç ayarçnç gîrÅntÅlemek iáin parametresiz FDDEBUG
 yazçn.
 Eßer bir dosya belirtildiyse tÅm hata ayçklama áçktçsç bu dosyaya
 yînlendirilecektir, áçktç dosya mevcutsa dosyaya eklenecektir. "stdout" ve
-"stderr" îzel isimleri áçktçyç standart áçktçya ya da standart hata akçüçna
+"stderr" îzel adlarç áçktçyç standart áçktçya veya standart hata akçüçna
 yeniden yînlendirmek iáin kullançlabilir.
 .
 
@@ -1504,7 +1504,7 @@ muhtemelen disk dolu? (%lu bayta ihtiyaá var)
 .
 
 :TEXT_ERROR_FCOM_IS_DEVICE#0%
-FreeCOM bir cihaz olamaz: "%s"
+FreeCOM bir aygçt olamaz: "%s"
 .
 :TEXT_ERROR_FCOM_INVALID#0%
 Bu dosya geáerli bir FreeCOM deßil veya uyumsuz bir sÅrÅmÅn dosyasç:
@@ -1512,11 +1512,11 @@ Bu dosya geáerli bir FreeCOM deßil veya uyumsuz bir sÅrÅmÅn dosyasç:
 .
 
 :TEXT_ERROR_LOADING_STRINGS
-Dize kaynaklarç belleße yÅklenemedi, %COMSPEC% unsurunda iüaret edilen konum
+Dize kaynaklarç belleße yÅklenemedi, %COMSPEC% îgesine iüaret edilen konum
 geáersiz gibi gîrÅnÅyor. LÅtfen FreeCOM iáin baüka bir konum belirtin ki
 dizeler bu konumdan yÅklenebilsinler, mesela:
 C:\\COMMAND.COM
-ya da dizelerin yÅklenmesini iptal etmek iáin enter tuüuna basçn.
+veya dizelerin yÅklenmesini iptal etmek iáin enter dÅßmesine basçn.
 .
 
 :TEXT_TERMINATING
