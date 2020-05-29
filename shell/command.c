@@ -935,5 +935,5 @@ int main(void)
 	kswapDeRegister(kswapContext);
 #endif
 
-  return 0;
+  return errorlevel;
 }
