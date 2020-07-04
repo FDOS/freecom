@@ -103,6 +103,7 @@ static int check_stdout_int29(void)
 	r.r_dx = 0;
 	intrpt(0x21, &r);
 	use_int29 = (r.r_dx & 0x90) == 0x90;
+	return use_int29;
 }
 #endif
 
