@@ -59,6 +59,9 @@ while (( "$#" )); do
     debug)
 	export DEBUG=1
 	;;
+    watcom)
+	export COMPILER=watcom
+	;;
     wc)
 	export COMPILER=watcom
 	;;
