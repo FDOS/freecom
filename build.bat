@@ -37,6 +37,7 @@ if "%1"=="ibmpc"      goto special
 if "%1"=="generic"    goto special
 if "%1"=="dbcs"       goto special
 if "%1"=="no-enh"     goto special
+if "%1"=="upx"        goto special
 goto run
 
 :special
@@ -52,6 +53,7 @@ if "%1"=="ibmpc"    set IBMPC=1
 if "%1"=="generic"  set GENDOS=1
 if "%1"=="dbcs"     set DBCS=1
 if "%1"=="no-enh"   set NO_ENH_INP=1
+if "%1"=="upx"      set WITH_UPX=1
 shift
 if not "%1" == "" goto loop_commandline
 
@@ -181,6 +183,11 @@ echo Patching heap size to 6KB
 echo.
 tools\ptchsize.exe command.com +6KB
 
+if %WITH_UPX%x == x goto alldone
+if exist command.upx del command.upx >nul
+upx --8086 --best -o command.upx command.com
+
+:alldone
 echo.
 echo All done. COMMAND.COM is ready for usage!
 echo.
@@ -220,4 +227,5 @@ set IBMPC=
 set NEC98=
 set DBCS=
 set NO_ENH_INP=
+set WITH_UPX=
 

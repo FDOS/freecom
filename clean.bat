@@ -7,7 +7,8 @@ goto end
 cd suppl
 call clnsuppl.bat
 cd ..
-call %0 .\ lastmake.mk context.h_c context.inc strings.h command.com infores info.txt
+call %0 command.com command.upx
+call %0 .\ lastmake.mk context.h_c context.inc strings.h infores info.txt
 call %0 strings\ strings.h   strings.err strings.dat
 call %0 strings\ strings.lib strings.lst strings.log
 call %0 strings\strings\ strings.lib strings.lst strings.rsp makefile 

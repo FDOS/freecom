@@ -2,6 +2,7 @@
 
 set -e
 
+WITH_UPX="no"
 SED=sed
 #workaround for Windows (set to binary mode)
 if [ "$(expr substr $(uname -s) 1 5)" == 'MINGW' ]; then
@@ -80,6 +81,9 @@ while (( "$#" )); do
 	;;
     gcc)
 	export COMPILER=gcc
+	;;
+    upx)
+	WITH_UPX="yes"
 	;;
     *)
 	break
@@ -208,6 +212,11 @@ echo
 echo Patching heap size to 6KB
 echo
 tools/ptchsize.exe command.com +6KB
+
+if [ $WITH_UPX = "yes" ]; then
+  rm -f command.upx
+  upx --8086 --best -o command.upx command.com
+fi
 
 echo
 echo All done. COMMAND.COM is ready for usage!
