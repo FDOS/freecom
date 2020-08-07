@@ -881,7 +881,7 @@ Digite CD sem parametros para mostrar o drive e diretorio atual.
 .
 
 :TEXT_CMDHELP_CHCP
-MOstra ou define o numero de codigo de pagina ativo.
+Mostra ou define o numero de codigo de pagina ativo.
 
 CHCP [nnn]
 
@@ -1072,7 +1072,7 @@ EXIT
 .
 
 :TEXT_CMDHELP_FOR
-Executa um comando especificado PARA CADA arquivo em um conjunto de arquivos.
+Executa um comando especificado para cada arquivo em um conjunto de arquivos.
 
 FOR %variavel IN (set) DO comando [parametros-de-comandos]
 
@@ -1084,6 +1084,9 @@ FOR %variavel IN (set) DO comando [parametros-de-comandos]
 
 Para usar o comando FOR em um arquivo de lote, especifique %%variavel ao
 inves de %variavel.
+
+Por exemplo:
+  FOR %f IN (---inicio--- a*.* ---fim---) DO ECHO - %f -
 .
 
 :TEXT_CMDHELP_GOTO
@@ -1299,7 +1302,7 @@ TRUENAME [drive:][caminho][nome_de_arquivo]
 .
 
 :TEXT_CMDHELP_TYPE
-Mostra o conteudo de arquivos de textos.
+Mostra o conteudo de arquivos de texto.
 
 TYPE [drive:][caminho]nome_do_arquivo
 .
@@ -1341,7 +1344,7 @@ redirecionar a saida para a saida padrao ou o canal de erros padrao.
 .
 
 :TEXT_CMDHELP_VOL
-Mostra o Volume do disco e o Numero de Serie se eles existem.
+Mostra o Volume do disco e o Numero de Serie, se eles existem.
 
 VOL [drive:]
 .
