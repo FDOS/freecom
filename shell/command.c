@@ -413,7 +413,7 @@ static void docommand(char *line)
           displayString(currCmdHelpScreen);
         } else {
           dprintf(("CMD '%s' : '%s'\n", cmdptr->name, rest));
-          cmdptr->func(rest);
+          errorlevel = cmdptr->func(rest);
         }
         goto errRet;
 	}
