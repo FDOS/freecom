@@ -21,9 +21,8 @@ fi
 export SWAP=
 
 if [ ! -f config.mak ]; then
-  echo Please copy config.std into config.mak and update the
-  echo settings therein.
-  exit 1
+  echo File config.mak missing, copying config.std to it
+  cp config.std config.mak || exit 1
 fi
 
 export XNASM=nasm
