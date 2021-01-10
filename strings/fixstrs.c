@@ -70,8 +70,11 @@ add: version number of strings and logfile entries
 #define mkdir(x) mkdir(x, 0777)
 static char *strupr(char *s)
 {
-  for (; *s; s++)
-    *s = toupper(*s);
+  char *p;
+
+  for (p = s; *p; p++)
+    *p = toupper(*p);
+  return s;
 }
 #else
 #include <direct.h>
