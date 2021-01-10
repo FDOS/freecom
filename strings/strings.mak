@@ -10,12 +10,12 @@ strings.h : DEFAULT.LNG fixstrs.exe
 	fixstrs.exe --lib $(LNG)
 	$(CP) strings.h ..
 
-strings.err : DEFAULT.err CRITSTRS.exe
-	CRITSTRS.exe $(LNG)
+strings.err : DEFAULT.err critstrs.exe
+	critstrs.exe $(LNG)
 
 fixstrs.exe: $(CFG) fixstrs.c
 
-CRITSTRS.exe: $(CFG) CRITSTRS.C
+critstrs.exe: $(CFG) critstrs.c
 
 #		*Individual File Dependencies*
 fixstrs.obj: $(CFG) fixstrs.c
