@@ -142,7 +142,7 @@ typedef struct {
 	const char * const keyname;
 } symKey;
 
-FILE *log = 0;
+FILE *lgf = 0;
 
 int in_file = 0;
 string_index_t string[MAXSTRINGS];
@@ -684,7 +684,7 @@ int main(int argc, char **argv)
 
 	/* Create the LOG file */
 	if(argc > 1) {		/* Only if a local LNG file was specified */
-		log = NULL;			/* No LOG entry til this time */
+		lgf = NULL;			/* No LOG entry til this time */
 		for(cnt = 0; cnt < maxCnt; ++cnt) {
 			switch(strg[cnt].flags & 3) {
 			case 0:		/* Er?? */
@@ -692,48 +692,48 @@ int main(int argc, char **argv)
 				 , stderr);
 				return 99;
 			case 1:		/* DEFAULT.lng only */
-				if(!log && (log = fopen(logfile, "wt")) == NULL) {
+				if(!lgf && (lgf = fopen(logfile, "wt")) == NULL) {
 					fprintf(stderr, "Cannot create logfile: '%s'\n"
 					 , logfile);
 					goto breakLogFile;
 				}
-				fprintf(log, "%s: Missing from local LNG file\n"
+				fprintf(lgf, "%s: Missing from local LNG file\n"
 				 , strg[cnt].name);
 				break;
 			case 2:		/* local.LNG only */
-				if(!log && (log = fopen(logfile, "wt")) == NULL) {
+				if(!lgf && (lgf = fopen(logfile, "wt")) == NULL) {
 					fprintf(stderr, "Cannot create logfile: '%s'\n"
 					 , logfile);
 					goto breakLogFile;
 				}
-				fprintf(log, "%s: No such string resource\n"
+				fprintf(lgf, "%s: No such string resource\n"
 				 , strg[cnt].name);
 				break;
 			case 3:		/* OK */
 				break;
 			}
 			if(strg[cnt].flags & VERSION_MISMATCH) {
-				if(!log && (log = fopen(logfile, "wt")) == NULL) {
+				if(!lgf && (lgf = fopen(logfile, "wt")) == NULL) {
 					fprintf(stderr, "Cannot create logfile: '%s'\n"
 					 , logfile);
 					goto breakLogFile;
 				}
-				fprintf(log, "%s: Version mismatch, current is: %u\n"
+				fprintf(lgf, "%s: Version mismatch, current is: %u\n"
 				 , strg[cnt].name, strg[cnt].version);
 			}
 			if(strg[cnt].flags & VALIDATION_MISMATCH) {
-				if(!log && (log = fopen(logfile, "wt")) == NULL) {
+				if(!lgf && (lgf = fopen(logfile, "wt")) == NULL) {
 					fprintf(stderr, "Cannot create logfile: '%s'\n"
 					 , logfile);
 					goto breakLogFile;
 				}
-				fprintf(log, "%s: printf() format string mismatch, should be: %s\n"
+				fprintf(lgf, "%s: printf() format string mismatch, should be: %s\n"
 				 , strg[cnt].name, strg[cnt].vstring);
 			}
 		}
 
-		if(log)
-			fclose(log);
+		if(lgf)
+			fclose(lgf);
 	}
 breakLogFile:
 
