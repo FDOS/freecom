@@ -292,7 +292,7 @@ void pxerror(const char * const msg1, const char * const msg2)
 	perror(temp);
 }
 
-void dumpCh(FILE * const f, const int ch)
+void dumpCh(FILE * const f, const unsigned char ch)
 {	static const char from[] = "'\\\n\t\a\b\f";
 	static const char to[]   = "'\\ntabf0";
 	const char *p;
