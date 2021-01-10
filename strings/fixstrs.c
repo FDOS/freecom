@@ -385,6 +385,7 @@ int loadFile(const char * const fnam)
 	int version;
 
 	text.text = vstring.text = 0;
+	version = 0;
 
 	printf("FIXSTRS: loading file %s\n", fnam);
 
