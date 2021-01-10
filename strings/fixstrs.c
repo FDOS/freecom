@@ -65,6 +65,7 @@ add: version number of strings and logfile entries
 #include <dir.h>
 #elif defined(__GNUC__) && !defined(__MINGW32__)
 #include <unistd.h>
+#include <sys/stat.h>
 #define stricmp strcasecmp
 #define mkdir(x) mkdir(x, 0777)
 static char *strupr(char *s)
