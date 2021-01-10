@@ -24,6 +24,6 @@ CFLAGS1 = -Os -Wall -Werror -Wno-pointer-to-int-cast -Wno-incompatible-pointer-t
 .SUFFIXES:
 .SUFFIXES: .c .asm .com .exe .obj
 .c.exe:
-	gcc -x c -DGCC -D__GETOPT_H -I../suppl $< -o $@
+	gcc -x c -Og -g -Wall -DGCC -D__GETOPT_H -I../suppl $< -o $@
 .c.obj:
 	$(CC) $< @$(CFG) -o $@
