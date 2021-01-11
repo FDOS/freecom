@@ -194,7 +194,7 @@ echo
 tools/ptchsize.exe command.com +6KB
 
 echo
-echo All done. COMMAND.COM is ready for usage!
+echo All done. COMMAND.COM is ready for use!
 echo
 if [ -z "$XMS_SWAP" ]; then
   echo Note: To build FreeCOM without XMS-Only Swap, re-run
