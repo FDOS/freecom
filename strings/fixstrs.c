@@ -8,7 +8,7 @@ strings.h - include file that contains all the defines.
 
 strings.log - contains all warnings of the local LNG file, the
               which resources (strings) are missing from it and
-              which ones are not specified in the DEFAULT.LNG, thus,
+              which ones are not specified in the DEFAULT.lng, thus,
               are most likely unknown to FreeCOM
               This file is present only, if there are such warnings,
               but no message is printed onto screen!
@@ -17,11 +17,11 @@ Then, if the "/lib" option is present, it creates the
 STRINGS library source files into the subdirectory STRINGS.
 
 There are two input files:
-DEFAULT.LNG and the language file passed as argument to FIXSTRS.
-DEFAULT.LNG has two meanings making it a fundamental file, which
+DEFAULT.lng and the language file passed as argument to FIXSTRS.
+DEFAULT.lng has two meanings making it a fundamental file, which
 ensures the integrity of the multi-language support of FreeCOM:
 
-1) The order of strings noted in DEFAULT.LNG will be kept the same in
+1) The order of strings noted in DEFAULT.lng will be kept the same in
 	all *.LNG files.
 2) If an individual *.LNG file does not define a certain string, its
 	contents is taken from the DEFAULT file.
@@ -31,7 +31,7 @@ is known to FreeCOM internally, especially meaning 1) will ensure that
 each STRINGS.DAT assigns the same semantic to those numbers.
 
 The STRINGS.DAT file generated in the following steps:
-1) DEFAULT.LNG is read; all strings are copied into memory,
+1) DEFAULT.lng is read; all strings are copied into memory,
 	the string_index_t array is generated with these strings.
 	At the end, one could generate STRINGS.DAT with all the default
 	strings, which are usually in English.
@@ -52,7 +52,7 @@ chg: The format of STRINGS.DAT has been changed in order to support
 chg: To use STRINGS.H to keep up the order becomes problematic, as this
 	file is regenerated each time FIXSTRS is run. On failure, this
 	file is destroyed. Therefore STRINGS.TXT will be renamed into
-	DEFAULT.LNG and is used to a) specify the order and, if missing,
+	DEFAULT.lng and is used to a) specify the order and, if missing,
 	the default string text.
 
 2001/03/15 ska
@@ -88,9 +88,9 @@ static char *strupr(char *s)
 
 #define logfile "strings.log"
 #define fDAT "strings.dat"
-#define fTXT "DEFAULT.LNG"
+#define fTXT "DEFAULT.lng"
 #define fH "strings.h"
-#define fEXT ".LNG"
+#define fEXT ".lng"
 #define fDMAKEFILE "makefile"
 #define fTCMAKEFILE "strings.rsp"
 
@@ -382,7 +382,7 @@ int loadFile(const char * const fnam)
 
 	text.text = vstring.text = 0;
 
-printf("FIXSTRS: loading file %s\n", fnam);
+	printf("FIXSTRS: loading file %s\n", fnam);
 
 	join(fnam, fEXT);
 	if((fin = fopen(fnam, "rt")) == NULL
@@ -662,7 +662,7 @@ int main(int argc, char **argv)
 			"Useage: FIXSTRS [/lib] [language]\n"
 			"\tIf no language is specified, only the default strings are read.\n"
 			"\tThe <language>.LNG file must reside in the current directory.\n"
-			"Note: DEFAULT.LNG must be present in the current directory, too.");
+			"Note: DEFAULT.lng must be present in the current directory, too.");
 		return 127;
 	}
 
@@ -690,7 +690,7 @@ int main(int argc, char **argv)
 				fputs("Internal error assigned string has no origin?!\n"
 				 , stderr);
 				return 99;
-			case 1:		/* DEFAULT.LNG only */
+			case 1:		/* DEFAULT.lng only */
 				if(!log && (log = fopen(logfile, "wt")) == NULL) {
 					fprintf(stderr, "Cannot create logfile: '%s'\n"
 					 , logfile);

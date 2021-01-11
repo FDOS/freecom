@@ -1,6 +1,6 @@
 # $Id$
 #
-# Derived from: Id: DEFAULT.LNG,v 1.34 2004/12/01 21:20:46 skaus Exp
+# Derived from: Id: DEFAULT.lng,v 1.34 2004/12/01 21:20:46 skaus Exp
 #
 # FreeCOM national customization file
 #
@@ -28,7 +28,7 @@
 # A missing version is assumed as "#0".
 # If there is a percent sign (%) appended to the version, the printf()
 # format string %-style placeholders are compared for the strings. The
-# sign need to be set in DEFAULT.LNG only.
+# sign need to be set in DEFAULT.lng only.
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the

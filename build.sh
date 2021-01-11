@@ -74,7 +74,7 @@ done
 
 
 if [ -n "$1" ]; then export LNG=$1; fi
-if [ -z "$LNG" ]; then export LNG=ENGLISH; fi
+if [ -z "$LNG" ]; then export LNG=english; fi
 echo Building FreeCOM for language $LNG
 
 if [ -z "$MAKE" ]; then
