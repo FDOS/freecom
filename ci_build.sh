@@ -22,25 +22,39 @@ fi
 export PATH=$CI_BUILD_DIR/bin:$PATH:$CI_BUILD_DIR/_watcom/binl64
 export WATCOM=$CI_BUILD_DIR/_watcom
 
-# Just one for now
-export LNG=english
-
 # Output directory
 rm -rf _output
 mkdir _output
 
+# Which ones to build
+# serbian disabled, parse error
+# turkish disabled, invalid code generated
+# yu437 disabled, parse error
+# yu852 disabled, parse error
+LANGUAGES="english dutch french german italian polish pt_br russian slovene spanish swedish ukr"
+
 # GCC
-git clean -x -d -f -e _output -e _watcom -e ow-snapshot.tar.gz
-./build.sh gcc
-TGT="_output/gcc/${LNG}"
-mkdir -p ${TGT}
-mv -i command.com ${TGT}/.
+for lng in ${LANGUAGES} ; do
+  # Do full clean for rebuild of each language
+  echo "Do full clean"
+  git clean -x -d -f -e _output -e _watcom -e ow-snapshot.tar.gz >/dev/null 2>&1
+  export LNG=${lng}
+  ./build.sh gcc
+  TGT="_output/gcc/${LNG}"
+  mkdir -p ${TGT}
+  mv -i command.com ${TGT}/.
+done
 
 # Watcom
-git clean -x -d -f -e _output -e _watcom -e ow-snapshot.tar.gz
-./build.sh wc
-TGT="_output/wc/${LNG}"
-mkdir -p ${TGT}
-mv -i command.com ${TGT}/.
+for lng in ${LANGUAGES} ; do
+  # Do full clean for rebuild of each language
+  echo "Do full clean"
+  git clean -x -d -f -e _output -e _watcom -e ow-snapshot.tar.gz >/dev/null 2>&1
+  export LNG=${lng}
+  ./build.sh wc
+  TGT="_output/wc/${LNG}"
+  mkdir -p ${TGT}
+  mv -i command.com ${TGT}/.
+done
 
 echo done
