@@ -2,3 +2,5 @@
 *.sh text eol=lf
 *.com -text
 elvis.rc -text
+ci_*.sh text eol=lf
+.github/workflows/*.yml text eol=lf
