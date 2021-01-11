@@ -28,7 +28,7 @@
 # add: DEL.C, COPY.C, CBREAK.C: STRINGS-based prompts
 # add: fixstrs.c: prompts & symbolic keys
 # add: fixstrs.c: backslash escape sequences
-# add: version IDs to DEFAULT.LNG and validation to FIXSTRS.C
+# add: version IDs to DEFAULT.lng and validation to FIXSTRS.C
 # chg: splitted code apart into LIB\*.c and CMD\*.c
 # bugfix: IF is now using error system & STRINGS to report errors
 # add: CALL: /N
@@ -40,9 +40,9 @@ LDLIBS !:=
 
 .IF $(LNG) != $(NULL)
 
-_LNG = $(LNG:u:s/.LNG//)
-_LLNG = $(_LNG).LNG
-_ELNG = $(LNG).ERR
+_LNG = $(LNG:u:s/.lng//)
+_LLNG = $(_LNG).lng
+_ELNG = $(LNG).err
 
 .ELSE
 
@@ -65,11 +65,11 @@ __errl:
 	@+-if exist errlist del errlist >nul
 	-ctags *.c ..\lib\*.c
 
-strings.h strings.dat .UPDATEALL : fixstrs.exe default.lng $(_LLNG)
+strings.h strings.dat .UPDATEALL : fixstrs.exe DEFAULT.lng $(_LLNG)
 	fixstrs.exe /lib $(LNG)
 	+copy strings.h .. >nul
 
-strings.lib : fixstrs.exe default.lng
+strings.lib : fixstrs.exe DEFAULT.lng
 	$(RUNMAKE) strings_lib strings_lib_clean
 
 strings_lib .SETDIR=strings :
@@ -80,7 +80,7 @@ strings_lib .SETDIR=strings :
 strings_lib_clean :
 	-$(RM) -fr strings
 
-strings.err : critstrs.exe default.err $(_ELNG)
+strings.err : critstrs.exe DEFAULT.err $(_ELNG)
 	critstrs.exe $(LNG)
 
 fixstrs.exe ?= _MODEL !:= c

@@ -1,4 +1,4 @@
-# $Id: DEFAULT.LNG 1277 2006-09-04 19:40:42Z blairdude $
+# $Id: DEFAULT.lng 1277 2006-09-04 19:40:42Z blairdude $
 #
 # FreeCOM national customization file
 #
@@ -26,7 +26,7 @@
 # A missing version is assumed as "#0".
 # If there is a percent sign (%) appended to the version, the printf()
 # format string %-style placeholders are compared for the strings. The
-# sign need to be set in DEFAULT.LNG only.
+# sign need to be set in DEFAULT.lng only.
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
