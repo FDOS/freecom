@@ -31,7 +31,7 @@ mkdir _output
 # turkish disabled, invalid code generated
 # yu437 disabled, parse error
 # yu852 disabled, parse error
-LANGUAGES="english dutch french german italian polish pt_br russian slovene spanish swedish ukr"
+LANGUAGES="english dutch finnish french german italian polish pt_br russian slovene spanish swedish ukr"
 
 # GCC
 for lng in ${LANGUAGES} ; do
