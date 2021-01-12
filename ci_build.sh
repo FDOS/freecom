@@ -27,9 +27,7 @@ rm -rf _output
 mkdir _output
 
 # Which ones to build
-# serbian disabled, parse error
-# yu437 disabled, parse error
-LANGUAGES="english dutch finnish french german italian polish pt_br russian slovene spanish swedish turkish ukr"
+LANGUAGES="english dutch finnish french german italian polish pt_br russian serbian slovene spanish swedish turkish ukr yu437"
 
 # GCC
 for lng in ${LANGUAGES} ; do
