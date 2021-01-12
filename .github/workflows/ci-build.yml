@@ -1,4 +1,4 @@
-name: Build / Test / Upload snapshot
+name: Build
 on:
   pull_request:
     types:
