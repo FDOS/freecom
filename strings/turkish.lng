@@ -594,7 +594,7 @@ aabb   a   a       b    b
 # Attention: This prompt is used via BIOS; any newline MUST be prefixed
 #	by \r!
 # Return value: a -> Yes; b -> No; c -> All; else -> Undefined
-:PROMPT_CANCEL_toplu iü#1%
+:PROMPT_CANCEL_BATCH#1%
 YyNnAaQq{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
 Control-Break'e basçldç.\r
@@ -896,7 +896,7 @@ Yçßçn               : Boü %5lu bayt
 :TEXT_MEMORY_CTXT_LASTDIR#1%
 \tSon dizin yçßçnç  : Kullançlan  %5u bayt, %5u îge
 .
-:TEXT_MEMORY_CTXT_toplu iü#1%
+:TEXT_MEMORY_CTXT_BATCH#1%
 \tòá iáe toplu iü   : Kullançlan  %5u bayt, %5u îge
 .
 :TEXT_MEMORY_CTXT_SWAPINFO#1%
