@@ -79,15 +79,15 @@ DOS: DOS
 S5
 FAT: FAT
 S6
-ROOT: kök
+ROOT: Kök
 S7
-DATA: veri
+DATA: Veri
 
 ## action strings
 S8
-IGNORE: (Y)oksay
+IGNORE: (Y)ok say
 S9
-RETRY: (T)ekrar dene
+RETRY: Yeniden (d)ene
 S10
 ABORT: (İ)ptal
 S11
@@ -95,7 +95,7 @@ FAIL: (B)aşarısız
 ## keys associated with the actions
 S14 (compacted)
 KEYS_IGNORE: yY
-KEYS_RETRY:  tT
+KEYS_RETRY:  dD
 KEYS_ABORT:  iİ
 KEYS_FAIL:   bB
 ## embedded strings
@@ -125,6 +125,6 @@ S15
 15: Geçersiz disk değişimi
 16: FCB mevcut değil
 17: Paylaşım önbelleği yetersiz
-18: Sayfa kodu uyumsuzluğu
+18: Sayfa kodu uyuşmazlığı
 19: Giriş sonu
 20: Yetersiz disk alanı

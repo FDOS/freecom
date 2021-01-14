@@ -4,7 +4,7 @@
 #
 #	Language: Turkish
 #	Codepage: ASCII (7bit) / CP857
-#	Author:   FreeCOM maintainer
+#	Author:   Emir SARI <bitigchi@me.com>
 # 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
@@ -119,7 +119,7 @@ Yanlış oluşturulmuş seçenek: '%s'
 .
 
 :TEXT_ERROR_CLOSE_QUOTE#0%
-Eksik kapama tırnak işareti: %c
+Eksik kapama tırnak imi: %c
 .
 
 :TEXT_ERROR_TEMPFILE
@@ -198,26 +198,26 @@ Ortam dolu olmasın?
 '%s' ortam değişkeni bulunamadı.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
-Ortam yok. Belki bellek yetersiz kaldı. /E seçeneğini belirtin.
+Ortam yok. Bellek yetersiz olabilir. /E seçeneğini belirtin.
 .
 
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ALIAS#1%
-'%s' diğer adı (alias) ayarlanamadı '%s'. Diğer ad alanı dolu olmasın?
+'%s' arması ayarlanamadı '%s'. Arma alanı dolu olmasın?
 .
 :TEXT_ERROR_ALIAS_NOT_FOUND#1%
-'%s' diğer adı bulunamadı.
+'%s' arması bulunamadı.
 .
 :TEXT_ERROR_NO_ALIAS_SEGMENT#1
-Diğer ad alanı yok. Bellek yetersiz olabilir.
+Arma alanı yok. Bellek yetersiz olabilir.
 .
 
 :TEXT_ERROR_SYNTAX_STR#0%
-Söz dizimi hatası. - '%s'
+Sözdizim hatası. - '%s'
 .
 
 :TEXT_ERROR_SYNTAX
-Söz dizimi hatası.
+Sözdizim hatası.
 .
 
 :TEXT_ERROR_FILENAME_TOO_LONG#0%
@@ -229,7 +229,7 @@ Dosya adı çok uzun. - '%s'
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
-Diğer ad genişletilmesinden sonra komut satırı çok uzun!
+Arma genişletilmesinden sonra komut satırı çok uzun!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
@@ -354,7 +354,7 @@ Birleştirme karakteri '+' bağımsız değişkenlerin sonunda olamaz.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
-Yapılacak hiçbir şey yok.
+Yapılacak bir şey yok.
 .
 
 :TEXT_ERROR_COPY
@@ -362,13 +362,13 @@ COPY başarısız oldu.
 .
 
 :TEXT_ERROR_IF_EXIST_NO_FILENAME#1
-IF EXIST: eksik dosya adı.
+IF EXIST: Eksik dosya adı.
 .
 :TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
-IF ERRORLEVEL: eksik sayı.
+IF ERRORLEVEL: Eksik sayı.
 .
 :TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
-IF ERRORLEVEL: geçersiz sayı.
+IF ERRORLEVEL: Geçersiz sayı.
 .
 :TEXT_ERROR_IF_MISSING_COMMAND#1
 IF: Eksik komut.
@@ -401,8 +401,8 @@ Bozuk komut satırı. Bu dahili bir hatadır ve COMMAND.COM'un
 
 :TEXT_INIT_FULLY_QUALIFIED#1%
 COMMAND.COM'a giden yolun tamamen belirtilmiş olması gerekmektedir!
-Bu, sürücü harfinin kullanılması ve geri eğri çizgi ile başlanması demektir.
-Mesela: C:\FDOS
+Bu, sürücü harfinin kullanılması ve ters eğik çizgi ile başlanması demektir.
+Örneğin: C:\FDOS
 
 COMMAND.COM şimdi bu yolu varsaymaktadır:
 %s
@@ -425,7 +425,7 @@ iletilerini okuyun.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE
-Takas başarısız oldu: Diğer adlar çok fazla bellek ayırıyor.
+Takas başarısız oldu: Armalar çok fazla bellek ayırıyor.
 .
 
 
@@ -434,7 +434,7 @@ Takas başarısız oldu: Uzak bellek ayrılamadı.
 .
 
 :TEXT_ERROR_ALIAS_OUT_OF_MEM#1
-Diğer ad alanı yetersiz.
+Arma alanı yetersiz.
 .
 
 :TEXT_ERROR_ALIAS_NO_SUCH#1%
@@ -442,11 +442,11 @@ Böyle bir arma yok: '%s'
 .
 
 :TEXT_ERROR_ALIAS_INSERT#1
-Diğer adın eklenmesi başarısız oldu.
+Arma eklenmesi başarısız oldu.
 .
 
 :TEXT_ALIAS_INVALID_NAME#1%
-Geçersiz diğer ad adı '%s'.
+Geçersiz arma adı '%s'.
 .
 
 :TEXT_ERROR_LOADING_CONTEXT#1
@@ -456,7 +456,7 @@ Bağlam modülü veya Kritik Hata Yöneticisi yüklenemedi.
 :TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
 Bağlam belleği yetersiz.
 Bu hata sürerse herhangi bir iç arabelleği artırmayı düşünün,
-mesela tarihçe, dizin yığını vs. gibi.
+örneğin tarihçe, dizin yığını vs. gibi.
 .
 
 :TEXT_ERROR_CONTEXT_LENGTH#1%
@@ -467,13 +467,13 @@ Bağlam %u bayt olarak yeniden boyutlandırılıyor.
 :TEXT_ERROR_CONTEXT_ADD_STATUS#1
 Bağlama durum verileri eklenmesi başarısız oldu. Bu hata bellek bozukluğunu
 veya yanlış belirlenmiş asgari bağlam boyutuna işaret edebilir.
-Lütfen FreeCOM bakımcısına şu adreste bu konuda bilgi verin:
+Lütfen FreeCOM geliştiricilerine şu adresten bu konuda bilgi verin:
 freecom@freedos.org
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
-Takas sonrası bağlam eksik. Bağlam tekrar Oluşturuldu,
-fakat tüm diğer adlar vs. kaybedildi.
+Takas sonrası bağlam eksik. Bağlam tekrar oluşturuldu;
+ancak tüm armalar vs. kaybedildi.
 .
 
 :TEXT_ERROR_PERMISSION_DENIED#1%
@@ -481,7 +481,7 @@ fakat tüm diğer adlar vs. kaybedildi.
 .
 
 :TEXT_ERROR_NO_SUCH_FILE#1%
-%s: Böyle bir dosya veya dizin yoktur
+%s: Böyle bir dosya veya dizin yok
 .
 
 :TEXT_ERROR_UNKNOWN_ERROR#1%
@@ -493,7 +493,7 @@ fakat tüm diğer adlar vs. kaybedildi.
 #
 
 :TEXT_MSG_PAUSE#1
-Sürdürmek için herhangi bir düğmeye basın . . .\
+Sürdürmek için herhangi bir düğmeye basın...\
 .
 
 :TEXT_MSG_HISTORY_SIZE#0%
@@ -501,7 +501,7 @@ Geçmiş boyutu %d bayt.
 .
 
 :TEXT_MSG_DOSKEY
-DOSKEY özellikleri zaten kabukta etkinleştirilmiş.
+DOSKEY özellikleri halihazırda kabukta etkinleştirilmiş.
 .
 
 :TEXT_MSG_ECHO_STATE#0%
@@ -513,7 +513,7 @@ VERIFY şudur: %s
 .
 
 :TEXT_MSG_FDDEBUG_STATE#0%
-DEBUG çıktısı şudur %s.
+DEBUG çıktısı şudur: %s.
 .
 :TEXT_MSG_FDDEBUG_TARGET#0%
 DEBUG çıktısı şuraya yazılıyor: '%s'.
@@ -585,7 +585,7 @@ Emin misiniz (E/H)? \
 :PROMPT_YES_NO#1
 YyNn{LF}{CR}{CBREAK}{ESC}
 aabb   a   a       b    b
- [Evet=ENTER, Hayır=ESC] ? \
+ [Evet=ENTER, Hayır=ESC]? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -598,7 +598,7 @@ aabb   a   a       b    b
 YyNnAaQq{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
 Control-Break'e basıldı.\r
-'%s' toplu iş dosyası sonlandırılsın mı (Evet/Hayır/Tümü) ? \
+'%s' toplu iş dosyası sonlandırılsın mı (Evet/Hayır/Tümü)? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -641,16 +641,16 @@ Dizin yığını boş.
 
 ## Strings to construct the DIR output
 :TEXT_DIR_HDR_VOLUME#1%
- %c sürücüsündeki birim \
+ %c sürücüsündeki birim\
 .
 :TEXT_DIR_HDR_VOLUME_STRING#0%
-şudur: %s
+: %s
 .
 :TEXT_DIR_HDR_VOLUME_NONE
-etiket içermiyor
+in bir etiketi yok
 .
 :TEXT_DIR_HDR_SERIAL_NUMBER#0%
- Birimin Seri Numarası: %04X-%04X
+ Birim seri numarası: %04X-%04X
 .
 :TEXT_DIR_FTR_FILES#1%
 %10s dosya\
@@ -714,7 +714,7 @@ Pzt\
 Sal\
 .
 :TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
-Çar«\
+Çar\
 .
 :TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
 Per\
@@ -750,7 +750,7 @@ Mevcut özellikler:
 ## Displayed within "?" <-> showcmd() to enumerate the included features
 ## Note the trailing single space
 :TEXT_SHOWCMD_FEATURE_ALIASES#1
-[diğer adlar] \
+[armalar] \
 .
 :TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
 [gelişmiş giriş] \
@@ -797,7 +797,7 @@ Mevcut özellikler:
 
 :TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
 
-İzleme kipi için F8 düğmesine veya %s ögesini atlamak için F5 düğmesine basın... \
+İzleme kipi için F8'e veya %s ögesini atlamak için F5'e basın... \
 .
 :TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
 '%s' atlanıyor.
@@ -845,7 +845,7 @@ Güncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
 FreeDOS Komut Kabuğu birçok programcı tarafından geliştirilmiştir, lütfen
 HISTORY.TXT dosyasına bakın.
 
-Şu anki bakımcı: Steffen Kaiser mailto:freecom@freedos.org.
+Şu anki geliştirici: Steffen Kaiser mailto:freecom@freedos.org.
 
 Hata raporları için: freedos-freecom@lists.sourceforge.net
 Güncellemeler için: http://freedos.sourceforge.net/freecom 
@@ -859,7 +859,7 @@ Güncellemeler için: http://freedos.sourceforge.net/freecom
 # All newlines must be prefixed by \r's !
 :TEXT_MSG_REBOOT_NOW#1
 \r\n\r
-Kabuk sona erdirilmek üzeredir ancak bu yasaktır\r
+Kabuk sona erdirilmek üzere ancak buna izin verilmiyor\r
 (genellikle "/P" seçeneğini etkinleştirerek).\r
 Sistemi yeniden başlatmanız veya eğer bu kabuk çoklu görev ortamında\r
 çalıştırılıyorsa bu görev/işlemi elle sonlandırmanız gerekir.\r
@@ -885,7 +885,7 @@ Bağlam segmenti     : Azami %5u bayt; boş %5u bayt
 Yığın               : Boş %5lu bayt
 .
 :TEXT_MEMORY_CTXT_ALIAS#1%
-\tDiğer adlar       : Sınır %5u bayt, güncel %5u bayt, %5u öge
+\tArmalar           : Sınır %5u bayt, güncel %5u bayt, %5u öge
 .
 :TEXT_MEMORY_CTXT_HISTORY#1%
 \tTarihçe           : Sınır %5u bayt, güncel %5u bayt, %5u öge
@@ -894,10 +894,10 @@ Yığın               : Boş %5lu bayt
 \tDizin yığını      : Sınır %5u bayt, güncel %5u bayt, %5u öge
 .
 :TEXT_MEMORY_CTXT_LASTDIR#1%
-\tSon dizin yığını  : Kullanılan  %5u bayt, %5u öge
+\tSon dizin yığını  : Kullanılan %5u bayt, %5u öge
 .
 :TEXT_MEMORY_CTXT_BATCH#1%
-\tİç içe toplu iş   : Kullanılan  %5u bayt, %5u öge
+\tİç içe toplu iş   : Kullanılan %5u bayt, %5u öge
 .
 :TEXT_MEMORY_CTXT_SWAPINFO#1%
 \tTakas bilgisi     : Kullanılan %5u bayt, %5u öge
@@ -906,10 +906,10 @@ Yığın               : Boş %5lu bayt
 
 ## CHCP
 :TEXT_ERROR_GET_CODEPAGE#1
-Sistemden güncel kod sayfası alınması başarısız oldu.
+Sistemden güncel kod sayfası alınamadı.
 .
 :TEXT_ERROR_SET_CODEPAGE#1
-Güncel kod sayfasının değiştirilmesi başarısız oldu.
+Güncel kod sayfası değiştirilemedi.
 .
 :TEXT_DISPLAY_CODEPAGE#1%
 Güncel kod sayfası: %u.
@@ -921,15 +921,15 @@ Sistem kod sayfası (uygun şekilde): %u.
 #
 
 :TEXT_CMDHELP_ALIAS
-Diğer adları görüntüler, ayarlar, kaldırır.
+Armaları görüntüler, ayarlar, kaldırır.
 
 ALIAS [değişken[=][dize]]
 
-	değişken  Diğer ad adını belirtir.
-	dize      Diğer ada atanacak karakter serisi.
+	değişken  Arma adını belirtir.
+	dize      Armaya atanacak karakter serisi.
 
 
-Güncel diğer adları görüntülemek için parametresiz ALIAS yazın.
+Güncel armaları görüntülemek için parametresiz ALIAS yazın.
 .
 
 :TEXT_CMDHELP_BEEP
@@ -945,13 +945,12 @@ Güncel BREAK ayarını görüntülemek için parametresiz BREAK yazın.
 .
 
 :TEXT_CMDHELP_CALL#1
-Bir toplu iş programından başka bir toplu iş programını çağırır.
+Bir toplu iş betiğinden başka bir toplu iş betiğini çağırır.
 
-CALL [/S | /N] [/Y] [sürücü:][yol]dosyaadı [toplu iş-paramet]
+CALL [/S | /N] [/Y] [sürücü:][yol]dosyaadı [toplu-iş-parametre]
 
-  toplu iş-parametre    toplu iş programı tarafından ihtiyaç duyulan komut satırı
-                     verileri belirtir.
-  /S zorlar, /N kaldırır FreeCOM takasını.
+  toplu-iş-parametre    toplu iş betiği için gerekli verileri belirtir.
+  FreeCOM takasını /S zorlar, /N kaldırır.
   /Y komutun çalıştırılması sırasında izleme kipini etkinleştirir.
 .
 
@@ -1061,7 +1060,7 @@ Tarihi görüntüler veya ayarlar.
 DATE [/D] [tarih]
 
 Güncel tarih ayarını görüntülemek ve yenisini girmek için bir istem almak
-için parametresiz DATE yazın. Tarihi muhafaza etmek için ENTER düğmesine basın.
+için parametresiz DATE yazın. Tarihi korumak için ENTER düğmesine basın.
 
 /D seçeneği, DATE komutunun etkileşimli olmasına engel olur.
 .
@@ -1094,7 +1093,7 @@ DIR [sürücü:][yol][dosyaadı] [/P] [/W] [/A[[:]öznitelikler]]
              H  Saklı dosyalar             A  Arşivlenmeye hazır dosyalar
              S  Sistem dosyaları           -  hayır öneki
  /O         Dosyaları sıralama düzenine göre listeler.
- sortorder   N  Ada göre (alfabetik)      S  Boyuta göre (önce küçüğü)
+ sortorder   N  Ada göre (alfabetik)       S  Boyuta göre (önce küçüğü)
              E  Uzantıya göre (alfabetik)  D  Tarih & zaman (önce eskisi)
              G  önce dizinleri grupla      -  Ters sıralama öneki
              U  Sıralanmamış		   Varsayılan /ONG
@@ -1109,30 +1108,30 @@ herhangi bir anahtarı - (tire) öneki ile geçersiz kılabilir--mesela /-W.
 
 :TEXT_CMDHELP_DOSKEY#1
 Harici DOSKEY yardımcı programı FreeCOM'a dahil edilmiştir.
-YUKARI ve AûA¶I düğmeleri ile tarihçeyi geri alabilir ve HISTORY ile
-görüntüleyebilirsiniz. SOL, SA¶ ve END ile HOME düğmeleriyle komut satırında
+YUKARI ve AŞAĞI düğmeleri ile tarihçeyi geri alabilir ve HISTORY ile
+görüntüleyebilirsiniz. SOL, SAĞ ve END ile HOME düğmeleriyle komut satırında
 gezinebilir ve INSERT ile ekleme veya üzerine yazma kipine geçebilirsiniz.
-TAB tuşu ile güncel sözcüğü dosya adı olarak tamamlayabilir; iki kere basarak
+TAB tuşu ile güncel sözcüğü dosya adı olarak tamamlayabilir; iki kez basarak
 tüm denkleşen dosyaları gösterebilirsiniz.
 .
 
 :TEXT_CMDHELP_ORIGINAL_DOSKEY#1
-Komut satırını düzenler, geri alır ve makro Oluşturur
+Komut satırını düzenler, geri alır ve makro oluşturur
 
 DOSKEY [/anahtar ...] [makroadı=[metin]]
 
-  /BUFSIZE:boyu	Makro ve komut arabelleği boyutunu ayarlar (varsayılan:512)
-  /ECHO:on|off  Makro genişleme yazımını etkinleştir/devre dışı (varsayılan:on)
-  /FILE:dosya   Makro listesi içeren dosya belirtir
-  /HISTORY      Bellekte muhafaza edilen tüm komutları görüntüler
-  /INSERT       Yeni karakterleri düğmesine basıldığında ekler
-  /KEYSIZE:boy. Klavyenin type-ahead arabelleği boyutu (varsayılan:15)
-  /LINE:boyut   Satır düzenleme arabelleğinin azami boyutu (varsayılan:128)
-  /MACROS       Tüm DOSKEY makrolarını görüntüler
-  /OVERSTRIKE   Yeni karakterleri düğmesine basıldığında üzerine yazar (varsayılan)
-  /REINSTALL    Yeni bir DOSKEY kopyası kurar
-  makroadı      Oluşturduğunuz makro için bir ad belirtir
-  metin         Makroya atamak istediğiniz komutları belirtir
+  /BUFSIZE:boyu	Makro ve komut arabelleği boyutunu ayarla (öntanımlı:512)
+  /ECHO:on|off  Makro genişleme yazımını etkinleştir/devre dışı (öntanımlı:açık)
+  /FILE:dosya   Makro listesi içeren dosya belirt
+  /HISTORY      Bellekte muhafaza edilen tüm komutları görüntüle
+  /INSERT       Yeni karakterleri düğmesine basıldığında ekle
+  /KEYSIZE:boy. Klavyenin type-ahead arabelleği boyutu (öntanımlı:15)
+  /LINE:boyut   Satır düzenleme arabelleğinin azami boyutu (öntanımlı:128)
+  /MACROS       Tüm DOSKEY makrolarını görüntüle
+  /OVERSTRIKE   Yeni karakterleri düğmesine basıldığında üzerine yaz (öntanımlı)
+  /REINSTALL    Yeni bir DOSKEY kopyası kur
+  makroadı      Oluşturduğunuz makro için bir ad belirt
+  metin         Makroya atamak istediğiniz komutları belirt
 
   YUKARI, AŞAĞI okları komutları geri alır
       Esc güncel komutu temizler
@@ -1149,7 +1148,7 @@ Aşağıdakiler DOSKEY makro tanımlamalarında kullanabileceğiniz özel kodlar
 .
 
 :TEXT_CMDHELP_ECHO
-Mesaj görüntüler veya komut yankısını etkinleştirir veya devre dışı bırakır.
+İleti görüntüler veya komut yankısını etkinleştirir veya devre dışı bırakır.
 
   ECHO [ON | OFF]
   ECHO [ileti]
@@ -1174,7 +1173,7 @@ FOR %değişken IN (küme) DO komut [komut-parametreleri]
   komut-parametreleri
              	Belirtilen komut için parametre veya anahtar belirtir.
 
-FOR komutunu bir toplu iş programında kullanmak için %değişken yerine %%değişken
+FOR komutunu bir toplu iş betiğinde kullanmak için %değişken yerine %%değişken
 kullanın.
 
 örneğin:
@@ -1182,11 +1181,11 @@ kullanın.
 .
 
 :TEXT_CMDHELP_GOTO
-Komut kabuğunu bir toplu iş programında etiketli bir satıra yönlendirir.
+Komut kabuğunu bir toplu iş betiğinde etiketli bir satıra yönlendirir.
 
 GOTO etiket
 
-  etiket	Toplu iş programında etiket olarak kullanılan bir metin belirtir.
+  etiket	Toplu iş betiğinde etiket olarak kullanılan bir metin belirtir.
 
 Etiket bir satıra kendi başına iki nokta ile başlayarak yazabilirsiniz.
 .
@@ -1202,7 +1201,7 @@ Boyut ile tarihçe arabelleğinin boyutu değiştirilir.
 .
 
 :TEXT_CMDHELP_IF
-toplu iş programlarında koşullu işlemleri yerine getirir.
+Toplu iş programlarında koşullu işlemleri yerine getirir.
 
 IF [NOT] ERRORLEVEL sayı komut
 IF [NOT] dize1==dize2 komut
@@ -1257,12 +1256,12 @@ Bir programı belleğin ilk 64K'sının üzerine yükler ve onu çalıştırır.
 
 LOADFIX [sürücü:][yol]dosyaadı
 
-Bir programı Aşağı belleğe yüklerken "Paketlenmiş dosya bozuk" mesajını
+Bir programı Aşağı belleğe yüklerken "Paketlenmiş dosya bozuk" iletisini
 aldıysanız programı LOADFIX kullanarak yükleyin.
 .
 
 :TEXT_CMDHELP_MD
-Dizin Oluşturur.
+Dizin oluşturur.
 
 MKDIR [sürücü:]yol
 MD [sürücü:]yol
@@ -1280,10 +1279,10 @@ Güncel yolu görüntülemek için parametresiz PATH yazın.
 .
 
 :TEXT_CMDHELP_PAUSE
-Bir toplu iş programın işleyişini duraklatır ve Aşağıdaki mesajı görüntüler:
-"Devam etmek için herhangi bir düğmesine basın...." veya başka bir mesaj.
+Bir toplu iş betiğinin işleyişini duraklatır ve aşağıdaki iletiyi görüntüler:
+"Sürdürmek için herhangi bir düğmeye basın...." veya başka bir ileti.
 
-PAUSE [mesaj]
+PAUSE [ileti]
 .
 
 :TEXT_CMDHELP_PROMPT
@@ -1293,8 +1292,7 @@ PROMPT [metin]
 
   metin   Yeni bir komut istemi belirtir.
 
-İstem normal karakterlerden ve Aşağıdaki özel kodlardan Oluşturulabilir:
-
+İstem normal karakterlerden ve aşağıdaki özel kodlardan oluşturulabilir:
 
   $Q   = (eşit işareti)
   $$   $ (dollar karakteri)
@@ -1342,9 +1340,8 @@ RD [sürücü:]yol
 .
 
 :TEXT_CMDHELP_REM
-<<<<<<< .mineAçıklamaları bir toplu iş dosyasına veya CONFIG.SYS dosyasına kaydeder.
-=======Yorumları bir toplu iş dosyasına veya CONFIG.SYS dosyasına kaydeder.
->>>>>>> .theirs
+Yorumları bir toplum iş dosyasına veya CONFIG.SYS dosyasına kaydeder.
+
 REM [yorum]
 .
 
@@ -1364,7 +1361,7 @@ Ortam değişkenlerini görüntüler, ayarlar veya kaldırır.
 SET [/C] [/P] [/E] [/U] [değişken[=[dize]]]
 
   değişken  Ortam değişkeninin adını belirtir.
-  dize      değişkene atanacak karakter serisini belirtir.
+  dize      Değişkene atanacak karakter serisini belirtir.
 
 * Eğer hiçbir dize belirtilmediyse, değişken ortamdan kaldırılır.
 
@@ -1481,7 +1478,7 @@ MEMORY
 .
 
 :TEXT_ERROR_COPY_PLUS_DESTINATION#1
-COPY hedefi artı ('+') karakterleri içermemelidir.
+COPY hedefi artı ('+') karakterini içermemelidir.
 .
 
 :TEXT_DELETE_FILE#1%
@@ -1490,7 +1487,7 @@ COPY hedefi artı ('+') karakterleri içermemelidir.
 
 :TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
 '%s' dosyasına yazılamadı;
-muhtemelen disk dolu? (%lu bayta ihtiyaç var)
+Disk dolu olabilir mi? (%lu bayt gerekli)
 .
 
 # Displayed for BIGcopy(), when copying takes quite a long time.
@@ -1520,7 +1517,7 @@ veya dizelerin yüklenmesini iptal etmek için enter düğmesine basın.
 .
 
 :TEXT_TERMINATING
-Şimdi sonlandırılıyor.
+Sonlandırılıyor.
 .
 
 :TEXT_HIDDEN_CRITER#0%
@@ -1546,3 +1543,7 @@ kritik bir hata tarafından sonlandırıldı\
 :TEXT_EXIT_REASON_3
 yerleşik oldu\
 .
+:TEXT_ERROR_EXE_CORRUPT
+EXE dosyası hasarlı\
+.
+
