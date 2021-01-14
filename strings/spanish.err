@@ -63,7 +63,7 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: Error %1 en unidad %A: %2 †rea: %3
+BLOCK_DEVICE: Error %1 en unidad %A: %2 √°rea: %3
 S3
 CHAR_DEVICE: Error %1 en dispositivo %A: %3
 
@@ -79,7 +79,7 @@ DOS: DOS
 S5
 FAT: FAT
 S6
-ROOT: ra°z
+ROOT: ra√≠z
 S7
 DATA: datos
 
@@ -105,26 +105,26 @@ S13
 DELIMITER: , %.
 
 ## Error strings
-UNKNOWN: C¢digo de error desconocido
+UNKNOWN: C√≥digo de error desconocido
 S15
-0: intento de violaci¢n de la protecci¢n contra escritura
-1: unidad no v†lida para este dispositivo
+0: intento de violaci√≥n de la protecci√≥n contra escritura
+1: unidad no v√°lida para este dispositivo
 2: unidad no lista
-3: instrucci¢n desconocida para el controlador
+3: instrucci√≥n desconocida para el controlador
 4: error de datos (error en CRC)
-5: longitud err¢nea de la estructura de petici¢n al controlador
-6: error de b£squeda
+5: longitud err√≥nea de la estructura de petici√≥n al controlador
+6: error de b√∫squeda
 7: tipo de soporte desconocido
 8: sector no encontrado
 9: la impresora no tiene papel
 10: error de escritura
 11: error de lectura
 12: error general
-13: violaci¢n de permisos de archivo compartido
-14: violaci¢n de protecci¢n
-15: cambio en disco no v†lido
-16: FCB no est† disponible
+13: violaci√≥n de permisos de archivo compartido
+14: violaci√≥n de protecci√≥n
+15: cambio en disco no v√°lido
+16: FCB no est√° disponible
 17: desbordamiento del buffer de acceso compartido
-18: el c¢digo de p†gina no concuerda
+18: el c√≥digo de p√°gina no concuerda
 19: fuera de la entrada
 20: espacio en disco insuficiente

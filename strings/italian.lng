@@ -157,7 +157,7 @@ Manca un parametro obbligatorio.
 .
 
 :TEXT_ERROR_INVALID_DRIVE#0%
-UnitÖ non valida %c:.
+Unit√† non valida %c:.
 .
 
 :TEXT_ERROR_BADCOMMAND#2%
@@ -177,7 +177,7 @@ Impossibile aprire il file temporaneo!
 .
 
 :TEXT_ERROR_LONG_LINE_BATCHFILE#0%
-La linea #%ld nel file batch '%s' ä troppo lunga.
+La linea #%ld nel file batch '%s' √® troppo lunga.
 .
 
 :TEXT_ERROR_BFILE_VANISHED#0%
@@ -307,11 +307,11 @@ Nessuna etichetta specificata per il GOTO.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
-Il comando CTTY ä stato escluso da questo COMMAND.COM.
+Il comando CTTY √® stato escluso da questo COMMAND.COM.
 .
 
 :TEXT_ERROR_NORW_DEVICE#0%
-UnitÖ non valida o non in lettura-scrittura - '%s'.
+Unit√† non valida o non in lettura-scrittura - '%s'.
 .
 
 :TEXT_ERROR_CTTY_DUP#0%
@@ -347,11 +347,11 @@ Impossibile scrivere sul file '%s'
 .
 
 :TEXT_ERROR_LEADING_PLUS
-Il carattere di concatenazione '+' non puï precedere gli argomenti.
+Il carattere di concatenazione '+' non pu√≤ precedere gli argomenti.
 .
 
 :TEXT_ERROR_TRAILING_PLUS
-Il carattere di concatenazione '+' non puï seguire gli argomenti.
+Il carattere di concatenazione '+' non pu√≤ seguire gli argomenti.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
@@ -384,7 +384,7 @@ Caricamento dei messaggi in memoria fallito.
 .
 
 :TEXT_MSG_NOTIMPLEMENTED
-L'opzione /MSG ä stata esclusa da questo COMMAND.COM.
+L'opzione /MSG √® stata esclusa da questo COMMAND.COM.
 .
 
 :TEXT_MSG_ITEMS_DISPLAYED#1%
@@ -392,8 +392,8 @@ L'opzione /MSG ä stata esclusa da questo COMMAND.COM.
 .
 
 :TEXT_CORRUPT_COMMAND_LINE
-Linea di comando corrotta. Questo ä un errore interno correlato al sistema
-in cui COMMAND.COM ä eseguito. Si prega di segnalare l'errore.
+Linea di comando corrotta. Questo √® un errore interno correlato al sistema
+in cui COMMAND.COM √® eseguito. Si prega di segnalare l'errore.
 .
 
 :TEXT_QUOTED_C_OR_K#1
@@ -402,7 +402,7 @@ Le opzioni /K e /C non possono essere virgolettate, quindi sono state ignorate.
 
 :TEXT_INIT_FULLY_QUALIFIED#1%
 Il percorso di COMMAND.COM deve essere completamente specificato!
-Deve includere la specificazione di unitÖ ed iniziare con un backslash.
+Deve includere la specificazione di unit√† ed iniziare con un backslash.
 Per esempio: C:\\FDOS
 
 COMMAND.COM assume ora questo percorso:
@@ -411,7 +411,7 @@ COMMAND.COM assume ora questo percorso:
 
 :TEXT_ERROR_RESTORE_SESSION
 Le informazioni di sessione non possono essere ripristinate, ogni impostazione
-locale ä persa. Fare riferimento al precedente messaggio di errore per
+locale √® persa. Fare riferimento al precedente messaggio di errore per
 comprendere la ragione di questo problema.
 .
 
@@ -422,7 +422,7 @@ comprendere la ragione di questo problema.
 .
 
 :TEXT_ERROR_CWD_FAILED#1%
-L'unitÖ %c: non risponde o la memoria interna ä esaurita.
+L'unit√† %c: non risponde o la memoria interna √® esaurita.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE
@@ -461,19 +461,19 @@ come la cronologia comandi, stack di directory, ecc...
 .
 
 :TEXT_ERROR_CONTEXT_LENGTH#1%
-La dimensione totale del contesto ä di %lu byte, oltre il limite minimo.
+La dimensione totale del contesto √® di %lu byte, oltre il limite minimo.
 Ridimensionamento del contesto a %u byte.
 .
 
 :TEXT_ERROR_CONTEXT_ADD_STATUS#1
 Tentativo fallito di aggiungere informazioni di stato al contesto. Questo
-errore puï indicare corruzione di memoria o una dimensione minima del
+errore pu√≤ indicare corruzione di memoria o una dimensione minima del
 contesto determinata non correttamente. Informare il maintainer di
 FreeCOM all'indirizzo: freecom@freedos.org 
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
-Contesto mancante dopo lo scambio. Il contesto ä ricreato, ma
+Contesto mancante dopo lo scambio. Il contesto √® ricreato, ma
 tutti gli alias, ecc. sono persi.
 .
 
@@ -486,34 +486,34 @@ Premere un tasto per continuare . . .\
 .
 
 :TEXT_MSG_HISTORY_SIZE#0%
-La cronologia ä di %d byte.
+La cronologia √® di %d byte.
 .
 
 :TEXT_MSG_DOSKEY
-Le caratteristiche di DOSKEY sono giÖ abilitate.
+Le caratteristiche di DOSKEY sono gi√† abilitate.
 .
 
 :TEXT_MSG_ECHO_STATE#0%
-ECHO ä %s
+ECHO √® %s
 .
 
 :TEXT_MSG_VERIFY_STATE#0%
-VERIFY ä %s
+VERIFY √® %s
 .
 
 :TEXT_MSG_FDDEBUG_STATE#0%
-L'output di DEBUG ä %s.
+L'output di DEBUG √® %s.
 .
 :TEXT_MSG_FDDEBUG_TARGET#0%
-L'output di DEBUG ä stampato su '%s'.
+L'output di DEBUG √® stampato su '%s'.
 .
 
 :TEXT_MSG_BREAK_STATE#0%
-BREAK ä %s
+BREAK √® %s
 .
 
 :TEXT_MSG_CURRENT_DATE#0%
-La data corrente ä %s
+La data corrente √® %s
 .
 
 ## The three DATE prompts MUST be in this order!
@@ -528,7 +528,7 @@ Immettere la nuova data ([aa]aa%smm%sgg): \
 .
 
 :TEXT_MSG_CURRENT_TIME#0%
-L'ora corrente ä %s
+L'ora corrente √® %s
 .
 
 :TEXT_STRING_PM#1
@@ -566,7 +566,7 @@ Procedere con l'operazione (S/N)? \
 :PROMPT_YES_NO#1
 SsNn{LF}{CR}{CBREAK}{ESC}
 aabb   a   a       b    b
- [Sç=INVIO, No=ESC] ? \
+ [S√¨=INVIO, No=ESC] ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -579,7 +579,7 @@ aabb   a   a       b    b
 SsNnTt{LF}{CR}{CBREAK}{ESC}
 aabbcc   a   a       c    b
 Control-Break premuto.\r
-Terminare il file batch '%s' (Sç/No/Tutti) ? \
+Terminare il file batch '%s' (S√¨/No/Tutti) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -589,7 +589,7 @@ Terminare il file batch '%s' (Sç/No/Tutti) ? \
 :PROMPT_OVERWRITE_FILE#1%
 SsNnTtEe{CBREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Sovrascrivere '%s' (Sç/No/Tutti/Esci) ? \
+Sovrascrivere '%s' (S√¨/No/Tutti/Esci) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -601,7 +601,7 @@ YyNnAaQq{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
 SsNnTtEe{CBREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Appendere a '%s' (Sç/No/Tutti/Esci) ? \
+Appendere a '%s' (S√¨/No/Tutti/Esci) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -611,7 +611,7 @@ Appendere a '%s' (Sç/No/Tutti/Esci) ? \
 :PROMPT_DELETE_FILE#1%
 SsNnTtEe{CBREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Cancellare '%s' (Sç/No/Tutti/Esci) ? \
+Cancellare '%s' (S√¨/No/Tutti/Esci) ? \
 .
 
 :TEXT_UNKNOWN_FILENAME#1
@@ -624,10 +624,10 @@ Stack delle directory vuoto.
 
 ## Strings to construct the DIR output
 :TEXT_DIR_HDR_VOLUME#1%
- Il volume nell'unitÖ %c \
+ Il volume nell'unit√† %c \
 .
 :TEXT_DIR_HDR_VOLUME_STRING#0%
-ä %s.
+√® %s.
 .
 :TEXT_DIR_HDR_VOLUME_NONE
 non ha etichetta.
@@ -727,7 +727,7 @@ Comandi interni disponibili:
 
 :TEXT_MSG_SHOWCMD_FEATURES
 
-FunzionalitÖ disponibili:
+Funzionalit√† disponibili:
 .
 
 ## Displayed within "?" <-> showcmd() to enumerate the included features
@@ -777,7 +777,7 @@ FunzionalitÖ disponibili:
 
 :TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
 
-Premere F8 per la modalitÖ traccia, o F5 per non eseguire %s... \
+Premere F8 per la modalit√† traccia, o F5 per non eseguire %s... \
 .
 :TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
 '%s' ignorato.
@@ -799,7 +799,7 @@ FreeDOS kernel versione %d.%d.%d
 :TEXT_MSG_VER_WARRANTY
 Copyright (C) 1994-2004 Tim Norman and others.
 
-Questo programma ä distribuito nella speranza che sia utile, ma
+Questo programma √® distribuito nella speranza che sia utile, ma
 SENZA ALCUNA GARANZIA; senza neppure la garanzia implicita di
 COMMERCIABILITA' o di APPLICABILITA' PER UN PARTICOLARE SCOPO. Si veda
 la Licenza Pubblica Generica GNU (GNU General Public License, in inglese)
@@ -813,7 +813,7 @@ http://freedos.sourceforge.net/freecom
 :TEXT_MSG_VER_REDISTRIBUTION
 Copyright (C) 1994-2001 Tim Norman and others.
 
-Questo programma e software libero; ä lecito ridistribuirlo e/o modificarlo
+Questo programma e software libero; √® lecito ridistribuirlo e/o modificarlo
 secondo i termini della Licenza Pubblica Generica GNU come pubblicata dalla
 Free Software Foundation; o la versione 2 della licenza o (a
 vosta scelta) una qualsiasi versione successiva.
@@ -825,7 +825,7 @@ http://freedos.sourceforge.net/freecom
 
 :TEXT_MSG_VER_DEVELOPERS
 
-FreeCOM (FreeDOS Command Shell) ä sviluppato da molti sviluppatori,
+FreeCOM (FreeDOS Command Shell) √® sviluppato da molti sviluppatori,
 fare riferimento al file HISTORY.TXT incluso.
 
 Attualmente mantenuto da Steffen Kaiser mailto:freecom@freedos.org
@@ -843,7 +843,7 @@ http://freedos.sourceforge.net/freecom
 # All newlines must be prefixed by \r's !
 :TEXT_MSG_REBOOT_NOW#1
 \r\n\r
-Il programma shell sta per terminare, sebbene ciï sia\r
+Il programma shell sta per terminare, sebbene ci√≤ sia\r
 vietato (normalmente utilizzando l'opzione "/P").\r
 E' necessario riavviare il computer o, se si sta eseguendo il\r
 programma shell in un ambiente multitasking, terminare il\r
@@ -897,8 +897,8 @@ Fallito tentativo di acquisizione della tabella codici corrente dal sistema.
 Fallito tentativo di cambiamento della tabella codici corrente.
 .
 :TEXT_DISPLAY_CODEPAGE#1%
-La tabella codici corrente ä %u.
-La tabella codici del sistema (vera e propria) ä: %u.
+La tabella codici corrente √® %u.
+La tabella codici del sistema (vera e propria) √®: %u.
 .
 
 #
@@ -932,7 +932,7 @@ Digitare BREAK senza parametri per visualizzare l'impostazione BREAK attuale.
 :TEXT_CMDHELP_CALL#1
 Richiama un file batch da un altro.
 
-CALL [/S | /N] [/Y] [unitÖ:][percorso]nomefile [parametri-batch]
+CALL [/S | /N] [/Y] [unit√†:][percorso]nomefile [parametri-batch]
 
   parametri-batch    Specifica le informazioni a linea di comando richieste
                      dal programma batch.
@@ -943,36 +943,36 @@ CALL [/S | /N] [/Y] [unitÖ:][percorso]nomefile [parametri-batch]
 :TEXT_CMDHELP_CD
 Visualizza o cambia la directory corrente.
 
-CHDIR [unitÖ:][percorso]
+CHDIR [unit√†:][percorso]
 CHDIR[..]
-CD [unitÖ:][percorso]
+CD [unit√†:][percorso]
 CD[..]
 CD -
 
   ..   Specifica che si vuole passare alla directory superiore.
-  -    Se la funzionalitÖ "last directory" ä abilitata, passa alla directory
+  -    Se la funzionalit√† "last directory" √® abilitata, passa alla directory
        precedente.
 
-Digitare CD unitÖ: per visualizzare la directory corrente nell'unitÖ
+Digitare CD unit√†: per visualizzare la directory corrente nell'unit√†
 specificata.
-Digitare CD senza parametri per visualizzare l'unitÖ e la directory correnti.
+Digitare CD senza parametri per visualizzare l'unit√† e la directory correnti.
 Vedere anche: CDD
 .
 
 :TEXT_CMDHELP_CDD
-Visualizza il nome o cambia unitÖ e directory correnti.
+Visualizza il nome o cambia unit√† e directory correnti.
 
-CDD [unitÖ:][percorso]
+CDD [unit√†:][percorso]
 CDD[..]
 CDD -
 
   ..   Specifica che si vuole passare alla directory superiore.
-  -    Se la funzionalitÖ "last directory" ä abilitata, passa alla directory
+  -    Se la funzionalit√† "last directory" √® abilitata, passa alla directory
        precedente.
 
-Se l'unitÖ ä specificata, l'unitÖ corrente cambierÖ di conseguenza; questa
-ä l'unica differenza con "CHDIR".
-Digitare CD senza parametri per visualizzare unitÖ e directory correnti.
+Se l'unit√† √® specificata, l'unit√† corrente cambier√† di conseguenza; questa
+√® l'unica differenza con "CHDIR".
+Digitare CD senza parametri per visualizzare unit√† e directory correnti.
 .
 
 :TEXT_CMDHELP_CHCP
@@ -995,10 +995,10 @@ CLS
 :TEXT_CMDHELP_COMMAND
 Esegue una nuova copia del programma shell di FreeDOS.
 
-COMMAND [[unitÖ:]percorso] [dispositivo] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P]
+COMMAND [[unit√†:]percorso] [dispositivo] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P]
                            [/MSG] [/LOW] [/Y [/[C|K] comando]]
 
-  [unitÖ:]percorso Specifica la directory che contiene COMMAND.COM.
+  [unit√†:]percorso Specifica la directory che contiene COMMAND.COM.
   dispositivo      Specifica il dispositivo da usare per l'input e l'output
                    dei comandi.
   /E:nnnnn         Imposta la dimensione iniziale dell'ambiente a nnnnn byte.
@@ -1007,18 +1007,18 @@ COMMAND [[unitÖ:]percorso] [dispositivo] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P]
                    (nnnn deve essere compreso fra 128 e 1,024).
   /U:nnn           Specifica la lunghezza del buffer di input (richiede /P).
                    (nnn deve essere compreso fra 128 e 255).
-  /P               Rende la nuova shell permanente (non puï terminare).
+  /P               Rende la nuova shell permanente (non pu√≤ terminare).
   /MSG             Memorizza tutti i messagi in memoria (richiede /P).
   /LOW             Forza la shell a mantenere i suoi dati residenti in
                    memoria bassa.
   /Y               Esegue il programma batch specificato da /C o /K in
-                   modalitÖ passo passo.
+                   modalit√† passo passo.
   /C comando       Esegue il comando specificato e termina.
   /K comando       Esegue il comando specificato e continua a funzionare.
 .
 
 :TEXT_CMDHELP_COPY
-Copia uno o pió file in un'altra posizione.
+Copia uno o pi√π file in un'altra posizione.
 
 COPY [/A | /B] sorgente [/A | /B] [+ sorgente [/A | /B] [+ ...]]
                [destinazione] [/A | /B]] [/V] [/Y | /-Y]
@@ -1029,12 +1029,12 @@ COPY [/A | /B] sorgente [/A | /B] [+ sorgente [/A | /B] [+ ...]]
   destinazione Specifica la directory e/o il nomefile per il/i nuovi file.
   /V           Verifica che i nuovi file siano scritti correttamente.
   /Y           Sopprime la richiesta di conferma per la sovrascrittura di
-               file destinazione giÖ esistenti.
+               file destinazione gi√† esistenti.
   /-Y          Causa la richiesta di conferma per la sovrascrittura di
-               file destinazione giÖ esistenti.
+               file destinazione gi√† esistenti.
 
-L'opzione /Y puï essere presente nella variabile d'ambiente COPYCMD.
-Ciï puï essere annullato con l'opzione /-Y sulla linea di comando.
+L'opzione /Y pu√≤ essere presente nella variabile d'ambiente COPYCMD.
+Ci√≤ pu√≤ essere annullato con l'opzione /-Y sulla linea di comando.
 
 Per appendere i file specificare un singolo file come destinazione, ma
 molteplici file come sorgente (usando i caratteri jolly o la forma
@@ -1061,12 +1061,12 @@ richiesta di una nuova data.  Prmere INVIO per mantenere la stessa data.
 .
 
 :TEXT_CMDHELP_DEL#2
-Cancella uno o pió file.
+Cancella uno o pi√π file.
 
-DEL [unitÖ:][percorso]nomefile [/P] [/V]
-ERASE [unitÖ:][percorso]nomefile [/P] [/V]
+DEL [unit√†:][percorso]nomefile [/P] [/V]
+ERASE [unit√†:][percorso]nomefile [/P] [/V]
 
-  [unitÖ:][percorso]nomefile Specifica il/i file da cancellare. Specificare
+  [unit√†:][percorso]nomefile Specifica il/i file da cancellare. Specificare
                              file multipli usando i caratteri jolly.
   /P    Chiede conferma prima di cancellare ogni file.
   /V    Visualizza tutti i file cancellati.
@@ -1075,14 +1075,14 @@ ERASE [unitÖ:][percorso]nomefile [/P] [/V]
 :TEXT_CMDHELP_DIR#4
 Visualizza la lista dei file e sottodirectory in una directory.
 
-DIR [unitÖ:][percorso][nomefile] [/P] [/W] [/A[[:]attributi]]
+DIR [unit√†:][percorso][nomefile] [/P] [/W] [/A[[:]attributi]]
   [/O[[:]ordine]] [/S] [/B] [/L] [/V]
 
-  [unitÖ:][percorso][nomefile]
-           Specifica unitÖ, directory, e/o file da visualizzare
+  [unit√†:][percorso][nomefile]
+           Specifica unit√†, directory, e/o file da visualizzare
            (Si possono usare i caratteri jolly o nomifile multipli).
  /P        Effettua una pausa dopo ogni schermata di informazioni.
- /W        Usa il formato su pió colonne.
+ /W        Usa il formato su pi√π colonne.
  /A        Visualizza i file con gli attributi specificati. (Default: /ADHSRA)
  attributi  D  Directory                 R  File di sola lettura
             H  File nascosti             A  File pronti per l'archiviazione
@@ -1094,7 +1094,7 @@ DIR [unitÖ:][percorso][nomefile] [/P] [/W] [/A[[:]attributi]]
             U  Non ordinati
  /S        Visualizza i file nelle directory specificate e tutte le
            sottodirectory.
- /B        Usa ul formato breve (nÇ intestazione nÇ riepilogo).
+ /B        Usa ul formato breve (n√© intestazione n√© riepilogo).
  /L        Usa caratteri minuscoli.
  /Y or /4  Visualizza l'anno con 4 cifre.
 
@@ -1104,7 +1104,7 @@ per esempio: /-W
 .
 
 :TEXT_CMDHELP_DOSKEY#1
-L'utility estaerna DOSKEY ä stata incorporata in FreeCOM.
+L'utility estaerna DOSKEY √® stata incorporata in FreeCOM.
 Usare i tasti cursore SU e GIU' per richiamare la cronologia comandi e
 HISTORY per visualizzarla.
 Usare i tasti cursore SINSTRA e DESTRA ed i tasti INIZIO e FINE per navigare
@@ -1130,7 +1130,7 @@ DOSKEY [opzioni ...] [nomemacro=[testo]]
                 della linea (default:128)
   /MACROS       Visualizza tutte le macro memorizzate
   /OVERSTRIKE   Modo sovrascrittura: i caratteri sovrascrivono quelli
-                giÖ esistenti (default)
+                gi√† esistenti (default)
   /REINSTALL    Installa una nuova copia di DOSKey
   macroname     Specifica un nome per la macro da creare
   text          Specifica i comandi che si vogliono assegnare alla macro
@@ -1146,7 +1146,7 @@ DOSKEY [opzioni ...] [nomemacro=[testo]]
 I seguenti codici speciali possono essere usati nella definizione di macro:
   $T     Separatore di comandi: permette comandi multipli in una macro
   $1-$9  Parametri: equivalenti a %1-%9 nei programmi batch
-  $*     Simbolo sostituito da tutto ciï che segue il nome della macro nella
+  $*     Simbolo sostituito da tutto ci√≤ che segue il nome della macro nella
          linea di comando.
 .
 
@@ -1173,7 +1173,7 @@ Esegue il comando specificato per ogni file in un insieme di file.
 FOR %variabile IN (insieme) DO comando [parametri-comando]
 
   %variabile Specifica il parametro sostituibile.
-  (insieme)  Specifica un insieme di uno o pió file. Valgono i caratteri jolly.
+  (insieme)  Specifica un insieme di uno o pi√π file. Valgono i caratteri jolly.
   comando    Specifica il comando da eseguire per ogni file.
   parametri-comando
              Specifica i parametri e/o le opzioni per il commando.
@@ -1198,7 +1198,7 @@ con il carattere : (due punti).
 Per esempio:
   ECHO prima del GOTO
   GOTO fine
-  REM questa linea ä ignorata
+  REM questa linea √® ignorata
   :fine
   ECHO dopo il GOTO
 .
@@ -1221,11 +1221,11 @@ IF [NOT] ERRORLEVEL numero comando
 IF [NOT] stringa1==stringa2 comando
 IF [NOT] EXIST nomefile comando
 
-  NOT               Il comando sarÖ eseguito solo se la condizione ä falsa.
+  NOT               Il comando sar√† eseguito solo se la condizione √® falsa.
   ERRORLEVEL numero Specifica una condizione vera se l'ultimo programma
                     eseguito ha restituito un codice d'uscita maggiore o
                     uguale al numero specificato.
-  comando           Specifica il comando da eseguire se la condizione ä
+  comando           Specifica il comando da eseguire se la condizione √®
                     verificata.
   string1==string2  Specifica una condizione vera se le stringhe specificate
                     sono identiche.
@@ -1236,9 +1236,9 @@ IF [NOT] EXIST nomefile comando
 :TEXT_CMDHELP_LH
 Carica un programma nell'aria di memoria alta (upper memory area).
 
-LOADHIGH [unitÖ:][percorso]nomefile [parmetri]
+LOADHIGH [unit√†:][percorso]nomefile [parmetri]
 LOADHIGH [/L:regione1[,mindim1][;regione2[,mindim2]...] [/S]]
-         [unitÖ:][percorso]nomefile [parmetri]
+         [unit√†:][percorso]nomefile [parmetri]
 
 /L:regione1[,mindim1][;regione2[,mindim2]]...
             Specifica la/le regioni di memoria in cui caricare il programma.
@@ -1251,14 +1251,14 @@ LOADHIGH [/L:regione1[,mindim1][;regione2[,mindim2]...] [/S]]
 /S          Riduce l' UMB alla sua dimensione minima mentre sta caricando il
             programma.
 
-[unitÖ:][percorso]nomefile
+[unit√†:][percorso]nomefile
             Specifica nome e posizione del programma.
 .
 
 :TEXT_CMDHELP_LOADFIX
 Carica il programma sopra ai primi 64K di memoria, e lo esegue.
 
-LOADFIX [unitÖ:][percorso]nomefile
+LOADFIX [unit√†:][percorso]nomefile
 
 Usare LOADFIX per caricare il programma se si riceve il messaggio "Packed
 file corrupt" quando si cerca di eseguirlo.
@@ -1267,14 +1267,14 @@ file corrupt" quando si cerca di eseguirlo.
 :TEXT_CMDHELP_MD
 Crea una directory.
 
-MKDIR [unitÖ:]percorso
-MD [unitÖ:]percorso
+MKDIR [unit√†:]percorso
+MD [unit√†:]percorso
 .
 
 :TEXT_CMDHELP_PATH
 Visualizza o imposta il percorso di ricerca per i file eseguibili.
 
-PATH [[unitÖ:]percorso[;...]]
+PATH [[unit√†:]percorso[;...]]
 PATH ;
 
 Digitare PATH ; per cancellare il percorso di ricerca e cercare solo nella
@@ -1296,16 +1296,16 @@ PROMPT [testo]
 
   testo    Specifica il nuovo prompt.
 
-Il prompt puï essere costituito da caratteri normali e i seguenti codici
+Il prompt pu√≤ essere costituito da caratteri normali e i seguenti codici
 speciali:
 
   $Q   = (segno di uguale)
   $$   $ (simbolo del dollaro)
   $T   Ora attuale
   $D   Data odierna
-  $P   UnitÖ and percorso correnti
+  $P   Unit√† and percorso correnti
   $V   Il numero di versione della shell di FreeDOS
-  $N   UnitÖ corrente
+  $N   Unit√† corrente
   $G   > (segno di maggiore)
   $L   < (segno di minore)
   $B   | (segno di pipe)
@@ -1320,8 +1320,8 @@ Digitare PROMPT senza parametri per riottenre le impostazioni di default.
 Aggiunge la directory corrente alla pila delle directory, e cambia la
 directory corrente.
 
-PUSHD [[unitÖ:]percorso]
-  Dove [unitÖ:]percorso ä la nuova directory corrente.
+PUSHD [[unit√†:]percorso]
+  Dove [unit√†:]percorso √® la nuova directory corrente.
 .
 
 :TEXT_CMDHELP_POPD
@@ -1341,8 +1341,8 @@ DIRS
 :TEXT_CMDHELP_RD
 Rimuove (cancella) una directory.
 
-RMDIR [unitÖ:]percorso
-RD [unitÖ:]percorso
+RMDIR [unit√†:]percorso
+RD [unit√†:]percorso
 .
 
 :TEXT_CMDHELP_REM
@@ -1354,13 +1354,13 @@ REM [commento]
 :TEXT_CMDHELP_REN
 Rinomina un file/directory.
 
-RENAME [unitÖ:][percorso][nomedirectory1 | nomefile1]
+RENAME [unit√†:][percorso][nomedirectory1 | nomefile1]
                [nomedirectory2 | nomefile2]
-REN [unitÖ:][percorso][nomedirectory1 | nomefile1]
+REN [unit√†:][percorso][nomedirectory1 | nomefile1]
             [nomedirectory2 | nomefile2]
 
-Notare che non si puï specificare una nuova unitÖ o percorso come destinazione.
-Usare il comando MOVE per fare ciï.
+Notare che non si pu√≤ specificare una nuova unit√† o percorso come destinazione.
+Usare il comando MOVE per fare ci√≤.
 .
 
 :TEXT_CMDHELP_SET#1
@@ -1371,13 +1371,13 @@ SET [/C] [/P] [variabile=[stringa]]
   variabile  Specifica il nome della variabile d'ambiente.
   stringa    Specifica una serie di caratteri da assegnare alla variabile.
 
-* Se non ä specificata una stringa, la variabile ä rimossa dall'ambiente.
+* Se non √® specificata una stringa, la variabile √® rimossa dall'ambiente.
 
 Digitare SET senza parametri per visualizzare le variabili d'ambiente attuali.
 
 /C mantiene il carattere maiuscolo/minuscolo del nome della variabile; per
-default la variabile ä convertita in mauscolo, se non ä giÖ presente
-nell'ambiente, altrimenti il carattere ä mantenuto.
+default la variabile √® convertita in mauscolo, se non √® gi√† presente
+nell'ambiente, altrimenti il carattere √® mantenuto.
 
 /P richiede all'utente una stringa, ed assegna l'input dell'utente alla
 variabile.
@@ -1405,13 +1405,13 @@ nuova. Premere INVIO per mantenere la stessa ora.
 :TEXT_CMDHELP_TRUENAME
 Visualizza il nome completo di percorso del file/percorso specificato.
 
-TRUENAME [unitÖ:][percorso][nomefile]
+TRUENAME [unit√†:][percorso][nomefile]
 .
 
 :TEXT_CMDHELP_TYPE
 Visualizza il contenuto di un file di testo.
 
-TYPE [unitÖ:][percorso]nomefile
+TYPE [unit√†:][percorso]nomefile
 .
 
 :TEXT_CMDHELP_VER
@@ -1436,14 +1436,14 @@ VERIFY.
 .
 
 :TEXT_CMDHELP_FDDEBUG
-Se la modalitÖ debug ä compilata in FreeDOS, questo comando attiva o disattiva
+Se la modalit√† debug √® compilata in FreeDOS, questo comando attiva o disattiva
 l'output di debug, o visualizza lo stato attuale.
 
 FDDEBUG [ON | OFF | nomefile]
 
 Digitare FDDEBUG senza parametri per visualizzare lo stato corrente.
-Se si specifica un file, tutto l'output di debug ä rediretto in questo file;
-l'output ä aggiunto al filee, se giÖ esistente. I nomi speciali "stdout" e
+Se si specifica un file, tutto l'output di debug √® rediretto in questo file;
+l'output √® aggiunto al filee, se gi√† esistente. I nomi speciali "stdout" e
 "stderr" possono essere usati per redirigere l'output di debug sullo
 standard output o standard error.
 .
@@ -1451,16 +1451,16 @@ standard output o standard error.
 :TEXT_CMDHELP_VOL
 Visualizza l'etichetta di volume e il numero di serie del disco, se esistenti.
 
-VOL [unitÖ:]
+VOL [unit√†:]
 .
 
 :TEXT_CMDHELP_QUESTION#1
-Visualizza la lista di comandi e funzionalitÖ disponibili nel programma shell.
+Visualizza la lista di comandi e funzionalit√† disponibili nel programma shell.
 
 ?
 ?comando [argomento]
 
-La prima variante visualizza tutti i comandi e le funzionalitÖ disponibili.
+La prima variante visualizza tutti i comandi e le funzionalit√† disponibili.
 La seconda richiede conferma prima di eseguire il comando specificato come
 il modo tracciamento fosse attivo.
 .
@@ -1479,7 +1479,7 @@ MEMORY
 .
 
 :TEXT_ERROR_COPY_PLUS_DESTINATION#1
-La destinazione del comando COPY non puï contentere il carattere pió ('+').
+La destinazione del comando COPY non pu√≤ contentere il carattere pi√π ('+').
 .
 
 :TEXT_DELETE_FILE#1%
@@ -1502,17 +1502,17 @@ copiati %luKB/%luKB\r\
 .
 
 :TEXT_ERROR_FCOM_IS_DEVICE#0%
-FreeCOM non puï essere un dispositivo: "%s"
+FreeCOM non pu√≤ essere un dispositivo: "%s"
 .
 :TEXT_ERROR_FCOM_INVALID#0%
-Questo file non ä un FreeCOM valido o ä di una versione incompatibile:
+Questo file non √® un FreeCOM valido o √® di una versione incompatibile:
 %s
 .
 
 :TEXT_ERROR_LOADING_STRINGS
 Caricamento delle risorse in memoria fallito, la posizione puntata da
 %COMSPEC% sembra non essere valida. Specificare un'altra posizione da cui
-FreeCOM puï provare a caricare le risorse, per esempio:
+FreeCOM pu√≤ provare a caricare le risorse, per esempio:
 C:\\COMMAND.COM
 o premi INVIO per annullare il caricamento.
 .

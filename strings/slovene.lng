@@ -93,45 +93,45 @@
 #
 ## Issued if a single character option is unknown
 :TEXT_ERROR_INVALID_SWITCH#0%
-Neveljavna moßnost /%c
+Neveljavna mo≈ænost /%c
 .
 
 ## Issued if a longname option is unknown
 :TEXT_ERROR_INVALID_LSWITCH#0%
-Neveljavna moßnost /%s
+Neveljavna mo≈ænost /%s
 .
 
 ## Issued if the context, the type of argument etc. is invalid
 :TEXT_ERROR_ILLFORMED_OPTION#0%
-Nepravilno oblikovana moßnost "%s"
+Nepravilno oblikovana mo≈ænost "%s"
 .
 
 :TEXT_ERROR_OPT_ARG#0%
-Moßnost "%s" ne more imeti argumenta
+Mo≈ænost "%s" ne more imeti argumenta
 .
 
 :TEXT_ERROR_OPT_NOARG#0%
-Moßnost "%s" mora imeti argument
+Mo≈ænost "%s" mora imeti argument
 .
 
 :TEXT_INVALID_NUMBER#0%
-Neveljavna Átevilka v moßnosti "%s"
+Neveljavna ≈°tevilka v mo≈ænosti "%s"
 .
 
 :TEXT_ERROR_CLOSE_QUOTE#0%
-Manjka konüni narekovaj: %c
+Manjka konƒçni narekovaj: %c
 .
 
 :TEXT_ERROR_TEMPFILE
-Ni mogoüe ustvariti zaüasne datoteke
+Ni mogoƒçe ustvariti zaƒçasne datoteke
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
-Preveü parametrov: %s
+Preveƒç parametrov: %s
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS
-Preveü parametrov.
+Preveƒç parametrov.
 .
 
 :TEXT_ERROR_INVALID_PARAMETER#0%
@@ -139,15 +139,15 @@ Neveljaven parameter: %s
 .
 
 :TEXT_ERROR_PATH_NOT_FOUND
-Poti ni mogoüe najti.
+Poti ni mogoƒçe najti.
 .
 
 :TEXT_ERROR_FILE_NOT_FOUND
-Datoteke ni mogoüe najti.
+Datoteke ni mogoƒçe najti.
 .
 
 :TEXT_ERROR_SFILE_NOT_FOUND#0%
-Datoteke ni mogoüe najti: %s
+Datoteke ni mogoƒçe najti: %s
 .
 
 :TEXT_ERROR_REQ_PARAM_MISSING#0%
@@ -167,11 +167,11 @@ Ni dovolj spomina.
 .
 
 :TEXT_ERROR_OUT_OF_DOS_MEMORY#1
-Ni mogoüe dodeliti spomina za DOS.
+Ni mogoƒçe dodeliti spomina za DOS.
 .
 
 :TEXT_ERROR_CANNOTPIPE
-Ni mogoüe preusmerjati izhoda; ni mogoüe odpreti zaüasne datoteke.
+Ni mogoƒçe preusmerjati izhoda; ni mogoƒçe odpreti zaƒçasne datoteke.
 .
 
 :TEXT_ERROR_LONG_LINE_BATCHFILE#0%
@@ -179,7 +179,7 @@ Vrstica %ld v datoteki %s je predolga.
 .
 
 :TEXT_ERROR_BFILE_VANISHED#0%
-Ukazne datoteke "%s" ni mogoüe najti.
+Ukazne datoteke "%s" ni mogoƒçe najti.
 .
 
 :TEXT_ERROR_BFILE_LABEL#0%
@@ -191,33 +191,33 @@ Ukazna datoteka %s ne vsebuje oznake %s.
 .
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ENV_VAR#0%
-Ni mogoüe nastaviti okoljske spremenljivke %s.
+Ni mogoƒçe nastaviti okoljske spremenljivke %s.
 Je okolje polno?
 .
 :TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
-Okoljske spremenljivke %s ni mogoüe najti.
+Okoljske spremenljivke %s ni mogoƒçe najti.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
-Ni okolja. Morda ni dovolj spomina. Uporabite moßnost /E.
+Ni okolja. Morda ni dovolj spomina. Uporabite mo≈ænost /E.
 .
 
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ALIAS#1%
-Ni mogoüe nastaviti sopomenke "%s". Je spomin za sopomenke poln?
+Ni mogoƒçe nastaviti sopomenke "%s". Je spomin za sopomenke poln?
 .
 :TEXT_ERROR_ALIAS_NOT_FOUND#1%
-Sopomenke "%s" ni mogoüe najti.
+Sopomenke "%s" ni mogoƒçe najti.
 .
 :TEXT_ERROR_NO_ALIAS_SEGMENT#1
 Ni prostora za sopomenke. Morda ni dovolj spomina.
 .
 
 :TEXT_ERROR_SYNTAX_STR#0%
-Sintaktiüna napaka: %s
+Sintaktiƒçna napaka: %s
 .
 
 :TEXT_ERROR_SYNTAX
-Sintaktiüna napaka.
+Sintaktiƒçna napaka.
 .
 
 :TEXT_ERROR_FILENAME_TOO_LONG#0%
@@ -225,15 +225,15 @@ Predolgo ime datoteke: %s
 .
 
 :TEXT_ERROR_SELFCOPY#0%
-Datoteke %s ni mogoüe kopirati nase.
+Datoteke %s ni mogoƒçe kopirati nase.
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
-Ukazna vrstica je zaradi razÁiritve sopomenk postala predolga!
+Ukazna vrstica je zaradi raz≈°iritve sopomenk postala predolga!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
-Ukazna vrstica je daljÁa od 125 znakov.
+Ukazna vrstica je dalj≈°a od 125 znakov.
 .
 
 :TEXT_ERROR_HISTORY_SIZE#1%
@@ -246,7 +246,7 @@ Zgodovina je prazna.
 
 
 :TEXT_ERROR_BAD_MCB_CHAIN
-Veriga MCB je poÁkodovana ali pa sistem ni zdrußljiv z MS-DOS.
+Veriga MCB je po≈°kodovana ali pa sistem ni zdru≈æljiv z MS-DOS.
 .
 
 :TEXT_ERROR_UNDEFINED_ERROR#0%
@@ -258,7 +258,7 @@ Illegal memory region %d - ignored.
 .
 
 :TEXT_ERROR_ON_OR_OFF
-Treba je doloüiti ON ali OFF.
+Treba je doloƒçiti ON ali OFF.
 .
 
 :TEXT_ERROR_BAD_VARIABLE
@@ -270,7 +270,7 @@ IN manjka v ukazu FOR.
 .
 
 :TEXT_ERROR_MISSING_PARENTHESES#1
-En ali veü oklepajev manjka.
+En ali veƒç oklepajev manjka.
 .
 
 :TEXT_ERROR_DO_MISSING#1
@@ -282,11 +282,11 @@ Besedi DO v ukazu FOR ne sledi ukaz.
 .
 
 :TEXT_ERROR_REDIRECT_FROM_FILE#0%
-Ni mogoüe preusmeriti vhoda iz datoteke %s.
+Ni mogoƒçe preusmeriti vhoda iz datoteke %s.
 .
 
 :TEXT_ERROR_REDIRECT_TO_FILE#0%
-Ni mogoüe preusmeriti izhoda v datoteko %s.
+Ni mogoƒçe preusmeriti izhoda v datoteko %s.
 .
 
 :TEXT_ERROR_EMPTY_REDIRECTION#1
@@ -298,11 +298,11 @@ Neveljaven datum.
 .
 
 :TEXT_ERROR_INVALID_TIME
-Neveljaven üas.
+Neveljaven ƒças.
 .
 
 :TEXT_ERROR_NO_GOTO_LABEL
-Ni doloüene oznake za GOTO.
+Ni doloƒçene oznake za GOTO.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
@@ -310,7 +310,7 @@ Ta COMMAND.COM ne vsebuje ukaza CTTY.
 .
 
 :TEXT_ERROR_NORW_DEVICE#0%
-Naprava "%" ni veljavna ali pa ne omogoüa branja in pisanja.
+Naprava "%" ni veljavna ali pa ne omogoƒça branja in pisanja.
 .
 
 :TEXT_ERROR_CTTY_DUP#0%
@@ -318,11 +318,11 @@ Failed to change file descriptors to TTY '%s'.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
-/L Áe ni podprt.
+/L ≈°e ni podprt.
 .
 
 :TEXT_ERROR_U_NOTIMPLEMENTED
-/U Áe ni podprt.
+/U ≈°e ni podprt.
 .
 
 :TEXT_ERROR_WRITING_DEST
@@ -330,31 +330,31 @@ Napaka pri pisanju na cilj.
 .
 
 :TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
-Ni mogoüe odpreti izvora: %s
+Ni mogoƒçe odpreti izvora: %s
 .
 
 :TEXT_ERROR_OPEN_FILE#0%
-Ni mogoüe odpreti datoteke "%s"
+Ni mogoƒçe odpreti datoteke "%s"
 .
 
 :TEXT_ERROR_READ_FILE#0%
-Ni mogoüe brati iz datoteke "%s"
+Ni mogoƒçe brati iz datoteke "%s"
 .
 
 :TEXT_ERROR_WRITE_FILE#0%
-Ni mogoüe pisati v datoteko "%s"
+Ni mogoƒçe pisati v datoteko "%s"
 .
 
 :TEXT_ERROR_LEADING_PLUS
-Znak za zdrußevanje, "+", ne more stati pred datotekami.
+Znak za zdru≈æevanje, "+", ne more stati pred datotekami.
 .
 
 :TEXT_ERROR_TRAILING_PLUS
-Znak za zdrußevanje, "+", ne more slediti datotekam.
+Znak za zdru≈æevanje, "+", ne more slediti datotekam.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
-Niü za postoriti.
+Niƒç za postoriti.
 .
 
 :TEXT_ERROR_COPY
@@ -365,25 +365,25 @@ COPY ni uspel
 IF EXIST: manjka ime datoteke
 .
 :TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
-IF ERRORLEVEL: manjka Átevilo
+IF ERRORLEVEL: manjka ≈°tevilo
 .
 :TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
-IF ERRORLEVEL: neveljavno Átevilo
+IF ERRORLEVEL: neveljavno ≈°tevilo
 .
 :TEXT_ERROR_IF_MISSING_COMMAND#1
 IF: manjka ukaz
 .
 
 :TEXT_NOT_IMPLEMENTED_YET
-Ta funkcija Áe ni podprta.
+Ta funkcija ≈°e ni podprta.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
-Ni bilo mogoüe naloßiti sporoüil v spomin.
+Ni bilo mogoƒçe nalo≈æiti sporoƒçil v spomin.
 .
 
 :TEXT_MSG_NOTIMPLEMENTED
-Ta COMMAND.COM ne vsebuje moßnosti /MSG.
+Ta COMMAND.COM ne vsebuje mo≈ænosti /MSG.
 .
 
 :TEXT_MSG_ITEMS_DISPLAYED#1%
@@ -391,18 +391,18 @@ Prikazanih %u elementov.
 .
 
 :TEXT_CORRUPT_COMMAND_LINE
-PoÁkodovana ukazna vrstica. To je notranja napaka in je povezana
+Po≈°kodovana ukazna vrstica. To je notranja napaka in je povezana
 s sistemom, v katerem se izvaja COMMAND.COM. Prosimo, da to
-napako sporoüite.
+napako sporoƒçite.
 .
 
 :TEXT_QUOTED_C_OR_K#1
-Moßnosti /C in /K ni mogoüe citirati, ker se ne upoÁtevata.
+Mo≈ænosti /C in /K ni mogoƒçe citirati, ker se ne upo≈°tevata.
 .
 
 :TEXT_INIT_FULLY_QUALIFIED#1%
 Pot do COMMAND.COM mora biti absolutna!
-To pomeni, da mora vsebovati ürko pogona, ki ji sledi "\\".
+To pomeni, da mora vsebovati ƒçrko pogona, ki ji sledi "\\".
 Primer: C:\\FDOS
 
 COMMAND.COM trenutno uporablja to pot:
@@ -426,16 +426,16 @@ Pogon %c: se ne odziva.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE
-Izmenjava ni uspela: sopomenke zavzemajo preveü spomina.
+Izmenjava ni uspela: sopomenke zavzemajo preveƒç spomina.
 .
 
 
 :TEXT_ERROR_KSWAP_ALLOCMEM
-Izmenjava ni uspela: ni mogoüe dodeliti oddaljenega spomina.
+Izmenjava ni uspela: ni mogoƒçe dodeliti oddaljenega spomina.
 .
 
 :TEXT_ERROR_ALIAS_OUT_OF_MEM#1
-Ni veü prostora za sopomenke.
+Ni veƒç prostora za sopomenke.
 .
 
 :TEXT_ERROR_ALIAS_NO_SUCH#1%
@@ -443,7 +443,7 @@ Sopomenka "%s" ne obstaja.
 .
 
 :TEXT_ERROR_ALIAS_INSERT#1
-Ni bilo mogoüe vstaviti sopomenke.
+Ni bilo mogoƒçe vstaviti sopomenke.
 .
 
 :TEXT_ALIAS_INVALID_NAME#1%
@@ -461,7 +461,7 @@ such as history, direcory stack etc.
 .
 
 :TEXT_ERROR_CONTEXT_LENGTH#1%
-Velikost konteksta znaÁa %lu bajtov, kar je veüje od omejitve.
+Velikost konteksta zna≈°a %lu bajtov, kar je veƒçje od omejitve.
 Spremenjena bo na %u bajtov.
 .
 
@@ -502,7 +502,7 @@ Velikost zgodovine je %d bajtov.
 .
 
 :TEXT_MSG_DOSKEY
-Funkcije DOSKEY so ße omogoüene.
+Funkcije DOSKEY so ≈æe omogoƒçene.
 .
 
 :TEXT_MSG_ECHO_STATE#0%
@@ -548,7 +548,7 @@ Vnesite nov datum ([cc]yy%smm%sdd): \
 .
 
 :TEXT_MSG_CURRENT_TIME#0%
-Trenutni üas je %s
+Trenutni ƒças je %s
 .
 
 :TEXT_STRING_PM#1
@@ -559,7 +559,7 @@ Trenutni üas je %s
 .
 
 :TEXT_MSG_ENTER_TIME#1
-Vnesite nov üas: \
+Vnesite nov ƒças: \
 .
 
 # src-file <operation> target-file
@@ -576,7 +576,7 @@ Vnesite nov üas: \
 DdNn{CR}{LF}{CBREAK}
 aabb   b   b       b
 Vse datoteke v imeniku "%s" bodo izbrisane.
-Ste prepriüani (D/N)? \
+Ste prepriƒçani (D/N)? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -629,7 +629,7 @@ Append to '%s' (Da/Ne/Vse/Prekini) ? \
 :PROMPT_DELETE_FILE#1%
 DdNnVvPp{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Naj izbriÁem "%s" (Da/Ne/Vse/Prekini)? \
+Naj izbri≈°em "%s" (Da/Ne/Vse/Prekini)? \
 .
 
 :TEXT_UNKNOWN_FILENAME#1
@@ -637,7 +637,7 @@ Naj izbriÁem "%s" (Da/Ne/Vse/Prekini)? \
 .
 
 :TEXT_DIRSTACK_EMPTY
-ImeniÁki sklad je prazen.
+Imeni≈°ki sklad je prazen.
 .
 
 ## Strings to construct the DIR output
@@ -651,7 +651,7 @@ je %s
 nima oznake
 .
 :TEXT_DIR_HDR_SERIAL_NUMBER#0%
- Serijska Átevilka nosilca je %04X-%04X
+ Serijska ≈°tevilka nosilca je %04X-%04X
 .
 :TEXT_DIR_FTR_FILES#1%
 %10s datotek\
@@ -660,7 +660,7 @@ nima oznake
    %12s bajtov
 .
 :TEXT_DIR_FTR_TOTAL_NUMBER
-Êtevilo izpisanih datotek:
+≈†tevilo izpisanih datotek:
 .
 :TEXT_DIR_FTR_DIRS#1%
 %10s imenikov\
@@ -718,7 +718,7 @@ tor\
 sre\
 .
 :TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
-üet\
+ƒçet\
 .
 :TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
 pet\
@@ -754,13 +754,13 @@ Funkcije, ki so na voljo:
 [sopomenke] \
 .
 :TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
-[izboljÁan vnos] \
+[izbolj≈°an vnos] \
 .
 :TEXT_SHOWCMD_FEATURE_HISTORY#1
 [zgodovina] \
 .
 :TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
-[dokonüavanje imen datotek] \
+[dokonƒçavanje imen datotek] \
 .
 :TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
 [izmenjava] \
@@ -769,7 +769,7 @@ Funkcije, ki so na voljo:
 [start logging] \
 .
 :TEXT_SHOWCMD_FEATURE_LAST_DIR#1
-[prejÁnji imenik] \
+[prej≈°nji imenik] \
 .
 :TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
 [dolga imena datotek] \
@@ -790,15 +790,15 @@ Funkcije, ki so na voljo:
 [DOS NLS] \
 .
 :TEXT_SHOWCMD_FEATURE_DIRSTACK#1
-[imeniÁki sklad (PUSHD)] \
+[imeni≈°ki sklad (PUSHD)] \
 .
 :TEXT_SHOWCMD_FEATURE_DEBUG#1
-[razhro∫üevanje FreeCOMa] \
+[razhro‚ïëƒçevanje FreeCOMa] \
 .
 
 :TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
 
-Pritisnite F8 za naüin sledenja ali F5 za preskoüitev %s... \
+Pritisnite F8 za naƒçin sledenja ali F5 za preskoƒçitev %s... \
 .
 :TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
 Preskakujem %s.
@@ -809,7 +809,7 @@ DOS verzija %u.%u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS
-Jedro FreeDOS (izgradnja 1933 ali starejÁa)
+Jedro FreeDOS (izgradnja 1933 ali starej≈°a)
 .
 
 :TEXT_MSG_VER_LATER_FREEDOS#0%
@@ -820,33 +820,33 @@ Jedro FreeDOS, verzija %d.%d.%d
 :TEXT_MSG_VER_WARRANTY
 (C) 1994-2005 Tim Norman in drugi.
 
-Ta program je razpeüavan v upanju, da bo komu uporaben, toda BREZ
-KAKRÊNEGAKOLI JAMSTVA; cel¢ brez jamstva PRODAJNOSTI ali PRIMERNOSTI ZA
-KATERIKOLI NAMEN. Za veü podrobnosti glejte SploÁno dovoljenje GNU (GNU GPL).
+Ta program je razpeƒçavan v upanju, da bo komu uporaben, toda BREZ
+KAKR≈†NEGAKOLI JAMSTVA; cel√≥ brez jamstva PRODAJNOSTI ali PRIMERNOSTI ZA
+KATERIKOLI NAMEN. Za veƒç podrobnosti glejte Splo≈°no dovoljenje GNU (GNU GPL).
 
-Poroüajte o hroÁüih na freedos-freecom@lists.sourceforge.net.
+Poroƒçajte o hro≈°ƒçih na freedos-freecom@lists.sourceforge.net.
 Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
 (C) 1994-2005 Tim Norman in drugi.
 
-To je prosta programska oprema; razpeüavate in/ali spreminjate jo lahko pod
-pogoji, navedenimi v SploÁnem dovoljenju GNU (GNU GPL), ki ga je izdala
+To je prosta programska oprema; razpeƒçavate in/ali spreminjate jo lahko pod
+pogoji, navedenimi v Splo≈°nem dovoljenju GNU (GNU GPL), ki ga je izdala
 organizacija Free Software Corporation; slediti morate pogojem verzije 2
-ali novejÁe.
+ali novej≈°e.
 
-Poroüajte o hroÁüih na  freedos-freecom@lists.sourceforge.net.
+Poroƒçajte o hro≈°ƒçih na  freedos-freecom@lists.sourceforge.net.
 Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_DEVELOPERS
-FreeCOM, FreeDOSovo ukazno lupino, razvija veliko ljudi; glejte priloßeno
+FreeCOM, FreeDOSovo ukazno lupino, razvija veliko ljudi; glejte prilo≈æeno
 datoteko HISTORY.TXT.
 
-FreeCOM trenutno vzdrßuje Steffen Kaiser: freecom@freedos.org.
+FreeCOM trenutno vzdr≈æuje Steffen Kaiser: freecom@freedos.org.
 
-Poroüajte o hroÁüih na freedos-freecom@lists.sourceforge.net.
+Poroƒçajte o hro≈°ƒçih na freedos-freecom@lists.sourceforge.net.
 Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
 .
 
@@ -890,10 +890,10 @@ Heap:              %5lu bajtov prostih
 \tZgodovina:       omejitev %5u bajtov, trenutno %5u, %5u elementov
 .
 :TEXT_MEMORY_CTXT_DIRSTACK#1%
-\tImeniÁki sklad:  omejitev %5u bajtov, trenutno %5u, %5u elementov
+\tImeni≈°ki sklad:  omejitev %5u bajtov, trenutno %5u, %5u elementov
 .
 :TEXT_MEMORY_CTXT_LASTDIR#1%
-\tPrejÁnji imenik: porabljenih %5u bajtov, %5u elementov
+\tPrej≈°nji imenik: porabljenih %5u bajtov, %5u elementov
 .
 :TEXT_MEMORY_CTXT_BATCH#1%
 \tBatch nesting  : porabljenih %5u bajtov, %5u elementov
@@ -905,10 +905,10 @@ Heap:              %5lu bajtov prostih
 
 ## CHCP
 :TEXT_ERROR_GET_CODEPAGE#1
-Ni mogoüe dobiti podatka o trenutno izbranem kodiranju.
+Ni mogoƒçe dobiti podatka o trenutno izbranem kodiranju.
 .
 :TEXT_ERROR_SET_CODEPAGE#1
-Ni mogoüe zamenjati kodiranja.
+Ni mogoƒçe zamenjati kodiranja.
 .
 :TEXT_DISPLAY_CODEPAGE#1%
 Trenutno izbrano kodiranje je %u.
@@ -920,12 +920,12 @@ The system codepage (properly) is: %u.
 #
 
 :TEXT_CMDHELP_ALIAS
-Prikaße, nastavlja, ali odstranjuje sopomenke.
+Prika≈æe, nastavlja, ali odstranjuje sopomenke.
 
 ALIAS [sopomenka[=][definicija]]
 
-  sopomenka   Doloüi ime sopomenke.
-  definicija  Doloüi niz znakov, v katere bo sopomenka razÁirjena.
+  sopomenka   Doloƒçi ime sopomenke.
+  definicija  Doloƒçi niz znakov, v katere bo sopomenka raz≈°irjena.
 
 Vnesite ALIAS brez parametrov, da vidite trenutno definirane sopomenke.
 .
@@ -956,7 +956,7 @@ CALL [/S | /N] [/Y] [pogon:][pot]datoteka [batch-parameters]
 .
 
 :TEXT_CMDHELP_CD
-Prikaße ime trenutnega imenika ali pa ga spremeni.
+Prika≈æe ime trenutnega imenika ali pa ga spremeni.
 
 CHDIR [pogon:][pot]
 CHDIR[..]
@@ -965,33 +965,33 @@ CD[..]
 CD -
 
   ..  Gre v nadrejeni imenik.
-  -   Gre v prejÁnji imenik, üe je ta funkcija omogoüena.
+  -   Gre v prej≈°nji imenik, ƒçe je ta funkcija omogoƒçena.
 
-Vnesite CD pogon:, da vidite trenutni imenik doloüenega pogona.
+Vnesite CD pogon:, da vidite trenutni imenik doloƒçenega pogona.
 Vnesite CD brez parametrov, da vidite trenutni pogon in imenik.
 Glej tudi: CDD
 .
 
 :TEXT_CMDHELP_CDD
-Prikaße ime trenutnega pogona in imenika ali pa ju spremeni.
+Prika≈æe ime trenutnega pogona in imenika ali pa ju spremeni.
 
 CDD [pogon:][pot]
 CDD[..]
 
   ..  Gre v nadrejeni imenik.
-  -   Gre v prejÁnji imenik, üe je ta funkcija omogoüena.
+  -   Gre v prej≈°nji imenik, ƒçe je ta funkcija omogoƒçena.
 
-¨e je doloüen samo pogon, se spremeni trenutni pogon; to je edina razlika med
+ƒåe je doloƒçen samo pogon, se spremeni trenutni pogon; to je edina razlika med
 CDD in CHDIR.
 Vnesite CDD brez parametrov, da vidite trenutni pogon in imenik.
 .
 
 :TEXT_CMDHELP_CHCP
-Prikaße ali spremeni trenutno kodiranje znakov (kodno stran).
+Prika≈æe ali spremeni trenutno kodiranje znakov (kodno stran).
 
 CHCP [nnn]
 
-  nnn  Doloüi kodiranje.
+  nnn  Doloƒçi kodiranje.
 
 Vnesite CHCP brez parametra, da vidite trenutno izbrano kodiranje.
 .
@@ -1003,45 +1003,45 @@ CLS
 .
 
 :TEXT_CMDHELP_COMMAND
-Zaßene novo kopijo FreeCOMa.
+Za≈æene novo kopijo FreeCOMa.
 
 COMMAND [[pogon:]pot] [naprava] [/E:n] [/L:n] [/U:n] [/P] [/MSG] [/LOW]
   [/Y [/[C|K] ukaz]]
 
-  [pogon:]pot  Doloüi imenik, ki vsebuje COMMAND.COM.
-  naprava      Doloüi napravo, ki naj bo uporabljena za vhod in izhod.
-  /E:nnnnn     Nastavi zaüetno velikost okolja na n bajtov.
+  [pogon:]pot  Doloƒçi imenik, ki vsebuje COMMAND.COM.
+  naprava      Doloƒçi napravo, ki naj bo uporabljena za vhod in izhod.
+  /E:nnnnn     Nastavi zaƒçetno velikost okolja na n bajtov.
                (n naj bo med 256 in 32768)
-  /L:n         Doloüi velikost notranjih struktur (zahteva /P).
+  /L:n         Doloƒçi velikost notranjih struktur (zahteva /P).
                (n naj bo med 128 in 1024)
-  /U:n         Doloüi velikost spomina za vhod (zahteva /P)
+  /U:n         Doloƒçi velikost spomina za vhod (zahteva /P)
                (n naj bo med 128 in 255)
-  /P           Naredi novo lupino trajno (ne da se je konüati).
-  /MSG         Shrani vsa sporoüila o napakah v spominu (zahteva /P).
-  /LOW         Prisili lupino, da shrani stalen del v nißji del spomina.
-  /Y           Koraka skozi ukazno datoteko, ki jo doloüi /C ali /K.
-  /C ukaz      Izvede naveden ukaz in se konüa.
+  /P           Naredi novo lupino trajno (ne da se je konƒçati).
+  /MSG         Shrani vsa sporoƒçila o napakah v spominu (zahteva /P).
+  /LOW         Prisili lupino, da shrani stalen del v ni≈æji del spomina.
+  /Y           Koraka skozi ukazno datoteko, ki jo doloƒçi /C ali /K.
+  /C ukaz      Izvede naveden ukaz in se konƒça.
   /K ukaz      Izvede naveden ukaz in nadaljuje z izvajanjem.
 .
 
 :TEXT_CMDHELP_COPY
-Kopira eno ali veü datotek na drugo lokacijo.
+Kopira eno ali veƒç datotek na drugo lokacijo.
 
 COPY [/A | /B] izvor [/A | /B] [+ izvor [/A | /B] [+ ...]] [cilj [/A | /B]]
   [/V] [/Y | /-Y]
 
-  izvor  Doloüi datoteke, ki naj se kopirajo.
-  /A     Doloüi ASCII datoteko z besedilom.
-  /B     Doloüi binarno datoteko.
-  cilj   Doloüi imenik in/ali ime za nove datoteke.
+  izvor  Doloƒçi datoteke, ki naj se kopirajo.
+  /A     Doloƒçi ASCII datoteko z besedilom.
+  /B     Doloƒçi binarno datoteko.
+  cilj   Doloƒçi imenik in/ali ime za nove datoteke.
   /V     Preveri, ali so se datoteke pravilno zapisale.
-  /Y     Ne vpraÁa, ali ßelite zamenjati obstojeüo ciljno datoteko.
-  /-Y    VpraÁa, ali ßelite zamenjati obstojeüo ciljno datoteko.
+  /Y     Ne vpra≈°a, ali ≈æelite zamenjati obstojeƒço ciljno datoteko.
+  /-Y    Vpra≈°a, ali ≈æelite zamenjati obstojeƒço ciljno datoteko.
 
-Moßnost /Y je lahko prednastavljena v spremenljivki COPYCMD.
-Onemogoüite jo lahko z /-Y na ukazni vrstici.
+Mo≈ænost /Y je lahko prednastavljena v spremenljivki COPYCMD.
+Onemogoƒçite jo lahko z /-Y na ukazni vrstici.
 
-Da zdrußite veü datotek v eno, doloüite samo eno ciljno datoteko, toda veü
+Da zdru≈æite veƒç datotek v eno, doloƒçite samo eno ciljno datoteko, toda veƒç
 izvornih datotek (z nadomestnimi znaki ali kot datoteka1+datoteka2+datoteka3).
 .
 
@@ -1050,60 +1050,60 @@ Zamenja terminal, s katerim upravljate sistem.
 
 CTTY naprava
 
-  naprava  Terminal, ki ga ßelite uporabljati, npr. COM1.
+  naprava  Terminal, ki ga ≈æelite uporabljati, npr. COM1.
 .
 
 :TEXT_CMDHELP_DATE#1
-Prikaße ali nastavi datum.
+Prika≈æe ali nastavi datum.
 
 DATE [/D] [datum]
 
-Vnesite DATE brez parametrov, da vidite trenutni datum in istoüasno nastavite
-novega. Pritisnite Enter, da obdrßite isti datum.
+Vnesite DATE brez parametrov, da vidite trenutni datum in istoƒçasno nastavite
+novega. Pritisnite Enter, da obdr≈æite isti datum.
 
-/D onemogoüi interaktivnost.
+/D onemogoƒçi interaktivnost.
 .
 
 :TEXT_CMDHELP_DEL#2
-IzbriÁe eno ali veü datotek.
+Izbri≈°e eno ali veƒç datotek.
 
 DEL [pogon:][pot]datoteka [/P] [/V]
 ERASE [pogon:][pot]datoteka [/P] [/V]
 
-  [pogon:][pot]datoteka  Doloüi datoteko za izbris. Veü datotek doloüite z
+  [pogon:][pot]datoteka  Doloƒçi datoteko za izbris. Veƒç datotek doloƒçite z
                          nadomestnimi znaki.
-  /P                     VpraÁa za potrditev, preden izbriÁe vsako datoteko.
-  /V                     Prikaße izbrisane datoteke.
+  /P                     Vpra≈°a za potrditev, preden izbri≈°e vsako datoteko.
+  /V                     Prika≈æe izbrisane datoteke.
 .
 
 :TEXT_CMDHELP_DIR#4
-Prikaße seznam datotek in podimenikov v imeniku.
+Prika≈æe seznam datotek in podimenikov v imeniku.
 
 DIR [pogon:][pot][datoteka] [/P] [/W] [/A[[:]atributi]] [/O[[:]razvrstitev]]
   [/S] [/B] [/L] [/LFN] [/Y|/4]
 
  [pogon:][pot][datoteka]
-              Doloüi pogon, imenik, in/ali datoteke, ki naj bodo prikazane.
-              Uporabite lahko nadomestne znake ali veü izrazov.
+              Doloƒçi pogon, imenik, in/ali datoteke, ki naj bodo prikazane.
+              Uporabite lahko nadomestne znake ali veƒç izrazov.
  /P           Se ustavi po vsakem zaslonu informacij.
- /W           Êirok seznam.
- /A           Prikaße datoteke z doloüenimi atributi.
+ /W           ≈†irok seznam.
+ /A           Prika≈æe datoteke z doloƒçenimi atributi.
  atributi      D  imeniki             R  datoteke samo za branje
                H  skrite datoteke     A  datoteke, pripravljene za arhiviranje
                S  sistemske datoteke  -  predpona "ne"
- /O           Doloüi vrstni red.
- razvrstitev   N  po imenu (abecedno)     S  po velikosti (manjÁi najprej)
-               E  po konünici (abecedno)  D  üasovno (starejÁi najprej)
+ /O           Doloƒçi vrstni red.
+ razvrstitev   N  po imenu (abecedno)     S  po velikosti (manj≈°i najprej)
+               E  po konƒçnici (abecedno)  D  ƒçasovno (starej≈°i najprej)
                G  najprej imeniki         -  predpona za obratni vrstni red
-               A  po üasu zadnjega dostopa (starejÁi najprej)
- /S           Prikaße datoteke v doloüenem imeniku in vseh podimenikih.
- /B           Minimalistiüen format (brez glave in povzetka).
- /L           Uporabi male ürke.
- /LFN         Prikaße dolga imena datotek.
- /Y ali /4    Prikaße letnice s 4 Átevkami.
+               A  po ƒçasu zadnjega dostopa (starej≈°i najprej)
+ /S           Prika≈æe datoteke v doloƒçenem imeniku in vseh podimenikih.
+ /B           Minimalistiƒçen format (brez glave in povzetka).
+ /L           Uporabi male ƒçrke.
+ /LFN         Prika≈æe dolga imena datotek.
+ /Y ali /4    Prika≈æe letnice s 4 ≈°tevkami.
 
-Moßnosti so lahko prednastavljene v spremenljivki DIRCMD. Onemogoüite jih
-lahko tako, da pred moßnostjo vnesete "-", npr. /-W.
+Mo≈ænosti so lahko prednastavljene v spremenljivki DIRCMD. Onemogoƒçite jih
+lahko tako, da pred mo≈ænostjo vnesete "-", npr. /-W.
 .
 
 :TEXT_CMDHELP_DOSKEY#1
@@ -1111,8 +1111,8 @@ Funkcije programa DOSKEY zdaj vsebuje FreeCOM.
 S tipkama gor in dol brskate po zgodovini, z ukazom HISTORY pa vidite celotno
 zgodovino vpisanih ukazov.
 S tipkami levo, desno, Home, in End se pomikate po ukazni vrstici.
-S tipko Insert preklapljate med naüinom vrivanja in prepisovanja.
-S tipko Tab dokonüate ime datoteke na podlagi trenutno vneÁene besede; üe jo
+S tipko Insert preklapljate med naƒçinom vrivanja in prepisovanja.
+S tipko Tab dokonƒçate ime datoteke na podlagi trenutno vne≈°ene besede; ƒçe jo
 pritisnete dvakrat, boste videli vse datoteke, ki se z njo ujemajo.
 .
 
@@ -1149,75 +1149,75 @@ The following are special codes you can use in DOSKey macro definitions:
 .
 
 :TEXT_CMDHELP_ECHO
-Prikazuje sporoüila ali omogoüi ali onemogoüi izpisovanje ukazov.
+Prikazuje sporoƒçila ali omogoƒçi ali onemogoƒçi izpisovanje ukazov.
 
   ECHO [ON | OFF]
-  ECHO [sporoüilo]
+  ECHO [sporoƒçilo]
 
 Vnesite ECHO brez parametrov, da izveste trenutno stanje ECHO.
 .
 
 :TEXT_CMDHELP_EXIT
-Konüa FreeCOM, razen üe je ta bil naloßen z moßnostjo /P.
+Konƒça FreeCOM, razen ƒçe je ta bil nalo≈æen z mo≈ænostjo /P.
 
 EXIT
 .
 
 :TEXT_CMDHELP_FOR
-Izvede doloüen ukaz za vsako datoteko v mnoßici datotek.
+Izvede doloƒçen ukaz za vsako datoteko v mno≈æici datotek.
 
-FOR %spremenljivka IN (mnoßica) DO ukaz [parametri]
+FOR %spremenljivka IN (mno≈æica) DO ukaz [parametri]
 
-  %spremenljivka  Doloüi ime spremenljivke.
-  (mnoßica)       Doloüi mnoßico ene ali veü datotek. Uporabite lahko
+  %spremenljivka  Doloƒçi ime spremenljivke.
+  (mno≈æica)       Doloƒçi mno≈æico ene ali veƒç datotek. Uporabite lahko
                   nadomestne znake.
-  ukaz            Doloüi ukaz, ki naj bo izveden za vsako datoteko.
-  parametri       Doloüi parametre za naveden ukaz.
+  ukaz            Doloƒçi ukaz, ki naj bo izveden za vsako datoteko.
+  parametri       Doloƒçi parametre za naveden ukaz.
 
 V ukazni datoteki vnesite %%spremenljivka namesto %spremenljivka.
 
 Primer:
-  FOR %f IN (---zaüetek--- a*.* ---konec---) DO ECHO - %f -
+  FOR %f IN (---zaƒçetek--- a*.* ---konec---) DO ECHO - %f -
 .
 
 :TEXT_CMDHELP_GOTO
-V ukazni datoteki nadaljuje izvajanje od oznaüene vrstice.
+V ukazni datoteki nadaljuje izvajanje od oznaƒçene vrstice.
 
 GOTO oznaka
 
-  oznaka  Doloüi oznako vrstice.
+  oznaka  Doloƒçi oznako vrstice.
 
-Oznaka v vrstici stoji sama, zaüne pa se z dvopiüjem.
+Oznaka v vrstici stoji sama, zaƒçne pa se z dvopiƒçjem.
 .
 
 :TEXT_CMDHELP_HISTORY#1
-Zgodovina vneÁenih ukazov.
+Zgodovina vne≈°enih ukazov.
 
 HISTORY [velikost]
 
-Brez velikosti je prikazana celotna zgodovina vneÁenih ukazov.
-Z velikostjo se spremeni velikost spomina, posveüenega zgodovini.
+Brez velikosti je prikazana celotna zgodovina vne≈°enih ukazov.
+Z velikostjo se spremeni velikost spomina, posveƒçenega zgodovini.
 .
 
 :TEXT_CMDHELP_IF
-V ukazni datoteki izvede ukaz, üe je izpolnjen doloüen pogoj.
+V ukazni datoteki izvede ukaz, ƒçe je izpolnjen doloƒçen pogoj.
 
-IF [NOT] ERRORLEVEL Átevilo ukaz
+IF [NOT] ERRORLEVEL ≈°tevilo ukaz
 IF [NOT] niz1==niz2 ukaz
 IF [NOT] EXIST datoteka ukaz
 
-  NOT                 Doloüi, naj ukazna lupina izvede ukaz, üe pogoj ni
+  NOT                 Doloƒçi, naj ukazna lupina izvede ukaz, ƒçe pogoj ni
                       izpolnjen.
-  ERRORLEVEL Átevilo  Ukaz se bo izvedel, üe je zadnji izvedeni ukaz vrnil
-                      napako, katere koda je enaka ali veüja od navedenega
-                      Átevila.
-  niz1==niz2          Ukaz se bo izvedel, üe se niza ujemata.
-  EXIST datoteka      Ukaz se bo izvedel, üe datoteka obstaja.
-  ukaz                Doloüi ukaz, ki naj bo izveden, üe je pogoj izpolnjen.
+  ERRORLEVEL ≈°tevilo  Ukaz se bo izvedel, ƒçe je zadnji izvedeni ukaz vrnil
+                      napako, katere koda je enaka ali veƒçja od navedenega
+                      ≈°tevila.
+  niz1==niz2          Ukaz se bo izvedel, ƒçe se niza ujemata.
+  EXIST datoteka      Ukaz se bo izvedel, ƒçe datoteka obstaja.
+  ukaz                Doloƒçi ukaz, ki naj bo izveden, ƒçe je pogoj izpolnjen.
 .
 
 :TEXT_CMDHELP_LFNFOR
-Vkljuüi ali izkljuüi dolga imena datotek v ukazu FOR ali dokonüavanje imen
+Vkljuƒçi ali izkljuƒçi dolga imena datotek v ukazu FOR ali dokonƒçavanje imen
 datotek.
 
 LFNFOR [ON | OFF]
@@ -1228,30 +1228,30 @@ nastavitev LFNFOR.
 .
 
 :TEXT_CMDHELP_LH
-Naloßi program v gornji spomin.
+Nalo≈æi program v gornji spomin.
 
 LOADHIGH [pogon:][pot]datoteka [parametri]
 LOADHIGH [/L:regija1[,minVelikost1][;regija2[,minVelikost2]...] [/S]]
          [pogon:][pot]datoteka [parametri]
 
 /L:regija1[,minVelikost1][;regija2[,minVelikost2]...
-    Doloüi regijo oz. regije spomina, v katere naj se naloßi program. Regija1
-    doloüi Átevilo prve regije, minVelikost1 doloüi minimalno velikost (üe
-    sploh) za regijo1. Regija2 in minVelikost2 doloüita Átevilo in minimalno
-    velikost druge regije, üe obstaja. Regij lahko doloüite, kolikor ßelite.
+    Doloƒçi regijo oz. regije spomina, v katere naj se nalo≈æi program. Regija1
+    doloƒçi ≈°tevilo prve regije, minVelikost1 doloƒçi minimalno velikost (ƒçe
+    sploh) za regijo1. Regija2 in minVelikost2 doloƒçita ≈°tevilo in minimalno
+    velikost druge regije, ƒçe obstaja. Regij lahko doloƒçite, kolikor ≈æelite.
 /S
-  Skrüi UMB na minimalno velikost, medtem ko se program nalaga.
+  Skrƒçi UMB na minimalno velikost, medtem ko se program nalaga.
 [pogon:][pot]datoteka
-  Doloüi lokacijo in ime programa.
+  Doloƒçi lokacijo in ime programa.
 .
 
 :TEXT_CMDHELP_LOADFIX
-Naloßi program nad prvih 64K spomina in ga izvede.
+Nalo≈æi program nad prvih 64K spomina in ga izvede.
 
 LOADFIX [pogon:][pot]datoteka
 
-Uporabite LOADFIX, üe ste prejeli sporoüilo "Packed file corrupt", ko ste ga
-poskuÁali naloßiti v nizek del spomina.
+Uporabite LOADFIX, ƒçe ste prejeli sporoƒçilo "Packed file corrupt", ko ste ga
+posku≈°ali nalo≈æiti v nizek del spomina.
 .
 
 :TEXT_CMDHELP_MD
@@ -1262,21 +1262,21 @@ MD [pogon:]pot
 .
 
 :TEXT_CMDHELP_PATH
-Prikaße ali spremeni seznam imenikov, v katerih se iÁüejo programi.
+Prika≈æe ali spremeni seznam imenikov, v katerih se i≈°ƒçejo programi.
 
 PATH [[pogon:]pot[;...]]
 PATH ;
 
-Vnesite PATH ;, da izpraznite seznam in ukaßete lupini, naj programe iÁüe le
+Vnesite PATH ;, da izpraznite seznam in uka≈æete lupini, naj programe i≈°ƒçe le
 v trenutnem imeniku.
 Vnesite PATH brez parametrov, da vidite trenutni seznam programskih imenikov.
 .
 
 :TEXT_CMDHELP_PAUSE
-Zaüasno prekine izvajanje ukazne datoteke in prikaße sporoüilo "Pritisnite
-katerokoli tipko" oz. doloüeno sporoüilo.
+Zaƒçasno prekine izvajanje ukazne datoteke in prika≈æe sporoƒçilo "Pritisnite
+katerokoli tipko" oz. doloƒçeno sporoƒçilo.
 
-PAUSE [sporoüilo]
+PAUSE [sporoƒçilo]
 .
 
 :TEXT_CMDHELP_PROMPT
@@ -1284,21 +1284,21 @@ Spremeni ukazni poziv.
 
 PROMPT [besedilo]
 
-  besedilo  Doloüi novi ukazni poziv.
+  besedilo  Doloƒçi novi ukazni poziv.
 
 Poziv je lahko sestavljen iz katerihkoli znakov in naslednjih posebnih kod:
 
-  $Q  = (enaüaj)
+  $Q  = (enaƒçaj)
   $$  $ (dolar)
-  $T  trenutni üas
+  $T  trenutni ƒças
   $D  trenutni datum
   $P  trenutni pogon in imenik
   $V  verzija FreeCOMa
   $N  trenutni pogon
-  $G  > ("veü kot")
+  $G  > ("veƒç kot")
   $L  < ("manj kot")
-  $B  | (navpiüna ürta)
-  $H  brisalka (izbriÁe prejÁnji znak)
+  $B  | (navpiƒçna ƒçrta)
+  $H  brisalka (izbri≈°e prej≈°nji znak)
   $E  escape (ASCII znak 27)
   $_  prelom vrstice
 
@@ -1306,71 +1306,71 @@ Vnesite PROMPT brez parametrov, da ukazni poziv ponastavite.
 .
 
 :TEXT_CMDHELP_PUSHD
-Potisne trenutni imenik na imeniÁki sklad z moßnostjo spreminjanja trenutnega
+Potisne trenutni imenik na imeni≈°ki sklad z mo≈ænostjo spreminjanja trenutnega
 imenika.
 
 PUSHD [[pogon:]pot]
-  kjer je [pogon:]pot pot, v katero ßelite.
+  kjer je [pogon:]pot pot, v katero ≈æelite.
 .
 
 :TEXT_CMDHELP_POPD
-Vzame imenik z imeniÁkega sklada in ga doloüi za trenutni imenik.
+Vzame imenik z imeni≈°kega sklada in ga doloƒçi za trenutni imenik.
 
 POPD [*]
-  Parameter "*" poüisti imeniÁki sklad.
+  Parameter "*" poƒçisti imeni≈°ki sklad.
 .
 
 :TEXT_CMDHELP_DIRS
-Prikaße vsebino imeniÁkega sklada.
+Prika≈æe vsebino imeni≈°kega sklada.
 
 DIRS
 .
 
 :TEXT_CMDHELP_RD
-Odstrani (izbriÁe) prazen imenik.
+Odstrani (izbri≈°e) prazen imenik.
 
 RMDIR [pogon:]pot
 RD [pogon:]pot
 .
 
 :TEXT_CMDHELP_REM
-Oznaüuje komentarje (opombe) v ukazni datoteki ali CONFIG.SYS.
+Oznaƒçuje komentarje (opombe) v ukazni datoteki ali CONFIG.SYS.
 
 REM [komentar]
 .
 
 :TEXT_CMDHELP_REN
-Preimenuje eno ali veü datotek oz. imenikov.
+Preimenuje eno ali veƒç datotek oz. imenikov.
 
 RENAME [pogon:][pot][imenik1 | datoteka1] [imenik2 | datoteka2]
 REN [pogon:][pot][imenik1 | datoteka1] [imenik2 | datoteka2]
 
-Pri novem imenu ne morete doloüiti novega pogona oz. poti; za ta namen
+Pri novem imenu ne morete doloƒçiti novega pogona oz. poti; za ta namen
 uporabite ukaz MOVE.
 .
 
 :TEXT_CMDHELP_SET#1
-Prikaße, nastavi, ali odstrani okoljsko spremenljivko.
+Prika≈æe, nastavi, ali odstrani okoljsko spremenljivko.
 
 SET [/C] [/P] [/E] [/U] [spremenljivka[=[niz]]]
 
-  spremenljivka  Doloüi ime spremenljivke.
-  niz            Doloüi vrednost spremenljivke.
+  spremenljivka  Doloƒçi ime spremenljivke.
+  niz            Doloƒçi vrednost spremenljivke.
 
-¨e niz ni doloüen, se spremenljivka odstrani iz okolja.
+ƒåe niz ni doloƒçen, se spremenljivka odstrani iz okolja.
 
 Vnesite SET brez parametrov, da vidite trenutne vrednosti vseh spremenljivk.
 
 Vnesite SET in ime spremenljivke, da vidite njeno vrednost.
 
-/C obdrßi velike in male ürke: navadno se ime datoteke spremeni v velike ürke,
-üe spremenljivka ße obstaja.
+/C obdr≈æi velike in male ƒçrke: navadno se ime datoteke spremeni v velike ƒçrke,
+ƒçe spremenljivka ≈æe obstaja.
 
 /P pozove uporabnika, da vnese niz, in ga dodeli spremenljivki.
 
-/E nastavi spremenljivko na prvo vrstico izhoda programa, ki ga doloüa niz.
+/E nastavi spremenljivko na prvo vrstico izhoda programa, ki ga doloƒça niz.
 
-/U spremeni vse ürke niza v velike ürke.
+/U spremeni vse ƒçrke niza v velike ƒçrke.
 .
 
 :TEXT_CMDHELP_SHIFT#1
@@ -1383,41 +1383,41 @@ toward the end.
 .
 
 :TEXT_CMDHELP_TIME#1
-Prikaße ali nastavi üas.
+Prika≈æe ali nastavi ƒças.
 
-TIME [/T] [üas]
+TIME [/T] [ƒças]
 
-Vnesite TIME brez parametrov, da vidite trenutni üas in istoüasno nastavite
-novega. Pritisnite Enter, da obdrßite starega.
+Vnesite TIME brez parametrov, da vidite trenutni ƒças in istoƒçasno nastavite
+novega. Pritisnite Enter, da obdr≈æite starega.
 
-/T onemogoüi interaktivnost.
+/T onemogoƒçi interaktivnost.
 .
 
 :TEXT_CMDHELP_TRUENAME
-Prikaße polno ime doloüene poti.
+Prika≈æe polno ime doloƒçene poti.
 
 TRUENAME [pogon:][pot][datoteka]
 .
 
 :TEXT_CMDHELP_TYPE
-Prikaße vsebino datoteke z besedilom.
+Prika≈æe vsebino datoteke z besedilom.
 
 TYPE [pogon:][pot]datoteka
 .
 
 :TEXT_CMDHELP_VER
-Prikaße verzijo FreeCOMa in druge informacije.
+Prika≈æe verzijo FreeCOMa in druge informacije.
 
 VER [/R] [/W] [/D] [/C]
 
-  /R  Prikaße verzijo jedra in druge informacije.
-  /W  Prikaße informacije o jamstvu.
-  /D  Prikaße pogoje za razpeüavanje FreeCOMa.
-  /C  Prikaße sodelujoüe pri razvoju FreeCOMa.
+  /R  Prika≈æe verzijo jedra in druge informacije.
+  /W  Prika≈æe informacije o jamstvu.
+  /D  Prika≈æe pogoje za razpeƒçavanje FreeCOMa.
+  /C  Prika≈æe sodelujoƒçe pri razvoju FreeCOMa.
 .
 
 :TEXT_CMDHELP_VERIFY
-Pove datoteünemu sistemu, naj preveri, ali se datoteke pravilno zapiÁejo
+Pove datoteƒçnemu sistemu, naj preveri, ali se datoteke pravilno zapi≈°ejo
 na disk.
 
 VERIFY [ON | OFF]
@@ -1440,29 +1440,29 @@ to the standard output or standard error stream.
 .
 
 :TEXT_CMDHELP_VOL
-Prikaße oznako nosilca in njegovo serijsko Átevilko, üe ta obstajata.
+Prika≈æe oznako nosilca in njegovo serijsko ≈°tevilko, ƒçe ta obstajata.
 
 VOL [pogon:]
 .
 
 :TEXT_CMDHELP_QUESTION#1
-Prikaße seznam ukazov in funkcij, ki so na voljo v FreeCOMu.
+Prika≈æe seznam ukazov in funkcij, ki so na voljo v FreeCOMu.
 
 ?
 ?ukaz [parametri]
 
-Prva oblika prikaße vse vgrajene ukaze in funkcije.
-Druga oblika vpraÁa, ali naj izvede doloüen ukaz, kot v naüinu sledenja.
+Prva oblika prika≈æe vse vgrajene ukaze in funkcije.
+Druga oblika vpra≈°a, ali naj izvede doloƒçen ukaz, kot v naƒçinu sledenja.
 .
 
 :TEXT_CMDHELP_WHICH
-PoiÁüe in prikaße datoteko za vsak doloüen ukaz.
+Poi≈°ƒçe in prika≈æe datoteko za vsak doloƒçen ukaz.
 
 WHICH ukaz...
 .
 
 :TEXT_CMDHELP_MEMORY#1
-Prikaße FreeCOMov notranji spomin.
+Prika≈æe FreeCOMov notranji spomin.
 
 MEMORY
 .
@@ -1472,11 +1472,11 @@ Cilj za ukaz COPY ne sme vsebovati znakov "+".
 .
 
 :TEXT_DELETE_FILE#1%
-BriÁem datoteko "%s".
+Bri≈°em datoteko "%s".
 .
 
 :TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
-Ni mogoüe pisati v datoteko "%s";
+Ni mogoƒçe pisati v datoteko "%s";
 je morda disk poln? (potrebnih je %lu bajtov)
 .
 
@@ -1494,7 +1494,7 @@ je morda disk poln? (potrebnih je %lu bajtov)
 FreeCOM ne more biti naprava: "%s"
 .
 :TEXT_ERROR_FCOM_INVALID#0%
-Ta datoteka ni veljaven FreeCOM ali pa ni zdrußljiva verzija:
+Ta datoteka ni veljaven FreeCOM ali pa ni zdru≈æljiva verzija:
 %s
 .
 
