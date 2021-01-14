@@ -4,7 +4,7 @@
 #
 #  Language: Serbian / Yugoslavian
 #  Codepage: 852
-#  Author:   Dejan ætrbac (strbac@phreaker.net)
+#  Author:   Dejan Å trbac (strbac@phreaker.net)
 #
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
@@ -90,21 +90,21 @@
 #
 ## Issued if a single character option is unknown
 :TEXT_ERROR_INVALID_SWITCH
-Neva§e†i prekidaŸ - /%c
+NevaÅ¾eÄ‡i prekidaÄ - /%c
 .
 
 ## Issued if a longname option is unknown
 :TEXT_ERROR_INVALID_LSWITCH
-Neva§e†i prekidaŸ - /%s
+NevaÅ¾eÄ‡i prekidaÄ - /%s
 .
 
 ## Issued if the context, the type of argument etc. is invalid
 :TEXT_ERROR_ILLFORMED_OPTION
-Loçe formirana opcija: '%s'
+LoÅ¡e formirana opcija: '%s'
 .
 
 :TEXT_ERROR_OPT_ARG
-Opcija '%s' ne mo§e imati argument.
+Opcija '%s' ne moÅ¾e imati argument.
 .
 
 :TEXT_ERROR_OPT_NOARG
@@ -112,7 +112,7 @@ Opcija '%s' mora imati argument.
 .
 
 :TEXT_INVALID_NUMBER
-Neva§e†i broj naveden u '%s'
+NevaÅ¾eÄ‡i broj naveden u '%s'
 .
 
 :TEXT_ERROR_CLOSE_QUOTE
@@ -120,31 +120,31 @@ Nedostaje krajnji navodnik: %c
 .
 
 :TEXT_ERROR_TEMPFILE
-Privremeni fajl ne mo§e biti kreiran.
+Privremeni fajl ne moÅ¾e biti kreiran.
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS_STR
-Isuviçe parametara - '%s'
+IsuviÅ¡e parametara - '%s'
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS
-Isuviçe parametara.
+IsuviÅ¡e parametara.
 .
 
 :TEXT_ERROR_INVALID_PARAMETER
-Neva§e†i parametar - '%s'
+NevaÅ¾eÄ‡i parametar - '%s'
 .
 
 :TEXT_ERROR_PATH_NOT_FOUND
-Putanja nije pronaĞena.
+Putanja nije pronaÄ‘ena.
 .
 
 :TEXT_ERROR_FILE_NOT_FOUND
-Fajl nije pronaĞen.
+Fajl nije pronaÄ‘en.
 .
 
 :TEXT_ERROR_SFILE_NOT_FOUND
-Fajl nije pronaĞen - '%s'
+Fajl nije pronaÄ‘en - '%s'
 .
 
 :TEXT_ERROR_REQ_PARAM_MISSING
@@ -152,15 +152,15 @@ Potreban parametar nedostaje.
 .
 
 :TEXT_ERROR_INVALID_DRIVE
-Neva§e†i drajv - %c:
+NevaÅ¾eÄ‡i drajv - %c:
 .
 
 :TEXT_ERROR_BADCOMMAND#2
-Loça komanda ili naziv fajla - "%s".
+LoÅ¡a komanda ili naziv fajla - "%s".
 .
 
 :TEXT_ERROR_OUT_OF_MEMORY
-Greçka nedostatka memorije.
+GreÅ¡ka nedostatka memorije.
 .
 
 :TEXT_ERROR_OUT_OF_DOS_MEMORY#1
@@ -168,7 +168,7 @@ Alokacija DOS memorije nije uspela.
 .
 
 :TEXT_ERROR_CANNOTPIPE
-Nemogu†nost cevovoda! Privremeni fajl ne mo§e biti otvoren!
+NemoguÄ‡nost cevovoda! Privremeni fajl ne moÅ¾e biti otvoren!
 .
 
 :TEXT_ERROR_LONG_LINE_BATCHFILE
@@ -176,11 +176,11 @@ Linija #%ld u batch fajlu '%s' je preduga.
 .
 
 :TEXT_ERROR_BFILE_VANISHED
-Batch fajl '%s' nije pronaĞen.
+Batch fajl '%s' nije pronaÄ‘en.
 .
 
 :TEXT_ERROR_BFILE_LABEL
-Batch fajl '%s' ne sadr§i labelu '%s'.
+Batch fajl '%s' ne sadrÅ¾i labelu '%s'.
 .
 
 :TEXT_ERROR_DIRFCT_FAILED#1
@@ -188,41 +188,41 @@ Batch fajl '%s' ne sadr§i labelu '%s'.
 .
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ENV_VAR
-Promenljiva okru§enja '%s' ne mo§e biti postavljena.
-Okru§enje prepuno?
+Promenljiva okruÅ¾enja '%s' ne moÅ¾e biti postavljena.
+OkruÅ¾enje prepuno?
 .
 :TEXT_ERROR_ENV_VAR_NOT_FOUND
-Promenljiva okru§enja '%s' nije pronaĞena.
+Promenljiva okruÅ¾enja '%s' nije pronaÄ‘ena.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
-Nema okru§enja. Mogu†i nedostatak memorije. Navedite /E opciju.
+Nema okruÅ¾enja. MoguÄ‡i nedostatak memorije. Navedite /E opciju.
 .
 
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ALIAS#1
-Alias '%s' ne mo§e biti postavljen. Prostor za aliase prepun?
+Alias '%s' ne moÅ¾e biti postavljen. Prostor za aliase prepun?
 .
 :TEXT_ERROR_ALIAS_NOT_FOUND#1
-Alias '%s' nije pronaĞen.
+Alias '%s' nije pronaÄ‘en.
 .
 :TEXT_ERROR_NO_ALIAS_SEGMENT#1
-Nema prostora za aliase. Mogu†i nedostatak memorije.
+Nema prostora za aliase. MoguÄ‡i nedostatak memorije.
 .
 
 :TEXT_ERROR_SYNTAX_STR
-Sintaksna greçka - '%s'
+Sintaksna greÅ¡ka - '%s'
 .
 
 :TEXT_ERROR_SYNTAX
-Sintaksna greçka.
+Sintaksna greÅ¡ka.
 .
 
 :TEXT_ERROR_FILENAME_TOO_LONG
-Naziv fajla je predugaŸak - '%s'
+Naziv fajla je predugaÄak - '%s'
 .
 
 :TEXT_ERROR_SELFCOPY
-Fajl '%s' ne mo§e biti kopiran u sebe.
+Fajl '%s' ne moÅ¾e biti kopiran u sebe.
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
@@ -230,11 +230,11 @@ Komandna linija je preduga posle razvijanja aliasa!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
-Linija je preduga. Komanda ne mo§e biti izvrçena.
+Linija je preduga. Komanda ne moÅ¾e biti izvrÅ¡ena.
 .
 
 :TEXT_ERROR_HISTORY_SIZE#1
-Neva§e†a veliŸina istorije - '%s'
+NevaÅ¾eÄ‡a veliÄina istorije - '%s'
 .
 
 :TEXT_HISTORY_EMPTY#1
@@ -242,15 +242,15 @@ Istorija komandne linije je prazna.
 .
 
 :TEXT_ERROR_BAD_MCB_CHAIN
-MCB lanac je oçte†en, ili MS-DOS nekompatibilan sistem.
+MCB lanac je oÅ¡teÄ‡en, ili MS-DOS nekompatibilan sistem.
 .
 
 :TEXT_ERROR_UNDEFINED_ERROR
-Nedefinisana greçka %d.
+Nedefinisana greÅ¡ka %d.
 .
 
 :TEXT_ERROR_REGION_WARNING
-Neva§e†e memorijsko podruŸje %d - ignorisano.
+NevaÅ¾eÄ‡e memorijsko podruÄje %d - ignorisano.
 .
 
 :TEXT_ERROR_ON_OR_OFF
@@ -258,7 +258,7 @@ Morate navesti ON ili OFF.
 .
 
 :TEXT_ERROR_BAD_VARIABLE
-Loçe navedena promenljiva.
+LoÅ¡e navedena promenljiva.
 .
 
 :TEXT_ERROR_IN_MISSING#1
@@ -278,11 +278,11 @@ FOR: Nedostaje komanda posle DO iskaza.
 .
 
 :TEXT_ERROR_REDIRECT_FROM_FILE
-Ulaz ne mo§e biti preusmeren na fajl '%s'.
+Ulaz ne moÅ¾e biti preusmeren na fajl '%s'.
 .
 
 :TEXT_ERROR_REDIRECT_TO_FILE
-Izlaz ne mo§e biti preusmeren na fajl '%s'.
+Izlaz ne moÅ¾e biti preusmeren na fajl '%s'.
 .
 
 :TEXT_ERROR_EMPTY_REDIRECTION#1
@@ -290,11 +290,11 @@ Prazno preusmerenje.
 .
 
 :TEXT_ERROR_INVALID_DATE
-Neva§e†i datum.
+NevaÅ¾eÄ‡i datum.
 .
 
 :TEXT_ERROR_INVALID_TIME
-Neva§e†e vreme.
+NevaÅ¾eÄ‡e vreme.
 .
 
 :TEXT_ERROR_NO_GOTO_LABEL
@@ -306,7 +306,7 @@ Komanda CTTY je izostavljena iz ovog COMMAND.COMa.
 .
 
 :TEXT_ERROR_NORW_DEVICE
-Neva§e†i ili ne postoje†i uŸitno-upisni ureĞaj '%s'.
+NevaÅ¾eÄ‡i ili ne postojeÄ‡i uÄitno-upisni ureÄ‘aj '%s'.
 .
 
 :TEXT_ERROR_CTTY_DUP
@@ -314,15 +314,15 @@ Neuspeh pri promeni fajl deskriptora na TTY '%s'.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
-PrekidaŸ /L nije implementiran.
+PrekidaÄ /L nije implementiran.
 .
 
 :TEXT_ERROR_U_NOTIMPLEMENTED
-PrekidaŸ /U nije implementiran.
+PrekidaÄ /U nije implementiran.
 .
 
 :TEXT_ERROR_WRITING_DEST
-Greçka pri upisu na odrediçte.
+GreÅ¡ka pri upisu na odrediÅ¡te.
 .
 
 :TEXT_ERROR_CANNOT_OPEN_SOURCE
@@ -334,23 +334,23 @@ Fajl '%s' nije mogao biti otvoren.
 .
 
 :TEXT_ERROR_READ_FILE
-Nemogu†nost Ÿitanja iz fajla: '%s'
+NemoguÄ‡nost Äitanja iz fajla: '%s'
 .
 
 :TEXT_ERROR_WRITE_FILE
-Nemogu†nost upisa u fajl: '%s'
+NemoguÄ‡nost upisa u fajl: '%s'
 .
 
 :TEXT_ERROR_LEADING_PLUS
-Povezuju†i znak '+' ne mo§e voditi argumente.
+PovezujuÄ‡i znak '+' ne moÅ¾e voditi argumente.
 .
 
 :TEXT_ERROR_TRAILING_PLUS
-Povezuju†i znak '+' ne mo§e pratiti argumente.
+PovezujuÄ‡i znak '+' ne moÅ¾e pratiti argumente.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
-Nema niŸeg da se uradi.
+Nema niÄeg da se uradi.
 .
 
 :TEXT_ERROR_COPY
@@ -364,21 +364,21 @@ IF EXIST: nedostaje naziv fajla
 IF ERRORLEVEL: nedostaje broj
 .
 :TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
-IF ERRORLEVEL: neva§e†i broj
+IF ERRORLEVEL: nevaÅ¾eÄ‡i broj
 .
 :TEXT_ERROR_IF_MISSING_COMMAND#1
 IF: nedostaje komanda
 .
 :TEXT_NOT_IMPLEMENTED_YET
-¦ao nam je. Nije implementirano.
+Å½ao nam je. Nije implementirano.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
-Neuspeh pri uŸitavanju poruka u memoriju.
+Neuspeh pri uÄitavanju poruka u memoriju.
 .
 
 :TEXT_MSG_NOTIMPLEMENTED
-PrekidaŸ /MSG nije implementiran.
+PrekidaÄ /MSG nije implementiran.
 .
 
 :TEXT_MSG_ITEMS_DISPLAYED#1
@@ -386,8 +386,8 @@ Ukupno izlistano stavki: %u
 .
 
 :TEXT_CORRUPT_COMMAND_LINE
-Oçte†ena komandna linija. Ovo je interna greçka i povezana je sa
-sistemom u kome radi COMMAND.COM. Molimo vas prijavite ovu greçku.
+OÅ¡teÄ‡ena komandna linija. Ovo je interna greÅ¡ka i povezana je sa
+sistemom u kome radi COMMAND.COM. Molimo vas prijavite ovu greÅ¡ku.
 .
 
 :TEXT_QUOTED_C_OR_K#1
@@ -396,7 +396,7 @@ Opcije /C i /K nemogu biti pod navodnicima, ignorisane.
 
 :TEXT_INIT_FULLY_QUALIFIED#1
 Putanja do COMMAND.COMa mora biti potpuna!
-Ovo znaŸi ukljuŸujuŸi slovo drajva poŸinju†i obrnutom kosom crtom (\\).
+Ovo znaÄi ukljuÄujuÄi slovo drajva poÄinjuÄ‡i obrnutom kosom crtom (\\).
 Na primer: C:\\
 
 COMMAND.COM sada podrazumeva ovu putanju:
@@ -404,14 +404,14 @@ COMMAND.COM sada podrazumeva ovu putanju:
 .
 
 :TEXT_ERROR_RESTORE_SESSION
-Informacije o sesiji nisu mogle biti vra†ene. Sve lokalne postavke
-su izgubljene. Molimo vas pogledajte gore izjavljene poruke o greçkama
-za mogu†i razlog nastanka ovog problema.
+Informacije o sesiji nisu mogle biti vraÄ‡ene. Sve lokalne postavke
+su izgubljene. Molimo vas pogledajte gore izjavljene poruke o greÅ¡kama
+za moguÄ‡i razlog nastanka ovog problema.
 .
 
 :TEXT_ERROR_SAVE_SESSION
-Trenutne informacije nemogu biti oŸuvane za vreme poziva programa.
-Molimo vas pogledajte gore izjavljene poruke o greçkama za mogu†i razlog
+Trenutne informacije nemogu biti oÄuvane za vreme poziva programa.
+Molimo vas pogledajte gore izjavljene poruke o greÅ¡kama za moguÄ‡i razlog
 nastanka ovog problema.
 .
 
@@ -420,12 +420,12 @@ Drajv %c: ne reaguje ili nedostatak interne memorije.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE
-Swapping nije uspeo: Aliasi zauzimaju previçe memorije.
+Swapping nije uspeo: Aliasi zauzimaju previÅ¡e memorije.
 .
 
 
 :TEXT_ERROR_KSWAP_ALLOCMEM
-Swapping nije uspeo: Daleka memorija ne mo§e biti alocirana.
+Swapping nije uspeo: Daleka memorija ne moÅ¾e biti alocirana.
 .
 
 :TEXT_ERROR_ALIAS_OUT_OF_MEM#1
@@ -437,32 +437,32 @@ Alias '%s' ne postoji.
 .
 
 :TEXT_ERROR_ALIAS_INSERT#1
-Greçka pri umetanju aliasa.
+GreÅ¡ka pri umetanju aliasa.
 .
 
 :TEXT_ALIAS_INVALID_NAME#1
-Neva§e†e ime aliasa '%s'.
+NevaÅ¾eÄ‡e ime aliasa '%s'.
 .
 
 :TEXT_ERROR_LOADING_CONTEXT#1
-Manipulator kritiŸnih greçaka ili kontekst modul ne mo§e biti uŸitan.
+Manipulator kritiÄnih greÅ¡aka ili kontekst modul ne moÅ¾e biti uÄitan.
 .
 
 :TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
 Nedostatak memorije za kontekst.
-Ako ova greçka nastavi da se javlja, razmotrite pove†anje internog
+Ako ova greÅ¡ka nastavi da se javlja, razmotrite poveÄ‡anje internog
 bafera, kao istorije, steka direktorijuma itd.
 .
 
 :TEXT_ERROR_CONTEXT_LENGTH#1
-VeliŸina konteksta prelazi maksimalni limit za %lu bajta.
-Promena veliŸine konteksta na %u bajta.
+VeliÄina konteksta prelazi maksimalni limit za %lu bajta.
+Promena veliÄine konteksta na %u bajta.
 .
 
 :TEXT_ERROR_CONTEXT_ADD_STATUS#1
-Neuspeh pri dodavanju statusnih informacija u kontekst. Ova greçka
-mo§e znaŸiti oçte†enje memorije ili nepravilno utvrĞena minimalna
-veliŸina konteksta.
+Neuspeh pri dodavanju statusnih informacija u kontekst. Ova greÅ¡ka
+moÅ¾e znaÄiti oÅ¡teÄ‡enje memorije ili nepravilno utvrÄ‘ena minimalna
+veliÄina konteksta.
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -479,12 +479,12 @@ Pritisnite bilo koji taster za nastavak...\
 .
 
 :TEXT_MSG_HISTORY_SIZE
-VeliŸina istorije je %d bajta.
+VeliÄina istorije je %d bajta.
 .
 
 :TEXT_MSG_DOSKEY
-DOSKEY je ve† omogu†en interno u komandnoj ljusci.
-Pokrenite DOSKEY /? za viçe informacija o implementaciji.
+DOSKEY je veÄ‡ omoguÄ‡en interno u komandnoj ljusci.
+Pokrenite DOSKEY /? za viÅ¡e informacija o implementaciji.
 .
 
 :TEXT_MSG_ECHO_STATE
@@ -549,7 +549,7 @@ Unesite novo vreme: \
 :PROMPT_DELETE_ALL#1
 DdNn{CR}{LF}{CBREAK}
 aabb   b   b       b
-Svi fajlovi u direktorijumu '%s' †e biti obrisani!
+Svi fajlovi u direktorijumu '%s' Ä‡e biti obrisani!
 Da li ste sigurni (Da/Ne)? \
 .
 
@@ -682,7 +682,7 @@ Uto\
 Sre\
 .
 :TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
-¬et\
+ÄŒet\
 .
 :TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
 Pet\
@@ -770,10 +770,10 @@ FreeDOS jezgro %d.%d.%d
 # All newlines must be prefixed by \r's !
 :TEXT_MSG_REBOOT_NOW#1
 \r\n\r
-Ljuska †e sada biti prekinuta, iako je ovo zabranjeno\r
-(obiŸno navoĞenjem prekidaŸa "/P").\r
+Ljuska Ä‡e sada biti prekinuta, iako je ovo zabranjeno\r
+(obiÄno navoÄ‘enjem prekidaÄa "/P").\r
 Morate restartovati sistem ili, ukoliko ova ljuska radi u\r
-viçeprocesnom okru§enju, prekinuti ovaj proces.\r
+viÅ¡eprocesnom okruÅ¾enju, prekinuti ovaj proces.\r
 .
 
 # Displayed during the initialization phase of FreeCOM, if its own
@@ -840,7 +840,7 @@ Prikazuje, postavlja, ili uklanja aliase.
   string       Navodi niz karaktera za dodelu aliasu.
 
  Pokrenite ALIAS bez parametara za prikaz trenutnih aliasa. Ukoliko string
- nije naveden, postoje†i alias se uklanja.
+ nije naveden, postojeÄ‡i alias se uklanja.
 .
 
 :TEXT_CMDHELP_BEEP
@@ -850,7 +850,7 @@ Stvara kratak zvuk upozorenja.
 .
 
 :TEXT_CMDHELP_BREAK
-Postavlja ili uklanja proçirenu CTRL+C proveru.
+Postavlja ili uklanja proÅ¡irenu CTRL+C proveru.
 
   BREAK [ON | OFF]
 
@@ -865,8 +865,8 @@ Poziva jedan batch program iz drugog.
   batch-parametri   Navodi informacije sa komandne linije potrebne
                     batch programu.
 
-  /S ukljuŸuje dok /N iskljuŸuje swapping komandne ljuske.
-  /Y omogu†ava mod pra†enja prilikom izvrçenja komande.
+  /S ukljuÄuje dok /N iskljuÄuje swapping komandne ljuske.
+  /Y omoguÄ‡ava mod praÄ‡enja prilikom izvrÅ¡enja komande.
 .
 
 :TEXT_CMDHELP_CD
@@ -878,12 +878,12 @@ Prikazuje naziv ili menja trenutni direktorijum.
   CD[..]
   CD -
 
-  ".."  Navodi da §elite da promenite direktorijum u roditeljski trenutnog.
-  "-"   Vra†a se u prethodni direktorijum.
+  ".."  Navodi da Å¾elite da promenite direktorijum u roditeljski trenutnog.
+  "-"   VraÄ‡a se u prethodni direktorijum.
 
  Pokrenite "CD drajv:" za prikaz trenutnog dira na navedenom drajvu.
  Pokrenite CD bez parametara za prikaz trenutnog drajva i direktorijuma.
- TakoĞe pogledajte komandu CDD.
+ TakoÄ‘e pogledajte komandu CDD.
 .
 
 :TEXT_CMDHELP_CDD
@@ -893,8 +893,8 @@ Prikazuje trenutni direktorijum ili menja trenutni direktorijum i drajv.
   CDD[..]
   CDD -
 
-  ".."  Navodi da §elite da promenite direktorijum u roditeljski trenutnog.
-  "-"   Vra†a se u prethodni direktorijum.
+  ".."  Navodi da Å¾elite da promenite direktorijum u roditeljski trenutnog.
+  "-"   VraÄ‡a se u prethodni direktorijum.
 
  Ako je "drajv:" naveden, trenutni radni drajv se menja na navedeni.
  Ovo je jedina razlika u odnosu na "CD" odnosno "CHDIR".
@@ -912,59 +912,59 @@ Prikazuje ili postavlja broj aktivne kodne strane.
 .
 
 :TEXT_CMDHELP_CLS
-Briçe ekran i postavlja standardne atribute boja.
+BriÅ¡e ekran i postavlja standardne atribute boja.
 
   CLS
 .
 
 :TEXT_CMDHELP_COMMAND
-Pokre†e novu instancu komandne ljuske.
+PokreÄ‡e novu instancu komandne ljuske.
 
-  COMMAND [[drajv:]putanja] [ureĞaj] [/E:nnnnn] [/P] [/MSG]
+  COMMAND [[drajv:]putanja] [ureÄ‘aj] [/E:nnnnn] [/P] [/MSG]
            [/LOW] [/Y [/[C|K] komanda]]
 
-  [drajv:]putanja  Navodi direktorijum koji sadr§i COMMAND.COM.
-  ureĞaj           Navodi ureĞaj za komandni ulaz/izlaz.
-  /E:nnnnn         Postavlja poŸetnu veliŸinu okru§enja na nnnnn bajta.
-                   (nnnnn treba biti broj izmeĞu 256 i 32,768).
+  [drajv:]putanja  Navodi direktorijum koji sadrÅ¾i COMMAND.COM.
+  ureÄ‘aj           Navodi ureÄ‘aj za komandni ulaz/izlaz.
+  /E:nnnnn         Postavlja poÄetnu veliÄinu okruÅ¾enja na nnnnn bajta.
+                   (nnnnn treba biti broj izmeÄ‘u 256 i 32,768).
   /P               Postavlja novu komandnu ljusku za stalnu (nema izlaza).
-  /LOW             Primorava komandnu ljusku da dr§i svoje stalne podatke
+  /LOW             Primorava komandnu ljusku da drÅ¾i svoje stalne podatke
                    u niskoj memoriji.
-  /MSG             UŸitava sve sistemske poruke u memoriju (zahteva i /P).
-  /Y               KoraŸa kroz batch program naveden sa /C ili /K.
-  /C komanda       Izvrçava navedenu komandu i vra†a se u trenutnu ljusku.
-  /K komanda       Izvrçava navedenu komandu i nastavlja rad.
+  /MSG             UÄitava sve sistemske poruke u memoriju (zahteva i /P).
+  /Y               KoraÄa kroz batch program naveden sa /C ili /K.
+  /C komanda       IzvrÅ¡ava navedenu komandu i vraÄ‡a se u trenutnu ljusku.
+  /K komanda       IzvrÅ¡ava navedenu komandu i nastavlja rad.
 .
 
 :TEXT_CMDHELP_COPY
-Kopira jedan ili viçe fajlova na drugu lokaciju.
+Kopira jedan ili viÅ¡e fajlova na drugu lokaciju.
 
   COPY [/A | /B] izvor [/A | /B] [+ izvor [/A | /B] [+ ...]]
-        [odrediçte [/A | /B]] [/V] [/Y | /-Y]
+        [odrediÅ¡te [/A | /B]] [/V] [/Y | /-Y]
 
   izvor        Navodi fajl ili fajlove koje treba prekopirati.
-  /A           Nagoveçta ASCII tekstualni fajl.
-  /B           Nagoveçta binarni fajl.
-  odrediçte    Navodi direktorijum i/ili naziv fajla za novi(e) fajl(ove).
+  /A           NagoveÅ¡ta ASCII tekstualni fajl.
+  /B           NagoveÅ¡ta binarni fajl.
+  odrediÅ¡te    Navodi direktorijum i/ili naziv fajla za novi(e) fajl(ove).
   /V           Proverava korektnost upisa novih fajlova.
-  /Y           Priguçava upite za pisanje preko ve† postoje†ih fajlova u
-               odrediçtu, odgovaraju†i potvrdno.
-  /-Y          Poziva upit za potvrdu pisanja preko ve† postoje†ih fajlova
-               u odrediçtu.
+  /Y           PriguÅ¡ava upite za pisanje preko veÄ‡ postojeÄ‡ih fajlova u
+               odrediÅ¡tu, odgovarajuÄ‡i potvrdno.
+  /-Y          Poziva upit za potvrdu pisanja preko veÄ‡ postojeÄ‡ih fajlova
+               u odrediÅ¡tu.
 
- PrekidaŸ /Y mo§e biti naveden u COPYCMD promenljivi okru§enja.
- Ovo mo§e biti poniçteno sa /-Y na komandnoj liniji.
+ PrekidaÄ /Y moÅ¾e biti naveden u COPYCMD promenljivi okruÅ¾enja.
+ Ovo moÅ¾e biti poniÅ¡teno sa /-Y na komandnoj liniji.
 
- Za spajanje fajlova, navedite jedan fajl za odrediçte, ali viçe fajlova za
- izvor (koriscenjem d§oker znakova ili fajl1+fajl2+fajl3 formatom).
+ Za spajanje fajlova, navedite jedan fajl za odrediÅ¡te, ali viÅ¡e fajlova za
+ izvor (koriscenjem dÅ¾oker znakova ili fajl1+fajl2+fajl3 formatom).
 .
 
 :TEXT_CMDHELP_CTTY
-Menja terminalni ureĞaj koriç†en za kontrolu sistema.
+Menja terminalni ureÄ‘aj koriÅ¡Ä‡en za kontrolu sistema.
 
-  CTTY ureĞaj
+  CTTY ureÄ‘aj
 
-  ureĞaj    Terminalni ureĞaj koji §elite koristiti, kao npr. COM1.
+  ureÄ‘aj    Terminalni ureÄ‘aj koji Å¾elite koristiti, kao npr. COM1.
 .
 
 :TEXT_CMDHELP_DATE#1
@@ -972,21 +972,21 @@ Prikazuje ili postavlja datum.
 
   DATE [/D] [datum]
 
-  /D odvra†a DATE od interaktivnosti.
+  /D odvraÄ‡a DATE od interaktivnosti.
 
  Pokrenite DATE bez parametara za prikaz trenutne postavke datuma
- i upit za novu. Pritisnite ENTER da zadr§ite isti datum.
+ i upit za novu. Pritisnite ENTER da zadrÅ¾ite isti datum.
 .
 
 :TEXT_CMDHELP_DEL#2
-Briçe jedan ili viçe fajlova.
+BriÅ¡e jedan ili viÅ¡e fajlova.
 
   DEL [drajv:][putanja]fajl [/P] [/V]
   ERASE [drajv:][putanja]fajl [/P] [/V]
 
-  [drajv:][putanja]fajl   Navodi fajl(ove) za brisanje. Navedite viçe
-                          fajlova koriste†i se d§oker znacima.
-  /P    Poziva upit za potvrdu pre brisanja svakog fajla pojedinaŸno.
+  [drajv:][putanja]fajl   Navodi fajl(ove) za brisanje. Navedite viÅ¡e
+                          fajlova koristeÄ‡i se dÅ¾oker znacima.
+  /P    Poziva upit za potvrdu pre brisanja svakog fajla pojedinaÄno.
   /V    Prikazuje sve izbrisane fajlove.
 .
 
@@ -994,47 +994,47 @@ Briçe jedan ili viçe fajlova.
 Prikazuje listu fajlova i pod-direktorijuma u direktorijumu.
 
   DIR [drajv:][putanja][fajl] [/P] [/W] [/A[[:]atributi]]
-       [/O[[:]naŸin]] [/S] [/B] [/L] [/[Y|4]]
+       [/O[[:]naÄin]] [/S] [/B] [/L] [/[Y|4]]
 
   [drajv:][putanja][fajl]
            Navodi drajv, direktorijum, i/ili fajlove za listanje.
-            (Mo§e biti slo§ena ili viçestruka specififikacija fajlova)
+            (MoÅ¾e biti sloÅ¾ena ili viÅ¡estruka specififikacija fajlova)
   /A       Prikazuje fajlove sa navedenim atributima. (Podraz. /ADHSRA)
-  atributi  D  Direktorijumi             R  Read-only (samo za Ÿitanje)
+  atributi  D  Direktorijumi             R  Read-only (samo za Äitanje)
             H  Hidden (sakriveni)        A  Spremni za arhiviranje
             S  Sistemski fajlovi         -  Prefiks negacije
-  /O       Prikazuje fajlove sortirane na navedeni naŸin. (Podraz. /ONG)
-  naŸin     N  Po nazivu                 S  Po veliŸini
+  /O       Prikazuje fajlove sortirane na navedeni naÄin. (Podraz. /ONG)
+  naÄin     N  Po nazivu                 S  Po veliÄini
             E  Po ekstenziji             D  Po datumu i vremenu
-            G  Grupiçe direktorijume     -  Prefiks inverznog redosleda
+            G  GrupiÅ¡e direktorijume     -  Prefiks inverznog redosleda
             U  Nesortirano
   /P       Pauzira posle svakog punog ekrana informacija.
-  /W       Koristi format çirokog listanja.
+  /W       Koristi format Å¡irokog listanja.
   /S       Prikazuje fajlove u navedenom diru i svim pod-direktorijumima.
   /B       Koristi ogoljeni format (bez zaglavlja i statistike).
   /L       Koristi mala slova.
   /Y,/4    Prikazuje godinu sa 4 cifre.
 
- PrekidaŸi mogu biti navedeni u DIRCMD promenljivi okru§enja. Poniçtite
- ve† navedene prekidaŸe postavljanjem prefiksa "-". Na primer: /-W.
+ PrekidaÄi mogu biti navedeni u DIRCMD promenljivi okruÅ¾enja. PoniÅ¡tite
+ veÄ‡ navedene prekidaÄe postavljanjem prefiksa "-". Na primer: /-W.
 .
 
 :TEXT_CMDHELP_DOSKEY#1
-DOSKEY je omogu†en interno u komandnoj ljusci.
+DOSKEY je omoguÄ‡en interno u komandnoj ljusci.
 
- ÚÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿
- ³ Taster     ³ Funkcija ³
- ÃÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
- ³ Gore/Dole  ³ Poziva istoriju.                                      ³
- ³ Levo/Desno ³ Navigacija kroz komandnu liniju i/ili dopunjavanje    ³
- ³            ³ trenutne linije prethodno pozvanom komandom.          ³
- ³ Home/End   ³ PoŸetak/kraj linije.                                  ³
- ³ Insert     ³ Promena izmeĞu moda umetanja i pisanja preko.         ³
- ³ Tab        ³ Dopunjavanje trenutne reŸi kao naziv fajla. Dvostruki ³
- ³            ³ pritisak †e prikazati sve odgovaraju†e fajlove.       ³
- ÀÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+ â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+ â”‚ Taster     â”‚ Funkcija â”‚
+ â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+ â”‚ Gore/Dole  â”‚ Poziva istoriju.                                      â”‚
+ â”‚ Levo/Desno â”‚ Navigacija kroz komandnu liniju i/ili dopunjavanje    â”‚
+ â”‚            â”‚ trenutne linije prethodno pozvanom komandom.          â”‚
+ â”‚ Home/End   â”‚ PoÄetak/kraj linije.                                  â”‚
+ â”‚ Insert     â”‚ Promena izmeÄ‘u moda umetanja i pisanja preko.         â”‚
+ â”‚ Tab        â”‚ Dopunjavanje trenutne reÄi kao naziv fajla. Dvostruki â”‚
+ â”‚            â”‚ pritisak Ä‡e prikazati sve odgovarajuÄ‡e fajlove.       â”‚
+ â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
- Komanda HISTORY †e prikazati sadr§aj bafera istorije.
+ Komanda HISTORY Ä‡e prikazati sadrÅ¾aj bafera istorije.
 .
 
 :TEXT_CMDHELP_ORIGINAL_DOSKEY#1
@@ -1049,92 +1049,92 @@ Prikazuje poruke, ili postavlja-uklanja odjek komandi.
   ECHO.
 
  Pokrenite ECHO bez parametara za prikaz trenutne postavke.
- "ECHO." †e ispisati praznu liniju na ekran.
+ "ECHO." Ä‡e ispisati praznu liniju na ekran.
 .
 
 :TEXT_CMDHELP_EXIT
-Napuçta trenutno aktivnu komandnu ljusku.
+NapuÅ¡ta trenutno aktivnu komandnu ljusku.
 
   EXIT
 .
 
 :TEXT_CMDHELP_FOR
-Pokre†e navedenu komandu za svaki fajl iz navedenog skupa fajlova.
+PokreÄ‡e navedenu komandu za svaki fajl iz navedenog skupa fajlova.
 
   FOR %varijabla IN (skup) DO komanda [parametri]
 
   %varijabla    Navodi zamenljivi parametar.
-  (skup)        Navodi skup od jednog ili viçe fajlova. D§oker znaci su
+  (skup)        Navodi skup od jednog ili viÅ¡e fajlova. DÅ¾oker znaci su
                 dozvoljeni.
-  komanda       Navodi komandu za izvrçenje nad svakim fajlom iz skupa.
+  komanda       Navodi komandu za izvrÅ¡enje nad svakim fajlom iz skupa.
   parametri     Navodi parametre navedene komande.
 
  U batch programima, koristite %%varijabla umesto %varijabla.
 .
 
 :TEXT_CMDHELP_GOTO
-Upu†uje komandnu ljusku na liniju odreĞenu labelom u batch programu.
+UpuÄ‡uje komandnu ljusku na liniju odreÄ‘enu labelom u batch programu.
 
   GOTO labela
 
   labela   Navodi labelu definisanu u trenutnom batch programu.
 
- Labelu piçete samu na liniji, poŸinju†i dvotaŸkom.
+ Labelu piÅ¡ete samu na liniji, poÄinjuÄ‡i dvotaÄkom.
 .
 
 :TEXT_CMDHELP_HISTORY#1
-Prikazuje trenutni sadr§aj bafera istorije.
+Prikazuje trenutni sadrÅ¾aj bafera istorije.
 
   HISTORY
 .
 
 :TEXT_CMDHELP_IF
-Vrçi uslovno procesiranje u batch programima.
+VrÅ¡i uslovno procesiranje u batch programima.
 
   IF [NOT] ERRORLEVEL broj komanda
   IF [NOT] string1==string2 komanda
   IF [NOT] EXIST fajl komanda
 
-  NOT               Navodi da komandna ljuska treba da izvrçi komandu samo
-                    ukoliko je uslov netaŸan. Negacija uslova.
-  ERRORLEVEL broj   Vra†a TA¬NO ukoliko je prethodno pokrenuti program
-                    vratio izlazni kod jednak ili ve†i od navedenog broja.
-  komanda           Navodi komandu koja se treba izvrçiti ukoliko je uslov
+  NOT               Navodi da komandna ljuska treba da izvrÅ¡i komandu samo
+                    ukoliko je uslov netaÄan. Negacija uslova.
+  ERRORLEVEL broj   VraÄ‡a TAÄŒNO ukoliko je prethodno pokrenuti program
+                    vratio izlazni kod jednak ili veÄ‡i od navedenog broja.
+  komanda           Navodi komandu koja se treba izvrÅ¡iti ukoliko je uslov
                     zadovoljen.
-  string1==string2  Vra†a TA¬NO ukoliko su nizovi znakova jednaki.
-  EXIST fajl        Vra†a TA¬NO ukoliko fajl sa navedenim imenom postoji.
+  string1==string2  VraÄ‡a TAÄŒNO ukoliko su nizovi znakova jednaki.
+  EXIST fajl        VraÄ‡a TAÄŒNO ukoliko fajl sa navedenim imenom postoji.
 .
 
 :TEXT_CMDHELP_LH
-UŸitava program u gornje memorijsko podruŸje.
+UÄitava program u gornje memorijsko podruÄje.
 
   LOADHIGH [drajv:][putanja]fajl [parametri]
-  LOADHIGH [/L:podruŸje1[,min_vel1][;podruŸje2[,min_vel2]...] [/S]]
+  LOADHIGH [/L:podruÄje1[,min_vel1][;podruÄje2[,min_vel2]...] [/S]]
            [drajv:][putanja]fajl [parametri]
 
-  /L:podruŸje1[,min_vel1][;podruŸje2[,min_vel2]...
-             Navodi podruŸje(a) memorije u koje treba uŸitati program.
-             - podruŸje1 navodi broj prvog memorijskog podruŸja.
-             - min_vel1 navodi minimalnu veliŸinu, ako postoji, za podruŸje1.
-             - podruŸje2 navodi broj drugog memorijskog podruŸja.
-             - min_vel2 navodi minimalnu veliŸinu, ako postoji, za podruŸje2.
-             Mo§ete navesti koliko god §elite memorijskih podruŸja.
+  /L:podruÄje1[,min_vel1][;podruÄje2[,min_vel2]...
+             Navodi podruÄje(a) memorije u koje treba uÄitati program.
+             - podruÄje1 navodi broj prvog memorijskog podruÄja.
+             - min_vel1 navodi minimalnu veliÄinu, ako postoji, za podruÄje1.
+             - podruÄje2 navodi broj drugog memorijskog podruÄja.
+             - min_vel2 navodi minimalnu veliÄinu, ako postoji, za podruÄje2.
+             MoÅ¾ete navesti koliko god Å¾elite memorijskih podruÄja.
 
-  /S         Smanjuje UMB do svoje minimalne veliŸine dok se program uŸitava.
+  /S         Smanjuje UMB do svoje minimalne veliÄine dok se program uÄitava.
 
   [drajv:][putanja]fajl
-             Navodi lokaciju i naziv programa koji treba uŸitati.
+             Navodi lokaciju i naziv programa koji treba uÄitati.
 
-  parametri  Parametri programa koji se uŸitava.
+  parametri  Parametri programa koji se uÄitava.
 .
 
 :TEXT_CMDHELP_LOADFIX
-UŸitava program iznad prvih 64K memorije i pokre†e program.
+UÄitava program iznad prvih 64K memorije i pokreÄ‡e program.
 
   LOADFIX [drajv:][putanja]fajl
 
- Upotrebite LOADFIX za uŸitavanje programa ukoliko ste dobili poruku
- "Packed file corrupt" pri pokuçaju uŸitavanja u nisku memoriju.
+ Upotrebite LOADFIX za uÄitavanje programa ukoliko ste dobili poruku
+ "Packed file corrupt" pri pokuÅ¡aju uÄitavanja u nisku memoriju.
 .
 
 :TEXT_CMDHELP_MD
@@ -1145,13 +1145,13 @@ Kreira novi direktorijum.
 .
 
 :TEXT_CMDHELP_PATH
-Prikazuje ili postavlja putanju za tra§enje izvrçnih fajlova.
+Prikazuje ili postavlja putanju za traÅ¾enje izvrÅ¡nih fajlova.
 
   PATH [[drajv:]putanja[;...]]
   PATH ;
 
  Pokrenite "PATH ;" za brisanje svih putanja i usmerenje komandne
- ljuske na tra§enje izvrçnih fajlova samo u trenutnom direktorijumu.
+ ljuske na traÅ¾enje izvrÅ¡nih fajlova samo u trenutnom direktorijumu.
  Pokrenite PATH bez parametara za prikaz trenutne vrednosti.
 .
 
@@ -1169,7 +1169,7 @@ Menja odziv komandnog prompta.
 
   tekst    Navodi novi komandni prompt
 
- Prompt mo§e biti sastavljen od znakova i slede†ih specijalnih kodova:
+ Prompt moÅ¾e biti sastavljen od znakova i sledeÄ‡ih specijalnih kodova:
 
       $Q   = (znak za jednako)
       $$   $ (znak za dolar)
@@ -1178,10 +1178,10 @@ Menja odziv komandnog prompta.
       $P   Trenutni drajv i putanja
       $V   Verzija komandne ljuske
       $N   Trenutni drajv
-      $G   > (znak za ve†e-od)
+      $G   > (znak za veÄ‡e-od)
       $L   < (znak za manje-od)
       $B   | (znak za cev)
-      $H   Backspace (briçe prethodni znak)
+      $H   Backspace (briÅ¡e prethodni znak)
       $E   Escape kod (ASCII kod 27)
       $_   CR i LF kodovi (nova linija)
 
@@ -1194,7 +1194,7 @@ trenutni radni direktorijum.
 
   PUSHD [[drajv:]putanja]
 
-  Gde je [drajv:]putanja nova putanja koju §elite.
+  Gde je [drajv:]putanja nova putanja koju Å¾elite.
 .
 
 :TEXT_CMDHELP_POPD
@@ -1202,24 +1202,24 @@ Skida direktorijum sa vrha steka direktorijuma, i postavlja ga za radni.
 
   POPD [*]
 
-  Opcija '*' briçe sadr§aj steka direktorijuma.
+  Opcija '*' briÅ¡e sadrÅ¾aj steka direktorijuma.
 .
 
 :TEXT_CMDHELP_DIRS
-Prikazuje sadr§aj steka direktorijuma.
+Prikazuje sadrÅ¾aj steka direktorijuma.
 
   DIRS
 .
 
 :TEXT_CMDHELP_RD
-Uklanja (briçe) direktorijum.
+Uklanja (briÅ¡e) direktorijum.
 
   RMDIR [drajv:]putanja
   RD [drajv:]putanja
 .
 
 :TEXT_CMDHELP_REM
-Obele§ava komentar (napomenu) u batch fajlu ili CONFIG.SYSu.
+ObeleÅ¾ava komentar (napomenu) u batch fajlu ili CONFIG.SYSu.
 
   REM [komentar]
 .
@@ -1230,28 +1230,28 @@ Menja naziv fajlu ili direktorijumu.
   RENAME [drajv:][putanja][dir1 | fajl1] [dir2 | fajl2]
   REN [drajv:][putanja][dir1 | fajl1] [dir2 | fajl2]
 
- D§oker znaci nisu dozvoljeni.
+ DÅ¾oker znaci nisu dozvoljeni.
 
- Primetite da ne mo§ete navesti novi drajv ili putanju za odrediçte.
+ Primetite da ne moÅ¾ete navesti novi drajv ili putanju za odrediÅ¡te.
  U tu svrhu upotrebite eksternu komandu MOVE.
 .
 
 :TEXT_CMDHELP_SET#1
-Prikazuje, postavlja, ili uklanja promenljive okru§enja.
+Prikazuje, postavlja, ili uklanja promenljive okruÅ¾enja.
 
   SET [/C] [/P] [promenljiva=[string]]
 
-  promenljiva  Navodi ime promenljive okru§enja.
+  promenljiva  Navodi ime promenljive okruÅ¾enja.
   string       Navodi niz znakova za dodelu promenljivoj. Ukoliko string
-               nije naveden, promenljiva se uklanja iz okru§enja.
+               nije naveden, promenljiva se uklanja iz okruÅ¾enja.
 
- Pokrenite SET bez parametara za prikaz trenutnih promenljivi okru§enja.
+ Pokrenite SET bez parametara za prikaz trenutnih promenljivi okruÅ¾enja.
 
-  /C    Prisiljava zadr§avanje navedene veliŸine slova promenljive.
-  /P    Poziva upit sa stringom i dodeljuje korisniŸki unos promenljivoj.
+  /C    Prisiljava zadrÅ¾avanje navedene veliÄine slova promenljive.
+  /P    Poziva upit sa stringom i dodeljuje korisniÄki unos promenljivoj.
 
- Promenljiva se standardno menja u velika slova, ukoliko se ve† ne
- nalazi u okru§enju, inaŸe se navedena veliŸina slova zadr§ava.
+ Promenljiva se standardno menja u velika slova, ukoliko se veÄ‡ ne
+ nalazi u okruÅ¾enju, inaÄe se navedena veliÄina slova zadrÅ¾ava.
 .
 
 :TEXT_CMDHELP_SHIFT#1
@@ -1259,7 +1259,7 @@ Menja poziciju zamenljivih parametara u batch fajlu.
 
   SHIFT [DOWN]
 
- DOWN pomera prozor argumenata prema poŸetku (%0). U ostalim sluŸajevima
+ DOWN pomera prozor argumenata prema poÄetku (%0). U ostalim sluÄajevima
  pomera isti prema kraju.
 .
 
@@ -1268,10 +1268,10 @@ Prikazuje ili postavlja sistemsko vreme.
 
   TIME [/T] [vreme]
 
-  /T odvra†a TIME od interaktivnosti.
+  /T odvraÄ‡a TIME od interaktivnosti.
 
  Pokrenite TIME bez parametara za prikaz trenutne postavke vremena i
- upit za novu. Pritisnite ENTER da saŸuvate isto vreme.
+ upit za novu. Pritisnite ENTER da saÄuvate isto vreme.
 .
 
 :TEXT_CMDHELP_TRUENAME
@@ -1281,7 +1281,7 @@ Prikazuje punu putanju trenutne ili navedene putanje.
 .
 
 :TEXT_CMDHELP_TYPE
-Prikazuje sadr§aj tekstualnih fajlova.
+Prikazuje sadrÅ¾aj tekstualnih fajlova.
 
   TYPE [drajv:][putanja]fajl
 .
@@ -1322,12 +1322,12 @@ Prikazuje listu komandi i osobina dostupnih u ljusci.
   ?komanda [argument]
 
  Prva varijanta prikazuje dostupne komande i osobine ljuske.
- Druga varijanta †e izneti upit da li se navedena komanda treba
- izvrçiti, kao da je mod pra†enja aktivan.
+ Druga varijanta Ä‡e izneti upit da li se navedena komanda treba
+ izvrÅ¡iti, kao da je mod praÄ‡enja aktivan.
 .
 
 :TEXT_CMDHELP_WHICH
-Tra§i i prikazuje izvrçne fajlove za svaku navedenu komandu.
+TraÅ¾i i prikazuje izvrÅ¡ne fajlove za svaku navedenu komandu.
 
   WHICH {komanda}
 .
@@ -1337,7 +1337,7 @@ NA
 .
 
 :TEXT_ERROR_COPY_PLUS_DESTINATION#1
-Odrediçte COPY ne sme sadr§ati plus ('+') znakove.
+OdrediÅ¡te COPY ne sme sadrÅ¾ati plus ('+') znakove.
 .
 
 :TEXT_DELETE_FILE#1

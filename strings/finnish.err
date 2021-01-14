@@ -4,7 +4,7 @@
 #
 #       Language: Finnish
 #       Codepage: 850
-#       Author:   Sampo HippelÑinen
+#       Author:   Sampo Hippel√§inen
 # 
 # The critical error (criter) handler receives some information
 # from the kernel about what error condition happens, generates some
@@ -108,23 +108,23 @@ DELIMITER: , %.
 UNKNOWN: Tuntematon virhekoodi
 S15
 0: kirjoitussuojausvirhe
-1: ajuri ei tunnista yksikkîÑ
+1: ajuri ei tunnista yksikk√∂√§
 2: asema ei valmis
 3: ajuri ei tunnista komentoa
 4: tietovirhe (CRC)
-5: virheellinen laiteajuripyyntîtietueen koko
+5: virheellinen laiteajuripyynt√∂tietueen koko
 6: hakuvirhe
-7: tunnistamaton tietovÑline
-8: sektoria ei lîydy
+7: tunnistamaton tietov√§line
+8: sektoria ei l√∂ydy
 9: tulostimen paperi loppu
 10: kirjoitusvika
 11: lukuvika
 12: yleisvika
-13: yhteiskÑyttîvirhe
+13: yhteisk√§ytt√∂virhe
 14: lukitusvirhe
 15: virheellinen levyn vaihto
 16: tiedoston ohjauslohko ei saatavilla
-17: yhteiskÑyttîpuskurin ylivuoto
-18: koodisivu ei tÑsmÑÑ
-19: syîte loppu
-20: levytila ei riitÑ
+17: yhteisk√§ytt√∂puskurin ylivuoto
+18: koodisivu ei t√§sm√§√§
+19: sy√∂te loppu
+20: levytila ei riit√§

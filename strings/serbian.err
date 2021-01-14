@@ -4,7 +4,7 @@
 #
 #  Language: Serbian / Yugoslavian
 #  Codepage: 852
-#  Author:   Dejan Êtrbac (strbac@phreaker.net)
+#  Author:   Dejan ≈†trbac (strbac@phreaker.net)
 #
 # The critical error (criter) handler receives some information
 # from the kernel about what error condition happens, generates some
@@ -63,13 +63,13 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: %&0A%&0A%&0DGreÁka %1 na drajvu %A: - %3
+BLOCK_DEVICE: %&0A%&0A%&0DGre≈°ka %1 na drajvu %A: - %3
 S3
-CHAR_DEVICE:  %&0A%&0A%&0DGreÁka %1 na ure–aju %A: - %3
+CHAR_DEVICE:  %&0A%&0A%&0DGre≈°ka %1 na ureƒëaju %A: - %3
 
 ## kind of operation
 S0
-READ: pri üitanju
+READ: pri ƒçitanju
 S1
 WRITE: pri upisu
 
@@ -85,7 +85,7 @@ DATA: Podaci
 
 ## action strings
 S8
-IGNORE: (I)gnoriÁi
+IGNORE: (I)gnori≈°i
 S9
 RETRY: (P)onovo
 S10
@@ -105,26 +105,26 @@ S13
 DELIMITER: , %.
 
 ## Error strings
-UNKNOWN: Nepoznata greÁka
+UNKNOWN: Nepoznata gre≈°ka
 S15
-0: POKUÊAJ PREKORA¨ENjA ZAÊTITE OD PISANjA
+0: POKU≈†AJ PREKORAƒåENjA ZA≈†TITE OD PISANjA
 1: NEPOZNATA JEDINICA ZA DRAJVER
 2: DRAJV NIJE SPREMAN
 3: NEPOZNATA KOMANDA PRENETA DRAJVERU
-4: GREÊKA U PODACIMA (LOÊ CRC)
-5: LOÊA DU¶INA STRUKTURE ZAHTEVA DRAJVERA URE—AJA
-6: GREÊKA PRI TRA¶ENjU (SEEK)
+4: GRE≈†KA U PODACIMA (LO≈† CRC)
+5: LO≈†A DU≈ΩINA STRUKTURE ZAHTEVA DRAJVERA UREƒêAJA
+6: GRE≈†KA PRI TRA≈ΩENjU (SEEK)
 7: NEPOZNATI TIP MEDIJA
-8: SEKTOR NIJE PRONA—EN
-9: U ÊTAMPACU NEMA PAPIRA
-10: GREÊKA PRI PISANjU
-11: GREÊKA PRI ¨ITANjU
+8: SEKTOR NIJE PRONAƒêEN
+9: U ≈†TAMPACU NEMA PAPIRA
+10: GRE≈†KA PRI PISANjU
+11: GRE≈†KA PRI ƒåITANjU
 12: GENERALNI OTKAZ
-13: NARUÊAVANjE RASPODELE
-14: NARUÊAVANjE BLOKADE
-15: NEVA¶ECA PROMENA DISKA
+13: NARU≈†AVANjE RASPODELE
+14: NARU≈†AVANjE BLOKADE
+15: NEVA≈ΩECA PROMENA DISKA
 16: FCB JE NEDOSTUPNA
-17: PREKORA¨ENjE ZAJEDNI¨KOG BAFERA
-18: NEUSAGLAÊENOST KODNIH STRANA
+17: PREKORAƒåENjE ZAJEDNIƒåKOG BAFERA
+18: NEUSAGLA≈†ENOST KODNIH STRANA
 19: NEDOVOLjNO ULAZA
 20: NEDOVOLjNO DISK PROSTORA

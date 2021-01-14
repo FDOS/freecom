@@ -71,7 +71,7 @@ CHAR_DEVICE: Erreur %1 lecteur %A: %3
 S0
 READ: lecture de
 S1
-WRITE: ‚criture vers
+WRITE: Ã©criture vers
 
 ## kind of failed area of block devices
 S4
@@ -81,7 +81,7 @@ FAT: FAT
 S6
 ROOT: root
 S7
-DATA: donn‚es
+DATA: donnÃ©es
 
 ## action strings
 S8
@@ -107,24 +107,24 @@ DELIMITER: , %.
 ## Error strings
 UNKNOWN: Code d'erreur inconnu
 S15
-0: tentative de violation de protection en ‚criture
-1: unit‚ inconnue pour pilote
-2: lecteur non prˆt
-3: commande inconnue donn‚e au pilote
-4: erreur de donn‚es (mauvais CRC)
-5: mauvaise structure de taille pour le requˆte de pilote de p‚riph‚rique
+0: tentative de violation de protection en Ã©criture
+1: unitÃ© inconnue pour pilote
+2: lecteur non prÃªt
+3: commande inconnue donnÃ©e au pilote
+4: erreur de donnÃ©es (mauvais CRC)
+5: mauvaise structure de taille pour le requÃªte de pilote de pÃ©riphÃ©rique
 6: erreur de recherche
 7: type de support inconnu
-8: secteur non trouv‚
-9: imprimante … court de papier
-10: erreur d'‚criture
+8: secteur non trouvÃ©
+9: imprimante Ã  court de papier
+10: erreur d'Ã©criture
 11: erreur de lecture
-12: erreur g‚n‚rale
+12: erreur gÃ©nÃ©rale
 13: violation de partage
 14: violation de verrou
 15: changement de disque invalide
 16: FCB indisponible
-17: tampon de partage satur‚
+17: tampon de partage saturÃ©
 18: page de code manquante
-19: fin de l'entr‚e
+19: fin de l'entrÃ©e
 20: espace disque insuffisant

@@ -63,7 +63,7 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: Napaka pri %1 pogona %A: obmoŸje %2: %3
+BLOCK_DEVICE: Napaka pri %1 pogona %A: obmoÄje %2: %3
 S3
 CHAR_DEVICE: Napaka pri %1 naprave %A: %3
 
@@ -107,24 +107,24 @@ DELIMITER: , %.
 ## Error strings
 UNKNOWN: Neznana koda napake
 S15
-0: poskus prekrçitve zaçŸite pred pisanjem
+0: poskus prekrÅ¡itve zaÅ¡Äite pred pisanjem
 1: neznana enota za gonilnik
 2: pogon ni pripravljen
 3: gonilnik je prejel neznan ukaz
-4: podatkovna napaka (napaŸen CRC)
-5: napaŸna dol§ina strukture zahteve za gonilnik
+4: podatkovna napaka (napaÄen CRC)
+5: napaÄna dolÅ¾ina strukture zahteve za gonilnik
 6: napaka pri iskanju
 7: neznana vrsta medija
-8: sektorja ni mogoŸe najti
+8: sektorja ni mogoÄe najti
 9: tiskalnik nima papirja
 10: napaka pri pisanju
 11: napaka pri branju
-12: sploçna napaka
-13: prekrçitev deljenja
-14: prekrçitev zaklepa
+12: sploÅ¡na napaka
+13: prekrÅ¡itev deljenja
+14: prekrÅ¡itev zaklepa
 15: neveljavna zamenjava diskete
 16: FCB ni na voljo
 17: medpomnilnik za deljenje prepoln
 18: neujemanje kodiranj
-19: ni veŸ vhoda
+19: ni veÄ vhoda
 20: ni dovolj prostora na disku
