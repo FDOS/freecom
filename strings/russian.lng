@@ -553,10 +553,10 @@ LFNFOR COMPLETE - %s
 .
 
 :TEXT_STRING_PM#1
- pm\
+ пп\
 .
 :TEXT_STRING_AM#1
- am\
+ дп\
 .
 
 :TEXT_MSG_ENTER_TIME#1
@@ -884,7 +884,7 @@ C:\\FDOS
 Сегмент памяти для переменных окружения    : максимум %5u байт; свободно %5u байт
 .
 :TEXT_MEMORY_CONTEXT#1%
-Сегмент контекста        : максимум %5u байт; свободное %5u байт
+Сегмент контекста        : максимум %5u байт; свободно %5u байт
 .	
 :TEXT_MEMORY_HEAP#1%
 Память                   : свободно %5lu байт
@@ -1553,11 +1553,11 @@ FreeCOM не может быть устройством: "%s"
 .
 
 :TEXT_ERROR_LOADING_STRINGS
-Failed to load the strings resource into memory, the location
-pointed to in %COMSPEC% seems to be invalid. Please specify another
-location of FreeCOM to try to load the strings from, e.g.:
+Не удалось загрузить строковый ресурс в память, вероятно в %COMSPEC%
+указано некорректное расположение. Укажите другое расположение
+FreeCOM, из которого можно попытаться загрузить строки, например:
 C:\\COMMAND.COM
-or just hit enter to cancel to load the strings.
+или просто нажмите Enter, чтобы отменить загрузку строк.
 .
 
 :TEXT_TERMINATING
