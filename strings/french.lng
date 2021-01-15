@@ -10,7 +10,7 @@
 # outputs.  This file is the input to the fixstrs program, and it
 # outputs strings.h and strings.dat.  The .DAT file is appended to
 # the command.exe file, and then renamed to command.com.  The .H
-# file contains all the info for the program to retreive the
+# file contains all the info for the program to retrieve the
 # messages.
 #
 # The format of this file is simple.  Blank lines and lines starting
@@ -30,7 +30,7 @@
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
-# period (".") signifies that there will be a final carrage return when
+# period (".") signifies that there will be a final carriage return when
 # the message is displayed, but a comma does not.
 #
 # The body may contain backslash escape sequences as known from C; there
@@ -50,7 +50,7 @@
 
 # Defining prompts
 # Some prompts may cause an user interaction. Those ones should be in sync
-# with the issued text. To define how to interprete a pressed key, they
+# with the issued text. To define how to interpret a pressed key, they
 # are mapped into metakeys like that: [ignore first hash sign]
 
 ## Return value: a -> Yes; else -> No
@@ -62,9 +62,9 @@
 
 # All strings, which label start with "PROMPT_", are parsed as prompts.
 # The first two lines of the body are special; the first one enumerates all
-# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# valid keys, the second one assigns arbitrary metakeys. Metakeys may
 # range from 'a' through 'z'; spaces are ignored; everything else cause
-# an error. The comment preceeding the prompt definition associates the
+# an error. The comment preceding the prompt definition associates the
 # metakeys with their meaning.
 # The remaining lines of the body contain the text to be displayed.
 #
@@ -75,7 +75,7 @@
 # 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
 # The spaces between the 'b's in the second line had been inserted to
 # align them with the corresponding keys of the first line, hence in order
-# to enhance readibility of the association between the pressed keys and their
+# to enhance readability of the association between the pressed keys and their
 # mapping into a metakey.
 #
 # The first line (pressed keys) has to enumerate the ASCII value as returned
@@ -1205,7 +1205,7 @@ Avec la taille, la taille du tampon de l'historique est modifiée.
 .
 
 :TEXT_CMDHELP_IF
-Effectue des traitement conditionnels dans les programmes batch.
+Effectue des traitements conditionnels dans les programmes batch.
 
 IF [NOT] ERRORLEVEL nombre commande
 IF [NOT] chaîne1==chaîne2 commande
@@ -1284,7 +1284,7 @@ Tapez PATH sans paramètres pour afficher le chemin actuel.
 
 :TEXT_CMDHELP_PAUSE
 Suspend le traitement d'un programme batch et affiche le message :
-"Appuyez sur un touche pour continuer...." ou un message optionnel spécifié.
+"Appuyez sur une touche pour continuer...." ou un message optionnel spécifié.
 
 PAUSE [message]
 .
@@ -1296,7 +1296,7 @@ PROMPT [texte]
 
   texte    Spécifie une nouvelle invite de commande.
 
-L'invite peut être constitué de caractères normaux et des code spéciaux
+L'invite peut être constitué de caractères normaux et des codes spéciaux
 suivants :
 
   $Q   = (signe d'égalité)
@@ -1368,7 +1368,7 @@ SET [/C] [/P] [/E] [/U] [variable=[chaîne]]
   variable  Spécifie le nom de la variable d'environnement.
   chaîne    Spécifie une série de caractères à assigner à la variable.
 
-* Si aucune chaîne n'est spécifiée, la variable est enlevé de l'environnement.
+* Si aucune chaîne n'est spécifiée, la variable est enlevée de l'environnement.
 
 Tapez SET sans paramètres pour afficher les variables d'environnement actuels.
 
@@ -1400,7 +1400,7 @@ Affiche ou définit l'heure du système.
 
 TIME [/T] [heure]
 
-Tapez TIME sans paramètre pour afficher l'heure actuelle et un invite pour
+Tapez TIME sans paramètre pour afficher l'heure actuelle et une invite pour
 entrez une nouvelle heure. Appuyez sur ENTRÉE pour garder l'heure.
 
 /T empêche TIME de devenir interactif.

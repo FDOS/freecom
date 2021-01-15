@@ -112,7 +112,7 @@ S15
 2: lecteur non prêt
 3: commande inconnue donnée au pilote
 4: erreur de données (mauvais CRC)
-5: mauvaise structure de taille pour le requête de pilote de périphérique
+5: mauvaise structure de taille pour la requête de pilote de périphérique
 6: erreur de recherche
 7: type de support inconnu
 8: secteur non trouvé
