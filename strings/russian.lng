@@ -5,7 +5,7 @@
 #	Language: Russian
 #	Codepage: CP866
 #	Author:   Сандул Юрий Валентинович, Petr-Akhlamov,
-#                 Кузнецов Егор Михайлович.
+#	          Кузнецов Егор Михайлович.
 # 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
@@ -554,10 +554,10 @@ LFNFOR COMPLETE - %s
 .
 
 :TEXT_STRING_PM#1
- пп\
+ pm\
 .
 :TEXT_STRING_AM#1
- дп\
+ am\
 .
 
 :TEXT_MSG_ENTER_TIME#1
