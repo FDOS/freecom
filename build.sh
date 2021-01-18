@@ -2,6 +2,7 @@
 
 set -e
 
+export IBMPC=1
 WITH_UPX="no"
 SED=sed
 #workaround for Windows (set to binary mode)
@@ -58,13 +59,19 @@ while (( "$#" )); do
 	export DBCS=1
 	;;
     nec98)
+	unset GENDOS
+	unset IBMPC
 	export NEC98=1
 	;;
     ibmpc)
+	unset GENDOS
 	export IBMPC=1
+	unset NEC98
 	;;
     generic)
 	export GENDOS=1
+	unset IBMPC
+	unset NEC98
 	;;
     no-xms-swap)
 	unset XMS_SWAP
