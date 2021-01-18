@@ -189,7 +189,7 @@ upx --8086 --best -o command.upx command.com
 
 :alldone
 echo.
-echo All done. COMMAND.COM is ready for usage!
+echo All done. COMMAND.COM is ready for use!
 echo.
 if NOT "%XMS_SWAP%"=="" goto ende
 

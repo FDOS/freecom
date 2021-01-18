@@ -63,7 +63,7 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: Errore di %1l'unit… %A: %2 area: %3
+BLOCK_DEVICE: Errore di %1l'unitÃ  %A: %2 area: %3
 S3
 CHAR_DEVICE: Errore di %1 dispositivo %A: %3
 
@@ -108,8 +108,8 @@ DELIMITER: , %.
 UNKNOWN: Codice di errore sconosciuto
 S15
 0: tentativo di violazione della protezione in scrittura
-1: unit… sconosciuta al driver
-2: unit… non pronta
+1: unitÃ  sconosciuta al driver
+2: unitÃ  non pronta
 3: comando sconosciuto inviato al driver
 4: errore nei dati (errore CRC)
 5: errata dimensione della struttura di richiesta al driver

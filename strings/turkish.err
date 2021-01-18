@@ -2,8 +2,8 @@
 #
 # Critical error national customization file
 #
-#	Language: English
-#	Codepage: ASCII (7bit) / any codepage
+#	Language: Turkish
+#	Codepage: ASCII (7bit) / CP857
 #	Author:   FreeCOM maintainer
 # 
 # The critical error (criter) handler receives some information
@@ -63,15 +63,15 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: Hata %1 src %A: %2 alan: %3
+BLOCK_DEVICE: Hata %1 sÃ¼rÃ¼cÃ¼ %A: %2 alan: %3
 S3
-CHAR_DEVICE: Hata %1 src %A: %3
+CHAR_DEVICE: Hata %1 sÃ¼rÃ¼cÃ¼ %A: %3
 
 ## kind of operation
 S0
-READ: Ÿundan okunuyor:
+READ: Åuradan okunuyor:
 S1
-WRITE: Ÿuna yazlyor:
+WRITE: Åuraya yazÄ±lÄ±yor:
 
 ## kind of failed area of block devices
 S4
@@ -79,24 +79,24 @@ DOS: DOS
 S5
 FAT: FAT
 S6
-ROOT: root
+ROOT: KÃ¶k
 S7
-DATA: veri
+DATA: Veri
 
 ## action strings
 S8
-IGNORE: (Y)oksay
+IGNORE: (Y)ok say
 S9
-RETRY: (T)ekrar dene
+RETRY: Yeniden (d)ene
 S10
-ABORT: (˜)ptal
+ABORT: (Ä°)ptal
 S11
-FAIL: (B)aŸarsz
+FAIL: (B)aÅŸarÄ±sÄ±z
 ## keys associated with the actions
 S14 (compacted)
 KEYS_IGNORE: yY
-KEYS_RETRY:  tT
-KEYS_ABORT:  i˜
+KEYS_RETRY:  dD
+KEYS_ABORT:  iÄ°
 KEYS_FAIL:   bB
 ## embedded strings
 S12
@@ -107,24 +107,24 @@ DELIMITER: , %.
 ## Error strings
 UNKNOWN: Bilinmeyen hata kodu
 S15
-0: yazma korumas ihlal teŸebbs
-1: src i‡in bilinmeyen birim
-2: src hazr de§il
-3: srcye bilinmeyen bir komut verildi
-4: veri hatas (yanlŸ CRC)
-5: yanlŸ cihaz srcs talep yaps boyutu
-6: arama hatas
-7: bilinmeyen ortam tr
-8: kesim bulunamad
-9: yazcda ka§t kalmad
-10: yazma hatas
-11: okuma hatas
-12: genel baŸarszlk
-13: paylaŸm ihlali
-14: kilitleme ihlali
-15: ge‡ersiz disk de§iŸimi
-16: FCB mevcut de§il
-17: paylaŸm ”nbelle§i yetersiz
-18: sayfa kodu uyumsuzlu§u
-19: giriŸ sonu
-20: yetersiz disk alan
+0: Yazma korumasÄ± ihlal giriÅŸimi
+1: SÃ¼rÃ¼cÃ¼ iÃ§in bilinmeyen birim
+2: SÃ¼rÃ¼cÃ¼ hazÄ±r deÄŸil
+3: SÃ¼rÃ¼cÃ¼ye bilinmeyen bir komut verildi
+4: Veri hatasÄ± (yanlÄ±ÅŸ CRC)
+5: YanlÄ±ÅŸ aygÄ±t sÃ¼rÃ¼cÃ¼sÃ¼ talep yapÄ±sÄ± boyutu
+6: Arama hatasÄ±
+7: Bilinmeyen ortam tÃ¼rÃ¼
+8: Kesim bulunamadÄ±
+9: YazÄ±cÄ±da kÃ¢ÄŸÄ±t kalmadÄ±
+10: Yazma hatasÄ±
+11: Okuma hatasÄ±
+12: Genel baÅŸarÄ±sÄ±zlÄ±k
+13: PaylaÅŸÄ±m ihlali
+14: Kilitleme ihlali
+15: GeÃ§ersiz disk deÄŸiÅŸimi
+16: FCB mevcut deÄŸil
+17: PaylaÅŸÄ±m Ã¶nbelleÄŸi yetersiz
+18: Sayfa kodu uyuÅŸmazlÄ±ÄŸÄ±
+19: GiriÅŸ sonu
+20: Yetersiz disk alanÄ±

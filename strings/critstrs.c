@@ -6,11 +6,11 @@ strings.err - contains all the strings. will be appended on the end
               of the exe file.
 
 There are two input files:
-DEFAULT.ERR and the language file passed as argument to CRITSTRS.
+DEFAULT.err and the language file passed as argument to CRITSTRS.
 Any definition in the latter will override setting from the
 first one.
 
-1) If an individual *.ERR file does not define a certain string, its
+1) If an individual *.err file does not define a certain string, its
 	contents is taken from the DEFAULT file.
 2) The strings do not have any particular order within the *.ERR files,
 	the order is implicitly applied by CRITSTRS.
@@ -264,7 +264,7 @@ int main(int argc, char **argv)
 			"Useage: CRITSTRS [language]\n"
 			"\tIf no language is specified, the default strings are read only.\n"
 			"\tThere must be <language>.ERR file in the current directory.\n"
-			"Note: DEFAULT.ERR must be present in the current directory, too.");
+			"Note: DEFAULT.err must be present in the current directory, too.");
 		return 127;
 	}
 

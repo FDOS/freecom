@@ -2,3 +2,26 @@
 *.sh text eol=lf
 *.com -text
 elvis.rc -text
+ci_*.sh text eol=lf
+.github/workflows/*.yml text eol=lf
+
+# On checkout it is the specified encoding, but git internal
+# representation is UTF-8 so that diffs work correctly
+strings/DEFAULT.??? working-tree-encoding=CP437 text eol=auto
+strings/english.??? working-tree-encoding=CP437 text eol=auto
+strings/yu437.???   working-tree-encoding=CP437 text eol=auto
+strings/dutch.???   working-tree-encoding=CP850 text eol=auto
+strings/finnish.??? working-tree-encoding=CP850 text eol=auto
+strings/french.???  working-tree-encoding=CP850 text eol=auto
+strings/german.???  working-tree-encoding=CP850 text eol=auto
+strings/italian.??? working-tree-encoding=CP850 text eol=auto
+strings/pt_br.???   working-tree-encoding=CP850 text eol=auto
+strings/spanish.??? working-tree-encoding=CP850 text eol=auto
+strings/swedish.??? working-tree-encoding=CP850 text eol=auto
+strings/serbian.??? working-tree-encoding=CP852 text eol=auto
+strings/slovene.??? working-tree-encoding=CP852 text eol=auto
+strings/turkish.??? working-tree-encoding=CP857 text eol=auto
+strings/russian.??? working-tree-encoding=CP866 text eol=auto
+strings/ukr.???     working-tree-encoding=CP866 text eol=auto
+# Does not exist in iconv, so have to do it manually
+# strings/polish.???  working-tree-encoding=CP991 text eol=auto

@@ -1,0 +1,1549 @@
+# $Id$
+#
+# FreeCOM national customization file
+#
+#       Language: Finnish
+#       Codepage: 850
+#       Author:   Sampo Hippeläinen
+# 
+# This file is used to generate all the messages that command.com
+# outputs.  This file is the input to the fixstrs program, and it
+# outputs strings.h and strings.dat.  The .DAT file is appended to
+# the command.exe file, and then renamed to command.com.  The .H
+# file contains all the info for the program to retreive the
+# messages.
+#
+# The format of this file is simple.  Blank lines and lines starting
+# with "#" are ignored.
+# Each message starts with a label name that will be used to refer to
+# the message in the program.  A label starts with a colon ":".
+# A label has a version ID attached to it delimited by a hash sign, e.g.:
+#	:TEXT_LABEL#1
+# This version is incremented each time the contents of the string has
+# undergo a larger change. The same language definition may contain the
+# same label up to one time, regardless of the version. FIXSTRS compares
+# both the label and the version ID and both must match.
+# A missing version is assumed as "#0".
+# If there is a percent sign (%) appended to the version, the printf()
+# format string %-style placeholders are compared for the strings. The
+# sign need to be set in DEFAULT.lng only.
+#
+# All lines after the label are the message until a line with a
+# single "." or "," in the first column.  The difference is the
+# period (".") signifies that there will be a final carrage return when
+# the message is displayed, but a comma does not.
+#
+# The body may contain backslash escape sequences as known from C; there
+# are the usual \# (where '#' is a lowercase letter except 'x' or one of
+# "[]{}?"), \\ (to embed a backslash itself)
+# \x?? (where '??' are up to two hexadecimal digits), \0 (to embed a NUL
+# character), \, and \. (to specify a period or comma in the first column
+# of a line) and the single \ at the end of the line to suppress to append
+# a newline character. Note: There is NO octal sequence except the short \0!
+# There is a known bug (or feature): [ignore the very first hash mark]
+#:TEXT_LABEL#2
+#
+#\
+#,
+# Although the first data line appends the newline, the second does not,
+# though the comma removes the newline from the first line.
+
+# Defining prompts
+# Some prompts may cause an user interaction. Those ones should be in sync
+# with the issued text. To define how to interprete a pressed key, they
+# are mapped into metakeys like that: [ignore first hash sign]
+
+## Return value: a -> Yes; else -> No
+#:PROMPT_YES_NO#1
+#KkEe\n\r{CBREAK}
+#aabb b b       b
+# (Yes/No) ? \
+#.
+
+# All strings, which label start with "PROMPT_", are parsed as prompts.
+# The first two lines of the body are special; the first one enumerates all
+# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# range from 'a' through 'z'; spaces are ignored; everything else cause
+# an error. The comment preceeding the prompt definition associates the
+# metakeys with their meaning.
+# The remaining lines of the body contain the text to be displayed.
+#
+# Above example defines a native Yes/No prompt with a space behind the question
+# mark and no appended newline.
+# The metakey 'a' means "User answered with 'Yes'" and 'b' means no.
+# The keys 'Y' and 'y' are mapped to metakey 'a' (aka Yes) and the keys
+# 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
+# The spaces between the 'b's in the second line had been inserted to
+# align them with the corresponding keys of the first line, hence in order
+# to enhance readibility of the association between the pressed keys and their
+# mapping into a metakey.
+#
+# The first line (pressed keys) has to enumerate the ASCII value as returned
+# by DOS or BIOS (INT-10); special keys normally expressed with ASCII code zero,
+# but a non-zero scancode are NOT supported; this limit includes for instance
+# the function keys F1 through F12 and the cursor keys and it is not possible
+# to differ between the number pad and normal keys.
+# The keys may be enumerated by their ASCII character, by a backslash sequence,
+# or a symbolic name enclosed in curly brackets (see FIXSTRS.C "symkeys[]"
+# array about the supported symnames).
+
+
+#
+#  These are error messages
+#
+## Issued if a single character option is unknown
+:TEXT_ERROR_INVALID_SWITCH#0%
+Virheellinen valitsin. - /%c
+.
+
+## Issued if a longname option is unknown
+:TEXT_ERROR_INVALID_LSWITCH#0%
+Virheellinen valitsin. - /%s
+.
+
+## Issued if the context, the type of argument etc. is invalid
+:TEXT_ERROR_ILLFORMED_OPTION#0%
+Virheellinen asetus: '%s'
+.
+
+:TEXT_ERROR_OPT_ARG#0%
+Valitsimelle '%s' ei kuulu olla argumenttia
+.
+
+:TEXT_ERROR_OPT_NOARG#0%
+Valitsimella '%s' pitää olla argumentti
+.
+
+:TEXT_INVALID_NUMBER#0%
+Virheellinen luku: '%s'
+.
+
+:TEXT_ERROR_CLOSE_QUOTE#0%
+Puuttuva loppulainausmerkki: %c
+.
+
+:TEXT_ERROR_TEMPFILE
+Väliaikaistiedoston luonti epäonnistui
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
+Liikaa parametreja. - '%s'
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS
+Liikaa parametreja.
+.
+
+:TEXT_ERROR_INVALID_PARAMETER#0%
+Virheellinen parametri. - '%s'
+.
+
+:TEXT_ERROR_PATH_NOT_FOUND
+Polkua ei löydy.
+.
+
+:TEXT_ERROR_FILE_NOT_FOUND
+Tiedostoa ei löydy.
+.
+
+:TEXT_ERROR_SFILE_NOT_FOUND#0%
+Tiedostoa ei löydy. - '%s'
+.
+
+:TEXT_ERROR_REQ_PARAM_MISSING#0%
+Vaadittu parametri puuttuu.
+.
+
+:TEXT_ERROR_INVALID_DRIVE#0%
+Virheellinen asema %c:.
+.
+
+:TEXT_ERROR_BADCOMMAND#2%
+Komento tai tiedostonimi tuntematon - "%s".
+.
+
+:TEXT_ERROR_OUT_OF_MEMORY
+Muisti loppu.
+.
+
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+DOS-muistin varausvirhe.
+.
+
+:TEXT_ERROR_CANNOTPIPE
+Putkivirhe!  Väliaikaistiedoston avaus epäonnistui!
+.
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE#0%
+Rivi #%ld komentojonossa '%s' liian pitkä.
+.
+
+:TEXT_ERROR_BFILE_VANISHED#0%
+Komentojonoa '%s' ei löydy.
+.
+
+:TEXT_ERROR_BFILE_LABEL#0%
+Komentojonossa '%s' ei ole nimiötä '%s'.
+.
+
+:TEXT_ERROR_DIRFCT_FAILED#1%
+%s '%s' epäonnistui.
+.
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ENV_VAR#0%
+Ei voitu asettaa ympäristömuuttujaa '%s'.
+Ympäristö täynnä?
+.
+:TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
+Ympäristömuuttujaa '%s' ei löydy.
+.
+:TEXT_ERROR_NO_ENVIRONMENT
+Ympäristö puuttuu. Muisti ehkä vähissä. Käytä /E.
+.
+
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1%
+Aliasta '%s' ei voitu asettaa. Aliastila täynnä?
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1%
+Aliasta '%s' ei löydy.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+Ei aliastilaa. Muisti ehkä vähissä.
+.
+
+:TEXT_ERROR_SYNTAX_STR#0%
+Syntaksivirhe. - '%s'
+.
+
+:TEXT_ERROR_SYNTAX
+Syntaksivirhe.
+.
+
+:TEXT_ERROR_FILENAME_TOO_LONG#0%
+Tiedostonimi liian pitkä. - '%s'
+.
+
+:TEXT_ERROR_SELFCOPY#0%
+Ei voi kopioida '%s' itseensä
+.
+
+:TEXT_ERROR_COMMAND_TOO_LONG
+Komentorivi liian pitkä aliaslaajennuksineen!
+.
+
+:TEXT_ERROR_LINE_TOO_LONG
+Komentorivi yli 125 merkkiä.
+.
+
+:TEXT_ERROR_HISTORY_SIZE#1%
+Historian koko '%s' virheellinen.
+.
+
+:TEXT_HISTORY_EMPTY#1
+Komentorivihistoria tyhjä.
+.
+
+
+:TEXT_ERROR_BAD_MCB_CHAIN
+Muistin ohjauslohkoketju virheellinen tai MS-DOS ei yhteensopiva.
+.
+
+:TEXT_ERROR_UNDEFINED_ERROR#0%
+Tuntematon virhe %d.
+.
+
+:TEXT_ERROR_REGION_WARNING#0%
+Muistialue %d virheellinen - ohitetaan.
+.
+
+:TEXT_ERROR_ON_OR_OFF
+Täytyy olla ON tai OFF.
+.
+
+:TEXT_ERROR_BAD_VARIABLE
+Muuttujan määrittely virheellinen.
+.
+
+:TEXT_ERROR_IN_MISSING#1
+FOR: IN puuttuu.
+.
+
+:TEXT_ERROR_MISSING_PARENTHESES#1
+Sulku tai molemmat sulut puuttuu.
+.
+
+:TEXT_ERROR_DO_MISSING#1
+FOR: DO puuttuu.
+.
+
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+FOR: komento puuttuu DO:n jälkeen.
+.
+
+:TEXT_ERROR_REDIRECT_FROM_FILE#0%
+Syötettä ei voi ohjata tiedostosta '%s'.
+.
+
+:TEXT_ERROR_REDIRECT_TO_FILE#0%
+Tulostetta ei voi ohjata tiedostoon '%s'.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+Tyhjä ohjaus.
+.
+
+:TEXT_ERROR_INVALID_DATE
+Virheellinen päivämäärä.
+.
+
+:TEXT_ERROR_INVALID_TIME
+Virheellinen aika.
+.
+
+:TEXT_ERROR_NO_GOTO_LABEL
+GOTO:lle ei määritelty nimiötä.
+.
+
+:TEXT_CTTY_NOTIMPLEMENTED
+Tämä COMMAND.COM-versio ei toteuta CTTY-komentoa.
+.
+
+:TEXT_ERROR_NORW_DEVICE#0%
+Puuttuva tai virheellinen siirräntälaite '%s'.
+.
+
+:TEXT_ERROR_CTTY_DUP#0%
+TTY:n '%s' tiedostokuvaajaa ei voitu muuttaa.
+.
+
+:TEXT_ERROR_L_NOTIMPLEMENTED
+/L ei vielä toteutettu.
+.
+
+:TEXT_ERROR_U_NOTIMPLEMENTED
+/U ei vielä toteutettu.
+.
+
+:TEXT_ERROR_WRITING_DEST
+Kirjoitus kohteeseen epäonnistui.
+.
+
+:TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
+Lähteen avaus epäonnistui. - '%s'
+.
+
+:TEXT_ERROR_OPEN_FILE#0%
+Ei voitu avata tiedostoa '%s'
+.
+
+:TEXT_ERROR_READ_FILE#0%
+Ei voitu lukea tiedostosta '%s'
+.
+
+:TEXT_ERROR_WRITE_FILE#0%
+Ei voitu kirjoittaa tiedostoon '%s'
+.
+
+:TEXT_ERROR_LEADING_PLUS
+Yhdistysmerkki '+' ei voi olla argumenttien edellä.
+.
+
+:TEXT_ERROR_TRAILING_PLUS
+Yhdistysmerkki '+' ei voi olla argumenttien jälkeen.
+.
+
+:TEXT_ERROR_NOTHING_TO_DO
+Ei tehtävää.
+.
+
+:TEXT_ERROR_COPY
+COPY epäonnistui
+.
+
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: tiedostonimi puuttuu
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: luku puuttuu
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: luku virheellinen
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: komento puuttuu
+.
+
+:TEXT_NOT_IMPLEMENTED_YET
+Ei vielä toteutettu... pahoittelemme.
+.
+
+:TEXT_FAILED_LOAD_STRINGS
+Ei voitu ladata viestejä muistiin.
+.
+
+:TEXT_MSG_NOTIMPLEMENTED
+Tämä COMMAND.COM ei toteuta /MSG-valitsinta.
+.
+
+:TEXT_MSG_ITEMS_DISPLAYED#1%
+%u kohdetta.
+.
+
+:TEXT_CORRUPT_COMMAND_LINE
+Komentorivi vioittunut. Sisäinen virhe. Johtuu järjestelmästä,
+jolla COMMAND.COM:ia ajetaan. Ilmoita tästä virheestä, kiitos.
+.
+
+:TEXT_QUOTED_C_OR_K#1
+/C ja /K -valitsimet eivät tue lainausmerkkejä, ohitetaan.
+.
+
+:TEXT_INIT_FULLY_QUALIFIED#1%
+COMMAND.COM:in polku tulee olla täysin määritelty!
+Sen tulee sisältää aseman kirjain ja alkaa kenoviivalla.
+Esimerkki: C:\\FDOS
+
+COMMAND.COM olettaa polun nyt olevan:
+%s
+.
+
+:TEXT_ERROR_RESTORE_SESSION
+Istuntotietoa ei voitu palauttaa. Paikalliset asetukset
+menetetään. Yllä olevat virheviestit kuvaavat ongelmaa.
+.
+
+:TEXT_ERROR_SAVE_SESSION
+Nykyistä tietoa ei voida säilyttää ohjelmaa kutsuessa.
+Yllä olevat virheviestit kuvaavat ongelmaa.
+.
+
+:TEXT_ERROR_CWD_FAILED#1%
+Asema %c: ei vastaa.
+.
+
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+Heittovaihto epäonnistui: aliakset vievät liikaa muistia.
+.
+
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+Heittovaihto epäonnistui: etämuistin varaus epäonnistui.
+.
+
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+Aliastila loppu.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1%
+Ei aliasta: '%s'
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+Aliaksen lisäys epäonnistui.
+.
+
+:TEXT_ALIAS_INVALID_NAME#1%
+Aliaksen nimi '%s' virheellinen.
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+Kontekstimoduulin tai virheenkäsittelijän latausvirhe.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+Kontekstilta loppui muisti.
+Jos virhe toistuu, harkitse sisäisen puskurin tilan kasvatusta,
+kuten historian, hakemistopinon, tms.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1%
+Kontekstin yhteiskoko %lu tavua ylittää enimmäisrajan.
+Kooksi asetetaan %u tavua.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+Tilatiedon lukeminen kontekstiin epäonnistui. Virhe voi johtua
+muistin vioittumisesta tai kontekstin vähimmäiskoon väärin
+määrittelystä. Ilmoitathan FreeCOM:n ylläpitäjälle:
+freecom@freedos.org
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+Konteksti puuttuu heittovaihdon jälkeen. Se luodaan uudelleen,
+mutta aliakset ym. menetetään.
+.
+
+:TEXT_ERROR_PERMISSION_DENIED#1%
+%s: Pääsy evätty
+.
+
+:TEXT_ERROR_NO_SUCH_FILE#1%
+%s: Tiedostoa tai hakemistoa ei löydy
+.
+
+:TEXT_ERROR_UNKNOWN_ERROR#1%
+%s: Tuntematon virhe
+.
+
+#
+# Informational messages
+#
+
+:TEXT_MSG_PAUSE#1
+Paina mitä tahansa näppäintä jatkaaksesi . . .\
+.
+
+:TEXT_MSG_HISTORY_SIZE#0%
+Historian koko %d tavua.
+.
+
+:TEXT_MSG_DOSKEY
+DOSKEY on jo käytössä tässä kehotteessa.
+.
+
+:TEXT_MSG_ECHO_STATE#0%
+ECHO on %s
+.
+
+:TEXT_MSG_VERIFY_STATE#0%
+VERIFY on %s
+.
+
+:TEXT_MSG_FDDEBUG_STATE#0%
+DEBUG-tuloste on %s.
+.
+:TEXT_MSG_FDDEBUG_TARGET#0%
+DEBUG-tuloste sijaintiin '%s'.
+.
+
+:TEXT_MSG_BREAK_STATE#0%
+BREAK on %s
+.
+
+:TEXT_MSG_LFNFOR_STATE#0%
+LFNFOR on %s
+.
+
+:TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
+LFN-täydennys on %s
+.
+
+:TEXT_MSG_CURRENT_DATE#0%
+Päivämäärä nyt on %s
+.
+
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN#1%
+Syötä uusi päivämäärä (kk%spp%s[vv]vv): \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1%
+Syötä uusi päivämäärä (pp%skk%s[vv]vv): \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1%
+Syötä uusi päivämäärä ([vv]vv%skk%spp): \
+.
+
+:TEXT_MSG_CURRENT_TIME#0%
+Aika nyt on %s
+.
+
+:TEXT_STRING_PM#1
+ ip.\
+.
+:TEXT_STRING_AM#1
+ ap.\
+.
+
+:TEXT_MSG_ENTER_TIME#1
+Syötä uusi aika: \
+.
+
+# src-file <operation> target-file
+:TEXT_MSG_COPYING#0%
+%s %s %s
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (K/E) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1%
+KkEe{CR}{LF}{CBREAK}
+aabb   b   b       b
+Kaikki tiedostot sijainnissa '%s' poistetaan!
+Oletko varma (K/E)? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+KkEe{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Kyllä=ENTER, Ei=ESC] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+#	by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1%
+KkEeAaLl{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Control-Break painettu.\r
+Lopetetaanko komentojono '%s' (Kyllä/Ei/kAikki) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1%
+KkEeAaLl{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Korvataanko '%s' (Kyllä/Ei/kAikki/Lopeta) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_APPEND_FILE#1%
+KkEeAaLl{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Lisätäänkö tiedoston '%s' loppuun (Kyllä/Ei/kAikki/Lopeta) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1%
+KkEeAaLl{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Poistetaanko '%s' (Kyllä/Ei/kAikki/Lopeta) ? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<tuntematon>>\
+.
+
+:TEXT_DIRSTACK_EMPTY
+Hakemistopino tyhjä.
+.
+
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME#1%
+ Taltio asemassa %c \
+.
+:TEXT_DIR_HDR_VOLUME_STRING#0%
+on %s
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+nimetön
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER#0%
+ Taltion sarjanumero on %04X-%04X
+.
+:TEXT_DIR_FTR_FILES#1%
+%10s tiedosto(a)\
+.
+:TEXT_DIR_FTR_BYTES#0%
+   %12s tavua
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+Yhteensä lueteltu:
+.
+:TEXT_DIR_FTR_DIRS#1%
+%10s hakemisto(a)\
+.
+:TEXT_DIR_FTR_BYTES_FREE#0%
+%15s tavua vapaana
+.
+:TEXT_DIR_DIRECTORY#0%
+Hakemisto: %s
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE#0%
+ Hakemisto: %s
+.
+:TEXT_DIR_LINE_FILENAME_WIDE#1%
+%-15s\
+.
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE#1%
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1%
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <HAK> \
+.
+:TEXT_DIR_LINE_SIZE#1%
+   %10s \
+.
+
+:TEXT_FILE_COMPLATION_DISPLAY#1%
+%-14s\
+.
+
+:TEXT_MSG_PATH#0%
+PATH=%s
+.
+:TEXT_MSG_PATH_NONE#1
+Hakupolkua ei määritelty.
+.
+
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+su\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+ma\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+ti\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+ke\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+to\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+pe\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+la\
+.
+
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+mitään ei poistettu.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+yksi tiedosto poistettu.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1%
+%u tiedostoa poistettu.
+.
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+Saatavilla olevat sisäiset komennot:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+Saatavilla olevat toiminnallisuudet:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[aliakset] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[paranneltu syöte] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[historia] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[tiedostonimen täydennys] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[heittovaihto] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[käynnistysloki] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+[viime hakemisto] \
+.
+:TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
+[pitkät tiedostonimet] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[ytimen heittovaihto] \
+.
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[XMS-heittovaihto] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[heittovaihto oletuksena] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[asennettavat komennot] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+[DOS NLS] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[hakemistopino (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[FreeCOM-virheenkorjaus] \
+.
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
+
+F8 käynnistää jäljitystilan, F5 ohittaa %s... \
+.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
+Ohitetaan '%s'.
+.
+
+:TEXT_MSG_VER_DOS_VERSION#0%
+DOS-versio %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+FreeDOS-ydin (koontiversio 1933 tai vanhempi)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS#0%
+FreeDOS-ydin versio %d.%d.%d
+.
+
+
+:TEXT_MSG_VER_WARRANTY
+(C) 1994-2005 Tim Norman ja muut.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+Vikailmoitukset (englanniksi) osoitteeseen
+freedos-freecom@lists.sourceforge.net.
+Päivitykset osoitteesta http://freedos.sourceforge.net/freecom
+.
+
+:TEXT_MSG_VER_REDISTRIBUTION
+(C) 1994-2005 Tim Norman ja muut.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+Vikailmoitukset (englanniksi) osoitteeseen
+freedos-freecom@lists.sourceforge.net.
+Päivitykset osoitteesta http://freedos.sourceforge.net/freecom
+.
+
+:TEXT_MSG_VER_DEVELOPERS
+
+FreeDOS-komentokehotteella on ollut monta kehittäjää, ks.
+sisällytetty HISTORY.TXT-tiedosto.
+
+Tällä hetkellä ylläpitäjänä Steffen Kaiser mailto:freecom@freedos.org
+
+Vikailmoitukset (englanniksi) osoitteeseen
+freedos-freecom@lists.sourceforge.net.
+Päivitykset osoitteesta http://freedos.sourceforge.net/freecom
+.
+
+
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+Komentokehote on sulkeutumassa, mutta sen ei pitäisi\r
+(yleensä "/P"-valitsimen takia).\r
+Käynnistä järjestelmä uudelleen, tai jos kehote on moniajo-\r
+ympäristössä, lopeta tämä tehtävä tai prosessi manuaalisesti.\r
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+FreeCOM-ohjelmaa ei löydy.
+COMMAND.COM:n koko polku tulee määrittää COMMAND:n
+ensimmäiseksi argumentiksi, esimerkiksi:
+C:\\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1%
+Ympäristösegmentti     : maks. %5u tavua; vapaa %5u tavua
+.
+:TEXT_MEMORY_CONTEXT#1%
+Kontekstisegmentti     : maks. %5u tavua; vapaa %5u tavua
+.	
+:TEXT_MEMORY_HEAP#1%
+Keko                   : %5lu tavua vapaana
+.
+:TEXT_MEMORY_CTXT_ALIAS#1%
+\tAliakset       : raja %5u tavua, nyk. %5u tavua, %5u kohdetta
+.
+:TEXT_MEMORY_CTXT_HISTORY#1%
+\tHistoria       : raja %5u tavua, nyk. %5u tavua, %5u kohdetta
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1%
+\tHakemistopino  : raja %5u tavua, nyk. %5u tavua, %5u kohdetta
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1%
+\tViime hak. -VM : käyt. %5u tavua, %5u kohdetta
+.
+:TEXT_MEMORY_CTXT_BATCH#1%
+\tKJ-sisäkkäisyys: käyt. %5u tavua, %5u kohdetta
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1%
+\tHV-tiedot      : käyt. %5u tavua, %5u kohdetta
+.
+
+
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+Nykyistä koodisivua ei voitu määrittää.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+Koodisivua ei voitu vaihtaa.
+.
+:TEXT_DISPLAY_CODEPAGE#1%
+Nykyinen koodisivu on: %u.
+Järjestelmän (oikea) koodisivu on: %u.
+.
+
+#
+# Command help text
+#
+
+:TEXT_CMDHELP_ALIAS
+Näyttää, asettaa tai poistaa aliaksia.
+
+ALIAS [muuttuja[=][merkkijono]]
+
+	muuttuja    Määrittää aliaksen nimen.
+	merkkijono  Määrittää aliaksen merkkijonon.
+
+
+ALIAS ilman parametreja näyttää nykyiset aliakset.
+.
+
+:TEXT_CMDHELP_BEEP
+Soittaa merkkiäänen.
+.
+
+:TEXT_CMDHELP_BREAK
+Ottaa käyttöön tai poistaa käytöstä laajennetun Ctrl+C-tarkistuksen.
+
+BREAK [ON | OFF]
+
+BREAK ilman parametreja näyttää nykyisen BREAK-tilan.
+.
+
+:TEXT_CMDHELP_CALL#1
+Kutsuu komentojonoa toisesta komentojonosta.
+
+CALL [/S | /N] [/Y] [asema:][polku]tiedostonimi [parametrit]
+
+  parametrit   Määrittää kutsuttavan komentojonon vaatimat
+               komentojonoparametrit.
+  /S pakottaa ja /N estää FreeCOM:n heittovaihdon.
+  /Y ottaa jäljitystilan käyttöön kutsutulle komentojonolle.
+.
+
+:TEXT_CMDHELP_CD
+Näyttää nykyisen hakemiston nimen tai vaihtaa hakemistoa.
+
+CHDIR [asema:][polku]
+CHDIR[..]
+CD [asema:][polku]
+CD[..]
+CD -
+
+  ..   Siirtyy ylähakemistoon.
+  -    Jos "viime hakemisto" on käytössä, vaihtaa viime hakemistoon.
+
+CD asema: näyttää määritetyn aseman nykyisen hakemiston.
+CD ilman parametreja näyttää nykyisen aseman ja hakemiston.
+Katso myös: CDD
+.
+
+:TEXT_CMDHELP_CDD
+Näyttää nykyisen aseman sekä hakemiston tai vaihtaa asemaa sekä hakemistoa.
+
+CDD [asema:][polku]
+CDD[..]
+
+  ..   Siirtyy ylähakemistoon.
+  -    Jos "viime hakemisto" on käytössä, vaihtaa viime hakemistoon.
+
+Jos asema: määritetään, nykyistä asemaa vaihdetaan;
+tämä on ainoa ero "CHDIR"-komentoon.
+CDD ilman parametreja näyttää nykyisen aseman ja hakemiston.
+.
+
+:TEXT_CMDHELP_CHCP
+Näyttää nykyisen koodisivun numeron tai vaihtaa koodisivua.
+
+CHCP [nnn]
+
+  nnn   Määrittää koodisivun numeron.
+
+CHCP ilman parametreja näyttää nykyisen koodisivun numeron.
+.
+
+:TEXT_CMDHELP_CLS
+Tyhjentää kuvaruudun.
+
+CLS
+.
+
+:TEXT_CMDHELP_COMMAND
+Aloittaa uuden FreeDOS-komentokehotteen.
+
+COMMAND [[asema:]polku] [laite] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+                       [/LOW] [/Y [/[C|K] komento]]
+  [asema:]polku    Määrittää COMMAND.COM-ohjelman sijainnin.
+  laite           Asettaa käytettävän syöte- ja tulostelaitteen.
+  /E:nnnnn        Asettaa ympäristön aloituskoon olemaan nnnnn tavua.
+                  (nnnnn on oltava 256 ja 32 768 väliltä).
+  /L:nnnn         Asettaa sisäisen puskurin koon (vaatii /P-valitsimen).
+                  (nnnnn on oltava 128 ja 1 024 väliltä).
+  /U:nnn          Asettaa syötepuskurin koon (vaatii /P-valitsimen).
+                  (nnnnn on oltava 128 ja 255 väliltä).
+  /P              Tekee kehotteesta pysyvän (estää lopettamisen).
+  /MSG            Säilöö virheviestit muistiin (vaatii /P-valitsimen).
+  /LOW            Pakottaa komentokehotteen pitämään muistiaan
+                  alamuistissa.
+  /Y              Suorittaa /C tai /K-valitsimen komentojonon vaiheittain.
+  /C komento      Suorittaa annetun komennon ja lopettaa.
+  /K komento      Suorittaa annetun komennon ja jatkaa suoritusta.
+.
+
+:TEXT_CMDHELP_COPY
+Kopioi yhden tai useamman tiedoston eri sijaintiin.
+
+COPY [/A | /B] lähde [/A | /B] [+ lähde [/A | /B] [+ ...]] [kohde
+  [/A | /B]] [/V] [/Y | /-Y]
+
+  lähde        Määrittää kopioitavat tiedostot.
+  /A           Ilmaisee, että kyseessä on ASCII-tekstitiedosto.
+  /B           Ilmaisee, että kyseessä on binääritiedosto.
+  kohde        Määrittää tiedostojen uuden sijainnin ja/tai uudet nimet.
+  /V           Tarkistaa, että tiedostot kirjoitetaan oikein.
+  /Y           Estää korvauskehotteen ja korvaa kaikki jo olemassa olevat
+               kohdetiedostot lähdetiedostoilla.
+  /-Y          Kysyy kehotteella jokaiselle tiedostolle erikseen,
+               tulisiko jo olemassa oleva kohdetiedosto korvata.
+
+COPYCMD-ympäristömuuttuja saattaa määritellä /Y-valitsimen.
+Jos tämä asetus halutaan ohittaa, käytä valitsinta /-Y.
+
+Jos haluat liittää tiedostoja yhteen, määritä kohteeksi yksi tiedosto ja
+lähteeksi useampi (yleismerkeillä tai esimerkiksi tiedosto1+tiedosto2).
+.
+
+:TEXT_CMDHELP_CTTY
+Vaihtaa järjestelmää ohjaavaa päätelaitetta.
+
+CTTY laite
+
+  laite    Haluamasi päätelaite, kuten COM1.
+.
+
+:TEXT_CMDHELP_DATE#1
+Näyttää tai asettaa päivämäärän.
+
+DATE [/D] [date]
+
+DATE ilman parametreja tuo näyttöön nykyisen päivämäärän ja kehotteen
+uudesta päivämäärästä. Paina ENTER pitääksesi saman päivämäärän.
+
+/D estää komentoa esittämästä kehotteita.
+.
+
+:TEXT_CMDHELP_DEL#2
+Poistaa yhden tai useamman tiedoston.
+
+DEL [asema:][polku]tiedostonimi [/P] [/V]
+ERASE [asema:][polku]tiedostonimi [/P] [/V]
+
+  [asema:][polku]tiedostonimi  Määrittää poistettavat tiedostot. Useamman
+                          tiedoston voi määrittää yleismerkeillä.
+  /P	Varmistaa kehotteella ennen jokaisen tiedoston poistoa.
+  /V	Näyttää kaikki poistetut tiedot.
+.
+
+:TEXT_CMDHELP_DIR#4
+Näyttää hakemistossa olevat tiedostot ja alihakemistot.
+
+DIR [asema:][polku][tiedostonimi] [/P] [/W] [/A[[:]määritteet]]
+  [/O[[:]järjestys]] [/S] [/B] [/L] [/V]
+
+  [asema:][polku][tiedostonimi]
+            Määrittää aseman, hakemiston ja/tai lueteltavat tiedostot.
+            (Voi olla laajennettu määrittely tai monta määrittelyä.)
+ /P         Tauko jokaisen ruudullisen jälkeen.
+ /W         Käyttää leveää luettelomuotoa.
+ /A         Näyttää tiedostot, joilla on tietyt määritteet. (Oletus /ADHSRA)
+ määritteet  D  Hakemistot                 R  Vain luku -tiedostot
+             H  Piilotiedostot             A  Arkistoitavat tiedostot
+             S  Järjestelmätiedostot       -  Käänteinen (älä näytä, etuliite)
+ /O         Luettelee tiedostot annetussa järjestyksessä.
+ järjestys   N  Nimen mukaan (aakkosjärj.) S  Koon mukaan (pienin ensin)
+             E  Tiedostopäätteen mukaan    D  Vanhimmasta uusimpaan
+             G  Hakemistot ensin           -  Käänteinen järjestys (etuliite)
+             U  Älä lajittele		   Oletuksena /ONG
+ /S         Luettelee myös alihakemistoissa olevat tiedostot.
+ /B         Käyttää pelkistettyä muotoa (ei otsaketietoa tai yhteenvetoa).
+ /L         Käyttää pieniä kirjaimia.
+ /Y or /4   Näyttää vuosiluvun nelinumeroisena.
+
+DIRCMD-ympäristömuuttuja saattaa määritellä valitsimia. Ne voidaan
+poistaa käytöstä sijoittamalla - (väliviiva) ennen valitsinta, kuten /-W.
+.
+
+:TEXT_CMDHELP_DOSKEY#1
+Ulkoinen DOSKEY-työkalu on otettu osaksi FreeCOM:ia.
+Ylä- ja alanuolinäppäimet selaavat historiaa ja HISTORY näyttää sen.
+Vasemmat ja oikeat nuolinäppäimet sekä HOME ja END siirtyvät
+komentorivin sisällä ja INSERT vaihtaa päällekirjoitus- ja lisäystilan
+välillä. Sarkainnäppäin täydentää nykyisen sanan tiedostonimenä;
+kahdesti painettuna se näyttää luettelon löydetyistä tiedostonimistä.
+.
+
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
+Muokkaa komentorivejä, muistaa niitä ja luo makroja
+
+DOSKEY [/valitsin ...] [makro=[teksti]]
+
+  /BUFSIZE:koko   Asettaa makro- ja komentopuskurin koon         (oletus:512)
+  /ECHO:on|off    Määrittää makrolaajennusten kaiutustilan       (oletus:on)
+  /FILE:tiedosto  Määrittää makroja sisältävän tiedoston
+  /HISTORY        Näyttää kaikki muistissa olevat komennot
+  /INSERT         Uusien merkkien lisäys riville kirjoittaessa
+  /KEYSIZE:koko   Asettaa näppäimistön näppäilypuskurin koon     (oletus:15)
+  /LINE:koko      Asettaa rivin muokkauspuskurin enimmäiskoon    (oletus:128)
+  /MACROS         Näyttää kaikki DOSKey-makrot
+  /OVERSTRIKE     Kirjoitus rivillä olevien merkkien päälle      (oletus)
+  /REINSTALL      Asentaa DOSKey:n uudelleen muistiin
+  makro           Määrittää luotavan makron nimen
+  teksti          Määrittää makroon kuuluvat komennot
+
+ YLÖS,ALAS-nuolinäppäimet käyvät historiaa läpi
+       Esc tyhjentää komentorivin
+        F7 näyttää komentohistorian
+    Alt+F7 tyhjentää komentohistorian
+[teksti]F8 hakee tekstillä alkavaa komentoa
+        F9 hakee komentoa numerolla
+   Alt+F10 poistaa kaikki makrot
+
+Seuraavia erityiskoodeja voi käyttää DOSKeyn makrojen määritelmissä:
+  $T     Komentoerotin: makroissa voi olla useampi komento
+  $1-$9  Parametrit: toimivat samoin kuin %1-%9 komentojonoissa
+  $*     Korvautuu tekstillä, joka on makron nimen jälkeen komennossa
+.
+
+:TEXT_CMDHELP_ECHO
+Näyttää viestejä tai kytkee komentokaiutuksen päälle tai pois.
+
+  ECHO [ON | OFF]
+  ECHO [viesti]
+
+ECHO ilman parametreja näyttää nykyisen komentokaiutustilan.
+.
+
+:TEXT_CMDHELP_EXIT
+Lopettaa FreeDOS-komentokehotteen, ellei /P-valitsinta ole käytetty.
+
+EXIT
+.
+
+:TEXT_CMDHELP_FOR
+Suorittaa komennon jokaiselle tiedostolle tiedostoryhmässä.
+
+FOR %muuttuja IN (ryhmä) DO komento [komento-parametrit]
+
+  %muuttuja  Määrittää tiedostomuuttujan nimen.
+  (ryhmä)    Määrittää ryhmän tiedostoja, yleismerkit sallittu.
+  komento    Määrittää suoritettavan komennon.
+  komento-parametrit
+             Määrittää komennon parametrit.
+
+Komentojonoissa FOR-komennon muuttuja on määriteltävä kahdella
+prosenttimerkillä, kuten %%muuttuja eikä %muuttuja.
+
+Esimerkiksi:
+  FOR %f IN (---start--- a*.* ---end---) DO ECHO - %f -
+.
+
+:TEXT_CMDHELP_GOTO
+Siirtää komentojonon suorituksen annetun nimiön kohdalle.
+
+GOTO nimiö
+
+  nimiö   Määrittää komentojonossa olevan nimiön, josta suoritus jatkuu.
+
+Nimiö kirjoitetaan omalle rivilleen, joka alkaa kaksoispisteellä.
+.
+
+:TEXT_CMDHELP_HISTORY#1
+Näyttää komentohistorian tai määrittää sen koon.
+
+HISTORY [koko]
+
+Ilman parametreja komento näyttää komentorivihistorian sisällön.
+Jos koko annetaan, komentorivihistorian puskurin kokoa muutetaan.
+.
+
+:TEXT_CMDHELP_IF
+Suorittaa komennon ehdollisesti komentojonoissa.
+
+IF [NOT] ERRORLEVEL luku komento
+IF [NOT] mjono1==mjono2 komento
+IF [NOT] EXIST tnimi komento
+
+  NOT               Määrittää, että komento tulee suorittaa vain,
+                    jos ehto ei ole tosi (normaalisti toisinpäin).
+  ERRORLEVEL luku   Määrittää ehdon olevan tosi, jos edellisen ohjelman
+                    palauttama lopetuskoodi on suurempi tai yhtä kuin
+                    annettu luku.
+  komento           Määrittää komennon, joka suoritetaan ehdollisesti.
+  mjono1==mjono2    Määrittää ehdon olevan tosi, jos annetut kaksi
+                    merkkijonoa ovat samat.
+  EXIST tnimi       Määrittää ehdon olevan tosi, jos tiedosto on
+                    olemassa annetulla tiedostonimellä.
+.
+
+:TEXT_CMDHELP_LFNFOR
+Ottaa käyttöön tai poistaa käytöstä pitkät tiedostonimet FOR-komennolle
+ja tiedostonimien täydennykselle.
+
+LFNFOR [ON | OFF]
+LFNFOR COMPLETE [ON | OFF]
+
+LFNFOR tai LFNFOR COMPLETE ilman parametreja näyttää nykyisen LFNFOR-tilan.
+.
+
+:TEXT_CMDHELP_LH
+Lataa ohjelman ylämuistiin.
+
+LOADHIGH [asema:][polku]tiedostonimi [parametrit]
+LOADHIGH [/L:alue1[,vkoko1][;alue2[,vkoko2]]...] [/S]]
+         [asema:][polku]tiedostonimi [parametrit]
+
+/L:alue1[,vkoko1][;alue2[,vkoko2]]...
+            Määrittää muistialueet, joihin ohjelma ladataan.
+            alue1 määrittää muistialueen numeron ja vkoko1 määrittää
+            alueelle mahdollisen vähimmäiskoon. alue2 ja vkoko2
+            määrittää toisen alueen numeron ja vähimmäiskoon.
+            Alueiden lukumäärää ei ole rajoitettu.
+
+/S          Pienentää ylämuistilohkon (UMB) vähimmäiskokoon,
+            kun ohjelmaa ladataan.
+
+[asema:][polku]tiedostonimi
+            Määrittää ohjelman nimen ja sijainnin.
+.
+
+:TEXT_CMDHELP_LOADFIX
+Lataa ohjelman muistin ensimmäisen 64 kilotavun yläpuolelle ja ajaa sen.
+
+LOADFIX [asema:][polku]tiedostonimi
+
+Jos ohjelma tulostaa virheen pakatun tiedoston vioittumisesta, kun sen
+ajaa alamuistissa, voit kokeilla ajaa sen LOADFIX-komennolla.
+.
+
+:TEXT_CMDHELP_MD
+Luo hakemiston.
+
+MKDIR [asema:]polku
+MD [asema:]polku
+.
+
+:TEXT_CMDHELP_PATH
+Näyttää tai asettaa ohjelmatiedostojen hakupolun.
+
+PATH [[asema:]polku[;...]]
+PATH ;
+
+PATH ; tyhjentää hakupolkuluettelon, jolloin komentokehote hakee
+ohjelmia vain nykyisestä hakemistosta.
+PATH ilman parametreja näyttää nykyiset hakupolut.
+.
+
+:TEXT_CMDHELP_PAUSE
+Keskeyttää komentojonon suorituksen ja pyytää käyttäjältä
+näppäinpainallusta viestillä, joka on oletuksena
+"Paina mitä tahansa näppäintä jatkaaksesi...".
+
+PAUSE [viesti]
+.
+
+:TEXT_CMDHELP_PROMPT
+Vaihtaa komentokehotteen esitysmuotoa.
+
+PROMPT [teksti]
+
+  teksti  Määrittää uuden komentokehotteen esitysmuodon.
+
+Kehotteen muoto voi koostua normaalimerkkien lisäksi seuraavista
+erityiskoodeista.
+
+  $Q   = (yhtä kuin -merkki)
+  $$   $ (dollarin merkki)
+  $T   Nykyinen aika
+  $D   Nykyinen päivämäärä
+  $P   Nykyinen asema ja polku
+  $V   FreeDOS-komentokehotteen versio
+  $N   Nykyinen asema
+  $G   > (suurempi kuin -merkki)
+  $L   < (pienempi kuin -merkki)
+  $B   | (putkimerkki tai pystyviiva)
+  $H   Askelpalautin (poistaa edellisen merkin)
+  $E   Escape-koodi (ASCII-koodi 27)
+  $_   Rivinvaihto
+
+PROMPT ilman parametreja palauttaa esitysmuodon oletusasetukseen.
+.
+
+:TEXT_CMDHELP_PUSHD
+Lisää nykyisen hakemiston hakemistopolun ylimmäksi ja mahdollisesti
+vaihtaa toiseen hakemistoon.
+
+PUSHD [[asema:]polku]
+  [asema:]polku on polku, johon halutaan vaihtaa.
+.
+
+:TEXT_CMDHELP_POPD
+Poimii ylimmän hakemiston hakemistopinosta ja vaihtaa siihen.
+
+POPD [*]
+  '*' tyhjentää hakemistopinon.
+.
+
+:TEXT_CMDHELP_DIRS
+Näyttää hakemistopinon sisällön.
+
+DIRS
+.
+
+:TEXT_CMDHELP_RD
+Poistaa tyhjän hakemiston.
+
+RMDIR [asema:]polku
+RD [asema:]polku
+.
+
+:TEXT_CMDHELP_REM
+Esittää kommenttia komentojonossa tai CONFIG.SYS-tiedostossa.
+
+REM [kommentti]
+.
+
+:TEXT_CMDHELP_REN
+Nimeää tiedoston/hakemiston tai tiedostot/hakemistot uudelleen.
+
+RENAME [asema:][polku][hnimi1 | tnimi1] [hnimi2 | tnimi2]
+REN [asema:][polku][hnimi1 | tnimi1] [hnimi2 | tnimi2]
+
+Tälle komennolle ei voi määrittää kohdeasemaa tai -polkua tiedostolle
+tai hakemistolle. Siirtämiseen tulee käyttää MOVE-komentoa.
+.
+
+:TEXT_CMDHELP_SET#1
+Näyttää, asettaa tai poistaa ympäristömuuttujia.
+
+SET [/C] [/P] [/E] [/U] [muuttuja[=[arvo]]]
+
+  muuttuja  Määrittää ympäristömuuttujan nimen.
+  arvo      Määrittää merkkijonon, joka asetetaan muuttujan arvoksi.
+
+* Jos arvoa ei anneta (VAR=), ympäristömuuttuja poistetaan
+
+Kirjoita SET ilman parametreja näyttääksesi nykyiset ympäristömuuttujat.
+Kirjoita SET VAR näyttääksesi muuttujan VAR arvon.
+
+/C pakottaa pitämään muuttujan kirjainkoot samana; oletuksena muuttujan
+nimi muutetaan isoiksi kirjaimiksi, jos se ei ole jo määritelty
+ympäristössä, ja muuten pidetään samana.
+
+/P kysyy käyttäjältä kehotteella arvoa ja asettaa sen muuttujalle.
+
+/E suorittaa arvon mukaisen komennon ja asettaa muuttujan arvoksi
+kyseisen komennon ensimmäisen tulosterivin.
+
+/U muuttaa arvon kirjaimet isoiksi kirjaimiksi.
+.
+
+:TEXT_CMDHELP_SHIFT#1
+Vaihtaa numeroitujen parametrien paikkaa komentojonossa.
+
+SHIFT [DOWN]
+
+DOWN siirtää parametri-ikkunaa alkua kohti (%0); muuten
+sitä siirretään loppua kohti.
+.
+
+:TEXT_CMDHELP_TIME#1
+Näyttää tai asettaa järjestelmän ajan.
+
+TIME [/T] [aika]
+
+TIME ilman parametreja tuo näyttöön nykyisen kellonajan ja
+kehotteen uudesta ajasta. Paina ENTER pitääksesi saman ajan.
+
+/T estää komentoa esittämästä kehotteita.
+.
+
+:TEXT_CMDHELP_TRUENAME
+Näyttää annetun polun koko polkunimen.
+
+TRUENAME [asema:][polku][tiedostonimi]
+.
+
+:TEXT_CMDHELP_TYPE
+Näyttää tekstitiedoston sisällön.
+
+TYPE [asema:][polku]tiedostonimi
+.
+
+:TEXT_CMDHELP_VER
+Näyttää FreeDOS-komentokehotteen version ja muut tiedot.
+
+VER [/R] [/W] [/D] [/C]
+
+ /R         Ytimen versio ja muut tiedot.
+ /W         FreeDOS-komentokehotteen takuutiedot.
+ /D         FreeDOS-komentokehotteen jakelutiedot.
+ /C         FreeDOS-komentokehotteen tekijät.
+.
+
+:TEXT_CMDHELP_VERIFY
+Kertoo FreeDOS:n tiedostojärjestelmälle, tuleeko tiedostot tarkistaa
+kirjoitusten jälkeen varmistaakseen, että kirjoitus tehtiin oikein.
+
+VERIFY [ON | OFF]
+
+VERIFY ilman parametria näyttää nykyisen VERIFY-tilan.
+.
+
+:TEXT_CMDHELP_FDDEBUG
+Jos FreeDOS:iin on käännetty virheenkorjaustoiminnot, tämä komento
+kytkee virheenkorjaustulostuksen päälle tai pois tai kertoo sen tilan.
+
+FDDEBUG [ON | OFF | tiedosto]
+
+FDDEBUG ilman parametreja näyttää nykyisen tilan.
+
+Jos tiedosto määritellään, virheenkorjaustuloste ohjataan siihen;
+tuloste lisätään tiedoston loppuun, jos se on jo olemassa. erityiset
+tiedostonimet "stdout" ja "stderr" ohjaavat tulosteen joko
+standardituloste- tai standardivirhevirtaan.
+.
+
+:TEXT_CMDHELP_VOL
+Näyttää levyn taltion nimen ja sarjanumeron, jos ne on määritelty.
+
+VOL [asema:]
+.
+
+:TEXT_CMDHELP_QUESTION#1
+Näyttää kehotteessa saatavilla olevat komennot ja toiminnallisuudet.
+
+?
+?komento [argumentti]
+
+Ensimmäinen versio näyttää kaikki saatavilla olevat komennot ja
+toiminnallisuudet. Toinen versio kysyy kehotteella, suoritetaanko
+kyseistä komentoa (niin kuin jäljitystilassa).
+.
+
+:TEXT_CMDHELP_WHICH
+Hakee ja näyttää komennon toteuttavan ohjelman polun.
+
+WHICH komento...
+.
+
+:TEXT_CMDHELP_MEMORY#1
+Näyttää FreeCOM:n sisäisesti käyttämän muistin.
+
+MEMORY
+
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+COPY-komennon kohde ei voi sisältää plus-merkkejä ('+').
+.
+
+:TEXT_DELETE_FILE#1%
+Poistetaan tiedostoa "%s".
+.
+
+:TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
+Ei voi kirjoittaa tiedostoa '%s';
+levy ehkä täynnä? (%lu tavua tarvitaan)
+.
+
+# Displayed for BIGcopy(), when copying takes quite a long time.
+# **_NO_END if the input file size is unknown.
+# Both must end in \r rather than \n!!
+:TEXT_COPY_COPIED_NO_END#0%
+kopioitu %luKt/???Kt\r\
+.
+:TEXT_COPY_COPIED#0%
+kopioitu %luKt/%luKt\r\
+.
+
+:TEXT_ERROR_FCOM_IS_DEVICE#0%
+FreeCOM ei voi olla laite: "%s"
+.
+:TEXT_ERROR_FCOM_INVALID#0%
+Tiedosto ei ole kelvollinen FreeCOM tai on väärä versio:
+%s
+.
+
+:TEXT_ERROR_LOADING_STRINGS
+Merkkijonoresurssia ei voitu ladata muistiin. %COMSPEC%-muuttujan
+osoittama sijainti näyttäisi olevan virheellinen. Määritä toinen
+sijainti, josta FreeCOM lataa merkkijonot, kuten:
+C:\\COMMAND.COM
+tai paina Enter, jolloin merkkijonojen lataus peruutetaan.
+.
+
+:TEXT_TERMINATING
+Lopetetaan ohjelmaa nyt.
+.
+
+:TEXT_HIDDEN_CRITER#0%
+%u kriittisen virheen pyyntöä hiljennetty.
+.
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+Lopetuskoodi (ERRORLEVEL): %u, syy: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+DOS-rajapintavirhe\
+.
+:TEXT_EXIT_REASON_0
+päättyi normaalisti\
+.
+:TEXT_EXIT_REASON_1
+päättyi ^Break:iin\
+.
+:TEXT_EXIT_REASON_2
+päättyi virheeseen\
+.
+:TEXT_EXIT_REASON_3
+siirtyi muistiin\
+.
+:TEXT_ERROR_EXE_CORRUPT
+EXE-tiedosto vioittunut\
+.

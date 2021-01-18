@@ -22,9 +22,8 @@ fi
 export SWAP=
 
 if [ ! -f config.mak ]; then
-  echo Please copy config.std into config.mak and update the
-  echo settings therein.
-  exit 1
+  echo File config.mak missing, copying config.std to it
+  cp config.std config.mak || exit 1
 fi
 
 export XNASM=nasm
@@ -94,7 +93,7 @@ done
 
 
 if [ -n "$1" ]; then export LNG=$1; fi
-if [ -z "$LNG" ]; then export LNG=ENGLISH; fi
+if [ -z "$LNG" ]; then export LNG=english; fi
 echo Building FreeCOM for language $LNG
 
 if [ -z "$MAKE" ]; then
@@ -219,7 +218,7 @@ if [ $WITH_UPX = "yes" ]; then
 fi
 
 echo
-echo All done. COMMAND.COM is ready for usage!
+echo All done. COMMAND.COM is ready for use!
 echo
 if [ -z "$XMS_SWAP" ]; then
   echo Note: To build FreeCOM without XMS-Only Swap, re-run

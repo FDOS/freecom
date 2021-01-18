@@ -709,37 +709,52 @@ Dostupne interne komande:
 .
 
 :TEXT_MSG_SHOWCMD_FEATURES
+Missing:
 .
 
 ## Displayed within "?" <-> showcmd() to enumerate the included features
 ## Note the trailing single space
 :TEXT_SHOWCMD_FEATURE_ALIASES#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_HISTORY#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+Missing \
 .
 :TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_NLS#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+Missing \
 .
 :TEXT_SHOWCMD_FEATURE_DEBUG#1
+Missing \
 .
 
 :TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
@@ -1021,17 +1036,17 @@ Prikazuje listu fajlova i pod-direktorijuma u direktorijumu.
 :TEXT_CMDHELP_DOSKEY#1
 DOSKEY je omogucen interno u komandnoj ljusci.
 
- ÚÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄ¿
- ³ Taster     ³ Funkcija ³
- ÃÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
- ³ Gore/Dole  ³ Poziva istoriju.                                      ³
- ³ Levo/Desno ³ Navigacija kroz komandnu liniju i/ili dopunjavanje    ³
- ³            ³ trenutne linije prethodno pozvanom komandom.          ³
- ³ Home/End   ³ Pocetak/kraj linije.                                  ³
- ³ Insert     ³ Promena izmedju moda umetanja i pisanja preko.         ³
- ³ Tab        ³ Dopunjavanje trenutne reci kao naziv fajla. Dvostruki ³
- ³            ³ pritisak ce prikazati sve odgovarajuce fajlove.       ³
- ÀÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+ â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+ â”‚ Taster     â”‚ Funkcija â”‚
+ â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+ â”‚ Gore/Dole  â”‚ Poziva istoriju.                                      â”‚
+ â”‚ Levo/Desno â”‚ Navigacija kroz komandnu liniju i/ili dopunjavanje    â”‚
+ â”‚            â”‚ trenutne linije prethodno pozvanom komandom.          â”‚
+ â”‚ Home/End   â”‚ Pocetak/kraj linije.                                  â”‚
+ â”‚ Insert     â”‚ Promena izmedju moda umetanja i pisanja preko.         â”‚
+ â”‚ Tab        â”‚ Dopunjavanje trenutne reci kao naziv fajla. Dvostruki â”‚
+ â”‚            â”‚ pritisak ce prikazati sve odgovarajuce fajlove.       â”‚
+ â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 
  Komanda HISTORY ce prikazati sadrzaj bafera istorije.
 .

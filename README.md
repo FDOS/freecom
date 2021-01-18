@@ -1,3 +1,22 @@
+Source code distribution of FreeCOM - a Command line interface
+program, which substitutes COMMAND.COM
+
+The sources are hosted on:
+https://github.com/FDOS/freecom
+
+<!-- Upstream Master -->
+<!-- [![Build](https://github.com/FDOS/freecom/workflows/Build/badge.svg)](https://github.com/FDOS/freecom/actions) -->
+<!-- Local Branch -->
+[![Build](../../workflows/Build/badge.svg)](../../actions)
+
+#### More information
+[Changes since last official release](CHANGED)
+
+[How to compile FreeCOM](docs/compile.txt)
+
+
+---
+
 # FreeCOM DBCS edition
 
 a fork of FreeCOM (COMMAND.COM for FreeDOS) to support:
@@ -14,7 +33,7 @@ source repository of FreeCOM DBCS edition:
 
 https://github.com/lpproj/freecom_dbcs2/ (branch: dbcs)  
 
-original (upstream) source repository of (official) FreeCOM:
+original source repository of official FreeCOM:
 
 old http://sourceforge.net/p/freedos/svn/HEAD/tree/freecom/trunk/  
 new https://github.com/FDOS/freecom  
@@ -25,7 +44,7 @@ new https://github.com/FDOS/freecom
 When you want to build freecom_dbcs with OpenWatcom, you need:
 
 * Windows (x86/x64)
-* OpenWatcom C++ (I'm using ow 1.9)
+* OpenWatcom C++ (I'm using [2.0beta](https://github.com/open-watcom/open-watcom-v2/releases))
 * Netwide assembler Win32/Win64 version at https://www.nasm.us/
 
 When you want to build freecom_dbcs with ia16-elf-gcc, you need:

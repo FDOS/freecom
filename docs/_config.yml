@@ -1,0 +1,4 @@
+theme: jekyll-theme-architect
+title: "FreeCom : FreeDOS command.com"
+description: "FreeCom is an implementation of the command line interpreter for FreeDOS, command.com"
+show_downloads: "true"
