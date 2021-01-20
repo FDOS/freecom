@@ -103,7 +103,7 @@ int MbStricmp(const char *s1, const char *s2)
 	return d;
 }
 
-int MbStrnicmp(const char *s1, const char *s2, size_t length)
+int MbStrnicmp(const char *s1, const char *s2, unsigned length)
 {
 	int d = 0;
 	while(length--) {
