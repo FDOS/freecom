@@ -105,7 +105,7 @@ typedef enum STATE {
 	,GETTING_STRING
 } read_state;
 
-#define MAXSTRINGS       256
+#define MAXSTRINGS       384
 
 #define VERSION_MISMATCH 128
 #define VALIDATION_MISMATCH 64
@@ -454,6 +454,10 @@ int loadFile(const char * const fnam)
 						goto strnameFound;
 				/* string name was not found --> create a new one */
 				++maxCnt;
+				if (maxCnt >= MAXSTRINGS) {
+					fprintf(stderr, "Out of string buffer; should increase MAXSTRINGS to more than %u\n", (unsigned)(MAXSTRINGS));
+					return 80;
+				}
 			strnameFound:
 				if(!strg[cnt].name) {
 					if((strg[cnt].name = strdup(temp + 1)) == 0) {
