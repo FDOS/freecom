@@ -103,11 +103,11 @@ Virheellinen valitsin. - /%s
 
 ## Issued if the context, the type of argument etc. is invalid
 :TEXT_ERROR_ILLFORMED_OPTION#0%
-Virheellinen asetus: '%s'
+Vääränmuotoinen valitsin: '%s'
 .
 
 :TEXT_ERROR_OPT_ARG#0%
-Valitsimelle '%s' ei kuulu olla argumenttia
+Valitsimella '%s' ei kuulu olla argumenttia
 .
 
 :TEXT_ERROR_OPT_NOARG#0%
@@ -115,7 +115,7 @@ Valitsimella '%s' pitää olla argumentti
 .
 
 :TEXT_INVALID_NUMBER#0%
-Virheellinen luku: '%s'
+Virheellinen luku valitsimelle '%s'
 .
 
 :TEXT_ERROR_CLOSE_QUOTE#0%
@@ -198,7 +198,7 @@ Ympäristö täynnä?
 Ympäristömuuttujaa '%s' ei löydy.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
-Ympäristö puuttuu. Muisti ehkä vähissä. Käytä /E.
+Ympäristö puuttuu. Muisti ehkä vähissä. Käytä /E-valitsinta.
 .
 
 # The next three errors must remain in this order!
@@ -233,7 +233,7 @@ Komentorivi liian pitkä aliaslaajennuksineen!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
-Komentorivi yli 125 merkkiä.
+Komentorivi yli 125 merkkiä pitkä.
 .
 
 :TEXT_ERROR_HISTORY_SIZE#1%
@@ -262,7 +262,7 @@ Täytyy olla ON tai OFF.
 .
 
 :TEXT_ERROR_BAD_VARIABLE
-Muuttujan määrittely virheellinen.
+Virheellinen muuttujan määrittely.
 .
 
 :TEXT_ERROR_IN_MISSING#1
@@ -278,7 +278,7 @@ FOR: DO puuttuu.
 .
 
 :TEXT_ERROR_NO_COMMAND_AFTER_DO#1
-FOR: komento puuttuu DO:n jälkeen.
+FOR: komento puuttuu DO:n perästä.
 .
 
 :TEXT_ERROR_REDIRECT_FROM_FILE#0%
@@ -306,7 +306,7 @@ GOTO:lle ei määritelty nimiötä.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
-Tämä COMMAND.COM-versio ei toteuta CTTY-komentoa.
+Tämä COMMAND.COM ei tue CTTY-komentoa.
 .
 
 :TEXT_ERROR_NORW_DEVICE#0%
@@ -314,7 +314,7 @@ Puuttuva tai virheellinen siirräntälaite '%s'.
 .
 
 :TEXT_ERROR_CTTY_DUP#0%
-TTY:n '%s' tiedostokuvaajaa ei voitu muuttaa.
+Tiedostokuvaajia ei voitu muuttaa TTY-laitteelle '%s'.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
@@ -350,11 +350,11 @@ Yhdistysmerkki '+' ei voi olla argumenttien edellä.
 .
 
 :TEXT_ERROR_TRAILING_PLUS
-Yhdistysmerkki '+' ei voi olla argumenttien jälkeen.
+Yhdistysmerkki '+' ei voi olla argumenttien perässä.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
-Ei tehtävää.
+Ei mitään tehtävää.
 .
 
 :TEXT_ERROR_COPY
@@ -391,7 +391,7 @@ Tämä COMMAND.COM ei toteuta /MSG-valitsinta.
 .
 
 :TEXT_CORRUPT_COMMAND_LINE
-Komentorivi vioittunut. Sisäinen virhe. Johtuu järjestelmästä,
+Komentorivi vioittunut. Sisäinen virhe, joka johtuu järjestelmästä,
 jolla COMMAND.COM:ia ajetaan. Ilmoita tästä virheestä, kiitos.
 .
 
@@ -400,7 +400,7 @@ jolla COMMAND.COM:ia ajetaan. Ilmoita tästä virheestä, kiitos.
 .
 
 :TEXT_INIT_FULLY_QUALIFIED#1%
-COMMAND.COM:in polku tulee olla täysin määritelty!
+COMMAND.COM:in polku tulee olla kokonaan määritetty!
 Sen tulee sisältää aseman kirjain ja alkaa kenoviivalla.
 Esimerkki: C:\\FDOS
 
@@ -409,12 +409,12 @@ COMMAND.COM olettaa polun nyt olevan:
 .
 
 :TEXT_ERROR_RESTORE_SESSION
-Istuntotietoa ei voitu palauttaa. Paikalliset asetukset
+Istuntotietoja ei voitu palauttaa. Paikalliset asetukset
 menetetään. Yllä olevat virheviestit kuvaavat ongelmaa.
 .
 
 :TEXT_ERROR_SAVE_SESSION
-Nykyistä tietoa ei voida säilyttää ohjelmaa kutsuessa.
+Nykyisiä tietoja ei voida säilyttää ohjelmaa kutsuessa.
 Yllä olevat virheviestit kuvaavat ongelmaa.
 .
 
@@ -616,7 +616,7 @@ Korvataanko '%s' (Kyllä/Ei/kAikki/Lopeta) ? \
 :PROMPT_APPEND_FILE#1%
 KkEeAaLl{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Lisätäänkö tiedoston '%s' loppuun (Kyllä/Ei/kAikki/Lopeta) ? \
+Liitetäänkö tiedostoon '%s' (Kyllä/Ei/kAikki/Lopeta) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -886,13 +886,13 @@ Kontekstisegmentti     : maks. %5u tavua; vapaa %5u tavua
 Keko                   : %5lu tavua vapaana
 .
 :TEXT_MEMORY_CTXT_ALIAS#1%
-\tAliakset       : raja %5u tavua, nyk. %5u tavua, %5u kohdetta
+\tAliakset       : raja  %5u tavua, käytössä %5u tavua, %5u kohdetta
 .
 :TEXT_MEMORY_CTXT_HISTORY#1%
-\tHistoria       : raja %5u tavua, nyk. %5u tavua, %5u kohdetta
+\tHistoria       : raja  %5u tavua, käytössä %5u tavua, %5u kohdetta
 .
 :TEXT_MEMORY_CTXT_DIRSTACK#1%
-\tHakemistopino  : raja %5u tavua, nyk. %5u tavua, %5u kohdetta
+\tHakemistopino  : raja  %5u tavua, käytössä %5u tavua, %5u kohdetta
 .
 :TEXT_MEMORY_CTXT_LASTDIR#1%
 \tViime hak. -VM : käyt. %5u tavua, %5u kohdetta
@@ -1008,7 +1008,7 @@ Aloittaa uuden FreeDOS-komentokehotteen.
 
 COMMAND [[asema:]polku] [laite] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
                        [/LOW] [/Y [/[C|K] komento]]
-  [asema:]polku    Määrittää COMMAND.COM-ohjelman sijainnin.
+  [asema:]polku   Määrittää COMMAND.COM-ohjelman sisältävän hakemiston.
   laite           Asettaa käytettävän syöte- ja tulostelaitteen.
   /E:nnnnn        Asettaa ympäristön aloituskoon olemaan nnnnn tavua.
                   (nnnnn on oltava 256 ja 32 768 väliltä).
@@ -1018,7 +1018,7 @@ COMMAND [[asema:]polku] [laite] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
                   (nnnnn on oltava 128 ja 255 väliltä).
   /P              Tekee kehotteesta pysyvän (estää lopettamisen).
   /MSG            Säilöö virheviestit muistiin (vaatii /P-valitsimen).
-  /LOW            Pakottaa komentokehotteen pitämään muistiaan
+  /LOW            Pakottaa komentokehotteen pitämään työtietonsa
                   alamuistissa.
   /Y              Suorittaa /C tai /K-valitsimen komentojonon vaiheittain.
   /C komento      Suorittaa annetun komennon ja lopettaa.
@@ -1045,7 +1045,7 @@ COPYCMD-ympäristömuuttuja saattaa määritellä /Y-valitsimen.
 Jos tämä asetus halutaan ohittaa, käytä valitsinta /-Y.
 
 Jos haluat liittää tiedostoja yhteen, määritä kohteeksi yksi tiedosto ja
-lähteeksi useampi (yleismerkeillä tai esimerkiksi tiedosto1+tiedosto2).
+lähteeksi useampi (yleismerkeillä tai muodossa tiedosto1+tiedosto2+tiedosto3).
 .
 
 :TEXT_CMDHELP_CTTY
@@ -1073,10 +1073,10 @@ Poistaa yhden tai useamman tiedoston.
 DEL [asema:][polku]tiedostonimi [/P] [/V]
 ERASE [asema:][polku]tiedostonimi [/P] [/V]
 
-  [asema:][polku]tiedostonimi  Määrittää poistettavat tiedostot. Useamman
-                          tiedoston voi määrittää yleismerkeillä.
-  /P	Varmistaa kehotteella ennen jokaisen tiedoston poistoa.
-  /V	Näyttää kaikki poistetut tiedot.
+  [asema:][polku]tiedostonimi   Määrittää poistettavat tiedostot. Useamman
+                                tiedoston voi määrittää yleismerkeillä.
+  /P    Varmistaa kehotteella ennen jokaisen tiedoston poistoa.
+  /V    Näyttää kaikki poistetut tiedostot.
 .
 
 :TEXT_CMDHELP_DIR#4
@@ -1099,7 +1099,7 @@ DIR [asema:][polku][tiedostonimi] [/P] [/W] [/A[[:]määritteet]]
              E  Tiedostopäätteen mukaan    D  Vanhimmasta uusimpaan
              G  Hakemistot ensin           -  Käänteinen järjestys (etuliite)
              U  Älä lajittele		   Oletuksena /ONG
- /S         Luettelee myös alihakemistoissa olevat tiedostot.
+ /S         Luettelee myös kaikissa alihakemistoissa olevat tiedostot.
  /B         Käyttää pelkistettyä muotoa (ei otsaketietoa tai yhteenvetoa).
  /L         Käyttää pieniä kirjaimia.
  /Y or /4   Näyttää vuosiluvun nelinumeroisena.
@@ -1176,7 +1176,7 @@ FOR %muuttuja IN (ryhmä) DO komento [komento-parametrit]
              Määrittää komennon parametrit.
 
 Komentojonoissa FOR-komennon muuttuja on määriteltävä kahdella
-prosenttimerkillä, kuten %%muuttuja eikä %muuttuja.
+prosenttimerkillä, esimerkiksi %%muuttuja (eikä %muuttuja).
 
 Esimerkiksi:
   FOR %f IN (---start--- a*.* ---end---) DO ECHO - %f -
@@ -1244,8 +1244,8 @@ LOADHIGH [/L:alue1[,vkoko1][;alue2[,vkoko2]]...] [/S]]
             määrittää toisen alueen numeron ja vähimmäiskoon.
             Alueiden lukumäärää ei ole rajoitettu.
 
-/S          Pienentää ylämuistilohkon (UMB) vähimmäiskokoon,
-            kun ohjelmaa ladataan.
+/S          Pienentää ylämuistilohkon (UMB) vähimmäiskokoonsa
+            ohjelman lataamisen ajaksi.
 
 [asema:][polku]tiedostonimi
             Määrittää ohjelman nimen ja sijainnin.
@@ -1256,8 +1256,8 @@ Lataa ohjelman muistin ensimmäisen 64 kilotavun yläpuolelle ja ajaa sen.
 
 LOADFIX [asema:][polku]tiedostonimi
 
-Jos ohjelma tulostaa virheen pakatun tiedoston vioittumisesta, kun sen
-ajaa alamuistissa, voit kokeilla ajaa sen LOADFIX-komennolla.
+Jos ohjelma tulostaa virheen pakatun tiedoston vioittumisesta alamuistista
+ajettaessa, voit kokeilla ajaa sen LOADFIX-komennolla.
 .
 
 :TEXT_CMDHELP_MD
@@ -1426,8 +1426,8 @@ VER [/R] [/W] [/D] [/C]
 .
 
 :TEXT_CMDHELP_VERIFY
-Kertoo FreeDOS:n tiedostojärjestelmälle, tuleeko tiedostot tarkistaa
-kirjoitusten jälkeen varmistaakseen, että kirjoitus tehtiin oikein.
+Kertoo FreeDOS:n tiedostojärjestelmälle, tuleeko sen varmistaa tiedostoihin
+kirjoitusten tapahtuneen oikein.
 
 VERIFY [ON | OFF]
 
@@ -1443,8 +1443,8 @@ FDDEBUG [ON | OFF | tiedosto]
 FDDEBUG ilman parametreja näyttää nykyisen tilan.
 
 Jos tiedosto määritellään, virheenkorjaustuloste ohjataan siihen;
-tuloste lisätään tiedoston loppuun, jos se on jo olemassa. erityiset
-tiedostonimet "stdout" ja "stderr" ohjaavat tulosteen joko
+tuloste liitetään tiedoston loppuun, jos se on jo olemassa.
+Erikoistiedostonimet "stdout" ja "stderr" ohjaavat tulosteen joko
 standardituloste- tai standardivirhevirtaan.
 .
 
@@ -1487,8 +1487,8 @@ Poistetaan tiedostoa "%s".
 .
 
 :TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
-Ei voi kirjoittaa tiedostoa '%s';
-levy ehkä täynnä? (%lu tavua tarvitaan)
+Ei voi kirjoittaa tiedostoon '%s';
+levy ehkä täynnä? (%lu tavua vaaditaan)
 .
 
 # Displayed for BIGcopy(), when copying takes quite a long time.

@@ -63,7 +63,7 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: Virhe %1 levyn %A: %2aluetta: %3
+BLOCK_DEVICE: Virhe %1 aseman %A: %2aluetta: %3
 S3
 CHAR_DEVICE: Virhe %1 laitetta %A: %3
 
@@ -117,14 +117,14 @@ S15
 7: tunnistamaton tietoväline
 8: sektoria ei löydy
 9: tulostimen paperi loppu
-10: kirjoitusvika
-11: lukuvika
-12: yleisvika
+10: kirjoitusvirhe
+11: lukuvirhe
+12: yleinen virhe
 13: yhteiskäyttövirhe
 14: lukitusvirhe
-15: virheellinen levyn vaihto
-16: tiedoston ohjauslohko ei saatavilla
+15: väärä levynvaihto
+16: tiedoston ohjauslohko ei käytettävissä
 17: yhteiskäyttöpuskurin ylivuoto
-18: koodisivu ei täsmää
+18: koodisivut eivät täsmää
 19: syöte loppu
 20: levytila ei riitä
