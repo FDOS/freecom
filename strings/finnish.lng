@@ -1189,7 +1189,7 @@ GOTO nimiö
 
   nimiö   Määrittää komentojonossa olevan nimiön, josta suoritus jatkuu.
 
-Nimiö kirjoitetaan omalle rivilleen, joka alkaa kaksoispisteellä.
+Nimiö luodaan kirjoittamalla se omalle rivilleen kaksoispisteen perään.
 .
 
 :TEXT_CMDHELP_HISTORY#1
