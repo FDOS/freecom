@@ -42,6 +42,10 @@
 #endif
 #include "../include/crossjmp.h"
 
+#ifdef DBCS
+# include "mbcs.h"
+#endif
+
 #ifdef I_AM_TOM
 #ifndef DEBUG
 void suppl_testMemChain() {}
@@ -343,7 +347,19 @@ static void docommand(char *line)
   /* Internal commands are constructed out of non-delimiter
   	characters; ? had been parsed already */
     while(*rest && is_fnchar(*rest) && !strchr(QUOTE_STR, *rest))
+#ifdef DBCS
+    {
+      int n = MbLen(rest);
+      if (n == 1)
+        *cp++ = toupper(*rest++);
+      else
+        while(n-- > 0) {
+          *cp++ = *rest++;
+        }
+    }
+#else
       *cp++ = toupper(*rest++);
+#endif
 
     if(*rest && strchr(QUOTE_STR, *rest))
       /* If the first word is quoted, it is no internal command */

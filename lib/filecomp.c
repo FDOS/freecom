@@ -57,6 +57,8 @@
 #include "../strings.h"
 #ifdef DBCS
 # include "mbcs.h"
+# define strupr StrUpr
+# define strlwr MbStrLwr
 #endif
 
 static int do_complete(char *str, unsigned charcount, int show)
@@ -78,7 +80,11 @@ static int do_complete(char *str, unsigned charcount, int show)
   assert(str);
 
   /* expand current file name */
+#ifdef DBCS
+  count = (charcount > 0) ? (CharPrev(str, &str[charcount]) - str) : -1;
+#else
   count = charcount - 1;
+#endif
   if (count < 0)
     makelower = count = 0;
   else

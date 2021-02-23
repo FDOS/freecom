@@ -1,5 +1,6 @@
 #include "initsupl.loc"
 
+#include <ctype.h>
 #include <portable.h>
 #include "cntry.h"
 #include "nls_c.h"
@@ -39,6 +40,22 @@ int MbLen(const char *s)
 int _fMbLen(const char far *s)
 {
 	tmpl_mblen(s);
+}
+
+char *MbStrLwr(char *s)
+{
+	unsigned char c, *p = (unsigned char *)s;
+
+	while((c = (unsigned char)(*p)) != '\0') {
+		if (isDbcsLead(c) && (unsigned char)(p[1]) >= 0x20) {
+			p += 2;
+		}
+		else {
+			*p = tolower(c);
+			++p;
+		}
+	}
+	return s;
 }
 
 #ifdef TEST_DBCS

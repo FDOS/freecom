@@ -185,6 +185,12 @@
 #include "../include/nls.h"
 #include "../strings.h"
 
+#ifdef DBCS
+# include "mbcs.h"
+# define strupr StrUpr
+# define strlwr MbStrLwr
+#endif
+
 /* useful macros */
 #define MEM_ERR error_out_of_memory(); return 1;
 
