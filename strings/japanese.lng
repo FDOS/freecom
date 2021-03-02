@@ -829,9 +829,9 @@ Updates are available from http://freedos.sourceforge.net/freecom
 日本語メッセージに関するバグレポートはminashirojp@yahoo.co.jpに送ってください.
 最新版は http://dos.minashiro.net/freecomj.html から入手できます.
 
-日本語メッセージ 更新ビルド作成 : akm (http://astra.digi2.jp).
+日本語メッセージ 更新ビルド作成 : akm (https://diarywind.com/blog/e/commandj-11.html).
 
-FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs)
+FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs2)
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
@@ -849,9 +849,9 @@ Updates are available from http://freedos.sourceforge.net/freecom
 日本語メッセージに関するバグレポートはminashirojp@yahoo.co.jpに送ってください.
 最新版は http://dos.minashiro.net/freecomj.html から入手できます.
 
-日本語メッセージ 更新ビルド作成 : akm (http://astra.digi2.jp).
+日本語メッセージ 更新ビルド作成 : akm (https://diarywind.com/blog/e/commandj-11.html).
 
-FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs)
+FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs2)
 .
 
 :TEXT_MSG_VER_DEVELOPERS
@@ -864,7 +864,7 @@ Currently maintained by Steffen Kaiser mailto:freecom@freedos.org
 Send bug reports to freedos-freecom@lists.sourceforge.net.
 Updates are available from http://freedos.sourceforge.net/freecom
 
-FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs)
+FreeCOM DBCS edition: lpproj (https://github.com/lpproj/freecom_dbcs2)
 .
 
 
