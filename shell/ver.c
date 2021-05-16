@@ -41,7 +41,7 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "0.84-pre7 - "
+const char shellver[] = "0.85 - "
 #if defined(__BORLANDC__)
 	"BORLANDC"
 #elif defined(__TURBOC__)
