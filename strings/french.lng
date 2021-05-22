@@ -864,7 +864,7 @@ Les mises à jour sont disponibles à http://freedos.sourceforge.net/freecom
 Le shell est sur le point d'être terminé, bien que cela soit interdit\r
 (habituellement par la spécification de l'option "/P")\r
 Vous devez relancer le système ou, si le shell fonctionne dans un\r
-environnement multitâches, terminer la tâche manuellement.\r
+environnement multitâche, terminer la tâche manuellement.\r
 .
 
 # Displayed during the initialization phase of FreeCOM, if its own
@@ -911,7 +911,7 @@ Mémoire du tas          : %5lu octets disponibles
 Impossible d'identifier la page de code actuelle depuis le système.
 .
 :TEXT_ERROR_SET_CODEPAGE#1
-Le changement de page de code en cours à échoué.
+Le changement de page de code en cours a échoué.
 .
 :TEXT_DISPLAY_CODEPAGE#1%
 La page de code actuelle est %u.
@@ -990,7 +990,7 @@ Tapez CD sans paramètres pour afficher le lecteur et répertoire en cours.
 .
 
 :TEXT_CMDHELP_CHCP
-Affiche ou défini la page de code en cours.
+Affiche ou définit la page de code en cours.
 
 CHCP [nnn]
 
@@ -1076,9 +1076,9 @@ DEL [lecteur:][chemin]fichier [/P] [/V]
 ERASE [lecteur:][chemin]fichier [/P] [/V]
 
   [lecteur:][chemin]fichier Spécifie le/les fichier(s) à effacer. Vous pouvez
-                            spécifier plusieurs fichier à l'aide de masques.
+                            spécifier plusieurs fichiers à l'aide de masques.
   /P    Demande confirmation avant d'effacer chaque fichier.
-  /V    Affiche tout les fichiers effacés.
+  /V    Affiche tous les fichiers effacés.
 .
 
 :TEXT_CMDHELP_DIR#4
@@ -1115,7 +1115,7 @@ L'utilitaire externe DOSKEY a été incorporé dans FreeCOM.
 Utilisez curseur HAUT & BAS pour l'historique et HISTORY pour l'afficher.
 Utilisez curseur GAUCHE & DROIT et les touches FIN et HOME pour naviguer dans
 la ligne de commande et avec INSER changez les modes insertion et écrasement.
-Utilisez TAB pour compléter le mot actuel comme nom de fichier, utilisez le
+Utilisez TAB pour compléter le mot actuel comme nom de fichier, utilisez-le
 deux fois pour afficher tous les fichiers correspondants.
 .
 
@@ -1296,7 +1296,7 @@ PROMPT [texte]
 
   texte    Spécifie une nouvelle invite de commande.
 
-L'invite peut être constitué de caractères normaux et des codes spéciaux
+L'invite peut être constituée de caractères normaux et des codes spéciaux
 suivants :
 
   $Q   = (signe d'égalité)
@@ -1509,7 +1509,7 @@ le disque serait-il saturé ? (%lu octets requis)
 FreeCOM ne peut pas être un appareil : "%s"
 .
 :TEXT_ERROR_FCOM_INVALID#0%
-Ce fichier FreeCOM n'est pas valide ou provient d'un version incompatible :
+Ce fichier FreeCOM n'est pas valide ou provient d'une version incompatible :
 %s
 .
 
