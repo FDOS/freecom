@@ -43,16 +43,26 @@
 
 #include "../include/misc.h"
 
-void clrcmdline(char * const str, const int maxlen)
+void clrcmdline(char * const str, const int maxlen, int x, int y)
 {
 	size_t len = strlen(str);
-	assert(str);
 
-	memset(str, '\b', len);
-	dos_write(1, str, len);
-	memset(str, ' ', len);
-	dos_write(1, str, len);
-	memset(str, '\b', len);
-	dos_write(1, str, len);
-	memset(str, 0, maxlen);
+	if(len > 0) {
+		int step;
+
+		for(step = len; step > 0; step--) {
+			x--;
+			if(x<0) {
+				y--;
+				x=SCREEN_COLS-1;
+			}
+		}
+
+		assert(str);
+		goxy(x, y);
+		memset(str, ' ', len);
+		dos_write(1, str, len);
+		goxy(x, y);
+		memset(str, 0, maxlen);
+	}
 }
