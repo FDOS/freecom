@@ -982,11 +982,11 @@ static int orderFunction(const void *p1, const void *p2)
 
 static int flushOrder(struct ffblk _seg *orderArray,
   		int *orderIndex,
-  		int  orderCount)
+  		int  orderCount,
+		struct currDir *cDir)
 {
   int i;
   struct ffblk file;
-  struct currDir cDir = {0};
   
   for (i = 0; i < orderCount; i++)
   	orderIndex[i] = i;
@@ -996,7 +996,7 @@ static int flushOrder(struct ffblk _seg *orderArray,
   for (i = 0; i < orderCount; i++) {
   	int rv;
     _fmemcpy(&file, &orderArray[orderIndex[i]], sizeof(file));
-    if((rv = DisplaySingleDirEntry(&file, &cDir)) != E_None)
+    if((rv = DisplaySingleDirEntry(&file, cDir)) != E_None)
     	return rv;
   }
   return E_None;  
@@ -1111,7 +1111,7 @@ static int dir_list(int pathlen
 			_fmemcpy(&orderArray[orderCount], &file, sizeof(file));
 			orderCount++;
 			if(orderCount >= MAX_ORDER) {
-				rv = flushOrder(orderArray,orderIndex,orderCount);
+				rv = flushOrder(orderArray,orderIndex,orderCount,&cDir);
 				orderCount = 0;
 			}
 		} else
@@ -1128,7 +1128,7 @@ static int dir_list(int pathlen
 
   if(optO) {
     if(rv == E_None)
-		rv = flushOrder(orderArray,orderIndex,orderCount);
+		rv = flushOrder(orderArray,orderIndex,orderCount,&cDir);
     free(orderIndex);
     DOSfree(FP_SEG(orderArray));
   }

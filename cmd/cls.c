@@ -57,10 +57,40 @@ int cmd_cls (char * param) {
 
 	/* Output stream is neither a file nor NUL nor CLOCK$ */
 	if(((fdattr(1) ^ 0x80) & (0x80 | 0x08 | 0x04)) == 0) {
-		/* Now roll the screen */
+		unsigned attr = 0x0700;
+		int mode;
 		IREGS r;
+		
+		/* Get the current video mode */
+		
+		r.r_ax = 0x0f00;	/* Scroll window up // entire window */
+		intrpt(0x10, &r);
+		mode = r.r_ax & 0x7f;
+		
+		switch (mode)
+		{
+		case 0x04: /* CGA 320x200 */
+		case 0x05: /* CGA 320x200, grayscale */
+		case 0x09: /* PCjr 320x200 */
+		case 0x0a: /* PCjr 640x200 */
+		case 0x0b: /* Tandy 1000 SL/TL */
+		case 0x0d: /* EGA/VGA 320x200, 16 colors */
+		case 0x0e: /* EGA/VGA 640x200, 16 colors */
+		case 0x0f: /* EGA/VGA 640x350, mono */
+		case 0x10: /* EGA/VGA 640x350, 4 or 16 colors */
+		case 0x11: /* VGA 640x480, mono */
+		case 0x12: /* VGA 640x480, 16 colors */
+		case 0x13: /* VGA 320x200, 256 colors */
+		case 0x59: /* SVGA 800x600, 16 colors */
+			attr = 0;
+			break;
+		default:
+			;
+		}
+		
+		/* Now roll the screen */
 		r.r_ax = 0x0600;	/* Scroll window up // entire window */
-		r.r_bx = 0x0700;	/* Attribute to write */
+		r.r_bx = attr;		/* Attribute to write */
 		r.r_cx = 0x0000;	/* Upper left */
 		r.r_dx = ((SCREEN_ROWS - 1) << 8) | (SCREEN_COLS - 1); /* Lower right */
 		intrpt(0x10, &r);

@@ -53,7 +53,7 @@ int cmd_type(char *param)
 	}
 
 	for(argc = 0; argv[argc]; ++argc) {
-		if((fd = devopen(argv[argc], O_RDONLY)) == 0) {
+		if((fd = devopen(argv[argc], O_RDONLY)) < 0) {
 			error_sfile_not_found(argv[argc]);
 			ec = E_Other;
 			break;
@@ -76,7 +76,7 @@ int cmd_type(char *param)
 				}
 			}
 			dos_write(1, bufp, p - bufp);
-			if (len < sizeof(buf) || *p == 26) break;
+			if (len == 0 || *p == 26) break;
 		}
 		dos_close(fd);
 		if(cbreak) {
