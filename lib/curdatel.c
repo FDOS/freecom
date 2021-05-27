@@ -66,6 +66,27 @@ char *curDateLong(void)
 		return 0;
 	}
 
+#ifdef FEATURE_NLS
+	p = malloc(strlen(h) + strlen(date) + 4);
+	if (!p) {
+		free(h);
+		free(date);
+		error_out_of_memory();
+		return 0;
+	}
+	if (nlsBuf->datefmt == 2) {
+		strcpy(p, date);
+		strcat(p, " (");
+		strcat(p, h);
+		strcat(p, ")");
+	}
+	else {
+		strcpy(p, h);
+		strcat(p, " ");
+		strcat(p, date);
+	}
+	free(h);
+#else
 	if((p = realloc(h, strlen(h) + strlen(date) + 2)) == 0) {
 		free(h);
 		free(date);
@@ -74,6 +95,7 @@ char *curDateLong(void)
 	}
 
 	strcpy(stpcat(p, " "), date);
+#endif
 	free(date);
 
 	return p;

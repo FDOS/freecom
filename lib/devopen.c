@@ -41,6 +41,9 @@
 #include <io.h>
 #include <fcntl.h>
 #include <dos.h>
+#if defined (__TURBOC__)
+# include <dir.h>
+#endif
 
 #include "../include/openf.h"
 #include "../include/misc.h"
