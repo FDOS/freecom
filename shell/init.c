@@ -75,8 +75,9 @@ void exitfct(void)
 }
 
 
-static int showhelp = 0, internalBufLen = 0, inputBufLen = 0,
-           spawnAndExit = E_None, newEnvSize = 0, skipAUTOEXEC = 0;
+static unsigned int showhelp = 0, internalBufLen = 0, inputBufLen = 0,
+           spawnAndExit = E_None, newEnvSize = 0;
+static int skipAUTOEXEC = 0;
 /* static int newEnvSize = 0;          Min environment table size */
 static char *user_autoexec = 0;
 
@@ -437,7 +438,7 @@ int initialize(void)
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
   if(forceLow)
 	  env_resizeCtrl &= ~ENV_USEUMB;
-  if(newEnvSize > 16 && newEnvSize < 32767)
+  if(newEnvSize > 16 && newEnvSize < 32769)
     env_setsize(0, newEnvSize);
 #ifdef ENVIRONMENT_KEEP_FREE 
 #if ENVIRONMENT_KEEP_FREE > 0
