@@ -103,7 +103,7 @@ void stack_check_init()
   stack_bottom = &current_stack_location - (4*1024 - 50) / sizeof(void *);
   stack_unused = &current_stack_location;
 
-  for (barrier = stack_bottom; (void **)barrier < stack_unused ; barrier++)
+  for (barrier = (volatile void * volatile *)stack_bottom; (void **)barrier < stack_unused ; barrier++)
     *barrier = barrier;
 }
 int stack_check(const char *commandline)
