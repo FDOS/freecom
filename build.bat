@@ -147,7 +147,11 @@ if errorlevel 1 goto ende
 cd ..
 
 utils\mkinfres.exe /tinfo.txt infores shell\command.map shell\command.exe
-copy /b shell\command.exe + infores + criter\criter1 + criter\criter + strings\strings.dat command.com
+:: save version without lang specific files and version with strings embedded
+if NOT "%XMS_SWAP%"=="" SET CMD_NAME=strings\xmsswap.cln
+if "%XMS_SWAP%"=="" SET CMD_NAME=strings\command.cln
+copy /b shell\command.exe + infores + criter\criter1 + criter\criter %CMD_NAME%
+copy /b %CMD_NAME% + strings\strings.dat command.com
 if not exist command.com goto ende
 
 echo.
@@ -165,6 +169,7 @@ echo.
 echo Patching heap size to 6KB
 echo.
 tools\ptchsize.exe command.com +6KB
+tools\ptchsize.exe %CMD_NAME% +6KB
 
 if %WITH_UPX%x == x goto alldone
 if exist command.upx del command.upx >nul
@@ -205,3 +210,4 @@ set BC5_BASE=
 set XNASM=
 set LNG=
 set WITH_UPX=
+set CMD_NAME=
