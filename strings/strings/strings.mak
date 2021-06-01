@@ -15,12 +15,12 @@ OBJ1 =	str0000.obj\
 	str0007.obj
 OBJ2 =	str0008.obj\
 	str0009.obj\
-	str000A.obj\
-	str000B.obj\
-	str000C.obj\
-	str000D.obj\
-	str000E.obj\
-	str000F.obj
+	str000a.obj\
+	str000b.obj\
+	str000c.obj\
+	str000d.obj\
+	str000e.obj\
+	str000f.obj
 OBJ3 =	str0010.obj\
 	str0011.obj\
 	str0012.obj\
@@ -31,12 +31,12 @@ OBJ3 =	str0010.obj\
 	str0017.obj
 OBJ4 =	str0018.obj\
 	str0019.obj\
-	str001A.obj\
-	str001B.obj\
-	str001C.obj\
-	str001D.obj\
-	str001E.obj\
-	str001F.obj
+	str001a.obj\
+	str001b.obj\
+	str001c.obj\
+	str001d.obj\
+	str001e.obj\
+	str001f.obj
 OBJ5 =	str0020.obj\
 	str0021.obj\
 	str0022.obj\
@@ -47,12 +47,12 @@ OBJ5 =	str0020.obj\
 	str0027.obj
 OBJ6 =	str0028.obj\
 	str0029.obj\
-	str002A.obj\
-	str002B.obj\
-	str002C.obj\
-	str002D.obj\
-	str002E.obj\
-	str002F.obj
+	str002a.obj\
+	str002b.obj\
+	str002c.obj\
+	str002d.obj\
+	str002e.obj\
+	str002f.obj
 OBJ7 =	str0030.obj\
 	str0031.obj\
 	str0032.obj\
@@ -63,12 +63,12 @@ OBJ7 =	str0030.obj\
 	str0037.obj
 OBJ8 =	str0038.obj\
 	str0039.obj\
-	str003A.obj\
-	str003B.obj\
-	str003C.obj\
-	str003D.obj\
-	str003E.obj\
-	str003F.obj
+	str003a.obj\
+	str003b.obj\
+	str003c.obj\
+	str003d.obj\
+	str003e.obj\
+	str003f.obj
 OBJ9 =	str0040.obj\
 	str0041.obj\
 	str0042.obj\
@@ -79,12 +79,12 @@ OBJ9 =	str0040.obj\
 	str0047.obj
 OBJ10 =	str0048.obj\
 	str0049.obj\
-	str004A.obj\
-	str004B.obj\
-	str004C.obj\
-	str004D.obj\
-	str004E.obj\
-	str004F.obj
+	str004a.obj\
+	str004b.obj\
+	str004c.obj\
+	str004d.obj\
+	str004e.obj\
+	str004f.obj
 OBJ11 =	str0050.obj\
 	str0051.obj\
 	str0052.obj\
@@ -95,12 +95,12 @@ OBJ11 =	str0050.obj\
 	str0057.obj
 OBJ12 =	str0058.obj\
 	str0059.obj\
-	str005A.obj\
-	str005B.obj\
-	str005C.obj\
-	str005D.obj\
-	str005E.obj\
-	str005F.obj
+	str005a.obj\
+	str005b.obj\
+	str005c.obj\
+	str005d.obj\
+	str005e.obj\
+	str005f.obj
 OBJ13 =	str0060.obj\
 	str0061.obj\
 	str0062.obj\
@@ -111,12 +111,12 @@ OBJ13 =	str0060.obj\
 	str0067.obj
 OBJ14 =	str0068.obj\
 	str0069.obj\
-	str006A.obj\
-	str006B.obj\
-	str006C.obj\
-	str006D.obj\
-	str006E.obj\
-	str006F.obj
+	str006a.obj\
+	str006b.obj\
+	str006c.obj\
+	str006d.obj\
+	str006e.obj\
+	str006f.obj
 OBJ15 =	str0070.obj\
 	str0071.obj\
 	str0072.obj\
@@ -127,12 +127,12 @@ OBJ15 =	str0070.obj\
 	str0077.obj
 OBJ16 =	str0078.obj\
 	str0079.obj\
-	str007A.obj\
-	str007B.obj\
-	str007C.obj\
-	str007D.obj\
-	str007E.obj\
-	str007F.obj
+	str007a.obj\
+	str007b.obj\
+	str007c.obj\
+	str007d.obj\
+	str007e.obj\
+	str007f.obj
 OBJ17 =	str0080.obj\
 	str0081.obj\
 	str0082.obj\
@@ -143,12 +143,12 @@ OBJ17 =	str0080.obj\
 	str0087.obj
 OBJ18 =	str0088.obj\
 	str0089.obj\
-	str008A.obj\
-	str008B.obj\
-	str008C.obj\
-	str008D.obj\
-	str008E.obj\
-	str008F.obj
+	str008a.obj\
+	str008b.obj\
+	str008c.obj\
+	str008d.obj\
+	str008e.obj\
+	str008f.obj
 OBJ19 =	str0090.obj\
 	str0091.obj\
 	str0092.obj\
@@ -159,114 +159,113 @@ OBJ19 =	str0090.obj\
 	str0097.obj
 OBJ20 =	str0098.obj\
 	str0099.obj\
-	str009A.obj\
-	str009B.obj\
-	str009C.obj\
-	str009D.obj\
-	str009E.obj\
-	str009F.obj
-OBJ21 =	str00A0.obj\
-	str00A1.obj\
-	str00A2.obj\
-	str00A3.obj\
-	str00A4.obj\
-	str00A5.obj\
-	str00A6.obj\
-	str00A7.obj
-OBJ22 =	str00A8.obj\
-	str00A9.obj\
-	str00AA.obj\
-	str00AB.obj\
-	str00AC.obj\
-	str00AD.obj\
-	str00AE.obj\
-	str00AF.obj
-OBJ23 =	str00B0.obj\
-	str00B1.obj\
-	str00B2.obj\
-	str00B3.obj\
-	str00B4.obj\
-	str00B5.obj\
-	str00B6.obj\
-	str00B7.obj
-OBJ24 =	str00B8.obj\
-	str00B9.obj\
-	str00BA.obj\
-	str00BB.obj\
-	str00BC.obj\
-	str00BD.obj\
-	str00BE.obj\
-	str00BF.obj
-OBJ25 =	str00C0.obj\
-	str00C1.obj\
-	str00C2.obj\
-	str00C3.obj\
-	str00C4.obj\
-	str00C5.obj\
-	str00C6.obj\
-	str00C7.obj
-OBJ26 =	str00C8.obj\
-	str00C9.obj\
-	str00CA.obj\
-	str00CB.obj\
-	str00CC.obj\
-	str00CD.obj\
-	str00CE.obj\
-	str00CF.obj
-OBJ27 =	str00D0.obj\
-	str00D1.obj\
-	str00D2.obj\
-	str00D3.obj\
-	str00D4.obj\
-	str00D5.obj\
-	str00D6.obj\
-	str00D7.obj
-OBJ28 =	str00D8.obj\
-	str00D9.obj\
-	str00DA.obj\
-	str00DB.obj\
-	str00DC.obj\
-	str00DD.obj\
-	str00DE.obj\
-	str00DF.obj
-OBJ29 =	str00E0.obj\
-	str00E1.obj\
-	str00E2.obj\
-	str00E3.obj\
-	str00E4.obj\
-	str00E5.obj\
-	str00E6.obj\
-	str00E7.obj
-OBJ30 =	str00E8.obj\
-	str00E9.obj\
-	str00EA.obj\
-	str00EB.obj\
-	str00EC.obj\
-	str00ED.obj\
-	str00EE.obj\
-	str00EF.obj
-OBJ31 =	str00F0.obj\
-	str00F1.obj\
-	str00F2.obj\
-	str00F3.obj\
-	str00F4.obj\
-	str00F5.obj\
-	str00F6.obj\
-	str00F7.obj
-OBJ32 =	str00F8.obj\
-	str00F9.obj\
-	str00FA.obj\
-	str00FB.obj\
-	str00FC.obj\
-	str00FD.obj\
-	str00FE.obj
+	str009a.obj\
+	str009b.obj\
+	str009c.obj\
+	str009d.obj\
+	str009e.obj\
+	str009f.obj
+OBJ21 =	str00a0.obj\
+	str00a1.obj\
+	str00a2.obj\
+	str00a3.obj\
+	str00a4.obj\
+	str00a5.obj\
+	str00a6.obj\
+	str00a7.obj
+OBJ22 =	str00a8.obj\
+	str00a9.obj\
+	str00aa.obj\
+	str00ab.obj\
+	str00ac.obj\
+	str00ad.obj\
+	str00ae.obj\
+	str00af.obj
+OBJ23 =	str00b0.obj\
+	str00b1.obj\
+	str00b2.obj\
+	str00b3.obj\
+	str00b4.obj\
+	str00b5.obj\
+	str00b6.obj\
+	str00b7.obj
+OBJ24 =	str00b8.obj\
+	str00b9.obj\
+	str00ba.obj\
+	str00bb.obj\
+	str00bc.obj\
+	str00bd.obj\
+	str00be.obj\
+	str00bf.obj
+OBJ25 =	str00c0.obj\
+	str00c1.obj\
+	str00c2.obj\
+	str00c3.obj\
+	str00c4.obj\
+	str00c5.obj\
+	str00c6.obj\
+	str00c7.obj
+OBJ26 =	str00c8.obj\
+	str00c9.obj\
+	str00ca.obj\
+	str00cb.obj\
+	str00cc.obj\
+	str00cd.obj\
+	str00ce.obj\
+	str00cf.obj
+OBJ27 =	str00d0.obj\
+	str00d1.obj\
+	str00d2.obj\
+	str00d3.obj\
+	str00d4.obj\
+	str00d5.obj\
+	str00d6.obj\
+	str00d7.obj
+OBJ28 =	str00d8.obj\
+	str00d9.obj\
+	str00da.obj\
+	str00db.obj\
+	str00dc.obj\
+	str00dd.obj\
+	str00de.obj\
+	str00df.obj
+OBJ29 =	str00e0.obj\
+	str00e1.obj\
+	str00e2.obj\
+	str00e3.obj\
+	str00e4.obj\
+	str00e5.obj\
+	str00e6.obj\
+	str00e7.obj
+OBJ30 =	str00e8.obj\
+	str00e9.obj\
+	str00ea.obj\
+	str00eb.obj\
+	str00ec.obj\
+	str00ed.obj\
+	str00ee.obj\
+	str00ef.obj
+OBJ31 =	str00f0.obj\
+	str00f1.obj\
+	str00f2.obj\
+	str00f3.obj\
+	str00f4.obj\
+	str00f5.obj\
+	str00f6.obj\
+	str00f7.obj
+OBJ32 =	str00f8.obj\
+	str00f9.obj\
+	str00fa.obj\
+	str00fb.obj\
+	str00fc.obj\
+	str00fd.obj\
+	str00fe.obj
 
 strings.lib: ../strings.h ../strings.err $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) \
 $(OBJ6) $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14) $(OBJ15) \
 $(OBJ16) $(OBJ17) $(OBJ18) $(OBJ19) $(OBJ20) $(OBJ21) $(OBJ22) $(OBJ23) $(OBJ24) $(OBJ25) \
 $(OBJ26) $(OBJ27) $(OBJ28) $(OBJ29) $(OBJ30) $(OBJ31) $(OBJ32)
 	echo Making STRINGS library
-	ECHO $(CL) -c *.c
 	$(RMFILES2) strings.lib
 	$(AR) strings.lib @strings.rsp $(LIBLIST) strings.lst
 	$(CP) strings.lib ..
