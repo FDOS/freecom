@@ -11,7 +11,7 @@ if "%1"=="continue" goto loop
 if "%1"=="" SET MAKEALL=EN
 if "%1"=="" del strings.* > NUL
 set languages=%1 %2
-if "%1"=="" set languages=NL Dutch ES Spanish DE German FR French IT Italian PTR PT_BR RU Russian Ser Serbian YUG YU437 EN English
+if "%1"=="" set languages=NL Dutch ES Spanish DE German FR French IT Italian PTR PT_BR RU Russian Ser Serbian TR Turkish YUG YU437 EN English
 call %0  continue %languages%
 set MAKEALL=
 set languages=
