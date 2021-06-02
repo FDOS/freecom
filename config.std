@@ -22,6 +22,9 @@ DEBUG=-UDEBUG -DNDEBUG
 !endif
 SHELL_MMODEL_COMP=$(SHELL_MMODEL)
 
+## Memory model of fixstrs, requires far data pointers, so uses compact memory model by default
+FIXSTRS_MMODEL=-mc
+
 ## Add -DDEBUG=1 below to enable debug support for assembly files
 NASMFLAGS =
 
