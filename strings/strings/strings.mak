@@ -3,6 +3,8 @@ CFG_DEPENDENCIES = strings.mak
 TOP=../..
 !include "$(TOP)/config.mak"
 
+CFG:=../$(CFG)
+
 all : strings.lib
 
 OBJ1 =	str0000.obj\
