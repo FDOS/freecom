@@ -14,13 +14,14 @@
 #include <fmemory.h>
 #include "../include/misc.h"
 
-#define MAX_EXTERNAL_COMMAND_SIZE 125
+#define MAX_EXTERNAL_COMMAND_SIZE 126
 	/* The maximal external command line is:
 		  128: overall space for the command line)
 		- 1: Pascal string length byte
 		- 1: '\r' (at the end)
-		- 1: '\0' (at the very end)
-		= 125
+		= 126
+		Note: prior versions of FreeCOM also had a '\0' after the '\r', 
+		but per RBIL & other documents, the command line is only terminated by a '\r' (0Dh value)
 	*/
 
 enum InternalErrorCodes {
