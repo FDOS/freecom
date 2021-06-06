@@ -216,10 +216,9 @@ void execute(char *first, char *rest, int lh_lf)
 
 	if(strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE) {
         char *fullcommandline = malloc( strlen( first ) + strlen( rest ) + 2 );
-        error_line_too_long();
         if( fullcommandline == NULL ) return;
         sprintf( fullcommandline, "%s%s", first, rest );
-        if( chgEnv( "CMDLINE", fullcommandline ) != 0 ) {
+        if( chgEnv( LONG_CMDLINE_ENV_NAME, fullcommandline ) != 0 ) {
             free( fullcommandline );
             return;
         }
