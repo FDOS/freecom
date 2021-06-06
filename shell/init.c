@@ -286,18 +286,29 @@ int initialize(void)
   /* #2 extended command line in CMDLINE env var */
   //printf("Command line is %u chars long\n", cmdlen);
   if (cmdlen > MAX_EXTERNAL_COMMAND_SIZE) {
+    cmdlen = 0;
+	cmdline = 0;
 	/* see if CMDLINE env var exists, if so use it, should be \0 terminated
-       note this will duplicate the value into the local address space */
-	cmdline = getEnv("CMDLINE");
-	if (cmdline != 0) {
-		char *p = cmdline;
-		cmdlen = strlen(cmdline);
-		while (*p && (*p != ' ')) { p++; cmdlen--; }
-		memcpy(cmdline, p, cmdlen+1);
-	} else {
+	   we need to see if it exists, copy to local address space skipping past command.com */
+	if (!(env_matchVar(0, LONG_CMDLINE_ENV_NAME) & 7)) { /* found? ==0 */
+	    word segm;
+		int ofs;
+		segm = env_dfltSeg? env_dfltSeg : env_glbSeg; /* get env segment */
+		if (segm) { 
+		    if ((ofs = env_findVar(segm, LONG_CMDLINE_ENV_NAME)) >= 0) { /* get offset to CMDLINE env var if exists */
+	            char far *p = MK_FP(segm, ofs + strlen(LONG_CMDLINE_ENV_NAME) + 1); /* skip past CMDLINE= */
+    	        while (*p && !isargdelim(*p)) { p++; } /* skip past argv[0] ~= COMMAND.COM */
+		        if (0 == (cmdline = _fdupstr(p))) { /* copy into local address space just cmd tail */
+                   error_out_of_memory();
+                   return E_NoMem;
+		        }			
+		        cmdlen = strlen(cmdline);
+		    }
+		}
+	}
+    if (cmdline == 0) {
 		/* either no free memory or no CMDLINE env var found */
         error_corrupt_command_line();
-        cmdlen = 0;
 	}
   }
   if (cmdlen <= MAX_EXTERNAL_COMMAND_SIZE) {
