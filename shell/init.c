@@ -164,7 +164,7 @@ int initialize(void)
   int ec;           /* error code */
   unsigned offs;        /* offset into environment segment */
 
-  int cmdlen;         /* length of command line */
+  unsigned cmdlen;      /* length of command line */
   char *cmdline;        /* command line duplicated into heap */
   char *p, *h, *q;
 #ifdef FEATURE_CALL_LOGGING
@@ -278,13 +278,29 @@ int initialize(void)
     3) MKS command line @ENV:2, if peekb(ENV, 0) == '~'
     	&& peekb(ENV, 1) == '='
 
-    Currently implemented is version #1 only
+    Currently implemented is version #1 and #2
   */
-  cmdlen = peekb(_psp, 0x80);
-  if(cmdlen < 0 || cmdlen > 126) {
-    error_corrupt_command_line();
-    cmdlen = 0;
+  /* get size of command line, if <= 126 then assume actual size
+     >126 treat as flag indicating to use CMDLINE env variable */
+  cmdlen = (unsigned)peekb(_psp, 0x80);
+  /* #2 extended command line in CMDLINE env var */
+  //printf("Command line is %u chars long\n", cmdlen);
+  if (cmdlen > MAX_EXTERNAL_COMMAND_SIZE) {
+	/* see if CMDLINE env var exists, if so use it, should be \0 terminated
+       note this will duplicate the value into the local address space */
+	cmdline = getEnv("CMDLINE");
+	if (cmdline != 0) {
+		char *p = cmdline;
+		cmdlen = strlen(cmdline);
+		while (*p && (*p != ' ')) { p++; cmdlen--; }
+		memcpy(cmdline, p, cmdlen+1);
+	} else {
+		/* either no free memory or no CMDLINE env var found */
+        error_corrupt_command_line();
+        cmdlen = 0;
+	}
   }
+  if (cmdlen <= MAX_EXTERNAL_COMMAND_SIZE) {
     /* duplicate the command line into the local address space */
   if((cmdline = malloc(cmdlen + 1)) == 0) {
     error_out_of_memory();  /* Cannot recover from this problem */
@@ -292,6 +308,8 @@ int initialize(void)
   }
   _fmemcpy((char far*)cmdline, MK_FP(_psp, 0x81), cmdlen);
   cmdline[cmdlen] = '\0';
+  }
+  //printf("CMDLINE:[%s]\n", cmdline);
 #ifdef FEATURE_CALL_LOGGING
 #ifndef INCLUDE_CMD_FDDEBUG
   if((f = fopen(logFilename, "at")) == 0) {
