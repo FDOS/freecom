@@ -14,6 +14,7 @@
 #include <fmemory.h>
 #include "../include/misc.h"
 
+#define LONG_CMDLINE_ENV_NAME "CMDLINE"
 #define MAX_EXTERNAL_COMMAND_SIZE 126
 	/* The maximal external command line is:
 		  128: overall space for the command line)
