@@ -10,6 +10,6 @@ https://github.com/FDOS/freecom
 [![Build](../../workflows/Build/badge.svg)](../../actions)
 
 #### More information
-[Changes since last official release](CHANGED)
+[Changes since last official release](https://github.com/FDOS/freecom/commits/master)
 
 [How to compile FreeCOM](docs/compile.txt)
