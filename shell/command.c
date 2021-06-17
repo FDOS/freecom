@@ -411,8 +411,11 @@ static void docommand(char *line)
         if(memcmp(ltrimcl(rest), "/?", 2) == 0)  {
           displayString(currCmdHelpScreen);
         } else {
+          int internal_errorlevel;  /* error level for internal command */
           dprintf(("CMD '%s' : '%s'\n", cmdptr->name, rest));
-          errorlevel = cmdptr->func(rest);
+          internal_errorlevel = cmdptr->func(rest);
+		  /* don't set errorlevel for some commands such as IF, GOTO, FOR, etc. */
+		  if (!(cmdptr->flags & CMD_NO_ERRORLEVEL)) errorlevel = internal_errorlevel;
         }
         goto errRet;
 	}

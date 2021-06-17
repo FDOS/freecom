@@ -33,11 +33,13 @@ goto err_SKIP
 
 :err_OK
 errlvl 0
-echo Errorlevel %? (must be '0')
+::echo Errorlevel %? (must be '0')
+echo Errorlevel %errorlevel% (must be '0')
 if not errorlevel 1 echo Probe #1 passed
 if errorlevel 1 echo Probe #2 failed
 errlvl 15
-echo Errorlevel %? (must be '15')
+::echo Errorlevel %? (must be '15')
+echo Errorlevel %ERRORLEVEL% (must be '15')
 if errorlevel 15 echo Probe #3 passed
 if errorlevel 16 echo Probe #4 failed
 if errorlevel 14 echo Probe #5 passed

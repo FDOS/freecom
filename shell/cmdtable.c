@@ -58,7 +58,7 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_BREAK
-        {"BREAK",    0,             cmd_break     , TEXT_CMDHELP_BREAK},
+        {"BREAK", CMD_NO_ERRORLEVEL, cmd_break, TEXT_CMDHELP_BREAK},
 #endif
 
         {"CALL", CMD_SPECIAL_DIR | CMD_BATCHONLY, cmd_call, TEXT_CMDHELP_CALL},
@@ -77,7 +77,7 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_CLS
-  {"CLS", 0, cmd_cls, TEXT_CMDHELP_CLS},
+  {"CLS", CMD_NO_ERRORLEVEL, cmd_cls, TEXT_CMDHELP_CLS},
 #endif
 
 #ifdef INCLUDE_CMD_COPY
@@ -89,7 +89,7 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_DATE
-  {"DATE", 0, cmd_date, TEXT_CMDHELP_DATE},
+  {"DATE", CMD_NO_ERRORLEVEL, cmd_date, TEXT_CMDHELP_DATE},
 #endif
 
 #ifdef INCLUDE_CMD_DEL
@@ -105,10 +105,10 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef FEATURE_HISTORY
-  {"DOSKEY", 0, cmd_doskey, TEXT_CMDHELP_DOSKEY},
+  {"DOSKEY", CMD_NO_ERRORLEVEL, cmd_doskey, TEXT_CMDHELP_DOSKEY},
 #endif
 
-  {"ECHO", CMD_SPECIAL_ALL, cmd_echo, TEXT_CMDHELP_ECHO},
+  {"ECHO", CMD_SPECIAL_ALL | CMD_NO_ERRORLEVEL, cmd_echo, TEXT_CMDHELP_ECHO},
 
 #ifdef INCLUDE_CMD_DEL
   {"ERASE", CMD_SPECIAL_DIR, cmd_del, TEXT_CMDHELP_DEL},
@@ -119,19 +119,19 @@ struct CMD internalCommands[] =
   {"EXIT!!", 0, force_exit, TEXT_CMDHELP_EXIT},
 #endif
 
-  {"FOR", 0, cmd_for, TEXT_CMDHELP_FOR},
+  {"FOR", CMD_NO_ERRORLEVEL, cmd_for, TEXT_CMDHELP_FOR},
 
-  {"GOTO", CMD_BATCHONLY, cmd_goto, TEXT_CMDHELP_GOTO},
+  {"GOTO", CMD_BATCHONLY | CMD_NO_ERRORLEVEL, cmd_goto, TEXT_CMDHELP_GOTO},
 
 #ifdef FEATURE_HISTORY
   {"HISTORY", 0, cmd_history, TEXT_CMDHELP_HISTORY},
 #endif
 
-  {"IF", 0, cmd_if, TEXT_CMDHELP_IF},
+  {"IF", CMD_NO_ERRORLEVEL, cmd_if, TEXT_CMDHELP_IF},
 
 #ifdef FEATURE_LONG_FILENAMES
 #ifdef INCLUDE_CMD_LFNFOR
-  {"LFNFOR", 0, cmd_lfnfor, TEXT_CMDHELP_LFNFOR},
+  {"LFNFOR", CMD_NO_ERRORLEVEL, cmd_lfnfor, TEXT_CMDHELP_LFNFOR},
 #endif
 #endif
 
@@ -150,7 +150,7 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_MEMORY
-  {"MEMORY", 0, cmd_memory, TEXT_CMDHELP_MEMORY},
+  {"MEMORY", CMD_NO_ERRORLEVEL, cmd_memory, TEXT_CMDHELP_MEMORY},
 #endif
 
 #ifdef INCLUDE_CMD_MKDIR
@@ -163,7 +163,7 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_PAUSE
-  {"PAUSE", 0, cmd_pause, TEXT_CMDHELP_PAUSE},
+  {"PAUSE", CMD_NO_ERRORLEVEL, cmd_pause, TEXT_CMDHELP_PAUSE},
 #endif
 
 #ifdef INCLUDE_CMD_PROMPT
@@ -171,19 +171,19 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_PUSHD
-  {"PUSHD", CMD_SPECIAL_DIR, cmd_pushd, TEXT_CMDHELP_PUSHD},
+  {"PUSHD", CMD_SPECIAL_DIR | CMD_NO_ERRORLEVEL, cmd_pushd, TEXT_CMDHELP_PUSHD},
 #endif
 
 #ifdef INCLUDE_CMD_POPD
-  {"POPD", 0, cmd_popd, TEXT_CMDHELP_POPD},
+  {"POPD", CMD_NO_ERRORLEVEL, cmd_popd, TEXT_CMDHELP_POPD},
 #endif
 
 #ifdef INCLUDE_CMD_RMDIR
-  {"RD", CMD_SPECIAL_DIR, cmd_rmdir, TEXT_CMDHELP_RD},
+  {"RD", CMD_SPECIAL_DIR | CMD_NO_ERRORLEVEL, cmd_rmdir, TEXT_CMDHELP_RD},
 #endif
 
 #ifdef INCLUDE_CMD_REM
-  {"REM", 0, cmd_rem, TEXT_CMDHELP_REM},
+  {"REM", CMD_NO_ERRORLEVEL, cmd_rem, TEXT_CMDHELP_REM},
 #endif
 
 #ifdef INCLUDE_CMD_RENAME
@@ -192,21 +192,25 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_RMDIR
-  {"RMDIR", CMD_SPECIAL_DIR, cmd_rmdir, TEXT_CMDHELP_RD},
+  {"RMDIR", CMD_SPECIAL_DIR | CMD_NO_ERRORLEVEL, cmd_rmdir, TEXT_CMDHELP_RD},
 #endif
 
 #ifdef INCLUDE_CMD_SET
   {"SET", 0, cmd_set, TEXT_CMDHELP_SET},
 #endif
 
-  {"SHIFT", CMD_BATCHONLY, cmd_shift, TEXT_CMDHELP_SHIFT},
+  {"SHIFT", CMD_BATCHONLY | CMD_NO_ERRORLEVEL, cmd_shift, TEXT_CMDHELP_SHIFT},
 
 #ifdef INCLUDE_CMD_TIME
-  {"TIME", 0, cmd_time, TEXT_CMDHELP_TIME},
+  {"TIME", CMD_NO_ERRORLEVEL, cmd_time, TEXT_CMDHELP_TIME},
+#endif
+
+#ifdef INCLUDE_CMD_REM
+  {"TITLE", CMD_NO_ERRORLEVEL, cmd_rem, TEXT_CMDHELP_REM},
 #endif
 
 #ifdef INCLUDE_CMD_TRUENAME
-  {"TRUENAME", CMD_SPECIAL_DIR, cmd_truename, TEXT_CMDHELP_TRUENAME},
+  {"TRUENAME", CMD_SPECIAL_DIR | CMD_NO_ERRORLEVEL, cmd_truename, TEXT_CMDHELP_TRUENAME},
 #endif
 
 #ifdef INCLUDE_CMD_TYPE
@@ -214,7 +218,7 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_VER
-  {"VER", 0, cmd_ver, TEXT_CMDHELP_VER},
+  {"VER", CMD_NO_ERRORLEVEL, cmd_ver, TEXT_CMDHELP_VER},
 #endif
 
 #ifdef INCLUDE_CMD_VERIFY
@@ -226,11 +230,11 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_QUESTION
-  {"?", 0, showcmds, TEXT_CMDHELP_QUESTION},
+  {"?", CMD_NO_ERRORLEVEL, showcmds, TEXT_CMDHELP_QUESTION},
 #endif
 
 #ifdef DEBUG
-  {"FDDEBUG", 0, cmd_fddebug, TEXT_CMDHELP_FDDEBUG},
+  {"FDDEBUG", CMD_NO_ERRORLEVEL, cmd_fddebug, TEXT_CMDHELP_FDDEBUG},
 #endif
 
 #ifdef INCLUDE_CMD_WHICH

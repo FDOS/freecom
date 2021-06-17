@@ -174,6 +174,7 @@ int cmd_alias(char *);
 #define CMD_SPECIAL_ALL 1		/* pass unmodified line into cmd */
 #define CMD_SPECIAL_DIR	2		/* pass directory specific chars into cmd */
 #define CMD_BATCHONLY   4
+#define CMD_NO_ERRORLEVEL 8     /* command should not set errorlevel */
 
 struct CMD
 {
