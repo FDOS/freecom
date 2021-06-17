@@ -4,11 +4,11 @@
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-15">
 <META NAME="GENERATOR" CONTENT="VI">
 <META NAME="AUTHOR" CONTENT="Steffen Kaiser">
-<TITLE>HOW to compile FreeCOM v0.83 Beta 48</TITLE>
+<TITLE>HOW to compile FreeCOM</TITLE>
 </HEAD>
 
 <BODY>
-<H1>HOW to Compile FreeCOM v0.83 Beta 48 in Ten Steps</H1>
+<H1>HOW to Compile FreeCOM v0.8x in Ten Steps</H1>
 
 Because of several complaints about how to compile FreeCOM, this description
 has been crafted to show this process step-by-step.
@@ -24,7 +24,7 @@ has been crafted to show this process step-by-step.
 <BR><A HREF="#h2-one-time">One-time Preparations</A>
 <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#h3-cd-bin">Contents of Directory C:\BIN</A>
 <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="#h3-cd-root">Contents of Directory C:\</A>
-<BR><A HREF="#h2-10steps">Ten Steps to Compile FreeCOM v0.83 Beta 48</A>
+<BR><A HREF="#h2-10steps">Ten Steps to Compile FreeCOM v0.8x</A>
 <BR><P>
 
 <HR>
@@ -40,13 +40,12 @@ process.
 
 This examples uses the following system:
 <UL>
-<LI>VMware v2.0 (to emulate an unique PC, with a newly formatted, virtual
+<LI>VMware, VirtualBox, DOSEMU2, DOSBOX-X (to emulate an unique PC, with a newly formatted, virtual
 partition)
-<LI>OS: FreeDOS kernel 2027rc, binary release downloaded from:
-<A HREF="http://freedos.sourceforge.net/kernel/ke2027rc.zip">sf.net</A>;
-build date 2002-10-23 23:17:37
-<LI>Shell: FreeCOM v0.83 Beta 46 (tested with both binary release and XMS-Swap
-release); downloaded from <A HREF="http://freedos.sourceforge.net/freecom/packages/083Beta46/">FreeCOM's home page on sf.net</A>
+<LI>OS: FreeDOS kernel, binary release downloaded from:
+<A HREF="https://github.com/FDOS/kernel">https://github.com/FDOS/kernel</A>;
+<LI>Shell: FreeCOM v0.83 Beta 46 or later (tested with both binary release and XMS-Swap
+release); downloaded from <A HREF="https://github.com/FDOS/freecom">FreeCOM's home page on GitHub</A>
 <BR>The <EM>binary</EM> variant is installed as the default shell
 <TT>COMMAND.COM</TT>, the XMS-Swapping variant is installed as
 <TT>COM-XMS.COM</TT>; both on the root directory of the hard disk parition.
@@ -58,12 +57,12 @@ as this is the only variant for this VMware release.
 
 <UL>
 <LI>Nasm (aka <EM>Netware Assembler</EM>) is used to compile enclosed
-assembly files, downloaded from: <A HREF="http://belnet.dl.sourceforge.net/sourceforge/nasm/nsm09835.zip">http://belnet.dl.sourceforge.net/sourceforge/nasm/nsm09835.zip</A>;
-Nasm is hosted on <A HREF="http://nasm.sourceforge.net/">sf.net</A>, too;
-because of bugs in earlier release, do use version v0.98.35 or newer of the
-16-bit pre-compiled Nasm.
+assembly files;
+Nasm is hosted on <A HREF="https://www.nasm.us/">https://www.nasm.us/</A>, too;
+Version 2.15 or newer is recommended of the 16-bit pre-compiled Nasm.
 <BR>The Nasm Zip-file is unpacked into directory <TT>nasm</TT> on the CD-Rom.
 
+<LI>Open Watcom or GCC-ia16 are the recommended compilers, but Borland compilers are still supported.
 <LI>Turbo C++ v1.01 is used to compile the enclosed C files, download from
 the <A HREF="http://community.borland.com/article/0,1410,21751,00.html">Borland museum</A>.
 <BR>The Turbo C++ Zip-file is unpacked into directory <TT>tcpp101</TT> on
@@ -83,7 +82,8 @@ of the CD-Rom.
 newer release</A>.
 
 <LI><A HREF="http://freedos.sourceforge.net/freecom/packages/suppl.zip">The SUPPL library</A>
-pre-compiled for Turbo C++ v1.01, located on the root directory of the CD-Rom.
+pre-compiled for Turbo C++ v1.01, located on the root directory of the CD-Rom. 
+*** SUPPL is now included within the FreeCOM source archive, though it may still work from standalone version.
 </UL>
 
 <H2><A NAME="h2-sysconfig">System Configuration</A></H2>
@@ -1106,7 +1106,7 @@ Poking: @19DF:0080 = 1</PRE>
 
 <HR>
 <HR WIDTH=50%><HR WIDTH=25%><HR WIDTH=5%><P ALIGN=CENTER>
-Copyright 2002 &copy; Steffen Kaiser - current maintainer of FreeCOM
+Copyright 2002 &copy; Steffen Kaiser - former maintainer of FreeCOM
 <P>
 <FONT SIZE=1>
 <A HREF="ftp://ftp.cs.pdx.edu/pub/elvis/"><IMG SRC="../images/vi.gif" ALT="Elvis - The VI clone"></A>
