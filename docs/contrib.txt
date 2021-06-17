@@ -1,1 +1,13 @@
-Please see UPLOAD.TXT
+Contributions are welcome!
+
+Currently the best way to submit a patch is via a pull request (PR) on GitHub - see https://github.com/FDOS/freecom
+
+Discussion and patches may also be done via the FreeDOS developer mailing list or by attaching a patch to an issue on GitHub.
+
+
+Most wanted changes are:
+  - translations, fixing any that may need updating or adding new languages
+  - bug fixes, see Issues on GitHub site and bugs on Sourceforge https://sourceforge.net/p/freedos/bugs/
+  - improvements or compability fixes, i.e. new or update existing commands to better match MS COMMAND.COM or 4DOS
+
+Thank you.
