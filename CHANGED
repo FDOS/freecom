@@ -1,3 +1,60 @@
+v0.85
+From Kenneth J Davis
+    ensure not setting errorlevel for all internal commands, exclude commands such IF FOR etc
+    support CMDLINE for command lines > 126 characters  
+    from RBIL and other sources, the command line should end in just \r and if greater than 126 chars, the size byte should be 127 not actual size; still keep \0 if command line is short enough but allow 126 chars without terminating \0, set size to 127 if >126
+    misc batch file updates to aid in building multiple versions (languages/xmswap or not/compiler)
+    support /E maxsize of 32768, FreeCOM documentation and MS/PC DOS command.com document max value as 32768, due to use of signed int FreeCOM max size was actually 32766; change argument processing to use unsigned int and support up to 32768 as argument
+    git should ignore generated files
+    add files to GitHub so http://www.fdos.org/freecom/ directs to GitHub hosted content
+From Andrew Bird
+    fix build due to language keyword in strings file got renamed
+    improve fixstrs compatibility with gcc-ia16
+    multiple build fixes for Linux due to case sensitive filenames
+    muttiple fixes to avoid git encoding issues for translations
+    slightly improved French translations from @cardpuncher
+    fix so fixstrs does not segfault on incorrect input
+    add the remaining translations to the CI build
+    setup CI build on GitHub using GCC-ia16 and Open Watcom, multiple improvements to CI build
+    remove duplicate translation the translation 'yu852' is identical to 'serbian' so remove it
+    Update README - convert to Markdown, add build status badge, add links for Changes and Compile text documents
+    fixstrs: Avoid sign extension of chars 128..255 - with GCC on Linux, cp850 char 0xa3 'ú' was being converted as 0xffffffa3, so be explicit about signedness and size of the parameter.
+    fixstrs: fix invalid escape chars
+    fixstrs: initialise version number, strupr should return the pointer passed in - fixes gcc warnings
+    fixstrs: rename log variable - fix declaration mismatch
+    build: Copy default file if config missing
+From lpproj dbcs fork
+    add nls fallback, fix for running on DOS kernels that lack the nls API used
+    Add build option `upx' to build a compressed execuable
+    alias watcom=wc in build script
+    Fix chcp report wrong codepage on old DOS before v3.30 (and v3.30 for NEC PC-9800 series)
+From p-durlej fork
+    CLS: Use appropriate attribute values for common display modes.
+    DIR: Fix DIR /O /W not putting newline before the summary.
+    TYPE: Fix file open error handling
+    TYPE: Fix partial read handling
+    displayPrompt: prevent $P from being intermixed with INT 24H and phantom drive messages
+    DEL: Fix printing the directory path when deleting all files
+From Jason Pittman
+    Fix for multi-line commands in history, properly wrap and clear lines
+From Bart Oldeman
+    Update French translation (corrected some grammatical errors)
+    Add some more GCC options to reduce the size of command.com.
+    Add comment about MinGW.
+From Sampo Hippeläinen
+    better GOTO help translation
+    improve/add Finnish translation
+From Emir Sari
+    Fix typo
+    Improve Turkish translations - fixes ambiguities and overall improves current translations
+From Francesco Sacco
+    allow internal commands set the ERRORLEVEL
+    Minor fixes for pt-br.
+From ghderty
+    Translations: Update russian translation
+From Darrin M. Gorski
+    Allow non-permanent instances to exit with the last errorlevel instead of zero.
+
 v0.84pre7
 fix: Check for Win64 in Watcom makefile via %ProgramFiles(x86) (Bart)
 chg: Build xms-swap by default (Bart)
