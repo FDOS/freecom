@@ -238,11 +238,14 @@ static int lh_lf(char *args)
   dosSetAllocStrategy(old_strat);
 
 
-  /* if any error occurred, rc will hold the error code */
-  if (rc)
+  /* if any error occurred, print & return the error */
+  if (rc) {
     lh_error(rc);
+    return rc;
+  }
 
-  return rc;
+  /* otherwise return the exit code of the program that ran */
+  return errorlevel;
 }
 
 
