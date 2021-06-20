@@ -26,7 +26,7 @@
 # A missing version is assumed as "#0".
 # If there is a percent sign (%) appended to the version, the printf()
 # format string %-style placeholders are compared for the strings. The
-# sign need to be set in DEFAULT.lng only.
+# sign need to be set in DEFAULT.lng only.  Use a double %, %% to display a %.
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
@@ -468,7 +468,7 @@ Resizing context to %u bytes.
 Failed to add status information into context. This error may indicate
 memory corruption or an incorrectly determined minimum size of
 the context. Please inform the maintainer of FreeCOM at:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net mailing list.
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -824,7 +824,7 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details.
 
-Send bug reports to freedos-freecom@lists.sourceforge.net.
+Send bug reports to freedos-devel@lists.sourceforge.net.
 Updates are available from http://freedos.sourceforge.net/freecom
 .
 
@@ -836,7 +836,7 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.
 
-Send bug reports to freedos-freecom@lists.sourceforge.net.
+Send bug reports to freedos-devel@lists.sourceforge.net.
 Updates are available from http://freedos.sourceforge.net/freecom
 .
 
@@ -845,9 +845,7 @@ Updates are available from http://freedos.sourceforge.net/freecom
 The FreeDOS Command Shell developed by many developers, please refer
 to the enclosed HISTORY.TXT file.
 
-Currently maintained by Steffen Kaiser mailto:freecom@freedos.org
-
-Send bug reports to freedos-freecom@lists.sourceforge.net.
+Send bug reports to freedos-devel@lists.sourceforge.net.
 Updates are available from http://freedos.sourceforge.net/freecom
 .
 
@@ -1166,19 +1164,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Runs a specified command for each file in a set of files.
 
-FOR %variable IN (set) DO command [command-parameters]
+FOR %%variable IN (set) DO command [command-parameters]
 
-  %variable  Specifies a replaceable parameter.
+  %%variable  Specifies a replaceable parameter.
   (set)      Specifies a set of one or more files.  Wildcards may be used.
   command    Specifies the command to carry out for each file.
   command-parameters
              Specifies parameters or switches for the specified command.
 
-To use the FOR command in a batch program, specify %%variable instead of
-%variable.
+To use the FOR command in a batch program, specify %%%%variable instead of
+%%variable.
 
 For example:
-  FOR %f IN (---start--- a*.* ---end---) DO ECHO - %f -
+  FOR %%f IN (---start--- a*.* ---end---) DO ECHO - %%f -
 .
 
 :TEXT_CMDHELP_GOTO
