@@ -196,7 +196,7 @@ struct CMD internalCommands[] =
 #endif
 
 #ifdef INCLUDE_CMD_SET
-  {"SET", 0, cmd_set, TEXT_CMDHELP_SET},
+  {"SET", CMD_NO_ERRORLEVEL, cmd_set, TEXT_CMDHELP_SET},
 #endif
 
   {"SHIFT", CMD_BATCHONLY | CMD_NO_ERRORLEVEL, cmd_shift, TEXT_CMDHELP_SHIFT},
