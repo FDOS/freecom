@@ -703,8 +703,11 @@ int expandEnvVars(char *ip, char * const line)
 			  }
 
 			  ip = tp + 1;
-			} else
-			  *cp++ = '%';
+			} else {
+#if 0
+			  *cp++ = '%';  /* don't copy over % if no match, e.g. %somevar should print somevar not %somevar */
+#endif
+			}
 			break;
 		}
 		continue;
