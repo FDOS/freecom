@@ -1,12 +1,19 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+v0.85a
+~~~~~
+    regression fix: ensure not setting errorlevel for all internal commands, exclude commands such IF FOR etc
+    documentation update - merge/remove duplicate files, add history, general updates (links, email, etc)
+    correct help for 'for' command, add %% escaping to printf so for command shows %a ... do ... %a instead of ?a ... do ... ?a
+    use program exit code as errorlevel when using loadfix or loadhigh (unless error invoking program)
+    compatibility improvement, don't print % when missing paired % on command lines (show 'somevar' not '%somevar')
+    add beginning of more comprehensive test batch file
 v0.85
 ~~~~~
 From Kenneth J Davis
-    ensure not setting errorlevel for all internal commands, exclude commands such IF FOR etc
-    support CMDLINE for command lines > 126 characters  
-    from RBIL and other sources, the command line should end in just \r and if greater than 126 chars, the size byte should be 127 not actual size; still keep \0 if command line is short enough but allow 126 chars without terminating \0, set size to 127 if >126
+    support CMDLINE for command lines > 126 characters when invoking COMMAND.COM
+    improve compatibility when executing external programs - from RBIL and other sources, the command line should end in just \r and if greater than 126 chars, the size byte should be 127 not actual size; still keep \0 if command line is short enough but allow 126 chars without terminating \0, set size to 127 if >126
     misc batch file updates to aid in building multiple versions (languages/xmswap or not/compiler)
     support /E maxsize of 32768, FreeCOM documentation and MS/PC DOS command.com document max value as 32768, due to use of signed int FreeCOM max size was actually 32766; change argument processing to use unsigned int and support up to 32768 as argument
     git should ignore generated files
