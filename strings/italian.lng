@@ -469,7 +469,7 @@ Ridimensionamento del contesto a %u byte.
 Tentativo fallito di aggiungere informazioni di stato al contesto. Questo
 errore può indicare corruzione di memoria o una dimensione minima del
 contesto determinata non correttamente. Informare il maintainer di
-FreeCOM all'indirizzo: freecom@freedos.org 
+FreeCOM all'indirizzo: freedos-devel@lists.sourceforge.net 
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -805,7 +805,7 @@ COMMERCIABILITA' o di APPLICABILITA' PER UN PARTICOLARE SCOPO. Si veda
 la Licenza Pubblica Generica GNU (GNU General Public License, in inglese)
 per avere maggiori dettagli.
 
-Segnalare eventuali bug a: freedos-freecom@lists.sourceforge.net
+Segnalare eventuali bug a: freedos-devel@lists.sourceforge.net
 Aggiornamenti sono disponibili all'indirizzo:
 http://freedos.sourceforge.net/freecom
 .
@@ -818,7 +818,7 @@ secondo i termini della Licenza Pubblica Generica GNU come pubblicata dalla
 Free Software Foundation; o la versione 2 della licenza o (a
 vosta scelta) una qualsiasi versione successiva.
 
-Segnalare eventuali bug a: freedos-freecom@lists.sourceforge.net
+Segnalare eventuali bug a: freedos-devel@lists.sourceforge.net
 Aggiornamenti sono disponibili all'indirizzo:
 http://freedos.sourceforge.net/freecom
 .
@@ -828,9 +828,7 @@ http://freedos.sourceforge.net/freecom
 FreeCOM (FreeDOS Command Shell) è sviluppato da molti sviluppatori,
 fare riferimento al file HISTORY.TXT incluso.
 
-Attualmente mantenuto da Steffen Kaiser mailto:freecom@freedos.org
-
-Segnalare eventuali bug a: freedos-freecom@lists.sourceforge.net
+Segnalare eventuali bug a: freedos-devel@lists.sourceforge.net
 Aggiornamenti sono disponibili all'indirizzo:
 http://freedos.sourceforge.net/freecom
 .
@@ -1170,19 +1168,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Esegue il comando specificato per ogni file in un insieme di file.
 
-FOR %variabile IN (insieme) DO comando [parametri-comando]
+FOR %%variabile IN (insieme) DO comando [parametri-comando]
 
-  %variabile Specifica il parametro sostituibile.
+  %%variabile Specifica il parametro sostituibile.
   (insieme)  Specifica un insieme di uno o più file. Valgono i caratteri jolly.
   comando    Specifica il comando da eseguire per ogni file.
   parametri-comando
              Specifica i parametri e/o le opzioni per il commando.
 
-Per usare il comando FOR in un programma batch, specificare %%variabile
-invece di %variabile.
+Per usare il comando FOR in un programma batch, specificare %%%%variabile
+invece di %%variabile.
 
 Per esempio:
-  FOR %f IN (---inizio--- a*.* ---fine---) DO ECHO - %f -
+  FOR %%f IN (---inizio--- a*.* ---fine---) DO ECHO - %%f -
 .
 
 :TEXT_CMDHELP_GOTO

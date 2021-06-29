@@ -408,7 +408,7 @@ Limitando o contexto para %u bytes.
 Falha para adicionar informacoes de status no contexto. Esta mensagem de
 erro pode indicar que a memoria esta corrompida ou o tamanho minimo do
 contexto determinado esta incorreto. Por favor informe ao sustentadore do
-FreeCOM em: freecom@freedos.org
+FreeCOM em: freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -731,7 +731,7 @@ mas SEM NENHUMA GARANTIA; sem nunca implicar em garantia de
 MERCATIBILIDADE ou AJUSTE PARA UM PROPOSITO PARTICULAR.  Veja a GNU
 General Public License por mais detales.
 
-Envie informacoes sobre bugs para freedos-freecom@lists.sourceforge.net.
+Envie informacoes sobre bugs para freedos-devel@lists.sourceforge.net.
 Atualizacoes estao disponiveis em http://freedos.sourceforge.net/freecom
 .
 
@@ -743,7 +743,7 @@ sobre os termos da GNU General Public License como publicado pela Free
 Software Foundation; ou na versao 2 da Licensa, ou (na sua opcao)
 qualquer versao posterior.
 
-Envie informacoes sobre bugs para freedos-freecom@lists.sourceforge.net.
+Envie informacoes sobre bugs para freedos-devel@lists.sourceforge.net.
 Atualizacoes estao disponiveis em http://freedos.sourceforge.net/freecom
 .
 
@@ -752,9 +752,7 @@ Atualizacoes estao disponiveis em http://freedos.sourceforge.net/freecom
 O interpretador decomando do FreeDOS e desenvolvido por muitos programadores,
 por favor veja para anexar o arquivo HISTORY.TXT.
 
-Atualmente mantido por Steffen Kaiser E-mail:freecom@freedos.org
-
-Envie informacoes sobre bugs para freedos-freecom@lists.sourceforge.net.
+Envie informacoes sobre bugs para freedos-devel@lists.sourceforge.net.
 Atualizacoes estao disponiveis em http://freedos.sourceforge.net/freecom
 .
 
@@ -1074,19 +1072,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Executa um comando especificado para cada arquivo em um conjunto de arquivos.
 
-FOR %variavel IN (set) DO comando [parametros-de-comandos]
+FOR %%variavel IN (set) DO comando [parametros-de-comandos]
 
-  %variavel  Especifica um parametro substituivel.
+  %%variavel  Especifica um parametro substituivel.
   (set)      Especifica um ou mais arquivos.  Wildcards podem ser usados.
   comando    Especifica o comando a ser executado para cada arquivo.
   parametros-de-comandos
              Especifica os parametros ou opcoes para o comando especificado.
 
-Para usar o comando FOR em um arquivo de lote, especifique %%variavel ao
-inves de %variavel.
+Para usar o comando FOR em um arquivo de lote, especifique %%%%variavel ao
+inves de %%variavel.
 
 Por exemplo:
-  FOR %f IN (---inicio--- a*.* ---fim---) DO ECHO - %f -
+  FOR %%f IN (---inicio--- a*.* ---fim---) DO ECHO - %%f -
 .
 
 :TEXT_CMDHELP_GOTO

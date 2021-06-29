@@ -468,7 +468,7 @@ Bağlam %u bayt olarak yeniden boyutlandırılıyor.
 Bağlama durum verileri eklenmesi başarısız oldu. Bu hata bellek bozukluğunu
 veya yanlış belirlenmiş asgari bağlam boyutuna işaret edebilir.
 Lütfen FreeCOM geliştiricilerine şu adresten bu konuda bilgi verin:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -824,7 +824,7 @@ hatta TİCARİ ELVERİŞLİLİK veya AMACA UYGUNLUK zımni garantileri de
 verilmeden sunulmaktadır. Daha fazla ayrıntı için GNU Genel Kamu Lisansını
 okuyunuz.
 
-Hata raporlarını şu adrese gönderiniz: freedos-freecom@lists.sourceforge.net.
+Hata raporlarını şu adrese gönderiniz: freedos-devel@lists.sourceforge.net.
 Güncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
 .
 
@@ -836,7 +836,7 @@ GNU Genel Kamu Lisansının ya 2. sürümü veya (sizin seçiminize
 dayalı olarak) herhangi bir daha yeni sürümü kapsamında tekrar 
 dağıtabilir ve/veya değiştirebilirsiniz.
 
-Hata raporlarını şu adrese gönderiniz: freedos-freecom@lists.sourceforge.net.
+Hata raporlarını şu adrese gönderiniz: freedos-devel@lists.sourceforge.net.
 Güncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
 .
 
@@ -845,9 +845,7 @@ Güncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
 FreeDOS Komut Kabuğu birçok programcı tarafından geliştirilmiştir, lütfen
 HISTORY.TXT dosyasına bakın.
 
-Şu anki geliştirici: Steffen Kaiser mailto:freecom@freedos.org.
-
-Hata raporları için: freedos-freecom@lists.sourceforge.net
+Hata raporları için: freedos-devel@lists.sourceforge.net
 Güncellemeler için: http://freedos.sourceforge.net/freecom 
 
 
@@ -1165,19 +1163,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Belirtilen komutu bir dosya kümesindeki her dosya için çalıştırır.
 
-FOR %değişken IN (küme) DO komut [komut-parametreleri]
+FOR %%değişken IN (küme) DO komut [komut-parametreleri]
 
-  %değişken	Değiştirilebilir bir parametre belirtir.
+  %%değişken	Değiştirilebilir bir parametre belirtir.
   (küme)     	Bir veya birden çok dosya kümesi belirtir. Joker kullanılabilir.
   komut      	Her dosya için çalıştırılacak komutu belirtir.
   komut-parametreleri
              	Belirtilen komut için parametre veya anahtar belirtir.
 
-FOR komutunu bir toplu iş betiğinde kullanmak için %değişken yerine %%değişken
+FOR komutunu bir toplu iş betiğinde kullanmak için %%değişken yerine %%%%değişken
 kullanın.
 
 örneğin:
-  FOR %f IN (---başlangıç--- a*.* ---son---) DO ECHO - %f -
+  FOR %%f IN (---başlangıç--- a*.* ---son---) DO ECHO - %%f -
 .
 
 :TEXT_CMDHELP_GOTO

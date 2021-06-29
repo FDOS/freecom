@@ -466,7 +466,7 @@ Kooksi asetetaan %u tavua.
 Tilatiedon lukeminen kontekstiin epäonnistui. Virhe voi johtua
 muistin vioittumisesta tai kontekstin vähimmäiskoon väärin
 määrittelystä. Ilmoitathan FreeCOM:n ylläpitäjälle:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -823,7 +823,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details.
 
 Vikailmoitukset (englanniksi) osoitteeseen
-freedos-freecom@lists.sourceforge.net.
+freedos-devel@lists.sourceforge.net.
 Päivitykset osoitteesta http://freedos.sourceforge.net/freecom
 .
 
@@ -836,7 +836,7 @@ the Free Software Foundation; either version 2 of the License, or (at
 your option) any later version.
 
 Vikailmoitukset (englanniksi) osoitteeseen
-freedos-freecom@lists.sourceforge.net.
+freedos-devel@lists.sourceforge.net.
 Päivitykset osoitteesta http://freedos.sourceforge.net/freecom
 .
 
@@ -845,10 +845,8 @@ Päivitykset osoitteesta http://freedos.sourceforge.net/freecom
 FreeDOS-komentokehotteella on ollut monta kehittäjää, ks.
 sisällytetty HISTORY.TXT-tiedosto.
 
-Tällä hetkellä ylläpitäjänä Steffen Kaiser mailto:freecom@freedos.org
-
 Vikailmoitukset (englanniksi) osoitteeseen
-freedos-freecom@lists.sourceforge.net.
+freedos-devel@lists.sourceforge.net.
 Päivitykset osoitteesta http://freedos.sourceforge.net/freecom
 .
 
@@ -1167,19 +1165,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Suorittaa komennon jokaiselle tiedostolle tiedostoryhmässä.
 
-FOR %muuttuja IN (ryhmä) DO komento [komento-parametrit]
+FOR %%muuttuja IN (ryhmä) DO komento [komento-parametrit]
 
-  %muuttuja  Määrittää tiedostomuuttujan nimen.
+  %%muuttuja  Määrittää tiedostomuuttujan nimen.
   (ryhmä)    Määrittää ryhmän tiedostoja, yleismerkit sallittu.
   komento    Määrittää suoritettavan komennon.
   komento-parametrit
              Määrittää komennon parametrit.
 
 Komentojonoissa FOR-komennon muuttuja on määriteltävä kahdella
-prosenttimerkillä, esimerkiksi %%muuttuja (eikä %muuttuja).
+prosenttimerkillä, esimerkiksi %%%%muuttuja (eikä %%muuttuja).
 
 Esimerkiksi:
-  FOR %f IN (---start--- a*.* ---end---) DO ECHO - %f -
+  FOR %%f IN (---start--- a*.* ---end---) DO ECHO - %%f -
 .
 
 :TEXT_CMDHELP_GOTO

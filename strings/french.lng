@@ -469,7 +469,7 @@ La taille des contextes a été modifiée à %u octets.
 Échec de l'ajout d'informations d'état au contexte. Cette erreur peut indiquer
 une corruption mémoire ou une taille minimale mal déterminée du contexte.
 Veuillez informer le mainteneur de FreeCOM à l'adresse :
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -826,7 +826,7 @@ AUCUNE GARANTIE, ni explicite ni implicite, y compris les garanties de
 commercialisation ou d'adaptation dans un but spécifique. Prenez
 connaissance de la Licence Publique Générale GNU pour plus de détails.
 
-Envoyez les rapports de bugs à freedos-freecom@lists.sourceforge.net.
+Envoyez les rapports de bugs à freedos-devel@lists.sourceforge.net.
 Les mises à jour sont disponibles sur http://freedos.sourceforge.net/freecom
 .
 
@@ -838,7 +838,7 @@ selon les termes de la Licence Publique Générale GNU publiée par la Free
 Software Foundation (version 2 ou bien toute autre version ultérieure
 choisie par vous).
 
-Envoyez les rapports de bugs à freedos-freecom@lists.sourceforge.net.
+Envoyez les rapports de bugs à freedos-devel@lists.sourceforge.net.
 Les mises à jour sont disponibles sur http://freedos.sourceforge.net/freecom
 .
 
@@ -847,9 +847,7 @@ Les mises à jour sont disponibles sur http://freedos.sourceforge.net/freecom
 Le shell de commandes FreeDOS est développé par de nombreux développeurs,
 consultez le fichier HISTORY.TXT attaché.
 
-Actuellement maintenu par Steffen Kaiser mailto:freecom@freedos.org
-
-Envoyer les rapports de bugs à freedos-freecom@lists.sourceforge.net.
+Envoyer les rapports de bugs à freedos-devel@lists.sourceforge.net.
 Les mises à jour sont disponibles à http://freedos.sourceforge.net/freecom
 .
 
@@ -1169,19 +1167,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Exécute une commande spécifiée pour chaque fichier dans un jeu de fichiers.
 
-FOR %variable IN (set) DO commande [paramètres-de-commande]
+FOR %%variable IN (set) DO commande [paramètres-de-commande]
 
-  %variable  Spécifie un paramètre remplaçable.
+  %%variable  Spécifie un paramètre remplaçable.
   (set)      Spécifie un jeu d'un ou plusieurs fichiers.  Jokers acceptés.
   commande   Spécifie la commande à exécuter pour chaque fichier.
   paramètres-de-commande
              Spécifie des paramètres ou options pour la commande spécifiée.
 
-Pour utiliser la commande FOR dans un programme batch, spécifiez %%variable
-au lieu de %variable.
+Pour utiliser la commande FOR dans un programme batch, spécifiez %%%%variable
+au lieu de %%variable.
 
 Par exemple :
-  FOR %f IN (---début--- a*.* ---fin---) DO ECHO - %f -
+  FOR %%f IN (---début--- a*.* ---fin---) DO ECHO - %%f -
 .
 
 :TEXT_CMDHELP_GOTO

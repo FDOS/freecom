@@ -468,7 +468,7 @@ Kontekst zostanie pomniejszony do %u bajt¢w.
 Dodanie informacji o statusie do kontekstu nie powiodío sië. Moße to wskazywaç
 na bíÜd pamiëci lub nieprawidíowo okreûlonÜ minimalnÜ wielkoûç kontekstu.
 Proszë powiadomiç gospodarza FreeCOM na:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -801,7 +801,7 @@ jednak BEZ JAKIEJKOLWIEK GWARANCJI, nawet domyûlnej gwarancji PRZYDATNOòCI
 HANDLOWEJ albo PRZYDATNOòCI DO OKREòLONYCH ZASTOSOWA•. W celu uzyskania
 blißszych informacji zapoznaj sië z GNU General Public License.
 
-Raporty o bíëdach proszë wysyíaç do freedos-freecom@lists.sourceforge.net
+Raporty o bíëdach proszë wysyíaç do freedos-devel@lists.sourceforge.net
 Nowe wersje dostëpne pod http://freedos.sourceforge.net/freecom
 .
 
@@ -813,7 +813,7 @@ i/lub modyfikowaç na warunkach Powszechnej Licencji Publicznej GNU, wydanej
 przez Fundacjë Wolnego Oprogramowania - wedíug wersji 2-giej tej Licencji lub
 kt¢rejû z p¢¶niejszych wersji.
 
-Raporty o bíëdach proszë wysyíaç do freedos-freecom@lists.sourceforge.net
+Raporty o bíëdach proszë wysyíaç do freedos-devel@lists.sourceforge.net
 Nowe wersje dostëpne pod http://freedos.sourceforge.net/freecom
 .
 
@@ -822,9 +822,7 @@ Nowe wersje dostëpne pod http://freedos.sourceforge.net/freecom
 Shell FreeDOS jest rozwijany przez wielu tw¢rc¢w, proszë zapoznaç sië
 z zaíÜczonym plikiem HISTORY.TXT.
 
-Obecnym gospodarzem projektu jest Steffen Kaiser mailto:freecom@freedos.org
-
-Raporty o bíëdach proszë wysyíaç do freedos-freecom@lists.sourceforge.net
+Raporty o bíëdach proszë wysyíaç do freedos-devel@lists.sourceforge.net
 Nowe wersje dostëpne pod http://freedos.sourceforge.net/freecom
 .
 
@@ -1143,20 +1141,20 @@ EXIT
 :TEXT_CMDHELP_FOR
 Uruchamia podane polecenie dla kaßdego pliku z zestawu plik¢w.
 
-FOR %zmienna IN (zestaw) DO polecenie [parametry polecenia]
+FOR %%zmienna IN (zestaw) DO polecenie [parametry polecenia]
 
-  %zmienna   Okreûla parametr wymienny.
+  %%zmienna   Okreûla parametr wymienny.
   (zestaw)   Okreûla zestaw jednego lub kilku plik¢w. Ußywanie symboli
              wieloznacznych jest dozwolone.
   polecenie  Okreûla polecenie, kt¢re ma zostaç wykonane dla kaßdego pliku.
   parametry polecenia
              Okreûla parametry lub przeíÜczniki dla okreûlonego polecenia.
 
-Aby ußyç polecenia FOR w programie wsadowym, naleßy ußywaç %%zmienna zamiast
-%zmienna.
+Aby ußyç polecenia FOR w programie wsadowym, naleßy ußywaç %%%%zmienna zamiast
+%%zmienna.
 
 Na przykíad:
-  FOR %f IN (a*.*) DO ECHO - %f -
+  FOR %%f IN (a*.*) DO ECHO - %%f -
 .
 
 :TEXT_CMDHELP_GOTO

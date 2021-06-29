@@ -383,7 +383,7 @@ Storleken pÕ context %lu byte ÷verskrider max-spõrren.
 
 :TEXT_ERROR_CONTEXT_ADD_STATUS#1
 Kunde inte lõgga till statusinformation till context. Detta fel kan 
-indikera korrupt minne eller felaktig uppskattning av minimistorleken pÕ context. Var god informera prefekten f÷r FreeCOM pÕ: freecom@freedos.org
+indikera korrupt minne eller felaktig uppskattning av minimistorleken pÕ context. Var god informera prefekten f÷r FreeCOM pÕ: freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -703,7 +703,7 @@ Copyright (C) 1994-2001 Tim Norman och andra.
 Detta program distribueras i hop om att det ska vara anvõndbart, 
 men UTAN N┼GON GARANTI; utan ens pÕstÕdd garanti om att det PASSAR FÍR ETT VISST SYFTE. Se GNU General Public License f÷r mer detaljer.
 
-Bug-rapporter skickas till freedos-freecom@lists.sourceforge.net.
+Bug-rapporter skickas till freedos-devel@lists.sourceforge.net.
 Uppdateringar finns tillgõngliga pÕ http://freedos.sourceforge.net/freecom
 .
 
@@ -712,7 +712,7 @@ Copyright (C) 1994-2001 Tim Norman och andra.
 
 Detta program õr fri programvara; ni kan omdistribuera den och/eller õndra den under reglerna definierade i GNU General Public License som det publicerats av Free Software Foundation; antingen version 2 av licensen, eller om ni ÷nskar, den senaste.
 
-Bug-rapporter skickas till freedos-freecom@lists.sourceforge.net.
+Bug-rapporter skickas till freedos-devel@lists.sourceforge.net.
 Uppdateringar finns tillgõngliga pÕ http://freedos.sourceforge.net/freecom
 .
 
@@ -720,9 +720,7 @@ Uppdateringar finns tillgõngliga pÕ http://freedos.sourceforge.net/freecom
 
 FreeDOS kommandoprompt har utvecklats av mÕnga personer, se HISTORY.TXT f÷r mer detaljerad information.
 
-Nuvarande prefekt õr Steffen Kaiser mailto:freecom@freedos.org
-
-Bug-rapporter skickas till freedos-freecom@lists.sourceforge.net.
+Bug-rapporter skickas till freedos-devel@lists.sourceforge.net.
 Uppdateringar finns tillgõngliga pÕ http://freedos.sourceforge.net/freecom
 .
 
@@ -1035,16 +1033,16 @@ EXIT
 :TEXT_CMDHELP_FOR
 K÷r angivet kommando f÷r varje fil i en grupp av filer.
 
-FOR %variabel IN (grupp) DO kommando [kommandoparametrar]
+FOR %%variabel IN (grupp) DO kommando [kommandoparametrar]
 
-  %variabel  Anger en utbytbar parameter.
+  %%variabel  Anger en utbytbar parameter.
   (grupp)    Anger en eller flera filer. Jokertecken fÕr anvõndas.
   kommando   Anger kommandot som ska utf÷ras f÷r varje fil.
   kommandoparametrar
              Anger parametrar och/eller võxlar f÷r det angivna kommandot.
 
-F÷r att anvõnda FOR kommandot i ett batch-program, ange %%variabel istõllet
-f÷r %variabel.
+F÷r att anvõnda FOR kommandot i ett batch-program, ange %%%%variabel istõllet
+f÷r %%variabel.
 .
 
 :TEXT_CMDHELP_GOTO

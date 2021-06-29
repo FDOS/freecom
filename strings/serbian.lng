@@ -1076,15 +1076,15 @@ Napušta trenutno aktivnu komandnu ljusku.
 :TEXT_CMDHELP_FOR
 Pokreće navedenu komandu za svaki fajl iz navedenog skupa fajlova.
 
-  FOR %varijabla IN (skup) DO komanda [parametri]
+  FOR %%varijabla IN (skup) DO komanda [parametri]
 
-  %varijabla    Navodi zamenljivi parametar.
+  %%varijabla    Navodi zamenljivi parametar.
   (skup)        Navodi skup od jednog ili više fajlova. Džoker znaci su
                 dozvoljeni.
   komanda       Navodi komandu za izvršenje nad svakim fajlom iz skupa.
   parametri     Navodi parametre navedene komande.
 
- U batch programima, koristite %%varijabla umesto %varijabla.
+ U batch programima, koristite %%%%varijabla umesto %%varijabla.
 .
 
 :TEXT_CMDHELP_GOTO
