@@ -300,3 +300,4 @@ tools/vspawn.com
 tools/watcomc.cfg
 utils/watcomc.cfg
 strings/xmsswap.cln
+build/
