@@ -28,12 +28,13 @@ if "%1"=="no-xms-swap" goto special
 if "%1"=="xms-swap" goto special
 if "%1"=="xmsswap"  goto special
 if "%1"=="debug"    goto special
+if "%1"=="plainedt" goto plainedt
 if "%1"=="watcom"   goto special
 if "%1"=="wc"       goto special
 if "%1"=="tc"       goto special
 if "%1"=="tcpp"     goto special
 if "%1"=="bc"       goto special
-if "%1"=="upx"        goto special
+if "%1"=="upx"      goto special
 goto run
 
 :special
@@ -59,11 +60,21 @@ echo -r: Rebuild -- Clean before proceed
 echo clean: Remove *.OBJ, *.COM, *.LIB, etc. files, then exit
 echo no-xms-swap: Build FreeCOM without XMS-Only Swap support
 echo debug: Build FreeCOM with debug settings.
+echo plainedt: Build FreeCOM without enhanced line editing/history
 echo You can select for which language to built FreeCOM by setting
 echo the environment variable LNG before running this script, e.g.:
 echo SET LNG=german
 echo selects the German language. For available language see STRINGS\*.LNG
 goto ende
+
+:plainedt
+del config.h.build$$$ 2> NUL
+ren config.h config.h.build$$$ 2> NUL
+echo #define IGNORE_ENHANCED_INPUT >config.h
+type config.h.build$$$ >>config.h
+shift
+if not "%1" == "" goto loop_commandline
+::goto run
 
 :run
 if not x%1==x set LNG=%1
@@ -211,3 +222,5 @@ set XNASM=
 set LNG=
 set WITH_UPX=
 set CMD_NAME=
+if exist config.h.build$$$ del config.h
+if exist config.h.build$$$ ren config.h.build$$$ config.h
