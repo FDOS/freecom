@@ -1,4 +1,5 @@
 @ECHO OFF
+if "%COMPILER%"=="" set COMPILER=wc
 if NOT "%1"=="" goto %1
 
 rd /s /q build
@@ -99,7 +100,7 @@ copy VERSION.TXT build\%1\
 copy command.lsm build\%1\
 
 mkdir build\%1\xmsswap
-call build -r wc xms-swap %1
+call build -r %COMPILER% xms-swap %1
 copy command.com build\%1\xmsswap\
 copy tools\28.com build\%1\
 copy tools\50.com build\%1\
@@ -116,7 +117,7 @@ copy tools\load_icd.exe build\localize\
 
 
 mkdir build\%1\kswap
-call build -r wc no-xms-swap %1
+call build -r %COMPILER% no-xms-swap %1
 copy command.com build\%1\kswap\
 copy docs\k-swap.txt build\%1\kswap\
 copy tools\kssf.com build\%1\kswap\
@@ -128,12 +129,12 @@ copy tools\vspawn.com build\localize\
 
 
 mkdir build\%1\debug
-call build -r wc xms-swap debug %1
+call build -r %COMPILER% xms-swap debug %1
 copy command.com build\%1\debug\
 
 
 mkdir build\%1\plainedt
-call build -r wc xms-swap plainedt %1
+call build -r %COMPILER% xms-swap plainedt %1
 copy command.com build\%1\plainedt\
 
 
