@@ -113,6 +113,10 @@ intr_1:
 		pop	cx
 		pop	bx
 		pop	bp
+%ifidn MODEL,m					; in medium & large call far, in small & compact call near
+		retf
+%else
 		ret
+%endif
 %endif
 %endif

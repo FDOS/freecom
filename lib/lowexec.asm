@@ -81,7 +81,11 @@ exec_error:
 %endif
 	popm    si, di, ds
 	pop     bp
-	ret
+%ifidn MODEL,m					; in medium & large call far, in small & compact call near
+		retf
+%else
+		ret
+%endif
 
 saveSP dw 0
 saveSS dw 0
