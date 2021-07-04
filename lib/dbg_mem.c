@@ -54,6 +54,7 @@
 #include <alloc.h>	/* heapcheck, coreleft, farcoreleft */
 #endif
 #include <stdlib.h>	/* abort */
+#include <dos.h>    /* _dos_allocmem */
 
 #if defined(__TINY__) || defined(__SMALL__) || defined(__MEDIUM__)
 #define DISP_NEAR
@@ -94,6 +95,7 @@ void dbg_printmem (void) {
 		cputs("Unknown heapcheck() error. Cannot proceed!\r\n");
 		abort();
 	case _HEAPOK:
+		dprintf( ("HEAP: OK\r\n") );
 		break;
 	}
 #endif
