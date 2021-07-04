@@ -9,6 +9,7 @@ v0.85a
     use program exit code as errorlevel when using loadfix or loadhigh (unless error invoking program)
     compatibility improvement, don't print % when missing paired % on command lines (show 'somevar' not '%somevar')
     add beginning of more comprehensive test batch file
+    prevent debug builds crashing on startup, intr and lowexec needs to retf not retn for medium memory model builds (e.g.debug build)
 v0.85
 ~~~~~
 From Kenneth J Davis
