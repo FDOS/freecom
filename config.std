@@ -3,7 +3,7 @@ DIRSEP = \ #a backslash
 RMFILES = ..\scripts\rmfiles
 RMFILES2 = ..\..\scripts\rmfiles
 ECHOTO0 = echoto
-ECHOTO = ..\scripts\echoto
+ECHOTO = $(TOP)\scripts\echoto
 CP = copy
 CLO =
 
@@ -51,7 +51,7 @@ __XMS_SWAP = -DXMS_SWAP
 ##
 ## (*) Note: Should be detected by CONFIG.H automatically for Turbo C
 ##     and Borland C compilers.
-$(CFG): $(CFG_DEPENDENCIES) ../config.mak
+$(CFG): $(CFG_DEPENDENCIES) $(TOP)/config.mak
 	$(RMFILES) $(CFG)
 	$(ECHOTO) $(CFG) $(CFLAGS1)
 	$(ECHOTO) $(CFG) $(INCLUDEPATH)
