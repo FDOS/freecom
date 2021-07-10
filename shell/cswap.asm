@@ -83,6 +83,7 @@ XMSrestore	times 8 DW 0
 
 	cglobal canexit
 canexit	DB 0		; 1 -> can exit; _else_ --> cannot exit
+filler  DB 0
 
     cglobal mySS, mySP
 mySS DW 0
@@ -378,13 +379,21 @@ ret_from_resident:
 		mov ss,cx
 		mov sp,[execSP]
 
+%ifidn MODEL, m                     ; in medium & large need to fixup return segment
+		mov bp, sp
+		add [bp+8],bx
+%endif
 		pop bp
 		pop di
 		pop	si
 %ifidn __OUTPUT_FORMAT__,elf 	; GCC: need to preserve es
 		pop es
 %endif
+%ifidn MODEL, m                     ; in medium & large call far, in small & compact call near		
+		retf						; done (really)
+%else
 		retn						; done (really)
+%endif
 
 %ifidn __OUTPUT_FORMAT__,elf
 ; NASM does not support segment relocations so add them
