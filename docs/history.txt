@@ -8,8 +8,11 @@ v0.85a
     correct help for 'for' command, add %% escaping to printf so for command shows %a ... do ... %a instead of ?a ... do ... ?a
     use program exit code as errorlevel when using loadfix or loadhigh (unless error invoking program)
     compatibility improvement, don't print % when missing paired % on command lines (show 'somevar' not '%somevar')
+    if COMSPEC isn't set, strdup an empty "" string instead of potential NULL pointer dereference
     add beginning of more comprehensive test batch file
     prevent debug builds crashing on startup, intr and lowexec needs to retf not retn for medium memory model builds (e.g.debug build)
+    fix xms-swap debug build when returning from exec'd programs, fixup return segment and do a far return from xmsexec call
+
 v0.85
 ~~~~~
 From Kenneth J Davis
