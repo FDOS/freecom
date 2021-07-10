@@ -44,8 +44,12 @@
 
 char *comFile(void)
 { char *fnam;
-
-  if(inInit || (fnam = getEnv("COMSPEC")) == 0)
+  
+  if(inInit || (fnam = getEnv("COMSPEC")) == 0) {
+    /* ComPath may be a NULL reference */
+	if (!ComPath) return strdup("");
     return strdup(ComPath);
+  }
+  
   return fnam;
 }
