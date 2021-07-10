@@ -273,8 +273,11 @@ void execute(char *first, char *rest, int lh_lf)
 	env_nullStrings(0);
 
     setErrorLevel(result);
-  } else
+  } else { /* not bat, exe, or com file */
     error_bad_command(first);
+  }
+
+  /* clear CMDLINE once return from program execution so not still in environment */
   chgEnv( "CMDLINE", NULL );
 }
 
