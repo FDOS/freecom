@@ -467,7 +467,7 @@ int initialize(void)
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
   if(forceLow)
 	  env_resizeCtrl &= ~ENV_USEUMB;
-  if(newEnvSize > 16 && newEnvSize < 32769)
+  if(newEnvSize > 16 && newEnvSize < 32769u)
     env_setsize(0, newEnvSize);
 #ifdef ENVIRONMENT_KEEP_FREE 
 #if ENVIRONMENT_KEEP_FREE > 0
