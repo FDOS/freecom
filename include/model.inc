@@ -1,9 +1,9 @@
 %ifidni MODEL,s
-%include "../include/small.inc"
+%include "small.inc"
 %elifidni MODEL,m
-%include "../include/medium.inc"
+%include "medium.inc"
 %elifidni MODEL,l
-%include "../include/large.inc"
+%include "large.inc"
 %else
 %error "Unsupported MODEL; assign 's', 'm' or 'l' to macro MODEL"
 %endif

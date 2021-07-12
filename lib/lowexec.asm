@@ -46,8 +46,8 @@
 ; chg: moving all assembly files to NASM
 ;
 
-%include "../include/model.inc"
-%include "../include/stuff.inc"
+%include "model.inc"
+%include "stuff.inc"
 
 segment _TEXT
 	cglobal lowLevelExec
@@ -81,11 +81,7 @@ exec_error:
 %endif
 	popm    si, di, ds
 	pop     bp
-%ifidn MODEL,m					; in medium & large call far, in small & compact call near
-		retf
-%else
-		ret
-%endif
+	ret					; retf/retn model specific, see model.inc
 
 saveSP dw 0
 saveSS dw 0

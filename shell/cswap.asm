@@ -26,8 +26,8 @@
 ;
 ;
 
-%include "../include/model.inc"
-%include "../include/stuff.inc"
+%include "model.inc"
+%include "stuff.inc"
 
 segment _BSS 			; transient data (in DS)
 
@@ -389,11 +389,7 @@ ret_from_resident:
 %ifidn __OUTPUT_FORMAT__,elf 	; GCC: need to preserve es
 		pop es
 %endif
-%ifidn MODEL, m                     ; in medium & large call far, in small & compact call near		
-		retf						; done (really)
-%else
-		retn						; done (really)
-%endif
+		ret							; done (really), retn/retf based on memory model, see model.inc
 
 %ifidn __OUTPUT_FORMAT__,elf
 ; NASM does not support segment relocations so add them

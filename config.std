@@ -26,7 +26,7 @@ SHELL_MMODEL_COMP=$(SHELL_MMODEL)
 FIXSTRS_MMODEL=-mc
 
 ## Add -DDEBUG=1 below to enable debug support for assembly files
-NASMFLAGS =
+NASMFLAGS = -I$(TOP)/include
 
 !include "$(TOP)/mkfiles/$(COMPILER).mak"
 
