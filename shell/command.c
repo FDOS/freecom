@@ -93,7 +93,7 @@ unsigned char __supportlfns = 1;
 	left unchanged.
 */
 static void **stack_bottom, **stack_unused;
-void stack_check_init()
+void stack_check_init(void)
 {
   void *current_stack_location;
   volatile void * volatile *barrier;
