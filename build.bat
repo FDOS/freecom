@@ -68,10 +68,10 @@ echo selects the German language. For available language see STRINGS\*.LNG
 goto ende
 
 :plainedt
-del config.h.build$$$ 2> NUL
-ren config.h config.h.build$$$ 2> NUL
+if exist config.$$$ del config.$$$
+ren config.h config.$$$
 echo #define IGNORE_ENHANCED_INPUT >config.h
-type config.h.build$$$ >>config.h
+type config.$$$ >>config.h
 shift
 if not "%1" == "" goto loop_commandline
 ::goto run
@@ -222,5 +222,5 @@ set XNASM=
 set LNG=
 set WITH_UPX=
 set CMD_NAME=
-if exist config.h.build$$$ del config.h
-if exist config.h.build$$$ ren config.h.build$$$ config.h
+if exist config.$$$ del config.h
+if exist config.$$$ ren config.$$$ config.h
