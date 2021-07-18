@@ -10,7 +10,18 @@
 #include "../include/misc.h"
 #include "../include/lfnfuncs.h"
 
+int recursive_mkdir(const char * path, int optRecursiveMode, int optQuiet)
+{
+	if (optRecursiveMode) {
+		return 0;
+	} else {
+		return mkdir(path);
+	}
+}
+
 int cmd_mkdir(char *param)
 {
-	return mk_rd_dir(param, mkdir, "MKDIR");
+	return mk_rd_dir(param, recursive_mkdir, "MKDIR");
 }
+
+
