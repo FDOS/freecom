@@ -1,5 +1,5 @@
 @ECHO OFF
-SET DEV=0
+SET DEV=1
 IF NOT "%1"=="EXTENDED" IF NOT "%1"=="" GOTO %1
 REM This is intended to be a primary batch file for standard MSDOS compatible testing
 REM Run with option EXTENDED for testing advanced FreeCOM commands supported
@@ -185,6 +185,7 @@ goto : label3
 ECHO If you see me then label3 didn't work
 :label3
 echo Label 3 found
+IF "%DEV%"=="1" pause
 
 ECHO Testing IF and EXISTS
 ECHO Testing the EXIST format, you should see "((OK))" two times
