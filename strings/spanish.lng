@@ -465,7 +465,7 @@ Se asumirá un tamaño de %u bytes.
 No se pudo registrar información sobre estado en el contexto. Este error
 podría indicar corrupción de memoria o tamaño mínimo de contexto no válido.
 Por favor, informar al mantenedor de FreeCOM en:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -821,7 +821,7 @@ SIN NINGUNA GARANTÍA, incluso sin la garantía MERCANTIL implícita
 o sin garantizar la CONVENIENCIA PARA UN PROPÓSITO PARTICULAR.
 Véase la Licencia Pública General de GNU para más detalles.
 
-Envíe informes de errores a freedos-freecom@lists.sourceforge.net.
+Envíe informes de errores a freedos-devel@lists.sourceforge.net.
 Las actualizaciones estarán disponibles en http://freedos.sourceforge.net/freecom
 .
 
@@ -833,7 +833,7 @@ bajo los términos de la Licencia Pública General de GNU según es publicada
 por la Free Software Foundation, bien la versión 2 de dicha Licencia o bien
 (según su elección) cualquier versión posterior.
 
-Envíe informes de errores a freedos-freecom@lists.sourceforge.net.
+Envíe informes de errores a freedos-devel@lists.sourceforge.net.
 Las actualizaciones estarán disponibles en http://freedos.sourceforge.net/freecom
 .
 
@@ -842,11 +842,9 @@ Las actualizaciones estarán disponibles en http://freedos.sourceforge.net/freec
 El intérprete de órdenes de FreeDOS ha sido desarrollado por varios
 programadores, refiérase al archivo adjunto HISTORY.TXT para más detalles.
 
-Actualmente, está mantenido por Steffen Kaiser mailto:freecom@freedos.org
-
 Traducción al español por Aitor Santamaría Merino mailto:nls@freedos.org
 
-Envíe informes de errores a freedos-freecom@lists.sourceforge.net.
+Envíe informes de errores a freedos-devel@lists.sourceforge.net.
 Las actualizaciones estarán disponibles en http://freedos.sourceforge.net/freecom
 .
 
@@ -1182,15 +1180,15 @@ EXIT
 :TEXT_CMDHELP_FOR
 Ejecuta la orden especificada para cada archivo en un conjunto de archivos.
 
-FOR %variable IN (set) DO command [command-parameters]
+FOR %%variable IN (set) DO command [command-parameters]
 
-  %variable  Especifica una variable a ser reemplazada.
+  %%variable  Especifica una variable a ser reemplazada.
   (conjunto) Especifica un conjunto de archivos. Se admiten comodines.    
   orden      Especifica la orden que se ejecutará para cada archivo.
   parámetros Parámetros opcionales que la orden pueda requerir.
 
-Para usar FOR en un programa batch, usar %%variable en lugar de
-%variable.
+Para usar FOR en un programa batch, usar %%%%variable en lugar de
+%%variable.
 .
 
 

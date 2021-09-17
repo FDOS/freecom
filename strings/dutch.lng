@@ -464,7 +464,7 @@ de maximale limiet. Context wordt aangepast tot %u bytes.
 De poging om status-informatie aan de context toe te voegen is mislukt.
 Deze fout kan geheugencorruptie of een onjuist vastgestelde minimumgrootte
 van de context aangeven. Informeer alstublieft de beheerder van FreeCOM op:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -787,7 +787,7 @@ maar ZONDER ENIGE GARANTIE; zelfs zonder de veronderstelde garantie op
 MERCHANTABILITY of BRUIKBAARHEID VOOR EEN BEPAALDE DOEL(STELLING). 
 Raadpleeg de GNU General Public License (GPL) voor meer details hierover.
 
-Stuur foutmeldingsberichten naar freedos-freecom@lists.sourceforge.net.
+Stuur foutmeldingsberichten naar freedos-devel@lists.sourceforge.net.
 Nieuwere versies zijn verkrijgbaar van http://freedos.sourceforge.net/freecom
 .
 
@@ -799,7 +799,7 @@ met inachtneming van de voorwaarden van de GNU General Public License zoals
 die beschikbaar wordt gesteld door de Free Software Foundation;
 of versie 2 van de Licentie, of (zo u wilt) enige latere versie.
 
-Stuur foutmeldingsberichten naar freedos-freecom@lists.sourceforge.net.
+Stuur foutmeldingsberichten naar freedos-devel@lists.sourceforge.net.
 Nieuwere versies zijn verkrijgbaar van http://freedos.sourceforge.net/freecom
 .
 
@@ -808,9 +808,7 @@ Nieuwere versies zijn verkrijgbaar van http://freedos.sourceforge.net/freecom
 De FreeDOS opdrachtverwerker is ontwikkeld door vele ontwikkelaars,
 zie het bijgevoegde HISTORY.TXT bestand.
 
-Tegenwoordig beheerd door Steffen Kaiser mailto:freecom@freedos.org
-
-Stuur foutmeldingsberichten naar freedos-freecom@lists.sourceforge.net.
+Stuur foutmeldingsberichten naar freedos-devel@lists.sourceforge.net.
 Nieuwere versies zijn verkrijgbaar van http://freedos.sourceforge.net/freecom
 .
 
@@ -1138,16 +1136,16 @@ EXIT
 :TEXT_CMDHELP_FOR
 Voert de opgegeven opdracht uit voor elk bestand in een verzameling bestanden
 
-FOR %variabele IN (verzameling) DO opdracht [opdrachtparameters]
+FOR %%variabele IN (verzameling) DO opdracht [opdrachtparameters]
 
- %variabele  Duidt een vervangbare parameter aan.
+ %%variabele  Duidt een vervangbare parameter aan.
  (set)       Duidt een verzameling bestanden aan(1+). Jokertekens toegestaan
  opdracht    Voert de op elk bestand uit te voeren opdracht uit.
  opdrachtparameters
              Duidt parameters of schakelopties voor de opgegeven opdracht aan
 
 Om de opdracht FOR te gebruiken in een batchprogramma,
-moet u %%variabele opgeven in plaats van %variable.
+moet u %%%%variabele opgeven in plaats van %%variable.
 .
 
 :TEXT_CMDHELP_GOTO

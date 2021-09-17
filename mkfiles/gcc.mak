@@ -7,6 +7,7 @@ ECHOTO0 = echo >>
 CP = cp
 NASMFLAGS := $(NASMFLAGS) -felf
 SHELL_MMODEL_COMP=cmodel=small
+FIXSTRS_MMODEL=
 INCLUDEPATH=-I. -I../compat -I../suppl/compat
 
 CC = ia16-elf-gcc -c

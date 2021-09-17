@@ -1,3 +1,5 @@
+(this file is now obsolete, please submit changes as patches to FreeDOS mailing list or as Pull Request via GitHub)
+
 How to contribute to the FreeCOM project
 	-- 2000/12/10 Steffen Kaiser (ska)
 

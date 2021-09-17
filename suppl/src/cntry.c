@@ -207,7 +207,7 @@ void nlsWriteFallback(Country *nls)
 	nls->illegalLen = strlen(illchars);
 	nls->illegalChars = (char far *)illchars;
 #if defined(DBCS)
-	nls->dbcsTbl = (fartbl)dbcstbl;
+	nls->dbcsTbl = (unsigned char far *)dbcstbl;
 #endif
 }
 

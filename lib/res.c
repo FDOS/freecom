@@ -64,6 +64,9 @@
 
 #include "../config.h"
 
+#include <assert.h>
+#include <stdlib.h>
+
 #include "../include/resource.h"
 #include "../include/command.h"
 

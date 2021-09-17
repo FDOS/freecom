@@ -120,11 +120,7 @@ const char promptID[] = "PROMPT_";
 #define stringdir cfile
 #define cfilename (&cfile[sizeof(STRINGLIB_DIR)])
 #define cfmt "str%04x.c"
-#ifdef GCC
-#define objfmt "str%04x.o"
-#else
 #define objfmt "str%04x.obj"
-#endif
 char cfile[] = STRINGLIB_DIR "\0str45678.obj";
 
 /*

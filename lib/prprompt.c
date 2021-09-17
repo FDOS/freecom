@@ -146,7 +146,9 @@ void displayPrompt(const char *pr)
 #ifdef FEATURE_LONG_FILENAMES
             char pathname[MAXDIR];
             IREGS r;
-            printf("%c:\\", getdisk() + 'A');
+            int d;
+
+            d = getdisk();
 
             r.r_ax = 0x7147;
             r.r_dx = 0;
@@ -165,6 +167,7 @@ void displayPrompt(const char *pr)
                 break;
             }
 
+            printf("%c:\\", d + 'A');
             outs(pathname);
 #else
             char *p;

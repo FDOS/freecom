@@ -152,7 +152,7 @@ void readcommandEnhanced(char * const str, const int maxlen);
 void convert(unsigned long num, unsigned int billions, char * const des);
 
 void goxy(const unsigned char x, const unsigned char y);
-void clrcmdline(char * const str, const int maxlen);
+void clrcmdline(char * const str, const int maxlen, int x, int y);
 
 void setErrorLevel(int rc);
 void execute(char *first, char *rest, int lh_lf);

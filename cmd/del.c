@@ -74,6 +74,7 @@ optScanFct(opt_del)
   return E_Useage;
 }
 
+/*todo:DBCS */
 int cmd_del(char *param)
 {
 	int ec = E_None;    /* exit code */
@@ -165,7 +166,13 @@ int cmd_del(char *param)
              */
 			if(!optP && *p == '*'
 			 && ((q = strrchr(p, '.')) == 0 || q[1] == '*')) {
-				if(userprompt(PROMPT_DELETE_ALL, p) != 1) {
+				int r;
+				
+				p[-1] = 0;
+				r = userprompt(PROMPT_DELETE_ALL, fullname);
+				p[-1] = '\\';
+				
+				if (r != 1) {
 					ec = E_Other;
 					goto errRet;
 				}

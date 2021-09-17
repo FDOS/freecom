@@ -87,7 +87,7 @@ int parsedate (const char * s, struct dosdate_t *const datep) {
 #ifdef FEATURE_NLS
 	refreshNLS();
 	assert(nlsBuf);
-	assert(0 <= nlsBuf->datefmt && nlsBuf->datefmt <= 2);
+	assert(/*0 <= nlsBuf->datefmt && */ nlsBuf->datefmt <= 2);
 	assert(nlsBuf->dateSep);
 	switch(nlsBuf->datefmt) {
 	case 0:		/* mm/dd/yy */

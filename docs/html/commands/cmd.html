@@ -1,0 +1,2807 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META HTTP-EQUIV="Content-Language" CONTENT="en">
+<META NAME="GENERATOR" CONTENT="VI">
+<META NAME="DESCRIPTION" CONTENT="Description of features and implementation status of FreeCOM, the COMMAND.COM replacement">
+<META NAME="AUTHOR" CONTENT="Steffen Kaiser">
+<META NAME="KEYWORDS" CONTENT="DOS, FreeDOS, FreeCOM, COMMAND.COM, CLI">
+<META NAME="DATE" CONTENT="2001-02-06">
+<TITLE>Internal Commands of FreeCOM</TITLE>
+</HEAD>
+
+<BODY>
+List of commands and features of FreeCOM:
+<UL>
+<LI><A HREF="#alias">ALIAS - Display or change an alias</A>
+<LI><A HREF="#beep">BEEP - Issue a Beep</A>
+<LI><A HREF="#break">BREAK - Display or Set Extended Break Checking</A>
+<LI><A HREF="#call">CALL - Call a Nested Batchfile or Program</A>
+<LI><A HREF="#cancel">CANCEL - Terminate all scripts</A>
+<LI><A HREF="#cd">CD - Change current directory of a drive</A>
+<LI><A HREF="#cdd">CDD - Changes the current working directory</A>
+<LI><A HREF="#chdir">CHDIR - Change current directory of a drive</A>
+<LI><A HREF="#cls">CLS - Clear screen</A>
+<LI><A HREF="#copy">COPY - Copy one or more files to another location</A>
+<LI><A HREF="#ctty">CTTY - Change TTY (console)</A>
+<LI><A HREF="#date">DATE - Display or set current date</A>
+<LI><A HREF="#del">DEL - Delete files</A>
+<LI><A HREF="#dir">DIR - Displays the contents of the directory</A>
+<LI><A HREF="#dirs">DIRS - Display the directory stack</A>
+<LI><A HREF="#echo">ECHO - Displays a string onto screen</A>
+<LI><A HREF="#environment_keep_free">ENVIRONMENT_KEEP_FREE - keep free space in environment segment</A>
+<LI><A HREF="#erase">ERASE - Delete files</A>
+<LI><A HREF="#exit">EXIT - Terminate shell</A>
+<LI><A HREF="#feature_aliases">FEATURE_ALIASES - Command aliases</A>
+<LI><A HREF="#feature_auto_redirect_to_con">FEATURE_AUTO_REDIRECT_TO_CON - Autoswitch CON: to monitor</A>
+<LI><A HREF="#feature_batch">FEATURE_BATCH - Batch script processing</A>
+<LI><A HREF="#feature_boot_keys">FEATURE_BOOT_KEYS - check for F5/F8 keys on startup if /P is present</A>
+<LI><A HREF="#feature_call_logging">FEATURE_CALL_LOGGING - Startup logging</A>
+<LI><A HREF="#feature_dirstack">FEATURE_DIRSTACK - Directory stack</A>
+<LI><A HREF="#feature_enhanced_input">FEATURE_ENHANCED_INPUT - Enhanced command line editing</A>
+<LI><A HREF="#feature_filename_completion">FEATURE_FILENAME_COMPLETION - Filename completion</A>
+<LI><A HREF="#feature_history">FEATURE_HISTORY - Command line history</A>
+<LI><A HREF="#feature_installable_commands">FEATURE_INSTALLABLE_COMMANDS - Installable Commands interface (MUX-AE)</A>
+<LI><A HREF="#feature_last_dir">FEATURE_LAST_DIR - Change back to last directory</A>
+<LI><A HREF="#feature_load_messages">FEATURE_LOAD_MESSAGES - Load messages permanently</A>
+<LI><A HREF="#feature_nls">FEATURE_NLS - use DOS NLS</A>
+<LI><A HREF="#for">FOR - Repeat a command</A>
+<LI><A HREF="#goto">GOTO - Goto label</A>
+<LI><A HREF="#history">HISTORY - Display command line history</A>
+<LI><A HREF="#if">IF - Conditional execution of a command</A>
+<LI><A HREF="#loadfix">LOADFIX - Load an external program above the first 64KB memory</A>
+<LI><A HREF="#loadhigh">LOADHIGH - Load an external program into high memory</A>
+<LI><A HREF="#md">MD - make directory</A>
+<LI><A HREF="#memory">MEMORY - Display the internally used memory</A>
+<LI><A HREF="#mkdir">MKDIR - Make directory</A>
+<LI><A HREF="#path">PATH - Display or set the search path</A>
+<LI><A HREF="#pause">PAUSE - Pauses batch file execution</A>
+<LI><A HREF="#popd">POPD - Change back to the last pushed directory</A>
+<LI><A HREF="#prompt">PROMPT - Display or set the shell prompt</A>
+<LI><A HREF="#pushd">PUSHD - Push the current working directory onto the directory stack</A>
+<LI><A HREF="#quit">QUIT - Terminate the current script</A>
+<LI><A HREF="#rd">RD - Remove directory</A>
+<LI><A HREF="#rem">REM - Marks comments or remarks in batchfiles</A>
+<LI><A HREF="#ren">REN - Rename files</A>
+<LI><A HREF="#rename">RENAME - Rename files</A>
+<LI><A HREF="#rmdir">RMDIR - Remove directory</A>
+<LI><A HREF="#set">SET - Display or set environment variables</A>
+<LI><A HREF="#shift">SHIFT - Shift the arguments of a batch script</A>
+<LI><A HREF="#time">TIME - Display or set current time</A>
+<LI><A HREF="#truename">TRUENAME - Display the true name of a file</A>
+<LI><A HREF="#type">TYPE - Display the contents of files</A>
+<LI><A HREF="#ver">VER - Display the version information about FreeCOM and DOS</A>
+<LI><A HREF="#verify">VERIFY - Display or set verify level</A>
+<LI><A HREF="#vol">VOL - Display the volume label of a drive</A>
+<LI><A HREF="#which">WHICH - Search and display the executable file of specified commands</A>
+</UL>
+<BR><BR><HR><BR>
+<H2><A NAME="alias">ALIAS - Display or change an alias</A></H2>
+Requirements: <A HREF="#feature_aliases">FEATURE_ALIASES</A><BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>ALIAS</TT><BR>
+
+<LI>
+ <TT>ALIAS</TT> <I>name</I> <TT>'='</TT> <B>[</B> &laquo;string&raquo; <B>]</B><BR>
+
+</OL>
+
+<P>
+
+
+The first format without any argument displays all defined aliases.
+
+<P>The second format assigns the specified <TT><I>string</I></TT> to the alias with
+the specified <TT><I>name</I></TT>. If the <TT><I>string</I></TT> is empty, the named
+alias is removed.
+
+<P>Once an aliase is defined, a command line of the form:
+
+<TT> name { argument }</TT><BR>
+is replaced by:
+
+<TT> &lt;&lt;string&gt;&gt; { argument }</TT><BR>
+This mechanism is called <EM>alias expansion</EM>, because the alias
+<TT><I>name</I></TT> expands to the specified
+ &laquo;string&raquo;. To
+prevent alias expansion the command must be prefixed by one asterisk,
+e.g.:
+
+<TT> *name arguments</TT><BR>
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#alias">ALIAS</A></TT> dir=dir /w</TT><BR>
+
+<TT> C&gt; dir</TT><BR>
+displays short directory listing from now on.
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#alias">ALIAS</A></TT></TT><BR>
+displays all currently defined aliases, e.g.:
+<PRE><TT><A HREF="#dir">DIR</A></TT>=dir /w</PRE>
+in this case.
+
+
+<H4>Example: 3</H4>
+
+
+<TT> <TT><A HREF="#alias">ALIAS</A></TT> dir=</TT><BR>
+removes the previously defined alias <TT>dir</TT>, thus, <TT><A HREF="#dir">DIR</A></TT> displays
+the long output as by default again.
+<P><HR>
+<H2><A NAME="feature_aliases">FEATURE_ALIASES - Command aliases</A></H2>
+See also: <A HREF="#alias">ALIAS</A><BR>
+<P>
+
+
+If defined on compilation of FreeCOM, command aliases are supported.
+
+<P>New aliases are <U>defined</U> using the command:<BR>
+ <TT>ALIAS</TT> <I>name</I> <TT>'='</TT> &laquo;string&raquo;<BR>
+
+<P>Aliases are <U>removed</U> using the command:<BR>
+ <TT>ALIAS</TT> <I>name</I> <TT>'='</TT><BR>
+
+<P>When FreeCOM is interpreting a command line, the command -- the very
+first word -- is matched against all defined aliases. This word is
+separated from its arguments by whitespaces and cannot contain any
+path delimiters, such as backslashes or colons.
+<BR>If the command matches an alias, the name is <U>substituted</U> by the
+ &laquo;string&raquo;associated to the aliases, e.g. by defining the alias <TT>ls</TT> by:<BR>
+
+<TT> <TT><A HREF="#alias">ALIAS</A></TT> ls=dir /w/o</TT><BR>
+<BR>let FreeCOM interprete the command line:<BR>
+
+<TT> C&gt; ls /a</TT><BR>
+<BR>exactly as if one had typed in:<BR>
+
+<TT> C&gt; dir /w/o /a</TT><BR>
+
+<P>To <U>prevent</U> the alias expansion an asterisk is prefixed before the
+command, e.g.:<BR>
+
+<TT> C&gt; *ls /a</TT><BR>
+<BR>really tries to execute the command:<BR>
+
+<TT> ls /a</TT><BR>
+<BR>which usually is an external command.
+
+<P>Aliases may be used to <U>hide or re-place internal commands</U>, e.g.:<BR>
+
+<TT> <TT><A HREF="#alias">ALIAS</A></TT> dir=xdir</TT><BR>
+<BR>effectively hides the internal command <TT><TT><A HREF="#dir">DIR</A></TT></TT> and will always
+execute the -- usually -- external command <TT>XDIR</TT>.
+
+<P>Aliases <U>may be nested</U>, so if both alias definitions mentioned
+above are in place, the command:<BR>
+
+<TT> C&gt; ls /a</TT><BR>
+<BR>is really executed as:<BR>
+
+<TT> xdir /w/o /a</TT><BR>
+<BR>where the <TT>ls</TT> command is substituted by the command
+<TT>dir /w/o</TT>, then <TT>dir</TT> is detected as alias, too, and
+hence replaced by <TT>xdir</TT>.
+<BR>The same alias is <U>never substituted twice</U>, neither directly nor
+transitively, so:<BR>
+
+<TT> <TT><A HREF="#alias">ALIAS</A></TT> dir=dir /w</TT><BR>
+<BR>is allowed as well as:<BR>
+
+<TT> <TT><A HREF="#alias">ALIAS</A></TT> ls=dir /w/o</TT><BR>
+
+<TT> <TT><A HREF="#alias">ALIAS</A></TT> dir=ls -l</TT><BR>
+<BR><TABLE BORDER=1>
+<TR>
+  <TH>command</TH>
+  <TH>results in</TH>
+</TR>
+<TR>
+  <TD><TT>ls</TT></TD>
+  <TD><TT>ls -l /w/o</TT></TD>
+</TR>
+<TR>
+  <TD><TT>dir</TT></TD>
+  <TD><TT>dir /w/o -l</TT></TD>
+</TR>
+</TABLE>
+<P>As implied above, aliases are expanded when needed and <EM>not</EM>
+when they are defined.
+
+<P>Aliases are storred <U>for each instance of FreeCOM individually</U>
+and are inherited by secondary instances from the parent.
+
+
+<H3>Options</H3>
+
+Compile-time options:
+<UL>
+<LI><TT>ALIAS_DEFAULT_SIZE</TT>: The size reserved for all aliases
+per FreeCOM instance. Default: 1024
+</UL>
+<P><HR>
+<H2><A NAME="beep">BEEP - Issue a Beep</A></H2>
+Requirements: CMD_BEEP<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>BEEP</TT><BR>
+
+
+<P>
+
+
+Issues a beep.
+<BR>At this time FreeCOM supports audible beeps only.
+<P><HR>
+<H2><A NAME="break">BREAK - Display or Set Extended Break Checking</A></H2>
+Requirements: CMD_BREAK<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>BREAK</TT> <B>[</B> <TT>ON</TT> | <TT>OFF</TT> <B>]</B><BR>
+
+
+<P>
+
+
+Displays or sets the Extended Break status.
+<P>By pressing ^Break or ^C (Control-Break or Control-C) an user
+may signal the currently running program to halt. Most programs will
+abort to the prompt, but some may decide to just cancel the current
+action, but remain active.
+<P>DOS checks for ^Break/^C (Control-Break or Crontrol-C) each time
+a program issues a console input/output request. When Extended Break
+checking is enabled (<EM>ON</EM>), DOS checks for ^Break each time
+a program issues a request.
+<P><HR>
+<H2><A NAME="call">CALL - Call a Nested Batchfile or Program</A></H2>
+See also: <A HREF="#loadfix">LOADFIX</A>, <A HREF="#loadhigh">LOADHIGH</A><BR>
+Optional requirements: FEATURE_KERNEL_SWAP_SHELL<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>CALL</TT> <B>[/Y]</B> <I>program</I> <B>[</B> &laquo;arguments&raquo; <B>]</B><BR>
+
+<LI>
+ <TT>CALL</TT> <B>[/Y]</B> <B>[</B> <B>/S</B> | <B>/N</B> <B>]</B> <I>program</I> <B>[</B> &laquo;arguments&raquo; <B>]</B><BR>
+
+</OL>
+
+<P>
+
+
+Calls a program or batch script.
+
+<P>If the <TT><I>program</I></TT> is a <A HREF="#_appendix_batch">batch script</A>,
+that means it has the
+extension <TT>.BAT</TT>, <TT><TT><A HREF="#call">CALL</A></TT></TT> nests the batch script within
+the already running one. Without <TT><TT><A HREF="#call">CALL</A></TT></TT> the invoked batch
+script would terminate all already running batch scripts.
+<P>If present, the arguments are passed unchanged to the invoked program.
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+<UL>
+<LI><TT><B>/S</B></TT>: If <TT><I>program</I></TT> is not a batch script, the external
+program is executed by swapping FreeCOM out of memory. This process will
+require more time, especially if FreeCOM is to be reloaded from a floppy,
+some internal settings are lost, e.g. command line history, but it will
+free as much memory as possible for the external program.
+<P>This option and, thereby, this function is available only, if FreeCOM
+had been compiled with some support for swapping.
+
+<LI><TT><B>/N</B></TT>: If <TT><I>program</I></TT> is not a batch script, the external
+program is executed directly, with swapping disabled. <TT><B>/N</B></TT> superceeds
+<TT><B>/S</B></TT>.
+
+<LI><TT><B>/Y</B></TT>: Enables tracemode during execution of the command.
+
+</UL>
+
+<P>Note: In the future to swap FreeCOM out of memory during the execution
+of an external program will be the default behaviour.
+<P><HR>
+<H2><A NAME="cancel">CANCEL - Terminate all scripts</A></H2>
+
+<H3>Synopsis</H3>
+
+ <TT>CANCEL</TT> <B>[</B> <I>n</I> <B>]</B><BR>
+
+
+Terminates all currently active batch scripts and, if present, assigns
+the specified number <TT><I>n</I></TT> to the errorlevel.
+
+<P><EM>Note</EM>: This command is a <A HREF="#_appendix_hicmd">hidden internal command</A>.
+<P><HR>
+<H2><A NAME="cd">CD - Change current directory of a drive</A></H2>
+See also: <A HREF="#cdd">CDD</A>, <A HREF="#chdir">CHDIR</A>, <A HREF="#dir">DIR</A>, <A HREF="#dirs">DIRS</A>, <A HREF="#md">MD</A>, <A HREF="#pushd">PUSHD</A>, <A HREF="#rd">RD</A><BR>
+Requirements: CMD_CHDIR<BR>
+Optional requirements: <A HREF="#feature_last_dir">FEATURE_LAST_DIR</A><BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>CD</TT><BR>
+
+<LI>
+ <TT>CD</TT> <B>[</B> <I>drive</I> <TT>':'</TT> <B>]</B> <I>path</I><BR>
+
+<LI>
+ <TT>CD</TT> <TT>'-'</TT><BR>
+
+</OL>
+
+<TT><TT><A HREF="#cd">CD</A></TT></TT> is 100% compatible with the <TT><TT><A HREF="#chdir">CHDIR</A></TT></TT> command; there
+is no difference -- beside the spelling -- between them.
+
+<P>The first variant shows the <A HREF="#_appendix_cwd">current working
+directory</A> as absolute path.
+
+<P>The second variant changes the <A HREF="#_appendix_currdir">current
+directory</A> of the given drive.  If no drive is specified on command
+line, the current directory of the <A HREF="#chgdrive">currently
+selected drive (disk)</A> is changed.  This command does
+<STRONG>not</STRONG> change the currently selected drive in opposite to
+<TT><TT><A HREF="#cdd">CDD</A></TT></TT>!
+
+<P>The third variant changes back into the last visited directory
+<STRONG>and</STRONG> drive.  The commands <TT><TT><A HREF="#cd">CD</A></TT></TT>,
+<TT><TT><A HREF="#chdir">CHDIR</A></TT></TT>, <TT><TT><A HREF="#cdd">CDD</A></TT></TT>, and <TT><TT><A HREF="#pushd">PUSHD</A></TT></TT> save the current
+working directory before performing the specified directory change; the
+command <TT><TT><A HREF="#cd">CD</A></TT> '-'</TT> restores this saved directory. This command is
+available only, if the feature LAST_DIR has been enabled during the
+compilation of FreeCOM.
+
+
+<H3>Options</H3>
+
+There are no options for this command.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#cd">CD</A></TT> \freedos\help</TT><BR>
+
+Changes the current working directory of the currently selected drive to
+the path <TT>\FREEDOS\HELP</TT>.
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#cd">CD</A></TT> c:\freedos\help</TT><BR>
+
+Changes the current directory of drive <TT>C:</TT>.
+
+
+<H4>Example: 3</H4>
+
+Assuming the current working directory is <TT>\FREEDOS\HELP</TT> and
+the currently selected drive is <TT>C:</TT>.
+
+
+<TT> <TT><A HREF="#cd">CD</A></TT> </TT><BR>
+
+Displays <TT>C:\FREEDOS\HELP</TT>
+
+
+<H4>Example: 3</H4>
+
+The command sequence, provided the first two worked successfully:<BR>
+
+<TT> <TT><A HREF="#cd">CD</A></TT> \FREEDOS\HELP</TT><BR>
+
+<TT> <TT><A HREF="#cd">CD</A></TT> ..</TT><BR>
+
+<TT> <TT><A HREF="#cd">CD</A></TT> -</TT><BR>
+
+changes first into the directory <TT>\FREEDOS\HELP</TT>, then into
+its parent directory, which is <TT>\FREECOM</TT>. And finally
+<TT><TT><A HREF="#cd">CD</A></TT> -</TT> changes back to <TT>\FREEDOS\HELP</TT>, because this
+was the previous directory before previous <TT><TT><A HREF="#cd">CD</A></TT></TT>-like command.
+<P>Because <TT><TT><A HREF="#cd">CD</A></TT> -</TT> saves the previous directory, too, any
+subsequent:
+
+<TT> <TT><A HREF="#cd">CD</A></TT> -</TT><BR>
+will switch between these two directories; until another directory is
+changed to.
+<P><HR>
+<H2><A NAME="cdd">CDD - Changes the current working directory</A></H2>
+See also: <A HREF="#cd">CD</A>, <A HREF="#dir">DIR</A>, <A HREF="#md">MD</A>, <A HREF="#pushd">PUSHD</A>, <A HREF="#rd">RD</A><BR>
+Requirements: CMD_CDD<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>CDD</TT><BR>
+
+<LI>
+ <TT>CDD</TT> <B>[</B> <I>drive</I> <TT>':'</TT> <B>]</B> <I>path</I><BR>
+
+<LI>
+ <TT>CDD</TT> <TT>'-'</TT><BR>
+
+</OL>
+
+The behaviour of <TT><TT><A HREF="#cdd">CDD</A></TT></TT> is similiar to the <TT><TT><A HREF="#cd">CD</A></TT></TT>
+command, but it always changes both the currently selected drive and
+the current directory, thus, it changes the current working directory.
+
+<P>For further details please see the <TT><TT><A HREF="#cd">CD</A></TT></TT> command.
+<P><HR>
+<H2><A NAME="chdir">CHDIR - Change current directory of a drive</A></H2>
+This command is 100% compatible to <A HREF="#cd">CD</A>, please see there
+<P><HR>
+<H2><A NAME="cls">CLS - Clear screen</A></H2>
+See also: <A HREF="#echo">ECHO</A>, <A HREF="#type">TYPE</A><BR>
+Requirements: CMD_CLS<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>CLS</TT><BR>
+
+
+Clears the screen and resets the character colours to
+white on black.
+<P><HR>
+<H2><A NAME="copy">COPY - Copy one or more files to another location</A></H2>
+See also: <A HREF="#del">DEL</A>, <A HREF="#ren">REN</A><BR>
+Requirements: CMD_COPY<BR>
+
+<H3>Synopsis</H3>
+
+
+<OL>
+<LI>
+ <TT>COPY</TT> <B>[{</B> <I>option</I> <B>}]</B> <I>source</I> <B>[{</B> <I>option</I> <B>}]</B> <I>target</I> <B>[{</B> <I>option</I> <B>}]</B><BR>
+
+</OL>
+
+Copies the source file into the target file. See also: \REF{wildcards}
+
+<P>Before parsing its command line <TT><A HREF="#copy">COPY</A></TT> parses any <EM>option</EM> specified
+by the environment variable <TT><B>COPYCMD</B></TT>.
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+<UL>
+<LI><TT><B>/A</B></TT> see below
+<LI><TT><B>/B</B></TT>: Specifies the mode, in which the file is copied,
+	<TT><B>/A</B></TT> forces ASCII
+	and <TT><B>/B</B></TT> forces binary mode.
+	<P>These options do alter the mode of the file immediately
+	preceeding them and all following ones, until changed again.
+	<P>In binary mode the file is copied and nothing is changed at all.
+	<P>In ASCII mode <TT><A HREF="#copy">COPY</A></TT> takes special care about linefeeds / newline
+	characters and the end-of-line character.
+	<UL>
+	<LI>On read, the newline characters, which are a sequence of two
+	different bytes in DOS, are transformed into a single character, as
+	known from Unix-style systems. On write, this single character is
+	transformed into the two-byte sequence.
+	<BR>So, if both files are copied with different modes, newline
+	characters are transformed into either way.
+	<LI>If the end-of-file character is found on read, the remaining
+	contents of the file is ignored. On write, such character is appended
+	after the last character has been written.
+	</UL>
+	By default, files are copied in binary mode, whereas devices, e.g.
+	<TT>CON:</TT>, are copied in ASCII mode, but no end-of-file is appended.
+</UL>
+
+
+<H3>Arguments</H3>
+
+<UL>
+<LI><TT><I>source</I></TT>: The source file.
+	<BR>If more than one source file is specified, the target must be
+	a directory.
+
+<LI><TT><I>target</I></TT>: The target of the <TT><A HREF="#copy">COPY</A></TT> process.
+	<BR>If target is a directory, the destination file is placed into this
+	directory, but with the same filename as the source file.
+	<BR>If exactly one source is specified, but no target, target defaults
+	to just <TT>.</TT>, which represant the current directory.
+
+</UL>
+<P><HR>
+<H2><A NAME="ctty">CTTY - Change TTY (console)</A></H2>
+Requirements: CMD_CTTY<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>CTTY</TT> <I>device</I><BR>
+
+
+With this command the console device can be changed. A console device performs
+all basic input and output operations. This change is more complete
+than <A HREF="#_appendix_redirection">IO-redirections</A>, because latter one might
+not catch all output, for instance the error messages. See example 3 below.
+<BR>Because the console is a bidirectional virtual device, meaning it
+is to perform input <STRONG>and</STRONG> output, the specified
+<TT><I>device</I></TT> must not a unidirectional device, such as <TT>PRN</TT>.
+<P>To specify a second argument on the command line of FreeCOM has the
+same effect.
+<P><STRONG>Attention</STRONG>: This command is to effect the whole system,
+not only FreeCOM itself; so the effect of <TT><A HREF="#ctty">CTTY</A></TT> does not only depend on the
+implementation status of FreeCOM, but on the DOS kernel, too.
+<P>Also, some programs access the screen or keyboard directly, rather than
+using the DOS functions; these programs are <STRONG>not</STRONG> effected
+by <TT><A HREF="#ctty">CTTY</A></TT>.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+
+<TT> <TT><A HREF="#ctty">CTTY</A></TT> aux</TT><BR>
+
+Changes the console to the <TT><I>AUX:</I></TT> device, which is usually the
+first serial communication port <TT>COM1:</TT>. If this line is connected
+to a terminal or a terminal emulator, the system can be controlled from the
+terminal by now.
+
+
+<H4>Example: 2</H4>
+
+
+
+<TT> <TT><A HREF="#ctty">CTTY</A></TT> nul</TT><BR>
+any command sequence<BR>
+
+<TT> <TT><A HREF="#ctty">CTTY</A></TT> con</TT><BR>
+
+The first command discards any output. If a program attempts any input
+operation, it gets none. Some programs may not handle such situation
+correctly.
+<BR>So, any output, even error messages, are discarded during the command
+sequence.
+<BR>The second command changes the console back to the screen/keyboard pair.
+<BR>To display a string onto screen or read from keybord the usual
+<A HREF="#_appendix_redirection">I/O-redirections</A> may be used, for instance:
+<UL>
+<LI>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> This line appears on the screen &gt;CON</TT><BR>
+<LI>
+
+<TT> <TT><A HREF="#pause">PAUSE</A></TT> &gt;CON</TT><BR>
+This <TT><A HREF="#pause">PAUSE</A></TT> command will get its input even within the
+"<TT><TT><A HREF="#ctty">CTTY</A></TT> nul</TT>" environment.
+</UL>
+<P><HR>
+<H2><A NAME="date">DATE - Display or set current date</A></H2>
+See also: <A HREF="#time">TIME</A><BR>
+Requirements: CMD_DATE<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>DATE</TT> <B>[</B> <B>/D</B> <B>]</B><BR>
+
+<LI>
+ <TT>DATE</TT> <B>[</B> <B>/D</B> <B>]</B> <I>date</I><BR>
+
+</OL>
+
+The first variant displays the current system date, then enters a loop
+prompting the user for a new date. The loop terminates, if the user
+entered a valid new date or just pressed the <TT>ENTER</TT> key.
+
+<P>The second variant does not display the current date and tries to
+change the date to the specified <TT><I>date</I></TT>. On success the
+command terminates, otherwise enters the loop explained above.
+
+<P>The individual portions of a date may be separated by at least:
+dots <TT>.</TT>, forward slashes <TT>/</TT> or dashes <TT>-</TT>.
+Other nationally used characters may be supported, too.
+<BR><TT><A HREF="#date">DATE</A></TT> will support partial formats:
+<UL>
+<LI>A <EM>single numnber</EM>: specifies the day only.
+<LI><EM>Two numbers</EM>: specifies the day and the month in the order
+used by the national date format, which is MM/DD for American and Japanese
+and DD/MM for European format.
+<LI><EM>Three numbers</EM>: specifies a full date including day, month and
+year in the order suitable for the national date format, which is:
+<UL>
+<LI>MM/DD/[CC]YY: for American,
+<LI>DD/MM/[CC]YY: for European and
+<LI>[CC]YY/MM/DD: for Japanese format.
+</UL>
+If the year portion is less than 100, the century is assumed to be 1900, if
+it is greater or equal than 80; otherwise the century is 2000.
+<P><EM>Note</EM>: Some European countries introduced the so-called
+business date in 1996 or so, which is the same as the Japanese format;
+it makes sorting of literal dates a lot easier. If FreeCOM will or will not
+support it, will depend on the NLS used by DOS.
+</UL>
+
+<BR>Symbolical names of monthes are not support (yet).
+
+
+<H3>Options</H3>
+
+
+All options must precced any argument.
+
+<P><TT><B>/D</B></TT> prevents from prompting the user.
+<OL>
+<LI>In variant 1, the date is displayed only.
+<LI>In variant 2, the date is tried to be changed, but the loop is not
+entered on failure.
+</OL>
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+
+<TT> <TT><A HREF="#date">DATE</A></TT> /D</TT><BR>
+
+Just display the current system date.
+
+
+<H4>Example: 3</H4>
+
+
+<TT> <TT><A HREF="#date">DATE</A></TT> 2/1/00</TT><BR>
+
+Sets the current date to 1st February of 2000.
+<P><HR>
+<H2><A NAME="del">DEL - Delete files</A></H2>
+See also: <A HREF="#dir">DIR</A><BR>
+Requirements: CMD_DELETE<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>DEL</TT> <B>[{</B> <I>options</I> | <I>pattern</I> <B>}]</B><BR>
+
+
+Deletes files, if <TT><I>pattern</I></TT> matches a directory, all files within
+this directory are deleted.
+<P>When all files are to be deleted, a warning prompt is issued.
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+<UL>
+<LI><TT><B>/P</B></TT>: Prompts the user before delete a file.
+<LI><TT><B>/V</B></TT>: Displays, which files are deleted.
+</UL>
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#del">DEL</A></TT> FILE1.EXT FILE2.EXT</TT><BR>
+Deletes the files <TT>FILE1.EXT</TT> and <TT>FILE2.EXT</TT>.
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#del">DEL</A></TT> /P *.bak</TT><BR>
+Deletes all files with extension <TT>BAK</TT>, but prompts the
+user for each single file before deleting it.
+
+
+<H4>Example: 3</H4>
+
+
+<TT> <TT><A HREF="#del">DEL</A></TT>.</TT><BR>
+Deletes all files within the current directory.
+<P><HR>
+<H2><A NAME="dir">DIR - Displays the contents of the directory</A></H2>
+See also: <A HREF="#chdir">CHDIR</A>, <A HREF="#mkdir">MKDIR</A>, <A HREF="#rmdir">RMDIR</A><BR>
+Requirements: CMD_DIR<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>DIR</TT> <B>[{</B> <I>options</I> | <I>pattern</I> <B>}]</B><BR>
+
+
+<P><TT><TT><A HREF="#dir">DIR</A></TT></TT> displays the contents of direcories and/or
+the attributes of files, whatever the <TT><I>pattern</I></TT> specifies.
+If no <TT><I>pattern</I></TT> is specified on command line, the current
+working directory is displayed. The actual information displayed
+depends on the specified options and is explained below.
+<P>A <TT><I>pattern</I></TT> may contain <A HREF="#_appendix_wildcards">wildcards</A>,
+which are expanded against both files and directories. To specify a
+directory is essentially equal to write: <TT>directory\*.*</TT>.
+<P>Unlike options patterns are performed in sequence, that means that
+if two patterns are specified, first all entries matching the first one,
+then all entries matching the second one are displayed;
+<FONT SIZE=-1>instead of to display the matching entries intermixed</FONT>.
+
+<P>Before parsing its command line <TT><A HREF="#dir">DIR</A></TT> parses any <EM>option</EM> specified
+by the environment variable <TT><B>DIRCMD</B></TT>.
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+<UL>
+<LI><TT><B>/A</B></TT>: (All) Wildcards are matched against System and Hidden
+files, too.
+<LI><TT><B>/A**</B></TT>: (Attribute) Wildcards are matched against files
+with selected attributes set or clear. The argument
+of the <TT><B>/A</B></TT> option is a sequence of:
+	<UL>
+	<LI><TT><B>?</B></TT> meaning: attribute <TT><B>?</B></TT> must be set, or
+	<LI><TT><B>-?</B></TT> meaning: attribute <TT><B>?</B></TT> must not be set.
+	</UL>
+	<P>The following attributes, the <TT><B>?</B></TT> above, are supported:
+	<UL>
+	<LI><TT><B>R</B></TT> for: read-only,
+	<LI><TT><B>H</B></TT> for: hidden,
+	<LI><TT><B>S</B></TT> for: system,
+	<LI><TT><B>D</B></TT> for: directory, and
+	<LI><TT><B>A</B></TT> for: archive.
+	</UL>
+	<P>If the same attribute is specified twice within the same
+	<TT><B>/A</B></TT> option, the last one superceeds previous ones; if
+	more than one <TT><B>/A</B></TT> option is specified, the last one
+	superceeds all previous ones.
+<LI><TT><B>/B</B></TT>: (Bare) Displays the lines with the information of
+files and directories only. The ones displaying the volume label,
+the serial number, totals etc. are suppressed. In combination with
+<TT><B>/S</B></TT> the absolute path of the files is displayed.
+<LI><TT><B>/L</B></TT>: (Lower-case) Filenames are displayed in lower-case
+letters rather than capitol ones.
+<LI><TT><B>/O</B></TT>: (Order default) is a synonym of <TT><B>/ONG</B></TT>.
+<LI><TT><B>/O**</B></TT>: (Order) Sort the entries displayed in a specific order.
+	The following sort orders are supported:
+	<UL>
+	<LI><TT><B>D</B></TT> sort by last modification <B>d</B>ate (earliest first)
+	<LI><TT><B>E</B></TT> sort by file <B>e</B>xtension
+	<LI><TT><B>G</B></TT> <B>g</B>roup directories first
+	<LI><TT><B>N</B></TT> sort by file <B>n</B>ame
+	<LI><TT><B>S</B></TT> sort by size (smallest first)
+	<LI><TT><B>U</B></TT> do not sort (<B>u</B>nsorted)
+	</UL>
+	<P>Each sort order, except <TT><B>U</B></TT>, may be prefixed by
+	a hyphen to reverse the sort order. <TT><B>U</B></TT> effectively
+	cancels any previous setting or specified sort order, e.g. to
+	override an <TT><B>/O</B></TT> option from the <TT><B>DIRCMD</B></TT>
+	environment variable.
+	<P>If the same sort order is specified twice within the same
+	<TT><B>/O</B></TT> option, the last one superceeds previous ones; if
+	more than one <TT><B>/O</B></TT> option is specified, the last one
+	superceeds all previous ones.
+	<P><STRONG>Warning</STRONG>: The entries are cached within memory
+	before displaying them; if FreeCOM runs short on memory, to sort is
+	disabled completely or the entries are sorted in chunks only.
+<LI><TT><B>/P</B></TT>: (Page) Page the output -- pause the display after
+	issuing one screen-full.
+<LI><TT><B>/S</B></TT>: (Subdirectories) Recursively display directories.
+<LI><TT><B>/W</B></TT>: (Wide) Displays five filenames per line and suppress
+the information about the file size, date etc.
+<LI><TT><B>/Y</B></TT>: (Year) Displays a 4-digit year, rather than just two
+	digits.
+<LI><TT><B>/4</B></TT>: (4digit Year) is a synonym of <TT><B>/Y</B></TT>.
+</UL>
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+
+<TT> <TT><A HREF="#dir">DIR</A></TT></TT><BR>
+Displays the contents of the current directory, but ignore System and
+Hidden files. The output may look like this:
+
+<PRE>
+!!todo!!
+</PRE>
+
+
+<H4>Example: 2</H4>
+
+
+
+<TT> <TT><A HREF="#dir">DIR</A></TT> a* bb* *.txt</TT><BR>
+First displays all files, that begin with the letter <TT>A</TT>; then
+all files, that begin with two letters <TT>B</TT>, are displayed and
+at last all files with the extension <TT>TXT</TT>.
+
+
+<H4>Example: 3</H4>
+
+
+
+<TT> <TT><A HREF="#dir">DIR</A></TT> /w a* b*</TT><BR>
+
+<TT> <TT><A HREF="#dir">DIR</A></TT> a* /w b*</TT><BR>
+
+<TT> <TT><A HREF="#dir">DIR</A></TT> a* b* /w</TT><BR>
+Because the position of options is not significant,
+all these examples behave the same way and display the matching files
+in <EM>wide</EM> or also called <EM>short</EM> form, which may look
+like this:
+
+<PRE>
+!!todo!!
+</PRE>
+
+<P><HR>
+<H2><A NAME="dirs">DIRS - Display the directory stack</A></H2>
+See also: <A HREF="#cd">CD</A>, <A HREF="#chdir">CHDIR</A>, <A HREF="#popd">POPD</A>, <A HREF="#pushd">PUSHD</A><BR>
+Requirements: CMD_DIRS<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>DIRS</TT><BR>
+
+
+Displays all directories stacked with the <TT><A HREF="#pushd">PUSHD</A></TT> command.
+<P><HR>
+<H2><A NAME="echo">ECHO - Displays a string onto screen</A></H2>
+See also: <A HREF="#type">TYPE</A><BR>
+Requirements: CMD_ECHO<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>ECHO</TT> <B>[</B> <TT>ON</TT> | <TT>OFF</TT> <B>]</B><BR>
+
+<LI>
+ <TT>ECHO</TT> &laquo;string&raquo;<BR>
+
+<LI>
+ <TT>ECHO.</TT><BR>
+
+</OL>
+
+When executing a batch script each line is displayed to the console
+before executing it by default. The first variant of <TT><A HREF="#echo">ECHO</A></TT> enables or
+disables this behaviour. To disable echoing the commands is equal to
+prefix each line of a batch script with the Ad-symbol <TT>@</TT>.
+<BR>If <TT><A HREF="#echo">ECHO</A></TT> is invoked with no argument at all, the current echo status
+is displayed.
+<BR>When entered on an interactive command line the echo status controls
+whether or not the <TT><A HREF="#prompt">PROMPT</A></TT> string is displayed.
+
+<P>The second variant displays the specified
+ &laquo;string&raquo;.
+<BR>Note: Because of variant 1
+ &laquo;string&raquo; may not expand
+to the single words <TT>ON</TT> or <TT>OFF</TT> without another
+character.
+
+<P>The third variant displays an empty line. No space must be
+placed between the dot and <TT><A HREF="#echo">ECHO</A></TT>.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT></TT><BR>
+
+Displays the current echo status, e.g. responding:
+<PRE><TT><A HREF="#echo">ECHO</A></TT> is on</PRE>
+
+
+<H4>Example: 2</H4>
+
+
+<TT> @<TT><A HREF="#echo">ECHO</A></TT> OFF</TT><BR>
+
+Disables the echo status. Because the Ad-sign <TT>@</TT> disables the
+echo status right for this line, this command disable echoing all the
+next lines of a batch script and is not echoed to the console itself.
+It is, therefore, best placed in the first line of a batch script.
+
+
+<H4>Example: 3</H4>
+
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> Just a text</TT><BR>
+
+Displays <TT>Just a text</TT>
+<P><HR>
+<H2><A NAME="feature_enhanced_input">FEATURE_ENHANCED_INPUT - Enhanced command line editing</A></H2>
+See also: <A HREF="#feature_filename_completion">FEATURE_FILENAME_COMPLETION</A>, <A HREF="#feature_history">FEATURE_HISTORY</A><BR>
+<P>
+
+
+If enabled on compilation of FreeCOM, enhanced command line editing
+features are activated. Otherwise, FreeCOM uses the default
+buffered input DOS API function #0A.
+
+<P>If this feature is disabled, neither command line history
+nor filename completion is available.
+
+<P>Besides the other features various key bindings recognized, which are
+listed in the general FreeCOM documentation.
+<P><HR>
+<H2><A NAME="erase">ERASE - Delete files</A></H2>
+This command is 100% compatible to <A HREF="#del">DEL</A>, please see there
+<P><HR>
+<H2><A NAME="exit">EXIT - Terminate shell</A></H2>
+
+<H3>Synopsis</H3>
+
+ <TT>EXIT</TT><BR>
+
+
+Terminates the currently running shell, unless FreeCOM had been started with
+the <TT><B>/P</B></TT> option. In this case, <TT><A HREF="#exit">EXIT</A></TT> works like <TT><A HREF="#cancel">CANCEL</A></TT>.
+<P><HR>
+<H2><A NAME="feature_auto_redirect_to_con">FEATURE_AUTO_REDIRECT_TO_CON - Autoswitch CON: to monitor</A></H2>
+<P>
+
+
+If defined on compilation of FreeCOM and if FreeCOM is to terminate
+although it is forbidden -- e.g. by passing the <TT><B>/P</B></TT> option
+when executing FreeCOM --, the console is changed to the keyboard/monitor
+pair automatically after some insuccessful prompts to reboot the system.
+
+
+<H3>Options</H3>
+
+Compile-time options:
+<UL>
+<LI><TT><TT><A HREF="#feature_auto_redirect_to_con">FEATURE_AUTO_REDIRECT_TO_CON</A></TT></TT>: How many loops may pass before
+switching the console CON: to the monitor. Default: 5.
+</UL>
+<P><HR>
+<H2><A NAME="feature_batch">FEATURE_BATCH - Batch script processing</A></H2>
+Requirements: IMPLICIT<BR>
+<P>
+
+
+The batch script processing is always enabled.
+
+
+<H3>Options</H3>
+
+Compile-time options:
+<UL>
+<LI><TT>BATCH_NESTLEVEL_MIN</TT>: Minimal supported batch nesting level.
+Default: 5
+</UL>
+<P><HR>
+<H2><A NAME="environment_keep_free">ENVIRONMENT_KEEP_FREE - keep free space in environment segment</A></H2>
+<P>
+
+
+If defined on compilation of FreeCOM, FreeCOM tries to keep the unused
+space in the environment segment equal to or greater than
+<TT><TT><A HREF="#environment_keep_free">ENVIRONMENT_KEEP_FREE</A></TT></TT>. The default value is 256.
+<P><HR>
+<H2><A NAME="feature_boot_keys">FEATURE_BOOT_KEYS - check for F5/F8 keys on startup if /P is present</A></H2>
+<P>
+
+
+If defined on compilation of FreeCOM, FreeCOM waits three seconds on
+startup, if the <TT><B>/P</B></TT> switch is present. If during this time
+a key has been pressed, <CODE>F5</CODE> will bypass AUTOEXEC.BAT execution
+and <CODE>F8</CODE> will enable trace mode.
+
+<BR><CODE>F5</CODE> is equal to to pass <A HREF="FreeCOM.html#-cmdline">the <TT><B>/D</B></TT>
+switch</A> to FreeCOM.
+<BR><CODE>F8</CODE> is equal to to pass <A HREF="FreeCOM.html#-cmdline">the <TT><B>/Y</B></TT>
+switch</A> to FreeCOM.
+<P><HR>
+<H2><A NAME="feature_installable_commands">FEATURE_INSTALLABLE_COMMANDS - Installable Commands interface (MUX-AE)</A></H2>
+<P>
+
+
+If defined on compilation of FreeCOM, calls to the Installable Commands
+API are made before executing any command. The API is situated at MUX-AE,
+the Multiplexer interrupt 0x2F function 0xAE.
+
+<P>The interface is documented elsewhere, for instance RBIL (Ralph
+Brown's interrupt list).
+<P><HR>
+<H2><A NAME="feature_nls">FEATURE_NLS - use DOS NLS</A></H2>
+<P>
+
+
+If defined on compilation of FreeCOM, FreeCOM uses the information
+retrievable by the currently active DOS NLS using the API functions #65.
+
+<P>These information influence:
+<UL>
+<LI>the format displaying time and date information,
+<LI>the characters to delimit items in lists,
+<LI>the currency string and display format,
+<LI>how to up- (and supported by some NLS only) to lower-case characters,
+<LI>how to sort characters.
+</UL>
+<P><HR>
+<H2><A NAME="feature_call_logging">FEATURE_CALL_LOGGING - Startup logging</A></H2>
+<P>
+
+
+If defined on compilation of FreeCOM, all startups of a FreeCOM instance
+is logged into a file.
+<P>The drive the logfile is created on can be changed at run-time
+with the external tool <TT>PTCHLDRV</TT>.
+
+
+<H3>Options</H3>
+
+Compile-time options:
+<UL>
+<LI><TT>LOG_FILE</TT>: The name of the logfile. Default: <TT>C:\FreeCom.log</TT>
+</UL>
+<P><HR>
+<H2><A NAME="feature_filename_completion">FEATURE_FILENAME_COMPLETION - Filename completion</A></H2>
+Requirements: <A HREF="#feature_enhanced_input">FEATURE_ENHANCED_INPUT</A><BR>
+<P>
+
+
+If defined on compilation of FreeCOM and if the enhanced command line
+editing is activated as well, the tabulatur key binding becomes available.
+
+<P>When the tabulator key is pressed, the word the cursor is located
+on actually or is immediately preceeding is separated and tried to
+match against files, like a <TT><A HREF="#dir">DIR</A></TT> command would do, e.g. when hitting tab
+at the command line:<BR>
+
+<TT> bar\f_ some arguments</TT><BR>
+<BR>-- where the underscore <TT>_</TT> is to mark the location of the cursor and
+is <EM>no</EM> actual character -- causes FreeCOM to try to locate any
+files or directories matching the filename pattern <TT>bar\f*.*</TT>.
+<BR>If none is found, a beep is issued to indicate that error and the
+command line remains unchanged.
+<BR>Otherwise as many characters are appended to the filename as are
+the same for all found matches, e.g.:
+<BR><OL>
+<LI>if exactly one match was found, its name is appened.
+<LI>if, for example, the files or directories: <TT>FOO</TT>, <TT>FUU.TXT</TT>
+or <TT>FUU</TT> are present in the directory <TT>BAR</TT>, no character
+is appened, because there are no equal characters following the already
+present <TT>f</TT> character.
+<LI>if, for example, the files or directories: <TT>FOO</TT>, <TT>FOO.TXT</TT>
+or <TT>FOO1.TXT</TT> are present in the directory <TT>BAR</TT>, the
+two characters <TT>OO</TT> are appened, because all found matches
+share these two characters immediately following the already present
+characers. Hence, the command line is expanded to:<BR>
+
+<TT> bar\FOO_ some arguments</TT><BR>
+<BR>Please note that the case of all characters will match the case
+of the retrieved filenames.
+</OL>
+In addition, because in the cases 2 and 3 the file completion was not
+complete because more than one match was found, a beep is issued.
+In this situation to hit the tabulator key a second time, without
+an intervueing other key press, causes to display all available matches,
+but keeps the command line unchanged otherwise.
+<BR>If exactly one filename match was found, hence the file completion
+was complete, and if the found match is a directory, a backslash is
+appended to. This allows to walk into deep levels of directories speededly.
+
+<P>If the cursor had been placed, for instance, under the backslash
+in above mentioned command line, the full string <TT>bar\f</TT> had
+been tried to be completed as well. This behaviour differs from other
+implementations.
+
+
+<H3>Options</H3>
+
+Compile-time options:
+<UL>
+<LI><TT>FILE_SEARCH_MODE</TT>: Filemode passed to the DOS API to aquire
+matching directory entries. Default: Read-Only, Archive, Directory
+</UL>
+<P><HR>
+<H2><A NAME="feature_dirstack">FEATURE_DIRSTACK - Directory stack</A></H2>
+See also: <A HREF="#dirs">DIRS</A>, <A HREF="#popd">POPD</A>, <A HREF="#pushd">PUSHD</A><BR>
+<P>
+
+
+This feature is automatically enabled, if <TT><A HREF="#pushd">PUSHD</A></TT> is enabled.
+
+<P>The directory stack pushes and pops directories on demand via the
+commands <TT><A HREF="#pushd">PUSHD</A></TT> and <TT><A HREF="#popd">POPD</A></TT>. <TT><A HREF="#dirs">DIRS</A></TT> displays all pushed directories.
+<P>Please see the documentation of the mentioned commands.
+
+
+<H3>Options</H3>
+
+Compile-time options:
+<UL>
+<LI><TT>DIRSTACK_DEFAULT_SIZE</TT>: The amount of bytes reserved to store
+items of the directory stack. Default: 256
+</UL>
+<P><HR>
+<H2><A NAME="feature_history">FEATURE_HISTORY - Command line history</A></H2>
+See also: <A HREF="#history">HISTORY</A><BR>
+Requirements: <A HREF="#feature_enhanced_input">FEATURE_ENHANCED_INPUT</A><BR>
+<P>
+
+
+If enabled on compilation of FreeCOM and the enhanced command line
+editing is acivated as well, the command line history becomes available.
+
+<P>When commands are enterred manually on the command line prompt
+of FreeCOM, old command lines are storred in the history and can
+be retrieved later using the key bindings of <TT>F3</TT>, <TT>F1</TT>
+and the cursor Up and Down keys.
+<BR>Without the command line history at most one line is cached.
+
+<P>The command:<BR>
+
+<TT> <TT><A HREF="#history">HISTORY</A></TT></TT><BR>
+<BR>displays all cached command lines.
+
+<P>The command:<BR>
+ <TT>HISTORY</TT> <I>number</I><BR>
+
+<BR>resizes the amount of bytes reserved to cache command lines to
+<TT><I>number</I></TT> bytes. Doing so all cached command lines are deleted.
+
+<P>Each instance of FreeCOM maintains its own command line history,
+which is initially inherited from the particular parent instance,
+if any.
+
+
+<H3>Options</H3>
+
+Compile-time options:
+<UL>
+<LI><TT>HISTORY_DEFAULT_SIZE</TT>: The amount of bytes reserved initially.
+Default: 256
+</UL>
+<P><HR>
+<H2><A NAME="feature_last_dir">FEATURE_LAST_DIR - Change back to last directory</A></H2>
+See also: <A HREF="#cd">CD</A>, <A HREF="#cdd">CDD</A>, <A HREF="#chdir">CHDIR</A>, <A HREF="#popd">POPD</A>, <A HREF="#pushd">PUSHD</A><BR>
+<P>
+
+
+If defined on compilation of FreeCOM, every change of the current
+directory using an internal command records the previous directory
+and enables the <TT><I>-</I></TT> shortcut for <TT><A HREF="#cd">CD</A></TT>, <TT><A HREF="#cdd">CDD</A></TT> and <TT><A HREF="#chdir">CHDIR</A></TT>.
+
+
+<H4>Example: </H4>
+
+
+<TT> C&gt; <TT><A HREF="#cd">CD</A></TT> \</TT><BR>
+
+<TT> C&gt; <TT><A HREF="#cd">CD</A></TT> freedos\bin</TT><BR>
+
+<TT> C&gt; <TT><A HREF="#cd">CD</A></TT> -</TT><BR>
+
+<TT> C&gt; <TT><A HREF="#cd">CD</A></TT> -</TT><BR>
+<BR>The first <TT><A HREF="#cd">CD</A></TT> command changes into the root direcotry, the second into
+the directory <TT>\FREEDOS\BIN</TT>, any subsequent <TT><TT><A HREF="#cd">CD</A></TT> -</TT> commands
+will change between the root directory and <TT>\FREEDOS\BIN</TT>.
+<P><HR>
+<H2><A NAME="for">FOR - Repeat a command</A></H2>
+Requirements: CMD_FOR<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>FOR</TT> <TT>'%'</TT> <I>letter</I> <TT>IN</TT> <TT>'('</TT> <B>{</B> <I>word</I> | <I>pattern</I> <B>}</B> <TT>')'</TT> <TT>DO</TT> &laquo;any command&raquo;<BR>
+
+
+Executes
+ &laquo;any command&raquo; for several values assigned to
+the variable <TT><I>letter</I></TT>. The values are read strictly left to right
+from the <TT><I>word</I></TT>s and <TT><I>pattern</I></TT>s enclosed in
+parenthises; where <TT><I>pattern</I></TT>s are words containing
+wildcards and are replaced by all matching filenames.
+<P>Any occurence of a percent sign <TT>%</TT> and the specified letter
+is replaced by the current value of the <TT><A HREF="#for">FOR</A></TT> loop. <EM>Note:</EM> The
+letter is case-sensitively matched!
+
+<P><STRONG>Warning #1</STRONG>: Unlike most commands
+<A HREF="#_appendix_redirection">I/O-redirections</A> are passed forth to the
+command instead of to apply them to <TT><A HREF="#for">FOR</A></TT> itself, e.g.:<BR>
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %a IN (*.*) DO <TT><A HREF="#echo">ECHO</A></TT> %a &gt;q</TT><BR>
+repeatedly executes the <TT><A HREF="#echo">ECHO</A></TT> command with the redirection <TT>>q</TT>,
+hence, effectively overwriting the file each time.
+
+<BR><STRONG>Warning #2</STRONG>: Due the syntactical problem that the
+<TT><A HREF="#for">FOR</A></TT> variable is specified as 
+ <TT>'%'</TT> <I>letter</I>, which is also
+a legal start of an environment variable, the following kludge had
+been included to support <TT><A HREF="#for">FOR</A></TT> and its special variables:
+<UL>
+<LI>You can use as many percent character as you wish as long as you
+use exactly the same number for a particular <TT><A HREF="#for">FOR</A></TT> variable.
+<LI>Before any environment variables are expanded, the command line
+is checked for the skeleton specified within the synopsis (there must
+not be specified no redirection between the <TT><A HREF="#for">FOR</A></TT> and DO keywords), if
+it is found, the <TT><A HREF="#for">FOR</A></TT> command is executed <EM>without</EM> expanding
+any environment variables -- they get expanded each time the
+command is invoked.
+<LI><STRONG><FONT SIZE="+1">Known Bug</FONT></STRONG>: Otherwise any
+environment variables are expanded and, if it happens
+that a valid <TT><A HREF="#for">FOR</A></TT> command is found now, the environment variables within
+the command are expanded a second time.
+In this case the I/O redirections are applied to <TT><A HREF="#for">FOR</A></TT>, too, instead of
+passing them forth to the command.
+<LI><TT><A HREF="#for">FOR</A></TT> commands as part of the command of <TT><A HREF="#call">CALL</A></TT>, <TT><A HREF="#if">IF</A></TT>, and <TT><A HREF="#for">FOR</A></TT> itself are
+never found before expanding the environment variables.
+</UL>
+
+<BR><STRONG>Warning #3</STRONG>: Due a bug in MS COMMAND (BugID #1050) the right
+parenthesis <STRONG>must</STRONG> be followed by at least one whitespace,
+this allows the "<EM>feature</EM>" to embed such characters within the
+words and patterns, e.g.:<BR>
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %a in (a()a b()b) DO command</TT><BR>
+executes the <TT>command</TT> two times, first replacing <TT>%a</TT>
+by <TT>a()a</TT>, second by <TT>b()b</TT>.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %z IN (*.*) DO copy %a a:</TT><BR>
+
+Performs a <TT><TT><A HREF="#copy">COPY</A></TT> xyz A:</TT> command for each file in the current
+directory. Its behaviour is equal to <TT><TT><A HREF="#copy">COPY</A></TT> *.* A:</TT>
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %z IN (a?b*.TXT) DO <TT><A HREF="#call">CALL</A></TT> batch arg %z</TT><BR>
+
+Executes the batch script <TT>batch.bat</TT> for each file matching
+the pattern <TT>A?B*.TXT</TT> located in the current directory. Within the
+script, the automatic variable <TT><I>%1</I></TT> always expands to the constant
+argument <TT><I>arg</I></TT>, whereas <TT><I>%2</I></TT> expands to the filename
+of the current loop.
+
+
+<H4>Example: 3</H4>
+
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %a IN (1 2 3 4 5) DO <TT><A HREF="#echo">ECHO</A></TT> %a</TT><BR>
+
+Is equal to the command sequence:<BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 1</TT><BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 2</TT><BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 3</TT><BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 4</TT><BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 5</TT><BR>
+
+Because these words do <EM>not</EM> contain no wildcards, they are <EM>not</EM>
+matched as filenames.
+
+
+<H4>Example: 4</H4>
+
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %g IN (1 2 3*) DO <TT><A HREF="#echo">ECHO</A></TT> %g</TT><BR>
+
+Performs the commands:<BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 1</TT><BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 2</TT><BR>
+
+and the <TT><A HREF="#echo">ECHO</A></TT> command for each file in the current directory, that has no
+extension and which name starts with the digit three.
+<P><HR>
+<H2><A NAME="goto">GOTO - Goto label</A></H2>
+Requirements: CMD_GOTO<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>GOTO</TT> <B>[</B> <TT>':'</TT> <B>]</B> <I>label</I><BR>
+
+
+Normally all commands of a batch script are executed in the sequence
+in which they are appear with the script. <TT><A HREF="#goto">GOTO</A></TT> controls the command flow
+by unconditionally jumping to the specified <TT><I>label</I></TT>; the commands following that label
+will be executed then. A label is written as a colon in the first
+column of a line and the name of the label immediately behind. If FreeCOM
+hits a label in the normal flow, it is ignored completely, even any redirection
+characters are ignored.
+
+<P>The <TT><I>label</I></TT> must be located in the same script file as the
+<TT><A HREF="#goto">GOTO</A></TT> itself, if it appears more than once, the first occurance takes
+precedence.
+
+<P>Conditional jumps can be contructed with help of the <TT><A HREF="#if">IF</A></TT> command, see
+example 2.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#goto">GOTO</A></TT> ende</TT><BR>
+
+Jumps the to label <TT>:ende</TT>
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#if">IF</A></TT> "%1"=="" <TT><A HREF="#goto">GOTO</A></TT> emptyCommandLine</TT><BR>
+
+Jumps to label <TT>:emptyCommandLine</TT>, if no argument had been
+passed to the batch script.
+For instance:
+<PRE>@<TT><A HREF="#echo">ECHO</A></TT> OFF
+<TT><A HREF="#if">IF</A></TT> "%1"=="" <TT><A HREF="#goto">GOTO</A></TT> error
+<TT><A HREF="#rem">REM</A></TT> do something sane here
+<TT><A HREF="#goto">GOTO</A></TT> ende
+
+:error
+<TT><A HREF="#echo">ECHO</A></TT> You must pass an argument to me!
+
+:ende
+</PRE>
+<P><HR>
+<H2><A NAME="history">HISTORY - Display command line history</A></H2>
+Requirements: <A HREF="#feature_history">FEATURE_HISTORY</A><BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>HISTORY</TT><BR>
+
+<LI>
+ <TT>HISTORY</TT> <I>number</I><BR>
+
+</OL>
+
+<P>
+
+
+The first format without any argument displays all cached command
+lines.
+
+<P>The second format resizes the memory pre-allocated for the
+command line history cache to <TT><I>number</I></TT> bytes.
+
+<P><HR>
+<H2><A NAME="if">IF - Conditional execution of a command</A></H2>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>IF</TT> <B>[</B> <TT>NOT</TT> <B>]</B> <TT>EXIST</TT> <I>file</I> &laquo;command&raquo;<BR>
+
+<LI>
+ <TT>IF</TT> <B>[</B> <TT>NOT</TT> <B>]</B> <TT>ERRORLEVEL</TT> <I>number</I> &laquo;command&raquo;<BR>
+
+<LI>
+ <TT>IF</TT> <B>[</B> <TT>NOT</TT> <B>]</B> <I>string</I> <TT>'=='</TT> <I>word</I> &laquo;command&raquo;<BR>
+
+<LI>
+ <TT>IF</TT> <B>[</B> <TT>NOT</TT> <B>]</B> <I>quoted-string</I> <TT>'=='</TT> <I>quoted-string</I> &laquo;command&raquo;<BR>
+
+</OL>
+
+Conditionally executes the specified
+ &laquo;command&raquo;. If the keyword
+ <TT>NOT</TT> is specified, the condition is negated, meaning, the
+ &laquo;command&raquo; is executed, if the condition evaluates to false.
+
+<P>The first condition evaluates to true, if the specified <TT><I>file</I></TT>
+exists. Wildcards are supported. On local file systems one can test for
+character devices, too.
+
+<P>The second variant evaluates to true, if the errorlevel is currently
+assigned to a number greater or equal than the specified <TT><I>number</I></TT>.
+Errorlevels are assigned when external commands terminates or via
+<TT><A HREF="#cancel">CANCEL</A></TT> or <TT><A HREF="#quit">QUIT</A></TT>.
+<BR>Due to compatibly with other DOS shells FreeCOM does not check, if
+the specified errorlevel is a number, but silently accepts any string.
+This allows to use the so-called <EM>Benny levels</EM>, where you
+can specify <TT>HA</TT>, <TT>HB</TT>, ... , <TT>HZ</TT> or
+<TT>xa</TT>, <TT>xb</TT>, ... , <TT>xz</TT> instead of
+<TT>1</TT>, <TT>2</TT>, ... , <TT>26</TT>. Some malformed
+batch script use this syntax to make mapping of errorlevels to
+drive letters <EM>more visible</EM>. See example 5.
+
+<P>The third and four ones are true, when the left string is case-sensitively
+equal to the string on the right side of the double equal sign.
+Either side may be quoted by double quotes, though, if the right side
+is <EM>not</EM> quoted, the first word is tested only.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#if">IF</A></TT> NOT EXIST c:\command.com <TT><A HREF="#echo">ECHO</A></TT> There is no COMMAND.COM in C:\</TT><BR>
+<BR>Executes the <TT><A HREF="#echo">ECHO</A></TT> command, if a file <TT>C:\COMMAND.COM</TT>
+does <EM>not</EM> exist.
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#if">IF</A></TT> EXIST c:\fdos\nul <TT><A HREF="#goto">GOTO</A></TT> have_fdos_directory</TT><BR>
+<BR>Branch the interpretation of the batch script to the label, if
+the file <TT>C:\FDOS\NUL</TT> exists. Because the filename <TT>NUL</TT>
+corresponds to the character device <TT>NUL:</TT>, which always exists,
+this test may be used to probe for the existance of the path
+<TT>C:\FDOS</TT>, because all character devices are virtually present in
+every directory of local filesystems.
+
+
+<H4>Example: 3</H4>
+
+
+<TT> <TT><A HREF="#if">IF</A></TT> %1==name <TT><A HREF="#echo">ECHO</A></TT> First argument is "name"</TT><BR>
+<BR><TT><A HREF="#echo">ECHO</A></TT> is executed, if the first argument of the current batch script
+is <TT><I>"name"</I></TT> (without the quotes). <TT>%1</TT> may expand to
+any string, even with embedded whitespaces, but without an embedded
+double equal sign. Also, metacharacters included within the argument
+are evaluated.
+
+
+<H4>Example: 4</H4>
+
+
+<TT> <TT><A HREF="#if">IF</A></TT> "%1"=="first name" <TT><A HREF="#echo">ECHO</A></TT> First argument is "first name"</TT><BR>
+<BR><TT><A HREF="#echo">ECHO</A></TT> is executed, if the first argument of the current batch script
+is <TT><I>"first name"</I></TT> (without the quotes). <TT>%1</TT> may expand
+to any string, even with embedded whitespaces or an embedded double
+equal sign or metacharacters.
+
+
+<H4>Example: 5</H4>
+
+ &laquo;program&raquo;<BR>
+
+
+<TT> <TT><A HREF="#set">SET</A></TT> drv=</TT><BR>
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %%Z IN (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) DO <TT><A HREF="#if">IF</A></TT> ERRORLEVEL H%%Z <TT><A HREF="#set">SET</A></TT> drv=%%Z</TT><BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> ERRORLEVEL 27 <TT><A HREF="#set">SET</A></TT> drv=</TT><BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> "%drv%"=="" goto error_no_drive_letter</TT><BR>
+<BR>Assuming that
+ &laquo;program&raquo; is setting the exit code to 1..26 for the drive letter, e.g. when
+searching for RAMdisks, this code snippet assigns the drive letter to
+the environment variable <TT>drv</TT> or unsets the variable on error.
+
+<P><STRONG>Note:</STRONG> The following code is equal to the above one
+and fully compatible to all shells:
+ &laquo;program&raquo;<BR>
+
+
+<TT> <TT><A HREF="#set">SET</A></TT> drv=</TT><BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> ERRORLEVEL 1 <TT><A HREF="#set">SET</A></TT> drv=A</TT><BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> ERRORLEVEL 2 <TT><A HREF="#set">SET</A></TT> drv=B</TT><BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> ERRORLEVEL 3 <TT><A HREF="#set">SET</A></TT> drv=C</TT><BR>
+<BR>...  <BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> ERRORLEVEL 25 <TT><A HREF="#set">SET</A></TT> drv=Y</TT><BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> ERRORLEVEL 26 <TT><A HREF="#set">SET</A></TT> drv=Z</TT><BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> ERRORLEVEL 27 <TT><A HREF="#set">SET</A></TT> drv=</TT><BR>
+
+<TT> <TT><A HREF="#if">IF</A></TT> "%drv%"=="" goto error_no_drive_letter</TT><BR>
+<P><HR>
+<H2><A NAME="feature_load_messages">FEATURE_LOAD_MESSAGES - Load messages permanently</A></H2>
+<P>
+
+
+If enabled on compilation of FreeCOM, the <TT><B>/MSG</B></TT> becomes
+available.
+
+<P>If this option is present, when an instance of FreeCOM is created,
+the FreeCOM messages are loaded into memory permanently. Otherwise,
+the messages are loaded on demand and are removed from memory when an
+external command is executed, in order to conserve memory.
+
+<P>This feature may help to run FreeCOM on disk- and floppyless boxes.
+<P><HR>
+<H2><A NAME="loadfix">LOADFIX - Load an external program above the first 64KB memory</A></H2>
+See also: <A HREF="#call">CALL</A>, <A HREF="#loadhigh">LOADHIGH</A><BR>
+
+<H3>Synopsis</H3>
+
+ <TT>LOADFIX</TT> <I>program</I> <B>[{</B> <I>argument</I> <B>}]</B><BR>
+
+
+Loads and executes an exepacked program, that would abort execution
+with the error message "Packed file corrupt" otherwise.
+
+<P><EM>Attention:</EM> This command is not available in the
+XMS-only variant of FreeCOM!
+
+
+<H4>Example: </H4>
+
+
+<TT> <TT><A HREF="#loadfix">LOADFIX</A></TT> program.exe</TT><BR>
+<P><HR>
+<H2><A NAME="loadhigh">LOADHIGH - Load an external program into high memory</A></H2>
+See also: <A HREF="#call">CALL</A>, <A HREF="#loadfix">LOADFIX</A><BR>
+
+<H3>Synopsis</H3>
+
+ <TT>LOADHIGH</TT> <B>[{</B> <I>option</I> <B>}]</B> <I>program</I> <B>[{</B> <I>argument</I> <B>}]</B><BR>
+
+
+Loads and executes an external program in high memory, also called UMB.
+This command is used to load TSRs, such mouse drivers, into the upper
+memory to conserve the conventional memory for programs.
+
+
+<H4>Example: </H4>
+
+
+<TT> <TT><A HREF="#loadhigh">LOADHIGH</A></TT> lmouse.com</TT><BR>
+<P><HR>
+<H2><A NAME="md">MD - make directory</A></H2>
+See also: <A HREF="#cd">CD</A>, <A HREF="#mkdir">MKDIR</A>, <A HREF="#rd">RD</A><BR>
+Requirements: CMD_MKDIR<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>MD</TT> <I>path</I><BR>
+
+
+Creates a directory of the specified name <TT><I>path</I></TT>. Any parent
+directories must already exist.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#md">MD</A></TT> C:\1</TT><BR>
+<BR>Creates the directory <TT>1</TT> in the root directory of drive
+<TT>C:</TT>.
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#mkdir">MKDIR</A></TT> C:\1\2\3</TT><BR>
+<BR>Creates the directory <TT>3</TT> in the directory <TT>\1\2</TT> of
+drive <TT>C:</TT>. If the directory <TT>C:\1\2</TT> does not exist, yet,
+the command fails.
+<P><HR>
+<H2><A NAME="memory">MEMORY - Display the internally used memory</A></H2>
+Requirements: CMD_MEMORY<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>MEMORY</TT><BR>
+
+
+<P>
+
+
+Displays the useage of internal memory of FreeCOM.
+
+<FONT COLOR="#CC0000">Note</FONT>: The internals of FreeCOM are currently under heavy
+construction, the actual output might vary heavily from this example.
+
+
+<H3>Examples</H3>
+
+
+<TT> <TT><A HREF="#memory">MEMORY</A></TT></TT><BR>
+
+may display this:
+<PRE>
+Environment segment    : max  1200 bytes; free     8 bytes
+Context segment        : max  2304 bytes; free  2252 bytes
+        Aliases        : limit  1024 bytes, current     5 bytes,     0 items
+        History        : limit   256 bytes, current    34 bytes,     2 items
+        Directory stack: limit   256 bytes, current     5 bytes,     0 items
+        Last dir cache : used      0 bytes,     0 items
+        Swapinfo       : used      0 bytes,     0 items
+Heap                   : free 482080 bytes
+</PRE>
+<UL>
+<LI>The <TT>Environment segment</TT> is the storage area, the environment
+variables are storred in. It may be changed passing the <TT><B>/E</B></TT>
+option to FreeCOM.
+<LI>FreeCOM stores several internal information into the
+<TT>Context segment</TT>; the aliases - modified by the <TT><A HREF="#alias">ALIAS</A></TT> command -,
+the history - displayed using the <TT><A HREF="#history">HISTORY</A></TT> command, accessed by pressing
+the cursor Up/Down keys on command line -, the directory stack - displayed
+with the <TT><A HREF="#dirs">DIRS</A></TT> command and accessed using the <TT><A HREF="#pushd">PUSHD</A></TT> and <TT><A HREF="#popd">POPD</A></TT> commands -,
+the last directory - accessed with the <TT><TT><A HREF="#cd">CD</A></TT> -</TT> command -, and,
+finally, some internal command used by the low-level swap interface of
+FreeCOM.
+<LI>The <TT>heap</TT> is the storage area FreeCOM can allocated
+memory from itself. This value is useful for FreeCOM developers
+mostly.
+</UL>
+<UL>
+<LI><TT>max</TT> specifies the maximum amount of bytes allocatable
+within this storage area.
+<LI><TT>free</TT> specifies the unused bytes within this storage area.
+<LI><TT>limit</TT> specifies the maximum amount of bytes allocatable
+for the particular information within the area.
+<LI><TT>current</TT> specifies the amount of bytes currently allocated
+for the particular information.
+<LI><TT>items</TT> specifies the number of items storred
+for the particular information, e.g. how many directories have been
+pushed onto the stack using <TT><A HREF="#pushd">PUSHD</A></TT>.
+</UL>
+<P><HR>
+<H2><A NAME="mkdir">MKDIR - Make directory</A></H2>
+This command is 100% compatible to <A HREF="#md">MD</A>, please see there
+<P><HR>
+<H2><A NAME="path">PATH - Display or set the search path</A></H2>
+Requirements: CMD_PATH<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>PATH</TT><BR>
+
+<LI>
+ <TT>PATH</TT> <B>[</B> <TT>'='</TT> <B>]</B> <B>{</B> <I>path</I> <B>:</B> <TT>';'</TT> <B>}</B><BR>
+
+<LI>
+ <TT>PATH;</TT><BR>
+
+</OL>
+
+Displays or assigns a new search path.
+
+<P>The first variant displays the currently active search path.
+
+<P>The second one assigns the specified paths to the search path.
+The leading equal sign, if present, is ignored.
+
+<P>The third variant empties the search path.
+
+<P>When FreeCOM searches for an external command or a batch script, which
+has no path specified, it is search for in all the directories specified
+in the search path. If the current directory <TT>.</TT> is not mentioned
+in the search path, it is searched through first.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#path">PATH</A></TT> c:\fdos\bin;c:\tools;d:\others\bin;bin</TT><BR>
+<BR>If FreeCOM is to execute an external program, e.g. <TT>XCOPY</TT>,
+FreeCOM will search for the program in the following directories in the
+specified order, the first program file found is executed:
+<OL>
+<LI>the current directory
+<LI><TT>C:\FDOS\BIN</TT>
+<LI><TT>C:\TOOLS</TT>
+<LI><TT>D:\OTHERS\BIN</TT>
+<LI><TT>BIN</TT>
+</OL>
+<BR>Note: Because the last directory specification is a relative one,
+rather than an absolute one, the program is searched for in the
+sub-directory <TT>BIN</TT> of the current directory.
+<P><HR>
+<H2><A NAME="pause">PAUSE - Pauses batch file execution</A></H2>
+Requirements: CMD_PAUSE<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>PAUSE</TT><BR>
+
+<LI>
+ <TT>PAUSE</TT> &laquo;string&raquo;<BR>
+
+</OL>
+
+
+<P>Pauses the batch file execution until a key is pressed.
+<P><TT><TT><A HREF="#pause">PAUSE</A></TT></TT> prompts the user with the specified string or,
+if none is specifed, "<TT>Press any key to proceed</TT>"
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#pause">PAUSE</A></TT></TT><BR>
+Just pauses the execution.
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#pause">PAUSE</A></TT> Execution paused, press any key to proceed ...</TT><BR>
+Pauses execution displaying this string.
+
+
+<H4>Example: 3</H4>
+
+
+<TT> <TT><A HREF="#pause">PAUSE</A></TT> &gt;nul</TT><BR>
+Pauses execution, but does not display any prompt.
+<P><HR>
+<H2><A NAME="popd">POPD - Change back to the last pushed directory</A></H2>
+See also: <A HREF="#cd">CD</A>, <A HREF="#cdd">CDD</A>, <A HREF="#dirs">DIRS</A>, <A HREF="#popd">POPD</A><BR>
+Requirements: CMD_CDD, CMD_POPD<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>POPD</TT><BR>
+
+<LI>
+ <TT>POPD</TT> <TT>'*'</TT><BR>
+
+</OL>
+
+<P>The first variant changes the current directory back to the one,
+in which the last <TT><A HREF="#pushd">PUSHD</A></TT> command was executed.
+
+<P>The second one clears all entries of the directory stack, but does
+not change the current directory.
+<P><HR>
+<H2><A NAME="prompt">PROMPT - Display or set the shell prompt</A></H2>
+Requirements: CMD_PROMPT<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>PROMPT</TT><BR>
+
+ <TT>PROMPT</TT> <B>[</B> <TT>'='</TT> <B>]</B> <I>prompt</I><BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="pushd">PUSHD - Push the current working directory onto the directory stack</A></H2>
+See also: <A HREF="#cd">CD</A>, <A HREF="#cdd">CDD</A>, <A HREF="#dirs">DIRS</A>, <A HREF="#popd">POPD</A><BR>
+Requirements: CMD_CDD, CMD_PUSHD<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>PUSHD</TT> <I>directory</I><BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="quit">QUIT - Terminate the current script</A></H2>
+
+<H3>Synopsis</H3>
+
+ <TT>QUIT</TT> <B>[</B> <I>n</I> <B>]</B><BR>
+
+
+Terminates the current active batch script and, if present, assigns
+the specified number <TT><I>n</I></TT> to the errorlevel.
+
+<P><EM>Note</EM>: This command is a <A HREF="#_appendix_hicmd">hidden internal command</A>.
+<P><HR>
+<H2><A NAME="rd">RD - Remove directory</A></H2>
+See also: <A HREF="#cd">CD</A>, <A HREF="#md">MD</A>, <A HREF="#rmdir">RMDIR</A><BR>
+Requirements: CMD_RMDIR<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>RD</TT> <I>path</I><BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="rem">REM - Marks comments or remarks in batchfiles</A></H2>
+Requirements: CMD_REM<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>REM</TT> &laquo;string&raquo;<BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="ren">REN - Rename files</A></H2>
+See also: <A HREF="#rename">RENAME</A><BR>
+Requirements: CMD_RENAME<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>REN</TT> &laquo;source&raquo; &laquo;destination&raquo;<BR>
+
+
+Renames the source file(s) into the target file(s). See also: \REF{wildcards}
+
+<P>The
+ &laquo;destination&raquo; must not contain any path specification, the
+ &laquo;source&raquo; file is renamed within the directory it is currently located in, see
+example 2 below. Any wildcards used within
+ &laquo;destination&raquo; are replaced by the corresponding character of the source filename,
+see example 4 below.
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+
+<TT> <TT><A HREF="#ren">REN</A></TT> file1.txt file2.txt</TT><BR>
+
+Renames <TT>file1.txt</TT> into <TT>file2.txt</TT>
+
+
+<H4>Example: 2</H4>
+
+
+
+<TT> <TT><A HREF="#ren">REN</A></TT> path\file1.txt file2.txt</TT><BR>
+
+Renames <TT>path\file1.txt</TT> into <TT>path\file2.txt</TT>
+
+
+<H4>Example: 3</H4>
+
+
+
+<TT> <TT><A HREF="#ren">REN</A></TT> path\file*.txt *.bak</TT><BR>
+
+Renames all files located within directory <TT>path</TT> with extension
+<TT>.txt</TT> and which filename is beginning with <TT>file</TT>,
+such as <TT>file.txt</TT>, <TT>filea.txt</TT> and <TT>file99xx.txt</TT>,
+into <TT>*.bak</TT> files.
+
+
+<H4>Example: 4</H4>
+
+
+
+<TT> <TT><A HREF="#ren">REN</A></TT> *.DAT A*.*</TT><BR>
+
+Renames all files located within the current directory with extension
+<TT>.DAT</TT> into files by replacing the very first character of
+the filename by the letter <TT>A</TT>, all other characters, the
+file extension and path are remain unchanged.
+
+
+<H4>Example: 5</H4>
+
+
+
+<TT> <TT><A HREF="#ren">REN</A></TT> *.TXT ??b*.bak</TT><BR>
+
+Renames all files located within the current directory with extension
+<TT>.TXT</TT> into files by replacing the <EM>third</EM> character of
+the filename by the letter <TT>B</TT> and the file extension to
+<TT>.BAK</TT>, all other characters and the
+file path are remain unchanged.
+
+<P><STRONG>Warning:</STRONG> If the source file name consists of one
+character only, the second question mark in the destination pattern
+is ignored, hence, e.g. the file <TT>A.TXT</TT> is renamed into
+<TT>AB.BAK</TT> by this example, what is <EM>incompatible</EM> to
+MS COMMAND v6.22 <FONT SIZE=-1>(maybe others, too)</FONT>, which
+embedds a space as second character making the file inaccessable,
+but what is exactly the same behaviour of the same MS COMMAND's <TT><A HREF="#copy">COPY</A></TT>
+command.
+<P><HR>
+<H2><A NAME="rename">RENAME - Rename files</A></H2>
+This command is 100% compatible to <A HREF="#ren">REN</A>, please see there
+<P><HR>
+<H2><A NAME="rmdir">RMDIR - Remove directory</A></H2>
+This command is 100% compatible to <A HREF="#rd">RD</A>, please see there
+<P><HR>
+<H2><A NAME="set">SET - Display or set environment variables</A></H2>
+Requirements: CMD_SET<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>SET</TT> <B>[{</B> <I>option</I> <B>}]</B><BR>
+
+<LI>
+ <TT>SET</TT> <B>[{</B> <I>option</I> <B>}]</B> <I>variable</I> <TT>'='</TT> &laquo;string&raquo;<BR>
+
+</OL>
+
+<P>
+
+
+The first variant <FONT SIZE=-1>(without any argument)</FONT> displays
+all the currently defined environment variables in the format
+<FONT SIZE=-1>(without any whitespaces before or after the equal sign)</FONT>:
+ <I>name</I> <TT>'='</TT> &laquo;value&raquo;<BR>
+
+
+<P>The second variant assigns a new value
+ &laquo;string&raquo; to the specified
+ <I>variable</I>. If the
+ <I>variable</I> already exists, the old value is overwritten without notice; otherwise
+it is newly created.
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+All options must preceed the assigment, if present.
+
+<P><UL>
+<LI><TT><B>/C</B></TT>: forces to keep the exact case of the letters
+of the variable name; by default all letters are uppercased to
+keep compatibly.
+<LI><TT><B>/I</B></TT>: has been temporarily included to the <TT><A HREF="#set">SET</A></TT> command to
+allow an easy way to display the current size of the environment segment,
+because it is one of the most frequently reported, but not reproduceable
+bug report. Once this option has been encountered, all the remaining command
+line is ignored.
+<LI><TT><B>/P</B></TT>: Prompts the user with the specified 
+ &laquo;string&raquo; and assigns the user's input to the 
+ <I>variable</I>. If no input is made, hence,
+one taps just <TT>ENTER</TT>, an empty value is assigned to the
+ <I>variable</I>, which is then removed from the environment.
+</UL>
+<P><HR>
+<H2><A NAME="shift">SHIFT - Shift the arguments of a batch script</A></H2>
+Requirements: CMD_SHIFT<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>SHIFT</TT><BR>
+
+<LI>
+ <TT>SHIFT</TT> <TT>DOWN</TT><BR>
+
+</OL>
+
+<P>
+
+Shifts the arguments of a batch script one position up (first
+variant) or down (second variant).
+
+<P>Within a batch script the automatic variables %0 through %9
+are replaced by the script name and the first nine arguments.
+This can be imagined as a window to ten arguments of the script.
+<TT><A HREF="#shift">SHIFT</A></TT> will allow to move this window of ten arguments towards its
+end (up) or its start (down).
+
+<P>After <TT><A HREF="#shift">SHIFT</A></TT> has been executed, the former %0 is hidden and inaccessable,
+%1 became %0, %2 became %1 a.s.o, %9 became %8 and the formerly hidden
+tenth argument became %9.
+<BR><TT><TT><A HREF="#shift">SHIFT</A></TT> DOWN</TT> reverses one <TT><A HREF="#shift">SHIFT</A></TT> command.
+
+<P><TT><A HREF="#shift">SHIFT</A></TT> can be called as many times as wanted, <TT><TT><A HREF="#shift">SHIFT</A></TT> DOWN</TT>
+won't allow to underflow the very first argument.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+If the batch script B.BAT:<BR>
+
+<TT> @<TT><A HREF="#echo">ECHO</A></TT> OFF</TT><BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 0: %0</TT><BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 1: %1</TT><BR>
+
+<TT> <TT><A HREF="#echo">ECHO</A></TT> 2: %2</TT><BR>
+had been executed using:<BR>
+
+<TT> B.BAT 1 2 3 4</TT><BR>
+it displays:
+<PRE>B.BAT
+1
+2</PRE>
+<BR>If a <TT><A HREF="#shift">SHIFT</A></TT> command had been inserted as second line, the
+same call displays:
+<PRE>1
+2
+3</PRE>
+<P><HR>
+<H2><A NAME="time">TIME - Display or set current time</A></H2>
+See also: <A HREF="#date">DATE</A><BR>
+Requirements: CMD_TIME<BR>
+
+<H3>Synopsis</H3>
+
+<OL>
+<LI>
+ <TT>TIME</TT> <B>[</B> <B>/T</B> <B>]</B><BR>
+
+<LI>
+ <TT>TIME</TT> <B>[</B> <B>/T</B> <B>]</B> <I>time</I><BR>
+
+</OL>
+
+Variant 1 displays the current time, then enters a loop prompting the
+user to enter a new time. The loops terminates when a valid time had
+entered or the user just pressed the <TT>ENTER</TT> key.
+
+<P>Variant 2 does not display the current time, but tries to change the
+current time to the specified <TT><I>time</I></TT>, on failure the loop as
+explained above is entered.
+
+<P>The individual portions of a time may be sperated by at least:
+dots <TT>.</TT>, colons <TT>:</TT> and forward slashes <TT>/</TT>. Other
+nationally used characters may be supported, too.
+If a certain number of portions are specified:
+<OL>
+<LI>error,
+<LI>hour:minute; seconds and hundreds default to zero,
+<LI>hour:minute:seconds; hundreds defaults to zero,
+<LI>hour:minute:seconds.hundreds;
+<LI>more than 4 portions result in an error.
+</OL>
+Separated by no, one or more whitespaces the am/pm modifiers may follow
+optionally. If present they alter the given time as follows:
+<UL>
+<LI>AM: if hour is equal to 12, it becomes 0 (midnight).
+<LI>PM: f hour is greater than 12, it is incremented by 12.
+</UL>
+
+
+<H3>Options</H3>
+
+
+All options must preceed any arguments.
+
+
+<P><TT><B>/T</B></TT>: prevents from prompting the user.
+<OL>
+<LI>In variant 1, the time is displayed only.
+<LI>In variant 2, the time is tried to be changed, but the loop is not
+entered on failure.
+</OL>
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#time">TIME</A></TT> /T</TT><BR>
+
+Just displays the current time.
+
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#time">TIME</A></TT> 18:2</TT><BR>
+
+Sets the current system time to 6:02 PM.
+<P><HR>
+<H2><A NAME="truename">TRUENAME - Display the true name of a file</A></H2>
+Requirements: CMD_TRUENAME<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>TRUENAME</TT> <I>path</I><BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="type">TYPE - Display the contents of files</A></H2>
+See also: <A HREF="#dir">DIR</A>, <A HREF="#echo">ECHO</A><BR>
+Requirements: CMD_TYPE<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>TYPE</TT> <B>{</B> <I>pattern</I> <B>}</B><BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="ver">VER - Display the version information about FreeCOM and DOS</A></H2>
+Requirements: CMD_VER<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>VER</TT> <B>[{</B> <I>option</I> <B>}]</B><BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="verify">VERIFY - Display or set verify level</A></H2>
+Requirements: CMD_VERIFY<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>VERIFY</TT> <B>[</B> <TT>ON</TT> | <TT>OFF</TT> <B>]</B><BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="vol">VOL - Display the volume label of a drive</A></H2>
+See also: <A HREF="#dir">DIR</A><BR>
+
+<H3>Synopsis</H3>
+
+ <TT>VOL</TT> <B>[</B> <I>drive</I> <B>]</B><BR>
+
+
+
+
+<H3>Options</H3>
+
+Unless stated otherwise all options of this command do follow the
+<A HREF="#_appendix_options">standard rules for options</A>.
+
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<P><HR>
+<H2><A NAME="which">WHICH - Search and display the executable file of specified commands</A></H2>
+Requirements: CMD_WHICH<BR>
+
+<H3>Synopsis</H3>
+
+ <TT>WHICH</TT> <B>[{</B> <I>command</I> <B>}]</B><BR>
+
+<P>Searches for the specified command(s) the same way as if it would
+be specified on command line as command itself. If an executable
+file is found, its path is displayed in this format:<BR>
+ <I>command</I> &laquo;tab&raquo; <I>path</I><BR>
+
+<BR>The 
+ &laquo;tab&raquo; stands for the tabulator character (ASCII 9).
+<BR>If the command is not found only the
+ <I>command</I> part, but neither a
+ <I>path</I> nor the
+ &laquo;tab&raquo; is displayed.
+<P>Internal commands, installable commands and aliases are not found.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> <TT><A HREF="#which">WHICH</A></TT> which</TT><BR>
+
+Returns a file or nothing, because <TT><A HREF="#which">WHICH</A></TT> is an internal command.
+
+
+<H4>Example: 2</H4>
+
+
+<TT> <TT><A HREF="#which">WHICH</A></TT> command</TT><BR>
+Could display for instance:
+<PRE>command	C:\COMMAND.COM</PRE>
+<P>Please note that <TT>command</TT> is the string "command"
+and no placeholder.
+<P><HR>
+<H2><A NAME="_appendix">Appendix</A></H2>
+<H3><A NAME="_appendix_currdir">Current Directory</A></H3>
+
+The current directory is the default directory of a drive.
+
+<P>DOS stores a default directory for each drive. When a path is
+specified with a drive specification only, such as <TT>D:</TT>,
+it is completed with this default directory of that drive to
+construct the <A HREF="#_appendix_abspath">absolute path</A> to be used.
+
+<H3><A NAME="_appendix_cwd">Current Working Direcory</A></H3>
+
+In opposite to the current directory the current <EM>working</EM>
+directory is the <A HREF="#_appendix_abspath">absolute path</A> constructed
+out of the <A HREF="#chgdrive">currently selected drive</A> and <A
+HREF="cd">current directory</A> of that drive.
+
+<H3><A NAME="_appendix_abspath">Path Specification</A></H3>
+
+In DOS an absolute path is constructed out of several components:
+<OL>
+<LI>drive,
+<LI>directory,
+<LI>filename, and
+<LI>file extension.
+</OL>
+like this: <TT>D:\DIR1\DIR2\FILENAME.EXT</TT>.
+
+<P>The drive is a single letter from <TT>A</TT> through <TT>Z</TT>
+followed by a colon <TT>:</TT>.
+
+<P>The remaining part of a path consists of similiar components
+delimited by a single backslash <TT>\</TT>. The last component
+is also called filename. Each of these components may be formed of
+a name, up to eight characters long, and an extension, up to
+three characters long. Both parts are delimited by a single dot
+<TT>.</TT>. Although the extension may be absent, the filename
+must have at least one character.
+<BR>Note: The term <EM>filename</EM> is not limited to <EM>files</EM>
+in the usual sense, but may apply to any name visible in a directory,
+such as subdirectories and volume labels, as well.
+
+<P>To ease the way to enter a path the user may specify a relative path,
+rather than an absolute one. In such path one or more components may
+be missing:
+
+<UL>
+<LI>If no drive is specified, what means that no colon is specified, the
+path is prefixed by the <A HREF="#chgdrive">currently selected
+drive</A>.
+
+<LI>If the directory is not prefixed by the backslash or no directory
+is specified at all, the <A HREF="#_appendix_currdir">current directory</A>
+of the drive is inserted right behind the colon.
+
+<LI>Some programs may append an absent extension to the very last
+filename component.
+
+</UL>
+
+<P>Examples, assume the current directories of
+<TABLE BORDER=1>
+<TR>
+	<TD><B>Drive</B></TD>
+	<TD><B>Current Directory</B></TD>
+</TR>
+<TR>
+	<TD>C:</TD>
+	<TD><TT>\FREEDOS\HELP</TT></TD>
+</TR>
+<TR>
+	<TD>D:</TD>
+	<TD><TT>\TEMP\TEXT</TT></TD>
+</TR>
+</TABLE>
+The currently selected drive is <TT>C:</TT>.
+
+<OL>
+<LI><TT>C:\</TT>
+<BR>The root directory of drive <TT>C:</TT>.
+
+<LI><TT>.</TT>
+<BR>The current working directory, ergo: <TT>C:\FREEDOS\HELP</TT>.
+
+<LI><TT>..</TT>
+<BR>The parent directory, ergo: <TT>C:\FREEDOS</TT>.
+
+<LI><TT>D:</TT>
+<BR>The current directory of drive <TT>D:</TT>, ergo: <TT>D:\TEMP</TT>.
+
+<LI><TT>D:.</TT>
+<BR>The current directory of drive <TT>D:</TT>, ergo: <TT>D:\TEMP</TT>.
+
+<LI><TT>D:..</TT>
+<BR>The parent directory of drive <TT>D:</TT>, ergo: <TT>D:\</TT>.
+
+<LI><TT>..\BIN</TT>
+<BR>Because there is neither a drive nor a leading backslash, both the
+currently selected drive and the current directory of that drive
+is inserted before the given path, ergo: <TT>C:\FREEDOS\HELP\..\BIN</TT>.
+<BR>The embedded component <TT>..</TT> has the same meaning as when
+specified alone: <EM>parent directory</EM>, though, here in the context
+of the directory <TT>C:\FREEDOS\HELP\</TT>. That means that the
+final absolute path is: <TT>C:\FREEDOS\BIN</TT>.
+
+</OL>
+
+<P>Path specifications that do not conform to above mentioned
+format lead to various different behaviour of the various programs,
+because there is no standard to scan, parse and interprete such
+patterns.
+Problems include:
+<UL>
+<LI>multiple backslashes,
+<LI>multiple dots,
+<LI>multiple colons, or a colon at a position unequal to two,
+<LI>The current directory <TT>.</TT> or parent directory <TT>..</TT>
+special directories in the context of a root directory, such as
+<TT>C:\.</TT>, <TT>C:\..</TT>, or <TT>C:\TEMP\..\..</TT>.
+</UL>
+
+<P>Note: The special directories <TT>.</TT> and <TT>..</TT> are no
+phantom directories or virtual entries, but standard entries of
+every directory except the root directories. These entries help
+crash recovery tools, such as <TT>CHKDSK</TT> or <TT>SCANDISK</TT>,
+to find errors within the directory structure and restore it to
+a valid file tree. Therefore a common assumption that a tripple dot
+<TT>...</TT> directory means <EM>parent-of-parent</EM> is incorrect,
+though, might be supported by certain programs.
+
+<H3><A NAME="_appendix_options">Standard Rules for Options</A></H3>
+
+Options are prefixed by one forward slash "<TT>/</TT>",
+the following character identifies the option and is called
+option character, for instance: <TT><B>/A</B></TT>
+
+<P>Some commands do accept long option names, where a complete word
+identifies the option rather than a single character, e.g. <TT><B>/MSG</B></TT>.
+
+<P>Some option may be used in conjunction with an argument. The argument
+is appended to the option with one colon "<TT>:</TT>" or
+one equal sign "<TT>=</TT>", for instance: <TT><B>/A:hr</B></TT>
+or <TT><B>/P=fdexec.bat</B></TT>.
+
+<P>Multiple options <EM>without</EM> argument maybe merged together
+as a single option with or without embedded slashes, e.g. <TT><B>/WS</B></TT>
+or <TT><B>/W/S</B></TT>, instead of <TT><B>/W /S</B></TT>.
+<BR>However, because some commands do accept long option names, the
+way with embedded slashes is more secure and is recommended therefore.
+<BR>An option with argument may be the last one of such merged options.
+
+<P>Options without arguments enable or disable certain features. Therefore,
+those options are sometimes called <EM>boolean</EM> options or flags.
+<BR>Boolean options may be optionally prefixed by a plus "<TT>+</TT>"
+or minus "<TT>-</TT>" sign. So, the boolean option <TT><B>O</B></TT>
+can be written in three ways:
+<OL>
+<LI><TT><B>/+O</B></TT>: The option is enabled.
+<LI><TT><B>/-O</B></TT>: The option is disabled.
+<LI><TT><B>/O</B></TT>: (<FONT SIZE=-1>neither plus nor minus sign</FONT>)
+The option is toggled or flipped; this means if the option is
+enabled currently, it is disabled; but if it is disabled currently,
+it is enabled.
+</OL>
+<BR>Without user invention a boolean option is disabled by default, so
+both <TT><B>/+O</B></TT> and <TT><B>/O</B></TT> behave the same most
+of the time. However, some commands allow the user to change the default
+settings of certain options, e.g. <TT><A HREF="#copy">COPY</A></TT> and
+<TT><A HREF="#dir">DIR</A></TT>.
+
+<H3><A NAME="_appendix_redirection">I/O Redirection</A></H3>
+
+In DOS the standard input and output can be redirected to a file or
+another device; however, although it is common to use these I/O streams
+today, some programmers cowardly ignore them for reasons of speed or
+program size.
+
+<P>If the <STRONG>input</STRONG> stream is redirected to a file or
+device, instead of polling the keyboard and request the user to
+interactively enter characters via the keyboard, those characters
+are read from the file or device. Usually these programs terminate
+when the file has been read wholely.
+
+<P>If the <STRONG>output</STRONG> stream is redirected to a file
+or device, instead of issuing the information onto screen,
+it is dumped into the file or device. Per convention each program
+has two output streams: one (called standard output)
+to issue normal information and one (called standard error output) for
+error messages the user should not miss.
+
+<P>Redirections are specified on command line and effect exactly that
+command invoked herein, regardless if the command is an external or
+internal one, an alias or batch script. The utter exception is the <TT><A HREF="#for">FOR</A></TT>
+command, which requires that the redirection is to apply to the command
+specified behind the DO keyword rather than <TT><A HREF="#for">FOR</A></TT> itself.
+<BR>If more than one redirection is specified on the command line and
+they effect the same stream (input, output, or error), the rightmost one
+superceed any previous one.
+
+<P>Redirections are syntactically specified like this:
+<BR>
+ <I>operator</I> <I>target</I><BR>
+
+ <I>operator</I> <B>::=</B> <TT>'&lt;'</TT> | <TT>'&gt;'</TT> <B>[</B> <TT>'&gt;'</TT> <B>]</B> <B>[</B> <TT>'&amp;'</TT> <B>[</B> <TT>'&gt;'</TT> <B>]</B> <B>]</B><BR>
+
+ <I>target</I> <B>::=</B> <I>file</I> | <I>device</I><BR>
+
+
+<BR>Although it is not relevant where the redirections are placed on the
+command line, it is common praxis to place them at the end of it.
+<P>The <TT><I>operators</I></TT> have the following meaning:
+<TABLE BORDER=1>
+<TR>	<TH>Operator</TH>
+		<TH>Redirection</TH>
+</TR>
+<TR>	<TD><TT>&lt;</TT></TD>
+		<TD>Input stream</TD>
+</TR>
+<TR>	<TD><TT>&gt;</TT></TD>
+		<TD>Output stream; target file is overwritten</TD>
+</TR>
+<TR>	<TD><TT>&gt;&gt;</TT></TD>
+		<TD>Output stream; output is appended to target, if it already exists</TD>
+</TR>
+<TR>	<TD><TT>&gt;&amp;</TT></TD>
+		<TD>Output and error stream; target file is overwritten</TD>
+</TR>
+<TR>	<TD><TT>&gt;&gt;&amp;</TT></TD>
+		<TD>Output and error stream; output is appended to target, if it already exists</TD>
+</TR>
+<TR>	<TD><TT>&gt;&amp;&gt;</TT></TD>
+		<TD>Error stream; target file is overwritten</TD>
+</TR>
+<TR>	<TD><TT>&gt;&gt;&amp;&gt;</TT></TD>
+		<TD>Error stream; output is appended to target, if it already exists</TD>
+</TR>
+</TABLE>
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> cmd &lt;in1 &lt;in2</TT><BR>
+<BR>Input stream is redirected to file <TT>IN2</TT>, because it is the rightmost
+one.
+
+
+<H4>Example: 2</H4>
+
+
+<TT> cmd &lt;in &gt;&amp;out</TT><BR>
+<BR>Input stream is redirected to file <TT>IN</TT>, output and error streams are
+joined together and redireced into file <TT>OUT</TT>.
+If the file <TT>OUT</TT> already exists, the old contents is discarded and
+replaced by the new one; otherwise, the <TT>OUT</TT> is created anew.
+
+
+<H4>Example: 3</H4>
+
+
+<TT> cmd &lt;in &gt;&gt;&amp;out</TT><BR>
+<BR>As example 2, but instead of replacing the contents of <TT>OUT</TT>, if the
+file already exists, the new information is appended to the end of the file.
+
+
+<H4>Example: 4</H4>
+
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %a IN (*.*) DO <TT><A HREF="#echo">ECHO</A></TT> %a &gt;out</TT><BR>
+<BR>As mentioned earlier, <TT><A HREF="#for">FOR</A></TT> is an exception and passes forth the redirections
+to each invocation of the command specified right of the DO keyword. So this
+examples overwrites the output file each time the <TT><A HREF="#echo">ECHO</A></TT> command is performed,
+thus, instead of creating a file list, only the last found file is recorded into
+<TT>OUT</TT>.
+
+
+<H4>Example: 5</H4>
+
+
+<TT> <TT><A HREF="#if">IF</A></TT> EXIST out <TT><A HREF="#del">DEL</A></TT> out</TT><BR>
+
+<TT> <TT><A HREF="#for">FOR</A></TT> %a IN (*.*) DO <TT><A HREF="#echo">ECHO</A></TT> %a &gt;&gt;out</TT><BR>
+<BR>This sequence eliminate the problem, the <TT><A HREF="#if">IF</A></TT> command is required to
+actually replace the file rather than appending the file list to the
+probably existent file.
+
+<H4>Pipes</H4>
+
+<P>Another form of redirection is <STRONG>piping</STRONG>. Hereby, the output stream
+of one command is connected to the input stream of another command. Pipes can combine
+any number of commands this way. Because DOS is no multitasking system, pipes are
+simulated by spawning the first command with an output redirection capturing the
+issued information into a temporary file and then the second command with an input
+redirection from that very same temporary file, on completation of the second
+command the temporary file is deleted.
+
+
+<H3>Examples</H3>
+
+
+<H4>Example: 1</H4>
+
+
+<TT> cmd1 | cmd2 | cmd3</TT><BR>
+
+<BR>Which is similiar to this sequence:
+<BR>
+
+<TT> cmd1 &gt;%TEMP%\t1</TT><BR>
+
+<TT> cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2</TT><BR>
+
+<TT> <TT><A HREF="#del">DEL</A></TT> %TEMP%\t1</TT><BR>
+
+<TT> cmd3 &lt;%TEMP%\t2</TT><BR>
+
+<TT> <TT><A HREF="#del">DEL</A></TT> %TEMP%\t2</TT><BR>
+
+
+<H4>Example: 2</H4>
+
+
+The first and last command can have an input or output redirection
+respectively, like so:
+
+<BR>
+
+<TT> cmd1 | cmd2 | cmd3 &lt;in &gt;out</TT><BR>
+
+
+<BR>Which is similiar to this sequence:
+<BR>
+
+<TT> cmd1 &gt;%TEMP%\t1 &lt;in</TT><BR>
+
+<TT> cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2</TT><BR>
+
+<TT> <TT><A HREF="#del">DEL</A></TT> %TEMP%\t1</TT><BR>
+
+<TT> cmd3 &lt;%TEMP%\t2 &gt;out</TT><BR>
+
+<TT> <TT><A HREF="#del">DEL</A></TT> %TEMP%\t2</TT><BR>
+
+
+<H4>Example: 3</H4>
+
+
+The error stream can be piped as well:
+
+<BR>
+
+<TT> cmd1 |&amp; cmd2 | cmd3</TT><BR>
+
+<BR>Which is similiar to this sequence:
+<BR>
+
+<TT> cmd1 &gt;&amp;%TEMP%\t1</TT><BR>
+
+<TT> cmd2 &lt;%TEMP%\t1 &gt;%TEMP%\t2</TT><BR>
+
+<TT> <TT><A HREF="#del">DEL</A></TT> %TEMP%\t1</TT><BR>
+
+<TT> cmd3 &lt;%TEMP%\t2</TT><BR>
+
+<TT> <TT><A HREF="#del">DEL</A></TT> %TEMP%\t2</TT><BR>
+
+<BR>Here only the error messages of <TT>cmd1</TT> are passed
+into <TT>cmd2</TT>; the error messages of both <TT>cmd2</TT>
+and <TT>cmd3</TT> are issued to the screen.
+
+<H4>Nested redirections</H4>
+
+Batch scripts or when external programs invoke other programs or another shell,
+redirections may be nested, e.g.:
+
+<P>Consider the batch file <TT>BATCH.BAT</TT>:
+<PRE>
+@<TT><A HREF="#echo">ECHO</A></TT> OFF
+<TT><A HREF="#echo">ECHO</A></TT> 1
+<TT><A HREF="#echo">ECHO</A></TT> 2 &gt;out_2
+<TT><A HREF="#echo">ECHO</A></TT> 3
+</PRE>
+which is invoked via:
+<BR>
+
+<TT> BATCH &gt;out_1</TT><BR>
+
+<BR>When the script <TT>BATCH</TT> gets executed, the actual output stream
+is redirected to the file <TT>OUT_1</TT>. Therefore the output of the first
+<TT><A HREF="#echo">ECHO</A></TT> command is redirected into this file.
+<BR>Because the second <TT><A HREF="#echo">ECHO</A></TT> command has its own output redirection, its
+output is redirected into the file <TT>OUT_2</TT>. On completion of <TT><A HREF="#echo">ECHO</A></TT>
+the redirection is closed and the former one is restored.
+<BR>What causes that the output of the third <TT><A HREF="#echo">ECHO</A></TT> command is redirected
+into <TT>OUT_1</TT> again.
+
+
+<H3><A NAME="_appendix_hicmd">Hidden Internal Commands</A></H3>
+
+There are some special internal commands, that are not directly visible
+nor accessable. They are hidden because of two main purposes:
+<OL>
+<LI>Many of them are of internal nature and should not used by the user.
+<LI>They are extensions to the normal batch language and may, therefore,
+clash with a particular installation. To prevent this clash those
+commands are hidden by default and can be made directly accessable
+via the ICMD command.
+</OL>
+
+<P>Hidden internal commands can be access by prefixing the command
+with <TT>::=</TT>. This token usually specifies a label within the
+batch language, given the nature of the labels, they may be comments
+as well. Due to the latter variant, most non-FreeCOM shells won't see
+the <TT>::=</TT>, hence, ignore those commands.
+
+<P>For example:
+
+<TT> C&gt; ::=<TT><A HREF="#cancel">CANCEL</A></TT> 30</TT><BR>
+<BR>cancels (terminates) all currently active batch files and assigns
+<TT><I>30</I></TT> to the current errorlevel.
+</BODY>

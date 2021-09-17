@@ -123,23 +123,37 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 #	define buf dosCMDTAIL
 #	define memcpy _fmemcpy
 #else
-  unsigned char buf[128];
+  unsigned char buf[MAX_EXTERNAL_COMMAND_SIZE+2]; /* 128 bytes is max size in PSP, 2 bytes for size and terminator */
 #endif
   struct fcb fcb1,
     fcb2;
   struct ExecBlock execBlock;
   int retval;
+  int cmdLen;
 
 
   assert(cmd);
   assert(cmdLine);
-  assert(strlen(cmdLine) <= 125);
 
   invalidateNLSbuf();
 
   /* generate Pascal string from the command line */
-  memcpy(&buf[1], cmdLine, buf[0] = strlen(cmdLine));
-  memcpy(&buf[1] + buf[0], "\xd", 2);
+  /* we assume passed in c string (ASCIIZ) */
+  cmdLen = strlen(cmdLine);
+  if (cmdLen > MAX_EXTERNAL_COMMAND_SIZE) {
+	/* we assume CMDLINE environment variable already set with full cmdLine */
+	/* so we simply truncate passed command line to max size, terminated by \r, no \0 for callee */
+    /* for maximum compatibility set size to 127 (0x7f) */
+    buf[0] = (unsigned char)(MAX_EXTERNAL_COMMAND_SIZE+1);
+    memcpy(&buf[1], cmdLine, MAX_EXTERNAL_COMMAND_SIZE);
+	/* terminate with just carriage return \r */
+	memcpy(&buf[1] + buf[0], "\xd", 1);
+  } else {
+    /* set size of actual command line and copy to buffer */
+    memcpy(&buf[1], cmdLine, buf[0] = strlen(cmdLine));
+	/* ensure terminated with \r\0 */
+	memcpy(&buf[1] + buf[0], "\xd", 2);
+  }
 
   /* fill FCBs */
   if ((cmdLine = parsfnm(cmdLine, &fcb1, 1)) != 0)

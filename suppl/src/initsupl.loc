@@ -29,9 +29,11 @@
 	/* Identify to compile a SUPPL file */
 #define _SUPPL_
 
+#if 0
 	/* Add the RCS ID into the files */
 #ifndef NDEBUG
 #define RCS_Version
+#endif
 #endif
 
 

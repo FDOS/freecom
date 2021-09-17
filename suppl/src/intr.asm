@@ -25,6 +25,8 @@
 ; 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 ;
 
+%include "model.inc"
+
 %ifidn __OUTPUT_FORMAT__, elf 	; only for ia16-elf-gcc compilations
 %define COMPILE 1
 
@@ -113,6 +115,6 @@ intr_1:
 		pop	cx
 		pop	bx
 		pop	bp
-		ret
+		ret					; retf/retn model specific, see model.inc
 %endif
 %endif

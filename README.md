@@ -1,16 +1,25 @@
+# FreeCom - The DOS Command Line Interface #
+********************************************
+
 Source code distribution of FreeCOM - a Command line interface
 program, which substitutes COMMAND.COM
-
-The sources are hosted on:
-https://github.com/FDOS/freecom
 
 <!-- Upstream Master -->
 <!-- [![Build](https://github.com/FDOS/freecom/workflows/Build/badge.svg)](https://github.com/FDOS/freecom/actions) -->
 <!-- Local Branch -->
 [![Build](../../workflows/Build/badge.svg)](../../actions)
 
-#### More information
-[Changes since last official release](CHANGED)
+## About ##
+This software is part of the FreeDOS project. 
+Please visit the freedos web page at http://www.freedos.org/ for more information about FreeDOS.
+
+FreeCOM implements the command processor for the DOS kernel.  It is usually the first program started by the kernel and provides a command line interface to interactively run other DOS programs.
+
+Additionally, FreeCOM implements a BATCH file processor allowing scripting of commands as well.  See http://help.fdos.org/en/hhstndrd/batch/index.htm for more help with batch commands.
+
+
+## More information ##
+[Changes since last official release](https://github.com/FDOS/freecom/commits/master)
 
 [How to compile FreeCOM](docs/compile.txt)
 

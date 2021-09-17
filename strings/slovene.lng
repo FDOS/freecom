@@ -469,7 +469,7 @@ Spremenjena bo na %u bajtov.
 Failed to add status information into context. This error may indicate
 memory corruption or an incorrectly determined minimum size of
 the context. Please inform the maintainer of FreeCOM at:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -824,7 +824,7 @@ Ta program je razpečavan v upanju, da bo komu uporaben, toda BREZ
 KAKRŠNEGAKOLI JAMSTVA; celó brez jamstva PRODAJNOSTI ali PRIMERNOSTI ZA
 KATERIKOLI NAMEN. Za več podrobnosti glejte Splošno dovoljenje GNU (GNU GPL).
 
-Poročajte o hroščih na freedos-freecom@lists.sourceforge.net.
+Poročajte o hroščih na freedos-devel@lists.sourceforge.net.
 Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
 .
 
@@ -836,7 +836,7 @@ pogoji, navedenimi v Splošnem dovoljenju GNU (GNU GPL), ki ga je izdala
 organizacija Free Software Corporation; slediti morate pogojem verzije 2
 ali novejše.
 
-Poročajte o hroščih na  freedos-freecom@lists.sourceforge.net.
+Poročajte o hroščih na  freedos-devel@lists.sourceforge.net.
 Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
 .
 
@@ -844,9 +844,7 @@ Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
 FreeCOM, FreeDOSovo ukazno lupino, razvija veliko ljudi; glejte priloženo
 datoteko HISTORY.TXT.
 
-FreeCOM trenutno vzdržuje Steffen Kaiser: freecom@freedos.org.
-
-Poročajte o hroščih na freedos-freecom@lists.sourceforge.net.
+Poročajte o hroščih na freedos-devel@lists.sourceforge.net.
 Posodobitve so na voljo na http://freedos.sourceforge.net/freecom
 .
 
@@ -1166,18 +1164,18 @@ EXIT
 :TEXT_CMDHELP_FOR
 Izvede določen ukaz za vsako datoteko v množici datotek.
 
-FOR %spremenljivka IN (množica) DO ukaz [parametri]
+FOR %%spremenljivka IN (množica) DO ukaz [parametri]
 
-  %spremenljivka  Določi ime spremenljivke.
+  %%spremenljivka  Določi ime spremenljivke.
   (množica)       Določi množico ene ali več datotek. Uporabite lahko
                   nadomestne znake.
   ukaz            Določi ukaz, ki naj bo izveden za vsako datoteko.
   parametri       Določi parametre za naveden ukaz.
 
-V ukazni datoteki vnesite %%spremenljivka namesto %spremenljivka.
+V ukazni datoteki vnesite %%%%spremenljivka namesto %%spremenljivka.
 
 Primer:
-  FOR %f IN (---začetek--- a*.* ---konec---) DO ECHO - %f -
+  FOR %%f IN (---začetek--- a*.* ---konec---) DO ECHO - %%f -
 .
 
 :TEXT_CMDHELP_GOTO

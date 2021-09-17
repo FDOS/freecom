@@ -105,7 +105,7 @@ void freep(char **p);
 /* int isoption(char *str)  Return: 0: if str is no option */
 int optScanString_(const char * const optstr, int bool, const char *arg, char **value);
 int optScanBool_(const char * const optstr, int bool, const char *arg, int *value, int flip);
-int optScanInteger_(const char * const optstr, int bool, const char *arg, int *value);
+int optScanInteger_(const char * const optstr, int bool, const char *arg, unsigned int *value);
 #define optHasArg()	(strarg != 0)
 
 #define optScanString(var)    \

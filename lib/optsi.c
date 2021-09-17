@@ -47,8 +47,8 @@
 #include "../err_fcts.h"
 
 int optScanInteger_ (const char *const optstr, int bool_v,
-                     const char * arg, int * value) {
-  int v;
+                     const char * arg, unsigned int * value) {
+  unsigned int v;
 
   (void)bool_v;
   assert(optstr);

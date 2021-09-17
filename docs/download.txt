@@ -1,21 +1,21 @@
 You can download pre-compiled variants of FreeCOM from:
 
-http://freedos.sourceforge.net/freecom/packages/
+https://github.com/FDOS/freecom
 
-other download locations are explained at:
+For each language supported, a zip archive is provided with the following versions:
 
-binary.zip: the latest FreeCOM, binaries only
+  xmsswap: the latest FreeCOM with XMS-Only swap support
 
-xmsswap.zip: the latest FreeCOM with XMS-Only swap support, binaries only
+  kswap: the latest FreeCOM with kswap support
 
-plainedt.zip: the latest FreeCOM without the command line editing
-	enhancements (history, file complation)
+  plainedt: the latest FreeCOM without the command line editing
+            enhancements (history, file complation)
 
-debug.zip: the latest FreeCOM with debug information enabled
+  debug: the latest FreeCOM with debug information enabled
 
-localize.zip: Developer package for localizer (to create new or
-	maintaing existing *.LNG files), includes latest FreeCOM
 
-suppl.zip: the SUPPL library pre-compiled for TC++ v1.01
-	its source code is avilable from:
-	http://www2.inf.fh-rhein-sieg.de/~skaise2a/ska/sources.html#suppl
+And a developer package for localizer (to create new or maintaining existing *.LNG files),
+which includes latest FreeCOM (xmsswap with enhancements) and precompiled strings (*.dat)
+for each language along with the source (*.lng) language files and fixstrings.exe used to
+generate new strings.dat file.  See included documentation for further details.
+

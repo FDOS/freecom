@@ -3,7 +3,7 @@ DIRSEP = \ #a backslash
 RMFILES = ..\scripts\rmfiles
 RMFILES2 = ..\..\scripts\rmfiles
 ECHOTO0 = echoto
-ECHOTO = ..\scripts\echoto
+ECHOTO = $(TOP)\scripts\echoto
 CP = copy
 CLO =
 
@@ -22,8 +22,11 @@ DEBUG=-UDEBUG -DNDEBUG
 !endif
 SHELL_MMODEL_COMP=$(SHELL_MMODEL)
 
+## Memory model of fixstrs, requires far data pointers, so uses compact memory model by default
+FIXSTRS_MMODEL=-mc
+
 ## Add -DDEBUG=1 below to enable debug support for assembly files
-NASMFLAGS =
+NASMFLAGS = -I$(TOP)/include
 
 !include "$(TOP)/mkfiles/$(COMPILER).mak"
 
@@ -63,7 +66,7 @@ __DBCS = -DDBCS -DJAPANESE
 ##
 ## (*) Note: Should be detected by CONFIG.H automatically for Turbo C
 ##     and Borland C compilers.
-$(CFG): $(CFG_DEPENDENCIES) ../config.mak
+$(CFG): $(CFG_DEPENDENCIES) $(TOP)/config.mak
 	$(RMFILES) $(CFG)
 	$(ECHOTO) $(CFG) $(CFLAGS1)
 	$(ECHOTO) $(CFG) $(INCLUDEPATH)

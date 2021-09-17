@@ -471,7 +471,7 @@ Das Einfügen von Statusinformationen in den Kontext ist
 fehlgeschlagen. Dieser Fehler kann auf Speicherfehler oder
 eine falsch bestimmte Minimalgröße des Kontexts hindeuten.
 Bitte benachrichtigen Sie die Verantwortlichen von FreeCOM:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -796,7 +796,7 @@ Gewähr der MARKTGÄNGIGKEIT oder TAUGLICHKEIT FÜR EINEN
 BESTIMMTEN ZWECK.  Bitte lesen Sie die GNU General Public License
 für nähere Informationen hierzu.
 
-Bitte senden Sie Fehlerberichte an freedos-freecom@lists.sourceforge.net.
+Bitte senden Sie Fehlerberichte an freedos-devel@lists.sourceforge.net.
 Updates sind unter http://freedos.sourceforge.net/freecom erhältlich.
 .
 
@@ -809,7 +809,7 @@ Free Software Foundation veröffentlicht, weitergeben und/oder
 modifizieren, entweder gemäß Version 2 der Lizenz oder (nach
 Ihrer Option) jeder späteren Version.
 
-Bitte senden Sie Fehlerberichte an freedos-freecom@lists.sourceforge.net.
+Bitte senden Sie Fehlerberichte an freedos-devel@lists.sourceforge.net.
 Updates sind unter http://freedos.sourceforge.net/freecom erhältlich.
 .
 
@@ -819,9 +819,7 @@ Die FreeDOS Command Shell wurde von vielen Entwicklern entwickelt,
 für nähere Informationen greifen Sie bitte auf die Datei
 HISTORY.TXT zurück.
 
-Momentan instandgehalten von Steffen Kaiser (freecom@freedos.org)
-
-Bitte senden Sie Fehlerberichte an freedos-freecom@lists.sourceforge.net.
+Bitte senden Sie Fehlerberichte an freedos-devel@lists.sourceforge.net.
 Updates sind unter http://freedos.sourceforge.net/freecom erhältlich.
 .
 
@@ -1176,17 +1174,17 @@ EXIT
 :TEXT_CMDHELP_FOR
 Führt einen spezifizierten Befehl für jede Datei eines Dateisatzes aus.
 
-FOR %Variable IN (Dateisatz) DO Befehl [Befehlsparameter]
+FOR %%Variable IN (Dateisatz) DO Befehl [Befehlsparameter]
 
-  %Variable    Spezifiziert einen ersetzbaren Parameter.
+  %%Variable    Spezifiziert einen ersetzbaren Parameter.
   (Dateisatz)  Spezifiziert einen Satz aus einer oder mehreren Dateien.
                Wildcards können benutzt werden.
   Befehl       Spezifiziert einen auf jede Datei anzuwendenden Befehl.
   Befehlsparameter
                Spezifiziert Parameter oder Switches für den angegebenen Befehl.
 
-Um den FOR-Befehl in einem Stapelprogramm zu benutzen, geben Sie %%Variable
-anstelle von %Variable an.
+Um den FOR-Befehl in einem Stapelprogramm zu benutzen, geben Sie %%%%Variable
+anstelle von %%Variable an.
 .
 
 :TEXT_CMDHELP_GOTO

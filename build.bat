@@ -26,34 +26,41 @@ if "%1"=="-?" goto help
 set XMS_SWAP=1
 :loop_commandline
 if "%1"=="no-xms-swap" goto special
+if "%1"=="xms-swap" goto special
+if "%1"=="xmsswap"  goto special
 if "%1"=="debug"    goto special
+if "%1"=="plainedt" goto plainedt
 if "%1"=="watcom"   goto special
 if "%1"=="wc"       goto special
 if "%1"=="tc"       goto special
 if "%1"=="tcpp"     goto special
 if "%1"=="bc"       goto special
+if "%1"=="upx"      goto special
 if "%1"=="nec98"      goto special
 if "%1"=="ibmpc"      goto special
 if "%1"=="generic"    goto special
 if "%1"=="dbcs"       goto special
-if "%1"=="no-enh"     goto special
-if "%1"=="upx"        goto special
+rem if "%1"=="no-enh"     goto special
+if "%1"=="no-enh"     goto plainedt
 goto run
 
 :special
 if "%1"=="no-xms-swap" set XMS_SWAP=
+if "%1"=="xms-swap" set XMS_SWAP=1
+if "%1"=="xmsswap"  set XMS_SWAP=1
 if "%1"=="debug"    set DEBUG=1
 if "%1"=="watcom"   set COMPILER=WATCOM
 if "%1"=="wc"       set COMPILER=WATCOM
 if "%1"=="tc"       set COMPILER=TC2
 if "%1"=="tcpp"     set COMPILER=TURBOCPP
 if "%1"=="bc"       set COMPILER=BC5
+if "%1"=="upx"      set WITH_UPX=1
 if "%1"=="nec98"    set NEC98=1
 if "%1"=="ibmpc"    set IBMPC=1
 if "%1"=="generic"  set GENDOS=1
 if "%1"=="dbcs"     set DBCS=1
 if "%1"=="no-enh"   set NO_ENH_INP=1
-if "%1"=="upx"      set WITH_UPX=1
+if "%1"=="plainedt" set NO_ENH_INP=1
 shift
 if not "%1" == "" goto loop_commandline
 
@@ -66,16 +73,28 @@ echo -r: Rebuild -- Clean before proceed
 echo clean: Remove *.OBJ, *.COM, *.LIB, etc. files, then exit
 echo no-xms-swap: Build FreeCOM without XMS-Only Swap support
 echo debug: Build FreeCOM with debug settings.
+echo plainedt: Build FreeCOM without enhanced line editing/history
 echo generic: Build DOS generic version of FreeCOM.
 echo ibmpc: Build FreeCOM for IBM PC series.
 echo nec98: Build FreeCOM for NEC PC-9801 series.
 echo dbcs: Build FreeCOM with double-byted characters support.
-echo no-enh: Disable enhanced line input (history and filename completion).
+rem echo no-enh: Disable enhanced line input (history and filename completion).
+echo no-enh: same as plainedt
 echo You can select for which language to built FreeCOM by setting
 echo the environment variable LNG before running this script, e.g.:
 echo SET LNG=german
 echo selects the German language. For available language see STRINGS\*.LNG
 goto ende
+
+:plainedt
+goto special
+if exist config.$$$ del config.$$$
+ren config.h config.$$$
+echo #define IGNORE_ENHANCED_INPUT >config.h
+type config.$$$ >>config.h
+shift
+if not "%1" == "" goto loop_commandline
+::goto run
 
 :run
 if not "%GENDOS%" == "1" goto run2
@@ -164,7 +183,11 @@ if errorlevel 1 goto ende
 cd ..
 
 utils\mkinfres.exe /tinfo.txt infores shell\command.map shell\command.exe
-copy /b shell\command.exe + infores + criter\criter1 + criter\criter + strings\strings.dat command.com
+:: save version without lang specific files and version with strings embedded
+if NOT "%XMS_SWAP%"=="" SET CMD_NAME=strings\xmsswap.cln
+if "%XMS_SWAP%"=="" SET CMD_NAME=strings\command.cln
+copy /b shell\command.exe + infores + criter\criter1 + criter\criter %CMD_NAME%
+copy /b %CMD_NAME% + strings\strings.dat command.com
 if not exist command.com goto ende
 
 echo.
@@ -182,6 +205,7 @@ echo.
 echo Patching heap size to 6KB
 echo.
 tools\ptchsize.exe command.com +6KB
+tools\ptchsize.exe %CMD_NAME% +6KB
 
 if %WITH_UPX%x == x goto alldone
 if exist command.upx del command.upx >nul
@@ -221,11 +245,13 @@ set TP1_BASE=
 set BC5_BASE=
 set XNASM=
 set LNG=
+set WITH_UPX=
+set CMD_NAME=
 set GENDOS=
 set FMR=
 set IBMPC=
 set NEC98=
 set DBCS=
 set NO_ENH_INP=
-set WITH_UPX=
-
+if exist config.$$$ del config.h
+if exist config.$$$ ren config.$$$ config.h

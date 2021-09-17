@@ -1,8 +1,8 @@
 CFG_DEPENDENCIES = strings.mak
-MMODEL = -mc
 
 TOP=..
 !include "$(TOP)/config.mak"
+MMODEL = $(FIXSTRS_MMODEL)
 
 all : strings.h strings.err
 

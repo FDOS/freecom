@@ -303,6 +303,9 @@ int do_printf(FILE *f, const char * fmt, va_list arg)
 
         continue;
 
+      case '%':
+        handle_char(c, f);
+        break;
       default:
         handle_char('?', f);
 

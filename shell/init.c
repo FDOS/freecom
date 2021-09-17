@@ -82,8 +82,9 @@ void exitfct(void)
 }
 
 
-static int showhelp = 0, internalBufLen = 0, inputBufLen = 0,
-           spawnAndExit = E_None, newEnvSize = 0, skipAUTOEXEC = 0;
+static unsigned int showhelp = 0, internalBufLen = 0, inputBufLen = 0,
+           spawnAndExit = E_None, newEnvSize = 0;
+static int skipAUTOEXEC = 0;
 /* static int newEnvSize = 0;          Min environment table size */
 static char *user_autoexec = 0;
 
@@ -170,7 +171,7 @@ int initialize(void)
   int ec;           /* error code */
   unsigned offs;        /* offset into environment segment */
 
-  int cmdlen;         /* length of command line */
+  unsigned cmdlen;      /* length of command line */
   char *cmdline;        /* command line duplicated into heap */
   char *p, *h, *q;
 #ifdef FEATURE_CALL_LOGGING
@@ -293,13 +294,40 @@ int initialize(void)
     3) MKS command line @ENV:2, if peekb(ENV, 0) == '~'
     	&& peekb(ENV, 1) == '='
 
-    Currently implemented is version #1 only
+    Currently implemented is version #1 and #2
   */
-  cmdlen = peekb(_psp, 0x80);
-  if(cmdlen < 0 || cmdlen > 126) {
-    error_corrupt_command_line();
+  /* get size of command line, if <= 126 then assume actual size
+     >126 treat as flag indicating to use CMDLINE env variable */
+  cmdlen = (unsigned)peekb(_psp, 0x80);
+  /* #2 extended command line in CMDLINE env var */
+  //printf("Command line is %u chars long\n", cmdlen);
+  if (cmdlen > MAX_EXTERNAL_COMMAND_SIZE) {
     cmdlen = 0;
+	cmdline = 0;
+	/* see if CMDLINE env var exists, if so use it, should be \0 terminated
+	   we need to see if it exists, copy to local address space skipping past command.com */
+	if (!(env_matchVar(0, LONG_CMDLINE_ENV_NAME) & 7)) { /* found? ==0 */
+	    word segm;
+		int ofs;
+		segm = env_dfltSeg? env_dfltSeg : env_glbSeg; /* get env segment */
+		if (segm) { 
+		    if ((ofs = env_findVar(segm, LONG_CMDLINE_ENV_NAME)) >= 0) { /* get offset to CMDLINE env var if exists */
+	            char far *p = MK_FP(segm, ofs + strlen(LONG_CMDLINE_ENV_NAME) + 1); /* skip past CMDLINE= */
+    	        while (*p && !isargdelim(*p)) { p++; } /* skip past argv[0] ~= COMMAND.COM */
+		        if (0 == (cmdline = _fdupstr(p))) { /* copy into local address space just cmd tail */
+                   error_out_of_memory();
+                   return E_NoMem;
+		        }			
+		        cmdlen = strlen(cmdline);
+		    }
+		}
+	}
+    if (cmdline == 0) {
+		/* either no free memory or no CMDLINE env var found */
+        error_corrupt_command_line();
+	}
   }
+  if (cmdlen <= MAX_EXTERNAL_COMMAND_SIZE) {
     /* duplicate the command line into the local address space */
   if((cmdline = malloc(cmdlen + 1)) == 0) {
     error_out_of_memory();  /* Cannot recover from this problem */
@@ -307,6 +335,8 @@ int initialize(void)
   }
   _fmemcpy((char far*)cmdline, MK_FP(_psp, 0x81), cmdlen);
   cmdline[cmdlen] = '\0';
+  }
+  //printf("CMDLINE:[%s]\n", cmdline);
 #ifdef FEATURE_CALL_LOGGING
 #ifndef INCLUDE_CMD_FDDEBUG
   if((f = fopen(logFilename, "at")) == 0) {
@@ -453,7 +483,7 @@ int initialize(void)
   env_resizeCtrl |= ENV_USEUMB | ENV_ALLOWMOVE | ENV_LASTFIT;
   if(forceLow)
 	  env_resizeCtrl &= ~ENV_USEUMB;
-  if(newEnvSize > 16 && newEnvSize < 32767)
+  if(newEnvSize > 16 && newEnvSize < 32769u)
     env_setsize(0, newEnvSize);
 #ifdef ENVIRONMENT_KEEP_FREE 
 #if ENVIRONMENT_KEEP_FREE > 0

@@ -1,1 +1,1 @@
-FreeCom version 0.84-pre7 - WATCOMC - XMS_Swap [Dec 30 2019 15:00:00]
+FreeCom version 0.85a - WATCOMC [July 10 2021]

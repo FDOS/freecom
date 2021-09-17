@@ -97,7 +97,7 @@ unsigned char __supportlfns = 1;
 	left unchanged.
 */
 static void **stack_bottom, **stack_unused;
-void stack_check_init()
+void stack_check_init(void)
 {
   void *current_stack_location;
   volatile void * volatile *barrier;
@@ -107,7 +107,7 @@ void stack_check_init()
   stack_bottom = &current_stack_location - (4*1024 - 50) / sizeof(void *);
   stack_unused = &current_stack_location;
 
-  for (barrier = stack_bottom; (void **)barrier < stack_unused ; barrier++)
+  for (barrier = (volatile void * volatile *)stack_bottom; (void **)barrier < stack_unused ; barrier++)
     *barrier = barrier;
 }
 int stack_check(const char *commandline)
@@ -220,10 +220,9 @@ void execute(char *first, char *rest, int lh_lf)
 
 	if(strlen(rest) > MAX_EXTERNAL_COMMAND_SIZE) {
         char *fullcommandline = malloc( strlen( first ) + strlen( rest ) + 2 );
-        error_line_too_long();
         if( fullcommandline == NULL ) return;
         sprintf( fullcommandline, "%s%s", first, rest );
-        if( chgEnv( "CMDLINE", fullcommandline ) != 0 ) {
+        if( chgEnv( LONG_CMDLINE_ENV_NAME, fullcommandline ) != 0 ) {
             free( fullcommandline );
             return;
         }
@@ -278,8 +277,11 @@ void execute(char *first, char *rest, int lh_lf)
 	env_nullStrings(0);
 
     setErrorLevel(result);
-  } else
+  } else { /* not bat, exe, or com file */
     error_bad_command(first);
+  }
+
+  /* clear CMDLINE once return from program execution so not still in environment */
   chgEnv( "CMDLINE", NULL );
 }
 
@@ -428,8 +430,11 @@ static void docommand(char *line)
         if(memcmp(ltrimcl(rest), "/?", 2) == 0)  {
           displayString(currCmdHelpScreen);
         } else {
+          int internal_errorlevel;  /* error level for internal command */
           dprintf(("CMD '%s' : '%s'\n", cmdptr->name, rest));
-          errorlevel = cmdptr->func(rest);
+          internal_errorlevel = cmdptr->func(rest);
+		  /* don't set errorlevel for some commands such as IF, GOTO, FOR, etc. */
+		  if (!(cmdptr->flags & CMD_NO_ERRORLEVEL)) errorlevel = internal_errorlevel;
         }
         goto errRet;
 	}
@@ -717,8 +722,11 @@ int expandEnvVars(char *ip, char * const line)
 			  }
 
 			  ip = tp + 1;
-			} else
-			  *cp++ = '%';
+			} else {
+#if 0
+			  *cp++ = '%';  /* don't copy over % if no match, e.g. %somevar should print somevar not %somevar */
+#endif
+			}
 			break;
 		}
 		continue;

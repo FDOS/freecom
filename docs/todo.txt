@@ -7,7 +7,7 @@ Things to do
 
 (0) Fix bugs :)
 
-(2) Support the DOS=HIGH directive in CONFIG.SYS
+(2) Ensure the documentation matches current implementation.
 
 (3) Optimize the code!  For size and speed.  There are numerous places
 where the code is hardly optimal for either.
@@ -21,7 +21,7 @@ where the code is hardly optimal for either.
 (1) Make the permanent command.com (/p) store the messages in memory
 (this is already implemented) and have some way for other instances
 of command.com to use these same messages in memory.  Maybe the
-Multiplexor interrupt (2Fh)?  Does command.com have a MSDOS reserved
+Multiplexer interrupt (2Fh)?  Does command.com have a MSDOS reserved
 mux handler number?
 
 (1) Critical Error handler: Conditions and rules must be defined

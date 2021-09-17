@@ -26,8 +26,8 @@
 ;
 ;
 
-%include "../include/model.inc"
-%include "../include/stuff.inc"
+%include "model.inc"
+%include "stuff.inc"
 
 segment _BSS 			; transient data (in DS)
 
@@ -83,6 +83,7 @@ XMSrestore	times 8 DW 0
 
 	cglobal canexit
 canexit	DB 0		; 1 -> can exit; _else_ --> cannot exit
+filler  DB 0
 
     cglobal mySS, mySP
 mySS DW 0
@@ -378,13 +379,17 @@ ret_from_resident:
 		mov ss,cx
 		mov sp,[execSP]
 
+%ifidn MODEL, m                     ; in medium & large need to fixup return segment
+		mov bp, sp
+		add [bp+8],bx
+%endif
 		pop bp
 		pop di
 		pop	si
 %ifidn __OUTPUT_FORMAT__,elf 	; GCC: need to preserve es
 		pop es
 %endif
-		retn						; done (really)
+		ret							; done (really), retn/retf based on memory model, see model.inc
 
 %ifidn __OUTPUT_FORMAT__,elf
 ; NASM does not support segment relocations so add them
