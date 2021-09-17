@@ -316,6 +316,7 @@ strings/strings/str00fb.c
 strings/strings/str00fc.c
 strings/strings/str00fd.c
 strings/strings/str00fe.c
+strings/strings/str00ff.c
 strings/strings/strings.lst
 strings/strings/strings.rsp
 suppl/watcomc.cfg

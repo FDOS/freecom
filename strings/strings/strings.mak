@@ -261,7 +261,8 @@ OBJ32 =	str00f8.obj\
 	str00fb.obj\
 	str00fc.obj\
 	str00fd.obj\
-	str00fe.obj
+	str00fe.obj\
+	str00ff.obj
 
 strings.lib: ../strings.h ../strings.err $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) \
 $(OBJ6) $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14) $(OBJ15) \
