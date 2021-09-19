@@ -209,9 +209,9 @@ int dfnsplit(const char * const fnam, char ** const dr, char ** const path
 					unsigned n = MbLen(p);
 					if (n > 1) {
 						while(n--) {
-							++p;
+							ch = *p++;
 							if(p >= h) break;
-							*z++ = *p;
+							*z++ = ch;
                         }
 					}
 					else {
