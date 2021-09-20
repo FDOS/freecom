@@ -28,6 +28,10 @@
 #include "../include/misc.h"
 #include "../err_fcts.h"
 
+#ifdef DBCS
+# include "mbcs.h"
+#endif
+
 void myfnsplit( const char *path,
                       char *buf,
                       char *drv,
@@ -49,7 +53,11 @@ void myfnsplit( const char *path,
 
     for( end = path; *end && *end != ':'; ) end++;
 
+#ifdef DBCS
+    for( p = end; p > path && *(p = CharPrev(path, p)) != '\\'/* && *p != '/'*/; )
+#else
     for( p = end; p > path && *--p != '\\'/* && *p != '/'*/; )
+#endif
         if( *p == '.' ) {
             end = p;
             break;
@@ -60,7 +68,11 @@ void myfnsplit( const char *path,
     }
 
     for( p = end; p > path; )
+#ifdef DBCS
+        if( *(p = CharPrev(path, p)) == '\\'/* || *p == '/'*/) {
+#else
         if( *--p == '\\'/* || *p == '/'*/) {
+#endif
         /* 
          * '/' can't happen as a path seperator in FreeCOM because it's treated
          * as a switch character no matter where it's found
@@ -94,7 +106,11 @@ void myfnmerge( char *path, const char *drive, const char *dir,
 
     if( *dir ) {
         strcat( path, dir );
+#ifdef DBCS
+        if( *(CharPrev(dir, dir + strlen( dir ))) != '\\' )
+#else
         if( *( dir + strlen( dir ) - 1 ) != '\\' )
+#endif
             strcat( path, "\\" );
     }
 

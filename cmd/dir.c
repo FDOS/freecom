@@ -151,9 +151,6 @@
  */
 
 #include "../config.h"
-#ifdef JAPANESE
-# include "../include/iskanji.h"
-#endif
 
 #include <assert.h>
 #include <ctype.h>
@@ -1228,10 +1225,13 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		pattern = dfnfilename(path);
 		assert(p);
 		if(!*pattern || (dfnstat(path) & DFN_DIRECTORY) != 0) {
+#ifdef DBCS
+			char *prev_pattern, *org_pattern = pattern;
 			pattern = strchr(pattern, '\0');
-#if defined(JAPANESE)
-			if(pattern[-1] != '\\' || iskanji(pattern[-2]))
+			prev_pattern = CharPrev(org_pattern, pattern);
+			if (*prev_pattern != '\\')
 #else
+			pattern = strchr(pattern, '\0');
 			if(pattern[-1] != '\\')
 #endif
 				++pattern;

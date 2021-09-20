@@ -53,8 +53,8 @@
 #include "../include/command.h"
 #include "../err_fcts.h"
 #include "../strings.h"
-#ifdef JAPANESE
-# include "../include/iskanji.h"
+#ifdef DBCS
+# include "mbcs.h"
 #endif
 
 #ifdef FEATURE_LONG_FILENAMES
@@ -86,6 +86,9 @@ int cmd_del(char *param)
 	/* Make fullname somewhat larger to ensure that appending
 		a matched name, one backslash and one hope. */
 	char fullname[MAXPATH + sizeof(f.ff_name) + 2],
+#ifdef DBCS
+	*prev_p,
+#endif
 	*p, *q;
 	int len;
 
@@ -127,19 +130,25 @@ int cmd_del(char *param)
 					 within dynamic memory */
 			free(p);
 			p = fullname + len;
+#ifdef DBCS
+			prev_p = CharPrev(fullname, p);
+#endif
 
 			/* check if it is a directory */
 			if(dfnstat(fullname) & DFN_DIRECTORY) {
-#if defined(JAPANESE)
-				if (p[-1] != '\\' || iskanji(p[-2]))
+#ifdef DBCS
+				if (*prev_p != '\\') {
+					prev_p = p;
+					*p++ = '\\';
+				}
 #else
 				if (p[-1] != '\\')
-#endif
 					*p++ = '\\';
+#endif
 			}
 
-#if defined(JAPANESE)
-			if(p[-1] == '\\' && !iskanji(p[-2]))    /* delete a whole directory */
+#ifdef DBCS
+			if (*prev_p == '\\')
 #else
 			if(p[-1] == '\\')    /* delete a whole directory */
 #endif
@@ -149,14 +158,16 @@ int cmd_del(char *param)
 				filename */
 			/* There is at least one backslash within fullname,
 				because of dfnexpand() */
-#if defined(JAPANESE)
-			do {
-				--p;
-			} while(*p != '\\' || iskanji(*(p - 1))) ;
+#ifdef DBCS
+			while(p > fullname) {
+				prev_p = CharPrev(fullname, p);
+				if (*prev_p == '\\') break;
+                p = prev_p;
+			};
 #else
 			while(*--p != '\\') ;
-#endif
 			++p;
+#endif
 
 			/* make sure user is sure if all files are to be
 			 * deleted */

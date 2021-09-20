@@ -51,8 +51,8 @@
 #include "../include/misc.h"
 #include "../strings.h"
 #include "../include/openf.h"
-#ifdef JAPANESE
-# include "../include/iskanji.h"
+#ifdef DBCS
+# include "mbcs.h"
 #endif
 
 #define ASCII 1
@@ -609,15 +609,16 @@ int cmd_copy(char *rest)
   do {
 	struct CopySource *p = h;
   	do {
-  		char *s = strchr(p->fnam, '\0') - 1;
-#if defined(JAPANESE)
-  		if(*s == '/' || (*s == '\\' && !iskanji(*(s - 1)))		/* forcedly be directory */
+#ifdef DBCS
+  		char *s = CharPrev(p->fnam, strchr(p->fnam, '\0'));
+  		if(*s == '/' || *s == '\\'		/* forcedly be directory */
 #else
+  		char *s = strchr(p->fnam, '\0') - 1;
   		if(*s == '/' || *s == '\\'		/* forcedly be directory */
 #endif
   		 || 0 != (dfnstat(p->fnam) & DFN_DIRECTORY)) {
 			char **buf;
-			char *q;
+			char *q = NULL;
 			if(*s == ':') 
 				q = dfnmerge(0, p->fnam, 0, "*", "*");
 			else
