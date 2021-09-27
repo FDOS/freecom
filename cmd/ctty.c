@@ -120,6 +120,12 @@ int cmd_ctty(char *param)
 
   if(failed)
     error_ctty_dup(param);
+  else {
+    setCurrentConDev(param);
+    /* workaround: do not use enhanced input if switched device is
+                   not standard 'CON' */
+    set_readcommandType( (attr & 0x9f) == 0x93 );
+  }
 
   return failed;
 }

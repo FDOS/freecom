@@ -55,17 +55,36 @@
 #include <stdarg.h>
 #include <io.h>     /* _open, _write, _close */
 
+#include <dfn.h>
 #include "../include/batch.h"
 #include "../include/misc.h"
 #include "../include/command.h"
 #include "../strings.h"
+
+static char condev[13] = "CON";
+
+const char * getCurrentConDev(void)
+{
+  return (const char *)condev;
+}
+
+int setCurrentConDev(const char * dnam)
+{
+  const char *nam = dfnfilename(dnam);
+  size_t len = strlen(nam);
+
+  if (len == 0 || len >= sizeof(condev))
+    return -1; /* failed */
+  memcpy(condev, nam, len + 1);
+  return 0; /* ok */
+}
 
 /* This is to prevent all that Turbo C CONIO stuff from being linked in */
 static void mycprintf( char *fmt, ... )
 {
     va_list args;
     char buffer[ 512 ];
-    int consolehandle = dos_open( "CON", O_WRONLY );
+    int consolehandle = dos_open( condev, O_WRONLY );
     /* 
      * Just as cprintf _ensures_ printing directly to the console, so will
      * opening the console and writing to it do the same
