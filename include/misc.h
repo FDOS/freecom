@@ -84,6 +84,8 @@ int vcgetcstr(const char *const legalCh);
 int keypressed(void);
 int cgetchar_timed(int secs);
 int chkCBreak(int mode);
+const char *getCurrenConDev(void);
+int setCurrentConDev(const char * dnam);
 void beep(void);
 void beep_low(void);
 char *comFile(void);
@@ -149,6 +151,7 @@ void partstrlower(char *str);
 void readcommand(char * const str, int maxlen);
 void readcommandDOS(char * const str, int maxlen);
 void readcommandEnhanced(char * const str, const int maxlen);
+int set_readcommandType(int enhanced);
 void convert(unsigned long num, unsigned int billions, char * const des);
 
 void goxy(const unsigned char x, const unsigned char y);

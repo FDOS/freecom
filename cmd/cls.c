@@ -52,13 +52,13 @@
 #include "../include/misc.h"
 
 int cmd_cls (char * param) {
+    int attr = fdattr(1);
     (void)param;
     outc( '\xc' ); /* ^L Form feed */
 
-#if defined(IBMPC) || defined(NEC98)
-	/* Output stream is neither a file nor NUL nor CLOCK$ */
-	if(((fdattr(1) ^ 0x80) & (0x80 | 0x08 | 0x04)) == 0) {
-# if defined(IBMPC)
+	/* Output stream is standard CON device */
+	if((attr & 0x9f) == 0x93) {
+#if defined(IBMPC)
 		unsigned attr = 0x0700;
 		int mode;
 		IREGS r;
@@ -97,14 +97,18 @@ int cmd_cls (char * param) {
 		r.r_dx = ((SCREEN_ROWS - 1) << 8) | (SCREEN_COLS - 1); /* Lower right */
 		intrpt(0x10, &r);
 		goxy(1, 1);			/* home the cursor */
-# else
-		cputs_int29("\x1b" "[m" "\x1b" "[2J");
-# endif
-	}
+#elif defined(NEC98) || defined(FMR)
+		outs( "\x1b[m" "\x1b[2J" );
 #else
-	/* DOS generic: do nothing */
-	outc('\r');
+		/* DOS generic: do nothing */
+		outc('\r');
 #endif
+	}
+	else if((attr & 0x9c) == 0x80) {
+		/* character device neither NUL nor CLOCK$ nor standard CON
+		  (guess AUX or COMn, which is connected commmon serial terminal) */
+		outs( "\x1b[2J" );
+	}
 
 	return 0;
 }
