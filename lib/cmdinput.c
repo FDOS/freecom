@@ -14,6 +14,7 @@
 #include "../include/keys.h"
 #include "../include/misc.h"
 #if defined(DBCS)
+# include "../include/openf.h"
 # include "../suppl/nls_c.h"
 #endif
 
@@ -51,9 +52,7 @@ static void outc_dos(char c)
     }
     else
     {
-        r.r_ax = 0x0200;
-        r.r_dx = c;
-        intrpt(0x21, &r);
+        dos_write(1, &c, 1);
     }
 }
 void outc(char c)

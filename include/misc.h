@@ -261,10 +261,12 @@ void critEndRepCheck(void);
 /* prf.c */
 int putch_int29(int c);
 int cputs_int29(const char *s);
+#  if 0
 #  undef putch
 #  undef cputs
 #  define putch(c) putch_int29(c)
 #  define cputs(s) cputs_int29(s)
+#  endif
 # endif
 /* xtra.c */
 int init_mymachine(void);

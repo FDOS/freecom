@@ -94,19 +94,6 @@ static void clrcmdline_oxy_d(char * const str, const int maxlen, const unsigned 
 #undef clrcmdline
 #define clrcmdline(s,m,cc,ox,oy,cpos)	clrcmdline_oxy_d(s,m,cc,ox,oy)
 
-#if defined NEC98
-static int check_stdout_int29(void)
-{
-	IREGS r;
-	r.r_ax = 0x4400;
-	r.r_bx = 1;
-	r.r_dx = 0;
-	intrpt(0x21, &r);
-	use_int29 = (r.r_dx & 0x90) == 0x90;
-	return use_int29;
-}
-#endif
-
 void readcommandEnhanced(char * const str, const int maxlen)
 {
 	static unsigned orgx, orgy;		/* start of current line */
@@ -134,7 +121,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 #if defined NEC98
 	/* use int 29h for output to default console */
 	/* workaround for some alternative CON drivers, like ktn4 */
-	check_stdout_int29();
+	use_int29 = (fdattr(1) & 0x9f) == 0x93;
 #endif
 	/* if echo off, don't print prompt */
 	if(echo)
@@ -479,6 +466,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 #if defined(NEC98)
 	restoreSpecialKeys();
+	use_int29 = 0;
 #endif
 	setcursorstate(insert);
 }
