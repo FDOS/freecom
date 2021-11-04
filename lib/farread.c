@@ -93,14 +93,35 @@ size_t farwrite(int fd, void far*buf, size_t length)
 		return 0xffff;
 	return bytes;
 }
+#endif
 
+#if !defined(__TURBOC__)
 int sfn_open(const char *pathname, int flags)
 {
+#if defined(__GNUC__)
+	IREGS r;
+	r.r_ax = 0x3d00 | flags;
+	r.r_dx = FP_OFF(pathname);
+	r.r_ds = FP_SEG(pathname);
+	intrpt(0x21, &r);
+	return (r.r_flags & 1) ? -1 : (int)r.r_ax;
+#else
 	int handle;
 	int result = _dos_open(pathname, flags,	&handle);
 	return (result == 0 ? handle : -1);
+#endif
 }
+#endif
 
+#if defined(__GNUC__)
+int dos_close(int fd)
+{
+	IREGS r;
+	r.r_ax = 0x3e00;
+	r.r_bx = fd;
+	intrpt(0x21, &r);
+	return (r.r_flags & 1) ? -1 : 0;
+}
 #endif
 
 int dos_read(int fd, void *buf, unsigned int len)
