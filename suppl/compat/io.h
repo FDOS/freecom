@@ -4,6 +4,11 @@
 #define __IO_H
 
 #include <unistd.h>
+
+#ifdef __GNUC__
+#define _lseek lseek
+#endif
+
 extern int _open(const char *pathname, int flags, ...);
 extern int _creat(const char *pathname, mode_t mode);
 extern int _read(int fd, void *buf, size_t cnt);

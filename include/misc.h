@@ -95,19 +95,20 @@ int mk_rd_dir(char *param, int (*func) (const char *), char *fctname);
 void cutBackslash(char * const s);
 int cd_dir(char *param, int cdd, const char * const fctname);
 enum OnOff onoffStr(char *line);
-#if defined(__TURBOC__) || defined(__GNUC__)
+#if defined(__TURBOC__)
+#define sfn_open _open
+#define dos_close _close
+#else
+int sfn_open(const char *pathname, int flags);
 #if defined(__GNUC__)
 #define stricmp strcasecmp
 #define strcmpi strcasecmp
 #define strnicmp strncasecmp
 #define memicmp strncasecmp
-#define lseek _lseek
-#endif
-#define sfn_open _open
-#define dos_close _close
+int dos_close(int fd);
 #else
-int sfn_open(const char *pathname, int flags);
 #define dos_close _dos_close
+#endif
 #endif
 int dos_read(int fd, void *buf, unsigned int len);
 int dos_write(int fd, const void *buf, unsigned int len);
