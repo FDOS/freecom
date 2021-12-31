@@ -4,7 +4,7 @@
 #
 #	Language: Turkish
 #	Codepage: ASCII (7bit) / CP857
-#	Author:   FreeCOM maintainer
+#	Author:   Emir SARI
 # 
 # The critical error (criter) handler receives some information
 # from the kernel about what error condition happens, generates some
@@ -63,15 +63,15 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: Hata %1 sürücü %A: %2 alan: %3
+BLOCK_DEVICE: Hata - %1 %A sürücüsü: %2 alanı: %3
 S3
-CHAR_DEVICE: Hata %1 sürücü %A: %3
+CHAR_DEVICE: Hata - %1 %A sürücüsü: %3
 
 ## kind of operation
 S0
-READ: Şuradan okunuyor:
+READ: Okunma konumu:
 S1
-WRITE: Şuraya yazılıyor:
+WRITE: Yazılma konumu:
 
 ## kind of failed area of block devices
 S4
@@ -89,14 +89,14 @@ IGNORE: (Y)ok say
 S9
 RETRY: Yeniden (d)ene
 S10
-ABORT: (İ)ptal
+ABORT: İ(p)tal
 S11
-FAIL: (B)aşarısız
+FAIL: (B)aşarısız say
 ## keys associated with the actions
 S14 (compacted)
 KEYS_IGNORE: yY
 KEYS_RETRY:  dD
-KEYS_ABORT:  iİ
+KEYS_ABORT:  pP
 KEYS_FAIL:   bB
 ## embedded strings
 S12
@@ -119,7 +119,7 @@ S15
 9: Yazıcıda kâğıt kalmadı
 10: Yazma hatası
 11: Okuma hatası
-12: Genel başarısızlık
+12: Genel sorun
 13: Paylaşım ihlali
 14: Kilitleme ihlali
 15: Geçersiz disk değişimi
