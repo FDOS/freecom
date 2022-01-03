@@ -918,6 +918,7 @@ static int DisplaySingleDirEntry(struct ffblk *file, struct currDir *cDir)
    return cbreak? E_CBreak: rv;
 }
 
+/* return -1,0,1 where -1 if p1 is before p2, 0 if same, 1 if p2 is before p1 */
 static int orderFunction(const void *p1, const void *p2)
 {
   int i1 = *(int*)p1;
@@ -972,9 +973,13 @@ static int orderFunction(const void *p1, const void *p2)
 	  case ORDER_BY_NAME:
 		rv = strcmp(f1.ff_name,f2.ff_name);
 		break;
-	  }
-	  if (opt & ORDER_INVERSE) rv = - rv;
-	}  
+	}
+	if (opt & ORDER_INVERSE) rv = - rv;
+  }  
+  
+  /* if criteria (size, date, etc) compare equal then return results lexically by filename */
+  if (rv == 0)
+	rv = strcmp(f1.ff_name,f2.ff_name);
 
   return rv;
 }    	
