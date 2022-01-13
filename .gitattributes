@@ -21,6 +21,7 @@ strings/swedish.??? working-tree-encoding=CP850 text eol=auto
 strings/serbian.??? working-tree-encoding=CP852 text eol=auto
 strings/slovene.??? working-tree-encoding=CP852 text eol=auto
 strings/turkish.??? working-tree-encoding=CP857 text eol=auto
+strings/pt.???   working-tree-encoding=CP860 text eol=auto
 strings/russian.??? working-tree-encoding=CP866 text eol=auto
 strings/ukr.???     working-tree-encoding=CP866 text eol=auto
 # Does not exist in iconv, so have to do it manually
