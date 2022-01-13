@@ -27,7 +27,7 @@ rm -rf _output
 mkdir _output
 
 # Which ones to build
-LANGUAGES="english dutch finnish french german italian polish pt_br russian serbian slovene spanish swedish turkish ukr yu437"
+LANGUAGES="english dutch finnish french german italian polish pt pt_br russian serbian slovene spanish swedish turkish ukr yu437"
 
 # GCC
 for lng in ${LANGUAGES} ; do
