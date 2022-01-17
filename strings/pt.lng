@@ -1,0 +1,1437 @@
+# $Id: DEFAULT.LNG $
+#
+# FreeCOM national customization file
+#
+#	Language: Portuguese
+#	Codepage: CP860
+#	Author:   Fabjo Arbaro
+# 
+
+
+#
+#  These are error messages
+#
+## Issued if a single character option is unknown
+:TEXT_ERROR_INVALID_SWITCH#0%
+Parâmetro inválido. - /%c
+.
+
+## Issued if a longname option is unknown
+:TEXT_ERROR_INVALID_LSWITCH#0%
+Parâmetro inválido. - /%s
+.
+
+## Issued if the context, the type of argument etc. is invalid
+:TEXT_ERROR_ILLFORMED_OPTION#0%
+Opção malformada: '%s'
+.
+
+:TEXT_ERROR_OPT_ARG#0%
+Opção '%s' não pode ter argumentos
+.
+
+:TEXT_ERROR_OPT_NOARG#0%
+Opção '%s' deve ter um argumento
+.
+
+:TEXT_INVALID_NUMBER#0%
+Número inválido especificado em '%s'
+.
+
+:TEXT_ERROR_CLOSE_QUOTE#0%
+Fecho de aspas em falta: %c
+.
+
+:TEXT_ERROR_TEMPFILE
+Não é possível criar ficheiro temporário
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
+Demasiados parâmetros. - '%s'
+.
+
+:TEXT_ERROR_TOO_MANY_PARAMETERS
+Demasiados parâmetros.
+.
+
+:TEXT_ERROR_INVALID_PARAMETER#0%
+Parâmetro inválido. - '%s'
+.
+
+:TEXT_ERROR_PATH_NOT_FOUND
+Caminho não encontrado.
+.
+
+:TEXT_ERROR_FILE_NOT_FOUND
+Ficheiro não encontrado.
+.
+
+:TEXT_ERROR_SFILE_NOT_FOUND#0%
+Ficheiro não encontrado. - '%s'
+.
+
+:TEXT_ERROR_REQ_PARAM_MISSING#0%
+Parâmetro obrigatório em falta.
+.
+
+:TEXT_ERROR_INVALID_DRIVE#0%
+Unidade inválida %c:.
+.
+
+:TEXT_ERROR_BADCOMMAND#2%
+Comando ou nome de ficheiro não reconhecidos - '%s'.
+.
+
+:TEXT_ERROR_OUT_OF_MEMORY
+Memória esgotada.
+.
+
+:TEXT_ERROR_OUT_OF_DOS_MEMORY#1
+Não é possível alocar memoria.
+.
+
+:TEXT_ERROR_CANNOTPIPE
+Não é possível abrir ficheiro temporário para redireccionamento.
+.
+
+:TEXT_ERROR_LONG_LINE_BATCHFILE#0%
+Linha #%ld no ficheiro batch '%s' demasiado longa.
+.
+
+:TEXT_ERROR_BFILE_VANISHED#0%
+Ficheiro batch '%s' não encontrado.
+.
+
+:TEXT_ERROR_BFILE_LABEL#0%
+Ficheiro batch '%s' não contem a etiqueta '%s'.
+.
+
+:TEXT_ERROR_DIRFCT_FAILED#1%
+%s falhou para '%s'.
+.
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ENV_VAR#0%
+Não é possível alterar variável de ambiente '%s'.
+Ambiente pode estar cheio.
+.
+:TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
+Variável de ambiente '%s' não encontrada.
+.
+:TEXT_ERROR_NO_ENVIRONMENT
+Não há ambiente. Pode faltar memória. Use a opção /E.
+.
+
+# The next three errors must remain in this order!
+:TEXT_ERROR_SET_ALIAS#1%
+Não é possível definir alias '%s'. Pode não existir espaço.
+.
+:TEXT_ERROR_ALIAS_NOT_FOUND#1%
+Alias '%s' não encontrado.
+.
+:TEXT_ERROR_NO_ALIAS_SEGMENT#1
+Não há espaço para alias. Pode faltar memória.
+.
+
+:TEXT_ERROR_SYNTAX_STR#0%
+Erro de síntaxe. - '%s'
+.
+
+:TEXT_ERROR_SYNTAX
+Erro de síntaxe.
+.
+
+:TEXT_ERROR_FILENAME_TOO_LONG#0%
+Nome de ficheiro demasiado longo. - '%s'
+.
+
+:TEXT_ERROR_SELFCOPY#0%
+Não é possível copiar '%s' para si mesmo
+.
+
+:TEXT_ERROR_COMMAND_TOO_LONG
+Linha de comandos demasiado longa após expansão.
+.
+
+:TEXT_ERROR_LINE_TOO_LONG
+Linha de comandos ultrapassa os 125 caracteres.
+.
+
+:TEXT_ERROR_HISTORY_SIZE#1%
+Tamanho de histórico inválido '%s'.
+.
+
+:TEXT_HISTORY_EMPTY#1
+Histórico de linha de comandos vazio.
+.
+
+
+:TEXT_ERROR_BAD_MCB_CHAIN
+Cadeia MCB inválida ou sistema incompatível com DOS.
+.
+
+:TEXT_ERROR_UNDEFINED_ERROR#0%
+Erro indefinido %d.
+.
+
+:TEXT_ERROR_REGION_WARNING#0%
+Região de memória inválida %d ignorada.
+.
+
+:TEXT_ERROR_ON_OR_OFF
+Deve especificar ON ou OFF.
+.
+
+:TEXT_ERROR_BAD_VARIABLE
+Especificação de variável inválida.
+.
+
+:TEXT_ERROR_IN_MISSING#1
+FOR: IN em falta.
+.
+
+:TEXT_ERROR_MISSING_PARENTHESES#1
+Parêntesis em falta.
+.
+
+:TEXT_ERROR_DO_MISSING#1
+FOR: DO em falta.
+.
+
+:TEXT_ERROR_NO_COMMAND_AFTER_DO#1
+FOR: Comando em falta após DO.
+.
+
+:TEXT_ERROR_REDIRECT_FROM_FILE#0%
+Não é possível redireccionar entrada de ficheiro '%s'.
+.
+
+:TEXT_ERROR_REDIRECT_TO_FILE#0%
+Não é possível redireccionar saída para ficheiro '%s'.
+.
+
+:TEXT_ERROR_EMPTY_REDIRECTION#1
+Rediccionamento vazio.
+.
+
+:TEXT_ERROR_INVALID_DATE
+Data inválida.
+.
+
+:TEXT_ERROR_INVALID_TIME
+Hora inválida.
+.
+
+:TEXT_ERROR_NO_GOTO_LABEL
+Etiqueta não especificada em GOTO.
+.
+
+:TEXT_CTTY_NOTIMPLEMENTED
+Comando CTTY não implementado neste COMMAND.COM.
+.
+
+:TEXT_ERROR_NORW_DEVICE#0%
+Dispositivo inválido ou sem acesso de leitura-escrita '%s'.
+.
+
+:TEXT_ERROR_CTTY_DUP#0%
+Não foi possível alterar o descritor do TTY '%s'.
+.
+
+:TEXT_ERROR_L_NOTIMPLEMENTED
+Opção /L não implementada.
+.
+
+:TEXT_ERROR_U_NOTIMPLEMENTED
+Opção /U não implementada.
+.
+
+:TEXT_ERROR_WRITING_DEST
+Erro ao escrever para destino.
+.
+
+:TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
+Não é possível abrir origem '%s'
+.
+
+:TEXT_ERROR_OPEN_FILE#0%
+Não é possível abrir ficheiro '%s'
+.
+
+:TEXT_ERROR_READ_FILE#0%
+Não é possível ler de ficheiro '%s'
+.
+
+:TEXT_ERROR_WRITE_FILE#0%
+Não é possível escrever para ficheiro '%s'
+.
+
+:TEXT_ERROR_LEADING_PLUS
+Carácter de concatenação '+' não pode preceder os argumentos.
+.
+
+:TEXT_ERROR_TRAILING_PLUS
+Carácter de concatenação '+' não pode seguir-se aos argumentos.
+.
+
+:TEXT_ERROR_NOTHING_TO_DO
+Nada por fazer.
+.
+
+:TEXT_ERROR_COPY
+COPY falhou
+.
+
+:TEXT_ERROR_IF_EXIST_NO_FILENAME#1
+IF EXIST: nome de ficheiro em falta
+.
+:TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
+IF ERRORLEVEL: número em falta
+.
+:TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
+IF ERRORLEVEL: número inválido
+.
+:TEXT_ERROR_IF_MISSING_COMMAND#1
+IF: Comando em falta
+.
+
+:TEXT_NOT_IMPLEMENTED_YET
+Ainda não implementado.
+.
+
+:TEXT_FAILED_LOAD_STRINGS
+Não foi possível carregar mensagens para memória.
+.
+
+:TEXT_MSG_NOTIMPLEMENTED
+Opção /MSG foi excluída deste COMMAND.COM.
+.
+
+:TEXT_MSG_ITEMS_DISPLAYED#1%
+%u itens mostrados.
+.
+
+:TEXT_CORRUPT_COMMAND_LINE
+Linha de comandos corrompida. Este é um erro interno no intérprete de comandos.
+Por favor, reporte o problema para <freecom@freedos.org>.
+.
+
+:TEXT_QUOTED_C_OR_K#1
+As opções /C e /K não podem estar entre aspas (estas são ignoradas).
+.
+
+:TEXT_INIT_FULLY_QUALIFIED#1%
+Caminho para COMMAND.COM deve ser completo.
+Exemplo: C:\\FDOS
+
+COMMAND.COM assumirá este caminho agora:
+%s
+.
+
+:TEXT_ERROR_RESTORE_SESSION
+Não foi possível restaurar sessão e definições locais foram perdidas.
+Consulte as mensagens de erro acima para compreender este erro.
+.
+
+:TEXT_ERROR_SAVE_SESSION
+Não foi possível guardar sessão durante chamada ao programa.
+Consulte as mensagens de erro acima para compreender este erro.
+.
+
+:TEXT_ERROR_CWD_FAILED#1%
+Unidade %c: não responde.
+.
+
+:TEXT_ERROR_KSWAP_ALIAS_SIZE
+Troca falhou: Aliases consomem demasiada memória.
+.
+
+
+:TEXT_ERROR_KSWAP_ALLOCMEM
+Troca falhou: Não é possível alocar memória distante.
+.
+
+:TEXT_ERROR_ALIAS_OUT_OF_MEM#1
+Espaço para aliases esgotado.
+.
+
+:TEXT_ERROR_ALIAS_NO_SUCH#1%
+Alias não encontrado: '%s'
+.
+
+:TEXT_ERROR_ALIAS_INSERT#1
+Não foi possível inserir alias.
+.
+
+:TEXT_ALIAS_INVALID_NAME#1%
+Nome de alias inválido '%s'.
+.
+
+:TEXT_ERROR_LOADING_CONTEXT#1
+Não é possível carregar módulo de contexto ou gestor de erros críticos.
+.
+
+:TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
+Falta de memória para contexto.
+Se este erro persistir, tente aumentar buffers internos.
+.
+
+:TEXT_ERROR_CONTEXT_LENGTH#1%
+Tamanho do contexto (%lu bytes) excede o limite máximo.
+Redimensionando contexto para %u bytes.
+.
+
+:TEXT_ERROR_CONTEXT_ADD_STATUS#1
+Não foi possível adicionar informação de estado ao contexto. Este erro pode
+indicar uma corrupção de memória ou um tamanho mínimo de texto incorrecto.
+Por favor, reporte o problema para <freecom@freedos.org>.
+.
+
+:TEXT_ERROR_CONTEXT_AFTER_SWAP#1
+Contexto em falta após troca.
+Um novo contexto será criado mas algumas definições serão perdidas.
+.
+
+:TEXT_ERROR_PERMISSION_DENIED#1%
+%s: Permissão negada
+.
+
+:TEXT_ERROR_NO_SUCH_FILE#1%
+%s: Não existe tal ficheiro ou directório
+.
+
+:TEXT_ERROR_UNKNOWN_ERROR#1%
+%s: Erro desconhecido
+.
+
+#
+# Informational messages
+#
+
+:TEXT_MSG_PAUSE#1
+Carregue em qualquer teclar para continuar...\
+.
+
+:TEXT_MSG_HISTORY_SIZE#0%
+Tamanho do histórico: %d bytes.
+.
+
+:TEXT_MSG_DOSKEY
+As funcionalidades do DOSKEY já estão activadas.
+.
+
+:TEXT_MSG_ECHO_STATE#0%
+ECHO está %s
+.
+
+:TEXT_MSG_VERIFY_STATE#0%
+VERIFY está %s
+.
+
+:TEXT_MSG_FDDEBUG_STATE#0%
+DEBUG está %s.
+.
+:TEXT_MSG_FDDEBUG_TARGET#0%
+Saída de DEBUG escrita para '%s'.
+.
+
+:TEXT_MSG_BREAK_STATE#0%
+BREAK está %s
+.
+
+:TEXT_MSG_LFNFOR_STATE#0%
+LFNFOR está %s
+.
+
+:TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
+Autocomplemento de nomes de ficheiros longos está %s
+.
+
+:TEXT_MSG_CURRENT_DATE#0%
+Data actual: %s
+.
+
+## The three DATE prompts MUST be in this order!
+:TEXT_MSG_ENTER_DATE_AMERICAN#1%
+Introduza uma nova data (mm%sdd%s[cc]yy): \
+.
+:TEXT_MSG_ENTER_DATE_EUROPE#1%
+Introduza uma nova data (dd%smm%s[cc]yy): \
+.
+:TEXT_MSG_ENTER_DATE_JAPANESE#1%
+Introduza uma nova data ([cc]yy%smm%sdd): \
+.
+
+:TEXT_MSG_CURRENT_TIME#0%
+Hora actual: %s
+.
+
+:TEXT_STRING_PM#1
+ pm\
+.
+:TEXT_STRING_AM#1
+ am\
+.
+
+:TEXT_MSG_ENTER_TIME#1
+Intruduza uma nova hora: \
+.
+
+# src-file <operation> target-file
+:TEXT_MSG_COPYING#0%
+%s %s %s
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Used by Delete all (Y/N) --> let ENTER default to NO
+# Return value: a -> Yes; else -> No
+:PROMPT_DELETE_ALL#1%
+SsNn{CR}{LF}{CBREAK}
+aabb   b   b       b
+Todos os ficheiros em '%s' serão eliminados!
+Deseja continuar (S/N) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; else -> No
+:PROMPT_YES_NO#1
+SsNn{LF}{CR}{CBREAK}{ESC}
+aabb   a   a       b    b
+ [Sim=ENTER, Não=ESC] ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Attention: This prompt is issued via BIOS; any newline MUST be prefixed
+# by \r!
+# Return value: a -> Yes; b -> No; c -> All; else -> Undefined
+:PROMPT_CANCEL_BATCH#1%
+SsNnTtAa{LF}{CR}{CBREAK}{ESC}
+aabbcccc   a   a       c    b
+Control-Break pressionado.\r
+Terminar batch '%s' (Sim/Não/Todos) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_OVERWRITE_FILE#1%
+SsNnTtAa{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Sobrescrever '%s' (Sim/Não/Todos/Abortar) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_APPEND_FILE#1%
+SsNnTtAa{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Acrescentar a '%s' (Sim/Não/Todos/Abortar) ? \
+.
+
+# This prompt MUST include the pseudo key CBREAK!
+# Note: This prompt ignores DOS NLS intentionally in order to
+# keep interactive prompt & user-interaction in sync.
+# Return value: a -> Yes; b -> No; c -> All; d -> Quit
+:PROMPT_DELETE_FILE#1%
+SsNnTtAa{BREAK}{ENTER}{ESC}
+aabbccdd      d      a    b
+Eliminar '%s' (Sim/Não/Todos/Abortar) ? \
+.
+
+:TEXT_UNKNOWN_FILENAME#1
+<<unknown>>\
+.
+
+:TEXT_DIRSTACK_EMPTY
+Pilha de directórios vazia.
+.
+
+## Strings to construct the DIR output
+:TEXT_DIR_HDR_VOLUME#1%
+ Volume na unidade %c \
+.
+:TEXT_DIR_HDR_VOLUME_STRING#0%
+é %s
+.
+:TEXT_DIR_HDR_VOLUME_NONE
+não tem etiqueta
+.
+:TEXT_DIR_HDR_SERIAL_NUMBER#0%
+ Número de série do volume é %04X-%04X
+.
+:TEXT_DIR_FTR_FILES#1%
+%10s ficheiro(s)\
+.
+:TEXT_DIR_FTR_BYTES#0%
+   %12s bytes
+.
+:TEXT_DIR_FTR_TOTAL_NUMBER
+Número de ficheiros listados:
+.
+:TEXT_DIR_FTR_DIRS#1%
+%10s directórios(s)\
+.
+:TEXT_DIR_FTR_BYTES_FREE#0%
+ %15s bytes livres
+.
+:TEXT_DIR_DIRECTORY#0%
+Directório %s
+.
+:TEXT_DIR_DIRECTORY_WITH_SPACE#0%
+ Directório %s
+.
+:TEXT_DIR_LINE_FILENAME_WIDE#1%
+%-15s\
+.
+:TEXT_DIR_LINE_FILENAME_BARE#1%
+%s
+.
+:TEXT_DIR_LINE_FILENAME_SINGLE#1%
+%-13s\
+.
+:TEXT_DIR_LINE_FILENAME#1%
+%-8s %-3s \
+.
+:TEXT_DIR_LINE_SIZE_DIR#1
+        <DIR> \
+.
+:TEXT_DIR_LINE_SIZE#1%
+   %10s \
+.
+
+:TEXT_FILE_COMPLATION_DISPLAY#1%
+%-14s\
+.
+
+:TEXT_MSG_PATH#0%
+PATH=%s
+.
+:TEXT_MSG_PATH_NONE#1
+Nenhum caminho de pesquisa definido.
+.
+
+## The following names MUST be in this order!
+:TEXT_WEEKDAY_SHORT_NAME_SUNDAY#1
+Dom\
+.
+:TEXT_WEEKDAY_SHORT_NAME_MONDAY#1
+Seg\
+.
+:TEXT_WEEKDAY_SHORT_NAME_TUESDAY#1
+Ter\
+.
+:TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
+Qua\
+.
+:TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
+Qui\
+.
+:TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
+Sex\
+.
+:TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
+Sáb\
+.
+
+# Displayed by DEL how many files were removed.
+# These three strings must be kept in order!
+:TEXT_MSG_DEL_CNT_FILES#1
+nenhum ficheiro eliminado.
+.
+:TEXT_MSG_DEL_CNT_FILES_1#1
+um ficheiro eliminado.
+.
+:TEXT_MSG_DEL_CNT_FILES_2#1%
+%u ficheiros eliminados.
+.
+
+:TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
+Comandos internos disponíveis:
+.
+
+:TEXT_MSG_SHOWCMD_FEATURES
+
+Funcionalidades disponíveis:
+.
+
+## Displayed within "?" <-> showcmd() to enumerate the included features
+## Note the trailing single space
+:TEXT_SHOWCMD_FEATURE_ALIASES#1
+[aliases] \
+.
+:TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
+[entrada avançada] \
+.
+:TEXT_SHOWCMD_FEATURE_HISTORY#1
+[histórico] \
+.
+:TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
+[autocomplemento de nomes de ficheiro] \
+.
+:TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
+[troca] \
+.
+:TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
+[iniciar log] \
+.
+:TEXT_SHOWCMD_FEATURE_LAST_DIR#1
+[último directório] \
+.
+:TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
+[nomes de ficheiro longos] \
+.
+:TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
+[troca no kernel] \
+.
+:TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
+[troca com XMS] \
+.
+:TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
+[troca por omissão] \
+.
+:TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
+[comandos instaláveis] \
+.
+:TEXT_SHOWCMD_FEATURE_NLS#1
+[suporte para línguas (NLS)] \
+.
+:TEXT_SHOWCMD_FEATURE_DIRSTACK#1
+[pilha de directório (PUSHD)] \
+.
+:TEXT_SHOWCMD_FEATURE_DEBUG#1
+[depuração FreeCOM] \
+.
+
+:TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
+
+Pressione F8 para modo passo-a-passou, ou F5 para ignorar %s... \
+.
+:TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
+Ignorando '%s'.
+.
+
+:TEXT_MSG_VER_DOS_VERSION#0%
+DOS versão %u.%u
+.
+
+:TEXT_MSG_VER_EARLY_FREEDOS
+Kernel FreeDOS (build 1933 ou anterior)
+.
+
+:TEXT_MSG_VER_LATER_FREEDOS#0%
+Kernel FreeDOS versão %d.%d.%d
+.
+
+
+:TEXT_MSG_VER_WARRANTY
+Copyright (C) 1994-2022 Tim Norman e outros.
+
+Este programa é distribuído na esperança de que possa ser útil,
+mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO
+a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR.
+Veja a Licença Pública Geral GNU para mais detalhes.
+
+Envie relatórios de erros para <freedos-freecom@lists.sourceforge.net>.
+Actualizações disponíveis em <http://freedos.sourceforge.net/freecom>.
+.
+
+:TEXT_MSG_VER_REDISTRIBUTION
+Copyright (C) 1994-2022 Tim Norman e outros.
+
+Este programa é distribuído na esperança de que possa ser útil,
+mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÃO
+a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR.
+Veja a Licença Pública Geral GNU para mais detalhes.
+
+Envie relatórios de erros para <freedos-freecom@lists.sourceforge.net>.
+Actualizações disponíveis em <http://freedos.sourceforge.net/freecom>.
+.
+
+:TEXT_MSG_VER_DEVELOPERS
+
+Este intérprete de comandos foi desenvolvido por muitas pessoas.
+Ler o ficheiro 'HISTORY.TXT' para mais detalhes.
+
+Actualmente mantido por Steffen Kaiser <freecom@freedos.org>.
+Envie relatórios de erros para <freedos-freecom@lists.sourceforge.net>.
+Actualizações disponíveis em <http://freedos.sourceforge.net/freecom>.
+.
+
+
+# Displayed when the shell is to terminate, but has been started
+# with /P option <-> shell cannot exist;
+# This is a crash situation, because FreeCOM won't reach this situation
+# normally otherwise
+# All newlines must be prefixed by \r's !
+:TEXT_MSG_REBOOT_NOW#1
+\r\n\r
+Tentou fechar o intérprete de comandos mas isto não é permitdo, talvez por\r
+ter sido usada a opção /P. Terá de reiniciar o sistema ou, caso esteja num\n
+sistema multi-tarefa, terminar o processo respectivo manualmente.
+.
+
+# Displayed during the initialization phase of FreeCOM, if its own
+# filename could not be determined.
+:TEXT_MSG_FREECOM_NOT_FOUND#1
+Executável do FreeCOM não encontrado. Deve fornecer um caminho completo
+para o COMMAND.COM como primeiro parâmetro do COMMAND.
+Exemplo: C:\\FDOS
+.
+
+
+:TEXT_MEMORY_ENVIRONMENT#1%
+Segmento de ambiente   : máximo %5u bytes; livre %5u bytes
+.
+:TEXT_MEMORY_CONTEXT#1%
+Segmento de contexto   : máximo %5u bytes; livre %5u bytes
+.
+:TEXT_MEMORY_HEAP#1%
+Heap                   : livre %5lu bytes
+.
+:TEXT_MEMORY_CTXT_ALIAS#1%
+\tAliases              : limite %5u bytes, actual %5u bytes, %5u itens
+.
+:TEXT_MEMORY_CTXT_HISTORY#1%
+\tHistórico            : limite %5u bytes, actual %5u bytes, %5u itens
+.
+:TEXT_MEMORY_CTXT_DIRSTACK#1%
+\tPilha de directórios : limite %5u bytes, actual %5u bytes, %5u itens
+.
+:TEXT_MEMORY_CTXT_LASTDIR#1%
+\tÚltimos directórios  : usado %5u bytes, %5u itens
+.
+:TEXT_MEMORY_CTXT_BATCH#1%
+\tAninhamento de batch : usado %5u bytes, %5u itens
+.
+:TEXT_MEMORY_CTXT_SWAPINFO#1%
+\tInformação de troca  : usado %5u bytes, %5u itens
+.
+
+
+## CHCP
+:TEXT_ERROR_GET_CODEPAGE#1
+Não foi possível obter a página de códigos do sistema.
+.
+:TEXT_ERROR_SET_CODEPAGE#1
+Não foi possível alterar a página de códigos actual.
+.
+:TEXT_DISPLAY_CODEPAGE#1%
+Página de códigos actual: %u.
+Página de códigos do sistema: %u.
+.
+
+#
+# Command help text
+#
+
+:TEXT_CMDHELP_ALIAS
+Mostra, altera ou remove aliases.
+
+ALIAS [variável[=][valor]]
+
+  variável  Especifica o nome do alias.
+  valor     Define uma série de caracteres a associar ao alias.
+
+
+Use ALIAS sem parâmetros para mostrar os aliases actuais.
+.
+
+:TEXT_CMDHELP_BEEP
+Produz um sinal sonoro.
+.
+
+:TEXT_CMDHELP_BREAK
+Liga ou desliga a verificação de CTRL+C.
+
+BREAK [ON | OFF]
+
+Use BREAK sem parâmetros para mostrar o estado actual.
+.
+
+:TEXT_CMDHELP_CALL#1
+Chama um batch a partir de outro.
+
+CALL [/S | /N] [/Y] [unidade:][caminho]ficheiro [parâmetros]
+
+  /S          Garante troca do FreeCOM.
+  /N          Desliga troca do FreeCOM.
+  /Y          Liga o rastreamento durante a execução.
+  parâmetros  Especifica parâmetros passados ao batch.
+.
+
+:TEXT_CMDHELP_CD
+Mostra ou altera o directório actual.
+
+CHDIR [unidade:][caminho]
+CHDIR [..]
+CD [unidade:][caminho]
+CD [..]
+CD [-]
+
+  ..  Indica que queremos mudar para o directório acima.
+  -   Muda para o directório actual (se a funcionalidade estiver ligada).
+
+Use CD unidade: para mostrar o directório actual em determinada unidade.
+Use CD sem parâmetros para mostrar a unidade e directório actuais.
+
+Ver também: CDD
+.
+
+:TEXT_CMDHELP_CDD
+Mostra ou altera a unidade e directório actuais.
+
+CDD [unidade:][caminho]
+CDD [..]
+
+  ..  Indica que queremos mudar para o directório acima.
+  -   Muda para o directório actual (se a funcionalidade estiver ligada).
+
+Caso uma unidade seja especificada, a unidade actual é também mudada.
+Esta é a única diferença em relação aos comandos "CHDIR" e "CD".
+
+Use CD sem parâmetros para mostrar a unidade e directório actuais.
+.
+
+:TEXT_CMDHELP_CHCP
+Mostra ou altera o número da página de códigos activa.
+
+CHCP [número]
+
+  número  Especifica o número da página de códigos.
+
+Use CHCP sem parâmetro para mostrar o número da página de códigos activa.
+.
+
+:TEXT_CMDHELP_CLS
+Limpa o visor.
+
+CLS
+.
+
+:TEXT_CMDHELP_COMMAND
+Inicia uma nova cópia do intérprete de comandos.
+
+COMMAND [caminho] [dispositivo] [/E:tamanho] [/L:tamanho] [/U:tamanho]
+        [/P] [/MSG] [/LOW] [/Y [/[C|K] comando]]
+
+  caminho      Especifica o caminho completo para o COMMAND.COM.
+  dispositivo  Indica o disositivo a utilizar para entrada e saída de comandos.
+  /E:tamanho   Determina o tamanho inical do ambiente em bytes.
+               Valor entre 256 e 32768.
+  /L:tamanho   Determina o tamanho dos buffers internos em bytes.
+               Valor entre 128 e 1024. Requer opção /P.
+  /U:tamanho   Determina o tamanho dos buffers internos em bytes.
+               Valor entre 128 e 255. Requer opção /P.
+  /P           Cria intérprete de comandos permanente (não pode ser fechado).
+  /MSG         Armazena amensagens de erro em memória. Requer opção /P.
+  /LOW         Força dados residantes a serem mantidos na memória baixa.
+  /Y           Avança passo-a-passo em batch passado nos parâmetros /C ou /K.
+  /C comando   Executa um comando específico e sai.
+  /K comando   Executa um comando específico a continua aberto.
+.
+
+:TEXT_CMDHELP_COPY
+Copia um ou mais ficheiros para outra localização.
+
+COPY [/A | /B] origem [/A | /B] [+ source [/A | /B] [+ ...]]
+     [destino [/A | /B]] [/V] [/Y | /-Y]
+
+  origem   Especifica o ficheiro ou ficheiros a serem copiados.
+  /A       Indica um ficheiro de texto ASCII.
+  /B       Indica um ficheiro binário.
+  destino  Especifica o directório e/ou nome ficheiro de destino.
+  /V       Verifica se os novos ficheiros são escritos correctamente.
+  /Y       Suprime a confirmação de sobrescrita de ficheiros existentes.
+  /-Y      Liga a confirmação de sobrescrita de ficheiros existentes.
+
+A opção /Y pode ser predefinida na variável de ambiente COPYCMD.
+Neste caso a opção pode ser desligada usando /-Y na linha de comandos.
+
+Para concatenar ficheiros, especifique vários ficheiros como origem (usando
+wildcards ou na forma ficheiro1+ficheiro2+...) mas um único como destino.
+.
+
+:TEXT_CMDHELP_CTTY
+Altera o dispositivo de terminal usado para controlar o sistema.
+
+CTTY dispositivo
+
+  dispositivo  Dispositivo de terminar pretendido (como COM1).
+.
+
+:TEXT_CMDHELP_DATE#1
+Mostra ou altera a data do sistema.
+
+DATE [/D | data]
+
+  /D  Previne o pedido interactivo de nova data.
+
+Use DATE sem parâmetros para mostrar a data actual e opcionalmente alterá-la.
+.
+
+:TEXT_CMDHELP_DEL#2
+Elimina um ou mais ficheiros.
+
+DEL ficheiros [/P] [/V]
+ERASE ficheiros [/P] [/V]
+
+  ficheiros  Especifica o(s) ficheiro(s) a eliminar.
+  /P         Pede confirmação antes de eliminar cada ficheiro.
+  /V         Mostra o nome de todos os ficheiros eliminados.
+.
+
+:TEXT_CMDHELP_DIR#4
+Mostra uma lista de ficheiros e subdirectórios num directório.
+
+DIR [unidade:][caminho][nome] [/P] [/W] [/A[[:]atributos]]
+  [/O[[:]ordem]] [/S] [/B] [/L] [/V]
+
+ /P         Pausa após cada visor cheio de informação.
+ /W         Usa formato de listagem alargada.
+ /A         Mostra ficheiros com atributos específicos.
+ atributos    D  Directórios           R  Ficheros apenas de leitura
+              H  Ficheiros escondidos  A  Files prontos a arquivar
+              S  Ficheiros de sistema  -  Prefixo significando negação
+ /O:        Lista ficheiros ordernados.
+ ordem        N  Por nome              S  Por tamanho (crescente)
+              E  Por extensão          D  Por data e hora (cronológicas)
+              G  Agrupa directórios    -  Prefixo significando ordem inversa
+              U  Não ordenar (idêntico a /ONG).
+ /S         Mostra ficheiros no directório e todos os seus subdirectórios.
+ /B         Usa formato mínimo (sem cabeçalho nem sumário).
+ /L         Usa minúsculas apenas.
+ /Y ou /4   Mostra anos de 4 dígitos.
+
+Opções podem ser predefinidas na variável de ambiente DIRCMD. Opções
+predefinidas podem ser desligadas prefixando qualquer opção com '-' na
+linha de comandos. Por exemplo, /-W para desligar listagem alargada.
+.
+
+:TEXT_CMDHELP_DOSKEY#1
+Utilitário DOSKEY integrado no FreeCOM.
+
+Use as teclas Cima e Baixo para navegar o histórico e HISTORY para mostrá-lo.
+Use as teclas Esquerda, Direita, Home e End para navegar dentro de uma linha
+de comandos e Insert para alternar entre modo de inserção e sobreposição.
+Use a tecla Tab para completar a palavra corrente como nome de ficheiro, ou
+pressione-a duas vezes para mostrar todos os ficheiros correspondentes.
+.
+
+:TEXT_CMDHELP_ORIGINAL_DOSKEY#1
+Edita ou recupera linhas de comando e cria macros
+
+DOSKEY [/opções...] [nome=[texto]]
+
+  /BUFSIZE:tamanho  Define o tamanho do buffer (por omissão 512).
+  /ECHO:on|off      Liga ou desliga expansão de macros (ligada por omissão).
+  /FILE:ficheiro    Especifica o ficheiro contendo lista de macros.
+  /HISTORY          Mostra todos os comandos armazenados em memória.
+  /INSERT           Insere novos caracteres na linha ao escrever.
+  /KEYSIZE:tamanho  Define o tamanho do buffer de escrita antecipada
+                    (por omissão 15).
+  /LINE:tamanho     Define o tamanho máximo do buffer de edição da linha
+                    (por omissão 128).
+  /MACROS           Lista todas as macros.
+  /OVERSTRIKE       Sobrescreve caracteres na linha ao escrever
+                    (ligado por omissão).
+  /REINSTALL        Instala uma nova cópia do DOSKey.
+  nome              Especifica o nome da macro a criar.
+  texto             Indica o texto que deve ser associado com a macro.
+
+Teclas:
+  Cima/Baixo  Recuperar comandos.
+  Esc         Limpar comando actual.
+  F7          Mostrar histórico de comandos.
+  ALT+F7      Limpar histórico de comandos.
+  [texto]F8   Procurar por comando começado por 'texto'.
+  F9          Selecciona um comando pelo número.
+  Alt+F10     Limpar definições de macros.
+
+Códigos especiais que podem ser usados em definições de macros:
+  $T          Separador de comandos (permite vários comandos numa macro).
+  $1-$9       Parâmetros (Equivalentes a %1-%9 em ficheiros batch).
+  $*          Representa todos os parâmetros passados à macro.
+.
+
+:TEXT_CMDHELP_ECHO
+Mostra uma mensagem, ou liga e desliga o eco dos comandos.
+
+  ECHO [ON | OFF]
+  ECHO [mensagem]
+
+Use ECHO sem parâmetros para mostrar o estado de eco corrente
+.
+
+:TEXT_CMDHELP_EXIT
+Sai do intérprete de comandos ou de um batch.
+
+EXIT
+.
+
+:TEXT_CMDHELP_FOR
+Executa um comando específico para cada ficheiro num conjunto.
+
+FOR %variável IN (conjunto) DO comando [parâmetros]
+
+  %variável  Especifica o nome da variável definida.
+  conjunto   Indica o conjunto de ficheiros percorrido.
+  comando    Define o comando a ser executado para cada ficheiro.
+  parâmetros Define os parâmetros passados ao comando.
+
+Exemplo:
+  FOR %f IN (a b c) DO ECHO - %f -
+
+Para usar o FOR num batch, especifique %%variável em vez de %variável.
+.
+
+:TEXT_CMDHELP_GOTO
+Redirecciona a execução para a linha de uma etiqueta num batch.
+
+GOTO etiqueta
+
+Uma etiqueta é definida numa linha cotendo apenas ':etiqueta'.
+.
+
+:TEXT_CMDHELP_HISTORY#1
+Mostra o conteúdo do histórico de linhas de comando ou define o seu tamanho.
+
+HISTORY [tamanho]
+
+  tamanho  Define um novo tamanho para o buffer do histórico.
+  
+Use HISTORY sem parâmetros para mostrar o conteúdo actual do histórico.
+.
+
+:TEXT_CMDHELP_IF
+Executa um comando condionalmente.
+
+IF [NOT] ERRORLEVEL número comando
+IF [NOT] texto1==texto2 comando
+IF [NOT] EXIST ficheiro comando
+
+  comando           Especifica o comando a executar de acordo com a condição.
+  NOT               Executar comando apenas a condição seguinte seja falsa.
+  ERRORLEVEL número Comando será executado apenas no caso de o último programa
+                    executado ter resultado num código de saída igual pi
+                    superior ao valor indicado.
+  texto1==texto2    Comando será executado caso os dois textos coincidam.
+  EXIST ficheiro    Comando será executado caso o ficheiro indicado exista.
+.
+
+:TEXT_CMDHELP_LFNFOR
+Liga ou desliga nomes de ficheiro longos no comando FOR e autocomplemento.
+
+LFNFOR [ON | OFF]
+LFNFOR COMPLETE [ON | OFF]
+
+Use LFNFOR ou LFNFOR COMPLETE para obter o estado actual da opção.
+.
+
+:TEXT_CMDHELP_LH
+Carrega um progama na área de memória superior.
+
+LOADHIGH [unidade:][caminho]nome [parâmetros]
+LOADHIGH [/L:região[,min][;região2[,min2]...] [/S]]
+         [unidade:][caminho]nome [parâmetros]
+
+  /L  Especifica as regiões de memória para onde carregar o programa,
+      incluindo opcionalmente o tamanho mínimo de cada região.
+  /S  Reduz UMB ao seu tamanho mínimo ao carregar o programa.
+.
+
+:TEXT_CMDHELP_LOADFIX
+Carega um programa acima dos primeiros 64KB de memória.
+
+LOADFIX [unidade:][caminho]nome
+
+Use LOADFIX para carregar um programa caso tenha obtido um erro "Packed file
+corrupt" ao tentar executá-lo normalmente.
+.
+
+:TEXT_CMDHELP_MD
+Cria um directório.
+
+MKDIR [unidade:]caminho
+MD [unidade:]caminho
+.
+
+:TEXT_CMDHELP_PATH
+Mostra ou altera o caminho de pesquisa de executáveis.
+
+PATH [[unidade:]caminho[;...]]
+PATH ;
+
+Use PATH ; para limpar todas as definições de caminhos de pesquisa e obrigar
+o intérprete de comandos a procurar apenas no caminho actual.
+
+Use PATH sem parâmetros para mostrar a definição actual.
+.
+
+:TEXT_CMDHELP_PAUSE
+Suspende o processamento, mostrando uma mensagem.
+
+PAUSE [mensagem]
+
+Caso nenhuma mensagem seja especificada, será mostrada por omissão a seguinte:
+"Carregue em qualquer teclar para continuar..."
+.
+
+:TEXT_CMDHELP_PROMPT
+Altera o pedido da linha de comandos.
+
+PROMPT [texto]
+
+  texto  Especifica o pedido a mostrar no início de cada linha de comandos.
+
+Códigos especiais que podem ser usados na definição:
+
+  $Q   Sinal de igual '='.
+  $$   Cifrão '$'.
+  $T   Hora actual.
+  $D   Data actual.
+  $P   Unidade e caminho actuais.
+  $V   Número de versão do intérprete de comandos.
+  $N   Unidade actual.
+  $G   Sinal de maior '>'.
+  $L   Sinal de menor '<'.
+  $B   Barra vertical '|'.
+  $H   Retrocesso (apaga carácter anterior).
+  $E   Código de escape (código ASCII 27).
+  $_   Quebra de linha (códigos ASCII 13 e 10).
+
+Use PROMPT sem parâmetros para restaurar a definição por omissão.
+.
+
+:TEXT_CMDHELP_PUSHD
+Adiciona o directório actual à pilha de directórios, opcionalmente mudando
+também em seguida o directório actual.
+
+PUSHD [[unidade:]caminho]
+
+  [unidade:]caminho  Indica qual o directório para onde mudar.
+
+Use	PUSHD sem parâmetros se não pretender mudar o directório actual.
+.
+
+:TEXT_CMDHELP_POPD
+Retira um directório da pilha de directórios e muda para ele.
+
+POPD [*]
+
+Usando o parâmetro '*' a pilha de directórios é limpa.
+.
+
+:TEXT_CMDHELP_DIRS
+Lista o conteúdo da pilha de directórios.
+
+DIRS
+.
+
+:TEXT_CMDHELP_RD
+Remove um directório vazio.
+
+RMDIR [unidade:]caminho
+RD [unidade:]caminho
+.
+
+:TEXT_CMDHELP_REM
+Regista um comentário num batch ou no CONFIG.SYS.
+
+REM [texto]
+.
+
+:TEXT_CMDHELP_REN
+Renomeia um ou vários ficheiros ou directórios.
+
+RENAME [unidade:][caminho][origem] [destino]
+REN [unidade:][caminho][origem] [destino]
+
+Note que não podem se pode ser especificados caminho ou unidade diferentes
+para o ficheiro ou directório de destino. Use o comando MOVE para esse fim.
+.
+
+:TEXT_CMDHELP_SET#1
+Mostra, altera ou remove variáveis de ambiente.
+
+SET [/C] [/P] [/E] [/U] [variável[=[texto]]]
+
+  variável  Especifica o nome da variável de ambiente.
+  texto     Define o valor atribuído à variável (ou um comando usando /E).
+  /C        Manter maiúsculas e minúsculas no nome da variável (por omissão o
+            nome é passado para maiúsculas caso a variável ainda não exista
+            ou mantido caso corresponda a uma variável existente.
+  /P        Pedir um valor ao utilizador e associá-lo à variável.
+  /E        Definir o valor da variável para a saída do comando no texto.
+  /U        Converter o valor atribuído à variável para maiúsculas.
+.
+
+:TEXT_CMDHELP_SHIFT#1
+Altera a posição dos parâmetros numéricos num batch.
+
+SHIFT [DOWN]
+
+Caso se use DOWN, os parâmetros serão em direcção ao primeiro (%0),
+caso contrário em direcção ao último (%9).
+.
+
+:TEXT_CMDHELP_TIME#1
+Mostra ou altera a hora do sistema.
+
+TIME [/T | hora]
+
+  /T  Previne o pedido interactivo de nova hora.
+
+Use TIME sem parâmetros para mostrar a hora actual e opcionalmente alterá-la.
+.
+
+:TEXT_CMDHELP_TRUENAME
+Mostra o caminho completo de um ficheiro ou directório indicados.
+
+TRUENAME [unidade:][caminho][nome]
+.
+
+:TEXT_CMDHELP_TYPE
+Mostra o conteúdo de um ficheiro de texto.
+
+TYPE [unidade:][caminho]nome
+.
+
+:TEXT_CMDHELP_VER
+Mostra a versão do intérprete de comandos e outras informações.
+
+VER [/R] [/W] [/D] [/C]
+
+ /R         Informação sobre a versão do kernel e outras.
+ /W         Garantia do intérprete de comandos. 
+ /D         Informação sobre distribuição do intérprete de comandos.
+ /C         Contribuidores para o projecto do intérprete de comandos.
+.
+
+:TEXT_CMDHELP_VERIFY
+Define se o sistema de ficheiros deve verificar a escrita em disco.
+
+VERIFY [ON | OFF]
+
+Use VERIFY para obter o estado actual desta definição.
+.
+
+:TEXT_CMDHELP_FDDEBUG
+Ligar ou desligar escrita da informação de depuração ou mostrar o seu estado.
+
+FDDEBUG [ON | OFF | ficheiro]
+
+Use FDDEBUG sem parâmetros para mostrar a definição actual.
+
+Se um ficheiro for indicado, toda a informação de depuração será adicionada
+nesse ficheiro. Podem ser usados os nomes especiais "stdout" ou "stderr" para
+especificar as streams de saída e erro por omissão.
+
+Esta opção só poderá ser ligada se o FreeDOS tiver sido compilado com suporte
+para informação de depuração.
+.
+
+:TEXT_CMDHELP_VOL
+Mostra a etiqueta de volume e o número de série do disco, caso existam.
+
+VOL [unidade:]
+
+Use VOL sem parâmetros para mostrar a informação da unidade actual.
+.
+
+:TEXT_CMDHELP_QUESTION#1
+Mostra os comandos e funcionalidades disponíveis no intérprete de comandos.
+
+?
+?comando [parâmetros]
+
+Sem qualquer comando, são mostrados os comandos e funcionalidades disponíveis.
+
+Caso seja indicado um comando, será mostrado um pedido de confirmação antes de
+executá-lo como se o modo passo-a-passo estivesse activo.
+.
+
+:TEXT_CMDHELP_WHICH
+Mostra o ficheiro executável para cada comando especificado.
+
+WHICH comandos...
+.
+
+:TEXT_CMDHELP_MEMORY#1
+Mostra a memória interna utilizada pelo intérprete de comandos.
+
+MEMORY
+.
+
+:TEXT_ERROR_COPY_PLUS_DESTINATION#1
+Não podem existir caracteres '+' na especificação de destino.
+.
+
+:TEXT_DELETE_FILE#1%
+Eliminando ficheiro '%s'.
+.
+
+:TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
+Não é possível escrever no ficheiro '%s'.
+Talvez o disco esteja cheio (%lu bytes requeridos).
+.
+
+# Displayed for BIGcopy(), when copying takes quite a long time.
+# **_NO_END if the input file size is unknown.
+# Both must end in \r rather than \n!!
+:TEXT_COPY_COPIED_NO_END#0%
+copiado %luKB/???KB\r\
+.
+:TEXT_COPY_COPIED#0%
+copiado %luKB/%luKB\r\
+.
+
+:TEXT_ERROR_FCOM_IS_DEVICE#0%
+FreeCOM não pode ser um dispositivo: '%s'
+.
+:TEXT_ERROR_FCOM_INVALID#0%
+Este ficheiro não é um FreeCOM válido ou tem uma versão incompatível:
+%s
+.
+
+:TEXT_ERROR_LOADING_STRINGS
+Não foi possível as carregar mensagens para memória, o caminho indicado por
+%COMSPEC% parece ser inválido. Especifique uma localização válida do FreeCOM
+de onde carregar as mensagens (por exemplo, "C:\\COMMAND.COM"), ou pressione
+Enter para cancelar o carregamento das mensagens.
+.
+
+:TEXT_TERMINATING
+Terminando agora.
+.
+
+:TEXT_HIDDEN_CRITER#0%
+%u pedidos de erros crítico suprimidos.
+.
+
+# The exit reasons MUST be kept in this order!
+:TEXT_DISP_EXITCODE#0%
+Código de saída (ERRORLEVEL): %u, motivo: %u (%s)
+.
+:TEXT_EXIT_REASON_NEG_1
+Erro da API DOS\
+.
+:TEXT_EXIT_REASON_0
+terminado normalmente\
+.
+:TEXT_EXIT_REASON_1
+terminado por ^Break\
+.
+:TEXT_EXIT_REASON_2
+terminado por erro crítico\
+.
+:TEXT_EXIT_REASON_3
+tornado residente\
+.

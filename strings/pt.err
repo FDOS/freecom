@@ -1,0 +1,77 @@
+# $Id: DEFAULT.ERR $
+#
+# Critical error national customization file
+#
+#	Language: Portuguese
+#	Codepage: CP860
+#	Author:   Fabjo Arbaro
+# 
+
+
+## Primary strings
+S2
+BLOCK_DEVICE: Erro %1 na unidade %A: %2 área: %3
+S3
+CHAR_DEVICE: Erro %1 no dispositivo %A: %3
+
+## kind of operation
+S0
+READ: lendo de
+S1
+WRITE: escrevendo para
+
+## kind of failed area of block devices
+S4
+DOS: DOS
+S5
+FAT: FAT
+S6
+ROOT: raiz
+S7
+DATA: dados
+
+## action strings
+S8
+IGNORE: (I)gnorar
+S9
+RETRY: (R)epetir
+S10
+ABORT: (A)bortar
+S11
+FAIL: (F)alhar
+## keys associated with the actions
+S14 (compacted)
+KEYS_IGNORE: iI
+KEYS_RETRY:  rR
+KEYS_ABORT:  aA
+KEYS_FAIL:   fF
+## embedded strings
+S12
+QUESTION:  ? %.
+S13
+DELIMITER: , %.
+
+## Error strings
+UNKNOWN: Código de erro desconhecido
+S15
+0: tentativa de violação de protecção de escrita
+1: unidade desconhecida para controlador
+2: unidade não preparada
+3: comando desconhecido dado a controlador
+4: erro de dados (código CRC inválido)
+5: dimensão da estructura de pedido ao controlador inválida
+6: erro de busca
+7: tipo de suporte desconhecido
+8: sector não encontrado
+9: impressora sem papel
+10: falha de escrita
+11: falha de leitura
+12: falha genérica
+13: falha de partilha
+14: falha de bloqueio
+15: troca de disco inválida
+16: FCB indisponível
+17: memória partilhada esgotada
+18: página de códigos incompatível
+19: entrada esgotada
+20: espaço em disco insuficiente

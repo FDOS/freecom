@@ -4,7 +4,7 @@
 #
 #	Language: Turkish
 #	Codepage: ASCII (7bit) / CP857
-#	Author:   Emir SARI <bitigchi@me.com>
+#	Author:   Emir SARI
 # 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
@@ -175,7 +175,7 @@ Kanal oluşturulamadı! Geçici dosya açılamadı!
 .
 
 :TEXT_ERROR_LONG_LINE_BATCHFILE#0%
-'%s' toplu iş dosyasında satır #%ld çok uzun.
+'%s' toplu iş dosyasında #%ld. satır çok uzun.
 .
 
 :TEXT_ERROR_BFILE_VANISHED#0%
@@ -183,7 +183,7 @@ Toplu iş dosyası '%s' bulunamadı.
 .
 
 :TEXT_ERROR_BFILE_LABEL#0%
-'%s' toplu iş dosyası '%s' etiketini içermemekte.
+'%s' toplu iş dosyası, '%s' etiketini içermemekte.
 .
 
 :TEXT_ERROR_DIRFCT_FAILED#1%
@@ -282,11 +282,11 @@ FOR: DO ardından hiçbir komut girilmemiş.
 .
 
 :TEXT_ERROR_REDIRECT_FROM_FILE#0%
-Çıktı '%s' dosyasından yönlendirilemedi.
+Çıktı, '%s' dosyasından yönlendirilemedi.
 .
 
 :TEXT_ERROR_REDIRECT_TO_FILE#0%
-Çıktı '%s' dosyasına yönlendirilemedi.
+Çıktı, '%s' dosyasına yönlendirilemedi.
 .
 
 :TEXT_ERROR_EMPTY_REDIRECTION#1
@@ -306,7 +306,7 @@ GOTO için hiçbir etiket belirtilmemiş.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
-CTTY komutu bu COMMAND.COM'dan hariç tutulmuştur.
+CTTY komutu bu COMMAND.COM'dan hariç tutuldu.
 .
 
 :TEXT_ERROR_NORW_DEVICE#0%
@@ -375,7 +375,7 @@ IF: Eksik komut.
 .
 
 :TEXT_NOT_IMPLEMENTED_YET
-Özür dileriz. Özellik mevcut değil.
+Özür dileriz, özellik mevcut değil.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
@@ -468,7 +468,7 @@ Bağlam %u bayt olarak yeniden boyutlandırılıyor.
 Bağlama durum verileri eklenmesi başarısız oldu. Bu hata bellek bozukluğunu
 veya yanlış belirlenmiş asgari bağlam boyutuna işaret edebilir.
 Lütfen FreeCOM geliştiricilerine şu adresten bu konuda bilgi verin:
-freedos-devel@lists.sourceforge.net
+freecom@freedos.org
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -505,30 +505,30 @@ DOSKEY özellikleri halihazırda kabukta etkinleştirilmiş.
 .
 
 :TEXT_MSG_ECHO_STATE#0%
-ECHO şudur: %s
+ECHO: %s
 .
 
 :TEXT_MSG_VERIFY_STATE#0%
-VERIFY şudur: %s
+VERIFY: %s
 .
 
 :TEXT_MSG_FDDEBUG_STATE#0%
-DEBUG çıktısı şudur: %s.
+DEBUG çıktısı: %s.
 .
 :TEXT_MSG_FDDEBUG_TARGET#0%
-DEBUG çıktısı şuraya yazılıyor: '%s'.
+DEBUG çıktısı yazılma konumu: '%s'.
 .
 
 :TEXT_MSG_BREAK_STATE#0%
-BREAK şudur: %s
+BREAK: %s
 .
 
 :TEXT_MSG_LFNFOR_STATE#0%
-LFNFOR şudur: %s
+LFNFOR: %s
 .
 
 :TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
-LFN Complete şudur: %s
+LFN Complete: %s
 .
 
 :TEXT_MSG_CURRENT_DATE#0%
@@ -572,10 +572,10 @@ Yeni zaman gir: \
 # Used by Delete all (Y/N) --> let ENTER default to NO
 # Return value: a -> Yes; else -> No
 :PROMPT_DELETE_ALL#1%
-YyNn{CR}{LF}{CBREAK}
+EeHh{CR}{LF}{CBREAK}
 aabb   b   b       b
 '%s' içindeki tüm dosyalar silinecek!
-Emin misiniz (E/H)? \
+Emin misiniz [(E)vet/(H)ayır]? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -583,9 +583,9 @@ Emin misiniz (E/H)? \
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; else -> No
 :PROMPT_YES_NO#1
-YyNn{LF}{CR}{CBREAK}{ESC}
+EeHh{LF}{CR}{CBREAK}{ESC}
 aabb   a   a       b    b
- [Evet=ENTER, Hayır=ESC]? \
+ [(E)vet=ENTER, (H)ayır=ESC]? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -595,10 +595,10 @@ aabb   a   a       b    b
 #	by \r!
 # Return value: a -> Yes; b -> No; c -> All; else -> Undefined
 :PROMPT_CANCEL_BATCH#1%
-YyNnAaQq{LF}{CR}{CBREAK}{ESC}
+EeHhTtKk{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
 Control-Break'e basıldı.\r
-'%s' toplu iş dosyası sonlandırılsın mı (Evet/Hayır/Tümü)? \
+'%s' toplu iş dosyası sonlandırılsın mı [(E)vet/(H)ayır/(T)ümü]? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -606,9 +606,9 @@ Control-Break'e basıldı.\r
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
 :PROMPT_OVERWRITE_FILE#1%
-YyNnAaQq{BREAK}{ENTER}{ESC}
+EeHhTtKk{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-'%s' dosyasının üzerine yazılsın mı (Evet/Hayır/Tümü/Çık) ? \
+'%s' dosyasının üzerine yazılsın mı [(E)vet/(H)ayır/(T)ümü/Çı(k)]? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -616,9 +616,9 @@ aabbccdd      d      a    b
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
 :PROMPT_APPEND_FILE#1%
-YyNnAaQq{BREAK}{ENTER}{ESC}
+EeHhTtKk{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-'%s' dosyasına eklensin mi (Evet/Hayır/Tümü/Çık) ? \
+'%s' dosyasına eklensin mi [(E)vet/(H)ayır/(T)ümü/Çı(k)]? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -626,9 +626,9 @@ aabbccdd      d      a    b
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; b -> No; c -> All; d -> Quit
 :PROMPT_DELETE_FILE#1%
-YyNnAaQq{BREAK}{ENTER}{ESC}
+EeHhTtKk{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-'%s' silinsin mi (Evet/Hayır/Tümü/Çık) ? \
+'%s' silinsin mi [(E)vet/(H)ayır/(T)ümü/Çı(k)]? \
 .
 
 :TEXT_UNKNOWN_FILENAME#1
@@ -825,7 +825,7 @@ verilmeden sunulmaktadır. Daha fazla ayrıntı için GNU Genel Kamu Lisansını
 okuyunuz.
 
 Hata raporlarını şu adrese gönderiniz: freedos-devel@lists.sourceforge.net.
-Güncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
+Güncellemeler https://github.com/FDOS/freecom adresinde mevcuttur
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
@@ -837,7 +837,7 @@ dayalı olarak) herhangi bir daha yeni sürümü kapsamında tekrar
 dağıtabilir ve/veya değiştirebilirsiniz.
 
 Hata raporlarını şu adrese gönderiniz: freedos-devel@lists.sourceforge.net.
-Güncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
+Güncellemeler https://github.com/FDOS/freecom adresinde mevcuttur
 .
 
 :TEXT_MSG_VER_DEVELOPERS
@@ -845,8 +845,10 @@ Güncellemeler http://freedos.sourceforge.net/freecom adresinde mevcuttur
 FreeDOS Komut Kabuğu birçok programcı tarafından geliştirilmiştir, lütfen
 HISTORY.TXT dosyasına bakın.
 
+Şu anki geliştirici: Steffen Kaiser mailto:freecom@freedos.org.
+
 Hata raporları için: freedos-devel@lists.sourceforge.net
-Güncellemeler için: http://freedos.sourceforge.net/freecom 
+Güncellemeler için: https://github.com/FDOS/freecom
 
 
 
@@ -1119,14 +1121,14 @@ Komut satırını düzenler, geri alır ve makro oluşturur
 DOSKEY [/anahtar ...] [makroadı=[metin]]
 
   /BUFSIZE:boyu	Makro ve komut arabelleği boyutunu ayarla (öntanımlı:512)
-  /ECHO:on|off  Makro genişleme yazımını etkinleştir/devre dışı (öntanımlı:açık)
+  /ECHO:on|off  Makro genişleme yazımını aç/kapat (öntanımlı:açık)
   /FILE:dosya   Makro listesi içeren dosya belirt
   /HISTORY      Bellekte muhafaza edilen tüm komutları görüntüle
   /INSERT       Yeni karakterleri düğmesine basıldığında ekle
   /KEYSIZE:boy. Klavyenin type-ahead arabelleği boyutu (öntanımlı:15)
   /LINE:boyut   Satır düzenleme arabelleğinin azami boyutu (öntanımlı:128)
   /MACROS       Tüm DOSKEY makrolarını görüntüle
-  /OVERSTRIKE   Yeni karakterleri düğmesine basıldığında üzerine yaz (öntanımlı)
+  /OVERSTRIKE   Yazarken yeni karakterleri satırın üzerine yaz (öntanımlı)
   /REINSTALL    Yeni bir DOSKEY kopyası kur
   makroadı      Oluşturduğunuz makro için bir ad belirt
   metin         Makroya atamak istediğiniz komutları belirt
@@ -1163,19 +1165,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Belirtilen komutu bir dosya kümesindeki her dosya için çalıştırır.
 
-FOR %%değişken IN (küme) DO komut [komut-parametreleri]
+FOR %değişken IN (küme) DO komut [komut-parametreleri]
 
-  %%değişken	Değiştirilebilir bir parametre belirtir.
-  (küme)     	Bir veya birden çok dosya kümesi belirtir. Joker kullanılabilir.
+  %değişken	Değiştirilebilir bir parametre belirtir.
+  (küme)     	Bir/birden çok dosya kümesi belirtir. Joker kullanılabilir.
   komut      	Her dosya için çalıştırılacak komutu belirtir.
   komut-parametreleri
              	Belirtilen komut için parametre veya anahtar belirtir.
 
-FOR komutunu bir toplu iş betiğinde kullanmak için %%değişken yerine %%%%değişken
+FOR komutunu bir toplu iş betiğinde kullanmak için %değişken yerine %%değişken
 kullanın.
 
 örneğin:
-  FOR %%f IN (---başlangıç--- a*.* ---son---) DO ECHO - %%f -
+  FOR %f IN (---başlangıç--- a*.* ---son---) DO ECHO - %f -
 .
 
 :TEXT_CMDHELP_GOTO
@@ -1205,7 +1207,7 @@ IF [NOT] ERRORLEVEL sayı komut
 IF [NOT] dize1==dize2 komut
 IF [NOT] EXIST dosyaadı komut
 
-  NOT			Komut kabuğunun komutu sadece koşul yanlış ise
+  NOT			Komut kabuğunun komutu yalnızca koşul yanlış ise
                     	çalıştırması gerektiğini belirtir.
   ERRORLEVEL number 	Son çalıştırılan program belirtilene eşit veya ondan
                     	yüksek bir çıkış kodu geri gönderdiyse doğru koşul
@@ -1271,8 +1273,8 @@ MD [sürücü:]yol
 PATH [[sürücü:]yol[;...]]
 PATH ;
 
-Tüm arama yolu ayarlarını temizlemek ve komut kabuğunu sadece güncel dizinde
-arama yapmaya yönlendirmek için PATH ; yazın.
+Tüm arama yolu ayarlarını temizlemek ve komut kabuğunu yalnızca
+güncel dizinde arama yapmaya yönlendirmek için PATH ; yazın.
 Güncel yolu görüntülemek için parametresiz PATH yazın.
 .
 
@@ -1544,4 +1546,3 @@ yerleşik oldu\
 :TEXT_ERROR_EXE_CORRUPT
 EXE dosyası hasarlı\
 .
-
