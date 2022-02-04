@@ -5,7 +5,7 @@
 #	Language: Turkish
 #	Codepage: ASCII (7bit) / CP857
 #	Author:   Emir SARI
-# 
+#
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
 # outputs strings.h and strings.dat.  The .DAT file is appended to
@@ -468,7 +468,7 @@ Bağlam %u bayt olarak yeniden boyutlandırılıyor.
 Bağlama durum verileri eklenmesi başarısız oldu. Bu hata bellek bozukluğunu
 veya yanlış belirlenmiş asgari bağlam boyutuna işaret edebilir.
 Lütfen FreeCOM geliştiricilerine şu adresten bu konuda bilgi verin:
-freecom@freedos.org
+freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
@@ -487,7 +487,7 @@ ancak tüm armalar vs. kaybedildi.
 :TEXT_ERROR_UNKNOWN_ERROR#1%
 %s: Bilinmeyen hata
 .
-	
+
 #
 # Informational messages
 #
@@ -833,7 +833,7 @@ Telif hakkı (C) 1994-2005 Tim Norman ve diğerleri.
 
 Bu program özgür yazılımdır, onu özgür Yazılım Vakfının yayınladığı
 GNU Genel Kamu Lisansının ya 2. sürümü veya (sizin seçiminize
-dayalı olarak) herhangi bir daha yeni sürümü kapsamında tekrar 
+dayalı olarak) herhangi bir daha yeni sürümü kapsamında tekrar
 dağıtabilir ve/veya değiştirebilirsiniz.
 
 Hata raporlarını şu adrese gönderiniz: freedos-devel@lists.sourceforge.net.
@@ -845,11 +845,9 @@ Güncellemeler https://github.com/FDOS/freecom adresinde mevcuttur
 FreeDOS Komut Kabuğu birçok programcı tarafından geliştirilmiştir, lütfen
 HISTORY.TXT dosyasına bakın.
 
-Şu anki geliştirici: Steffen Kaiser mailto:freecom@freedos.org.
-
 Hata raporları için: freedos-devel@lists.sourceforge.net
 Güncellemeler için: https://github.com/FDOS/freecom
-
+.
 
 
 # Displayed when the shell is to terminate, but has been started
@@ -880,7 +878,7 @@ Ortam segmenti      : Azami %5u bayt; boş %5u bayt
 .
 :TEXT_MEMORY_CONTEXT#1%
 Bağlam segmenti     : Azami %5u bayt; boş %5u bayt
-.	
+.
 :TEXT_MEMORY_HEAP#1%
 Yığın               : Boş %5lu bayt
 .
@@ -1225,7 +1223,7 @@ FOR komutu veya dosya adı tamamlaması için uzun adları etkinleştir/devre d�
 LFNFOR [ON | OFF]
 LFNFOR COMPLETE [ON | OFF]
 
-Güncel LFNFOR ayarını görüntülemek için parametresiz LFNFOR veya LFNFOR 
+Güncel LFNFOR ayarını görüntülemek için parametresiz LFNFOR veya LFNFOR
 yazın.
 .
 
@@ -1242,10 +1240,10 @@ LOADHIGH [/L:alan1[,minboyut1][;alan2[,minboyut]...] [/S]]
             varsa asgari boyutu belirtir. Alan2 ve minboyut2 varsa ikinci
             alanın sayısını ve asgari boyutunu belirtirler. İstediğiniz kadar
             alan belirtebilirsiniz.
-            
+
 
 /S          Program yüklenirken bir UMB'yi en küçük boyutuna küçültür.
-            
+
 
 [sürücü:][yol]dosyaadı
             Programın konumunu ve adını belirtir.

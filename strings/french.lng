@@ -171,7 +171,7 @@ L'allocation de mémoire DOS a échoué.
 .
 
 :TEXT_ERROR_CANNOTPIPE
-Cannot pipe!  Ne peut ouvrir le fichier temporaire !
+Impossible d'établir un pipe !  Impossible d'ouvrir le fichier temporaire !
 .
 
 :TEXT_ERROR_LONG_LINE_BATCHFILE#0%
@@ -667,7 +667,7 @@ Total des fichiers listés :
 %10s répertoire(s)\
 .
 :TEXT_DIR_FTR_BYTES_FREE#0%
- %15s octets de libres
+ %15s octets de libre
 .
 :TEXT_DIR_DIRECTORY#0%
 Répertoire de %s
@@ -752,7 +752,7 @@ Fonctionnalités présentes :
 ## Displayed within "?" <-> showcmd() to enumerate the included features
 ## Note the trailing single space
 :TEXT_SHOWCMD_FEATURE_ALIASES#1
-[aliases] \
+[alias] \
 .
 :TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
 [saisie étendue] \
@@ -767,7 +767,7 @@ Fonctionnalités présentes :
 [swapping] \
 .
 :TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
-[start logging] \
+[commencer la journalisation] \
 .
 :TEXT_SHOWCMD_FEATURE_LAST_DIR#1
 [dernier répertoire] \
@@ -776,7 +776,7 @@ Fonctionnalités présentes :
 [longs noms de fichiers] \
 .
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
-[swap kernel] \
+[swap noyau] \
 .
 :TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
 [swap XMS] \
@@ -827,7 +827,7 @@ commercialisation ou d'adaptation dans un but spécifique. Prenez
 connaissance de la Licence Publique Générale GNU pour plus de détails.
 
 Envoyez les rapports de bugs à freedos-devel@lists.sourceforge.net.
-Les mises à jour sont disponibles sur http://freedos.sourceforge.net/freecom
+Les mises à jour sont disponibles sur https://github.com/FDOS/freecom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
@@ -839,7 +839,7 @@ Software Foundation (version 2 ou bien toute autre version ultérieure
 choisie par vous).
 
 Envoyez les rapports de bugs à freedos-devel@lists.sourceforge.net.
-Les mises à jour sont disponibles sur http://freedos.sourceforge.net/freecom
+Les mises à jour sont disponibles sur https://github.com/FDOS/freecom
 .
 
 :TEXT_MSG_VER_DEVELOPERS
@@ -847,8 +847,8 @@ Les mises à jour sont disponibles sur http://freedos.sourceforge.net/freecom
 Le shell de commandes FreeDOS est développé par de nombreux développeurs,
 consultez le fichier HISTORY.TXT attaché.
 
-Envoyer les rapports de bugs à freedos-devel@lists.sourceforge.net.
-Les mises à jour sont disponibles à http://freedos.sourceforge.net/freecom
+Envoyez les rapports de bugs à freedos-devel@lists.sourceforge.net.
+Les mises à jour sont disponibles sur https://github.com/FDOS/freecom
 .
 
 
@@ -1159,7 +1159,7 @@ Tapez ECHO sans paramètres pour afficher le réglage echo actuel.
 .
 
 :TEXT_CMDHELP_EXIT
-Quitte le shell FreeDOS sauf si chargé avec /P.
+Quitte le shell FreeDOS sauf s'il est chargé avec /P.
 
 EXIT
 .
@@ -1167,19 +1167,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Exécute une commande spécifiée pour chaque fichier dans un jeu de fichiers.
 
-FOR %%variable IN (set) DO commande [paramètres-de-commande]
+FOR %variable IN (set) DO commande [paramètres-de-commande]
 
-  %%variable  Spécifie un paramètre remplaçable.
+  %variable  Spécifie un paramètre remplaçable.
   (set)      Spécifie un jeu d'un ou plusieurs fichiers.  Jokers acceptés.
   commande   Spécifie la commande à exécuter pour chaque fichier.
   paramètres-de-commande
              Spécifie des paramètres ou options pour la commande spécifiée.
 
-Pour utiliser la commande FOR dans un programme batch, spécifiez %%%%variable
-au lieu de %%variable.
+Pour utiliser la commande FOR dans un programme batch, spécifiez %%variable
+au lieu de %variable.
 
 Par exemple :
-  FOR %%f IN (---début--- a*.* ---fin---) DO ECHO - %%f -
+  FOR %f IN (---début--- a*.* ---fin---) DO ECHO - %f -
 .
 
 :TEXT_CMDHELP_GOTO
@@ -1214,9 +1214,9 @@ IF [NOT] EXIST nom-de-fichier commande
   ERRORLEVEL nombre Spécifie une condition vraie si le dernier programme
                     exécuté a retourné un code de sortie égal ou supérieur au
                     nombre spécifié.
-  command           Spécifie la commande à exécuter si la condition est
+  commande          Spécifie la commande à exécuter si la condition est
                     satisfaite.
-  string1==string2  Spécifie une condition vraie si les chaînes de texte
+  chaîne1==chaîne2  Spécifie une condition vraie si les chaînes de texte
                     spécifiées correspondent.
   EXIST nom-de-fich.Spécifie une condition vraie a si le nom de fichier
                     spécifié existe.
@@ -1259,7 +1259,7 @@ Charge un programme au-dessus des premiers 64K de mémoire et l'exécute.
 LOADFIX [lecteur:][chemin]nom-de-fichier
 
 Utilisez LOADFIX pour charger un programme si vous avec reçu le message
-"Fichier compressé corrompu" lorsque vous le chargez dans la mém. basse.
+"Fichier compressé corrompu" lorsque vous le chargez dans la mémoire basse.
 .
 
 :TEXT_CMDHELP_MD
@@ -1497,10 +1497,10 @@ le disque serait-il saturé ? (%lu octets requis)
 # **_NO_END if the input file size is unknown.
 # Both must end in \r rather than \n!!
 :TEXT_COPY_COPIED_NO_END#0%
-%luKB/???KB copié \r\
+%luKo/???Ko copiés \r\
 .
 :TEXT_COPY_COPIED#0%
-%luKB/%luKB copié\r\
+%luKo/%luKo copiés\r\
 .
 
 :TEXT_ERROR_FCOM_IS_DEVICE#0%
@@ -1545,4 +1545,7 @@ terminé par une erreur critique\
 .
 :TEXT_EXIT_REASON_3
 devenu résident\
+.
+:TEXT_ERROR_EXE_CORRUPT
+fichier EXE corrompu\
 .
