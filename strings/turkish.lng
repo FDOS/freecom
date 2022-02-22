@@ -119,7 +119,7 @@ Yanlış oluşturulmuş seçenek: '%s'
 .
 
 :TEXT_ERROR_CLOSE_QUOTE#0%
-Eksik kapama tırnak imi: %c
+Eksik kapatma tırnak imi: %c
 .
 
 :TEXT_ERROR_TEMPFILE
@@ -647,7 +647,7 @@ Dizin yığını boş.
 : %s
 .
 :TEXT_DIR_HDR_VOLUME_NONE
-in bir etiketi yok
+bölümünün bir etiketi yok
 .
 :TEXT_DIR_HDR_SERIAL_NUMBER#0%
  Birim seri numarası: %04X-%04X
@@ -656,7 +656,7 @@ in bir etiketi yok
 %10s dosya\
 .
 :TEXT_DIR_FTR_BYTES#0%
-   %12s bayt
+    %12s bayt
 .
 :TEXT_DIR_FTR_TOTAL_NUMBER
 Listelenen toplam dosya:
@@ -686,7 +686,7 @@ Listelenen toplam dosya:
 %-8s %-3s \
 .
 :TEXT_DIR_LINE_SIZE_DIR#1
-        <DİZİN> \
+      <DİZİN> \
 .
 :TEXT_DIR_LINE_SIZE#1%
    %10s \
@@ -924,7 +924,7 @@ Armaları görüntüler, ayarlar, kaldırır.
 ALIAS [değişken[=][dize]]
 
 	değişken  Arma adını belirtir.
-	dize      Armaya atanacak karakter serisi.
+	dizi      Armaya atanacak karakter serisini belirtir.
 
 
 Güncel armaları görüntülemek için parametresiz ALIAS yazın.
