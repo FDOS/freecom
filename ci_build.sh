@@ -9,15 +9,17 @@ else
 fi
 echo CI_BUILD_DIR is \"${CI_BUILD_DIR}\"
 
+OWTAR=ow-snapshot.tar.xz
+
 # Get Watcom compiler
 if [ ! -d _watcom ] ; then
-  if [ ! -f ow-snapshot.tar.gz ] ; then
+  if [ ! -f $OWTAR ] ; then
     echo "Downloading OpenWatcom compiler snaphot"
-    wget --quiet https://github.com/open-watcom/open-watcom-v2/releases/download/Current-build/ow-snapshot.tar.gz
+    wget --no-verbose https://github.com/open-watcom/open-watcom-v2/releases/download/Current-build/$OWTAR
   fi
   echo "Extracting OpenWatcom compiler snaphot"
   mkdir _watcom
-  tar -C _watcom -xf ow-snapshot.tar.gz
+  tar -C _watcom -xf $OWTAR
 fi
 export PATH=$CI_BUILD_DIR/bin:$PATH:$CI_BUILD_DIR/_watcom/binl64
 export WATCOM=$CI_BUILD_DIR/_watcom
@@ -33,7 +35,7 @@ LANGUAGES="english dutch finnish french german italian polish pt pt_br russian s
 for lng in ${LANGUAGES} ; do
   # Do full clean for rebuild of each language
   echo "Do full clean"
-  git clean -x -d -f -e _output -e _watcom -e ow-snapshot.tar.gz >/dev/null 2>&1
+  git clean -x -d -f -e _output -e _watcom -e $OWTAR >/dev/null 2>&1
   export LNG=${lng}
   ./build.sh gcc
   TGT="_output/gcc/${LNG}"
@@ -45,7 +47,7 @@ done
 for lng in ${LANGUAGES} ; do
   # Do full clean for rebuild of each language
   echo "Do full clean"
-  git clean -x -d -f -e _output -e _watcom -e ow-snapshot.tar.gz >/dev/null 2>&1
+  git clean -x -d -f -e _output -e _watcom -e $OWTAR >/dev/null 2>&1
   export LNG=${lng}
   ./build.sh wc
   TGT="_output/wc/${LNG}"
