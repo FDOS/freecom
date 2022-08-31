@@ -38,7 +38,7 @@ union REGPACK {
 		unsigned short ax, bx, cx, dx, bp, si, di, ds, es, flags;
 	} x;
 };
-extern void intr(int nr, union REGPACK *r) __attribute__((stdcall));
+extern void _intrf(int nr, union REGPACK *r) __attribute__((regparmcall));
 
 static inline unsigned getpsp(void)
 {
