@@ -40,7 +40,8 @@ co(mpilers): Micro-C only
 #include "fmemory.loc"
 
 #ifdef COMPILE
-void _fstrcpy(fargDecl(char, dst), fargDecl(const char, src))
-{	_fmemcpy(fargPass(dst), fargPass(src), _fstrlen1(src));
+char far *_fstrcpy(fargDecl(char, dst), fargDecl(const char, src))
+{
+	return (char far *)_fmemcpy(fargPass(dst), fargPass(src), _fstrlen1(src));
 }
 #endif
