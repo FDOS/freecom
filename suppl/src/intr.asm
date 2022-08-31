@@ -34,9 +34,11 @@ segment .text
 
 bits 16
 
-global intr
+global intrf
+global _intrf
 
-intr:
+intrf:
+_intrf:
 
 %elifidni COMPILER, WATCOM 	; and Open Watcom
 %define COMPILE 1
@@ -44,24 +46,22 @@ intr:
 segment _TEXT class=CODE
 
 
-global intr_
+global intrf_
+global _intrf_
 
-intr_:
+intrf_:
+_intrf_:
 %endif
 
 %ifdef COMPILE
 		push	bp			; Standard C entry
 %ifidn __OUTPUT_FORMAT__, elf
-		mov	bp,sp
-		mov	ax, [bp+4]		; interrupt number
-		mov	bx, [bp+6]		; regpack structure
-		push	es
-%else
+		push	es			; gcc-ia16 has es caller-saved
+%endif
 		push	bx
 		push	cx
 		mov	bx, dx
 		push	dx
-%endif
 		push	si
 		push	di
 		push	ds
@@ -87,11 +87,7 @@ intr_1:
 		push	bx
 		mov	bx, sp
 		mov	ds, [ss:bx+6]
-%ifidn __OUTPUT_FORMAT__, elf
-		mov	bx, [ss:bx+20]		; address of REGPACK
-%else
 		mov	bx, [ss:bx+12]		; address of REGPACK
-%endif
 		mov	[bx], ax
 		pop	word [bx+2]
 		mov	[bx+4], cx
@@ -106,15 +102,12 @@ intr_1:
 		pop	ds
 		pop	di
 		pop	si
-%ifidn __OUTPUT_FORMAT__, elf
-		pop	es
-		pop	bp
-		ret	4
-%else
 		pop	dx
 		pop	cx
 		pop	bx
+%ifidn __OUTPUT_FORMAT__, elf
+		pop	es
+%endif
 		pop	bp
 		ret					; retf/retn model specific, see model.inc
-%endif
 %endif
