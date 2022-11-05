@@ -222,6 +222,20 @@ _exit:
 	return retval;
 }
 
+static int is_valid_disk(int tstdsk)
+{
+  int savdsk = getdisk();
+  int newdsk;
+
+  /* Change to new disk */
+  setdisk(tstdsk);
+  newdsk = getdisk();
+
+  /* Restore */
+  setdisk(savdsk);
+
+  return (newdsk == tstdsk);
+}
 
 static int copy(char *dst, char *pattern, struct CopySource *src
   , int openMode)
@@ -437,7 +451,7 @@ static int copy(char *dst, char *pattern, struct CopySource *src
       unlink(rDest);		/* if device -> no removal, ignore error */
       return 0;
     }
-  } while(wildcarded && dos_findnext(&ff) == 0);
+  } while (wildcarded && dos_findnext(&ff) == 0);
   /*} while(wildcarded && FINDNEXT(&ff) == 0 && !(isfirst = 0)); */
 
   dos_findclose(&ff);
@@ -641,6 +655,14 @@ int cmd_copy(char *rest)
   } else {              /* Nay */
     destFile = ".\\*.*";
   }
+
+#define dst destFile
+  /* If the destination specifies a drive, check that it is valid */
+  if (dst[0] && dst[1] == ':' && !is_valid_disk(dst[0] - 'A')) {
+    error_invalid_drive(dst[0] - 'A');
+    return 0;
+  }
+#undef dst
 
   /* Now copy the files */
   h = head;
