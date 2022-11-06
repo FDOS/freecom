@@ -628,7 +628,7 @@ int cmd_copy(char *rest)
 			argBuffer = buf;
 			buf[argc] = p->fnam = q;
 			buf[++argc] = 0;
-  		} else if(*s == ':') {		/* Device name?? */
+		} else if(*s == ':' && (s - p->fnam) > 1) {		/* Device name LPT1:, but not X: */
   			if(!isDeviceName(p->fnam)) {
 				error_invalid_parameter(p->fnam);
 				goto errRet;
