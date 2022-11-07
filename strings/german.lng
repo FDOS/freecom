@@ -1075,7 +1075,7 @@ ERASE [Laufwerk:][Pfad]Dateiname [/P] [/V]
 Zeigt eine Liste von Dateien und Unterverzeichnissen in einem Verzeichnis an.
 
 DIR [Laufwerk:][Pfad][Dateiname] [/P] [/W] [/A[[:]Attribute]]
-  [/O[[:]Reihenfolge]] [/S] [/B] [/L] [/V]
+  [/O[[:]Reihenfolge]] [/S] [/B] [/L]
 
   [Laufwerk:][Pfad][Dateiname]
                Spezifiziert Laufwerk, Verzeichnis, und/oder aufzulistende

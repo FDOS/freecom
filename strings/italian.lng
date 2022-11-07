@@ -1074,7 +1074,7 @@ ERASE [unità:][percorso]nomefile [/P] [/V]
 Visualizza la lista dei file e sottodirectory in una directory.
 
 DIR [unità:][percorso][nomefile] [/P] [/W] [/A[[:]attributi]]
-  [/O[[:]ordine]] [/S] [/B] [/L] [/V]
+  [/O[[:]ordine]] [/S] [/B] [/L]
 
   [unità:][percorso][nomefile]
            Specifica unità, directory, e/o file da visualizzare

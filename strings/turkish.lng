@@ -1079,7 +1079,7 @@ ERASE [sürücü:][yol]dosyaadı [/P] [/V]
 Herhangi bir dizindeki dosyaların ve alt dizinlerin listesini görüntüler.
 
 DIR [sürücü:][yol][dosyaadı] [/P] [/W] [/A[[:]öznitelikler]]
-  [/O[[:]sıralamadüzeni]] [/S] [/B] [/L] [/V]
+  [/O[[:]sıralamadüzeni]] [/S] [/B] [/L]
 
   [sürücü:][yol][dosyaadı]
             Listelenecek sürücü, dizin ve dosyaları belirtir.

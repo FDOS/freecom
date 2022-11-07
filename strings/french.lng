@@ -1083,7 +1083,7 @@ ERASE [lecteur:][chemin]fichier [/P] [/V]
 Affiche une liste des fichiers et de sous répertoires dans un répertoire.
 
 DIR [lecteur:][chemin][nom-de-fichier] [/P] [/W] [/A[[:]attributs]]
-  [/O[[:]ordre-de-tri]] [/S] [/B] [/L] [/V]
+  [/O[[:]ordre-de-tri]] [/S] [/B] [/L]
 
   [lecteur:][chemin][nom-de-fichier]
             Spécifie le lecteur, le répertoire et/ou les fichiers à lister.
