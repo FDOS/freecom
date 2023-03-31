@@ -1045,7 +1045,7 @@ ERASE [drive:][pad]bestandsnaam [/P]
 Toont een lijst van bestanden en directories in een directory.
 
 DIR [drive:][pad][bestandsnaam] [/P] [/W] [/A[[:]attributen]]
-  [/O[[:]sorteervolgorde]] [/S] [/B] [/L] [/V]
+  [/O[[:]sorteervolgorde]] [/S] [/B] [/L]
 
   [drive:][pad][bestandsnaam]
             Duidt de weer te geven schijf, directorie, en/of bestanden aan.

@@ -992,7 +992,7 @@ ERASE ficheiros [/P] [/V]
 Mostra uma lista de ficheiros e subdirectórios num directório.
 
 DIR [unidade:][caminho][nome] [/P] [/W] [/A[[:]atributos]]
-  [/O[[:]ordem]] [/S] [/B] [/L] [/V]
+  [/O[[:]ordem]] [/S] [/B] [/L]
 
  /P         Pausa após cada visor cheio de informação.
  /W         Usa formato de listagem alargada.

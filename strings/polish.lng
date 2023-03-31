@@ -1057,7 +1057,7 @@ ERASE [dysk:][ûcießka]nazwapliku [/P] [/V]
 Wyûwietla listë plik¢w i podkatalog¢w w katalogu.
 
 DIR [dysk:][ûcießka][nazwapliku] [/P] [/W] [/A[[:]atrybuty]]
-  [/O[[:]kolejnoûç]] [/S] [/B] [/L] [/V]
+  [/O[[:]kolejnoûç]] [/S] [/B] [/L]
 
   [dysk:][ûcießka][nazwapliku]
             Okreûla dysk, katalog i/lub pliki do wyûwietlenia.

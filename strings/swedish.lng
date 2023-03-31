@@ -952,7 +952,7 @@ ERASE [enhet:][sökväg]filnamn [/P] [/V]
 Visar en lista med filer och underkataloger i en katalog.
 
 DIR [enhet:][sökväg][filnamn] [/P] [/W] [/A[[:]attribut]]
-  [/O[[:]sortorder]] [/S] [/B] [/L] [/V]
+  [/O[[:]sortorder]] [/S] [/B] [/L]
 
   [enhet:][sökväg][filnamn]
             Anger enhet, katalog och/eller filer att visa.

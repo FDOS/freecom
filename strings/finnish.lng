@@ -1081,7 +1081,7 @@ ERASE [asema:][polku]tiedostonimi [/P] [/V]
 Näyttää hakemistossa olevat tiedostot ja alihakemistot.
 
 DIR [asema:][polku][tiedostonimi] [/P] [/W] [/A[[:]määritteet]]
-  [/O[[:]järjestys]] [/S] [/B] [/L] [/V]
+  [/O[[:]järjestys]] [/S] [/B] [/L]
 
   [asema:][polku][tiedostonimi]
             Määrittää aseman, hakemiston ja/tai lueteltavat tiedostot.
