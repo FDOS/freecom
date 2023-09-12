@@ -58,7 +58,7 @@ void _fmemcpy(unsigned const dseg, unsigned const dofs
 #include <portable.h>
 #include "fmemory.h"
 
-void _fmemcpy(void far * const s1, const void far * const s2, unsigned length)
+void far *_fmemcpy(void far * const s1, const void far * const s2, unsigned length)
 {	byte far*p;
 	const byte far*q;
 
@@ -68,6 +68,7 @@ void _fmemcpy(void far * const s1, const void far * const s2, unsigned length)
 		do *p++ = *q++;
 		while(--length);
 	}
+	return s1;
 }
 
 #endif

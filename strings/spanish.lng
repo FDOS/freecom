@@ -1083,7 +1083,7 @@ ERASE [unidad:][ruta]archivo [/P] [/V]
 Muestra un listado de archivos y subdirectorios en un directorio.
 
 DIR [unidad:][ruta][archivo] [/P] [/W] [/A[[:]atributos]]
-  [/O[[:]orden]] [/S] [/B] [/L] [/V]
+  [/O[[:]orden]] [/S] [/B] [/L]
 
   [unidad:][ruta][archivo]
             Especifica la unidad, directorio y/o archivos a listar.

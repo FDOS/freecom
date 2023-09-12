@@ -48,19 +48,19 @@
 #define _fmemset farmemset
 
 #else	/* !_PAC_NOCLIB_ */
-void _fmemcpy(void far * const dst, const void far * const src, unsigned length);
-void _fmemset(void far * const dst, int ch, unsigned length);
+void far *_fmemcpy(void far * const dst, const void far * const src, unsigned length);
+void far *_fmemset(void far * const dst, int ch, unsigned length);
 #endif	/* _PAC_NOCLIB_ */
 
 unsigned _fstrlen(const char far * const s);
 char far *_fstrchr(const char far * const s, int ch);
-char far *_fmemchr(const char far * const s, int ch, unsigned length);
-void _fmemmove(void far * const dst, const void far * const src, unsigned length);
+void far *_fmemchr(const void far * s, int ch, unsigned length);
+void far *_fmemmove(void far * const dst, const void far * const src, unsigned length);
 int _fmemcmp(const void far * const dst, const void far * const src, unsigned length);
 int _fmemicmp(const void far * const dst, const void far * const src, unsigned length);
 int _fstrcmp(const char far * const dst, const char far * const src);
 int _fstricmp(const char far * const dst, const char far * const src);
-void _fstrcpy(char far * const dst, const char far * const src);
+char far *_fstrcpy(char far * dst, const char far * src);
 
 #endif /* defined(_PAC_NOCLIB_) || defined(_TC_EARLY_) || defined(__GNUC__) */
 #endif		/* _TC_LATER_ */

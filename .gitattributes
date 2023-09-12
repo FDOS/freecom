@@ -26,3 +26,4 @@ strings/russian.??? working-tree-encoding=CP866 text eol=auto
 strings/ukr.???     working-tree-encoding=CP866 text eol=auto
 # Does not exist in iconv, so have to do it manually
 # strings/polish.???  working-tree-encoding=CP991 text eol=auto
+strings/polish.??? text eol=auto

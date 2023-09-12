@@ -83,14 +83,14 @@ void _fmemmove(unsigned dseg, unsigned dofs
 #include <portable.h>
 #include "fmemory.h"
 
-void _fmemmove(void far * const s1, const void far * const s2
+void far *_fmemmove(void far * const s1, const void far * const s2
 	, unsigned length)
 {	byte far *p;
 	byte far *q;
 	byte far *h;
 
 	if(!length)
-		return;
+		return s1;
 
 	p = _fnormalize(s1);
 	q = _fnormalize((void far*)s2);
@@ -117,7 +117,7 @@ void _fmemmove(void far * const s1, const void far * const s2
 				--> copy backwardly
 	*/
 	if(p == q)
-		return;
+		return s1;
 
 	/*
 	 * without the typecasts TC++1 ignores the segment portions completely
@@ -136,6 +136,7 @@ void _fmemmove(void far * const s1, const void far * const s2
 	else {
 		_fmemcpy(s1, s2, length);
 	}
+	return s1;
 }
 #endif
 #endif

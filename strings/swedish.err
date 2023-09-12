@@ -8,13 +8,13 @@
 #
 ## Primary strings
 S2
-BLOCK_DEVICE: Fel %1 enhet %A: %2 omrÕde: %3
+BLOCK_DEVICE: Fel %1 enhet %A: %2 område: %3
 S3
 CHAR_DEVICE: Fel %1 enhet %A: %3
 
 ## kind of operation
 S0
-READ: lõser frÕn
+READ: läser från
 S1
 WRITE: skriver till
 
@@ -32,17 +32,17 @@ DATA: Data
 S8
 IGNORE: (I)gnorera
 S9
-RETRY: (N)ytt f÷rs÷k
+RETRY: (N)ytt försök
 S10
 ABORT: (A)vbryt
 S11
-FAIL: (F)ortsõtt
+FAIL: (M)isslyckas
 ## keys associated with the actions
 S14 (compacted)
 KEYS_IGNORE: iI
-KEYS_RETRY:  rR
+KEYS_RETRY:  nN
 KEYS_ABORT:  aA
-KEYS_FAIL:   fF
+KEYS_FAIL:   mM
 ## embedded strings
 S12
 QUESTION:  ? %.
@@ -50,26 +50,26 @@ S13
 DELIMITER: , %.
 
 ## Error strings
-UNKNOWN: Okõnd fel-kod
+UNKNOWN: Okänd fel-kod
 S15
-0: f÷rs÷k att bryta skrivskyddet
-1: okõnd typ f÷r drivrutin
+0: försök att bryta skrivskyddet
+1: okänd typ för drivrutin
 2: enhet inte klar
-3: drivrutin fick okõnt kommando
+3: drivrutin fick okänt kommando
 4: datafel (fel CRC)
-5: ogiltig strukturlõngd pÕ drivrutinsbegõran
-6: s÷kfel
-7: okõnd mediatyp
+5: ogiltig strukturlängd på drivrutinsbegäran
+6: sökfel
+7: okänd mediatyp
 8: sektorn hittades inte
-9: slut pÕ papper i skrivaren
+9: slut på papper i skrivaren
 10: skrivfel
-11: lõsfel
-12: allmõnt fel
+11: läsfel
+12: allmänt fel
 13: delningsfel
-14: lÕs fel
+14: lås fel
 15: felaktigt diskbyte
-16: FCB ej tillgõnglig
-17: delningsbuffer overflow
-18: codepage stõmmer inte
-19: ingen input
-20: otillrõckligt diskutrymme
+16: FCB ej tillgänglig
+17: överspill av delningsbuffert
+18: kodsida stämmer inte
+19: ingen indata
+20: otillräckligt diskutrymme

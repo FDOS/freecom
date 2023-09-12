@@ -86,7 +86,7 @@ typedef struct {
     unsigned int    r_es;
     unsigned int    r_flags;
 } IREGS;
-#define intrpt(num,regs) intr((num), (union REGPACK*)(regs))
+#define intrpt(num,regs) _intrf((num), (union REGPACK*)(regs))
 
 static inline unsigned short CS_(void)
 {

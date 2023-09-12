@@ -82,7 +82,7 @@ extern unsigned _FLAGS;
 #define _DS reg.x.ds
 #define _ES reg.x.es
 #define _CFLAG (reg.x.flags & 1)
-#define geninterrupt(n)  intr(n,&reg)
+#define geninterrupt(n)  intrpt(n,&reg)
 
 #else
 

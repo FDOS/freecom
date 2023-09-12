@@ -976,7 +976,7 @@ ERASE [drive:][caminho]nome_do_arquivo [/P]
 Mostra uma lista de arquivos e subdiretorios em um diretorio.
 
 DIR [drive:][caminho][nome_do_arquivo] [/P] [/W] [/A[[:]atributos]]
-  [/O[[:]sortorder]] [/S] [/B] [/L] [/V]
+  [/O[[:]sortorder]] [/S] [/B] [/L]
 
   [drive:][caminho][nome_do_arquivo]
             Especifica um drive, diretorio, e/ou arquivos para listar.

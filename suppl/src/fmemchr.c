@@ -61,12 +61,12 @@ unsigned _fmemchr(unsigned const seg, unsigned ofs, const unsigned value, unsign
 #include <portable.h>
 #include "fmemory.h"
 
-char far *_fmemchr(const char far* const s, int ch, unsigned length)
+void far *_fmemchr(const void far * s, int ch, unsigned length)
 {	const byte far *p;
 
 	for(p = (const byte far*)s; length--; ++p)
 		if(*p == ch)
-			return (char far*)p;
+			return (void far*)p;
 
 	return 0;
 }
