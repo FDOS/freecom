@@ -1099,7 +1099,7 @@ ERASE [drive:][path]filename [/P] [/V]
 ディレクトリ内のファイルとサブディレクトリの一覧を表示します.
 
 DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
-  [/O[[:]sortorder]] [/S] [/B] [/L] [/V]
+  [/O[[:]sortorder]] [/S] [/B] [/L]
 
   [drive:][path][filename]
         表示したいドライブ, ディレクトリまたはファイルを指定します.
