@@ -14,10 +14,10 @@ OWTAR=ow-snapshot.tar.xz
 # Get Watcom compiler
 if [ ! -d _watcom ] ; then
   if [ ! -f $OWTAR ] ; then
-    echo "Downloading OpenWatcom compiler snaphot"
-    wget --no-verbose https://github.com/open-watcom/open-watcom-v2/releases/download/Current-build/$OWTAR
+    echo "Downloading OpenWatcom compiler"
+    wget --no-verbose https://github.com/open-watcom/open-watcom-v2/releases/download/2023-02-01-Build/$OWTAR
   fi
-  echo "Extracting OpenWatcom compiler snaphot"
+  echo "Extracting OpenWatcom compiler"
   mkdir _watcom
   tar -C _watcom -xf $OWTAR
 fi
