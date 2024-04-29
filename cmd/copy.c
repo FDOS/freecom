@@ -26,6 +26,7 @@
 #include "../config.h"
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -658,8 +659,8 @@ int cmd_copy(char *rest)
 
 #define dst destFile
   /* If the destination specifies a drive, check that it is valid */
-  if (dst[0] && dst[1] == ':' && !is_valid_disk(dst[0] - 'A')) {
-    error_invalid_drive(dst[0] - 'A');
+  if (dst[0] && dst[1] == ':' && !is_valid_disk(toupper(dst[0]) - 'A')) {
+    error_invalid_drive(toupper(dst[0]) - 'A');
     return 0;
   }
 #undef dst
