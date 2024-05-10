@@ -66,7 +66,7 @@
 
 #if defined(__WATCOMC__) || defined(__GNUC__)
 struct fcb     {
-	char    bytes[0x25];
+	char bytes[0x25];
 };
 
 #ifdef __WATCOMC__
@@ -93,24 +93,24 @@ char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option);
 #else /* __GNUC__ */
 static char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option)
 {
-  char *ret;
-  unsigned char opt = option;
-  asm volatile("int $0x21" :
-      "=S"(ret), "+Ral"(opt) :
-      "Rah"((unsigned char)0x29), "e"(FP_SEG(fcbptr)), "D"(FP_OFF(fcbptr)),
-      "Rds"(FP_SEG(cmdline)), "0"(cmdline) :
-      "cc", "memory");
-  return opt == 0xff ? NULL : ret;
+	char *ret;
+	unsigned char opt = option;
+	asm volatile("int $0x21" :
+		"=S"(ret), "+Ral"(opt) :
+		"Rah"((unsigned char)0x29), "e"(FP_SEG(fcbptr)), "D"(FP_OFF(fcbptr)),
+		"Rds"(FP_SEG(cmdline)), "0"(cmdline) :
+		"cc", "memory");
+	return opt == 0xff ? NULL : ret;
 }
 #endif
 #endif
 
 struct ExecBlock
 {
-  word segOfEnv;
-  char far *cmdLine;
-  struct fcb far *fcb1;
-  struct fcb far *fcb2;
+	word segOfEnv;
+	char far *cmdLine;
+	struct fcb far *fcb1;
+	struct fcb far *fcb2;
 };
 
 #include "algndflt.h"
@@ -123,45 +123,44 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 #	define buf dosCMDTAIL
 #	define memcpy _fmemcpy
 #else
-  unsigned char buf[MAX_EXTERNAL_COMMAND_SIZE+2]; /* 128 bytes is max size in PSP, 2 bytes for size and terminator */
+	unsigned char buf[MAX_EXTERNAL_COMMAND_SIZE+2]; /* 128 bytes is max size in PSP, 2 bytes for size and terminator */
 #endif
-  struct fcb fcb1,
-    fcb2;
-  struct ExecBlock execBlock;
-  int retval;
-  int cmdLen;
+	struct fcb fcb1, fcb2;
+	struct ExecBlock execBlock;
+	int retval;
+	int cmdLen;
 
+	assert(cmd);
+	assert(cmdLine);
 
-  assert(cmd);
-  assert(cmdLine);
+	invalidateNLSbuf();
 
-  invalidateNLSbuf();
+	/* generate Pascal string from the command line */
+	/* we assume passed in c string (ASCIIZ) */
+	cmdLen = strlen(cmdLine);
+	if (cmdLen > MAX_EXTERNAL_COMMAND_SIZE) {
+		/* we assume CMDLINE environment variable already set with full cmdLine */
+		/* so we simply truncate passed command line to max size, terminated by \r, no \0 for callee */
+		/* for maximum compatibility set size to 127 (0x7f) */
+		buf[0] = (unsigned char)(MAX_EXTERNAL_COMMAND_SIZE+1);
+		memcpy(&buf[1], cmdLine, MAX_EXTERNAL_COMMAND_SIZE);
+		/* terminate with just carriage return \r */
+		buf[MAX_EXTERNAL_COMMAND_SIZE+1] = '\x0d';
+	} else {
+		/* set size of actual command line and copy to buffer */
+		buf[0] = (unsigned char)cmdLen;
+		memcpy(&buf[1], cmdLine, cmdLen);
+		/* ensure terminated with \r\0, if less then 126 characters
+		   or \r, if exactly 126 characters */
+		memcpy(&buf[1] + cmdLen, "\x0d", (cmdLen < MAX_EXTERNAL_COMMAND_SIZE) ? 2 : 1);
+	}
 
-  /* generate Pascal string from the command line */
-  /* we assume passed in c string (ASCIIZ) */
-  cmdLen = strlen(cmdLine);
-  if (cmdLen > MAX_EXTERNAL_COMMAND_SIZE) {
-	/* we assume CMDLINE environment variable already set with full cmdLine */
-	/* so we simply truncate passed command line to max size, terminated by \r, no \0 for callee */
-    /* for maximum compatibility set size to 127 (0x7f) */
-    buf[0] = (unsigned char)(MAX_EXTERNAL_COMMAND_SIZE+1);
-    memcpy(&buf[1], cmdLine, MAX_EXTERNAL_COMMAND_SIZE);
-	/* terminate with just carriage return \r */
-	buf[MAX_EXTERNAL_COMMAND_SIZE+1] = '\x0d';
-  } else {
-    /* set size of actual command line and copy to buffer */
-    buf[0] = (unsigned char)cmdLen;
-    memcpy(&buf[1], cmdLine, cmdLen);
-	/* ensure terminated with \r\0, if less then 126 characters
-	   or \r, if exactly 126 characters */
-	memcpy(&buf[1] + cmdLen, "\x0d", (cmdLen < MAX_EXTERNAL_COMMAND_SIZE) ? 2 : 1);
-  }
+	/* fill FCBs */
+	if ((cmdLine = parsfnm(cmdLine, &fcb1, 1)) != 0) {
+		parsfnm(cmdLine, &fcb2, 1);
+	}
 
-  /* fill FCBs */
-  if ((cmdLine = parsfnm(cmdLine, &fcb1, 1)) != 0)
-    parsfnm(cmdLine, &fcb2, 1);
-
-  saveSession();
+	saveSession();
 
 #ifdef FEATURE_XMS_SWAP
 	if(XMSisactive() && swapOnExec == TRUE) {
@@ -176,16 +175,16 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
 		} else
 #endif
 	{
-	  /* fill execute structure */
-	  execBlock.segOfEnv = segOfEnv;
-	  execBlock.cmdLine = (char far *)buf;
-	  execBlock.fcb1 = (struct fcb far *)&fcb1;
-	  execBlock.fcb2 = (struct fcb far *)&fcb2;
+		/* fill execute structure */
+		execBlock.segOfEnv = segOfEnv;
+		execBlock.cmdLine = (char far *)buf;
+		execBlock.fcb1 = (struct fcb far *)&fcb1;
+		execBlock.fcb2 = (struct fcb far *)&fcb2;
 
-	  retval = lowLevelExec((char far*)cmd, (struct ExecBlock far*)&execBlock);
+		retval = lowLevelExec((char far*)cmd, (struct ExecBlock far*)&execBlock);
 	}
 
-  restoreSession();
+	restoreSession();
 				
-  return retval;
+	return retval;
 }
