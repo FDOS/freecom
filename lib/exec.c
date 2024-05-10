@@ -147,12 +147,14 @@ int exec(const char *cmd, char *cmdLine, const unsigned segOfEnv)
     buf[0] = (unsigned char)(MAX_EXTERNAL_COMMAND_SIZE+1);
     memcpy(&buf[1], cmdLine, MAX_EXTERNAL_COMMAND_SIZE);
 	/* terminate with just carriage return \r */
-	memcpy(&buf[1] + buf[0], "\xd", 1);
+	buf[MAX_EXTERNAL_COMMAND_SIZE+1] = '\x0d';
   } else {
     /* set size of actual command line and copy to buffer */
-    memcpy(&buf[1], cmdLine, buf[0] = strlen(cmdLine));
-	/* ensure terminated with \r\0 */
-	memcpy(&buf[1] + buf[0], "\xd", 2);
+    buf[0] = (unsigned char)cmdLen;
+    memcpy(&buf[1], cmdLine, cmdLen);
+	/* ensure terminated with \r\0, if less then 126 characters
+	   or \r, if exactly 126 characters */
+	memcpy(&buf[1] + cmdLen, "\x0d", (cmdLen < MAX_EXTERNAL_COMMAND_SIZE) ? 2 : 1);
   }
 
   /* fill FCBs */
