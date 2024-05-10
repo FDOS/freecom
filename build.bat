@@ -86,7 +86,7 @@ if not "%MAKE%" == "" goto skip_make
 if "%COMPILER%" == "TC2"      set MAKE=%TC2_BASE%\make -f
 if "%COMPILER%" == "TURBOCPP" set MAKE=%TP1_BASE%\bin\make -f
 if "%COMPILER%" == "BC5"      set MAKE=%BC5_BASE%\bin\make -f
-if "%COMPILER%" == "WATCOM"   set MAKE=wmake /ms /h /f 
+if "%COMPILER%" == "WATCOM"   set MAKE=wmake -ms -h -f 
 
 echo Make is %MAKE%.
 
@@ -97,10 +97,10 @@ echo Checking SUPPL library
 cd suppl
 if exist skip goto endSuppl
 echo Building SUPPL library
-%MAKE%suppl.mak all
+%MAKE% suppl.mak all
 if errorlevel 1 goto ende
 cd src
-%MAKE%suppl.mak all
+%MAKE% suppl.mak all
 if errorlevel 1 goto ende
 cd ..
 :endSuppl
@@ -110,7 +110,7 @@ echo.
 echo Making basic utilities for build process
 echo.
 cd utils
-%MAKE%utils.mak all
+%MAKE% utils.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -118,10 +118,10 @@ echo.
 echo Making STRINGS resource
 echo.
 cd strings
-%MAKE%strings.mak all
+%MAKE% strings.mak all
 if errorlevel 1 goto ende
 cd strings
-%MAKE%strings.mak all
+%MAKE% strings.mak all
 if errorlevel 1 goto ende
 cd ..\..
 
@@ -129,7 +129,7 @@ echo.
 echo Making CRITER resource
 echo.
 cd criter
-%MAKE%criter.mak all
+%MAKE% criter.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -137,7 +137,7 @@ echo.
 echo Making misc library
 echo.
 cd lib
-%MAKE%lib.mak all
+%MAKE% lib.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -145,7 +145,7 @@ echo.
 echo Making commands library
 echo.
 cd cmd
-%MAKE%cmd.mak all
+%MAKE% cmd.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -153,7 +153,7 @@ echo.
 echo Making COMMAND.COM
 echo.
 cd shell
-%MAKE%command.mak all
+%MAKE% command.mak all
 if errorlevel 1 goto ende
 cd ..
 
@@ -172,7 +172,7 @@ cd tools
 type tools.m1 >tools.mak
 ..\utils\mktools.exe >>tools.mak
 type tools.m2 >>tools.mak
-%MAKE%tools.mak all
+%MAKE% tools.mak all
 if errorlevel 1 goto ende
 cd ..
 
