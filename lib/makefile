@@ -90,7 +90,7 @@ MAXLINELENGTH !:= 4096
 # Sources of this make target
 SRC = absfile.c almemblk.c alprmblk.c alsysblk.c app_get.c app_set.c \
 	beep_l.c beep_n.c brk_get.c brk_set.c cbreak.c cbs.c cd_dir.c cgetch.c \
-	cgettime.c chgctxt.c chgdrv.c chgenv.c chgenvc.c chgenvr.c clrline.c \
+	cgettime.c chgctxt.c chgdrv.c chgenv.c chgenvc.c chgenvr.c \
 	cmdinput.c comfile.c compfile.c critend.c critrchk.c ctxt.c ctxt_adr.c \
 	ctxt_as.c ctxt_chg.c ctxt_clr.c ctxt_get.c ctxt_inf.c ctxt_mk.c \
 	ctxt_mkb.c ctxt_mkn.c ctxt_pop.c ctxt_psh.c ctxt_rnu.c ctxt_set.c \
@@ -114,7 +114,7 @@ SRC = absfile.c almemblk.c alprmblk.c alsysblk.c app_get.c app_set.c \
 OBJ = absfile.obj almemblk.obj alprmblk.obj alsysblk.obj app_get.obj \
 	app_set.obj beep_l.obj beep_n.obj brk_get.obj brk_set.obj cbreak.obj \
 	cbs.obj cd_dir.obj cgetch.obj cgettime.obj chgctxt.obj chgdrv.obj \
-	chgenv.obj chgenvc.obj chgenvr.obj clrline.obj cmdinput.obj comfile.obj \
+	chgenv.obj chgenvc.obj chgenvr.obj cmdinput.obj comfile.obj \
 	compfile.obj critend.obj critrchk.obj ctxt.obj ctxt_adr.obj ctxt_as.obj \
 	ctxt_chg.obj ctxt_clr.obj ctxt_get.obj ctxt_inf.obj ctxt_mk.obj \
 	ctxt_mkb.obj ctxt_mkn.obj ctxt_pop.obj ctxt_psh.obj ctxt_rnu.obj \
@@ -249,9 +249,6 @@ chgenvc.obj : chgenvc.c \
 chgenvr.obj : chgenvr.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/misc.h ../include/timefunc.h ../strings.h
-clrline.obj : clrline.c \
-	 ../config.h ../include/datefunc.h ../include/debug.h \
-	../include/misc.h ../include/timefunc.h
 cmdinput.obj : cmdinput.c \
 	 ../config.h ../include/command.h ../include/datefunc.h \
 	../include/debug.h ../include/keys.h ../include/misc.h \
