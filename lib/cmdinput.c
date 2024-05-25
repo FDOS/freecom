@@ -111,6 +111,32 @@ static void outsblank(const char * const s)
 	outblank();
 }
 
+static void clrcmdline(char * const str, const unsigned pos, const int maxlen)
+{
+	size_t len = strlen(str);
+	int x = wherex();
+	int y = wherey();
+
+	if(len > 0) {
+		unsigned step;
+
+		for(step = pos; step > 0; step--) {
+			x--;
+			if(x<0) {
+				y--;
+				x=SCREEN_COLS-1;
+			}
+		}
+
+		assert(str);
+		goxy(x, y);
+		memset(str, ' ', len);
+		dos_write(1, str, len);
+		goxy(x, y);
+		memset(str, 0, maxlen);
+	}
+}
+
 /* read in a command line */
 void readcommandEnhanced(char * const str, const int maxlen)
 {
@@ -266,7 +292,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 		case KEY_CTL_C:       		/* ^C */
 		case KEY_ESC:              /* clear str  Make this callable! */
 
-			clrcmdline(str, maxlen, wherex(), wherey());
+			clrcmdline(str, current, maxlen);
 			current = charcount = 0;
 
 			if(ch == KEY_CTL_C && !echo) {
@@ -313,7 +339,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			if(!histGet(--histLevel, prvLine, sizeof(prvLine)))
 				++histLevel;		/* failed -> keep current command line */
 			else {
-				clrcmdline(str, maxlen, wherex(), wherey());
+				clrcmdline(str, current, maxlen);
 				strcpy(str, prvLine);
 				current = charcount = strlen(str);
 				outs(str);
@@ -323,7 +349,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 		case KEY_DOWN:             /* get next command from buffer */
 			if(histLevel) {
-				clrcmdline(str, maxlen, wherex(), wherey());
+				clrcmdline(str, current, maxlen);
 				strcpy(prvLine, str);
 				histGet(++histLevel, str, maxlen);
 				current = charcount = strlen(str);
@@ -333,7 +359,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 		case KEY_F5: /* keep cmdline in F3/UP buffer and move to next line */
 			strcpy(prvLine, str);
-			clrcmdline(str, maxlen, wherex(), wherey());
+			clrcmdline(str, current, maxlen);
 			outc('@');
 			if(orgy >= MAX_Y) {
 				outc('\n');			/* Force scroll */

@@ -27,7 +27,6 @@ OBJ3 =	chgdrv.obj\
 	chgenv.obj\
 	chgenvc.obj\
 	chgenvr.obj\
-	clrline.obj\
 	cmdinput.obj\
 	comfile.obj\
 	compfile.obj
