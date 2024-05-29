@@ -1,6 +1,17 @@
 FreeDOS Command Line Interface Development History
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+v0.85b
+~~~~~
+    fix screen corruption that occurs when performing an editing command that clears the command line and the cursor is not at EOL
+    fix an error that may overwrite 0x100 of a program when writing command line into PSP
+    COPY: allow lowercase drive letter for destination
+    COPY: Check that target drive exists and if not return the proper error code
+    COPY: We shouldn't error if the target argument is a bare drive
+    fix sort order when sorting by date AND time AND results compare identical, return sort by filename
+    fix CTTY suitable for serial terminal via AUX (COMn)
+    various NLS updates
+
 v0.85a
 ~~~~~
     regression fix: ensure not setting errorlevel for all internal commands, exclude commands such IF FOR etc
