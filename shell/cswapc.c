@@ -55,6 +55,7 @@
 #include <assert.h>
 #include <suppl.h>
 #include <mcb.h>
+#include <portable.h>
 #include "../include/command.h"
 
 #include "../include/cswap.h"

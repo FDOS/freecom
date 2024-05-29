@@ -23,7 +23,7 @@
 #include <direct.h>
 #include <stdlib.h>
 #include <stddef.h>
-
+#include <i86.h>
 
 /* Global argc/argv variables */
 #define G_ARGV _argv		/* global char **argv	variable */
@@ -71,13 +71,15 @@ typedef struct {
     unsigned int    r_es;
     unsigned int    r_flags;
 } IREGS;
+
+#if __WATCOMC__ <= 1290
+void intrf(int inter_no, union REGPACK *regs); 
+#endif
 #define intrpt(num,regs) intrf((num), (union REGPACK*)(regs))
 
-#ifdef __WATCOMC__
 unsigned CS_(void);
 #pragma aux CS_ = "mov ax, cs" value[ax];
 #define _CS CS_()
-#endif
 
 /* get/set current working drive */
 extern short getdisk(void);
