@@ -1,3 +1,9 @@
+*.o
+*.obj
+*.lib
+*.exe
+*.tmp
+
 config.bat
 command.com
 config.mak
