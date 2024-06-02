@@ -15,7 +15,7 @@
 #include "../include/keys.h"
 #include "../include/misc.h"
 
-static unsigned orgx, orgy;		/* start of current line */
+static unsigned orgx, orgy;		/* start of current command input */
 
 #define MK_PTR(type,seg,ofs) ((type FAR*) MK_FP (seg, ofs))
 /* safer edition of MK_FP (Arkady) */
@@ -137,6 +137,14 @@ static void clrcmdline(char * const str, const unsigned pos, const int maxlen)
 	}
 }
 
+/* calculates the number of lines to scroll if cursor is initially at position
+   curx,cury and cursor is advanced numchars characters */
+static unsigned numLinesToScroll(const unsigned curx, unsigned cury, const unsigned numchars)
+{
+	cury += (curx + numchars - 1) / SCREEN_COLS;
+	return (cury <= SCREEN_ROWS) ? 0 : cury - SCREEN_ROWS;
+}
+
 /* read in a command line */
 void readcommandEnhanced(char * const str, const int maxlen)
 {
@@ -147,10 +155,11 @@ void readcommandEnhanced(char * const str, const int maxlen)
 #endif
 #ifdef FEATURE_HISTORY
 	int histLevel = 0;
-	char prvLine[MAX_INTERNAL_COMMAND_SIZE];
+	char prvLine[MAX_INTERNAL_COMMAND_SIZE] = { '\0' };
 #endif
 	unsigned curx;
 	unsigned cury;
+	unsigned lines;
 	int count;
 	unsigned current = 0;
 	unsigned charcount = 0;
@@ -164,6 +173,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 	orgx = wherex();
 	orgy = wherey();
+
 	memset(str, 0, maxlen);
 
 	_setcursortype(_NORMALCURSOR);
@@ -259,11 +269,9 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				complete_filename(str, charcount);
 				charcount = strlen(str);
 				current = charcount;
-
 				goxy(orgx, orgy);
 				outs(str);
-				if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
-				  orgy--;
+				orgy -= numLinesToScroll(orgx, orgy, charcount);
 			  } else {                 /* if second TAB, list matches */
 				if (show_completion_matches(str, charcount))
 				{
@@ -271,6 +279,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				  orgx = wherex();
 				  orgy = wherey();
 				  outs(str);
+				  orgy -= numLinesToScroll(orgx, orgy, charcount);
 				}
 			  }
 			}
@@ -280,6 +289,12 @@ void readcommandEnhanced(char * const str, const int maxlen)
 #endif
 
 		case KEY_ENTER:            /* end input, return to main */
+			if (current != charcount) {
+				/* make sure we locate cursor to end of command before 
+				   spawning process */
+				goxy(orgx, orgy);
+				outs(str);
+			}
 
 #ifdef FEATURE_HISTORY
 			if(str[0])
@@ -332,6 +347,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			if(charcount < strlen(prvLine)) {
 				outs(strcpy(&str[charcount], &prvLine[charcount]));
 			   current = charcount = strlen(str);
+				orgy -= numLinesToScroll(orgx, orgy, charcount);
 		   }
 		   break;
 
@@ -342,6 +358,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				clrcmdline(str, current, maxlen);
 				strcpy(str, prvLine);
 				current = charcount = strlen(str);
+				orgy -= numLinesToScroll(orgx, orgy, charcount);
 				outs(str);
 				histGet(histLevel - 1, prvLine, sizeof(prvLine));
 			}
@@ -353,6 +370,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				strcpy(prvLine, str);
 				histGet(++histLevel, str, maxlen);
 				current = charcount = strlen(str);
+				orgy -= numLinesToScroll(orgx, orgy, charcount);
 				outs(str);
 			}
 			break;
@@ -422,13 +440,15 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				for (count = charcount; count > current; count--)
 				  str[count] = str[count - 1];
 				str[current++] = ch;
+				charcount++;
 				curx = wherex() + 1;
 				cury = wherey();
+				if (curx > MAX_X) { curx = 1; cury++; };
 				outs(&str[current - 1]);
-				if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
-				  cury--;
+				lines = numLinesToScroll(orgx, orgy, charcount);
+				cury -= lines;
+				orgy -= lines;
 				goxy(curx, cury);
-				charcount++;
 			  }
 			  else
 			  {
@@ -436,9 +456,9 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				  charcount++;
 				str[current++] = ch;
 				outc(ch);
+				lines = numLinesToScroll(orgx, orgy, charcount);
+				orgy -= lines;
 			  }
-			  if ((strlen(str) > (MAX_X - orgx)) && (orgy == MAX_Y + 1))
-				orgy--;
 			}
 			else
 			  beep();
