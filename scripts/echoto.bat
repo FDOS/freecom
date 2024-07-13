@@ -1,15 +1,2 @@
 @echo off
-set FILE=%1
-set STR=%2
-if "%STR%" == "" goto end_of_script
-
-:loop
-shift
-if "%2" == "" goto end
-set STR=%STR% %2
-goto loop
-:end
-
-echo %STR%>> %FILE%
-:end_of_script
-
+echo %2 %3 %4 %5 %6 %7 %8 %9 >>%1
