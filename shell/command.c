@@ -692,8 +692,10 @@ int expandEnvVars(char *ip, char * const line)
 			  *tp = '\0';
 
 			  if((evar = getEnv(ip)) != 0) {
-				if(cp >= parsedMax(strlen(evar)))
-				  return 0;
+				if(cp >= parsedMax(strlen(evar))) {
+                                        free(evar);
+                                        return 0;
+                                }
 				cp = stpcpy(cp, evar);
 				free(evar);
 			  } else if(matchtok(ip, "ERRORLEVEL")) {
@@ -704,8 +706,10 @@ int expandEnvVars(char *ip, char * const line)
 			  	if(0 == (evar = cwd(0))) {
 				    return 0;
 			  	} else {
-					if(cp >= parsedMax(strlen(evar)))
-					  return 0;
+					if(cp >= parsedMax(strlen(evar))) {
+                                                free(evar);
+                                                return 0;
+                                        }
 					cp = stpcpy(cp, evar);
 					free(evar);
 			  	}
