@@ -5,7 +5,8 @@
 #	Language: English
 #	Codepage: ASCII (7bit) / any codepage
 #	Author:   FreeCOM maintainer
-# 
+# Changelog by W. Spiegl (2024-10-15):
+# "FOR - Example: replaced %% by %%%%"
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
 # outputs strings.h and strings.dat.  The .DAT file is appended to
@@ -1080,7 +1081,7 @@ ERASE [drive:][path]filename [/P] [/V]
 Displays a list of files and subdirectories in a directory.
 
 DIR [drive:][path][filename] [/P] [/W] [/A[[:]attributes]]
-  [/O[[:]sortorder]] [/S] [/B] [/L] [/V]
+  [/O[[:]sortorder]] [/S] [/B] [/L]
 
   [drive:][path][filename]
             Specifies drive, directory, and/or files to list.
@@ -1176,7 +1177,7 @@ To use the FOR command in a batch program, specify %%%%variable instead of
 %%variable.
 
 For example:
-  FOR %%f IN (---start--- a*.* ---end---) DO ECHO - %%f -
+  FOR %%%%f IN (---start--- a*.* ---end---) DO ECHO - %%%%f -
 .
 
 :TEXT_CMDHELP_GOTO
