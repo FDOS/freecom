@@ -1231,9 +1231,9 @@ static int dir_print_body(char *arg, unsigned long *dircount)
 		assert(p);
 		if(!*pattern || (dfnstat(path) & DFN_DIRECTORY) != 0) {
 #ifdef DBCS
-			char *prev_pattern, *org_pattern = pattern;
+			char *prev_pattern;
 			pattern = strchr(pattern, '\0');
-			prev_pattern = CharPrev(org_pattern, pattern);
+			prev_pattern = CharPrev(path, pattern);
 			if (*prev_pattern != '\\')
 #else
 			pattern = strchr(pattern, '\0');
