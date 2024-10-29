@@ -43,8 +43,7 @@ _intrf:
 %elifidni COMPILER, WATCOM 	; and Open Watcom
 %define COMPILE 1
 
-segment _TEXT class=CODE
-
+segment _TEXT
 
 global intrf_
 global _intrf_

@@ -58,16 +58,29 @@ typedef enum {
 */
 #if defined(NEC98)
 # define MAX_X (((*(unsigned char far *)MK_FP(0x0000, 0x053c)) & 2)?40:80)
-# define MAX_Y (*(unsigned char far *)MK_FP(0x0060, 0x0112)+1)
+# if 1 /* need check */
+#  define MAX_Y (*(unsigned char far *)MK_FP(0x0060, 0x0112)+1)
+# else
+#  define MAX_Y (*(unsigned char far *)MK_FP(0x0060, 0x0112))
+# endif
 #elif defined(IBMPC)
 # define MAX_X (*(unsigned int  far*)MK_FP(0x40, 0x4a))
-# define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84) == 0 ? 25 : (*(unsigned char far*)MK_FP(0x40, 0x84)+1))  /* when 0040:0084 contains 0, assume 25 rows (CGA...) */
+# if 1 /* need check */
+#  define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84) == 0 ? 25 : (*(unsigned char far*)MK_FP(0x40, 0x84)+1))  /* when 0040:0084 contains 0, assume 25 rows (CGA...) */
+# else
+#  define MAX_Y (*(unsigned char far*)MK_FP(0x40, 0x84) == 0 ? 24 : *(unsigned char far*)MK_FP(0x40, 0x84)) /* when 0040:0084 contains 0, assume 25 rows (CGA...) */
+# endif
+
 #else
 # define MAX_X 80
-# define MAX_Y 25
+# define MAX_Y 24
 #endif
 #define SCREEN_COLS MAX_X
-#define SCREEN_ROWS MAX_Y
+#if 1 /* need check */
+# define SCREEN_ROWS (MAX_Y + 1)
+#else
+# define SCREEN_ROWS MAX_Y
+#endif
 
 extern FILE *errStream;
 #define outStream stdout
@@ -156,7 +169,6 @@ int set_readcommandType(int enhanced);
 void convert(unsigned long num, unsigned int billions, char * const des);
 
 void goxy(const unsigned char x, const unsigned char y);
-void clrcmdline(char * const str, const int maxlen, int x, int y);
 
 void setErrorLevel(int rc);
 void execute(char *first, char *rest, int lh_lf);
