@@ -18,6 +18,8 @@
 # include "../suppl/nls_c.h"
 #endif
 
+static unsigned orgx, orgy;		/* start of current command input */
+
 #if defined(NEC98)
 unsigned mywherex (void) {
     return 1U + *(unsigned char far *)MK_FP(0x60, 0x11c);
@@ -26,8 +28,6 @@ unsigned mywherey (void) {
     return 1U + *(unsigned char far *)MK_FP(0x60, 0x110);
 }
 #elif defined(IBMPC)
-static unsigned orgx, orgy;		/* start of current command input */
-
 #define MK_PTR(type,seg,ofs) ((type FAR*) MK_FP (seg, ofs))
 /* safer edition of MK_FP (Arkady) */
 typedef struct { unsigned char col, row; } SCRPOS;
@@ -222,24 +222,10 @@ void restoreSpecialKeys(void)
 }
 #endif
 
-static int outs_xyfix(const char * const str, unsigned *ox, unsigned *oy)
-{
-	unsigned max_c = (unsigned)MAX_Y * MAX_X;
-	unsigned where_c = (unsigned)(wherey()-1) * MAX_X + (wherex()-1);
-	unsigned len = strlen(str);
-	int feed = 0;
-	
-	outs(str);
-	where_c += len;
-	if (where_c >= max_c) {
-	  feed = (where_c - max_c) / MAX_X + 1;
-	  *oy -= feed;
-	}
-	return feed;
-}
-
-#if 1 /* need check */
+#if defined(DBCS)
+# include "cmdinp_d.c" /* DBCS version of readcommandEnhanced */
 #else
+
 static void clrcmdline(char * const str, const unsigned pos, const int maxlen)
 {
 	size_t len = strlen(str);
@@ -273,26 +259,10 @@ static unsigned numLinesToScroll(const unsigned curx, unsigned cury, const unsig
 	cury += (curx + numchars - 1) / SCREEN_COLS;
 	return (cury <= SCREEN_ROWS) ? 0 : cury - SCREEN_ROWS;
 }
-#endif /* need check */
 
 /* read in a command line */
-#if defined(DBCS)
-# include "cmdinp_d.c"
-#else
-
-static void clrcmdline_oxy(char * const str, const int maxlen, const unsigned charcount, unsigned ox, unsigned oy)
-{
-	unsigned len = charcount ? charcount : strlen(str);
-	goxy(ox, oy);
-	while(len-- > 0) outc(' ');
-	goxy(ox, oy);
-	memset(str, 0, maxlen);
-}
-#define clrcmdline(s,m,cc,ox,oy,cpos)	clrcmdline_oxy(s,m,cc,ox,oy)
-
 void readcommandEnhanced(char * const str, const int maxlen)
 {
-	static unsigned orgx, orgy;		/* start of current line */
 	unsigned char insert = 1;
 	unsigned ch;
 #ifdef FEATURE_FILENAME_COMPLETION
@@ -415,12 +385,8 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				charcount = strlen(str);
 				current = charcount;
 				goxy(orgx, orgy);
-#if 1 /* need check */
-				outs_xyfix(str, &orgx, &orgy);
-#else
 				outs(str);
 				orgy -= numLinesToScroll(orgx, orgy, charcount);
-#endif
 			  } else {                 /* if second TAB, list matches */
 				if (show_completion_matches(str, charcount))
 				{
@@ -456,11 +422,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 		case KEY_CTL_C:       		/* ^C */
 		case KEY_ESC:              /* clear str  Make this callable! */
 
-#if 1 /* need check */
-			clrcmdline(str, maxlen, charcount, orgx, orgy, current);
-#else
 			clrcmdline(str, current, maxlen);
-#endif
 			current = charcount = 0;
 
 			if(ch == KEY_CTL_C && !echo) {
@@ -508,48 +470,29 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			if(!histGet(--histLevel, prvLine, sizeof(prvLine)))
 				++histLevel;		/* failed -> keep current command line */
 			else {
-#if 1 /* need check */
-				clrcmdline(str, maxlen, charcount, orgx, orgy, current);
-				strcpy(str, prvLine);
-				current = charcount = strlen(str);
-				outs_xyfix(str, &orgx, &orgy); // outs(str);
-#else
 				clrcmdline(str, current, maxlen);
 				strcpy(str, prvLine);
 				current = charcount = strlen(str);
 				orgy -= numLinesToScroll(orgx, orgy, charcount);
 				outs(str);
-#endif
 				histGet(histLevel - 1, prvLine, sizeof(prvLine));
 			}
 			break;
 
 		case KEY_DOWN:             /* get next command from buffer */
 			if(histLevel) {
-#if 1 /* need check */
-				clrcmdline(str, maxlen, charcount, orgx, orgy, current);
-				strcpy(prvLine, str);
-				histGet(++histLevel, str, maxlen);
-				current = charcount = strlen(str);
-				outs_xyfix(str, &orgx, &orgy); // outs(str);
-#else
 				clrcmdline(str, current, maxlen);
 				strcpy(prvLine, str);
 				histGet(++histLevel, str, maxlen);
 				current = charcount = strlen(str);
 				orgy -= numLinesToScroll(orgx, orgy, charcount);
 				outs(str);
-#endif
 			}
 			break;
 
 		case KEY_F5: /* keep cmdline in F3/UP buffer and move to next line */
 			strcpy(prvLine, str);
-#if 1 /* need check */
-			clrcmdline(str, maxlen, charcount, orgx, orgy, current);
-#else
 			clrcmdline(str, current, maxlen);
-#endif
 			outc('@');
 			if(orgy >= MAX_Y) {
 				outc('\n');			/* Force scroll */
@@ -615,13 +558,6 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				for (count = charcount; count > current; count--)
 				  str[count] = str[count - 1];
 				str[current++] = ch;
-#if 1 /* need check */
-				curx = wherex();
-				cury = wherey();
-				cury -= outs_xyfix(&str[current - 1], &orgx, &orgy);
-				++curx;
-				if (curx > MAX_X) { curx = 1; cury++; };
-#else
 				charcount++;
 				curx = wherex() + 1;
 				cury = wherey();
@@ -630,7 +566,6 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				lines = numLinesToScroll(orgx, orgy, charcount);
 				cury -= lines;
 				orgy -= lines;
-#endif
 				goxy(curx, cury);
 			  }
 			  else
@@ -641,14 +576,8 @@ void readcommandEnhanced(char * const str, const int maxlen)
 				curx = wherex();
 				cury = wherey();
 				outc(ch);
-#if 1 /* need check */
-				if (wherex() < curx && wherey() == cury) {
-				  orgy--;
-				}
-#else
 				lines = numLinesToScroll(orgx, orgy, charcount);
 				orgy -= lines;
-#endif
 			  }
 			}
 			else

@@ -7,6 +7,22 @@
 # define isDbcsLead(ch) (0)
 #endif
 
+static int outs_xyfix(const char * const str, unsigned *ox, unsigned *oy)
+{
+	const unsigned max_c = (unsigned)(SCREEN_ROWS) * (MAX_X);
+	unsigned where_c = (unsigned)(wherey()-1) * MAX_X + (wherex()-1);
+	unsigned len = strlen(str);
+	int feed = 0;
+	
+	outs(str);
+	where_c += len;
+	if (where_c >= max_c) {
+	  feed = (where_c - max_c) / MAX_X + 1;
+	  *oy -= feed;
+	}
+	return feed;
+}
+
 unsigned curposToXY(const char * const str_top, unsigned curpos, unsigned *offset_x0, unsigned *offset_y0)
 {
 	unsigned x_max0 = MAX_X - 1;
@@ -91,12 +107,13 @@ static void clrcmdline_oxy_d(char * const str, const int maxlen, const unsigned 
 	memset(str, 0, maxlen);
 }
 
+#if 0
 #undef clrcmdline
 #define clrcmdline(s,m,cc,ox,oy,cpos)	clrcmdline_oxy_d(s,m,cc,ox,oy)
+#endif
 
 void readcommandEnhanced(char * const str, const int maxlen)
 {
-	static unsigned orgx, orgy;		/* start of current line */
 	unsigned char insert = 1;
 	unsigned ch;
 #ifdef FEATURE_FILENAME_COMPLETION
@@ -255,7 +272,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 		case KEY_CTL_C:       		/* ^C */
 		case KEY_ESC:              /* clear str  Make this callable! */
 
-			clrcmdline(str, maxlen, charcount, orgx, orgy, current);
+			clrcmdline_oxy_d(str, maxlen, charcount, orgx, orgy);
 			current = charcount = 0;
 
 			if(ch == KEY_CTL_C && !echo) {
@@ -279,7 +296,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 			if(!histGet(--histLevel, prvLine, sizeof(prvLine)))
 				++histLevel;		/* failed -> keep current command line */
 			else {
-				clrcmdline(str, maxlen, charcount, orgx, orgy, current);
+				clrcmdline_oxy_d(str, maxlen, charcount, orgx, orgy);
 				strcpy(str, prvLine);
 				current = charcount = strlen(str);
 				outs_xyfix(str, &orgx, &orgy); // outs(str);
@@ -289,7 +306,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 		case KEY_DOWN:             /* get next command from buffer */
 			if(histLevel) {
-				clrcmdline(str, maxlen, charcount, orgx, orgy, current);
+				clrcmdline_oxy_d(str, maxlen, charcount, orgx, orgy);
 				strcpy(prvLine, str);
 				histGet(++histLevel, str, maxlen);
 				current = charcount = strlen(str);
@@ -299,7 +316,7 @@ void readcommandEnhanced(char * const str, const int maxlen)
 
 		case KEY_F5: /* keep cmdline in F3/UP buffer and move to next line */
 			strcpy(prvLine, str);
-			clrcmdline(str, maxlen, charcount, orgx, orgy, current);
+			clrcmdline_oxy_d(str, maxlen, charcount, orgx, orgy);
 			outc('@');
 			if(orgy >= MAX_Y) {
 				outc('\n');			/* Force scroll */
