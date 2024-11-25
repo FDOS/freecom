@@ -18,8 +18,6 @@
 # include "../suppl/nls_c.h"
 #endif
 
-static unsigned orgx, orgy;		/* start of current command input */
-
 #if defined(NEC98)
 unsigned mywherex (void) {
     return 1U + *(unsigned char far *)MK_FP(0x60, 0x11c);
@@ -92,6 +90,8 @@ void outc(char c)
 #endif
 
 #ifdef FEATURE_ENHANCED_INPUT
+
+static unsigned orgx, orgy;		/* start of current command input */
 
 /* set cursor state for insert/overwrite mode */
 #if defined(NEC98)

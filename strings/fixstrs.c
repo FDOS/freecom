@@ -413,7 +413,7 @@ int loadFile(const char * const fnam)
 
 #if defined(DBCS)
 	is_dbcs_lead = is_dbcs_lead_default;
-	if (upfnam = strdup(fnam))
+	if ((upfnam = strdup(fnam)) != NULL)
 	{
 		strupr(upfnam);
 		if (strstr(upfnam, "JAPAN") || strstr(upfnam, "CP932"))

@@ -70,6 +70,7 @@ while (( "$#" )); do
 	;;
     generic)
 	export GENDOS=1
+	export NO_ENH_INP=1
 	unset IBMPC
 	unset NEC98
 	;;
