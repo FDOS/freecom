@@ -29,8 +29,8 @@ LIBPATH = $(CC_BASE_PATH)$(DIRSEP)lib
 INCLUDEPATH = -I$(CC_BASE_PATH)$(DIRSEP)h
 CC = $(BINPATH)$(DIRSEP)wcc -zq -fo=.obj
 CL = $(BINPATH)$(DIRSEP)wcl -zq -fo=.obj -bcl=dos
-AR = $(BINPATH)$(DIRSEP)wlib -n -c -l
-LIBLIST = $#
+AR = $(BINPATH)$(DIRSEP)wlib -n -c
+LIBLIST = >
 ECHOLIB = echo >>
 
 CFG = watcomc.cfg
