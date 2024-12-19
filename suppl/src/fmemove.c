@@ -79,7 +79,7 @@ void _fmemmove(unsigned dseg, unsigned dofs
 }
 
 #else
-#if defined(_PAC_NOCLIB_) || defined(_TC_EARLY_) || defined(__GNUC__)
+#if defined(_PAC_NOCLIB_) || defined(_TC_EARLY_)
 #include <portable.h>
 #include "fmemory.h"
 

@@ -106,6 +106,10 @@ co(mpilers):
 
 #include "initsupl.loc"
 
+#ifdef __GNUC__
+#include <libi86/string.h>
+#endif
+
 #ifndef _MICROC_
 #include <dos.h>
 #include <string.h>

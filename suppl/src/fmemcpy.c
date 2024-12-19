@@ -54,7 +54,7 @@ void _fmemcpy(unsigned const dseg, unsigned const dofs
 
 #else
 
-#if defined(_TC_EARLY_) || defined(__GNUC__)
+#if defined(_TC_EARLY_)
 #include <portable.h>
 #include "fmemory.h"
 

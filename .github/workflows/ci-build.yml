@@ -22,7 +22,7 @@ jobs:
       run: |
         sudo add-apt-repository ppa:tkchia/build-ia16
         sudo apt update
-        sudo apt install gcc-ia16-elf nasm upx
+        sudo apt install gcc-ia16-elf libi86-ia16-elf nasm upx
 
     - name: build
       run: ./ci_build.sh

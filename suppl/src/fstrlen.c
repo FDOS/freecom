@@ -49,7 +49,7 @@ unsigned _fstrlen(unsigned const seg, unsigned const ofs)
 
 #else
 
-#if defined(_TC_EARLY_) || defined(__GNUC__)
+#if defined(_TC_EARLY_)
 #include <assert.h>
 #include <portable.h>
 #include "fmemory.h"
