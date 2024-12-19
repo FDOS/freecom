@@ -57,7 +57,7 @@ unsigned _fmemchr(unsigned const seg, unsigned ofs, const unsigned value, unsign
 }
 
 #else
-#if defined(_TC_EARLY_) || defined(__GNUC__)
+#if defined(_TC_EARLY_)
 #include <portable.h>
 #include "fmemory.h"
 

@@ -5,6 +5,7 @@ RMFILES2 = rm -f
 ECHOTO = echo >>
 ECHOTO0 = echo >>
 CP = cp
+LIBC = -li86
 NASMFLAGS := $(NASMFLAGS) -felf
 SHELL_MMODEL_COMP=cmodel=small
 FIXSTRS_MMODEL=
@@ -14,7 +15,7 @@ CC = ia16-elf-gcc -c
 CL = ia16-elf-gcc -mcmodel=small
 CLO = -o $@
 AR = ia16-elf-ar crsv
-LD = $(CL) $(CFLAGS1) -o command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) command.ld $(LIBS) -Wl,-Map,command.map \#
+LD = $(CL) $(CFLAGS1) -o command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) command.ld $(LIBS) $(LIBC) -Wl,-Map,command.map \#
 LIBLIST = >
 ECHOLIB = echo >>
 

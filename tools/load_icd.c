@@ -12,7 +12,7 @@
 
 #include "suppl.h"
 #include "portable.h"
-#if defined(_TC_EARLY_) || defined(__GNUC__)
+#if defined(_TC_EARLY_)
 # include "fmemory.h"
 #endif
 

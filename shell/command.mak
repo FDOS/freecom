@@ -27,7 +27,7 @@ OBJ4 =	redir.obj\
 	ver.obj
 LIBS = 	..$(DIRSEP)cmd$(DIRSEP)cmds.lib ..$(DIRSEP)lib$(DIRSEP)freecom.lib \
 ..$(DIRSEP)strings$(DIRSEP)strings.lib \
-$(SUPPL_LIB_PATH)$(DIRSEP)suppl_$(SHELL_MMODEL).lib $(LIBC)
+$(SUPPL_LIB_PATH)$(DIRSEP)suppl_$(SHELL_MMODEL).lib
 
 echoto.bat: ../scripts/echoto.bat
 	$(CP) ..$(DIRSEP)scripts$(DIRSEP)echoto.bat .
@@ -41,6 +41,7 @@ command.rsp : echoto.bat
 	$(ECHOTO0) command.rsp command.exe
 	$(ECHOTO0) command.rsp command.map
 	$(ECHOTO0) command.rsp $(LIBS)
+	$(ECHOTO0) command.rsp $(LIBC)
 
 command.exe : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) command.rsp
 	$(LD) @command.rsp

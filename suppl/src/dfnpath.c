@@ -54,6 +54,9 @@ fi(le): dfnpath.c
 #ifndef _MICROC_
 #include <ctype.h>
 #endif
+#if defined(__GNUC__)
+#include <direct.h>
+#endif
 #include "dfn.loc"
 #include "dynstr.h"
 #include "suppl.h"
