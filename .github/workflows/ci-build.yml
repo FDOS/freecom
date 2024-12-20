@@ -18,11 +18,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Package install
-      run: |
-        sudo add-apt-repository ppa:tkchia/build-ia16
-        sudo apt update
-        sudo apt install gcc-ia16-elf libi86-ia16-elf nasm upx
+    - name: prerequisites
+      run: ./ci_prereq.sh
 
     - name: build
       run: ./ci_build.sh
