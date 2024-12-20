@@ -45,6 +45,12 @@ for lng in ${LANGUAGES} ; do
   mv -i command.com ${TGT}/.
 done
 
+# Let's use the just compiled command.com for the DOS builds and get some
+# testing of it for free. Note case insensitive target in case the freecom
+# package ever has an upper or mixed case file.
+echo Copying the GCC Linux built command.com to use for the DOS builds
+cp -v _output/gcc/english/command.com ${HOME}/.dosemu/drive_c/[Cc][Oo][Mm][Mm][Aa][Nn][Dd].[Cc][Oo][Mm]
+
 # Watcom (DOS) (slow so just English)
 mkdir -p _output/wc_dos/english
 git clean -q -x -d -f -e _output -e _watcom -e $OWTAR
