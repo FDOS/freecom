@@ -11,16 +11,6 @@ echo CI_BUILD_DIR is \"${CI_BUILD_DIR}\"
 
 OWTAR=ow-snapshot.tar.xz
 
-# Get Watcom compiler
-if [ ! -d _watcom ] ; then
-  if [ ! -f $OWTAR ] ; then
-    echo "Downloading OpenWatcom compiler"
-    wget --no-verbose https://github.com/open-watcom/open-watcom-v2/releases/download/2023-02-01-Build/$OWTAR
-  fi
-  echo "Extracting OpenWatcom compiler"
-  mkdir _watcom
-  tar -C _watcom -xf $OWTAR
-fi
 export PATH=$CI_BUILD_DIR/bin:$PATH:$CI_BUILD_DIR/_watcom/binl64
 export WATCOM=$CI_BUILD_DIR/_watcom
 
