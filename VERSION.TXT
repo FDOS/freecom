@@ -1,1 +1,1 @@
-FreeCom version 0.85b - WATCOMC [May 28 2024]
+FreeCom version 0.86 - WATCOMC [Dec 21 2024]
