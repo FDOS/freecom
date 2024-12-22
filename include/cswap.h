@@ -31,7 +31,7 @@ extern unsigned char far dosCMDNAME[128];
 
 extern int cdecl XMSexec(void);	
 
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__)
 typedef unsigned long xmsfunc(unsigned request, unsigned dx, void *si);
 #pragma aux xmsfunc = parm [ax] [dx] [si] modify [bx cx]
 extern xmsfunc far *far XMSdriverAdress;

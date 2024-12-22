@@ -197,7 +197,7 @@ void XMSinit(void)
 /*	asm	mov ah, 09	*/
 /*	asm mov dx, XMSALLOCSIZE; */		/* will do for first try */
 
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__)
 	res = xmsaddr(0x900, xms_block_size + 1, NULL);
 #elif defined(__GNUC__)
 	res = XMSrequest(0x900, xms_block_size + 1, NULL);
