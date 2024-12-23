@@ -12,6 +12,9 @@
 
 int recursive_rmdir(const char * path, int optRecursiveMode, int optQuiet)
 {
+	/* optQuiet effects parsing showing errors, but no effect on recursive call */
+	(void) optQuiet;
+	
 	if (optRecursiveMode) {
 		return 0;
 	} else {
