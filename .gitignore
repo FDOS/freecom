@@ -4,6 +4,11 @@
 *.exe
 *.tmp
 
+# CI build
+_downloads/**
+_output/**
+_watcom/**
+
 config.bat
 command.com
 config.mak
