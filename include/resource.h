@@ -44,7 +44,7 @@ typedef struct {		/* type of a control area */
 #include "algndflt.h"
 
 typedef int (*res_callbackp_t)(res_majorid_t, res_minorid_t
- , unsigned long, int, void *);
+ , unsigned long, int, void * const);
 
 #define RES_COOKIE "FREECOM "
 
