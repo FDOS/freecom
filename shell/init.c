@@ -284,7 +284,7 @@ int initialize(void)
      >126 treat as flag indicating to use CMDLINE env variable */
   cmdlen = (unsigned)peekb(_psp, 0x80);
   /* #2 extended command line in CMDLINE env var */
-  //printf("Command line is %u chars long\n", cmdlen);
+  /* printf("Command line is %u chars long\n", cmdlen); */
   if (cmdlen > MAX_EXTERNAL_COMMAND_SIZE) {
     cmdlen = 0;
 	cmdline = 0;
@@ -320,7 +320,7 @@ int initialize(void)
   _fmemcpy((char far*)cmdline, MK_FP(_psp, 0x81), cmdlen);
   cmdline[cmdlen] = '\0';
   }
-  //printf("CMDLINE:[%s]\n", cmdline);
+  /* printf("CMDLINE:[%s]\n", cmdline); */
 #ifdef FEATURE_CALL_LOGGING
 #ifndef INCLUDE_CMD_FDDEBUG
   if((f = fopen(logFilename, "at")) == 0) {
