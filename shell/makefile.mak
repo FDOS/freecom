@@ -40,7 +40,7 @@ command.rsp : echoto.bat
 	$(ECHOTO0) command.rsp $(OBJ4)
 	$(ECHOTO0) command.rsp command.exe
 	$(ECHOTO0) command.rsp command.map
-	$(ECHOTO0) command.rsp $(LIBS)
+	$(ECHOTO0) command.rsp $(LIBS)+
 	$(ECHOTO0) command.rsp $(LIBC)
 
 command.exe : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) command.rsp
