@@ -52,11 +52,11 @@ echolib.bat : ../scripts/echolib.bat
 
 cmds.rsp : echolib.bat cmd.mak
 	$(RMFILES) cmds.rsp
-	$(ECHOLIB) cmds.rsp $(OBJ1)
-	$(ECHOLIB) cmds.rsp $(OBJ2)
-	$(ECHOLIB) cmds.rsp $(OBJ3)
-	$(ECHOLIB) cmds.rsp $(OBJ4)
-	$(ECHOLIB) cmds.rsp $(OBJ5)
+	$(ECHOLIB) cmds.rsp +$(OBJ1: = +)
+	$(ECHOLIB) cmds.rsp +$(OBJ2: = +)
+	$(ECHOLIB) cmds.rsp +$(OBJ3: = +)
+	$(ECHOLIB) cmds.rsp +$(OBJ4: = +)
+	$(ECHOLIB) cmds.rsp +$(OBJ5: = +)
 
 cmds.lib : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) cmds.rsp
 	$(RMFILES) cmds.lib
