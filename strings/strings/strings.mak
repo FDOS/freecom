@@ -1,6 +1,6 @@
 CFG_DEPENDENCIES = strings.mak
 
-TOP=../..
+TOP = ../..
 !include "$(TOP)/config.mak"
 
 CFG:=../$(CFG)

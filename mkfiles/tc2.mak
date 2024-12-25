@@ -13,7 +13,8 @@ OBJC0 = $(LIBPATH)\c0$(SHELL_MMODEL).obj
 LIBC = $(LIBPATH)\c$(SHELL_MMODEL).lib
 
 CFG = TURBOC.CFG
-CFLAGS1 = -1- -a- -f- -ff- -K -w+ -O -Z -L$(LIBPATH)
+CFLAGS1 = -1- -a- -f- -ff- -K -w+ -O -Z
+CFLAGS2 = -L$(LIBPATH)
 
 #		*Implicit Rules*
 .c.exe:
