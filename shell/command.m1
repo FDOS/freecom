@@ -1,6 +1,6 @@
 .AUTODEPEND
 
-CFG_DEPENDENCIES = COMMAND.MAK ..\strings.h
+CFG_DEPENDENCIES = makefile.mak ..\strings.h
 
 !include "..\config.mak"
 

@@ -4,7 +4,7 @@ set SWAP=YES-DXMS-SWAP____________________
 if NOT "%SWAP%"=="YES-DXMS-SWAP____________________" goto err1
 : BEGIN Internal stuff for ska -- If one of these three commands
 :       fail for you, your distribution is broken! Please report.
-for %%a in (lib\lib.mak cmd\cmd.mak shell\command.mak) do if not exist %%a set SWAP=NO
+for %%a in (lib\makefile.mak cmd\makefile.mak shell\makefile.mak) do if not exist %%a set SWAP=NO
 if "%SWAP%"=="NO" set XMS_SWAP=
 if "%SWAP%"=="NO" call dmake dist
 : END
@@ -83,10 +83,10 @@ echo Building FreeCOM for language %LNG%
 
 if not "%MAKE%" == "" goto skip_make
 
-if "%COMPILER%" == "TC2"      set MAKE=%TC2_BASE%\make -f
-if "%COMPILER%" == "TURBOCPP" set MAKE=%TP1_BASE%\bin\make -f
-if "%COMPILER%" == "BC5"      set MAKE=%BC5_BASE%\bin\make -f
-if "%COMPILER%" == "WATCOM"   set MAKE=wmake -ms -h -f 
+if "%COMPILER%" == "TC2"      set MAKE=%TC2_BASE%\make -fmakefile.mak
+if "%COMPILER%" == "TURBOCPP" set MAKE=%TP1_BASE%\bin\make -f makefile.mak
+if "%COMPILER%" == "BC5"      set MAKE=%BC5_BASE%\bin\make -f makefile.mak
+if "%COMPILER%" == "WATCOM"   set MAKE=wmake -ms -h -f makefile.mak
 
 echo Make is %MAKE%.
 
@@ -97,10 +97,10 @@ echo Checking SUPPL library
 cd suppl
 if exist skip goto endSuppl
 echo Building SUPPL library
-%MAKE% suppl.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd src
-%MAKE% suppl.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd ..
 :endSuppl
@@ -110,7 +110,7 @@ echo.
 echo Making basic utilities for build process
 echo.
 cd utils
-%MAKE% utils.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd ..
 
@@ -118,10 +118,10 @@ echo.
 echo Making STRINGS resource
 echo.
 cd strings
-%MAKE% strings.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd strings
-%MAKE% strings.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd ..\..
 
@@ -129,7 +129,7 @@ echo.
 echo Making CRITER resource
 echo.
 cd criter
-%MAKE% criter.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd ..
 
@@ -137,7 +137,7 @@ echo.
 echo Making misc library
 echo.
 cd lib
-%MAKE% lib.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd ..
 
@@ -145,7 +145,7 @@ echo.
 echo Making commands library
 echo.
 cd cmd
-%MAKE% cmd.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd ..
 
@@ -153,7 +153,7 @@ echo.
 echo Making COMMAND.COM
 echo.
 cd shell
-%MAKE% command.mak all
+%MAKE% all
 if errorlevel 1 goto ende
 cd ..
 
@@ -169,10 +169,10 @@ echo.
 echo Making supplemental tools
 echo.
 cd tools
-type tools.m1 >tools.mak
-..\utils\mktools.exe >>tools.mak
-type tools.m2 >>tools.mak
-%MAKE% tools.mak all
+type tools.m1 >makefile.mak
+..\utils\mktools.exe >>makefile.mak
+type tools.m2 >>makefile.mak
+%MAKE% all
 if errorlevel 1 goto ende
 cd ..
 

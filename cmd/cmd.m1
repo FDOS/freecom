@@ -1,6 +1,6 @@
 .AUTODEPEND
 
-CFG_DEPENDENCIES = cmd.mak
+CFG_DEPENDENCIES = makefile.mak
 
 !include "..\config.mak"
 

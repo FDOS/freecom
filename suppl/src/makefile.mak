@@ -1,4 +1,4 @@
-CFG_DEPENDENCIES = suppl.mak
+CFG_DEPENDENCIES = makefile.mak
 
 TOP=../..
 !include "$(TOP)/config.mak"
@@ -55,7 +55,7 @@ echolib.bat: ../../scripts/echolib.bat
 	$(CP) ..$(DIRSEP)..$(DIRSEP)scripts$(DIRSEP)echolib.bat .
 
 # Prepare Linker Response File
-objlist.txt: echolib.bat suppl.mak
+objlist.txt: echolib.bat makefile.mak
 	$(RMFILES2) objlist.txt
 	$(ECHOLIB) objlist.txt $(OBJ1)
 	$(ECHOLIB) objlist.txt $(OBJ2)

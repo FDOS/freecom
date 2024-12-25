@@ -306,7 +306,7 @@ tools/icmd_1.icd
 tools/icmd_2.icd
 tools/icmd_3.icd
 tools/kssf.com
-tools/tools.mak
+tools/makefile.mak
 tools/vspawn.com
 tools/watcomc.cfg
 utils/watcomc.cfg

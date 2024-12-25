@@ -1,4 +1,4 @@
-CFG_DEPENDENCIES = strings.mak
+CFG_DEPENDENCIES = makefile.mak
 
 TOP=..
 MMODEL = $(FIXSTRS_MMODEL)

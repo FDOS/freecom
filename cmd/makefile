@@ -70,7 +70,7 @@ HDR = ..\config.h ..\err_fcts.h ..\include/batch.h ..\include/cmdline.h \
 #	Default target
 all: cmds.lib
 
-dist: cmd.mak
+dist: makefile.mak
 
 %.obj : %.asm ; $(NASM) $(NASMFLAGS) -f obj -F borland -o $@ $< >>errlist
 
@@ -248,12 +248,12 @@ DYNSOURCES =
 #MAKEDEP STOP
 
 clobber : clean
-	$(RM) $(RMFLAGS) *.com *.cln *.lib *.lst *.cfg cmd.mak
+	$(RM) $(RMFLAGS) *.com *.cln *.lib *.lst *.cfg makefile.mak
 
 clean : 
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com tags errlist
 
 
-cmd.mak : makefile cmd.m1 cmd.m2
+makefile.mak : makefile cmd.m1 cmd.m2
 	+copy cmd.m1 + $(mktmp cmds.lib : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\tif exist cmds.lib \44(AR) cmds.lib /c @&&|\n+-$(OBJ:t" &\\n+-")\n| , cmds.lst \n\tif not exist cmds.lib \44(AR) cmds.lib /c @&&|\n+$(OBJ:t" &\\n+")\n| , cmds.lst \n) + cmd.m2 $@
 

@@ -1,4 +1,4 @@
-CFG_DEPENDENCIES = utils.mak
+CFG_DEPENDENCIES = makefile.mak
 
 TOP=..
 !include "$(TOP)/config.mak"

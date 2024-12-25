@@ -1,4 +1,4 @@
-CFG_DEPENDENCIES = cmd.mak
+CFG_DEPENDENCIES = makefile.mak
 
 TOP=..
 !include "$(TOP)/config.mak"
@@ -50,7 +50,7 @@ OBJ5 =	rmdir.obj \
 echolib.bat : ../scripts/echolib.bat
 	$(CP) ..$(DIRSEP)scripts$(DIRSEP)echolib.bat .
 
-cmds.rsp : echolib.bat cmd.mak
+cmds.rsp : echolib.bat makefile.mak
 	$(RMFILES) cmds.rsp
 	$(ECHOLIB) cmds.rsp $(OBJ1)
 	$(ECHOLIB) cmds.rsp $(OBJ2)

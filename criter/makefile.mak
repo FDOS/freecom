@@ -1,4 +1,4 @@
-CFG_DEPENDENCIES = criter.mak
+CFG_DEPENDENCIES = makefile.mak
 
 TOP=..
 !include "$(TOP)/config.mak"

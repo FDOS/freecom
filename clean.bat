@@ -17,7 +17,7 @@ call %0 criter\  criter criter1 context.def context.inc context.h_c
 call %0 cmd\     cmds.lib    cmds.lst    cmds.rsp    echolib.bat
 call %0 lib\     freecom.lib freecom.lst freecom.rsp echolib.bat
 call %0 shell\   command.exe command.map command.rsp echoto.bat
-call %0 tools\   tools.mak
+call %0 tools\   makefile.mak
 
 call %0 strings\*.     cfg obj     exe
 call %0 strings\strings\*. c obj

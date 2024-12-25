@@ -13,7 +13,7 @@ cd ../lib     && rm -f freecom.lib freecom.lst freecom.rsp echolib.bat
 cd ../shell   && rm -f command.exe command.map command.rsp echoto.bat
 cd ../strings && rm -f *.cfg *.obj *.exe
 cd ../strings/strings && rm -f strings.lib strings.lst strings.rsp *.c *.obj *.o makefile
-cd ../../tools && rm -f tools.mak *.icd *.cfg *.obj *.map *.exe *.com
+cd ../../tools && rm -f makefile.mak *.icd *.cfg *.obj *.map *.exe *.com
 cd ../utils   && rm -f *.cfg *.obj *.map *.exe
 for i in cmd lib shell criter; do cd ../$i && rm -f *.obj *.cfg; done
 cd .. && rm -f gnuconf.mak $(find * -name gnumake.mak)

@@ -1,6 +1,6 @@
 #.AUTODEPEND
 
-CFG_DEPENDENCIES = lib.mak
+CFG_DEPENDENCIES = makefile.mak
 
 TOP=..
 !include "$(TOP)/config.mak"
@@ -255,7 +255,7 @@ echolib.bat : ../scripts/echolib.bat
 
 freecom.rsp : echolib.bat $(OBJ16) $(OBJ17) $(OBJ18) $(OBJ19) $(OBJ20) \
 $(OBJ21) $(OBJ22) $(OBJ23) $(OBJ24) $(OBJ25) $(OBJ26) $(OBJ27) $(OBJ28) \
-$(OBJ29) lib.mak
+$(OBJ29) makefile.mak
 	$(RMFILES) freecom.rsp
 	$(ECHOLIB) freecom.rsp $(OBJ1)
 	$(ECHOLIB) freecom.rsp $(OBJ2)

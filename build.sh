@@ -13,7 +13,7 @@ fi
 export SWAP=YES-DXMS-SWAP____________________
 # BEGIN Internal stuff for ska -- If one of these three commands
 #       fail for you, your distribution is broken! Please report.
-for a in lib/lib.mak cmd/cmd.mak shell/command.mak; do if [ ! -f $a ]; then export SWAP=NO; fi; done
+for a in lib/makefile.mak cmd/makefile.mak shell/makefile.mak; do if [ ! -f $a ]; then export SWAP=NO; fi; done
 if [ "$SWAP" == "NO" ]; then
     unset XMS_SWAP
     dmake dist
@@ -87,7 +87,7 @@ echo Building FreeCOM for language $LNG
 if [ -z "$MAKE" ]; then
     case "$COMPILER" in
 	watcom)
-	    export MAKE="wmake -ms -h -f"
+	    export MAKE="wmake -ms -h -f makefile.mak"
 	    ;;
 	gcc)
 	    export MAKE="make -f gnumake.mak"
@@ -114,11 +114,11 @@ gnumake_subst () {
 if $MAKE -? 2>&1 | grep -q gnu; then
     gnumake_subst . config.mak gnuconf.mak
     for i in suppl utils strings criter lib cmd; do
-	gnumake_subst $i $i.mak gnumake.mak
+	gnumake_subst $i makefile.mak gnumake.mak
     done
-    gnumake_subst suppl/src suppl.mak gnumake.mak
-    gnumake_subst strings/strings strings.mak gnumake.mak
-    gnumake_subst shell command.mak gnumake.mak
+    gnumake_subst suppl/src makefile.mak gnumake.mak
+    gnumake_subst strings/strings makefile.mak gnumake.mak
+    gnumake_subst shell makefile.mak gnumake.mak
 fi
 
 echo
@@ -126,10 +126,10 @@ echo Checking SUPPL library
 cd suppl
 if [ ! -f skip ]; then
     echo Building SUPPL library
-    $MAKE suppl.mak all
+    $MAKE all
 
     cd src
-    $MAKE suppl.mak all
+    $MAKE all
     cd ..
 fi
 cd ..
@@ -138,44 +138,44 @@ echo
 echo Making basic utilities for build process
 echo
 cd utils
-$MAKE utils.mak all
+$MAKE all
 cd ..
 
 echo
 echo Making STRINGS resource
 echo
 cd strings
-$MAKE strings.mak all
+$MAKE all
 cd strings
-$MAKE strings.mak all
+$MAKE all
 cd ../..
 
 echo
 echo Making CRITER resource
 echo
 cd criter
-$MAKE criter.mak all
+$MAKE all
 cd ..
 
 echo
 echo Making misc library
 echo
 cd lib
-$MAKE lib.mak all
+$MAKE all
 cd ..
 
 echo
 echo Making commands library
 echo
 cd cmd
-$MAKE cmd.mak all
+$MAKE all
 cd ..
 
 echo
 echo Making COMMAND.COM
 echo
 cd shell
-$MAKE command.mak all
+$MAKE all
 cd ..
 
 utils/mkinfres.exe -Tinfo.txt infores shell/command.map shell/command.exe
@@ -186,13 +186,13 @@ echo
 echo Making supplemental tools
 echo
 cd tools
-cat tools.m1 > tools.mak
-../utils/mktools.exe >>tools.mak
-cat tools.m2 >>tools.mak
+cat tools.m1 > makefile.mak
+../utils/mktools.exe >>makefile.mak
+cat tools.m2 >>makefile.mak
 if $MAKE -? 2>&1 | grep -q gnu; then
-    gnumake_subst . tools.mak gnumake.mak
+    gnumake_subst . makefile.mak gnumake.mak
 fi
-$MAKE tools.mak all
+$MAKE all
 cd ..
 
 echo

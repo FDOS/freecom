@@ -56,7 +56,7 @@ git clean -q -x -d -f -e _output -e _watcom -e _download
 {
   echo set COMPILER=WATCOM
   echo set WATCOM='C:\\devel\\watcomc'
-  echo set MAKE=wmake /ms /h /f
+  echo set MAKE=wmake /ms /h /f makefile.mak
   echo set XNASM='C:\\devel\\nasm\\nasm'
   echo set XUPX=upx --8086 --best
   echo set OLDPATH=%PATH%
