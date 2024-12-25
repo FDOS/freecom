@@ -204,7 +204,7 @@ void execute(char *first, char *rest, int lh_lf)
   assert(extension);
 
   /* loadhigh/loadfix don't do batch files */
-  if(!lh_lf && stricmp(extension, ".bat") == 0) {
+  if(!lh_lf && ((stricmp(extension, ".bat") == 0) || (stricmp(extension, ".cmd") == 0))) {
     dprintf(("[BATCH: %s %s]\n", fullname, rest));
     batch(fullname, first, rest);
   } else if(stricmp(extension, ".exe") == 0

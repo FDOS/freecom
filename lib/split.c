@@ -47,7 +47,11 @@
 
 #include "../include/cmdline.h"
 
-static int addArg(char ***Xarg, int *argc, char *sBeg, char **sEnd)
+char *skipnonoptdm(char *p);  /* lib/find.c */
+char *skipnonopt_word(char *p);
+
+
+static int addArg(char ***Xarg, int *argc, char *sBeg, char **sEnd, int ignore_options)
 { char **arg;
 
   assert(Xarg);
@@ -55,7 +59,7 @@ static int addArg(char ***Xarg, int *argc, char *sBeg, char **sEnd)
   assert(sEnd);
   assert(sBeg);
 
-    *sEnd = skip_word(sBeg);   /* find end of argument */
+    *sEnd = (ignore_options ? skipnonopt_word(sBeg) : skip_word(sBeg));   /* find end of argument */
 
     /* Because *start != '\0' && !isargdelim(*start) ==> s != start */
     assert(*sEnd > sBeg);
@@ -77,7 +81,7 @@ static int addArg(char ***Xarg, int *argc, char *sBeg, char **sEnd)
     return 0;
   }
 
-char **split(char *s, int *args)
+static char **split_cmdline(char *s, int *args, int ignore_options)
 {
   char **arg,
    *start;
@@ -91,12 +95,23 @@ char **split(char *s, int *args)
   ac = 0;
 
     /* skip to next argument */
-  if(s) while (*(start = skipdm(s)) != '\0')
+  if(s) while (*(start = (ignore_options?skipnonoptdm(s):skipdm(s))) != '\0')
   {
-    if(addArg(&arg, &ac, start, &s))
+    if(addArg(&arg, &ac, start, &s, ignore_options))
       return 0;
   }
 
   arg[*args = ac] = 0;
   return arg;
+}
+
+char **split(char *s, int *args)
+{
+	return split_cmdline(s, args, 0);
+}
+
+/* we must not split on option delimiters, only argument delimiters, see issue#52 */
+char **split_batchargs(char *s, int *args)
+{
+	return split_cmdline(s, args, 1);
 }

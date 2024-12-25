@@ -134,6 +134,12 @@ struct bcontext *activeBatchContext(void)
 	return b;
 }
 
+
+/* see split(...) in lib\split.c 
+   -- we must not split on option delimiters, only argument delimiters, see issue#52
+ */
+char **split_batchargs(char *s, int *args);
+
 /*
  * setBatchParams builds a parameter list in newly allocated memory.
  * The parameters consist of null terminated strings with a final
@@ -141,7 +147,7 @@ struct bcontext *activeBatchContext(void)
  */
 int setBatchParams(char *s)
 {
-  if((bc->params = split(s, &bc->numParams)) == 0)
+  if((bc->params = split_batchargs(s, &bc->numParams)) == 0)
   {
     error_out_of_memory();
     return 0;

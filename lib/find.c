@@ -98,3 +98,37 @@ char *skip_word(char *p)
 char *skipdm(char *p)
 { return find(p, 0);
 }
+
+/*
+ * Find the next delimiter/non-delimiter within p
+ *  Honor quotes and leading option characters
+ */
+static char *find_batch(char *p, int delim)
+{ int ch, quote;
+
+  assert(p);
+
+  dprintf(("find_batch(%s, %i) -- ", p, delim));
+  quote = 0;
+  while((ch = *p++) != '\0' && (quote
+   || (delim && !(isargdelim(ch)))
+   || (!delim && isargdelim(ch))))
+   {
+    if(quote == ch)
+      quote = 0;
+    else if(strchr(QUOTE_STR, ch))
+      quote = ch;
+   }
+   
+  dprintf(("returning %s\n", (p-1)));
+  return p - 1;
+}
+
+
+char *skipnonoptdm(char *p)
+{ return find_batch(p, 0);
+}
+
+char *skipnonopt_word(char *p)
+{ return find_batch(p, 1);
+}

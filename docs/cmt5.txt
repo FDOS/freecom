@@ -26,6 +26,8 @@ i) /A and /B of the COPY command are local options, e.g.:
 ii) the /C option of FreeCom itself don't follow any common rule for
 	option, because anything right of it (except one optional argument
 	sign) is interpreted as an argument for this option.
+    Note: CALL command is similar, except it supports several optional
+        arguments then batch filename followed by its arguments
 
 
 === How an option is parsed
@@ -349,7 +351,7 @@ xmpl(char *line)
 == General reflections
 
 1) The callback mechanism allows a very flexible association between
-	a syntacical correct option to a semantic.
+	a syntactical correct option to a semantic.
 	However, if other semantics are needed, the optScan***() function
 	set should be improved rather than locally implemented into
 	the callback function.
