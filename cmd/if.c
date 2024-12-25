@@ -59,12 +59,12 @@ int cmd_if(char *param)
 	assert(param);
 
 	/* check for options, note non-options must be treated as part of comparision */
-      if (matchtok(param, "/I")||matchtok(param, "/i"))
-        ignore_case++;
+	/* also check if param string begins with word 'not' */
+    /* users will expect /I NOT and NOT /I to both work */
+	if (matchtok(param, "NOT")) negate = X_EXEC;            /* Remember 'NOT' */
+	if (matchtok(param, "/I"))  ignore_case++;
+	if (matchtok(param, "NOT")) negate = X_EXEC;            /* Remember 'NOT' */
 
-	/* next check if param string begins with word 'not' */
-      if(matchtok(param, "not"))
-		negate = X_EXEC;            /* Remember 'NOT' */
 
 	/* Check for 'exist' form */
 
