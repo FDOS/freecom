@@ -1,4 +1,4 @@
-CFG_DEPENDENCIES = command.mak ../strings.h
+CFG_DEPENDENCIES = makefile.mak ../strings.h
 
 TOP=..
 !include "$(TOP)/config.mak"

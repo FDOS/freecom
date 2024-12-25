@@ -159,7 +159,7 @@ SRC += $(SRC_ERR)
 OBJ += $(OBJ_ERR)
 
 
-dist : lib.mak
+dist : makefile.mak
 
 %.obj : %.asm ; $(NASM) $(NASMFLAGS) -f obj -F borland -o $@ $< >>errlist
 
@@ -640,13 +640,13 @@ DYNSOURCES =
 #MAKEDEP STOP
 
 clobber : clean
-	$(RM) $(RMFLAGS) *.com *.cln *.lib *.lst *.cfg lib.mak
+	$(RM) $(RMFLAGS) *.com *.cln *.lib *.lst *.cfg makefile.mak
 
 clean : 
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com tags errlist lib.m3
 
 
-lib.mak : makefile lib.m1 lib.m2
+makefile.mak : makefile lib.m1 lib.m2
 	..\utils\chunk freecom_deps <$(mktmp $(OBJ:t"\n")\n) >lib.m3
 	+copy lib.m1 + lib.m3 + $(mktmp freecom.lib : \44(CFG) freecom_deps \n\tif exist freecom.lib \44(AR) freecom.lib /c @&&|\n+-$(OBJ:t" &\\n+-")\n| , freecom.lst \n\tif not exist freecom.lib \44(AR) freecom.lib /c @&&|\n+$(OBJ:t" &\\n+")\n| , freecom.lst \n) + lib.m2 $@
 #	+copy lib.m1 + $(mktmp freecom.lib : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\tif exist freecom.lib \44(AR) freecom.lib /c @&&|\n+-$(OBJ:t" &\\n+-")\n| , freecom.lst \n\tif not exist freecom.lib \44(AR) freecom.lib /c @&&|\n+$(OBJ:t" &\\n+")\n| , freecom.lst \n) + lib.m2 $@

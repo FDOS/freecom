@@ -94,7 +94,7 @@ PRE_OBJ = $(XMS_SWAP_PRE_OBJ)
 #	Default target
 all: com.exe
 
-dist : command.mak xms-swap.mak
+dist : makefile.mak xms-swap.mak
 
 %.obj : %.asm ; $(NASM) $(NASMFLAGS) -f obj -F borland -o $@ $< >>errlist
 
@@ -178,14 +178,14 @@ cswapc.c : ../include/cswap.h ../include/misc.h
 xms_crit.asm : ../criter/criter.asm
 
 clobber : clean
-	$(RM) $(RMFLAGS) *.com *.cln command.mak com.exe *.cfg
+	$(RM) $(RMFLAGS) *.com *.cln makefile.mak com.exe *.cfg
 
 clean :
 	$(RM) $(RMFLAGS) *.lst *.map *.bin *.bak *.las *.obj *.exe $(CFG) *.dmp com.com tags errlist
 
 .IF $(XMS_SWAP) == $(NULL)
 
-command.mak : makefile command.m1 command.m2
+makefile.mak : makefile command.m1 command.m2
 	+copy command.m1 + $(mktmp command.exe : \44(CFG) $(OBJ:t" \\\\\\n\\t") \n\t\44(LD) /m/s/l /c /d @&&|\n\44(LIBPATH)\\c0s.obj+\n$(OBJ:t"+\\n")\n) + command.m2 $@
 
 ALL_OBJ = $(XMS_SWAP_ADD_OBJ) $(OBJ:s/cb_catch.obj//)
