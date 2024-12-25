@@ -79,7 +79,6 @@ int cmd_if(char *param)
 		}
 
 		pp = skip_word(param);
-		*pp++ = '\0';
 
 		/* don't show abort/retry/fail if no disk in drive */
 		get_isr(0x24, olderrhandler);
