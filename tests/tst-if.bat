@@ -70,5 +70,35 @@ echo You should see passed probes 1, 3, 5, 7, 9,& 11 and no failed one
 echo.
 pause
 
+cls
+ECHO Testing /I and NOT options
+ECHO.
+if NOT a==A echo Probe #1 passed
+if /I a==A echo Probe #2 passed
+if /I NOT a==A echo Probe #3 failed
+if NOT /I a==A echo Probe #4 failed
+if /i b==A echo Probe #5 failed
+if not /i not b==A ECHO Probe #6 passed
+if /i a==A echo Probe #7 passed
+if /i not exist nicht-da.tgl echo Probe #8 passed
+if /i exist nicht-da.tgl echo Probe #9 failed
+if not exist nicht-da.tgl echo Probe #10 passed
+echo.
+echo You should see passed probes 1, 2, 6, 7, 8, & 10 and no failed ones
+echo.
+pause
+
+cls
+ECHO Testing incomplete COMMAND
+ECHO you should see multiple error messages "IF: Missing command" or similar message
+ECHO.
+REM [a==a], [a==a ], [a==a] note the middle one has a space before the end of line and other 2 do not
+if a==a ECHO Next 3 commands should fail
+if a==a
+if a==a 
+if a==a
+echo.
+pause
+
 echo.
 echo Test finished
