@@ -42,6 +42,10 @@ NASM = $(XNASM)
 __XMS_SWAP = -DXMS_SWAP
 !endif
 
+!if $(FIXSTRS_BUILD)0 == 10
+MMODEL = $(FIXSTRS_MMODEL)
+!endif
+
 # Default configuration
 # added strings.h here because $(CFG) is included everywhere already
 ## Add -D_NO__DOS_DATE if your compiler does not have no dosdate_t (*)
