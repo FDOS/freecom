@@ -16,14 +16,15 @@ CP = cp
 CC_BASE_PATH = $(WATCOM)
 !ifdef __LINUX__
 BINPATH = $(CC_BASE_PATH)/binl
-LD = $(CL) -l=dos -fe=command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -\"op map,statics,verbose,stack=4k\" $#
+LD = $(CL) -l=dos -fe=command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -\"op map,statics,verbose,stack=4k\"
 !else
 !ifdef Win64
 BINPATH = $(CC_BASE_PATH)\BINNT
 !else
 BINPATH = $(CC_BASE_PATH)\BINW
 !endif
-LD = wlinker /ma/nologo
+LD_RSP = command.rsp
+LD = wlinker /ma/nologo @$(LD_RSP)
 !endif
 LIBPATH = $(CC_BASE_PATH)$(DIRSEP)lib
 INCLUDEPATH = -I$(CC_BASE_PATH)$(DIRSEP)h

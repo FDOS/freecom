@@ -7,7 +7,8 @@ INCLUDEPATH = -I$(CC_BASE_PATH)\INCLUDE
 CC = $(BINPATH)\BCC		# Borland C++
 CL = $(CC)
 AR = $(BINPATH)\Tlib /C
-LD = $(BINPATH)\Tlink /m/s/l /c/d /i
+LD_RSP = command.rsp
+LD = $(BINPATH)\Tlink /m/s/l /c/d /i @$(LD_RSP)
 LIBLIST = ,
 ECHOLIB = echolib
 
