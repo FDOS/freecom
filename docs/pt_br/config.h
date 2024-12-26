@@ -1,26 +1,28 @@
 /*
- * config.h - Usado para configurar o que será compilado para interpretador.
+ * config.h - Usado para configurar o que serï¿½ compilado para interpretador.
  *
  */
 
-/* Defina DEBUG para adicionar código de  add depuração */
-#ifndef DEBUG			/* possivelmente já definido via linha de comando */
-//#define DEBUG
+/* Defina DEBUG para adicionar cï¿½digo de  add depuraï¿½ï¿½o */
+#ifndef DEBUG			/* possivelmente jï¿½ definido via linha de comando */
+/*
+  #define DEBUG
+*/
 #endif
 
 /* Defina para ativar o comando alias, e atalhos. */
 #define FEATURE_ALIASES
 #define ALIAS_DEFAULT_SIZE 1024
 
-/* Defina para ativar entrada de dados avançada (pre-requisito de Histórico e complementação 
+/* Defina para ativar entrada de dados avanï¿½ada (pre-requisito de Histï¿½rico e complementaï¿½ï¿½o 
 	nome de arquivo  */
 #define FEATURE_ENHANCED_INPUT
 
-/* Defina ativar histórico(DOSKEY); requer: Entrada de dados avançada */
+/* Defina ativar histï¿½rico(DOSKEY); requer: Entrada de dados avanï¿½ada */
 #define FEATURE_HISTORY
 #define HISTORY_DEFAULT_SIZE 256
 
-/* Defina para ativar complementação de nome de arquivo; requer: Entrada de dados avançada */
+/* Defina para ativar complementaï¿½ï¿½o de nome de arquivo; requer: Entrada de dados avanï¿½ada */
 #define FEATURE_FILENAME_COMPLETION
 
 /* Defina para ativar para carregar menssagens na memoria */
@@ -29,31 +31,31 @@
 /* Defina para ativar DOS NLS */
 #define FEATURE_NLS
 
-/* Defina para ativar teste das teclas F5/F8 na inicialização se /P estiver presente na
+/* Defina para ativar teste das teclas F5/F8 na inicializaï¿½ï¿½o se /P estiver presente na
 	linha de comando */
 /* #define FEATURE_BOOT_KEYS */
 
-/* LOG de características da linha de comando */
+/* LOG de caracterï¿½sticas da linha de comando */
 /* #define FEATURE_CALL_LOGGING */
 
-/* Preserva o último diretorio (CD, CHDIR, CDD, PUSHD, POPD);
-	"CD -" lá está chdir */
+/* Preserva o ï¿½ltimo diretorio (CD, CHDIR, CDD, PUSHD, POPD);
+	"CD -" lï¿½ estï¿½ chdir */
 #define FEATURE_LAST_DIR
 
-/* Ativa o suporte para instalação de extenções de COMANDO (MUX-AE)
+/* Ativa o suporte para instalaï¿½ï¿½o de extenï¿½ï¿½es de COMANDO (MUX-AE)
  */
 #define FEATURE_INSTALLABLE_COMMANDS
 
-/* Nome do executável */
+/* Nome do executï¿½vel */
 #define COM_NAME "COMMAND.COM"
-/* Nome padrão do AUTOEXEC.BAT */
+/* Nome padrï¿½o do AUTOEXEC.BAT */
 #define AUTO_EXEC "\\autoexec.bat"
 /* Arquivo de LOG para registrar algumas caracteristicas; PRECISA estar altamente-qualificado! */
 #define LOG_FILE "C:\\FreeCom.log"
 
 /* Define o numero de loops quando redirecionar para o CON se o
 	interpretados ficar em um loop - "hangForEver()" - para sempre
-   Não defina para remover esta característica */
+   Nï¿½o defina para remover esta caracterï¿½stica */
 #define FEATURE_AUTO_REDIRECT_TO_CON 5
 
 /* Quantos arquivo de lote devem ser aninhados minimamente */
@@ -65,7 +67,7 @@
 #define FEATURE_KERNEL_SWAP_SHELL
 
 /* Defina para adicionar suportr para troca XMS-only do FreeCOM
-	Está definição é incompatível com a definição acima.
+	Estï¿½ definiï¿½ï¿½o ï¿½ incompatï¿½vel com a definiï¿½ï¿½o acima.
 */
 /* #define FEATURE_XMS_SWAP */
 
@@ -76,14 +78,14 @@
 	^C or ^Break */
 #define CBREAK_ERRORLEVEL 3
 
-/* Use este modos_de_arquivos enquanto localizando por complementação do arquivo */
+/* Use este modos_de_arquivos enquanto localizando por complementaï¿½ï¿½o do arquivo */
 #define FILE_SEARCH_MODE FA_RDONLY | FA_ARCH | FA_DIREC
 
 
-/* Configuração de menssagens padrão:
-  PATTERN: como a string é construida pelo ID (com \n)
-  OUTOFMEMORY: string para informar uma condição de falta-de-memória(no \n)
-  ID_: O ID do erro quando não há modelo padrão para ser criado, mas
+/* Configuraï¿½ï¿½o de menssagens padrï¿½o:
+  PATTERN: como a string ï¿½ construida pelo ID (com \n)
+  OUTOFMEMORY: string para informar uma condiï¿½ï¿½o de falta-de-memï¿½ria(no \n)
+  ID_: O ID do erro quando nï¿½o hï¿½ modelo padrï¿½o para ser criado, mas
   	a string de falta-de-memoria for mostrada
 */
 #define MSG_DFL_PATTERN "String #%u\n"
@@ -91,13 +93,13 @@
 #define MSG_ERR_ID_OUTOFMEMORY TEXT_ERROR_OUT_OF_MEMORY
 
 
-/* Prompt padrão */
+/* Prompt padrï¿½o */
 #define DEFAULT_PROMPT "$P$G"
 
 /* Prove o maior tamanho que o contexto pode ter */
 #define CONTEXT_MAX_SIZE (65535U - 12)
 
-/* Defina este valor para selecionar o valor de FDDEBUG para a inicialização */
+/* Defina este valor para selecionar o valor de FDDEBUG para a inicializaï¿½ï¿½o */
 #define FDDEBUG_INIT_VALUE 1
 
 #define INCLUDE_CMD_BEEP
@@ -136,7 +138,7 @@
 #define INCLUDE_CMD_FDDEBUG
 #endif
 /*
-   comando que não tem uma definição:
+   comando que nï¿½o tem uma definiï¿½ï¿½o:
 
    exit
    call
@@ -150,13 +152,13 @@
 
 /********
 	***** Desfazer dependencias
-	***** Não mude a não ser que mude o fonte apropriado!
+	***** Nï¿½o mude a nï¿½o ser que mude o fonte apropriado!
 	************/
 #if defined(INCLUDE_CMD_PUSHD) || defined(INCLUDE_CMD_POPD)
 #define	INCLUDE_CMD_CDD
 #endif
 
-/* Não disponível com TURBOC++ 1.0 ou posteriores: */
+/* Nï¿½o disponï¿½vel com TURBOC++ 1.0 ou posteriores: */
 #ifdef __TURBOC__
 
 #if __TURBOC__ > 0x297
@@ -167,7 +169,7 @@
 
 #endif
 
-/* Define se seu compilador não tem 'dosdate_t' or 'dostime_t' */
+/* Define se seu compilador nï¿½o tem 'dosdate_t' or 'dostime_t' */
 #ifdef _TC_EARLY_
 	/* TC++1 */
 #define _NO__DOS_DATE
@@ -192,11 +194,11 @@
 #endif
 
 #if CONTEXT_MAX_SIZE > 65535U - 12
-#error "O tamanho do contexto máximo não pode exeder 65535 - 12 bytes"
+#error "O tamanho do contexto mï¿½ximo nï¿½o pode exeder 65535 - 12 bytes"
 #endif
 
 #if defined(FEATURE_KERNEL_SWAP_SHELL) && defined(FEATURE_XMS_SWAP)
-#error "FreeCOM não pode suportar ambos o Kernel- e XMS-based swapping simultaneamente
+#error "FreeCOM nï¿½o pode suportar ambos o Kernel- e XMS-based swapping simultaneamente
 #endif
 
 /* Externamente definida para compilar com suporte a XMS-Swap */
@@ -207,8 +209,8 @@
 
 #ifdef __TURBOC__
 #if defined(__COMPACT__) || defined(__LARGE__) || defined(__HUGE__)
-/* Compilando em modelo de memória larga --> deslisga AVISO:
-	"Convesão pode perder digitos significantes"	*/
+/* Compilando em modelo de memï¿½ria larga --> deslisga AVISO:
+	"Convesï¿½o pode perder digitos significantes"	*/
 #pragma warn -sig
 #endif
 #endif
