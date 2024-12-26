@@ -1,7 +1,8 @@
 CFG_DEPENDENCIES = makefile.mak
 
+FIXSTRS_BUILD = 1
+
 TOP=..
-MMODEL = $(FIXSTRS_MMODEL)
 !include "$(TOP)/config.mak"
 
 all : strings.h strings.err
