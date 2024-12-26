@@ -1337,7 +1337,7 @@ Verandert de positie van vervangbare parameters in een batchbestand.
 
 SHIFT [DOWN]
 
-DOWN schuift de argumenten volgorde vanaf het begin (%0); anders
+DOWN schuift de argumenten volgorde vanaf het begin (%%0); anders
 naar het einde.
 .
 

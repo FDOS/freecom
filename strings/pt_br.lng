@@ -1278,7 +1278,7 @@ Muda a posicao dos parametros substituiveis em um arquivo de lote.
 
 SHIFT [DOWN]
 
-Muda a janela de argumentos que sera iniciada (%0); que de outro modo
+Muda a janela de argumentos que sera iniciada (%%0); que de outro modo
 tomado ate o fim.
 .
 

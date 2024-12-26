@@ -1384,7 +1384,7 @@ Bir toplu iş dosyasında değiştirilebilir parametre konumunu değiştirir.
 
 SHIFT [DOWN]
 
-DOWN argüman penceresini başa doğru kaydırır (%0); yoksa sona doğru kaydırır.
+DOWN argüman penceresini başa doğru kaydırır (%%0); yoksa sona doğru kaydırır.
 
 .
 

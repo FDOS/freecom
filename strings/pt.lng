@@ -1278,7 +1278,7 @@ Altera a posição dos parâmetros numéricos num batch.
 
 SHIFT [DOWN]
 
-Caso se use DOWN, os parâmetros serão em direcção ao primeiro (%0),
+Caso se use DOWN, os parâmetros serão em direcção ao primeiro (%%0),
 caso contrário em direcção ao último (%9).
 .
 

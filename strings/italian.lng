@@ -1386,7 +1386,7 @@ Cambia la posizione dei parametri in un file batch.
 
 SHIFT [DOWN]
 
-DOWN sposta i parametri verso l'inizio (%0); altrimenti verso la fine.
+DOWN sposta i parametri verso l'inizio (%%0); altrimenti verso la fine.
 .
 
 :TEXT_CMDHELP_TIME#1
