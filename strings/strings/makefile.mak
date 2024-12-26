@@ -263,10 +263,12 @@ OBJ32 =	str00f8.obj\
 	str00fd.obj\
 	str00fe.obj
 
-strings.lib: ../strings.h ../strings.err $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) \
-$(OBJ6) $(OBJ7) $(OBJ8) $(OBJ9) $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14) $(OBJ15) \
-$(OBJ16) $(OBJ17) $(OBJ18) $(OBJ19) $(OBJ20) $(OBJ21) $(OBJ22) $(OBJ23) $(OBJ24) $(OBJ25) \
-$(OBJ26) $(OBJ27) $(OBJ28) $(OBJ29) $(OBJ30) $(OBJ31) $(OBJ32)
+objdep0 : $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(OBJ5) $(OBJ6) $(OBJ7) $(OBJ8) $(OBJ9)
+objdep1 : $(OBJ10) $(OBJ11) $(OBJ12) $(OBJ13) $(OBJ14) $(OBJ15) $(OBJ16) $(OBJ17)
+objdep2 : $(OBJ18) $(OBJ19) $(OBJ20) $(OBJ21) $(OBJ22) $(OBJ23) $(OBJ24) $(OBJ25)
+objdep3 : $(OBJ26) $(OBJ27) $(OBJ28) $(OBJ29) $(OBJ30) $(OBJ31) $(OBJ32)
+
+strings.lib: ../strings.h ../strings.err objdep0 objdep1 objdep2 objdep3
 	echo Making STRINGS library
 	$(RMFILES2) strings.lib
 	$(AR) strings.lib @strings.rsp $(LIBLIST) strings.lst
