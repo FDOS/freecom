@@ -78,7 +78,7 @@ void intrf(int inter_no, union REGPACK *regs);
 #define intrpt(num,regs) intrf((num), (union REGPACK*)(regs))
 
 unsigned CS_(void);
-#pragma aux CS_ = "mov ax, cs" value[ax];
+#pragma aux CS_ = "mov ax, cs" __value[__ax];
 #define _CS CS_()
 
 /* get/set current working drive */
@@ -87,15 +87,15 @@ extern short getdisk(void);
 	"mov ah, 19h"	\
 	"int 21h"	\
 	"xor ah, ah"	\
-	value [ax]
+	__value [__ax]
 
 extern short setdisk(int newdrive);
 #pragma aux setdisk = \
 	"mov ah, 0eh"	\
 	"int 21h"	\
 	"xor ah, ah"	\
-	parm [dx]	\
-	modify [dx]	\
-	value [ax]
+	__parm [__dx]	\
+	__modify [__dx]	\
+	__value [__ax]
 
 #endif

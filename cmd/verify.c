@@ -24,12 +24,12 @@ void setverify(char a);
 	"mov ah,0x2e" \
 	"mov dl,0" \
 	"int 0x21" \
-	parm [al] modify exact [ah dl]
+	__parm [__al] __modify __exact [__ah __dl]
 char getverify(void);
 #pragma aux getverify = \
 	"mov ah,0x54" \
 	"int 0x21" \
-	value [al] modify exact [ah]
+	__value [__al] __modify __exact [__ah]
 #endif
 
 #ifdef __GNUC__
