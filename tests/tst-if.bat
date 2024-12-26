@@ -65,8 +65,9 @@ if 1== 1 echo Probe #9 passed
 if 1== 2 echo Probe #10 failed
 if not 1=="1" echo Probe #11 passed
 if not "1 2 3 4"=="1 2 3 4" echo Probe #12 failed
+if "1 2 3 4"=="1 2 3 4" echo Probe #13 passed
 echo.
-echo You should see passed probes 1, 3, 5, 7, 9,& 11 and no failed one
+echo You should see passed probes 1, 3, 5, 7, 9, 11,& 13 and no failed one
 echo.
 pause
 
@@ -98,6 +99,21 @@ if a==a
 if a==a 
 if a==a
 echo.
+pause
+
+cls
+echo Testing " and extra characters included with ==
+echo .
+if "a=="a echo Probe #1 passed
+if "a == "a echo Probe #2 passed
+if a "== a echo Probe #3 passed
+if a garbage== a echo Probe #4 passed
+if a garbage==garbage a echo Probe #5 failed
+if .a == .a echo Probe #6 passed
+if " a==" a echo Probe #7 failed, a is not a valid command
+if " echo==" echo Probe #8 passed
+echo .
+echo You should see passed probes 1,2,3,4,6,& 8 with 7 giving a bad command error
 pause
 
 echo.

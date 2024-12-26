@@ -88,7 +88,7 @@ typedef int (* const optScanner)(const char * const optstr, int ch, int bool, co
 #define optLong(str)  (strcmpi(optstr, (str)) == 0)
 
 
-char *skipqword(const char *str, const char * const stop);
+char *skipqword(char *str, const char * const stop);
 
 /* Use matchtok() to compare string constants */
 #define match(line,word,len) match_(&(line), (word), (len))

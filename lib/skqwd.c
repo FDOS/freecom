@@ -56,6 +56,7 @@
 #include "../include/command.h"
 #include "../include/cmdline.h"
 
+#if 0
 char *skipqword(const char *pp, const char * const stop)
 {	size_t len;
 	int quote = 0;
@@ -74,3 +75,51 @@ char *skipqword(const char *pp, const char * const stop)
 
 	return (char *) pp;		/* strip const */
 }
+#else
+char *skipqword(char *pp, const char * const stop)
+{	size_t len;
+	int quote = 0;
+	char *pp_trunc = 0;
+
+	len = stop? strlen(stop): 0;
+
+	if(*pp) do {
+        /* if we find a quote then continue until terminator or end of string found */
+		if(quote) {
+			if(quote == *pp) {
+                pp_trunc = 0;
+				quote = 0;
+            } else if(len && (memcmp(pp, stop, len) == 0)) {
+                /* no matching quote, so back up to delimiter and mark end of pp */
+				char *p = pp;
+				while(*p && (!quote || (quote != *p)) && !isargdelim(*p)) p--;
+                p++;
+                if (p < pp) *p='\0';
+                break;
+            } else if(!pp_trunc && isargdelim(*pp)) {
+                pp_trunc = pp; /* if end of string but no matching quote, terminate at 1st delimiter instead */
+            }
+		} else if(strchr(QUOTE_STR, *pp))
+			quote = *pp;
+		else if(len && (memcmp(pp, stop, len) == 0)) {
+                /* no matching quote, so back up to delimiter and mark end of pp */
+				char *p = pp;
+				while(*p && (!quote || (quote != *p)) && !isargdelim(*p)) p--;
+                p++;
+                if (p < pp) *p='\0';
+                break;
+        } else if(!pp_trunc && isargdelim(*pp)) {
+            pp_trunc = pp;  /* truncate at delimter if not in quoted string */
+			break;
+        }
+	} while(*++pp);
+	if (pp_trunc) {
+        *pp_trunc = '\0'; /* never found end of quote so stop at first delimiter */
+        dprintf(("returning [%s]\n", pp_trunc+1));
+        return pp_trunc+1;
+    }
+
+    dprintf(("returning [%s]\n", pp));
+	return (char *) pp;		/* strip const */
+}
+#endif

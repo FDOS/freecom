@@ -148,10 +148,13 @@ int cmd_if(char *param)
 
 	/* Check that '==' is present, syntax error if not */
 	else {
-		size_t len;
+		size_t len_l, len_r;
 		char *r;      /* right operand */
 
 		pp = skipqword(param, "==");
+
+        /* skip past any garbage characters before the == */
+        while (*pp && (*pp != '=') && !isargdelim(*pp)) pp++;
 
 		if(*pp != '=' || pp[1] != '=') {
 			error_syntax(0);
@@ -160,9 +163,10 @@ int cmd_if(char *param)
 
 		*pp = '\0';     /* param[] points to the left operand */
 
-		/* skip over the '==' and subsquent spaces and
-			assign the end of the right operator to pp */
-		pp = skipqword(r = ltrimcl(pp + 2), 0);
+		/* skip over the '==' and subsquent spaces */
+        r = ltrimcl(pp + 2);
+        /* and assign the end of the right operator to pp */
+		pp = skipqword(r, 0);
 
 		/*	now: param := beginning of the left operand
 			r := beginning of the right operand
@@ -170,12 +174,15 @@ int cmd_if(char *param)
 		*/
 
 		rtrimcl(param);      /* ensure that spurious whitespaces are ignored */
-		len = strlen(param);
+		len_l = strlen(param);
+		len_r = strlen(r);
+		dprintf(("left side=[%s] %i\n", param, len_l));
+		dprintf(("rigt side=[%s] %i\n", r, len_r));
 
 		/* check if strings differ */
-		if ( ((pp - r) == len) &&
-		     ((ignore_case && strnicmp(param, r, len) == 0) ||
-		      (memcmp(param, r, len) == 0)) )
+		if ( (len_l == len_r) &&
+		     ((ignore_case && strnicmp(param, r, len_l) == 0) ||
+		      (memcmp(param, r, len_l) == 0)) )
 			x_flag = X_EXEC;
 	}
 
