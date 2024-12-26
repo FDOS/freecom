@@ -402,7 +402,7 @@ Bozuk komut satırı. Bu dahili bir hatadır ve COMMAND.COM'un
 :TEXT_INIT_FULLY_QUALIFIED#1%
 COMMAND.COM'a giden yolun tamamen belirtilmiş olması gerekmektedir!
 Bu, sürücü harfinin kullanılması ve ters eğik çizgi ile başlanması demektir.
-Örneğin: C:\FDOS
+Örneğin: C:\\FREEDOS
 
 COMMAND.COM şimdi bu yolu varsaymaktadır:
 %s
@@ -1163,19 +1163,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Belirtilen komutu bir dosya kümesindeki her dosya için çalıştırır.
 
-FOR %değişken IN (küme) DO komut [komut-parametreleri]
+FOR %%değişken IN (küme) DO komut [komut-parametreleri]
 
-  %değişken	Değiştirilebilir bir parametre belirtir.
+  %%değişken	Değiştirilebilir bir parametre belirtir.
   (küme)     	Bir/birden çok dosya kümesi belirtir. Joker kullanılabilir.
   komut      	Her dosya için çalıştırılacak komutu belirtir.
   komut-parametreleri
              	Belirtilen komut için parametre veya anahtar belirtir.
 
-FOR komutunu bir toplu iş betiğinde kullanmak için %değişken yerine %%değişken
-kullanın.
+FOR komutunu bir toplu iş betiğinde kullanmak için %%değişken yerine
+%%%%değişken kullanın.
 
 örneğin:
-  FOR %f IN (---başlangıç--- a*.* ---son---) DO ECHO - %f -
+  FOR %%%%f IN (---başlangıç--- a*.* ---son---) DO ECHO - %%%%f -
 .
 
 :TEXT_CMDHELP_GOTO

@@ -3,6 +3,12 @@
 #   Language: German
 #   Codepage: 858 (850 plus Euro currency sign)
 #   Author: Clemens Löser (Cl.Loeser@web.de)
+# Changelog by W. Spiegl (2024-12-21).
+# TEXT_CMDHELP_IF: added /I string==STRING
+# TEXT_CMDHELP_ECHO: added ECHO.
+# TEXT_CMDHELP_SHIFT: removed (%0) "the beginning (%0); otherwise" (?).
+# Changelog by W. Spiegl (2024-10-15):
+# "FOR - Example: replaced %% by %%%%"
 #   2022-01-19 / 2022-06-01 by W. Spiegl: corrected: line 287, "Eigabe", 311 "Üngültig",
 #   434 "Speicherpatz", 439 "Speicherpaltz",
 #   1121 "Dienstrogramm", 1395 "richtung", 1405 "double space",
@@ -1205,7 +1211,9 @@ Zeigt Nachrichten an oder schaltet das Befehls-Echoing an oder aus.
 
   ECHO [ON | OFF]
   ECHO [Nachricht]
+  ECHO.
 
+ECHO. Zeigt eine leere Zeile (nur in Batch-Dateien)
 Geben Sie ECHO ohne Parameter ein, um die aktuelle Echoeinstellung
 anzuzeigen.
 .
@@ -1262,19 +1270,21 @@ Bewirkt bedingungsabhängige Verarbeitung in einem Stapelprogramm.
 IF [NOT] ERRORLEVEL Nummer Befehl
 IF [NOT] Zeichenkette1==Zeichenkette2 Befehl
 IF [NOT] EXIST Dateiname Befehl
+/I string==STRING
 
-  NOT                Gibt an, dass der Interpreter den Befehl nur dann
-                     ausführen soll, wenn die Bedingung nicht zutrifft.
-  ERRORLEVEL Nummer  Ergibt eine wahre Bedingung, falls das zuletzt ausge-
-                     führte Programm einen Ausgangscode zurückgegeben hat,
-                     der gleich oder größer als die spezifizierte Nummer ist.
-  Befehl             Spezifiziert den bei zutreffender Bedingung auszuführen-
-                     den Befehl.
+  NOT                 Gibt an, dass der Interpreter den Befehl nur dann
+                      ausführen soll, wenn die Bedingung nicht zutrifft.
+  ERRORLEVEL Nummer   Ergibt eine wahre Bedingung, falls das zuletzt ausge-
+                      führte Programm einen Ausgangscode zurückgegeben hat,
+                      der gleich oder größer als die spezifizierte Nummer ist
+  Befehl              Spezifiziert den bei zutreffender Bedingung auszu-
+                      führenden Befehl.
   Zeichenkette1==Zeichenkette2
-                     Ergibt eine wahre Bedingung, falls die spezifizierten
-                     Zeichenketten übereinstimmen.
-  EXIST Dateiname    Ergibt eine wahre Bedingung, falls die spezifizierte
-                     Datei existiert.
+                      Ergibt eine wahre Bedingung, falls die spezifizierten
+                      Zeichenketten übereinstimmen.
+  EXIST Dateiname     Ergibt eine wahre Bedingung, falls die spezifizierte
+                      Datei existiert.
+  /I string==STRING  Ignoriert Groß-/Kleinschreibung
 .
 
 :TEXT_CMDHELP_LFNFOR
@@ -1448,7 +1458,7 @@ SET [/C] [/P] [/E] [/U] [Variable[=[Zeichenkette]]]]
 
 SHIFT [RUNTER]
 
-RUNTER verschiebt das Argumentfenster Richtung Anfang (%0); andernfalls
+RUNTER verschiebt das Argumentfenster Richtung Anfang; andernfalls
 in Richtung Ende.
 .
 

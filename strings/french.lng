@@ -26,7 +26,7 @@
 # A missing version is assumed as "#0".
 # If there is a percent sign (%) appended to the version, the printf()
 # format string %-style placeholders are compared for the strings. The
-# sign need to be set in DEFAULT.lng only.
+# sign need to be set in DEFAULT.LNG only.
 #
 # All lines after the label are the message until a line with a
 # single "." or "," in the first column.  The difference is the
@@ -404,7 +404,7 @@ Les options /C et /K ne peuvent pas être ajoutées, elles sont ignorées.
 :TEXT_INIT_FULLY_QUALIFIED#1%
 Le répertoire de COMMAND.COM doit être complètement défini !
 cela signifie que la lettre du lecteur doit être précisée.
-Par exemple: C:\\FDOS
+Par exemple: C:\\FREEDOS
 
 COMMAND.COM utilise actuellement le répertoire suivant :
 %s
@@ -885,16 +885,16 @@ Segment de contexte     : max %5u octets ; %5u octets libres
 Mémoire du tas          : %5lu octets disponibles
 .
 :TEXT_MEMORY_CTXT_ALIAS#1%
-\tAliases        : limite %5u octets, actuel %5u octets, %5u éléments
+\tAliases      : limite %5u octets, actuel %5u octets, %5u éléments
 .
 :TEXT_MEMORY_CTXT_HISTORY#1%
-\tHistorique     : limite %5u octets, actuel %5u octets, %5u éléments
+\tHistorique   : limite %5u octets, actuel %5u octets, %5u éléments
 .
 :TEXT_MEMORY_CTXT_DIRSTACK#1%
-\tPile répertoire: limite %5u octets, actuel %5u octets, %5u éléments
+\tPile répert. : limite %5u octets, actuel %5u octets, %5u éléments
 .
 :TEXT_MEMORY_CTXT_LASTDIR#1%
-\tCache répert.  : %5u octets utilisés, %5u éléments
+\tCache répert.: %5u octets utilisés, %5u éléments
 .
 :TEXT_MEMORY_CTXT_BATCH#1%
 \tEmpilement bat : %5u octets utilisés, %5u éléments
@@ -1167,19 +1167,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Exécute une commande spécifiée pour chaque fichier dans un jeu de fichiers.
 
-FOR %variable IN (set) DO commande [paramètres-de-commande]
+FOR %%variable IN (set) DO commande [paramètres-de-commande]
 
-  %variable  Spécifie un paramètre remplaçable.
+  %%variable Spécifie un paramètre remplaçable.
   (set)      Spécifie un jeu d'un ou plusieurs fichiers.  Jokers acceptés.
   commande   Spécifie la commande à exécuter pour chaque fichier.
   paramètres-de-commande
              Spécifie des paramètres ou options pour la commande spécifiée.
 
-Pour utiliser la commande FOR dans un programme batch, spécifiez %%variable
-au lieu de %variable.
+Pour utiliser la commande FOR dans un programme batch, spécifiez %%%%variable
+au lieu de %%variable.
 
 Par exemple :
-  FOR %f IN (---début--- a*.* ---fin---) DO ECHO - %f -
+  FOR %%%%f IN (---début--- a*.* ---fin---) DO ECHO - %%%%f -
 .
 
 :TEXT_CMDHELP_GOTO
