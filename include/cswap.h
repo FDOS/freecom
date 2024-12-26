@@ -33,7 +33,7 @@ extern int cdecl XMSexec(void);
 
 #if defined(__WATCOMC__)
 typedef unsigned long xmsfunc(unsigned request, unsigned dx, void *si);
-#pragma aux xmsfunc = parm [ax] [dx] [si] modify [bx cx]
+#pragma aux xmsfunc = __parm [__ax] [__dx] [__si] __modify [__bx __cx]
 extern xmsfunc far *far XMSdriverAdress;
 #elif defined(__GNUC__)
 extern unsigned far *far XMSdriverAdress;

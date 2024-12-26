@@ -79,7 +79,7 @@ char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option);
 	"jnz ok" \
 	"xor si, si" \
 	"ok:" \
-	parm [si] [es di] [ax] value [si] modify [ax es]
+	__parm [__si] [__es __di] [__ax] __value [__si] __modify [__ax __es]
 #else
 #pragma aux parsfnm = \
 	"mov ah, 29h" \
@@ -88,7 +88,7 @@ char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option);
 	"jnz ok" \
 	"xor si, si" \
 	"ok:" \
-	parm [ds si] [es di] [ax] value [ds si] modify [ax es]
+	__parm [__ds __si] [__es __di] [__ax] __value [__ds __si] __modify [__ax __es]
 #endif
 #else /* __GNUC__ */
 static char *parsfnm(const char *cmdline, struct fcb far *fcbptr, int option)

@@ -158,7 +158,7 @@ word resizeBlk(const word segm, const unsigned length);
 /* No differences, only for completeness. */
 
 unsigned BLK_byte2para(const unsigned bytes);
-/* Return the number of paragraphes that will be needed to store ¯bytes®
+/* Return the number of paragraphes that will be needed to store ï¿½bytesï¿½
 	bytes in.
 
 	If bytes == 0, the return value is zero, too.
@@ -178,16 +178,16 @@ int addu(unsigned *u1, unsigned u2);
 #pragma aux addu = \
 	"add word ptr es:[bx], ax"	\
 	"sbb ax, ax"	\
-	parm [es bx] [ax]	\
-	value [ax]	\
-	modify [es bx]
+	__parm [__es __bx] [__ax]   \
+	__value [__ax]  \
+	__modify [__es __bx]
 #else
 #pragma aux addu = \
 	"add word ptr [bx], ax"	\
 	"sbb ax, ax"	\
-	parm [bx] [ax]	\
-	value [ax]	\
-	modify [bx]
+	__parm [__bx] [__ax]    \
+	__value [__ax]  \
+	__modify [__bx]
 #endif
 #endif
 
