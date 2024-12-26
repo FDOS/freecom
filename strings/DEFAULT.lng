@@ -8,7 +8,7 @@
 # Changelog by W. Spiegl (2024-12-21).
 # TEXT_CMDHELP_IF: added /I string==STRING
 # TEXT_CMDHELP_ECHO: added ECHO.
-# TEXT_CMDHELP_SHIFT: removed (%0) "the beginning (%0); otherwise" (?).
+# TEXT_CMDHELP_SHIFT: fixed (%0) to be (%%0).
 # Changelog by W. Spiegl (2024-10-15):
 # "FOR - Example: replaced %% by %%%%"
 # This file is used to generate all the messages that command.com
