@@ -1385,7 +1385,7 @@ Vaihtaa numeroitujen parametrien paikkaa komentojonossa.
 
 SHIFT [DOWN]
 
-DOWN siirtää parametri-ikkunaa alkua kohti (%0); muuten
+DOWN siirtää parametri-ikkunaa alkua kohti (%%0); muuten
 sitä siirretään loppua kohti.
 .
 

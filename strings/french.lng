@@ -1389,7 +1389,7 @@ Modifie la position des paramètres remplaçables dans un fichier batch.
 
 SHIFT [DOWN]
 
-DOWN déplace la fenêtre d'argument vers le début (%0) ; sinon vers la fin.
+DOWN déplace la fenêtre d'argument vers le début (%%0) ; sinon vers la fin.
 
 .
 

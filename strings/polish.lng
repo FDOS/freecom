@@ -1344,7 +1344,7 @@ Zmienia pozycje parametr¢w w pliku wsadowym.
 
 SHIFT [DOWN]
 
-DOWN przesuwa wartožci w kierunku pocz†tku (%0); w przeciwnym wypadku
+DOWN przesuwa wartožci w kierunku pocz†tku (%%0); w przeciwnym wypadku
 w kierunku ko¤ca.
 .
 

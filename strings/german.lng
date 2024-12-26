@@ -1458,7 +1458,7 @@ SET [/C] [/P] [/E] [/U] [Variable[=[Zeichenkette]]]]
 
 SHIFT [RUNTER]
 
-RUNTER verschiebt das Argumentfenster Richtung Anfang; andernfalls
+RUNTER verschiebt das Argumentfenster Richtung Anfang (%%0); anderenfalls
 in Richtung Ende.
 .
 

@@ -1393,7 +1393,7 @@ Modifica la posición de parámetros reemplazables en un programa batch.
 
 SHIFT [DOWN]
 
-DOWN desplaza la lista de argumentos hacia el principio (%0); en caso
+DOWN desplaza la lista de argumentos hacia el principio (%%0); en caso
 caso contrario, hacia el final.
 .
 

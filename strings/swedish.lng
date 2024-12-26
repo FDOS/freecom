@@ -1233,7 +1233,7 @@ SET utan parametrar visar aktuella miljövariabler.
 
 SHIFT [DOWN]
 
-DOWN Flyttar parameter mot början (%0); annars mot slutet.
+DOWN Flyttar parameter mot början (%%0); annars mot slutet.
 .
 
 :TEXT_CMDHELP_TIME#1

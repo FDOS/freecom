@@ -1376,7 +1376,7 @@ Changes the position of replaceable parameters in a batch file.
 
 SHIFT [DOWN]
 
-DOWN shifts the argument window toward the beginning (%0); otherwise
+DOWN shifts the argument window toward the beginning (%%0); otherwise
 toward the end.
 .
 
