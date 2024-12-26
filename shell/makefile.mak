@@ -43,5 +43,5 @@ command.rsp : echoto.bat
 	$(ECHOTO0) command.rsp $(LIBS)+
 	$(ECHOTO0) command.rsp $(LIBC)
 
-command.exe : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) command.rsp
-	$(LD) @command.rsp
+command.exe : $(CFG) $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) $(LD_RSP)
+	$(LD)
