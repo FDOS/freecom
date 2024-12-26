@@ -69,4 +69,27 @@ cp config.std config.mak
 dosemu -td -q -K . -E "build.bat wc"
 mv -i command.com _output/wc_dos/english/.
 
+# Turbo C 2.01 (DOS) (slow so just Spanish)
+if [ -d ${HOME}/.dosemu/drive_c/tc201 ] ; then
+  export LNG=spanish
+
+  mkdir -p _output/tc2_dos/${LNG}
+  git clean -q -x -d -f -e _output -e _watcom -e _downloads
+  {
+    echo set LNG=${LNG}
+
+    echo set COMPILER=TC2
+    echo set TC2_BASE='C:\\tc201'
+    echo set XNASM=nasm
+    echo set XUPX=upx --8086 --best
+    echo set OLDPATH=%PATH%
+    echo set PATH='%TC2_BASE%;C:\\devel\\nasm;C:\\bin;%WATCOM%\\binw;%OLDPATH%'
+  } | unix2dos > config.bat
+
+  cp config.std config.mak
+
+  dosemu -td -q -K . -E "build.bat"
+  mv -i command.com _output/tc2_dos/${LNG}/.
+fi
+
 echo done
