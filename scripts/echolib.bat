@@ -1,15 +1,6 @@
 @echo off
-set FILE=%1
-set STR=+%2
-
-:loop
+if "%2%3%4%5%6%7%8%9" == "" goto nothing
+echo %2 %3 %4 %5 %6 %7 %8 %9 >>%1
 shift
-if "%2" == "" goto end
-set STR=%STR% +%2
-goto loop
-:end
-
-set AMP=&
-if "%AMP%" == "" set AMP=^^^&
-
-echo %STR% %AMP%>> %FILE%
+if not "%9" == "" echo echolib.bat arguments overflow
+:nothing
