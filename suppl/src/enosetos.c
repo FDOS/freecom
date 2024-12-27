@@ -75,7 +75,7 @@ int eno_setOSerror(int errnr)
 	DBG_ENTER("eno_setOSerror", Suppl_error)
 	DBG_ARGUMENTS( ("errnr=%u", errnr) )
 
-#ifdef __TURBOC__
+#if defined(__TURBOC__)
 	if((unsigned)errnr > 88) {
 		DBG_INFO( ("Errnr exceeds range") )
 		eno = EFAULT;
