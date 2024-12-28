@@ -8,7 +8,7 @@ all: $(CFG) cmds.lib
 OBJS1 = alias.obj beep.obj break.obj call.obj cdd.obj chcp.obj chdir.obj
 LOBJS1 = $(LIBPLUS)alias.obj $(LIBPLUS)beep.obj $(LIBPLUS)break.obj $(LIBPLUS)call.obj $(LIBPLUS)cdd.obj $(LIBPLUS)chcp.obj $(LIBPLUS)chdir.obj
 OBJS2 = cls.obj copy.obj ctty.obj date.obj del.obj dir.obj dirs.obj
-LOBJS2 = $(LIBPLUS)cls.obj $(LIBPLUS)copy.obj $(LIBPLUS)ctty.obj $(LIBPLUS)date.obj $(LIBPLUS)del.obj dir.obj $(LIBPLUS)dirs.obj
+LOBJS2 = $(LIBPLUS)cls.obj $(LIBPLUS)copy.obj $(LIBPLUS)ctty.obj $(LIBPLUS)date.obj $(LIBPLUS)del.obj $(LIBPLUS)dir.obj $(LIBPLUS)dirs.obj
 OBJS3 = doskey.obj echo.obj exit.obj exit2.obj fddebug.obj for.obj goto.obj
 LOBJS3 = $(LIBPLUS)doskey.obj $(LIBPLUS)echo.obj $(LIBPLUS)exit.obj $(LIBPLUS)exit2.obj $(LIBPLUS)fddebug.obj $(LIBPLUS)for.obj $(LIBPLUS)goto.obj
 OBJS4 = history.obj if.obj lfnfor.obj memory.obj mkdir.obj path.obj pause.obj
