@@ -67,7 +67,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "../include/resource.h"
+#include "../include/res.h"
 #include "../include/command.h"
 
 int enumResources(res_majorid_t id

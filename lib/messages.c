@@ -68,7 +68,6 @@
 
 #include "../include/command.h"
 #include "../include/misc.h"
-#include "../include/resource.h"
 #include "../include/res.h"
 #include "../strings.h"
 #include "../include/strings.typ"
