@@ -339,7 +339,7 @@ useage DB 7, 'Useage: VSpawn freecom [{ arguments }]', 13, 10
 
 errResize DB 7, 'Failed to resize VSpawn memory block', 13, 10, '$'
 
-EVEN
+align 2 ;;EVEN
 extensionStart	DB '.SWP', 0
 extensionEnd	DB 0
 
@@ -385,4 +385,4 @@ dbgStr1	DB 'VSpawn loaded at ', '$'
 dbgStr2 DB 10, 13, '$'
 %endif
 
-END
+;;END
