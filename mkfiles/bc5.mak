@@ -9,8 +9,6 @@ CL = $(CC)
 AR = $(BINPATH)\Tlib /C
 LD_RSP = command.rsp
 LD = $(BINPATH)\Tlink /m/s/l /c/d /i @$(LD_RSP)
-LIBPLUS = +
-LIBCONT = & #
 LIBLIST = ,
 ECHOLIB = echolib
 
