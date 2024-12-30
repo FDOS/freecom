@@ -16,7 +16,7 @@
 
 static int optRecursiveMode, optQuiet;
 
-/*#define COMMAND_EXTENSIONS*/
+#define COMMAND_EXTENSIONS
 #ifdef COMMAND_EXTENSIONS
 optScanFct(opt_md_rd)
 {
