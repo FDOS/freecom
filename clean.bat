@@ -26,7 +26,7 @@ call %0 utils\*.       obj map exe
 
 for %%i in (cmd lib shell criter) do if exist %%i\*.obj del %%i\*.obj>nul
 for %%i in (cmd lib shell string tools utils) do if exist %%i\*.cfg del %%i\*.cfg>nul
-for %%i in (cmd lib shell string tools utils) do if exist %%i\echoto.bat del %%i\echoto.bat>nul
+for %%i in (cmd lib shell string tools utils strings strings\strings) do if exist %%i\echoto.bat del %%i\echoto.bat>nul
 for %%i in (cmd lib shell string tools utils) do if exist %%i\echolib.bat del %%i\echolib.bat>nul
 
 :end

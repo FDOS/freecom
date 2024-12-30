@@ -312,3 +312,12 @@ tools/watcomc.cfg
 utils/watcomc.cfg
 strings/xmsswap.cln
 build/
+strings/strings/watcomc.cfg
+cmd/echoto.bat
+lib/echoto.bat
+strings/echoto.bat
+strings/strings/echoto.bat
+suppl/echoto.bat
+tools/echoto.bat
+utils/echoto.bat
+suppl/suppl_s.lst
