@@ -3,6 +3,7 @@ CFG_DEPENDENCIES = makefile.mak
 TOP=..
 !include "$(TOP)/config.mak"
 
-all: $(CFG) mktools.exe mkctxt.exe chunk.exe mkinfres.exe
+all: $(CFG) mktools.exe mkctxt.exe chunk.exe mkinfres.exe ptchsize.exe
 
-mktools.exe : ../config.h
+mktools.exe : mktools.c ../config.h
+ptchsize.exe : ptchsize.c ../tools/ptchsize.c

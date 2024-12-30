@@ -198,7 +198,7 @@ cd ..
 echo
 echo Patching heap size to 6KB
 echo
-tools/ptchsize.exe command.com +6KB
+utils/ptchsize.exe command.com +6KB
 
 if [ $WITH_UPX = "yes" ]; then
   rm -f command.upx
