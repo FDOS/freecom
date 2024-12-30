@@ -1,11 +1,13 @@
 !ifdef __LINUX__
 DIRSEP = /
 RMFILES = rm -f
-RMFILES2 = rm -f
 ECHOTO = echo >>
-ECHOTO0 = echo >>
+ECHOTODEP =
 CP = cp
 !endif
+LIBLIST = >
+ECHOLIB = echo >>
+ECHOLIBDEP =
 
 !ifdef __NT__
 !ifdef %ProgramFiles(x86)
@@ -31,8 +33,6 @@ INCLUDEPATH = -I$(CC_BASE_PATH)$(DIRSEP)h
 CC = $(BINPATH)$(DIRSEP)wcc -zq -fo=.obj
 CL = $(BINPATH)$(DIRSEP)wcl -zq -fo=.obj -bcl=dos
 AR = $(BINPATH)$(DIRSEP)wlib -n -c
-LIBLIST = >
-ECHOLIB = echo >>
 
 CFG = watcomc.cfg
 CFLAGS1 = -os-s-wx

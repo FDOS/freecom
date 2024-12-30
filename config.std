@@ -1,11 +1,17 @@
 # defaults for DOS; can be overridden in compiler makefiles
 DIRSEP = \ #a backslash
-RMFILES = ..\scripts\rmfiles
-RMFILES2 = ..\..\scripts\rmfiles
-ECHOTO0 = echoto
-ECHOTO = $(TOP)\scripts\echoto
+ECHOTO = echoto
+ECHOTODEP = echoto.bat
+LIBLIST = ,
+ECHOLIB = echolib
+ECHOLIBDEP = echolib.bat
 CP = copy
 CLO =
+SCRIPTS_PATH = ..\scripts
+!if $(TOP2LVL)0 == 10
+SCRIPTS_PATH = ..\..\scripts
+!endif
+RMFILES = $(SCRIPTS_PATH)\rmfiles
 
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
@@ -55,13 +61,19 @@ MMODEL = $(FIXSTRS_MMODEL)
 ##
 ## (*) Note: Should be detected by CONFIG.H automatically for Turbo C
 ##     and Borland C compilers.
-$(CFG): $(CFG_DEPENDENCIES) $(TOP)/config.mak
+$(CFG): $(ECHOTODEP) $(CFG_DEPENDENCIES) $(TOP)/config.mak
 	$(RMFILES) $(CFG)
 	$(ECHOTO) $(CFG) $(CFLAGS1)
 	$(ECHOTO) $(CFG) $(CFLAGS2)
 	$(ECHOTO) $(CFG) $(INCLUDEPATH)
 	$(ECHOTO) $(CFG) -m$(SHELL_MMODEL_COMP) $(MMODEL)
 	$(ECHOTO) $(CFG) $(DEBUG) $(__XMS_SWAP)
+
+echoto.bat: $(SCRIPTS_PATH)\echoto.bat
+	$(CP) $(SCRIPTS_PATH)\echoto.bat .
+
+echolib.bat: $(SCRIPTS_PATH)\echolib.bat
+	$(CP) $(SCRIPTS_PATH)\echolib.bat .
 
 #		*Implicit Rules*
 .asm.obj:

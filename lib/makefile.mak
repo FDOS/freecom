@@ -44,10 +44,7 @@ OBJS34 = err71.obj err72.obj err73.obj err74.obj err75.obj err76.obj err77.obj
 OBJS35 = err78.obj err79.obj err80.obj err81.obj err82.obj err83.obj err84.obj
 OBJS36 = err85.obj err86.obj err87.obj
 
-echolib.bat : ../scripts/echolib.bat
-	$(CP) ..$(DIRSEP)scripts$(DIRSEP)echolib.bat .
-
-freecom.rsp : echolib.bat makefile.mak
+freecom.rsp : $(ECHOLIBDEP) makefile.mak
 	$(RMFILES) freecom.rsp
 	$(ECHOLIB) freecom.rsp $(OBJS1)
 	$(ECHOLIB) freecom.rsp $(OBJS2)
