@@ -28,6 +28,7 @@
 int rmdir_withfiles(char * path, int maxlen)
 {
 	struct dos_ffblk f;
+	int ret;
 	int len = strlen(path);  /* Warning: we assume path is a buffer is large enough for longest file path */
 	char *p = path+len;
 
@@ -41,7 +42,7 @@ int rmdir_withfiles(char * path, int maxlen)
 	/* cycle through removing directories first */
 	stpcpy(p, "*.*");
 	if (!dos_findfirst(path, &f, FA_DIREC)) {
-		int ret = 0;
+		ret = 0;
 		do {
 			/* skip . and .. directory entries */
 			if ((strcmp(f.ff_name, ".")==0) ||
@@ -53,7 +54,8 @@ int rmdir_withfiles(char * path, int maxlen)
 				/* avoid overflowing our buffer */
 				if((len + strlen(f.ff_name)) > maxlen) {
 					error_filename_too_long(p);
-					return E_Other;
+					ret = E_Other;
+					continue;
 				}
 
 				strcpy(p, f.ff_name);       /* Make the full path */
@@ -69,19 +71,23 @@ int rmdir_withfiles(char * path, int maxlen)
 	/* remove any files in current directory */
 	stpcpy(p, "*.*");
 	if (!dos_findfirst(path, &f, FA_NORMAL)) {
+		ret = 0;
 		do {
 			/* avoid overflowing our buffer */
 			if((len + strlen(f.ff_name)) > maxlen) {
 				error_filename_too_long(p);
-				return E_Other;
+				ret = E_Other;
+				continue;
 			}
 
 			strcpy(p, f.ff_name);       /* Make the full path */
 			dprintf(("deleting [%s]\n", path));
 			/* try to delete the file */
-			if(unlink(path) != 0)
+			if(unlink(path) != 0) {
 				myperror(path);  /* notify the user */
-		} while (dos_findnext(&f) == 0);
+				/* could exit here, but we just let rmdir fail */
+			}
+		} while (!ret && (dos_findnext(&f) == 0));
 		dos_findclose(&f);
 	}
 
