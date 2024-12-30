@@ -1,11 +1,10 @@
 CFG_DEPENDENCIES = makefile.mak
 
+TOP2LVL = 1
 TOP = ../..
 !include "$(TOP)/config.mak"
 
-CFG:=../$(CFG)
-
-all : strings.lib
+all : $(CFG) strings.lib
 
 OBJS1 = str0000.obj str0001.obj str0002.obj str0003.obj str0004.obj str0005.obj str0006.obj str0007.obj
 OBJS2 = str0008.obj str0009.obj str000a.obj str000b.obj str000c.obj str000d.obj str000e.obj str000f.obj
@@ -48,7 +47,7 @@ $(OBJS25) $(OBJS26) $(OBJS27) $(OBJS28) $(OBJS29) $(OBJS30) $(OBJS31) $(OBJS32)
 
 strings.lib: ../strings.h ../strings.err strings_deps1 strings_deps2
 	echo Making STRINGS library
-	$(RMFILES2) strings.lib
+	$(RMFILES) strings.lib
 	$(AR) strings.lib @strings.rsp $(LIBLIST) strings.lst
 	$(CP) strings.lib ..
 	$(CP) strings.lst ..

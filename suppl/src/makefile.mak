@@ -1,5 +1,6 @@
 CFG_DEPENDENCIES = makefile.mak
 
+TOP2LVL = 1
 TOP=../..
 !include "$(TOP)/config.mak"
 
@@ -31,12 +32,9 @@ DOBJS8 = dbgv_s15.obj dbgv_s17.obj dbgv_s19.obj dbgv_s20.obj dbgv_s22.obj dbgv_s
 DOBJS9 = eeopen.obj eestrcon.obj env_sdup.obj erfc_00f.obj erfc_015.obj gm_res.obj 
 DOBJS10 = gm_dup.obj gm_chgm.obj gm_gtmem.obj nlstime.obj strnum.obj s_skipws.obj s_skipwd.obj
 
-echolib.bat: ../../scripts/echolib.bat
-	$(CP) ..$(DIRSEP)..$(DIRSEP)scripts$(DIRSEP)echolib.bat .
-
 # Prepare Linker Response File
-objlist.txt: echolib.bat makefile.mak
-	$(RMFILES2) objlist.txt
+objlist.txt: $(ECHOLIBDEP) makefile.mak
+	$(RMFILES) objlist.txt
 	$(ECHOLIB) objlist.txt $(OBJS1)
 	$(ECHOLIB) objlist.txt $(OBJS2)
 	$(ECHOLIB) objlist.txt $(OBJS3)
@@ -63,5 +61,5 @@ objlist.txt: echolib.bat makefile.mak
 ../$(SUPPL).lib: $(OBJS1) $(OBJS2) $(OBJS3) $(OBJS4) $(OBJS5) $(OBJS6) \
 $(OBJS7) $(OBJS8) $(OBJS9) $(OBJS10) $(OBJS11) $(DOBJS1) $(DOBJS2) $(DOBJS3) $(DOBJS4) \
 $(DOBJS5) $(DOBJS6) $(DOBJS7) $(DOBJS8) $(DOBJS9) $(DOBJS10) objlist.txt
-	$(RMFILES2) ..$(DIRSEP)$(SUPPL).lib
+	$(RMFILES) ..$(DIRSEP)$(SUPPL).lib
 	$(AR) ..$(DIRSEP)$(SUPPL).lib @objlist.txt $(LIBLIST)..$(DIRSEP)$(SUPPL).lst

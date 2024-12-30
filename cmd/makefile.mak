@@ -12,10 +12,7 @@ OBJS4 = history.obj if.obj lfnfor.obj memory.obj mkdir.obj path.obj pause.obj
 OBJS5 = popd.obj prompt.obj pushd.obj rem.obj ren.obj rmdir.obj set.obj
 OBJS6 = shift.obj time.obj truename.obj type.obj verify.obj which.obj
 
-echolib.bat : ../scripts/echolib.bat
-	$(CP) ..$(DIRSEP)scripts$(DIRSEP)echolib.bat .
-
-cmds.rsp : echolib.bat makefile.mak
+cmds.rsp : $(ECHOLIBDEP) makefile.mak
 	$(RMFILES) cmds.rsp
 	$(ECHOLIB) cmds.rsp $(OBJS1)
 	$(ECHOLIB) cmds.rsp $(OBJS2)
