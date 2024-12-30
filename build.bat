@@ -179,8 +179,8 @@ cd ..
 echo.
 echo Patching heap size to 6KB
 echo.
-tools\ptchsize.exe command.com +6KB
-tools\ptchsize.exe %CMD_NAME% +6KB
+utils\ptchsize.exe command.com +6KB
+utils\ptchsize.exe %CMD_NAME% +6KB
 
 if %WITH_UPX%x == x goto alldone
 if exist command.upx del command.upx >nul

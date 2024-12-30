@@ -69,11 +69,11 @@ set XMS_SWAP=Yes
 dmake || quit
 %_DBG setdos /y1 %+ %_DBG echo on
 if not exist com.com goto ende
-iff not exist tools\ptchsize.exe then
+iff not exist utils\ptchsize.exe then
 	echo no PTCHSIZE
 	goto ende
 endiff
-tools\ptchsize.exe com.com +7KB
+utils\ptchsize.exe com.com +7KB
 if errorlevel 1 goto ende
 move com.com packages\xmsswap.std\command.com
 copy /b shell\com.exe +infores + criter\criter + criter\criter1 packages\localize.std\xmsswap.cln
@@ -97,11 +97,11 @@ ren /q config.h.backup config.h || cancel 21
 
 if not x%err == x cancel %err
 if not exist com.com goto ende
-iff not exist tools\ptchsize.exe then
+iff not exist utils\ptchsize.exe then
 	echo no PTCHSIZE
 	goto ende
 endiff
-tools\ptchsize.exe com.com +6KB
+utils\ptchsize.exe com.com +6KB
 if errorlevel 1 goto ende
 move com.com packages\plainedt.std\command.com
 if exist com.com goto ende
@@ -119,11 +119,11 @@ if not exist com.com goto ende
 copy /b shell\com.exe +infores + criter\criter + criter\criter1 command.cln
 ren com.com command.com
 if exist com.com goto ende
-iff not exist tools\ptchsize.exe then
+iff not exist utils\ptchsize.exe then
 	echo no PTCHSIZE
 	goto ende
 endiff
-tools\ptchsize.exe command.com +6KB
+utils\ptchsize.exe command.com +6KB
 if errorlevel 1 goto ende
 
 for %file in (tools\kssf.com tools\vspawn.com tools\ptchldrv.exe tools\ptchsize.exe) (if exist %file copy %file packages\plainedt.std\ %+ if exist %file move %file packages\binary.std\ %+ if exist %file goto ende)
