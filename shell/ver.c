@@ -41,7 +41,8 @@
 #include "../err_fcts.h"
 #include "../strings.h"
 
-const char shellver[] = "0.86 - "
+#include "../version.h"
+const char shellver[] = FREECOM_VERSION  " - "
 #if defined(__BORLANDC__)
 	"BORLANDC"
 #elif defined(__TURBOC__)
