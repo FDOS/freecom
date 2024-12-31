@@ -76,6 +76,10 @@ static char *strupr(char *s)
     *p = toupper(*p);
   return s;
 }
+#elif defined(__WATCOMC__) && defined(__LINUX__)
+#include <unistd.h>
+#include <sys/stat.h>
+#define mkdir(x) mkdir(x, 0777)
 #else
 #include <direct.h>
 #include <io.h>
