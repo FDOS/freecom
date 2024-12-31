@@ -112,6 +112,9 @@ echo.
 cd utils
 %MAKE% all
 if errorlevel 1 goto ende
+cd ..\utilsc
+%MAKE% all
+if errorlevel 1 goto ende
 cd ..
 
 echo.

@@ -1,24 +1,17 @@
 CFG_DEPENDENCIES = makefile.mak
 
-FIXSTRS_BUILD = 1
+COMPACT_MODEL = 1
 
 TOP=..
 !include "$(TOP)/config.mak"
 
-all : strings.h strings.err
+all : $(CFG) strings.h strings.err fixstrs.exe
 
-strings.h : DEFAULT.lng fixstrs.exe
-	fixstrs.exe --lib $(LNG)
+strings.h : DEFAULT.lng
+	..$(DIRSEP)utilsc$(DIRSEP)fixstrs.exe --lib $(LNG)
 	$(CP) strings.h ..
 
-strings.err : DEFAULT.err critstrs.exe
-	critstrs.exe $(LNG)
+strings.err : DEFAULT.err
+	..$(DIRSEP)utilsc$(DIRSEP)critstrs.exe $(LNG)
 
-fixstrs.exe: $(CFG) fixstrs.c
-
-critstrs.exe: $(CFG) critstrs.c
-
-#		*Individual File Dependencies*
-fixstrs.obj: $(CFG) fixstrs.c
-
-critstrs.obj: $(CFG) critstrs.c
+fixstrs.exe: fixstrs.c

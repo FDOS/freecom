@@ -113,7 +113,7 @@ gnumake_subst () {
 
 if $MAKE -? 2>&1 | grep -q gnu; then
     gnumake_subst . config.mak gnuconf.mak
-    for i in suppl utils strings criter lib cmd; do
+    for i in suppl utils utilsc strings criter lib cmd; do
 	gnumake_subst $i makefile.mak gnumake.mak
     done
     gnumake_subst suppl/src makefile.mak gnumake.mak
@@ -138,6 +138,8 @@ echo
 echo Making basic utilities for build process
 echo
 cd utils
+$MAKE all
+cd ../utilsc
 $MAKE all
 cd ..
 

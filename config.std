@@ -28,15 +28,13 @@ DEBUG=-UDEBUG -DNDEBUG
 !endif
 SHELL_MMODEL_COMP=$(SHELL_MMODEL)
 
-## Memory model of fixstrs, requires far data pointers, so uses compact memory model by default
-FIXSTRS_MMODEL=-mc
+## Compact Memory model used if it requires far data pointers, so uses compact memory model by default
+COMPACT_MMODEL=-mc
 
 ## Add -DDEBUG=1 below to enable debug support for assembly files
 NASMFLAGS = -I$(TOP)/include
 
 !include "$(TOP)/mkfiles/$(COMPILER).mak"
-
-INCLUDEPATH = $(INCLUDEPATH) -I$(SUPPL_INC_PATH)
 
 ## Which programs to use
 NASM = $(XNASM)
@@ -48,8 +46,8 @@ NASM = $(XNASM)
 __XMS_SWAP = -DXMS_SWAP
 !endif
 
-!if $(FIXSTRS_BUILD)0 == 10
-MMODEL = $(FIXSTRS_MMODEL)
+!if $(COMPACT_MODEL)0 == 10
+MMODEL = $(COMPACT_MMODEL)
 !endif
 
 # Default configuration
@@ -65,7 +63,7 @@ $(CFG): $(ECHOTODEP) $(CFG_DEPENDENCIES) $(TOP)/config.mak
 	$(RMFILES) $(CFG)
 	$(ECHOTO) $(CFG) $(CFLAGS1)
 	$(ECHOTO) $(CFG) $(CFLAGS2)
-	$(ECHOTO) $(CFG) $(INCLUDEPATH)
+	$(ECHOTO) $(CFG) $(INCLUDEPATH) -I$(SUPPL_INC_PATH)
 	$(ECHOTO) $(CFG) -m$(SHELL_MMODEL_COMP) $(MMODEL)
 	$(ECHOTO) $(CFG) $(DEBUG) $(__XMS_SWAP)
 
