@@ -9,6 +9,6 @@ TOP=..
 
 all : $(CFG) fixstrs.exe critstrs.exe
 
-fixstrs.exe: $(CFG) fixstrs.c ../strings/fixstrs.c
+fixstrs.exe: fixstrs.c ../strings/fixstrs.c
 
-critstrs.exe: $(CFG) critstrs.c
+critstrs.exe: critstrs.c
