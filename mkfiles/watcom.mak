@@ -9,46 +9,43 @@ LIBLIST = >
 ECHOLIB = echo >>
 ECHOLIBDEP =
 
-!ifdef __NT__
-!ifdef %ProgramFiles(x86)
-!define Win64
-!endif
-!endif
-
-CC_BASE_PATH = $(WATCOM)
 !ifdef __LINUX__
-BINPATH = $(CC_BASE_PATH)/binl
 LD = $(CL) -l=dos -fe=command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -\"op map,statics,verbose,stack=4k\"
 !else
-!ifdef Win64
-BINPATH = $(CC_BASE_PATH)\BINNT
-!else
-BINPATH = $(CC_BASE_PATH)\BINW
-!endif
 LD_RSP = command.rsp
 LD = wlinker /ma/nologo @$(LD_RSP)
 !endif
-LIBPATH = $(CC_BASE_PATH)$(DIRSEP)lib
-INCLUDEPATH = -I$(CC_BASE_PATH)$(DIRSEP)h
-CC = $(BINPATH)$(DIRSEP)wcc -zq -fo=.obj
-CL = $(BINPATH)$(DIRSEP)wcl -zq -fo=.obj -bcl=dos
-AR = $(BINPATH)$(DIRSEP)wlib -n -c
+INCLUDEPATH = -I$(WATCOM)$(DIRSEP)h
+CC = wcc -zq -fo=.obj
+CL = wcl -zq -fo=.obj -bcl=dos
+CL386 = wcl386 -zq -fo=.obj
+AR = wlib -n -c
 
 CFG = watcomc.cfg
 CFLAGS1 = -os-s-wx
 
 #		*Implicit Rules*
-!ifdef __LINUX__
-.SUFFIXES:
-.SUFFIXES: .c .asm .com .exe .obj
+!ifeq UTILS_BUILD 1
 .c.exe:
-  gcc -x c -D__GETOPT_H -I../suppl $< -o $@
-!else ifdef Win64
-.c.exe
-  $(BINPATH)\owcc -I../suppl $< -o $@
+! ifdef __LINUX__
+  $(CL386) -I$(WATCOM)$(DIRSEP)lh $< -fm -fe=$@ -I..$(DIRSEP)suppl
+! else ifdef __DOS__
+!  ifeq COMPACT_MODEL 1
+  $(CL) -mc -I$(WATCOM)$(DIRSEP)h $< -fm -fe=$@ -I..$(DIRSEP)suppl
+!  else
+  $(CL) -ms -I$(WATCOM)$(DIRSEP)h $< -fm -fe=$@ -I..$(DIRSEP)suppl
+!  endif
+! else
+  $(CL386) -I$(WATCOM)$(DIRSEP)h $< -fm -fe=$@ -I..$(DIRSEP)suppl
+! endif
 !else
-.obj.exe:
-  $(BINPATH)\wlink sys DOS f $< lib $(SUPPL_LIB_PATH)\SUPPL_$(SHELL_MMODEL).LIB op q
-!endif
 .c.obj:
   $(CC) $< -bt=dos @$(CFG)
+
+.obj.exe:
+  wlink sys DOS f $< lib $(SUPPL_LIB_PATH)$(DIRSEP)suppl_$(SHELL_MMODEL).lib op q,map
+
+.c.exe:
+  $(CL) $< @$(CFG) -\"op map,statics,verbose,stack=4k\"
+
+!endif
