@@ -33,33 +33,33 @@ DOBJS9 = eeopen.obj eestrcon.obj env_sdup.obj erfc_00f.obj erfc_015.obj gm_res.o
 DOBJS10 = gm_dup.obj gm_chgm.obj gm_gtmem.obj nlstime.obj strnum.obj s_skipws.obj s_skipwd.obj
 
 # Prepare Linker Response File
-objlist.txt: $(ECHOLIBDEP) makefile.mak
-	$(RMFILES) objlist.txt
-	$(ECHOLIB) objlist.txt $(OBJS1)
-	$(ECHOLIB) objlist.txt $(OBJS2)
-	$(ECHOLIB) objlist.txt $(OBJS3)
-	$(ECHOLIB) objlist.txt $(OBJS4)
-	$(ECHOLIB) objlist.txt $(OBJS5)
-	$(ECHOLIB) objlist.txt $(OBJS6)
-	$(ECHOLIB) objlist.txt $(OBJS7)
-	$(ECHOLIB) objlist.txt $(OBJS8)
-	$(ECHOLIB) objlist.txt $(OBJS9)
-	$(ECHOLIB) objlist.txt $(OBJS10)
-	$(ECHOLIB) objlist.txt $(OBJS11)
-	$(ECHOLIB) objlist.txt $(DOBJS1)
-	$(ECHOLIB) objlist.txt $(DOBJS2)
-	$(ECHOLIB) objlist.txt $(DOBJS3)
-	$(ECHOLIB) objlist.txt $(DOBJS4)
-	$(ECHOLIB) objlist.txt $(DOBJS5)
-	$(ECHOLIB) objlist.txt $(DOBJS6)
-	$(ECHOLIB) objlist.txt $(DOBJS7)
-	$(ECHOLIB) objlist.txt $(DOBJS8)
-	$(ECHOLIB) objlist.txt $(DOBJS9)
-	$(ECHOLIB) objlist.txt $(DOBJS10)
+suppllib.rsp: $(ECHOLIBDEP) makefile.mak
+	$(RMFILES) suppllib.rsp
+	$(ECHOLIB) suppllib.rsp $(OBJS1)
+	$(ECHOLIB) suppllib.rsp $(OBJS2)
+	$(ECHOLIB) suppllib.rsp $(OBJS3)
+	$(ECHOLIB) suppllib.rsp $(OBJS4)
+	$(ECHOLIB) suppllib.rsp $(OBJS5)
+	$(ECHOLIB) suppllib.rsp $(OBJS6)
+	$(ECHOLIB) suppllib.rsp $(OBJS7)
+	$(ECHOLIB) suppllib.rsp $(OBJS8)
+	$(ECHOLIB) suppllib.rsp $(OBJS9)
+	$(ECHOLIB) suppllib.rsp $(OBJS10)
+	$(ECHOLIB) suppllib.rsp $(OBJS11)
+	$(ECHOLIB) suppllib.rsp $(DOBJS1)
+	$(ECHOLIB) suppllib.rsp $(DOBJS2)
+	$(ECHOLIB) suppllib.rsp $(DOBJS3)
+	$(ECHOLIB) suppllib.rsp $(DOBJS4)
+	$(ECHOLIB) suppllib.rsp $(DOBJS5)
+	$(ECHOLIB) suppllib.rsp $(DOBJS6)
+	$(ECHOLIB) suppllib.rsp $(DOBJS7)
+	$(ECHOLIB) suppllib.rsp $(DOBJS8)
+	$(ECHOLIB) suppllib.rsp $(DOBJS9)
+	$(ECHOLIB) suppllib.rsp $(DOBJS10)
 
 # Create the library
 ../$(SUPPL).lib: $(OBJS1) $(OBJS2) $(OBJS3) $(OBJS4) $(OBJS5) $(OBJS6) \
 $(OBJS7) $(OBJS8) $(OBJS9) $(OBJS10) $(OBJS11) $(DOBJS1) $(DOBJS2) $(DOBJS3) $(DOBJS4) \
-$(DOBJS5) $(DOBJS6) $(DOBJS7) $(DOBJS8) $(DOBJS9) $(DOBJS10) objlist.txt
+$(DOBJS5) $(DOBJS6) $(DOBJS7) $(DOBJS8) $(DOBJS9) $(DOBJS10) suppllib.rsp
 	$(RMFILES) ..$(DIRSEP)$(SUPPL).lib
-	$(AR) ..$(DIRSEP)$(SUPPL).lib @objlist.txt $(LIBLIST)..$(DIRSEP)$(SUPPL).lst
+	$(AR) ..$(DIRSEP)$(SUPPL).lib @suppllib.rsp $(LIBLIST)..$(DIRSEP)$(SUPPL).lst
