@@ -1,5 +1,7 @@
 CFG_DEPENDENCIES = makefile.mak
 
+UTILS_BUILD = 1
+
 TOP=..
 !include "$(TOP)/config.mak"
 

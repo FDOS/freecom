@@ -23,11 +23,12 @@ call %0 strings\*.     obj     exe
 call %0 strings\strings\*. c obj
 call %0 tools\*.   icd obj map exe com
 call %0 utils\*.       obj map exe
+call %0 utilsc\*.       obj map exe
 
-for %%i in (cmd lib shell criter) do if exist %%i\*.obj del %%i\*.obj>nul
-for %%i in (cmd lib shell string tools utils) do if exist %%i\*.cfg del %%i\*.cfg>nul
-for %%i in (cmd lib shell string tools utils strings strings\strings) do if exist %%i\echoto.bat del %%i\echoto.bat>nul
-for %%i in (cmd lib shell string tools utils) do if exist %%i\echolib.bat del %%i\echolib.bat>nul
+for %%i in (cmd lib shell string strings\strings tools utils utilsc) do if exist %%i\*.obj del %%i\*.obj>nul
+for %%i in (cmd lib shell string strings\strings tools utils utilsc) do if exist %%i\*.cfg del %%i\*.cfg>nul
+for %%i in (cmd lib shell string strings\strings tools utils utilsc) do if exist %%i\echoto.bat del %%i\echoto.bat>nul
+for %%i in (cmd lib shell string strings\strings tools utils utilsc) do if exist %%i\echolib.bat del %%i\echolib.bat>nul
 
 :end
 

@@ -10,7 +10,7 @@ CP = cp
 LIBC = -li86
 NASMFLAGS := $(NASMFLAGS) -felf
 SHELL_MMODEL_COMP=cmodel=small
-FIXSTRS_MMODEL=
+COMPACT_MMODEL=
 INCLUDEPATH=-I. -I../compat -I../suppl/compat
 
 CC = ia16-elf-gcc -c
