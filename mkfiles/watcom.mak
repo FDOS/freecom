@@ -29,7 +29,7 @@ CFLAGS1 = -os-s-wx
 .c.exe:
 ! ifdef __LINUX__
   $(CL386) -I$(WATCOM)$(DIRSEP)lh $< -fm -fe=$@ -I..$(DIRSEP)suppl
-! else ifdef __DOS__
+! else ifdef __MSDOS__
 !  ifeq COMPACT_MODEL 1
   $(CL) -mc -I$(WATCOM)$(DIRSEP)h $< -fm -fe=$@ -I..$(DIRSEP)suppl
 !  else
