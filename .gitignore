@@ -1,5 +1,7 @@
 *.cfg
+*.com
 *.exe
+*.icd
 *.lib
 *.lst
 *.map
@@ -13,20 +15,22 @@
 /_output/**
 /_watcom/**
 
+/build/**
 /strings/strings/**
 !/strings/strings/makefile.mak
 /**/echolib.bat
 /**/echoto.bat
 !/scripts/**
+/**/gnumake.mak
 
 /config.bat
-/command.com
 /config.mak
 /context.h_c
 /context.inc
-/strings.h
+/gnuconf.mak
 /infores
 /info.txt
+/strings.h
 /criter/context.def
 /criter/context.h_c
 /criter/context.inc
@@ -37,13 +41,5 @@
 /strings/strings.err
 /strings/strings.h
 /strings/strings.log
-/tools/28.com
-/tools/50.com
-/tools/icmd_1.icd
-/tools/icmd_2.icd
-/tools/icmd_3.icd
-/tools/kssf.com
-/tools/makefile.mak
-/tools/vspawn.com
 /strings/xmsswap.cln
-/build/
+/tools/makefile.mak
