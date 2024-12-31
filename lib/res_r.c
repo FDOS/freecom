@@ -80,7 +80,7 @@
 #include <assert.h>
 #include <string.h>	/* memcmp */
 #include <fcntl.h>
-#if !defined(__GNUC__) || !defined(PTCHSIZE) || defined(__MINGW32__)
+#if !defined(__GNUC__) && !defined(__WATCOMC__) || !defined(PTCHSIZE) || defined(__MINGW32__)
 #include <io.h>		/* filelength */
 #endif
 
@@ -102,11 +102,14 @@ static long int filelength(int fd)
   lseek(fd, cur, SEEK_SET);
   return fsize;
 }
+#elif defined(__WATCOMC__)
+#include <sys/types.h>
+#include <unistd.h>
 #endif
 #else
 #include "../include/misc.h"
 #endif
- 
+
 int enumFileResources(const char *const fnam
 	, res_majorid_t id
 	, res_callbackp_t fct
@@ -122,10 +125,11 @@ int enumFileResources(const char *const fnam
 
 	rc = 0;
 #ifdef PTCHSIZE
-	if((fd = open(fnam, O_RDONLY | O_BINARY)) < 0) {
+	#define OMODE O_RDONLY | O_BINARY
 #else
-	if((fd = dos_open(fnam, O_RDONLY)) < 0) {
+	#define OMODE O_RDONLY
 #endif
+	if((fd = dos_open(fnam, OMODE)) < 0) {
 	 	rc = -1;
 	 	dprintf(("[RES: Failed to open file: %s]\n", fnam));
 #ifdef DEBUG
