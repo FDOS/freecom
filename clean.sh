@@ -2,7 +2,7 @@
 cd suppl
 rm -f all_done untar.exe untar.com untar.obj untar.map
 rm -f compile.me suppl*.lib suppl*.lst vars.bat *.cfg
-cd src && rm -f *.obj objlist.txt echolib.bat *.cfg suppl*.lst
+cd src && rm -f *.obj suppllib.rsp echolib.bat *.cfg suppl*.lst
 cd ../..
 rm -f lastmake.mk context.h_c context.inc strings.h command.com command.upx infores info.txt
 cd strings    && rm -f strings.h   strings.err strings.dat
