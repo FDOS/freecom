@@ -3,8 +3,9 @@ FreeDOS Command Line Interface Development History
 
 v0.86
 ~~~~~
-    build fixes
+    improved build support (fixes, improved makefiles, add TC support to CI)
     add quotes to command line ENV VAR if has space to better handle LFN commands
+    fix IF "==" incompatibilities
     (version increment to avoid confusion with any prerelease builds)
 
 v0.85b
