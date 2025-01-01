@@ -56,15 +56,15 @@ jobs:
           - name:   Windows
             id:     nt
             image:  windows-latest
-            cmd:    build.bat watcom english
+            cmd:    build.bat watcom upx english
           - name:   Mac OSX-ARM
             id:     osx
             image:  macos-latest
-            cmd:    ./build.sh watcom english
+            cmd:    ./build.sh watcom upx english
           - name:   Linux
             id:     linux
             image:  ubuntu-latest
-            cmd:    ./build.sh watcom english
+            cmd:    ./build.sh watcom upx english
 
     runs-on: ${{matrix.host.image}}
     name: Test OW cross-compile (${{matrix.host.name}})
