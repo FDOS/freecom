@@ -1,4 +1,4 @@
-!ifdef __LINUX__
+!ifdef __UNIX__
 DIRSEP = /
 RMFILES = rm -f
 ECHOTO = echo >>
@@ -9,7 +9,7 @@ LIBLIST = >
 ECHOLIB = echo >>
 ECHOLIBDEP =
 
-!ifdef __LINUX__
+!ifdef __UNIX__
 LD = $(CL) -l=dos -fe=command.exe $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(LIBS) -\"op map,statics,verbose,stack=4k\"
 !else
 LD_RSP = command.rsp
@@ -35,6 +35,8 @@ CFLAGS1 = -os-s-wx
 !  else
   $(CL) -ms -I$(WATCOM)$(DIRSEP)h $< -fm -fe=$@ -I..$(DIRSEP)suppl
 !  endif
+! else ifdef __OSX__
+  clang -x c -Og -g -Wall -Wno-pragma-pack -DGCC -D__GETOPT_H -I../suppl $< -o $@
 ! else
   $(CL386) -I$(WATCOM)$(DIRSEP)h $< -fm -fe=$@ -I..$(DIRSEP)suppl
 ! endif
