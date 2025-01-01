@@ -1,0 +1,25 @@
+name: cross-compile-build
+description: Cross-compile
+inputs:
+  cmd:
+    description: 'build cmd'
+    default: ''
+    required: false
+    type: string
+#
+runs:
+  using: composite
+  steps:
+    - name: build (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        copy config.b config.bat
+        copy config.std config.mak
+        ${{inputs.cmd}}
+      shell: cmd
+    - name: build (OSX, Linux)
+      if: runner.os != 'Windows'
+      run: |
+        ${{inputs.cmd}}
+      shell: bash
+

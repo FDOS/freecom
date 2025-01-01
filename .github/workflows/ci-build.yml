@@ -47,3 +47,43 @@ jobs:
       with:
         name: ${{ steps.snapshotname.outputs.fname }}
         path: _output
+
+  test-ow-cross-compile:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    strategy:
+      matrix:
+        host:
+          - name:   Windows
+            id:     nt
+            image:  windows-latest
+            cmd:    build.bat watcom english
+          - name:   Mac OSX-ARM
+            id:     osx
+            image:  macos-latest
+            cmd:    ./build.sh watcom english
+          - name:   Linux
+            id:     linux
+            image:  ubuntu-latest
+            cmd:    ./build.sh watcom english
+
+    runs-on: ${{matrix.host.image}}
+    name: Test OW cross-compile (${{matrix.host.name}})
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Nasm install
+      uses: ilammy/setup-nasm@v1
+
+    - name: UPX install
+      uses: "./.github/actions/upx-inst"
+
+    - name: Open Watcom install
+      uses: open-watcom/setup-watcom@v0
+      with:
+        version: "2.0-64"
+
+    - name: build
+      uses: "./.github/actions/build"
+      with:
+        cmd: ${{matrix.host.cmd}}

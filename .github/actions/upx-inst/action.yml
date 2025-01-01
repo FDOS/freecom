@@ -1,0 +1,15 @@
+name: install-upx
+description: Load UPX
+#
+runs:
+  using: composite
+  steps:
+    - name: UPX install (OSX)
+      if: runner.os == 'macOS'
+      run: brew install upx
+      shell: bash
+    - name: UPX install (Linux, Windows)
+      if: runner.os != 'macOS'
+      uses: crazy-max/ghaction-upx@v3
+      with:
+        install-only: true
