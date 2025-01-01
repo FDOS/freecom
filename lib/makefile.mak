@@ -2,7 +2,7 @@
 
 CFG_DEPENDENCIES = makefile.mak
 
-TOP=..
+TOP = ..
 !include "$(TOP)/config.mak"
 
 all: freecom.lib

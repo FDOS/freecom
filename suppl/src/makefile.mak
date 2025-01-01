@@ -1,7 +1,7 @@
 CFG_DEPENDENCIES = makefile.mak
 
 TOP2LVL = 1
-TOP=../..
+TOP = ../..
 !include "$(TOP)/config.mak"
 
 SUPPL=suppl_$(SHELL_MMODEL)

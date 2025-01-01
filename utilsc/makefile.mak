@@ -4,7 +4,7 @@ UTILS_BUILD = 1
 
 COMPACT_MODEL = 1
 
-TOP=..
+TOP = ..
 !include "$(TOP)/config.mak"
 
 all : $(CFG) fixstrs.exe critstrs.exe
