@@ -1,6 +1,6 @@
 CFG_DEPENDENCIES = makefile.mak ../strings.h
 
-TOP=..
+TOP = ..
 !include "$(TOP)/config.mak"
 
 all: command.exe

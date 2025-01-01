@@ -2,7 +2,7 @@ CFG_DEPENDENCIES = makefile.mak
 
 COMPACT_MODEL = 1
 
-TOP=..
+TOP = ..
 !include "$(TOP)/config.mak"
 
 all : $(CFG) strings.h strings.err fixstrs.exe
