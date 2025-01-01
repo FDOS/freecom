@@ -12,8 +12,8 @@ cd ../criter  && rm -f criter criter1 context.def context.inc context.h_c
 cd ../strings/strings && rm -f *.c makefile
 cd ../../tools && rm -f makefile.mak *.icd
 cd ..
-for i in cmd lib string strings/strings; do rm -f $i/*.lib $i/*.lst; done
-for i in cmd lib shell string strings/strings tools utils utilsc; do
+for i in cmd lib strings strings/strings; do rm -f $i/*.lib $i/*.lst; done
+for i in cmd lib shell strings strings/strings tools utils utilsc; do
   rm -f $i/gnumake.mak $i/*.obj $i/*.o $i/*.cfg $i/*.map $i/*.exe
   rm -f $i/*.com $i/*.rsp $i/echoto.bat $i/echolib.bat
 done
