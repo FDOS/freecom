@@ -17,8 +17,8 @@ call %0 tools\ makefile.mak
 call %0 tools\*. icd
 
 for %%i in (cmd lib string strings\strings) do call %0 %%i\*. lib lst
-for %%i in (cmd lib shell string strings\strings tools utils utilsc) do call %0 %%i\*. obj o cfg map exe com rsp
-for %%i in (cmd lib shell string strings\strings tools utils utilsc) do call %0 %%i\ echoto.bat echolib.bat gnumake.mak
+for %%i in (cmd lib shell strings strings\strings tools utils utilsc) do call %0 %%i\*. obj o cfg map exe com rsp
+for %%i in (cmd lib shell strings strings\strings tools utils utilsc) do call %0 %%i\ echoto.bat echolib.bat gnumake.mak
 for %%i in (. criter) do call %0 %%i\ gnumake.mak
 
 :end
