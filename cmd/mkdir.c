@@ -14,9 +14,9 @@
 #include "../include/misc.h"
 #include "../include/lfnfuncs.h"
 
-int recursive_mkdir(const char * path, int optRecursiveMode, int optQuiet)
+int recursive_mkdir(const char * path, int recursiveMode, int quiet)
 {
-	if (optRecursiveMode) {
+	if (recursiveMode) {
 		char fullname[MAXPATH];
 		char *p = fullname;
 		int flag_not_done = 0;
@@ -43,7 +43,7 @@ int recursive_mkdir(const char * path, int optRecursiveMode, int optQuiet)
 				ret = mkdir(fullname);
 			}
 			if (ret) {
-				if (!optQuiet) {
+				if (!quiet) {
 					/* TODO show error message */
 				}
 				return ret;
