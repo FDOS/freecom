@@ -11,7 +11,7 @@ call %0 .\ command.com command.upx
 call %0 .\ lastmake.mk context.h_c context.inc strings.h infores info.txt gnuconf.mak
 call %0 criter\ criter criter1 context.def context.inc context.h_c
 call %0 strings\ command.cln xmsswap.cln strings.h strings.err strings.dat strings.log
-call %0 strings\strings\ makefile 
+call %0 strings\strings\ makefile strings.mak
 call %0 strings\strings\*. c
 call %0 tools\ makefile.mak
 call %0 tools\*. icd

@@ -13,6 +13,8 @@ SCRIPTS_PATH = ..\..\scripts
 !endif
 RMFILES = $(SCRIPTS_PATH)\rmfiles
 
+FIXSTRSOPT = --lib
+
 ## Where the pre-compiled SUPPL files are located
 ## See DOCS\SUPPL.TXT for more information about this library
 SUPPL_INC_PATH = ..$(DIRSEP)suppl

@@ -101,6 +101,7 @@ static char *strupr(char *s)
 #define fEXT ".lng"
 #define fDMAKEFILE "makefile"
 #define fTCMAKEFILE "strings.rsp"
+#define fTCMAKFILE "strings.mak"
 
 typedef enum STATE {
 	 LOOKING_FOR_START
@@ -644,6 +645,47 @@ noAppendNL:
 	return 0;
 }
 
+static int create_make_dependency(void)
+{
+	string_count_t cnt1;
+	string_count_t maxCnt1;
+	string_count_t cnt2;
+
+	strcpy(cfilename, fTCMAKFILE);
+	if((lgf = fopen(cfile, "wt")) == NULL) {
+		pxerror("creating ", cfile);
+		return 101;
+	}
+	cnt1 = maxCnt1 = cnt2 = 0;
+	for(cnt = 0; cnt < maxCnt; ++cnt) {
+		if( cnt1 == 0 ) {
+			if( cnt > 0 )
+				fprintf(lgf, "\n");
+			fprintf(lgf, "strings_deps%d : \\\n", maxCnt1++);
+			cnt2 = 0;
+		}
+		fprintf(lgf, " " objfmt, cnt);
+		if(++cnt1 > 127) {
+			cnt1 = 0;
+		}
+		if(++cnt2 > 7 && cnt1 > 0) {
+			fprintf(lgf, " \\\n");
+			cnt2 = 0;
+		}
+	}
+	for(cnt = 0; cnt < maxCnt1; ++cnt) {
+		if( cnt == 0 )
+			fprintf(lgf, "\nSTRINGS_DEPS =");
+		fprintf(lgf, " strings_deps%d", cnt);
+	}
+	fflush(lgf);
+	if(ferror(lgf)) {
+		puts("Unspecific error writing to " fTCMAKFILE);
+		return 104;
+	}
+	fclose(lgf);
+	return 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -653,18 +695,42 @@ int main(int argc, char **argv)
 	string_count_t cnt;		/* current string number */
 	string_size_t lsize;
 	int makeLib = 0;
+	const char *fmt;
 
 	unlink(logfile);
 
-	if(argv[1] && (stricmp(argv[1], "/lib") == 0 || stricmp(argv[1], "--lib") == 0)) {
-		--argc;
-		++argv;
-		makeLib = 1;
+	while(argv[1] != NULL ) {
+		if(stricmp(argv[1], "/lib") == 0 || stricmp(argv[1], "--lib") == 0) {
+			--argc;
+			++argv;
+			makeLib = 1;
+		} else if(stricmp(argv[1], "/lib1") == 0 || stricmp(argv[1], "--lib1") == 0) {
+			--argc;
+			++argv;
+			makeLib = 2;
+		} else if(stricmp(argv[1], "/lib2") == 0 || stricmp(argv[1], "--lib2") == 0) {
+			--argc;
+			++argv;
+			makeLib = 3;
+		} else {
+			break;
+		}
 	}
 
-	if(argc > 2) {
+	/*
+	 * Hidden options lib and lib1 and lib2
+	 *
+	 * if one of these option is used then program generate strings library
+	 * source files and generate make files and response file for make utility
+	 *
+	 * lib.. options control response file format
+	 * lib2  format is '+<file name> &'
+	 * lib1  format is '+<file name>'
+	 * lib   format is '<file name>' only
+	 */
+	if(argc > 2 ) {
 		puts("FIXSTRS - Generate STRINGS.DAT and STRINGS.H for a language\n"
-			"Useage: FIXSTRS [/lib] [language]\n"
+			"Useage: FIXSTRS [/lib|/lib1|/lib2] [language]\n"
 			"\tIf no language is specified, only the default strings are read.\n"
 			"\tThe <language>.LNG file must reside in the current directory.\n"
 			"Note: DEFAULT.lng must be present in the current directory, too.");
@@ -822,6 +888,8 @@ puts("FIXSTRS: building STRINGS resource");
 			pxerror("creating ", cfile);
 			return 100;
 		}
+		if((rc = create_make_dependency()) != 0)
+			return rc;
 		strcpy(cfilename, fTCMAKEFILE);
 		if((ftc101 = fopen(cfile, "wt")) == NULL) {
 			pxerror("creating ", cfile);
@@ -847,19 +915,27 @@ strings.lib .LIBRARY : ", fdmake);
 			dumpString(cnt);
 			fprintf(fdmake, "\\\n\t" objfmt, cnt);
 		}
-		for(cnt = 0; cnt < maxCnt - 1; ++cnt)
-#if defined(__TURBOC__)
-			fprintf(ftc101, "+" objfmt " &\n", cnt);
-#elif defined(GCC)
-			fprintf(ftc101, objfmt "\n", cnt);
-#else
-			fprintf(ftc101, "+" objfmt "\n", cnt);
-#endif
-#if defined(GCC)
-		fprintf(ftc101, objfmt " \n", cnt);
-#else
-		fprintf(ftc101, "+" objfmt " \n", cnt);
-#endif
+		if(makeLib == 3) {
+			/* Turbo C */
+			fmt = "+" objfmt " &\n";
+		} else if(makeLib == 2) {
+			/* Borland C */
+			fmt = "+" objfmt "\n";
+		} else {
+			/* GCC, Open Watcom */
+			fmt = objfmt "\n";
+		}
+		for(cnt = 0; cnt < maxCnt - 1; ++cnt) {
+			fprintf(ftc101, fmt, cnt);
+		}
+		if(makeLib > 1) {
+			/* Borland C, Turbo C */
+			fmt = "+" objfmt "\n";
+		} else {
+			/* GCC, Open Watcom */
+			fmt = objfmt "\n";
+		}
+		fprintf(ftc101, fmt, cnt);
 		/********************** epilogue */
 
 		fputs("\n\
