@@ -9,7 +9,7 @@ rm -f command.com command.upx
 rm -f lastmake.mk context.h_c context.inc strings.h infores info.txt
 cd strings    && rm -f strings.h strings.err strings.dat strings.log
 cd ../criter  && rm -f criter criter1 context.def context.inc context.h_c
-cd ../strings/strings && rm -f *.c makefile
+cd ../strings/strings && rm -f *.c makefile strings.mak
 cd ../../tools && rm -f makefile.mak *.icd
 cd ..
 for i in cmd lib strings strings/strings; do rm -f $i/*.lib $i/*.lst; done

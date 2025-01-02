@@ -8,7 +8,7 @@ TOP = ..
 all : $(CFG) strings.h strings.err fixstrs.exe
 
 strings.h : DEFAULT.lng
-	..$(DIRSEP)utilsc$(DIRSEP)fixstrs.exe --lib $(LNG)
+	..$(DIRSEP)utilsc$(DIRSEP)fixstrs.exe $(FIXSTRSOPT) $(LNG)
 	$(CP) strings.h ..
 
 strings.err : DEFAULT.err
