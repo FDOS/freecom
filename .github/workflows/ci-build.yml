@@ -52,22 +52,28 @@ jobs:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
     strategy:
       matrix:
+        ow:
+          - name:   '1.9'
+            id:     '1.9'
+          - name:   '2.0'
+            id:     '2.0-64'
         host:
-          - name:   Windows
-            id:     nt
-            image:  windows-latest
-            cmd:    build.bat watcom upx english
-          - name:   Mac OSX-ARM
-            id:     osx
-            image:  macos-latest
-            cmd:    ./build.sh watcom upx english
-          - name:   Linux
-            id:     linux
-            image:  ubuntu-latest
-            cmd:    ./build.sh watcom upx english
-
+          - name:   'Windows'
+            id:     'nt'
+            image:  'windows-latest'
+            cmd:    'build.bat watcom upx english'
+          - name:   'Mac OSX-ARM'
+            id:     'osx'
+            image:  'macos-latest'
+            cmd:    './build.sh watcom upx english'
+          - name:   'Linux'
+            id:     'linux'
+            image:  'ubuntu-latest'
+            cmd:    './build.sh watcom upx english'
+        exclude:
+          - { ow: { name: '1.9' }, host: { id: 'osx' } }
     runs-on: ${{matrix.host.image}}
-    name: Test OW cross-compile (${{matrix.host.name}})
+    name: Test OW ${{matrix.ow.name}} cross-compile (${{matrix.host.name}})
 
     steps:
     - uses: actions/checkout@v4
@@ -81,7 +87,7 @@ jobs:
     - name: Open Watcom install
       uses: open-watcom/setup-watcom@v0
       with:
-        version: "2.0-64"
+        version: ${{matrix.ow.id}}
 
     - name: build
       uses: "./.github/actions/build"
