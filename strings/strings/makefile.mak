@@ -8,7 +8,7 @@ all : $(CFG) strings.lib
 
 !include "strings.mak"
 
-strings.lib: ../strings.h ../strings.err $(STRINGS_DEPS)
+strings.lib: ../strings.h ../strings.err strings.rsp $(STRINGS_DEPS)
 	echo Making STRINGS library
 	$(RMFILES) strings.lib
 	$(AR) strings.lib @strings.rsp $(LIBLIST) strings.lst
