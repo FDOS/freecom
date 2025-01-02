@@ -29,7 +29,7 @@ LIBS = 	..$(DIRSEP)cmd$(DIRSEP)cmds.lib ..$(DIRSEP)lib$(DIRSEP)freecom.lib \
 ..$(DIRSEP)strings$(DIRSEP)strings.lib \
 $(SUPPL_LIB_PATH)$(DIRSEP)suppl_$(SHELL_MMODEL).lib
 
-command.rsp : $(ECHOTODEP)
+command.rsp : $(ECHOTODEP) makefile.mak
 	$(RMFILES) command.rsp
 	$(ECHOTO) command.rsp $(OBJ1)+
 	$(ECHOTO) command.rsp $(OBJ2)+
