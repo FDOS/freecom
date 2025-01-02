@@ -96,9 +96,9 @@ int rmdir_withfiles(char * path, int maxlen)
 	return rmdir(path);
 }
 
-int recursive_rmdir(const char * path, int optRecursiveMode, int optQuiet)
+int recursive_rmdir(const char * path, int recursiveMode, int quiet)
 {
-	if (optRecursiveMode) {
+	if (recursiveMode) {
 		struct dos_ffblk f;
 		char fullname[MAXPATH + sizeof(f.ff_name) + 2], *p;
 		int len;
@@ -133,7 +133,7 @@ int recursive_rmdir(const char * path, int optRecursiveMode, int optQuiet)
 		*p = 0;
 		
 		/* prompt user if they are sure, regardless if files or not */
-		if (!optQuiet) {
+		if (!quiet) {
 			int r;
 			r = userprompt(PROMPT_DELETE_ALL, fullname);  /* Are you sure? TODO fix me */
 				
