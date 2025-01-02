@@ -32,7 +32,7 @@ DOBJS8 = dbgv_s15.obj dbgv_s17.obj dbgv_s19.obj dbgv_s20.obj dbgv_s22.obj dbgv_s
 DOBJS9 = eeopen.obj eestrcon.obj env_sdup.obj erfc_00f.obj erfc_015.obj gm_res.obj 
 DOBJS10 = gm_dup.obj gm_chgm.obj gm_gtmem.obj nlstime.obj strnum.obj s_skipws.obj s_skipwd.obj
 
-# Prepare Linker Response File
+# Prepare Librarian Response File
 suppllib.rsp: $(ECHOLIBDEP) makefile.mak
 	$(RMFILES) suppllib.rsp
 	$(ECHOLIB) suppllib.rsp $(OBJS1)
@@ -58,8 +58,8 @@ suppllib.rsp: $(ECHOLIBDEP) makefile.mak
 	$(ECHOLIB) suppllib.rsp $(DOBJS10)
 
 # Create the library
-../$(SUPPL).lib: $(OBJS1) $(OBJS2) $(OBJS3) $(OBJS4) $(OBJS5) $(OBJS6) \
-$(OBJS7) $(OBJS8) $(OBJS9) $(OBJS10) $(OBJS11) $(DOBJS1) $(DOBJS2) $(DOBJS3) $(DOBJS4) \
+../$(SUPPL).lib: $(OBJS1) $(OBJS2) $(OBJS3) $(OBJS4) $(OBJS5) $(OBJS6) $(OBJS7) \
+$(OBJS8) $(OBJS9) $(OBJS10) $(OBJS11) $(DOBJS1) $(DOBJS2) $(DOBJS3) $(DOBJS4) \
 $(DOBJS5) $(DOBJS6) $(DOBJS7) $(DOBJS8) $(DOBJS9) $(DOBJS10) suppllib.rsp
 	$(RMFILES) ..$(DIRSEP)$(SUPPL).lib
-	$(AR) ..$(DIRSEP)$(SUPPL).lib @suppllib.rsp $(LIBLIST)..$(DIRSEP)$(SUPPL).lst
+	$(AR) ..$(DIRSEP)$(SUPPL).lib @suppllib.rsp $(LIBLIST) ..$(DIRSEP)$(SUPPL).lst
