@@ -314,7 +314,7 @@ CTTY komutu bu COMMAND.COM'dan hariç tutuldu.
 .
 
 :TEXT_ERROR_CTTY_DUP#0%
-Dosya tanımlayıcıların TTY'ye değiştirilmeleri başarısız '%s'.
+Dosya tanımlayıcıların '%s' TTY'ye değiştirilmeleri başarısız.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
@@ -375,7 +375,7 @@ IF: Eksik komut.
 .
 
 :TEXT_NOT_IMPLEMENTED_YET
-Özür dileriz, özellik mevcut değil.
+Özür dileriz, özellik henüz mevcut değil.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
@@ -402,7 +402,7 @@ Bozuk komut satırı. Bu dahili bir hatadır ve COMMAND.COM'un
 :TEXT_INIT_FULLY_QUALIFIED#1%
 COMMAND.COM'a giden yolun tamamen belirtilmiş olması gerekmektedir!
 Bu, sürücü harfinin kullanılması ve ters eğik çizgi ile başlanması demektir.
-Örneğin: C:\FDOS
+Örneğin: C:\\FREEDOS
 
 COMMAND.COM şimdi bu yolu varsaymaktadır:
 %s
@@ -641,7 +641,7 @@ Dizin yığını boş.
 
 ## Strings to construct the DIR output
 :TEXT_DIR_HDR_VOLUME#1%
- %c sürücüsündeki birim\
+ %c sürücüsündeki birim \
 .
 :TEXT_DIR_HDR_VOLUME_STRING#0%
 : %s
@@ -1007,18 +1007,18 @@ COMMAND [[sürücü:]yol] [aygıt] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
   [sürücü:]yol    COMMAND.COM'un bulunduğu dizini belirtir.
   device          Komut girişi ve çıkışı için kullanılan aygıtı belirtir.
   /E:nnnnn        İlk ortam boyutunu nnnnn bayt olarak ayarlar.
-                  (nnnnn 256 ilÉ 32.768 arasında olmalıdır).
+                  (nnnnn 256 ila 32.768 arasında olmalıdır).
   /L:nnnn         Dahili arabelleğin boyutunu belirtir (/P'de gerekir).
-                  (nnnn 128 ilÉ 1.024 arasında olmalıdır).
+                  (nnnn 128 ila 1.024 arasında olmalıdır).
   /U:nnn          Girdi arabelleğinin boyutunu belirtir (/P'de gerekir).
-                  (nnn 128 ilÉ 255 arasında olmalıdır).
+                  (nnn 128 ila 255 arasında olmalıdır).
   /P              Yeni komut kabuğunu daimi yapar (çıkış yapılamaz).
   /MSG            Tüm hata İletilerini bellekte depolar (/P'de gerekir).
   /LOW            Komut kabuğunun yerleşik verilerini Aşağı bellekte
                   tutmasını zorlar.
   /Y              /C veya /K ile belirtilen toplu iş programı adımlar.
-  /C command      Belirtilen komutu çalıştırır ve döner.
-  /K command      Belirtilen komutu çalıştırır ve çalışmaya devam eder.
+  /C komut        Belirtilen komutu çalıştırır ve döner.
+  /K komut      Belirtilen komutu çalıştırır ve çalışmaya devam eder.
 .
 
 :TEXT_CMDHELP_COPY
@@ -1041,7 +1041,7 @@ COPY [/A | /B] kaynak [/A | /B] [+ kaynak [/A | /B] [+ ...]] [hedef
 Bu, komut satırında /-Y ile geçersiz kılınabilir.
 
 Dosya eklemek için hedef olarak tek bir dosya belirtin fakat kaynak için
-birden fazla dosya belirtin (jokerler veya file1+file2+file3 biçimi).
+birden fazla dosya belirtin (jokerler veya dosya1+dosya2+dosya3 biçimi).
 .
 
 :TEXT_CMDHELP_CTTY
@@ -1091,7 +1091,7 @@ DIR [sürücü:][yol][dosyaadı] [/P] [/W] [/A[[:]öznitelikler]]
              H  Saklı dosyalar             A  Arşivlenmeye hazır dosyalar
              S  Sistem dosyaları           -  hayır öneki
  /O         Dosyaları sıralama düzenine göre listeler.
- sortorder   N  Ada göre (alfabetik)       S  Boyuta göre (önce küçüğü)
+ sıralama    N  Ada göre (alfabetik)       S  Boyuta göre (önce küçüğü)
              E  Uzantıya göre (alfabetik)  D  Tarih & zaman (önce eskisi)
              G  önce dizinleri grupla      -  Ters sıralama öneki
              U  Sıralanmamış		   Varsayılan /ONG
@@ -1163,19 +1163,19 @@ EXIT
 :TEXT_CMDHELP_FOR
 Belirtilen komutu bir dosya kümesindeki her dosya için çalıştırır.
 
-FOR %değişken IN (küme) DO komut [komut-parametreleri]
+FOR %%değişken IN (küme) DO komut [komut-parametreleri]
 
-  %değişken	Değiştirilebilir bir parametre belirtir.
+  %%değişken	Değiştirilebilir bir parametre belirtir.
   (küme)     	Bir/birden çok dosya kümesi belirtir. Joker kullanılabilir.
   komut      	Her dosya için çalıştırılacak komutu belirtir.
   komut-parametreleri
              	Belirtilen komut için parametre veya anahtar belirtir.
 
-FOR komutunu bir toplu iş betiğinde kullanmak için %değişken yerine %%değişken
-kullanın.
+FOR komutunu bir toplu iş betiğinde kullanmak için %%değişken yerine
+%%%%değişken kullanın.
 
 örneğin:
-  FOR %f IN (---başlangıç--- a*.* ---son---) DO ECHO - %f -
+  FOR %%%%f IN (---başlangıç--- a*.* ---son---) DO ECHO - %%%%f -
 .
 
 :TEXT_CMDHELP_GOTO
@@ -1384,7 +1384,7 @@ Bir toplu iş dosyasında değiştirilebilir parametre konumunu değiştirir.
 
 SHIFT [DOWN]
 
-DOWN argüman penceresini başa doğru kaydırır (%0); yoksa sona doğru kaydırır.
+DOWN argüman penceresini başa doğru kaydırır (%%0); yoksa sona doğru kaydırır.
 
 .
 
@@ -1511,7 +1511,7 @@ Dize kaynakları belleğe yüklenemedi, %COMSPEC% ögesine işaret edilen konum
 geçersiz gibi görünüyor. Lütfen FreeCOM için başka bir konum belirtin ki
 dizeler bu konumdan yüklenebilsinler, mesela:
 C:\\COMMAND.COM
-veya dizelerin yüklenmesini iptal etmek için enter düğmesine basın.
+veya dizelerin yüklenmesini iptal etmek için Enter düğmesine basın.
 .
 
 :TEXT_TERMINATING
