@@ -824,7 +824,7 @@ oder F5 um %s zu übergehen... \
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-DOS Version %u.%u
+DOS Version %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

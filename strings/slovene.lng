@@ -805,7 +805,7 @@ Preskakujem %s.
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-DOS verzija %u.%u
+DOS verzija %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

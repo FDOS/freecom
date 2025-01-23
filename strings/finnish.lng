@@ -802,7 +802,7 @@ Ohitetaan '%s'.
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-DOS-versio %u.%u
+DOS-versio %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

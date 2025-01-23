@@ -719,7 +719,7 @@ Ignorando '%s'.
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-DOS versão %u.%u
+DOS versão %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

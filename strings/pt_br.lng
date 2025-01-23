@@ -711,7 +711,7 @@ Contornando '%s'.
 .
 
 :TEXT_MSG_VER_DOS_VERSION
-Versa do DOS %u.%u
+Versa do DOS %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS
