@@ -118,6 +118,8 @@ int cmd_ver (char * rest) {
         }
         else
         {
+           unsigned char far * pstart;
+           unsigned char far * pend;
 /*         displayString(TEXT_MSG_VER_LATER_FREEDOS
            , regs.r_cx >> 8, regs.r_cx & 0xFF, regs.r_bx & 0xFF);
            , 2, 0, regs.r_bx & 0xFF ); */
@@ -125,8 +127,14 @@ int cmd_ver (char * rest) {
            regs.r_dx = 0;
            intrpt( 0x21, &regs );
            if (regs.r_dx) {
-             printf( "%Fs", MK_FP( regs.r_dx, regs.r_ax ) );
-             /* "%Fs" may only work in Turbo C's printf */
+             pstart = MK_FP( regs.r_dx, regs.r_ax );
+             for (pend = pstart; *pend; ++ pend) /* empty loop body */;
+             while (pend > pstart &&
+               (pend[-1] == ' ' || pend[-1] == 9
+                 || pend[-1] == 10 || pend[-1] == 13)) {
+               -- pend;
+             }
+             printf( "%.*Fs\n", pend - pstart, pstart);
            }
         }
       }
