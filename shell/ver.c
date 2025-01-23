@@ -107,10 +107,20 @@ int cmd_ver (char * rest) {
   /* arguments are simply ignored */
 
   if(optR) {                         /* version information */
+        unsigned int major, minor;
         IREGS regs;
+        regs.r_ax = 0x3306;
+        regs.r_bx = 0;
+        intrpt(0x21, &regs);
+        major = regs.r_bx & 255;
+        minor = regs.r_bx >> 8;
         regs.r_ax = 0x3000;
         intrpt(0x21, &regs);
-        displayString(TEXT_MSG_VER_DOS_VERSION, regs.r_ax & 0xFF, regs.r_ax >> 8);
+        if (major == 0) {
+          major = regs.r_ax & 255;
+          minor = regs.r_ax >> 8;
+        }
+        displayString(TEXT_MSG_VER_DOS_VERSION, major, minor);
 
         if ((regs.r_bx >> 8) == 0xfd && (regs.r_bx & 0xFF) == 0xff)
         {
