@@ -804,7 +804,7 @@ Mevcut özellikler:
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-DOS sürümü %u.%u
+DOS sürümü %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

@@ -807,7 +807,7 @@ aabbccdd      d      a    b
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-Версия DOS: %u.%u
+Версия DOS: %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

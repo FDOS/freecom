@@ -784,7 +784,7 @@ Premere F8 per la modalità traccia, o F5 per non eseguire %s... \
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-DOS versione %u.%u
+DOS versione %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

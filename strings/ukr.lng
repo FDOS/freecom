@@ -768,7 +768,7 @@ aabbccdd      d      a    b
 .
 
 :TEXT_MSG_VER_DOS_VERSION
-Версўя DOS %u.%u
+Версўя DOS %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

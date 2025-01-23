@@ -685,7 +685,7 @@ Hoppar över '%s'.
 .
 
 :TEXT_MSG_VER_DOS_VERSION
-DOS version %u.%u
+DOS version %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS

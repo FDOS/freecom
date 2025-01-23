@@ -781,7 +781,7 @@ Obchodzenie '%s'.
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-Wersja DOS: %u.%u
+Wersja DOS: %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS
