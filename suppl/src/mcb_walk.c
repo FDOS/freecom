@@ -84,11 +84,22 @@ int mcb_walk(word mcb, const MCB_WALKFUNC fct, void * const arg)
 
 	/* for walking, link in UMB list */
 	UMBLink = 1;		/* Don't unlink UMBs */
-	if(_osmajor >= 5) {	/* UMBs since DOS 5 */
+	{
 		_AX = 0x5802;	/* Get UMB Link state */
+    /* /// Modified to use __emit__(), which doesn't require an assembler,
+       if we're compiling with TurboC.  - Ron Cemer */
+#if defined(_TC_EARLY_)
+	        __emit__((unsigned char)0xf9);      /* stc */
+#elif defined(__WATCOMC__) || defined(__GNUC__)
+		reg.x.flags |= 1;
+#else
+		asm {
+			stc
+		}
+#endif
 		geninterrupt(0x21);
-		UMBLink = _AL;
-		if(!_CFLAG && !UMBLink) {	/* There are UMBs && not linked, yet */
+		if(!_CFLAG && !_AL) {	/* There are UMBs && not linked, yet */
+			UMBLink = _AL;
 			DBG_STRING("Link in UMBs")
 			_BX = 1;	/* Link them */
 			_AX = 0x5803;	/* Set UMB Link state */
