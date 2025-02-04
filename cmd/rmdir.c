@@ -13,6 +13,9 @@
 
 #include "suppl.h"
 #include "dfn.h"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 #include "../include/command.h"
 #include "../include/misc.h"
@@ -25,7 +28,11 @@
 #endif
 
 /* recursively delete subdirs and files */
+#ifdef DBCS
+int rmdir_withfiles(const char * fullname, char * path, int maxlen)
+#else
 int rmdir_withfiles(char * path, int maxlen)
+#endif
 {
 	struct dos_ffblk f;
 	int ret;
@@ -33,7 +40,11 @@ int rmdir_withfiles(char * path, int maxlen)
 	char *p = path+len;
 
 	/* ensure ends with \ */
+#ifdef DBCS
+	if (*fullname && *(CharPrev(fullname, p)) != '\\')
+#else
 	if (p[-1] != '\\')
+#endif
 		*p++ = '\\';
 	*p = '\0';
 	
@@ -60,7 +71,11 @@ int rmdir_withfiles(char * path, int maxlen)
 
 				strcpy(p, f.ff_name);       /* Make the full path */
 				/* recursively delete subdirectory */
+#ifdef DBCS
+				ret = rmdir_withfiles(fullname, path, maxlen);
+#else
 				ret = rmdir_withfiles(path, maxlen);
+#endif
 			}
 		} while (!ret && (dos_findnext(&f) == 0));
 		dos_findclose(&f);
@@ -128,7 +143,11 @@ int recursive_rmdir(const char * path, int recursiveMode, int quiet)
 		}
 		
 		/* ensure ends with \ */
+#ifdef DBCS
+		if (len > 0 && *(CharPrev(fullname, p)) != '\\')
+#else
 		if (p[-1] != '\\')
+#endif
 			*p++ = '\\';
 		*p = 0;
 		
@@ -141,8 +160,11 @@ int recursive_rmdir(const char * path, int recursiveMode, int quiet)
 				return E_Other;
 			}
 		}
-
+#ifdef DBCS
+		return rmdir_withfiles(fullname, fullname, sizeof(fullname));
+#else
 		return rmdir_withfiles(fullname, sizeof(fullname));
+#endif
 	} else {
 		return rmdir(path);
 	}

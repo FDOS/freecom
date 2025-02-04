@@ -9,6 +9,9 @@
 
 #include "suppl.h"
 #include "dfn.h"
+#ifdef DBCS
+# include "mbcs.h"
+#endif
 
 #include "../include/command.h"
 #include "../include/misc.h"
@@ -25,7 +28,11 @@ int recursive_mkdir(const char * path, int recursiveMode, int quiet)
 		dprintf(("fullpath = %s\n", fullname));
 		do {
 			while (*p && ((*p != '\\') && (*p != '/'))) {
+#ifdef DBCS
+				p += MbLen(p);
+#else
 				p++;
+#endif
 			}
 			flag_not_done = *p; /* == 0 when end of path found, nonzero if \ or / */
 			*p = '\0';
