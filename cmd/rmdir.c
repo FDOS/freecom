@@ -92,7 +92,7 @@ int rmdir_withfiles(char * path, int maxlen)
 	}
 
 	/* finally actually remove the directory */
-	*p = '\0';
+	p[-1] = '\0';
 	return rmdir(path);
 }
 
