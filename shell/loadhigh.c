@@ -462,8 +462,13 @@ static int loadhigh_prepare(void)
         /* Found a free memory block: allocate it */
         word bl = DosAlloc(mcb->mcb_size);
 
-        if (bl != FP_SEG(mcb) + 1)  /* Did we get the block we wanted? */
+        if (bl != FP_SEG(mcb) + 1) {  /* Did we get the block we wanted? */
+          DOSfree(bl);
+          for (i = 0; i < availBlocks; i++)
+            DOSfree(availBlock[i]);
+          free(availBlock);
           return err_mcb_chain;
+        }
 
         if (region->access)		/* /L option allows access to this region */
         {
