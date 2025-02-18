@@ -347,8 +347,10 @@ static int findUMBRegions(void)
         if (region->start)
         {
           region->end = FP_SEG(mcb) - 1;
-          region++;
-          region->start = 0;
+          if (! (mcb->mcb_type == 'Z' && 0 == mcb->mcb_size)) {
+            region++;
+            region->start = 0;
+          }
         }
       }
       else
@@ -625,7 +627,7 @@ static int parseArgs(char *cmdline, char **fnam, char **rest)
 
     /* Disable access to all UMB regions not listed here */
     for (i = 1; i < umbRegions; i++)
-    umbRegion[i].access = 0;
+      umbRegion[i].access = 0;
 
     r = 0;
 
