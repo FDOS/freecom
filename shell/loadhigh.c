@@ -53,6 +53,10 @@
 #define mcbNext(mcb)	mcbAssign(mcb, nxtMCB(FP_SEG(mcb)))
 #define DosAlloc(value)	DOSalloc((value), 0xF)
 
+#define BLOCKMAX 256
+#define AVAILBLOCKMAX 256
+#define REGIONMAX 64
+
 enum error_codes
 {
   err_help = -1, OK,
@@ -154,7 +158,7 @@ static int initialise(void)
   optS = 0;
 
   /* Allocate dynamic memory for some arrays */
-  if ((block = malloc(256 * sizeof(*block))) == 0)
+  if ((block = malloc(BLOCKMAX * sizeof(*block))) == 0)
     return err_out_of_memory;
 
 #ifdef FEATURE_XMS_SWAP
@@ -177,7 +181,7 @@ static int initialise(void)
 	}
 #endif
 
-  if ((umbRegion = malloc(64 * sizeof(*umbRegion))) == 0)
+  if ((umbRegion = malloc(REGIONMAX * sizeof(*umbRegion))) == 0)
     return err_out_of_memory;
 
   /* find the UMB regions */
@@ -348,6 +352,9 @@ static int findUMBRegions(void)
         {
           region->end = FP_SEG(mcb) - 1;
           if (! (mcb->mcb_type == 'Z' && 0 == mcb->mcb_size)) {
+            if ((region - umbRegion) >= REGIONMAX) {
+              return err_out_of_memory;
+            }
             region++;
             region->start = 0;
           }
@@ -371,6 +378,9 @@ static int findUMBRegions(void)
             region->end = umb_mcb->mcb_ownerPSP + umb_mcb->mcb_size - 1;
             if ((sig = umb_mcb->mcb_type) == 'M')
               region->end--;
+            if ((region - umbRegion) >= REGIONMAX) {
+              return err_out_of_memory;
+            }
             region++;
             region->start = 0;
             mcbAssign(mcb, FP_SEG(umb_mcb) + umb_mcb->mcb_size);
@@ -385,6 +395,9 @@ static int findUMBRegions(void)
       if (sig == 'Z')
       {
         region->end = FP_SEG(mcb) + mcb->mcb_size;
+        if ((region - umbRegion) >= REGIONMAX) {
+          return err_out_of_memory;
+        }
         region++;
         break;
       }
@@ -428,7 +441,7 @@ static int loadhigh_prepare(void)
   dosSetUMBLinkState(1);
   dosSetAllocStrategy(0);
 
-  if ((availBlock = malloc(256 * sizeof(*availBlock))) == 0)
+  if ((availBlock = malloc(AVAILBLOCKMAX * sizeof(*availBlock))) == 0)
     return err_out_of_memory;
 
   /* Call to force DOS to catenate any successive free memory blocks */
@@ -487,6 +500,13 @@ static int loadhigh_prepare(void)
                mcb->mcb_size >= region->minSize))
           {
 
+            if (availBlocks >= AVAILBLOCKMAX) {
+              DOSfree(bl);
+              for (i = 0; i < availBlocks; i++)
+                DOSfree(availBlock[i]);
+              free(availBlock);
+              return err_out_of_memory;
+            }
             availBlock[availBlocks++] = bl;
 
             if (optS)
@@ -506,6 +526,13 @@ static int loadhigh_prepare(void)
 
             continue;
           }
+        }
+        if (allocatedBlocks >= BLOCKMAX) {
+          DOSfree(bl);
+          for (i = 0; i < availBlocks; i++)
+            DOSfree(availBlock[i]);
+          free(availBlock);
+          return err_out_of_memory;
         }
         block[allocatedBlocks++] = bl;  /* no access to this block */
       }
@@ -579,6 +606,10 @@ static int loadfix_prepare(void)
 
 		dprintf(("loadfix: allocated 0x%04x\n",bl));
 		DOSresize(bl, 0x1000 - bl);  		
+	        if (allocatedBlocks >= BLOCKMAX) {
+	          DOSfree(bl);
+	          return err_out_of_memory;
+	        }
 		block[allocatedBlocks++] = bl;
 	}
 
