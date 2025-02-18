@@ -339,7 +339,9 @@ static int findUMBRegions(void)
     {
       sig = mcb->mcb_type;
 
-      if (mcb->mcb_ownerPSP == 8 && !_fmemcmp(mcb->mcb_name, "SC", 2))
+      if (mcb->mcb_ownerPSP == 8
+        && (!_fmemcmp(mcb->mcb_name, "SC", 2)
+          || !_fmemcmp(mcb->mcb_name, "S\x00\x30", 3))) /* lDOS S MCB type 30h */
       {
         /* this is a 'hole' in memory */
         if (region->start)
