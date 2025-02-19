@@ -180,10 +180,10 @@ if errorlevel 1 goto ende
 cd ..
 
 echo.
-echo Patching heap size to 6KB
+echo Patching heap size to 8KB
 echo.
-utils\ptchsize.exe command.com +6KB
-utils\ptchsize.exe %CMD_NAME% +6KB
+utils\ptchsize.exe command.com +8KB
+utils\ptchsize.exe %CMD_NAME% +8KB
 
 if %WITH_UPX%x == x goto alldone
 if exist command.upx del command.upx >nul
