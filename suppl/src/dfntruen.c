@@ -105,6 +105,7 @@ char *dfntruename(const char * const fnam)
 	chkHeap
 	if((h = eno_malloc(DFN_FILENAME_BUFFER_LENGTH)) != 0) {
 #ifdef FEATURE_LONG_FILENAMES
+	r.r_flags = 1;	/* CY before 21.71 calls! */
         r.r_ax = 0x7160;
         r.r_cx = 0x8002;
 #else
