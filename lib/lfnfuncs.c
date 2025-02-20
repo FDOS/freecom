@@ -53,6 +53,7 @@ const char * getshortfilename( const char *longfilename )
     r.r_di = FP_OFF( shortfilename );
     shortfilename[0] = '\0';
     r.r_cx = 0x8001; /* Get short filename */
+    r.r_flags = 1;	/* CY before 21.71 calls! */
     r.r_ax = 0x7160;/* LFN truename function */
 
     intrpt( 0x21, &r );
@@ -82,6 +83,7 @@ static int __creat_or_truncate( const char * filename, int mode, int code )
     r.r_bx = O_WRONLY;
     r.r_cx = mode;
     r.r_dx = code;
+    r.r_flags = 1;	/* CY before 21.71 calls! */
     r.r_ax = 0x716C;
 
     intrpt( 0x21, &r );
@@ -129,6 +131,7 @@ int lfnrename( const char *oldfilename, const char *newfilename )
     r.r_dx = FP_OFF( oldfilename );
     r.r_es = FP_SEG( newfilename );
     r.r_di = FP_OFF( newfilename );
+    r.r_flags = 1;	/* CY before 21.71 calls! */
     r.r_ax = 0x7156;
 
     intrpt( 0x21, &r );
@@ -181,6 +184,7 @@ int lfnfindfirst( const char *path, struct lfnffblk *buf, unsigned attr )
     r.r_di = FP_OFF( &lfnblock );  /* LFN find block goes in ES:DI */
     r.r_si = 1;                    /* Use DOS date/time format */
     r.r_cx = attr;
+    r.r_flags = 1;	/* CY before 21.71 calls! */
     r.r_ax = 0x714E;               /* LFN Findfirst */
 
     intrpt( 0x21, &r );
@@ -226,6 +230,7 @@ int lfnfindnext( struct lfnffblk *buf )
     r.r_di = FP_OFF( &lfnblock );          /* The LFN find block */
     r.r_bx = buf->lfnax;                   /* The lfn handle set by findfirst */
     r.r_si = 1;                            /* Use DOS times */
+    r.r_flags = 1;	/* CY before 21.71 calls! */
     r.r_ax = 0x714F;
 
     intrpt( 0x21, &r );
@@ -247,6 +252,7 @@ int lfnfindclose( struct lfnffblk *buf )
     if( !buf->lfnsup || !__supportlfns ) return( 0 );
 
     r.r_bx = buf->lfnax;        /* Findfirst handle */
+    r.r_flags = 1;	/* CY before 21.71 calls! */
     r.r_ax = 0x71A1;            /* LFN findclose */
 
     intrpt( 0x21, &r );

@@ -291,6 +291,7 @@ static void printLFNname(char *shortName, char *ext)
     dprintf(("[LFN: path %s\n",pathbuffer)); 
 	
       /* LFN get canonical LFN */
+	r.r_flags = 1;	/* CY before 21.71 calls! */
 	r.r_ax = 0x7160;
 	r.r_cx = 0x8002;
 	r.r_si = FP_OFF( pathbuffer );
@@ -760,6 +761,7 @@ static int dir_print_free(unsigned long dirs)
   displayString(TEXT_DIR_FTR_DIRS, buffer);
 
   rootname[0] = toupper(*path);
+  r.r_flags = 1;	/* CY before 21.73 calls! */
   r.r_ax = 0x7303;
   r.r_ds = FP_SEG(rootname);
   r.r_dx = FP_OFF(rootname);

@@ -156,6 +156,7 @@ char *_getdcwd(int drive, char Xbuf[], unsigned length)
 		r.r_dx = drive;
 		r.r_ds = FP_SEG(buf);
 #ifdef FEATURE_LONG_FILENAMES
+		r.r_flags = 1;	/* CY before 21.71 calls! */
 		r.r_ax = 0x7147;
 #else
         r.r_ax = 0x4700;

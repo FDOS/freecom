@@ -140,6 +140,7 @@ void displayPrompt(const char *pr)
 
             d = getdisk();
 
+	    r.r_flags = 1;	/* CY before 21.71 calls! */
             r.r_ax = 0x7147;
             r.r_dx = 0;
             r.r_si = FP_OFF(pathname);
