@@ -772,8 +772,10 @@ static int dir_print_free(unsigned long dirs)
 
   /* Note: RBIL carry clear and al==0 also means unimplemented 
      alternately carry set and ax==undefined (usually unchanged) for unimplemented
-  */  
-  if(!( r.r_flags & 1 ) && ( r.r_ax & 0xFF) ) {
+     ecm: RBIL is wrong, CF unchanged al=0 is the typical error return.
+     EDR-DOS returns NC ax=0 so checking for al!=0 here was wrong.
+  */
+  if(!( r.r_flags & 1 ) && ( r.r_ax != 0x7300 ) ) {
 	dprintf(("[DIR: Using FAT32 info]\n"));
 	clustersize = FAT32_Free_Space.sectors_per_cluster
 	 * FAT32_Free_Space.bytes_per_sector;
