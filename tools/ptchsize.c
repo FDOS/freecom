@@ -273,7 +273,6 @@ int main(int argc, char **argv)
 
 	printf("Patching '%s' to heap size of %u bytes\n"
 	 , argv[1], tosize);
-#if defined(__TURBOC__) || defined(GCC)
 	/* Watcom already has extraMin minimal and dynamically adjusts its MCB*/
 	if(tosize) {
 #ifdef GCC
@@ -293,7 +292,6 @@ int main(int argc, char **argv)
 			"File most probably corrupted now: %s\n", argv[1]);
 		return 77;
 	}
-#endif
 
 #ifndef GCC
 	if(fseek(freecom, ival.heapPos, SEEK_SET) != 0) {
