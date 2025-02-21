@@ -2,7 +2,7 @@
 
 	Patch heap size into FreeCOM executable
 
-	Useage: PTCHSIZE freecom [{ size }]
+	Useage: PTCHSIZE freecom compiler [{ size }]
 
 	Without any argument: Display the internal information
 	Else: patch the executable
@@ -21,6 +21,14 @@
 #include "../include/res.h"
 #include "../include/infores.h"
 
+enum {
+	COMPILER_NONE,
+	COMPILER_WATCOM,
+	COMPILER_TC2,
+	COMPILER_TURBOCPP,
+	COMPILER_BC5,
+	COMPILER_GCC
+};
 
 FILE *freecom = 0;
 unsigned char *info = 0;
@@ -127,6 +135,15 @@ void addUns_(unsigned long *minVal, unsigned val)
 		*minVal += val;
 }
 
+int my_stricmp(const char *a, const char *b)
+{
+	while ((*a != '\0') && (toupper(*a) == toupper(*b))) {
+		a++;
+		b++;
+	}
+	return toupper(*a) - toupper(*b);
+}
+
 void addSize(unsigned short *size, char * const Xp)
 {	unsigned long n;
 	char *p = Xp;
@@ -175,20 +192,33 @@ void addSize(unsigned short *size, char * const Xp)
 int main(int argc, char **argv)
 {	struct EXE_header exe;
 	unsigned short tosize;
+	int compiler = COMPILER_NONE;
 
-	if(argc <= 1) {
+	if(argc <= 2) {
 		puts("Patch heap size into FreeCOM executable\n"
-			"\nuseage: PTCHSIZE freecom [{ size }]\n"
+			"\nuseage: PTCHSIZE freecom compiler [{ size }]\n"
 			"\nSize may be given hexadecimal (0x###) or decimal.\n"
 			"If 'KB' is appended to size, it's multiplied with 1024.\n"
 			"A leading plus sign is ignored.\n"
 			"A plus sign by its own is treated as estimated minimum size.\n"
 			"More than one sizes are summed up.\n"
 			"If size evaluates to 0 (zero), the restriction is disabled.\n"
-			"\ne.g.: PTCHSIZE freecom + 5K\n"
-			"means: reserve 5*1024 bytes in addition to minimum size."
+			"\ne.g.: PTCHSIZE freecom compiler +5K\n"
+			"means: reserve 5*1024 bytes in addition to minimum size.\n"
+			"compiler may be one of bc, gcc, tc, tcpp, watcom.\n"
 		);
 		return 127;
+	}
+
+
+	if (!my_stricmp(argv[2], "WATCOM")) compiler = COMPILER_WATCOM;
+	else if (!my_stricmp(argv[2], "TC")) compiler = COMPILER_TC2;
+	else if (!my_stricmp(argv[2], "TCPP")) compiler = COMPILER_TURBOCPP;
+	else if (!my_stricmp(argv[2], "BC")) compiler = COMPILER_BC5;
+	else if (!my_stricmp(argv[2], "GCC")) compiler = COMPILER_GCC;
+	else {
+		printf("Unknown compiler %s\n", argv[2]);
+		return 78;
 	}
 
 	if(enumFileResources(argv[1], RES_ID_INFO, getInfo, 0) != 1) {
@@ -229,10 +259,8 @@ int main(int argc, char **argv)
 		return 71;
 	}
 
-	if(argc == 2
-#ifndef GCC
-	   || ival.heapPos == ~0
-#endif
+	if(argc == 3
+	   || (compiler != COMPILER_GCC && ival.heapPos == ~0)
 	   ) {
 		prUns(ival.alias, "Aliases");
 		prUns(ival.hist, "Command line history");
@@ -262,7 +290,7 @@ int main(int argc, char **argv)
 	}
 
 	tosize = 0;
-	argc = 1;
+	argc = 2;
 	while(argv[++argc])
 		addSize(&tosize, argv[argc]);
 	if(tosize && tosize < minSize) {
@@ -275,11 +303,11 @@ int main(int argc, char **argv)
 	 , argv[1], tosize);
 	/* Watcom already has extraMin minimal and dynamically adjusts its MCB*/
 	if(tosize) {
-#ifdef GCC
-		/* need to adjust SP */
-		unsigned startbss = 0x10000 - exe.extraMax * 16;
-		exe.fSP = startbss + ival.extraSpace * 16 + tosize;
-#endif
+		if (compiler == COMPILER_GCC) {
+			/* need to adjust SP */
+			unsigned startbss = 0x10000 - exe.extraMax * 16;
+			exe.fSP = startbss + ival.extraSpace * 16 + tosize;
+		}
 		exe.extraMin = exe.extraMax = ival.extraSpace + tosize / 16;
 	}
 	else {
@@ -293,18 +321,18 @@ int main(int argc, char **argv)
 		return 77;
 	}
 
-#ifndef GCC
-	if(fseek(freecom, ival.heapPos, SEEK_SET) != 0) {
-		printf("Failed to seek to heap size offset in %s\n", argv[1]);
-		return 42;
+	if (compiler != COMPILER_GCC) {
+		if(fseek(freecom, ival.heapPos, SEEK_SET) != 0) {
+			printf("Failed to seek to heap size offset in %s\n", argv[1]);
+			return 42;
+		}
+		assert(sizeof(tosize) == 2);
+		if(fwrite(&tosize, sizeof(tosize), 1, freecom) != 1) {
+			printf("Failed to patch heap size into FreeCOM executable.\n"
+				"File most probably corrupted now: %s\n", argv[1]);
+			return 75;
+		}
 	}
-	assert(sizeof(tosize) == 2);
-	if(fwrite(&tosize, sizeof(tosize), 1, freecom) != 1) {
-		printf("Failed to patch heap size into FreeCOM executable.\n"
-			"File most probably corrupted now: %s\n", argv[1]);
-		return 75;
-	}
-#endif
 
 	fflush(freecom);
 	if(ferror(freecom)) {
