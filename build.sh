@@ -5,10 +5,11 @@ set -e
 WITH_UPX="no"
 SED=sed
 #workaround for Windows (set to binary mode)
-if [ "$(expr substr $(uname -s) 1 5)" == 'MINGW' ]; then
+if [ $(uname -s) == "Darwin" ]; then true
+	# Darwin expr does not support substr, so handle special here
+elif [ "$(expr substr $(uname -s) 1 5)" == 'MINGW' ]; then
     SED='sed -b'
 fi
-
 
 export SWAP=YES-DXMS-SWAP____________________
 # BEGIN Internal stuff for ska -- If one of these three commands
@@ -198,9 +199,9 @@ $MAKE all
 cd ..
 
 echo
-echo Patching heap size to 6KB
+echo Patching heap size
 echo
-utils/ptchsize.exe command.com +6KB
+utils/ptchsize.exe command.com $COMPILER +6KB
 
 if [ $WITH_UPX = "yes" ]; then
   rm -f command.upx
