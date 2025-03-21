@@ -198,9 +198,9 @@ $MAKE all
 cd ..
 
 echo
-echo Patching heap size to 6KB
+echo Patching heap size to 8KB
 echo
-utils/ptchsize.exe command.com +6KB
+utils/ptchsize.exe command.com +8KB
 
 if [ $WITH_UPX = "yes" ]; then
   rm -f command.upx
