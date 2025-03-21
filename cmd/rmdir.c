@@ -34,7 +34,7 @@ int rmdir_withfiles(const char * fullname, char * path, int maxlen)
 int rmdir_withfiles(char * path, int maxlen)
 #endif
 {
-	struct dos_ffblk f;
+	struct dos_ffblk *f;
 	int ret;
 	int len = strlen(path);  /* Warning: we assume path is a buffer is large enough for longest file path */
 	char *p = path+len;
@@ -52,24 +52,30 @@ int rmdir_withfiles(char * path, int maxlen)
 
 	/* cycle through removing directories first */
 	stpcpy(p, "*.*");
-	if (!dos_findfirst(path, &f, FA_DIREC)) {
+	/* allocate our findfirst/next structure on heap to avoid exhausting stack */
+	f = (struct dos_ffblk *)malloc(sizeof(struct dos_ffblk));
+	if (f == NULL) {
+		error_out_of_memory();
+		return E_NoMem;
+	}
+	if (!dos_findfirst(path, f, FA_DIREC)) {
 		ret = 0;
 		do {
 			/* skip . and .. directory entries */
-			if ((strcmp(f.ff_name, ".")==0) ||
-			    (strcmp(f.ff_name, "..")==0))
+			if ((strcmp(f->ff_name, ".")==0) ||
+			    (strcmp(f->ff_name, "..")==0))
 				continue;
 
-			if (f.ff_attrib & FA_DIREC) {
-				dprintf(("name=%s\n", f.ff_name));
+			if (f->ff_attrib & FA_DIREC) {
+				dprintf(("name=%s\n", f->ff_name));
 				/* avoid overflowing our buffer */
-				if((len + strlen(f.ff_name)) > maxlen) {
+				if((len + strlen(f->ff_name)) > maxlen) {
 					error_filename_too_long(p);
 					ret = E_Other;
 					continue;
 				}
 
-				strcpy(p, f.ff_name);       /* Make the full path */
+				strcpy(p, f->ff_name);       /* Make the full path */
 				/* recursively delete subdirectory */
 #ifdef DBCS
 				ret = rmdir_withfiles(fullname, path, maxlen);
@@ -77,34 +83,38 @@ int rmdir_withfiles(char * path, int maxlen)
 				ret = rmdir_withfiles(path, maxlen);
 #endif
 			}
-		} while (!ret && (dos_findnext(&f) == 0));
-		dos_findclose(&f);
+		} while (!ret && (dos_findnext(f) == 0));
+		dos_findclose(f);
 		/* return early on error */
-		if (ret) return ret;
+		if (ret) {
+			free(f);
+			return ret;
+		}
 	}
 
 	/* remove any files in current directory */
 	stpcpy(p, "*.*");
-	if (!dos_findfirst(path, &f, FA_NORMAL)) {
+	if (!dos_findfirst(path, f, FA_NORMAL)) {
 		ret = 0;
 		do {
 			/* avoid overflowing our buffer */
-			if((len + strlen(f.ff_name)) > maxlen) {
+			if((len + strlen(f->ff_name)) > maxlen) {
 				error_filename_too_long(p);
 				ret = E_Other;
 				continue;
 			}
 
-			strcpy(p, f.ff_name);       /* Make the full path */
+			strcpy(p, f->ff_name);       /* Make the full path */
 			dprintf(("deleting [%s]\n", path));
 			/* try to delete the file */
 			if(unlink(path) != 0) {
 				myperror(path);  /* notify the user */
 				/* could exit here, but we just let rmdir fail */
 			}
-		} while (!ret && (dos_findnext(&f) == 0));
-		dos_findclose(&f);
+		} while (!ret && (dos_findnext(f) == 0));
+		dos_findclose(f);
 	}
+	free(f);
 
 	/* finally actually remove the directory */
 	p[-1] = '\0';
@@ -115,7 +125,8 @@ int recursive_rmdir(const char * path, int recursiveMode, int quiet)
 {
 	if (recursiveMode) {
 		struct dos_ffblk f;
-		char fullname[MAXPATH + sizeof(f.ff_name) + 2], *p;
+		char *p;
+		static char fullname[MAXPATH + sizeof(f.ff_name) + 2];
 		int len;
 		/* Get the pattern fully-qualified */
 			/* Note: An absolute path always contains:
