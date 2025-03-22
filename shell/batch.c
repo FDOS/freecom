@@ -443,9 +443,9 @@ char *readbatchline(int *eflag, char *textline, int size)
 
          if(
 #ifdef FEATURE_LONG_FILENAMES
-             lfnfor ? lfnfindfirst( fv, bc->ffind, FA_NORMAL ) == 0 :
+             lfnfor ? lfnfindfirst( fv, bc->ffind, (bc->forFlags&FLAG_OPT_DIRECTORY? FA_DIREC:FA_NORMAL) ) == 0 :
 #endif
-                      sfnfindfirst( fv, ( struct ffblk * )bc->ffind, FA_NORMAL )
+                      sfnfindfirst( fv, ( struct ffblk * )bc->ffind, (bc->forFlags&FLAG_OPT_DIRECTORY? FA_DIREC:FA_NORMAL) )
                       == 0 ) {
          	/* found a file */
          	*dfnfilename(fv) = '\0';	/* extract path */

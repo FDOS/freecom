@@ -37,6 +37,7 @@ struct bcontext
   int bclose;					/* close batch file on exit */
   int brewind;					/* rewind batch file next time */
   int numParams;				/* number of parameters */
+  int forFlags; 				/* optional flags to FOR command */
 };
 
 /*  The stack of current batch contexts.
@@ -56,3 +57,9 @@ char *find_arg_bc(struct bcontext const * const b, int n);
 
 #define	find_arg(num)	find_arg_bc(activeBatchContext(), (num))
 #define getArgCur(num)	find_arg_bc(bc, (num))
+
+/* flags used by FOR */
+/* #define FLAG_HACKERY_FOR 1 */
+#define FLAG_OPT_DIRECTORY 2
+#define FLAG_OPT_FILEPARSE 4
+#define FLAG_OPT_RECURSE   8

@@ -46,8 +46,33 @@ static forErrors checkFOR(char * param	/* in: command line */
 	assert(flags);
 
 	*flags = 0;
-	/* Check that first element is % then an alpha char followed by space */
 
+    /* skip past and process any option flags
+	   /D filespec is for directories instead of files
+	   /F ??? - not currently supported, parse file instead of perform findfirst/next
+	   /R [basepath] - not currently supported, repeat for each subdir of basepath
+	 */
+	if (*param == '/' || *param == '-') {
+		param++;
+		switch(toupper(*param++)) {
+			case 'D':
+				*flags |= FLAG_OPT_DIRECTORY;
+				break;
+#if 0
+			case 'F':
+				*flags |= FLAG_OPT_FILEPARSE;
+				break;
+			case 'R':
+				*flags |= FLAG_OPT_RECURSE;
+				break;
+#endif
+			default:
+				return badVar;
+		}
+		param = ltrimcl(param + 1);   /* skip whitespaces */
+	}
+
+	/* Check that it starts with a % then an alpha char followed by space */
 	*varS = param;
 	if(*param == '%') { 	/* Check for FOR %%%%v IN syntax */
 		while(*++param == '%');
@@ -59,7 +84,7 @@ static forErrors checkFOR(char * param	/* in: command line */
 		}
 	}
 
-#if 1
+#if 0
 	/* the standard release does not support normal variables as
 		FOR variables */
 	return badVar;
@@ -131,7 +156,6 @@ static int doFOR (char * varname, char * varE, char * param, char * paramE,
 	int rv;
 #endif
 
-        (void)flags;
 	assert(varname);
 	assert(varE);
 	assert(param);
@@ -169,6 +193,7 @@ static int doFOR (char * varname, char * varE, char * param, char * paramE,
 		}
 
 		bc->shiftlevel = 1;     /* skip %0 <=> filename */
+		bc->forFlags = flags;
 	}
 	return 0;
 
