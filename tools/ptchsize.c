@@ -230,7 +230,7 @@ int main(int argc, char **argv)
 	}
 
 	if(argc == 2
-#ifndef GCC
+#ifndef TARGET_USE_GCC_IA16
 	   || ival.heapPos == ~0
 #endif
 	   ) {
@@ -275,7 +275,7 @@ int main(int argc, char **argv)
 	 , argv[1], tosize);
 	/* Watcom already has extraMin minimal and dynamically adjusts its MCB*/
 	if(tosize) {
-#ifdef GCC
+#ifdef TARGET_USE_GCC_IA16
 		/* need to adjust SP */
 		unsigned startbss = 0x10000 - exe.extraMax * 16;
 		exe.fSP = startbss + ival.extraSpace * 16 + tosize;
@@ -293,7 +293,7 @@ int main(int argc, char **argv)
 		return 77;
 	}
 
-#ifndef GCC
+#ifndef TARGET_USE_GCC_IA16
 	if(fseek(freecom, ival.heapPos, SEEK_SET) != 0) {
 		printf("Failed to seek to heap size offset in %s\n", argv[1]);
 		return 42;

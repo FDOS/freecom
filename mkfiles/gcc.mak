@@ -27,7 +27,7 @@ CFLAGS1 = -Os -Wall -Werror -Wno-pointer-to-int-cast -Wno-incompatible-pointer-t
 .SUFFIXES: .c .asm .com .exe .obj
 ifeq ($(UTILS_BUILD),1)
 .c.exe:
-	gcc -x c -Og -g -Wall -DGCC -D__GETOPT_H -I../suppl $< -o $@
+	gcc -x c -Og -g -Wall -DTARGET_USE_GCC_IA16 -D__GETOPT_H -I../suppl $< -o $@
 else ifeq ($(COMPACT_MODEL),1)
 .c.obj .c.exe:
 	@echo ------------------------------------------------------

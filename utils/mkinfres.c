@@ -130,7 +130,7 @@ int addImageDisplacement(const char * const fnam
 		*extraSpace += (stacksize+15)/16;
 	}
 	fclose(f);
-#ifdef GCC
+#ifdef TARGET_USE_GCC_IA16
 	stacksize = 4*1024;
 	*extraSpace += stacksize / 16;
 #else
