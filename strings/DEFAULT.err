@@ -36,7 +36,7 @@
 # 
 # The individual words are defined by ABORT, IGNORE, RETRY, FAIL. They
 # should indicate which user response keys is associated with them;
-# suggested is to use the first letter and enclose it in parenthesises.
+# suggested is to use the first letter and enclose it in parentheses.
 # The delimiter ", " can be defined with DELIMITER and is the same
 # for all slots.
 # The "? " sequence is defined by QUESTION.
