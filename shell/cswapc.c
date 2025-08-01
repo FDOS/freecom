@@ -98,29 +98,38 @@ void fmemcpy(void far *d1, void far *s1, unsigned len)
 __attribute__((noinline))
 #endif
 static int XMScopy(
-        long length, ...
-/*      short shandle,
-        long soffset,
-        short dhandle,
-        long  doffset */
+        unsigned long length,
+        unsigned short shandle,
+        unsigned long soffset,
+        unsigned short dhandle,
+        unsigned long  doffset
         )
 {
-	assert(XMSdriverAdress);
+	unsigned short xmm[8];
+	xmm[0] = length;
+	xmm[1] = length >> 16;
+	xmm[2] = shandle;
+	xmm[3] = soffset;
+	xmm[4] = soffset >> 16;
+	xmm[5] = dhandle;
+	xmm[6] = doffset;
+	xmm[7] = doffset >> 16;
 
+	assert(XMSdriverAdress);
 /*	asm push si;
 	asm lea si,length
 	asm mov ah,0bh;	*/
 #if defined(__TURBOC__)
-	_SI = (unsigned)&length;
+	_SI = (unsigned)&xmm[0];
 	_AH = 0xb;
 	XMSrequest();
 /*	asm pop si; */
 
 	return _AX;		/* shut up warning */
 #elif defined(__GNUC__)
-	return XMSrequest(0xb00, 0, &length);
+	return XMSrequest(0xb00, 0, &xmm[0]);
 #else
-	return XMSdriverAdress(0xb00, 0, &length);
+	return XMSdriverAdress(0xb00, 0, &xmm[0]);
 #endif
 }
 
