@@ -88,8 +88,10 @@ I_AM_DEAD:								; process 0 can't terminate ...
 	mov ah, 9
 	int 21h
 I_AM_DEAD_loop:
+	int3
+	sti
 	hlt
 	jmp short I_AM_DEAD_loop
 
 dead_loop_string	DB 13,10,7,'Cannot terminate permanent FreeCOM instance'
-	DB 13,10,'System halted ... reboot or power off now$'
+	DB 13,10,'System halted ... reboot or power off now $'
