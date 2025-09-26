@@ -159,6 +159,14 @@ char switchar(void)
 }
 #endif
 
+unsigned isdrive(unsigned char cc) {
+  if (isalpha(cc))
+    return 1;
+  if ((cc - 'A') < 32)
+    return 1;
+  return 0;
+}
+
 void execute(char *first, char *rest, int lh_lf)
 {
   /*
@@ -177,7 +185,7 @@ void execute(char *first, char *rest, int lh_lf)
   assert(rest);
 
   /* check for a drive change (not for loadhigh/loadfix) */
-  if (!lh_lf && (strcmp(first + 1, ":") == 0) && isalpha(*first))
+  if (!lh_lf && (strcmp(first + 1, ":") == 0) && isdrive(*first))
   {
   	changeDrive(*first);
     return;

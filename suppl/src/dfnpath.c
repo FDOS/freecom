@@ -75,9 +75,9 @@ char *dfnpath(int drive)
 	DBG_ENTER("dfnpath", Suppl_dfn)
 	DBG_ARGUMENTS( ("drive=%u ('%c')", drive, drive < 32? '.': drive) )
 
-	if(isupper(drive)) drive -= 'A' - 1;
-	else if(islower(drive)) drive -= 'a' - 1;
-	else if((unsigned)drive > 32) {
+	if (islower(drive)) drive -= 'a' - 'A';
+	if (drive >= 'A') drive -= 'A' - 1;
+	if ((unsigned)drive > 32) {
 		eno_set( ENODEV);
 		DBG_RETURN_S( 0)
 	}
