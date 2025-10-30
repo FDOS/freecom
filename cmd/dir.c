@@ -156,6 +156,9 @@
 #include <conio.h>
 #include <ctype.h>
 #include <dos.h>
+#ifndef FA_DEVICE
+#define FA_DEVICE 0x0040u
+#endif
 #include <io.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -1106,7 +1109,7 @@ static int dir_list(int pathlen
 
     if (cbreak)
       rv = E_CBreak;
-    else if(rv == E_None) {
+    else if (rv == E_None && file.ff_attrib != FA_DEVICE) {
 		if(file.ff_attrib & FA_DIREC) {
 			dircount++;
 		} else {
