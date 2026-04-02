@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: prerequisites
       run: ./ci_prereq.sh
@@ -76,7 +76,7 @@ jobs:
     name: Test OW ${{matrix.ow.name}} cross-compile (${{matrix.host.name}})
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Nasm install
       uses: ilammy/setup-nasm@v1
@@ -85,7 +85,7 @@ jobs:
       uses: "./.github/actions/upx-inst"
 
     - name: Open Watcom install
-      uses: open-watcom/setup-watcom@v0
+      uses: open-watcom/setup-watcom@v1
       with:
         version: ${{matrix.ow.id}}
 
