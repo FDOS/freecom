@@ -10,6 +10,6 @@ runs:
       shell: bash
     - name: UPX install (Linux, Windows)
       if: runner.os != 'macOS'
-      uses: crazy-max/ghaction-upx@v3
+      uses: crazy-max/ghaction-upx@v4
       with:
         install-only: true
