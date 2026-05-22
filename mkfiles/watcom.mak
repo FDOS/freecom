@@ -36,7 +36,13 @@ CFLAGS1 = -os-s-wx
   $(CL) -ms -I$(WATCOM)$(DIRSEP)h $< -fm -fe=$@ -I..$(DIRSEP)suppl
 !  endif
 ! else ifdef __OSX__
-  clang -x c -Og -g -Wall -Wno-pragma-pack -DGCC -D__GETOPT_H -I../suppl $< -o $@
+  clang -x c -Og -g -Wall -Wno-pragma-pack -D__GETOPT_H -I../suppl $< -o $@
+! else ifdef __FREEBSD__
+  clang -x c -Og -g -Wall -Wno-pragma-pack -D__GETOPT_H -I../suppl $< -o $@
+! else ifdef __OPENBSD__
+  clang -x c -Og -g -Wall -Wno-pragma-pack -D__GETOPT_H -I../suppl $< -o $@
+! else ifdef __NETBSD__
+  gcc -x c -Og -g -Wall -Wno-pragma-pack -D__GETOPT_H -I../suppl $< -o $@
 ! else
   $(CL386) -I$(WATCOM)$(DIRSEP)h $< -fm -fe=$@ -I..$(DIRSEP)suppl
 ! endif
