@@ -28,6 +28,7 @@ cmd_buf:
 
 SEGMENT .text
 
+CPU 8086        ; expand out-of-range conditionals without 386-only opcodes
 ORG 100h		; this is an executable program, but as small as possible
 
 start:
@@ -92,13 +93,22 @@ mainloop:
 	mov ax, 4b00h
 	int 21h					; execute external program
 	jc execPrg1
-	xor ax, ax				; no error
+	mov ah, 4dh             ; keep status separate from a failed DOS-4B API
+	int 21h
+	mov sp, tsrend + STACK_SIZE
+	mov dx, cs
+	mov ds, dx
+	mov es, [context]
+	mov [ES:?childStatus], ax ; AL exit code, AH termination reason
+	mov WORD [ES:?execErr], 0
+	jmp execShell
 execPrg1:
 	mov sp, tsrend + STACK_SIZE	; standard stack position
 	mov dx, cs
 	mov ds, dx
 	mov es, [context]
 	mov [ES:?execErr], ax	; error code of DOS-4B API
+	mov WORD [ES:?childStatus], 0
 execShell:
 	mov ax, shellCmdLine
 	mov [eb_cmdline], ax
@@ -136,6 +146,13 @@ dbg_1:
 	mov es, ax				; MCB of context
 	mov WORD [ES:1], ds		; owner of context := kssf
 	mov ax, [ES:10h+?envSegm]		; environment segm
+	mov bx, [ES:10h+?dyn_ctxt]		; pending context if shell reload failed
+	or bx, bx
+	jz exit_noDynamic
+	dec bx
+	mov es, bx
+	mov WORD [ES:1], ds		; release it on KSSF termination, too
+exit_noDynamic:
 	or ax, ax
 	jz exit_noCtxt
 	dec ax

@@ -72,7 +72,7 @@ static void kswapSetISR(void)
 void kswapRegister(kswap_p ctxt)
 {   IREGS r;
 
-    dprintf(("[KSWAP: Registering static context at: 0x%04x]\n", (word)ctxt));
+    dprintf(("[KSWAP: Registering static context at: 0x%04x]\n", FP_SEG((void far *)ctxt)));
     assert(ctxt);
     /* our own PSP gets patched in order to load the values of the
         Criter and ^Break handlers of the context on termination
@@ -83,7 +83,7 @@ void kswapRegister(kswap_p ctxt)
     kswapSetISR();
 
     r.r_ax = 0x4bfd;    /* Set kswap argument structure segm */
-    r.r_bx = (word)ctxt;
+    r.r_bx = FP_SEG((void far *)ctxt);
     r.r_dx = FD_MAGIC;
     intrpt(0x21, &r);
     if(r.r_flags & 1) { /* failed */
@@ -91,27 +91,78 @@ void kswapRegister(kswap_p ctxt)
         dprintf(("[KSWAP: Registering failed, kernel swap deactivated]\n"));
         return;
     }
-    /* Initialize the constant values */
-    /* environment block required only, if swapping is avail */
-    ctxt->envSize = mcb_length(env_glbSeg);
-    ctxt->envSegm = allocSysBlk(ctxt->envSize, 0x82);
-    if(!ctxt->envSegm) {
-        error_kswap_allocmem();
-        swapOnExec = ERROR;
-    }
-    else
-        dprintf(("[KSWAP: master environment allocated at 0x%04x]\n"
-         , ctxt->envSegm));
+    /* Allocate the saved environment at swap time: initialization and SET
+       may still change its size after this registration. */
+    ctxt->envSize = 0;
+    ctxt->envSegm = 0;
 }
 void kswapDeRegister(kswap_p ctxt)
 {
     if(swapOnExec != ERROR) {   /* context belongs to this FreeCOM */
-        dprintf(("[KSWAP: DeRegistering static context at: 0x%04x]\n", (word)ctxt));
+        dprintf(("[KSWAP: DeRegistering static context at: 0x%04x]\n", FP_SEG((void far *)ctxt)));
         assert(ctxt);
         ctxt->shell = 0;        /* causes the kernel swap support to exit */
     }
 }
 
+
+/* Context variables are strings. Encode the counters in hex, after reserving
+   the entry, so that the saved counters include the entry's own allocation.
+   This avoids reconstructing history/dirstack numbering from their contents. */
+#define KSWAP_INFO_BYTES (sizeof(ctxt_info_t) * (CTXT_TAG_ALIAS - CTXT_FIRST_TAG + 1))
+#define KSWAP_STATUS_BYTES (KSWAP_INFO_BYTES + 1)
+
+static int kswapSaveStatus(void)
+{
+    static const char hex[] = "0123456789abcdef";
+    char reserve[2 * KSWAP_STATUS_BYTES + 1];
+    unsigned i, value;
+    char far *p;
+
+    memset(reserve, '0', sizeof(reserve) - 1);
+    reserve[sizeof(reserve) - 1] = 0;
+    if(ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_STATUS, reserve))
+        return FALSE;
+    p = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_STATUS);
+    if(!p)
+        return FALSE;
+    for(i = 0; i < KSWAP_STATUS_BYTES; ++i) {
+        value = i < KSWAP_INFO_BYTES ? ((unsigned char *)ctxt_info)[i]
+                                    : (forceLow != 0);
+        *p++ = hex[value >> 4];
+        *p++ = hex[value & 15];
+    }
+    return TRUE;
+}
+
+static int kswapRestoreStatus(void)
+{
+    unsigned char saved[KSWAP_STATUS_BYTES];
+    unsigned i, value;
+    char c;
+    char far *p = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_STATUS);
+
+    if(!p)
+        return FALSE;
+    for(i = 0; i < 2 * KSWAP_STATUS_BYTES; ++i) {
+        c = *p++;
+        if(c >= '0' && c <= '9')
+            value = c - '0';
+        else if(c >= 'a' && c <= 'f')
+            value = c - 'a' + 10;
+        else
+            return FALSE;
+        if(!(i & 1))
+            saved[i / 2] = value << 4;
+        else
+            saved[i / 2] |= value;
+    }
+    if(*p || saved[KSWAP_INFO_BYTES] > 1)
+        return FALSE;
+    memcpy(ctxt_info, saved, KSWAP_INFO_BYTES);
+    forceLow = saved[KSWAP_INFO_BYTES];
+    return TRUE;
+}
 
 /* Update the kswap argument block
     Return: 0 on error <-> no swapping possible
@@ -119,7 +170,9 @@ void kswapDeRegister(kswap_p ctxt)
 unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
 {
     word shellname;
-    word segm;
+    word segm, envSize;
+    int shellInContext;
+    struct MCB _seg *mcb;
     char *q, *h;
 
     assert(prg);
@@ -134,20 +187,38 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
         swap after all */
 
     /* preserve the environment */
-    assert(kswapContext->envSegm);
-    assert(kswapContext->envSize);
+    envSize = env_glbSeg ? mcb_length(env_glbSeg) : 0;
+    if(!envSize)
+        return FALSE;
     segm = kswapContext->envSegm;
+    if(!segm || mcb_length(segm) < envSize) {
+        word replacement = allocSysBlk(envSize, forceLow ? 0x02 : 0x82);
+        if(!replacement) {
+            static const char message[] =
+                "KSWAP: Not enough memory to save the environment; not swapping.\r\n";
+            /* Loading STRINGS can itself run out of memory and prompt for
+               another resource file. Also avoid CRT stdio: release FreeCOM
+               uses handle-valued FILE pointers, not CRT FILE structures. */
+            dos_write(fileno(stderr), message, sizeof(message) - 1);
+            return FALSE;       /* Execute normally; never overrun the backup. */
+        }
+        if(segm)
+            freeSysBlk(segm);
+        segm = kswapContext->envSegm = replacement;
+    }
+    kswapContext->envSize = envSize;
     dprintf(("[KSWAP: Updating master environment at 0x%04x]\n", segm));
     assert(isMCB(SEG2MCB(segm)));
     assert(isMCB(SEG2MCB(env_glbSeg)));
     assert(mcb_length(env_glbSeg) <= mcb_length(segm));
-    _fmemcpy(MK_FP(segm, 0), MK_FP(env_glbSeg, 0), mcb_length(env_glbSeg));
+    _fmemcpy(MK_FP(segm, 0), MK_FP(env_glbSeg, 0), envSize);
 
     /* Update the shell name as maybe %COMSPEC% was changed */
     /* COMSPEC is the central and traditionally the only place of the name of
         the shell */
-    if(isSwapFile
-     || (shellname = env_findVar(segm, "COMSPEC") + 8) == (unsigned)-1 + 8) {
+    shellInContext = isSwapFile
+     || (shellname = env_findVar(segm, "COMSPEC") + 8) == (unsigned)-1 + 8;
+    if(shellInContext) {
         char *p = comResFile();
         ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_SHELLNAME, p);
         free(p);
@@ -183,10 +254,24 @@ unsigned kswapMkStruc(const char * const prg, const char * const cmdline)
         ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE, "\1 \r");
     ctxtSet(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_PRGNAME, prg);
 
-    return (kswapContext->cmdline   /* fetch first in case of failure */
-       = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE)) != 0
-     && (kswapContext->prg
-       = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_PRGNAME)) != 0;
+    if(!kswapSaveStatus())
+        return FALSE;
+    /* Adding entries can relocate ctxt; take all pointers only afterwards. */
+    if(shellInContext)
+        kswapContext->shell = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_SHELLNAME);
+    kswapContext->cmdline = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_CMDLINE);
+    if(!kswapContext->shell || !kswapContext->cmdline)
+        return FALSE;
+    kswapContext->prg = ctxtAddress(CTXT_TAG_SWAPINFO, CTXT_SWAPINFO_PRGNAME);
+    if(!kswapContext->prg)
+        return FALSE;
+
+    /* The child and the reloaded shell need these strings and counters.
+       DOS must not release the context when this shell exits to KSSF. */
+    mcb = MK_SEG_PTR(struct MCB, SEG2MCB(ctxt));
+    mcb->mcb_ownerPSP = 8;
+    kswapContext->dyn_ctxt = ctxt;
+    return TRUE;
 
 }
 
@@ -201,15 +286,25 @@ int kswapLoadStruc(void)
 
     /* kswapContext->prg had been disabled in kswapInit() */
     assert(!kswapContext->prg);
-    setErrorLevel(kswapContext->execErr);
-
     canexit = kswapContext->canexit;
     defaultToSwap = kswapContext->dfltSwap;
 #ifndef NDEBUG
     fddebug = kswapContext->debug;
 #endif
     grabComFilename(1, kswapContext->shell);
-    if((ctxt = kswapContext->dyn_ctxt) == 0) {
+    ctxt = kswapContext->dyn_ctxt;
+    kswapContext->dyn_ctxt = 0;
+    if(ctxt) {
+        struct MCB _seg *mcb = MK_SEG_PTR(struct MCB, SEG2MCB(ctxt));
+        /* While the shell runs, ordinary context relocation and DOS exit
+           own this allocation again. KSSF owns it only across the swap. */
+        mcb->mcb_ownerPSP = _psp;
+        if(!kswapRestoreStatus()) {
+            freeBlk(ctxt);
+            ctxt = 0;
+        }
+    }
+    if(!ctxt) {
         error_no_context_after_swap();
         ctxtCreate();
     }
@@ -222,6 +317,13 @@ int kswapLoadStruc(void)
       env_resizeCtrl &= ~ENV_USEUMB;
     /* if the size does not change this function performs no actions */
     env_setsize(0, kswapContext->envSize);
+
+    /* Message resources and context must be ready before an EXEC error is
+       diagnosed. A successful child's nonzero AL is not a DOS-4B error. */
+    if(kswapContext->execErr)
+        setErrorLevel(kswapContext->execErr);
+    else
+        setChildStatus(kswapContext->childStatus);
 
     return TRUE;
 }

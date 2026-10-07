@@ -247,6 +247,12 @@ void execute(char *first, char *rest, int lh_lf)
 
 /* Execute the external program */
 #ifdef FEATURE_KERNEL_SWAP_SHELL
+	/* The swap ends this process, so DOS closes redirected and piped handles
+	   and the batch or FOR context is lost. docs/k-swap.txt lists these cases
+	   as unsupported; execute them without swapping, also under /SWAP. */
+	if(swapOnExec == TRUE
+	 && (oldinfd != -1 || oldoutfd != -1 || bc != 0))
+		swapOnExec = FALSE;
     if(swapOnExec == TRUE
 	 && kswapMkStruc(fullname, rest)) {
 	 	/* The Criter and ^Break handlers has been installed within

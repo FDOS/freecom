@@ -150,6 +150,7 @@ void convert(unsigned long num, unsigned int billions, char * const des);
 void goxy(const unsigned char x, const unsigned char y);
 
 void setErrorLevel(int rc);
+void setChildStatus(unsigned status);
 void execute(char *first, char *rest, int lh_lf);
 int exec(const char *, char *, const unsigned);
 void restoreSession(void);
