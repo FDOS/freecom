@@ -3,8 +3,9 @@
 # FreeCOM national customization file
 #
 #       Language: Polish
-#       Codepage: 991 (Mazovia)
+#       Codepage: 852 (Latin-2)
 #       Author:   Mateusz Viste "Fox" / the.killer@wp.pl
+#       Revised:  Piotr Okrutny (2026), reviewed in Weblate
 # 
 # This file is used to generate all the messages that command.com
 # outputs.  This file is the input to the fixstrs program, and it
@@ -50,7 +51,7 @@
 
 # Defining prompts
 # Some prompts may cause an user interaction. Those ones should be in sync
-# with the issued text. To define how to interprete a pressed key, they
+# with the issued text. To define how to interpret a pressed key, they
 # are mapped into metakeys like that: [ignore first hash sign]
 
 ## Return value: a -> Yes; else -> No
@@ -62,9 +63,9 @@
 
 # All strings, which label start with "PROMPT_", are parsed as prompts.
 # The first two lines of the body are special; the first one enumerates all
-# valid keys, the second one assigns arbitary metakeys. Metakeys may
+# valid keys, the second one assigns arbitrary metakeys. Metakeys may
 # range from 'a' through 'z'; spaces are ignored; everything else cause
-# an error. The comment preceeding the prompt definition associates the
+# an error. The comment preceding the prompt definition associates the
 # metakeys with their meaning.
 # The remaining lines of the body contain the text to be displayed.
 #
@@ -75,7 +76,7 @@
 # 'N', 'n', Enter and ^Break are mapped to metakey 'b' (aka No).
 # The spaces between the 'b's in the second line had been inserted to
 # align them with the corresponding keys of the first line, hence in order
-# to enhance readibility of the association between the pressed keys and their
+# to enhance readability of the association between the pressed keys and their
 # mapping into a metakey.
 #
 # The first line (pressed keys) has to enumerate the ASCII value as returned
@@ -93,21 +94,21 @@
 #
 ## Issued if a single character option is unknown
 :TEXT_ERROR_INVALID_SWITCH#0%
-Niepoprawny parametr. - /%c
+Nieprawid≈Çowy prze≈ÇƒÖcznik. - /%c
 .
 
 ## Issued if a longname option is unknown
 :TEXT_ERROR_INVALID_LSWITCH#0%
-Niepoprawny parametr. - /%s
+Nieprawid≈Çowy prze≈ÇƒÖcznik. - /%s
 .
 
 ## Issued if the context, the type of argument etc. is invalid
 :TEXT_ERROR_ILLFORMED_OPTION#0%
-†le sformuíowana opcja: '%s'
+Nieprawid≈Çowo zapisana opcja: '%s'
 .
 
 :TEXT_ERROR_OPT_ARG#0%
-Opcja '%s' nie moße mieç argumentu
+Opcja '%s' nie mo≈ºe mieƒá argumentu
 .
 
 :TEXT_ERROR_OPT_NOARG#0%
@@ -115,39 +116,39 @@ Opcja '%s' wymaga argumentu
 .
 
 :TEXT_INVALID_NUMBER#0%
-Niepoprawny numer w '%s'
+Nieprawid≈Çowa liczba w '%s'
 .
 
 :TEXT_ERROR_CLOSE_QUOTE#0%
-Brak zamykajÜcego cudzysíowa: %c
+Brak zamykajƒÖcego cudzys≈Çowa: %c
 .
 
 :TEXT_ERROR_TEMPFILE
-Nie moßna utworzyç pliku tymczasowego
+Nie mo≈ºna utworzyƒá pliku tymczasowego
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS_STR#0%
-Zbyt wiele parametr¢w. - '%s'
+Za du≈ºo parametr√≥w. - '%s'
 .
 
 :TEXT_ERROR_TOO_MANY_PARAMETERS
-Zbyt wiele parametr¢w.
+Za du≈ºo parametr√≥w.
 .
 
 :TEXT_ERROR_INVALID_PARAMETER#0%
-Niepoprawny parametr. - '%s'
+Nieprawid≈Çowy parametr. - '%s'
 .
 
 :TEXT_ERROR_PATH_NOT_FOUND
-òcießki nie odnaleziono.
+Nie mo≈ºna odnale≈∫ƒá ≈õcie≈ºki.
 .
 
 :TEXT_ERROR_FILE_NOT_FOUND
-Pliku nie odnaleziono.
+Nie mo≈ºna odnale≈∫ƒá pliku.
 .
 
 :TEXT_ERROR_SFILE_NOT_FOUND#0%
-Pliku nie odnaleziono. - '%s'
+Nie mo≈ºna odnale≈∫ƒá pliku. - '%s'
 .
 
 :TEXT_ERROR_REQ_PARAM_MISSING#0%
@@ -155,27 +156,27 @@ Brak wymaganego parametru.
 .
 
 :TEXT_ERROR_INVALID_DRIVE#0%
-Niepoprawny napëd %c:.
+Nieprawid≈Çowe okre≈õlenie dysku %c:.
 .
 
 :TEXT_ERROR_BADCOMMAND#2%
-Zíe polecenie lub nazwa pliku - "%s".
+Z≈Çe polecenie lub nazwa pliku - "%s".
 .
 
 :TEXT_ERROR_OUT_OF_MEMORY
-BíÜd: Brak pamiëci.
+Za ma≈Ço pamiƒôci.
 .
 
 :TEXT_ERROR_OUT_OF_DOS_MEMORY#1
-Alokacja pamiëci DOS nie powiodía sië.
+Nie uda≈Ço siƒô przydzieliƒá pamiƒôci DOS.
 .
 
 :TEXT_ERROR_CANNOTPIPE
-BúèD!  Nie moßna otworzyç pliku tymczasowego!
+Nie mo≈ºna utworzyƒá potoku! Nie mo≈ºna otworzyƒá pliku tymczasowego!
 .
 
 :TEXT_ERROR_LONG_LINE_BATCHFILE#0%
-Linia #%ld pliku wsadowego '%s' jest za díuga.
+Wiersz #%ld pliku wsadowego '%s' jest za d≈Çugi.
 .
 
 :TEXT_ERROR_BFILE_VANISHED#0%
@@ -187,106 +188,106 @@ Plik wsadowy '%s' nie zawiera etykiety '%s'.
 .
 
 :TEXT_ERROR_DIRFCT_FAILED#1%
-%s nie powiodío sië dla '%s'.
+%s - niepowodzenie dla '%s'.
 .
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ENV_VAR#0%
-Nie moßna ustawiç zmiennej ûrodowiskowej '%s'.
-Przepeínione ûrodowisko?
+Nie mo≈ºna ustawiƒá zmiennej ≈õrodowiskowej '%s'.
+Czy ≈õrodowisko jest pe≈Çne?
 .
 :TEXT_ERROR_ENV_VAR_NOT_FOUND#0%
-Nie odnaleziono zmiennej ûrodowiskowej '%s'.
+Nie odnaleziono zmiennej ≈õrodowiskowej '%s'.
 .
 :TEXT_ERROR_NO_ENVIRONMENT
-Brak ûrodowiska. Moße zbyt maío pamiëci. Spr¢buj z parametrem /E.
+Brak ≈õrodowiska. Byƒá mo≈ºe za ma≈Ço pamiƒôci. U≈ºyj opcji /E.
 .
 
 # The next three errors must remain in this order!
 :TEXT_ERROR_SET_ALIAS#1%
-Nie mogë ustawiç aliasu '%s'. Przestrze§ dla alias¢w zapeíniona?
+Nie mo≈ºna ustawiƒá aliasu '%s'. Czy obszar alias√≥w jest pe≈Çny?
 .
 :TEXT_ERROR_ALIAS_NOT_FOUND#1%
-Alias '%s' nie odnaleziony.
+Nie znaleziono aliasu '%s'.
 .
 :TEXT_ERROR_NO_ALIAS_SEGMENT#1
-Brak przestrzeni dla alias¢w. Moße zbyt maío pamiëci.
+Brak obszaru alias√≥w. Byƒá mo≈ºe za ma≈Ço pamiƒôci.
 .
 
 :TEXT_ERROR_SYNTAX_STR#0%
-BíÜd skíadni. - '%s'
+B≈ÇƒÖd sk≈Çadni. - '%s'
 .
 
 :TEXT_ERROR_SYNTAX
-BíÜd skíadni.
+B≈ÇƒÖd sk≈Çadni.
 .
 
 :TEXT_ERROR_FILENAME_TOO_LONG#0%
-Zbyt díuga nazwa pliku. - '%s'
+Zbyt d≈Çuga nazwa pliku. - '%s'
 .
 
 :TEXT_ERROR_SELFCOPY#0%
-Nie mogë skopiowaç '%s' na samego siebie.
+Nie mo≈ºna skopiowaƒá '%s' do niego samego
 .
 
 :TEXT_ERROR_COMMAND_TOO_LONG
-Command line too long after alias expansion!
+Wiersz polecenia po rozwiniƒôciu alias√≥w jest za d≈Çugi!
 .
 
 :TEXT_ERROR_LINE_TOO_LONG
-Linia zbyt díuga.  Nie mogë wykonaç polecenia.
+Wiersz polecenia d≈Çu≈ºszy ni≈º 125 znak√≥w.
 .
 
 :TEXT_ERROR_HISTORY_SIZE#1%
-Nieprawidíowy rozmiar historii '%s'.
+Nieprawid≈Çowy rozmiar historii '%s'.
 .
 
 :TEXT_HISTORY_EMPTY#1
-Historia komend pusta.
+Historia polece≈Ñ jest pusta.
 .
 
 
 :TEXT_ERROR_BAD_MCB_CHAIN
-úa§cush MCB uszkodzony, lub system niekompatybilny z MS-DOS.
+Uszkodzony ≈Ça≈Ñcuch MCB lub system niezgodny z MS-DOS.
 .
 
 :TEXT_ERROR_UNDEFINED_ERROR#0%
-Nieznany bíÜd %d.
+Niezdefiniowany b≈ÇƒÖd %d.
 .
 
 :TEXT_ERROR_REGION_WARNING#0%
-Niedozwolony region pamiëci %d - ignorowany.
+Niedozwolony obszar pamiƒôci %d - zignorowano.
 .
 
 :TEXT_ERROR_ON_OR_OFF
-Naleßy podaç ON lub OFF.
+Trzeba podaƒá opcjƒô ON lub OFF.
 .
 
 :TEXT_ERROR_BAD_VARIABLE
-Niepoprawna specyfikacja zmiennej.
+Nieprawid≈Çowe okre≈õlenie zmiennej.
 .
 
 :TEXT_ERROR_IN_MISSING#1
-FOR: brak operatora IN.
+FOR: brak IN.
 .
 
 :TEXT_ERROR_MISSING_PARENTHESES#1
-Brakuje jednego lub obu nawias¢w.
+Brakuje jednego lub obu nawias√≥w.
 .
 
 :TEXT_ERROR_DO_MISSING#1
-FOR: Brak operatora DO.
+FOR: brak DO.
 .
 
 :TEXT_ERROR_NO_COMMAND_AFTER_DO#1
-FOR: Brak komendy po operatorze DO.
+FOR: brak polecenia po DO.
 .
 
 :TEXT_ERROR_REDIRECT_FROM_FILE#0%
-Nie moßna przekierowaç ¶r¢día z pliku '%s'.
+Nie mo≈ºna przekierowaƒá wej≈õcia z pliku '%s'.
 .
 
 :TEXT_ERROR_REDIRECT_TO_FILE#0%
-Nie moßna przekierowaç wyjûcia do pliku '%s'.
+Nie mo≈ºna przekierowaƒá wyj≈õcia do pliku '%s'.
 .
 
 :TEXT_ERROR_EMPTY_REDIRECTION#1
@@ -294,130 +295,128 @@ Puste przekierowanie.
 .
 
 :TEXT_ERROR_INVALID_DATE
-Nieprawidíowa data.
+Nieprawid≈Çowa data.
 .
 
 :TEXT_ERROR_INVALID_TIME
-Nieprawidíowy czas.
+Nieprawid≈Çowa godzina.
 .
 
 :TEXT_ERROR_NO_GOTO_LABEL
-Brak okreûlonej etykiety dla GOTO.
+Nie podano etykiety dla GOTO.
 .
 
 :TEXT_CTTY_NOTIMPLEMENTED
-The CTTY command has been excluded from this COMMAND.COM.
+Polecenie CTTY nie zosta≈Ço wkompilowane w ten COMMAND.COM.
 .
 
 :TEXT_ERROR_NORW_DEVICE#0%
-UrzÜdzenie nieprawidíowe, lub nie wspiera operacji odczyt/zapis '%s'.
+Nieprawid≈Çowe urzƒÖdzenie lub urzƒÖdzenie bez odczytu i zapisu: '%s'.
 .
 
 :TEXT_ERROR_CTTY_DUP#0%
-Failed to change file descriptors to TTY '%s'.
+Nie uda≈Ço siƒô prze≈ÇƒÖczyƒá deskryptor√≥w plik√≥w na terminal '%s'.
 .
 
 :TEXT_ERROR_L_NOTIMPLEMENTED
-/L jeszcze nie zaimplementowane.
+/L nie jest jeszcze zaimplementowane.
 .
 
 :TEXT_ERROR_U_NOTIMPLEMENTED
-/U jeszcze nie zaimplementowane.
+/U nie jest jeszcze zaimplementowane.
 .
 
 :TEXT_ERROR_WRITING_DEST
-BíÜd zapisu u celu.
+B≈ÇƒÖd zapisu do celu.
 .
 
 :TEXT_ERROR_CANNOT_OPEN_SOURCE#0%
-Nie moßna otworzyç ¶r¢día. - '%s'
+Nie mo≈ºna otworzyƒá ≈∫r√≥d≈Ça. - '%s'
 .
 
 :TEXT_ERROR_OPEN_FILE#0%
-Nie moßna otworzyç pliku '%s'
+Nie mo≈ºna otworzyƒá pliku '%s'
 .
 
 :TEXT_ERROR_READ_FILE#0%
-Nie moßna odczytaç z pliku '%s'
+Nie mo≈ºna odczytaƒá z pliku '%s'
 .
 
 :TEXT_ERROR_WRITE_FILE#0%
-Nie moßna zapisaç pliku '%s'
+Nie mo≈ºna zapisaƒá do pliku '%s'
 .
 
 :TEXT_ERROR_LEADING_PLUS
-Znak '+' nie moße znajdowaç sië przed argumentem.
+Znak ≈ÇƒÖczenia '+' nie mo≈ºe staƒá przed argumentami.
 .
 
 :TEXT_ERROR_TRAILING_PLUS
-Znak '+' nie moße znajdowaç sië za argumentem.
+Znak ≈ÇƒÖczenia '+' nie mo≈ºe staƒá po argumentach.
 .
 
 :TEXT_ERROR_NOTHING_TO_DO
-Nie ma niczego do wykonania.
+Nic do zrobienia.
 .
 
 :TEXT_ERROR_COPY
-COPY nie powiodío sië
+B≈ÇƒÖd COPY
 .
 
 :TEXT_ERROR_IF_EXIST_NO_FILENAME#1
 IF EXIST: brak nazwy pliku
 .
 :TEXT_ERROR_IF_ERRORLEVEL_NO_NUMBER#1
-IF ERRORLEVEL: brak numeru
+IF ERRORLEVEL: brak liczby
 .
 :TEXT_ERROR_IF_ERRORLEVEL_INVALID_NUMBER#1
-IF ERRORLEVEL: nieprawidíowy numer
+IF ERRORLEVEL: nieprawid≈Çowa liczba
 .
 :TEXT_ERROR_IF_MISSING_COMMAND#1
-IF: brak komendy
+IF: brak polecenia
 .
 
 :TEXT_NOT_IMPLEMENTED_YET
-Przykro mi... Jeszcze nie zaimplementowane.
+Niestety... jeszcze nie zaimplementowane.
 .
 
 :TEXT_FAILED_LOAD_STRINGS
-Nie udaío sië zaíadowaç komunikat¢w do pamiëci.
+Nie uda≈Ço siƒô za≈Çadowaƒá komunikat√≥w do pamiƒôci.
 .
 
 :TEXT_MSG_NOTIMPLEMENTED
-The /MSG option has been excluded from this COMMAND.COM.
+Opcja /MSG nie zosta≈Ça wkompilowana w ten COMMAND.COM.
 .
 
 :TEXT_MSG_ITEMS_DISPLAYED#1%
-Wyûwietlono %u jednostek.
+Wy≈õwietlono pozycji: %u.
 .
 
 :TEXT_CORRUPT_COMMAND_LINE
-Uszkodzona linia polece§. To jest wewnëtrzny bíÜd i jest zwiÜzany z systemowym
-COMMAND.COM. Proszë powiadomiç zesp¢í FreeDOS o tym bíëdzie.
+Uszkodzony wiersz polecenia. To b≈ÇƒÖd wewnƒôtrzny, zwiƒÖzany z systemem,
+w kt√≥rym dzia≈Ça COMMAND.COM. Zg≈Ço≈õ ten b≈ÇƒÖd.
 .
 
 :TEXT_QUOTED_C_OR_K#1
-The /C and /K options cannot be quoted, they are ignored.
+Opcji /C i /K nie mo≈ºna ujmowaƒá w cudzys≈Ç√≥w - zosta≈Çy zignorowane.
 .
 
 :TEXT_INIT_FULLY_QUALIFIED#1%
-òcießka do COMMAND.COM musi byç w peíni opracowana!
-To oznacza, ße musi skíadaç sië z litery napëdu i zaczynaç sië backslash'em.
-Na przykíad: C:\\FDOS
+≈öcie≈ºka do COMMAND.COM musi byƒá pe≈Çna!
+Czyli z literƒÖ dysku i zaczynajƒÖca siƒô od uko≈õnika odwrotnego (\\).
+Na przyk≈Çad: C:\\FDOS
 
-COMMAND.COM spr¢buje teraz tÜ ûcießkë:
+COMMAND.COM przyjmuje teraz ≈õcie≈ºkƒô:
 %s
 .
 
 :TEXT_ERROR_RESTORE_SESSION
-The session information could not be restored, any local settings
-are lost. Please refer to above error messages for the reason
-of this problem.
+Nie uda≈Ço siƒô przywr√≥ciƒá informacji o sesji - ustawienia lokalne
+zosta≈Çy utracone. Przyczynƒô podajƒÖ powy≈ºsze komunikaty o b≈Çƒôdach.
 .
 
 :TEXT_ERROR_SAVE_SESSION
-The current information cannot be preserved during the call of the
-program. Please refer to above error messages for the reason of
-this problem.
+Nie mo≈ºna zachowaƒá bie≈ºƒÖcych informacji na czas wywo≈Çania programu.
+Przyczynƒô podajƒÖ powy≈ºsze komunikaty o b≈Çƒôdach.
 .
 
 :TEXT_ERROR_CWD_FAILED#1%
@@ -425,16 +424,16 @@ Dysk %c: nie odpowiada.
 .
 
 :TEXT_ERROR_KSWAP_ALIAS_SIZE
-Swapping failed: Aliases allocate too much memory.
+Wymiana nie powiod≈Ça siƒô: aliasy zajmujƒÖ za du≈ºo pamiƒôci.
 .
 
 
 :TEXT_ERROR_KSWAP_ALLOCMEM
-Swapping failed: Cannot allocate far memory.
+Wymiana nie powiod≈Ça siƒô: nie mo≈ºna przydzieliƒá pamiƒôci dalekiej.
 .
 
 :TEXT_ERROR_ALIAS_OUT_OF_MEM#1
-Brak pamiëci alias¢w.
+Brak miejsca w obszarze alias√≥w.
 .
 
 :TEXT_ERROR_ALIAS_NO_SUCH#1%
@@ -442,38 +441,50 @@ Nie ma takiego aliasu: '%s'
 .
 
 :TEXT_ERROR_ALIAS_INSERT#1
-Nie udaío sië dodaç aliasu.
+Nie uda≈Ço siƒô dodaƒá aliasu.
 .
 
 :TEXT_ALIAS_INVALID_NAME#1%
-Nieprawidíowa nazwa aliasu '%s'.
+Nieprawid≈Çowa nazwa aliasu '%s'.
 .
 
 :TEXT_ERROR_LOADING_CONTEXT#1
-Nie udaío sië zaíadowaç moduíu kontekstowego lub bíÜd krytyczny.
+Nie mo≈ºna za≈Çadowaƒá modu≈Çu kontekstu ani obs≈Çugi b≈Çƒôd√≥w krytycznych.
 .
 
 :TEXT_ERROR_CONTEXT_OUT_OF_MEMORY#1
-Brak pamiëci kontekstowej.
-Jeûli bíÜd bëdzie sië powtarzaí, spr¢buj zwiëkszyç jakieû wewnëtrzne bufory,
-takie jak historia, stos katalog¢w itp.
+Za ma≈Ço pamiƒôci kontekstu.
+Je≈õli b≈ÇƒÖd siƒô powtarza, zwiƒôksz kt√≥ry≈õ z bufor√≥w wewnƒôtrznych,
+np. historiƒô, stos katalog√≥w itp.
 .
 
 :TEXT_ERROR_CONTEXT_LENGTH#1%
-Kontekst wielkoûci %lu bajt¢w przekracza maksymalny limit.
-Kontekst zostanie pomniejszony do %u bajt¢w.
+≈ÅƒÖczny rozmiar kontekstu (%lu bajt√≥w) przekracza limit.
+Zmniejszanie kontekstu do %u bajt√≥w.
 .
 
 :TEXT_ERROR_CONTEXT_ADD_STATUS#1
-Dodanie informacji o statusie do kontekstu nie powiodío sië. Moße to wskazywaç
-na bíÜd pamiëci lub nieprawidíowo okreûlonÜ minimalnÜ wielkoûç kontekstu.
-Proszë powiadomiç gospodarza FreeCOM na:
+Nie uda≈Ço siƒô dodaƒá informacji o stanie do kontekstu. Mo≈ºe to oznaczaƒá
+uszkodzenie pamiƒôci lub ≈∫le ustalony minimalny rozmiar kontekstu.
+Powiadom opiekuna FreeCOM na li≈õcie dyskusyjnej:
 freedos-devel@lists.sourceforge.net
 .
 
 :TEXT_ERROR_CONTEXT_AFTER_SWAP#1
-Kontekst zostaí utracony w trakcie swapping'u. Kontekst zostanie odtworzony,
-jednakße wszystkie aliasy itd. zostanÜ utracone.
+Po wymianie brakuje kontekstu. Kontekst zostanie utworzony od nowa,
+ale wszystkie aliasy itp. zosta≈Çy utracone.
+.
+
+:TEXT_ERROR_PERMISSION_DENIED#1%
+%s: Brak dostƒôpu
+.
+
+:TEXT_ERROR_NO_SUCH_FILE#1%
+%s: Nie ma takiego pliku ani katalogu
+.
+
+:TEXT_ERROR_UNKNOWN_ERROR#1%
+%s: Nieznany b≈ÇƒÖd
 .
 
 #
@@ -481,53 +492,61 @@ jednakße wszystkie aliasy itd. zostanÜ utracone.
 #
 
 :TEXT_MSG_PAUSE#1
-Naciûnij dowolny klawisz aby kontynuowaç...\
+Naci≈õnij dowolny klawisz, aby kontynuowaƒá . . .\
 .
 
 :TEXT_MSG_HISTORY_SIZE#0%
-Wielkoûc historii to %d bajt¢w.
+Rozmiar historii: %d bajt√≥w.
 .
 
 :TEXT_MSG_DOSKEY
-DOSKEY juß jest aktywny w shell'u.
+Funkcje DOSKEY sƒÖ ju≈º w≈ÇƒÖczone w interpreterze polece≈Ñ.
 .
 
 :TEXT_MSG_ECHO_STATE#0%
-ECHO jest %s
+ECHO jest w stanie %s
 .
 
 :TEXT_MSG_VERIFY_STATE#0%
-VERIFY jest %s
+VERIFY jest w stanie %s
 .
 
 :TEXT_MSG_FDDEBUG_STATE#0%
-Wyjûcie DEBUG jest %s.
+Wyj≈õcie DEBUG jest w stanie %s.
 .
 :TEXT_MSG_FDDEBUG_TARGET#0%
-Wyjûcie DEBUG jest drukowane do '%s'.
+Wyj≈õcie DEBUG jest kierowane do '%s'.
 .
 
 :TEXT_MSG_BREAK_STATE#0%
-BREAK jest %s
+BREAK jest w stanie %s
+.
+
+:TEXT_MSG_LFNFOR_STATE#0%
+LFNFOR jest w stanie %s
+.
+
+:TEXT_MSG_LFNFOR_COMPLETE_STATE#0%
+Uzupe≈Çnianie LFN jest w stanie %s
 .
 
 :TEXT_MSG_CURRENT_DATE#0%
-Obecna data to %s
+Bie≈ºƒÖca data: %s
 .
 
 ## The three DATE prompts MUST be in this order!
 :TEXT_MSG_ENTER_DATE_AMERICAN#1%
-Wprowad¶ nowÜ datë (mm%sdd%s[cc]yy): \
+Wprowad≈∫ nowƒÖ datƒô (mm%sdd%s[rr]rr): \
 .
 :TEXT_MSG_ENTER_DATE_EUROPE#1%
-Wprowad¶ nowÜ datë (dd%smm%s[cc]yy): \
+Wprowad≈∫ nowƒÖ datƒô (dd%smm%s[rr]rr): \
 .
 :TEXT_MSG_ENTER_DATE_JAPANESE#1%
-Wprowad¶ nowÜ datë ([cc]yy%smm%sdd): \
+Wprowad≈∫ nowƒÖ datƒô ([rr]rr%smm%sdd): \
 .
 
 :TEXT_MSG_CURRENT_TIME#0%
-Teraz jest godzina %s
+Bie≈ºƒÖca godzina: %s
 .
 
 :TEXT_STRING_PM#1
@@ -538,7 +557,7 @@ Teraz jest godzina %s
 .
 
 :TEXT_MSG_ENTER_TIME#1
-Wprowad¶ nowÜ godzinë: \
+Wprowad≈∫ nowƒÖ godzinƒô: \
 .
 
 # src-file <operation> target-file
@@ -554,8 +573,8 @@ Wprowad¶ nowÜ godzinë: \
 :PROMPT_DELETE_ALL#1%
 TtNn{CR}{LF}{CBREAK}
 aabb   b   b       b
-Wszystkie pliki z '%s' zostanÜ wykasowane!
-Czy jesteû pewien (T/N)? \
+Wszystkie pliki w '%s' zostanƒÖ usuniƒôte!
+Czy na pewno (T/N)? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -563,7 +582,7 @@ Czy jesteû pewien (T/N)? \
 # keep interactive prompt & user-interaction in sync.
 # Return value: a -> Yes; else -> No
 :PROMPT_YES_NO#1
-TyNn{LF}{CR}{CBREAK}{ESC}
+TtNn{LF}{CR}{CBREAK}{ESC}
 aabb   a   a       b    b
  [Tak=ENTER, Nie=ESC] ? \
 .
@@ -577,8 +596,8 @@ aabb   a   a       b    b
 :PROMPT_CANCEL_BATCH#1%
 TtNnWwQq{LF}{CR}{CBREAK}{ESC}
 aabbcccc   a   a       c    b
-Wciûniëto Control-Break.\r
-Zatrzymaç plik wsadowy '%s' (Tak/Nie/Wszystkie) ? \
+Naci≈õniƒôto Ctrl+Break.\r
+Czy zako≈Ñczyƒá plik wsadowy '%s' (Tak/Nie/Wszystkie) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -588,7 +607,7 @@ Zatrzymaç plik wsadowy '%s' (Tak/Nie/Wszystkie) ? \
 :PROMPT_OVERWRITE_FILE#1%
 TtNnWwKk{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Czy nadpisaç '%s' (Tak/Nie/Wszystkie/Koniec) ? \
+ZastƒÖpiƒá '%s' (Tak/Nie/Wszystkie/Koniec) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -598,7 +617,7 @@ Czy nadpisaç '%s' (Tak/Nie/Wszystkie/Koniec) ? \
 :PROMPT_APPEND_FILE#1%
 TtNnWwKk{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Czy dopisaç do '%s' (Tak/Nie/Wszystkie/Koniec) ? \
+Dopisaƒá do '%s' (Tak/Nie/Wszystkie/Koniec) ? \
 .
 
 # This prompt MUST include the pseudo key CBREAK!
@@ -608,7 +627,7 @@ Czy dopisaç do '%s' (Tak/Nie/Wszystkie/Koniec) ? \
 :PROMPT_DELETE_FILE#1%
 TtNnWwKk{BREAK}{ENTER}{ESC}
 aabbccdd      d      a    b
-Wykasowaç '%s' (Tak/Nie/Wszystkie/Koniec) ? \
+UsunƒÖƒá '%s' (Tak/Nie/Wszystkie/Koniec) ? \
 .
 
 :TEXT_UNKNOWN_FILENAME#1
@@ -616,12 +635,12 @@ Wykasowaç '%s' (Tak/Nie/Wszystkie/Koniec) ? \
 .
 
 :TEXT_DIRSTACK_EMPTY
-Stos katalog¢w jest pusty.
+Stos katalog√≥w jest pusty.
 .
 
 ## Strings to construct the DIR output
 :TEXT_DIR_HDR_VOLUME#1%
- Zbi¢r w stacji %c \
+ Wolumin w stacji dysk√≥w %c \
 .
 :TEXT_DIR_HDR_VOLUME_STRING#0%
 to %s
@@ -630,22 +649,22 @@ to %s
 nie ma etykiety
 .
 :TEXT_DIR_HDR_SERIAL_NUMBER#0%
- Numer seryjny zbioru to %04X-%04X
+ Numer seryjny woluminu: %04X-%04X
 .
 :TEXT_DIR_FTR_FILES#1%
-%10s pliki(¢w)\
+%10s plik(√≥w)\
 .
 :TEXT_DIR_FTR_BYTES#0%
-   %12s bajt¢w
+   %12s bajt√≥w
 .
 :TEXT_DIR_FTR_TOTAL_NUMBER
-Wszystkich plik¢w:
+Razem plik√≥w na li≈õcie:
 .
 :TEXT_DIR_FTR_DIRS#1%
-%10s katalogi(¢w)\
+%10s katalog(√≥w)\
 .
 :TEXT_DIR_FTR_BYTES_FREE#0%
- %15s bajt¢w wolnych
+ %15s bajt√≥w wolnych
 .
 :TEXT_DIR_DIRECTORY#0%
 Katalog %s
@@ -680,7 +699,7 @@ Katalog %s
 PATH=%s
 .
 :TEXT_MSG_PATH_NONE#1
-Nie podano ûcießki poszukiwa§.
+Nie zdefiniowano ≈õcie≈ºki wyszukiwania.
 .
 
 ## The following names MUST be in this order!
@@ -694,13 +713,13 @@ Pon\
 Wto\
 .
 :TEXT_WEEKDAY_SHORT_NAME_WEDNSDAY#1
-òro\
+≈öro\
 .
 :TEXT_WEEKDAY_SHORT_NAME_THURSDAY#1
 Czw\
 .
 :TEXT_WEEKDAY_SHORT_NAME_FRIDAY#1
-PiÜ\
+PiƒÖ\
 .
 :TEXT_WEEKDAY_SHORT_NAME_SATURDAY#1
 Sob\
@@ -709,121 +728,124 @@ Sob\
 # Displayed by DEL how many files were removed.
 # These three strings must be kept in order!
 :TEXT_MSG_DEL_CNT_FILES#1
-nie usuniëto ßadnego pliku.
+Nie usuniƒôto ≈ºadnego pliku.
 .
 :TEXT_MSG_DEL_CNT_FILES_1#1
-usuniëto jeden plik.
+Usuniƒôto jeden plik.
 .
 :TEXT_MSG_DEL_CNT_FILES_2#1%
-plik¢w usuniëtych: %u
+Usuniƒôto plik√≥w: %u.
 .
 
 :TEXT_MSG_SHOWCMD_INTERNAL_COMMANDS
-Dostëpne komendy wewnëtrzne:
+Dostƒôpne polecenia wewnƒôtrzne:
 .
 
 :TEXT_MSG_SHOWCMD_FEATURES
 
-Dostëpne usíugi:
+Dostƒôpne funkcje:
 .
 
 ## Displayed within "?" <-> showcmd() to enumerate the included features
 ## Note the trailing single space
 :TEXT_SHOWCMD_FEATURE_ALIASES#1
-[aliases] \
+[aliasy] \
 .
 :TEXT_SHOWCMD_FEATURE_ENHANCED_INPUT#1
-[enhanced input] \
+[rozszerzone wprowadzanie] \
 .
 :TEXT_SHOWCMD_FEATURE_HISTORY#1
-[history] \
+[historia] \
 .
 :TEXT_SHOWCMD_FEATURE_FILENAME_COMPLETION#1
-[filename completion] \
+[uzupe≈Çnianie nazw plik√≥w]
 .
 :TEXT_SHOWCMD_FEATURE_SWAP_EXEC#1
-[swapping] \
+[wymiana] \
 .
 :TEXT_SHOWCMD_FEATURE_CALL_LOGGING#1
-[start logging] \
+[rejestrowanie startu] \
 .
 :TEXT_SHOWCMD_FEATURE_LAST_DIR#1
-[last dir] \
+[poprzedni katalog] \
+.
+:TEXT_SHOWCMD_FEATURE_LONG_FILENAMES#1
+[d≈Çugie nazwy plik√≥w] \
 .
 :TEXT_SHOWCMD_FEATURE_KERNEL_SWAP_SHELL#1
-[kernel swap] \
+[wymiana przez jƒÖdro] \
 .
 :TEXT_SHOWCMD_FEATURE_XMS_SWAP#1
-[XMS swap] \
+[wymiana do XMS]
 .
 :TEXT_SHOWCMD_DEFAULT_TO_SWAP#1
-[default to swap] \
+[domy≈õlnie wymiana] \
 .
 :TEXT_SHOWCMD_FEATURE_INSTALLABLE_COMMANDS#1
-[installable commands] \
+[polecenia instalowalne]
 .
 :TEXT_SHOWCMD_FEATURE_NLS#1
 [DOS NLS] \
 .
 :TEXT_SHOWCMD_FEATURE_DIRSTACK#1
-[directory stack (PUSHD)] \
+[stos katalog√≥w (PUSHD)] \
 .
 :TEXT_SHOWCMD_FEATURE_DEBUG#1
-[FreeCOM debugging] \
+[debugowanie FreeCOM] \
 .
 
 :TEXT_MSG_INIT_BYPASS_AUTOEXEC#1
 
-Wciûnij F8 dla trybu krok po kroku, lub F5 by obejûç %s... \
+Naci≈õnij F8, aby wykonywaƒá krokowo, lub F5, aby pominƒÖƒá %s... \
 .
 :TEXT_MSG_INIT_BYPASSING_AUTOEXEC#0%
-Obchodzenie '%s'.
+Pomijanie '%s'.
 .
 
 :TEXT_MSG_VER_DOS_VERSION#0%
-Wersja DOS: %u.%02u
+Wersja DOS %u.%02u
 .
 
 :TEXT_MSG_VER_EARLY_FREEDOS
-JÜdro FreeDOS (build 1933 lub nowszy)
+JƒÖdro FreeDOS (kompilacja 1933 lub wcze≈õniejsza)
 .
 
 :TEXT_MSG_VER_LATER_FREEDOS#0%
-Wersja jÜdra FreeDOS: %d.%d.%d
+Wersja jƒÖdra FreeDOS: %d.%d.%d
 .
 
 
 :TEXT_MSG_VER_WARRANTY
 Copyright (C) 1994-2001 Tim Norman i inni.
 
-Niniejszy program rozpowszechniany jest z nadziejÜ, iß bëdzie ußyteczny,
-jednak BEZ JAKIEJKOLWIEK GWARANCJI, nawet domyûlnej gwarancji PRZYDATNOòCI
-HANDLOWEJ albo PRZYDATNOòCI DO OKREòLONYCH ZASTOSOWA•. W celu uzyskania
-blißszych informacji zapoznaj sië z GNU General Public License.
+Niniejszy program rozpowszechniany jest z nadziejƒÖ, i≈º bƒôdzie u≈ºyteczny,
+jednak BEZ JAKIEJKOLWIEK GWARANCJI, nawet domy≈õlnej gwarancji PRZYDATNO≈öCI
+HANDLOWEJ albo PRZYDATNO≈öCI DO OKRE≈öLONYCH ZASTOSOWA≈É. W celu uzyskania
+bli≈ºszych informacji zapoznaj siƒô z GNU General Public License.
 
-Raporty o bíëdach proszë wysyíaç do freedos-devel@lists.sourceforge.net
-Nowe wersje dostëpne pod http://freedos.sourceforge.net/freecom
+Raporty o b≈Çƒôdach proszƒô wysy≈Çaƒá do freedos-devel@lists.sourceforge.net
+Nowe wersje dostƒôpne pod http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_REDISTRIBUTION
 Copyright (C) 1994-2001 Tim Norman i inni.
 
-Niniejszy program jest wolnym oprogramowaniem; moßesz go rozprowadzaç dalej
-i/lub modyfikowaç na warunkach Powszechnej Licencji Publicznej GNU, wydanej
-przez Fundacjë Wolnego Oprogramowania - wedíug wersji 2-giej tej Licencji lub
-kt¢rejû z p¢¶niejszych wersji.
+Niniejszy program jest wolnym oprogramowaniem; mo≈ºesz go rozprowadzaƒá dalej
+i/lub modyfikowaƒá na warunkach Powszechnej Licencji Publicznej GNU, wydanej
+przez Fundacjƒô Wolnego Oprogramowania - wed≈Çug wersji 2-giej tej Licencji lub
+kt√≥rej≈õ z p√≥≈∫niejszych wersji.
 
-Raporty o bíëdach proszë wysyíaç do freedos-devel@lists.sourceforge.net
-Nowe wersje dostëpne pod http://freedos.sourceforge.net/freecom
+Raporty o b≈Çƒôdach proszƒô wysy≈Çaƒá do freedos-devel@lists.sourceforge.net
+Nowe wersje dostƒôpne pod http://freedos.sourceforge.net/freecom
 .
 
 :TEXT_MSG_VER_DEVELOPERS
 
-Shell FreeDOS jest rozwijany przez wielu tw¢rc¢w, proszë zapoznaç sië
-z zaíÜczonym plikiem HISTORY.TXT.
+Shell FreeDOS jest rozwijany przez wielu tw√≥rc√≥w, proszƒô zapoznaƒá siƒô
+z za≈ÇƒÖczonym plikiem HISTORY.TXT.
 
-Raporty o bíëdach proszë wysyíaç do freedos-devel@lists.sourceforge.net
-Nowe wersje dostëpne pod http://freedos.sourceforge.net/freecom
+Raporty o b≈Çƒôdach proszƒô wysy≈Çaƒá do freedos-devel@lists.sourceforge.net
+Nowe wersje dostƒôpne pod http://freedos.sourceforge.net/freecom
 .
 
 
@@ -834,61 +856,61 @@ Nowe wersje dostëpne pod http://freedos.sourceforge.net/freecom
 # All newlines must be prefixed by \r's !
 :TEXT_MSG_REBOOT_NOW#1
 \r\n\r
-Shell zostanie zako§czony, pomimo, iß jest to zabronione (prawdopodobnie\r
-atywna jest opcja "/P").\r
-Naleßy zrestartowaç system, lub - jeûli shell jest uruchomiony w\r
-ûrodowisku wielozadaniowym - zako§czyç ten proces/zadanie rëcznie.\r
+Interpreter polece≈Ñ zaraz zostanie zako≈Ñczony, choƒá jest to\r
+zabronione (zwykle przez opcjƒô "/P").\r
+Uruchom ponownie komputer albo, je≈õli interpreter dzia≈Ça\r
+w ≈õrodowisku wielozadaniowym, zako≈Ñcz ten proces/zadanie rƒôcznie.\r
 .
 
 # Displayed during the initialization phase of FreeCOM, if its own
 # filename could not be determined.
 :TEXT_MSG_FREECOM_NOT_FOUND#1
-Plik wykonywalny FreeCOM nie zostaí odnaleziony.
-Naleßy okreûliç peínÜ ûcießkë do COMMAND.COM
-jako pierwszy argument za COMMAND, na razie:
+Nie znaleziono pliku wykonywalnego FreeCOM.
+Podaj pe≈ÇnƒÖ ≈õcie≈ºkƒô do COMMAND.COM jako
+pierwszy argument polecenia COMMAND, na przyk≈Çad:
 C:\\FDOS
 .
 
 
 :TEXT_MEMORY_ENVIRONMENT#1%
-Segment ûrodowiska     : maks %5u bajt¢w; wolnych %5u bajt¢w
+Segment ≈õrodowiska     : maks %5u bajt√≥w; wolnych %5u bajt√≥w
 .
 :TEXT_MEMORY_CONTEXT#1%
-Segment kontekstowy    : maks %5u bajt¢w; wolnych %5u bajt¢w
-.	
+Segment kontekstu      : maks %5u bajt√≥w; wolnych %5u bajt√≥w
+.
 :TEXT_MEMORY_HEAP#1%
-Stos                   : wolnych %5lu bajt¢w
+Sterta                 : wolnych %5lu bajt√≥w
 .
 :TEXT_MEMORY_CTXT_ALIAS#1%
-\tAliases        : limit %5u bytes, current %5u bytes, %5u items
+\tAliasy         : limit %5u bajt√≥w, zajƒôte %5u bajt√≥w, %5u pozycji
 .
 :TEXT_MEMORY_CTXT_HISTORY#1%
-\tHistory        : limit %5u bytes, current %5u bytes, %5u items
+\tHistoria       : limit %5u bajt√≥w, zajƒôte %5u bajt√≥w, %5u pozycji
 .
 :TEXT_MEMORY_CTXT_DIRSTACK#1%
-\tDirectory stack: limit %5u bytes, current %5u bytes, %5u items
+\tStos katalog√≥w : limit %5u bajt√≥w, zajƒôte %5u bajt√≥w, %5u pozycji
 .
 :TEXT_MEMORY_CTXT_LASTDIR#1%
-\tLast dir cache : used  %5u bytes, %5u items
+\tPoprz. katalog : zajƒôte %5u bajt√≥w, %5u pozycji
 .
 :TEXT_MEMORY_CTXT_BATCH#1%
-\tBatch nesting  : used  %5u bytes, %5u items
+\tZagn. wsadowe  : zajƒôte %5u bajt√≥w, %5u pozycji
 .
 :TEXT_MEMORY_CTXT_SWAPINFO#1%
-\tSwapinfo       : used  %5u bytes, %5u items
+\tDane wymiany   : zajƒôte %5u bajt√≥w, %5u pozycji
 .
 
 
 ## CHCP
 :TEXT_ERROR_GET_CODEPAGE#1
-Nie udaío sië uzyskaç obecnej strony kodowej od systemu.
+Nie uda≈Ço siƒô odczytaƒá bie≈ºƒÖcej strony kodowej z systemu.
 .
 :TEXT_ERROR_SET_CODEPAGE#1
-Zmiana obecnej strony kodowej nie powiodía sië.
+Nie uda≈Ço siƒô zmieniƒá bie≈ºƒÖcej strony kodowej.
 .
 :TEXT_DISPLAY_CODEPAGE#1%
-Obecna strona kodowa to %u.
-Systemowa strona kodowa to: %u.
+Bie≈ºƒÖca strona kodowa: %u.
+Strona kodowa systemu (w≈Ça≈õciwa): %u.
 .
 
 #
@@ -896,556 +918,576 @@ Systemowa strona kodowa to: %u.
 #
 
 :TEXT_CMDHELP_ALIAS
-Wyûwietla, ustawia lub usuwa aliasy.
+Wy≈õwietla, ustawia lub usuwa aliasy.
 
-ALIAS [zmienna[=][string]]
+ALIAS [zmienna[=][ciƒÖg]]
 
-        variable  Okreûla nazwë aliasu.
-        string    Okreûla serië znak¢w przyporzÜdkowanych aliasowi.
+  zmienna   Okre≈õla nazwƒô aliasu.
+  ciƒÖg      Okre≈õla ciƒÖg znak√≥w przypisywany do aliasu.
 
 
-Wpisz ALIAS bez parametr¢w by wyûwietliç obecny aliasy.
+Wpisz ALIAS bez parametr√≥w, aby wy≈õwietliƒá bie≈ºƒÖce aliasy.
 .
 
 :TEXT_CMDHELP_BEEP
-Odgrywa jeden BEEP.
+Wydaje sygna≈Ç d≈∫wiƒôkowy.
 .
 
 :TEXT_CMDHELP_BREAK
-Ustawia lub czyûci stan sprawdzania klawiszy CTRL+C.
+W≈ÇƒÖcza lub wy≈ÇƒÖcza rozszerzone sprawdzanie klawiszy CTRL+C.
 
 BREAK [ON | OFF]
 
-Wpisz BREAK bez parametr¢w by wyûwietliç obecny stan.
+Wpisz BREAK bez parametru, aby wy≈õwietliƒá bie≈ºƒÖce ustawienie BREAK.
 .
 
 :TEXT_CMDHELP_CALL#1
-Wywoíuje jeden program wsadowy z innego.
+Wywo≈Çuje jeden program wsadowy z innego.
 
-CALL [/S | /N] [/Y] [dysk:][ûcießka]nazwapliku [parametry wsadowe]
+CALL [/S | /N] [/Y] [dysk:][≈õcie≈ºka]nazwapliku [parametry-wsadowe]
 
-  parametry wsadowe   Okreûla wszystkie informacje wymagane przez program
-                      wsadowy w wierszu polece§.
-
-  /S wíÜcza, /N wyíÜcza swapping dla FreeCOM.
-  /Y wíÜcza tryb "krok po kroku".
+  parametry-wsadowe  Okre≈õla wszystkie informacje wiersza polece≈Ñ wymagane
+                     przez program wsadowy.
+  /S wymusza, /N wy≈ÇƒÖcza wymianƒô (swap) FreeCOM.
+  /Y w≈ÇƒÖcza tryb krokowy podczas wykonywania polecenia.
 .
 
 :TEXT_CMDHELP_CD
-Wyûwietla nazwë obecnego katalogu lub zmienia katalog na inny.
+Wy≈õwietla nazwƒô bie≈ºƒÖcego katalogu lub zmienia bie≈ºƒÖcy katalog.
 
-CHDIR [dysk:][ûcießka]
+CHDIR [dysk:][≈õcie≈ºka]
 CHDIR[..]
-CD [dysk:][ûcießka]
+CD [dysk:][≈õcie≈ºka]
 CD[..]
 CD -
 
-  ..   Okreûla ße ußytkownik chce przejûç do katalogu nadrzëdnego.
-  -    Jeûli usíuga "ostatni katalog" jest wíÜczona, przechodzi do niego.
+  ..   Oznacza przej≈õcie do katalogu nadrzƒôdnego.
+  -    Je≈õli w≈ÇƒÖczona jest funkcja "poprzedni katalog", przechodzi do niego.
 
-Wpisz CD dysk: aby wyûwietliç obceny katalog podanego dysku.
-Wpisz CD bez parametr¢w aby wyûwietliç obecny katalog i obecny dysk.
-Zobacz takße: CDD
+Wpisz CD dysk:, aby wy≈õwietliƒá bie≈ºƒÖcy katalog na podanym dysku.
+Wpisz CD bez parametr√≥w, aby wy≈õwietliƒá bie≈ºƒÖcy dysk i katalog.
+Zobacz te≈º: CDD
 .
 
 :TEXT_CMDHELP_CDD
-Wyûwietla obecny dysk i katalog lub przechodzi do innego dysku i katalogu.
+Wy≈õwietla nazwƒô bie≈ºƒÖcego katalogu lub zmienia bie≈ºƒÖcy katalog i dysk.
 
-CDD [dysk:][ûcießka]
+CDD [dysk:][≈õcie≈ºka]
 CDD[..]
 
-  ..   Okreûla ße ußytkownik chce przejûç do katalogu nadrzëdnego.
-  -    Jeûli usíuga "ostatni katalog" jest wíÜczona, przechodzi do niego.
+  ..   Oznacza przej≈õcie do katalogu nadrzƒôdnego.
+  -    Je≈õli w≈ÇƒÖczona jest funkcja "poprzedni katalog", przechodzi do niego.
 
-Jeûli "dysk:" jest okreûlony i r¢ßni sië od obecnego, interpreter przechodzi
-do niego; to jest jedyna r¢ßnica miëdzy "CD" a "CDD".
-Wpisz CD bez parametr¢w aby wyûwietliç obecny dysk i katalog.
+Je≈õli podano dysk:, zmienia siƒô te≈º bie≈ºƒÖcy dysk; to jedyna r√≥≈ºnica
+w stosunku do "CHDIR".
+Wpisz CD bez parametr√≥w, aby wy≈õwietliƒá bie≈ºƒÖcy dysk i katalog.
 .
 
 :TEXT_CMDHELP_CHCP
-Wyûwietla lub ustawia aktywnÜ stronë kodowÜ.
+Wy≈õwietla lub ustawia numer aktywnej strony kodowej.
 
 CHCP [nnn]
 
-  nnn   Okreûla numer strony kodowej.
+  nnn   Okre≈õla numer strony kodowej.
 
-Wpisz CHCP bez parametr¢w aby wyûwietliç aktywnÜ stronë kodowÜ.
+Wpisz CHCP bez parametru, aby wy≈õwietliƒá numer aktywnej strony kodowej.
 .
 
 :TEXT_CMDHELP_CLS
-Czyûci ekran.
+Czy≈õci ekran.
 
 CLS
 .
 
 :TEXT_CMDHELP_COMMAND
-Uruchamia nowÜ kopië interpretra komend (shell'u) FreeDOS.
+Uruchamia nowƒÖ kopiƒô interpretera polece≈Ñ FreeDOS.
 
-COMMAND [[dysk:]ûcießka] [urzÜdzenie] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
-                       [/LOW] [/Y [/[C|K] command]]
-  [dysk:]ûcießka  Okreûla dysk i katalog zawierajÜce COMMAND.COM.
-  urzÜdzenie      Okreûla urzÜdzenie ußywane dla wyjûç/wejûç.
-  /E:nnnnn        Ustawia pierwotnÜ wielkoûç ûrodowiska na nnnnn bajt¢w.
-                  (nnnnn powinno zawieraç sië miëdzy 256 a 32,768).
-  /L:nnnn         Ustawia díugoûç wewnëtrznych bufor¢w (wymaga /P).
-                  (nnnn powinno zawieraç sië miëdzy 128 a 1,024).
-  /U:nnn          Ustawia díugoûç bufora wejûciowego (wymaga /P).
-                  (nnn powinno zawieraç sië miëdzy 128 a 255).
-  /P              úaduje nowy interpreter komend (shell) na staíe.
-  /MSG            Skíaduje wszystkie komunikaty bíëd¢w w pamiëci (wymaga /P).
-  /LOW            Wymusza na interpreterze komend pracë w pamiëci niskiej.
-  /Y              Wykonuje plik wsadowy podany z /C lub /K krok po kroku.
-  /C polecenie    Wykonuje okreûlone polecenie i powraca.
-  /K polecenie    Wykonuja okreûlone polecenie i kontynuuje dziaíanie.
+COMMAND [[dysk:]≈õcie≈ºka] [urzƒÖdzenie] [/E:nnnnn] [/L:nnnn] [/U:nnn] [/P] [/MSG]
+                       [/LOW] [/Y [/[C|K] polecenie]]
+  [dysk:]≈õcie≈ºka  Okre≈õla katalog zawierajƒÖcy COMMAND.COM.
+  urzƒÖdzenie      Okre≈õla urzƒÖdzenie wej≈õcia i wyj≈õcia polece≈Ñ.
+  /E:nnnnn        Ustawia poczƒÖtkowy rozmiar ≈õrodowiska na nnnnn bajt√≥w.
+                  (nnnnn powinno byƒá z zakresu od 256 do 32 768).
+  /L:nnnn         Okre≈õla d≈Çugo≈õƒá bufor√≥w wewnƒôtrznych (wymaga r√≥wnie≈º /P).
+                  (nnnn powinno byƒá z zakresu od 128 do 1024).
+  /U:nnn          Okre≈õla d≈Çugo≈õƒá bufora wej≈õciowego (wymaga r√≥wnie≈º /P).
+                  (nnn powinno byƒá z zakresu od 128 do 255).
+  /P              Ustala nowy interpreter polece≈Ñ (wyj≈õcie niemo≈ºliwe).
+  /MSG            Przechowuje komunikaty b≈Çƒôd√≥w w pamiƒôci (wymaga r√≥wnie≈º /P).
+  /LOW            Wymusza trzymanie danych rezydentnych interpretera w pamiƒôci
+                  niskiej.
+  /Y              Wykonuje krokowo program wsadowy podany przez /C lub /K.
+  /C polecenie    Wykonuje podane polecenie i powraca.
+  /K polecenie    Wykonuje podane polecenie i kontynuuje dzia≈Çanie.
 .
 
 :TEXT_CMDHELP_COPY
-Kopiuje jeden lub wiëcej plik¢w w inne miejsce.
+Kopiuje jeden lub wiele plik√≥w w inne miejsce.
 
-COPY [/A | /B] ¶r¢dío [/A | /B] [+ ¶r¢dío [/A | /B] [+ ...]] [destynacja
+COPY [/A | /B] ≈∫r√≥d≈Ço [/A | /B] [+ ≈∫r√≥d≈Ço [/A | /B] [+ ...]] [cel
   [/A | /B]] [/V] [/Y | /-Y]
 
-  ¶r¢dío       Okreûla plik lub pliki majÜce zostaç skopiowane.
-  /A           Wskazuje ße plik jest plikiem tekstowym ASCII.
-  /B           Wskazuje ße plik jest binarny.
-  destination  Okreûla katalog i/lub nazwë pliku dla nowego(ych) pliku(¢w).
-  /V           Sprawdza czy pliki zostaíy poprawnie zapisane.
-  /Y           Automatycznie odpowiada "tak" na kaßde pytanie o nadpisanie
-               istniejÜcych plik¢w u celu.
-  /-Y          Wymusza pytanie przed kaßdym nadpisaniem istniejÜcego
-               pliku u celu.
+  ≈∫r√≥d≈Ço       Okre≈õla plik lub pliki, kt√≥re majƒÖ byƒá kopiowane.
+  /A           Wskazuje, ≈ºe plik jest plikiem tekstowym ASCII.
+  /B           Wskazuje, ≈ºe plik jest binarny.
+  cel          Okre≈õla katalog i/lub nazwƒô pliku dla nowych plik√≥w.
+  /V           Weryfikuje, czy nowe pliki sƒÖ zapisane prawid≈Çowo.
+  /Y           Pomija ≈ºƒÖdanie potwierdzenia zastƒÖpienia istniejƒÖcego
+               pliku docelowego.
+  /-Y          Powoduje ≈ºƒÖdanie potwierdzenia zastƒÖpienia istniejƒÖcego
+               pliku docelowego.
 
-Parametr /Y moße znajdowaç sië w zmiennej COPYCMD.
-Moße byç anulowany z linii polece§ za pomocÜ parametru /-Y.
+Prze≈ÇƒÖcznik /Y mo≈ºe byƒá wstƒôpnie ustawiony w zmiennej ≈õrodowiskowej COPYCMD.
+Mo≈ºna go zastƒÖpiƒá prze≈ÇƒÖcznikiem /-Y w wierszu polece≈Ñ.
 
-Aby dopisaç pliki, naleßy podaç jeden plik jako cel, a wiele plik¢w
-jako ¶r¢dío (ußywajÜc masek lub formatu plik1+plik2+plik3).
+Aby do≈ÇƒÖczaƒá pliki, okre≈õl pojedynczy plik docelowy i kilka plik√≥w
+≈∫r√≥d≈Çowych (symbole wieloznaczne lub format plik1+plik2+plik3).
 .
 
 :TEXT_CMDHELP_CTTY
-Zmienia terminal zarzÜdzajÜcy systemem.
+Zmienia urzƒÖdzenie terminala u≈ºywane do sterowania systemem.
 
-CTTY urzÜdzenie
+CTTY urzƒÖdzenie
 
-    urzÜdzenie    UrzÜdzenie majÜce zostaç wykorzystane, takie jak np COM1.
+  urzƒÖdzenie   UrzƒÖdzenie terminala, kt√≥re ma byƒá u≈ºywane, np. COM1.
 .
 
 :TEXT_CMDHELP_DATE#1
-Wyûwietla lub ustawia datë.
+Wy≈õwietla lub ustawia datƒô.
 
 DATE [/D] [data]
 
-Wpisz DATE bez parametr¢w aby wyûwietliç obecne ustawienia daty i
-zapytanie o wprowadzenie nowej.  Wciûnij ENTER aby zachowaç tÜ samÜ datë.
+Aby wy≈õwietliƒá bie≈ºƒÖcƒÖ datƒô i ≈ºƒÖdanie podania nowej, wpisz DATE bez
+parametr√≥w. Naci≈õnij klawisz ENTER, aby zachowaƒá tƒô samƒÖ datƒô.
 
-/D wyíÜcza interaktywnoûç programu DATE.
+/D wy≈ÇƒÖcza tryb interaktywny polecenia DATE.
 .
 
 :TEXT_CMDHELP_DEL#2
-Usuwa jeden lub wiëcej plik¢w
+Usuwa jeden lub wiele plik√≥w.
 
-DEL [dysk:][ûcießka]nazwapliku [/P] [/V]
-ERASE [dysk:][ûcießka]nazwapliku [/P] [/V]
+DEL [dysk:][≈õcie≈ºka]nazwapliku [/P] [/V]
+ERASE [dysk:][≈õcie≈ºka]nazwapliku [/P] [/V]
 
-  [dysk:][ûcießka]nazwapliku   Okreûla plik(i) do wykasowania.
-                                                    
-  /P    Pyta o potwierdzenie przed wykasowaniem kaßdego pliku.
-  /V    Wyûwietla wszystkie wykasowane pliki.
+  [dysk:][≈õcie≈ºka]nazwapliku  Okre≈õla pliki do usuniƒôcia. Wiele plik√≥w
+                              mo≈ºna okre≈õliƒá symbolami wieloznacznymi.
+  /P    ≈ªƒÖda potwierdzenia przed usuniƒôciem ka≈ºdego pliku.
+  /V    Wy≈õwietla wszystkie usuniƒôte pliki.
 .
 
 :TEXT_CMDHELP_DIR#4
-Wyûwietla listë plik¢w i podkatalog¢w w katalogu.
+Wy≈õwietla listƒô plik√≥w i podkatalog√≥w katalogu.
 
-DIR [dysk:][ûcießka][nazwapliku] [/P] [/W] [/A[[:]atrybuty]]
-  [/O[[:]kolejnoûç]] [/S] [/B] [/L]
+DIR [dysk:][≈õcie≈ºka][nazwapliku] [/P] [/W] [/A[[:]atrybuty]]
+  [/O[[:]kolejno≈õƒá]] [/S] [/B] [/L]
 
-  [dysk:][ûcießka][nazwapliku]
-            Okreûla dysk, katalog i/lub pliki do wyûwietlenia.
-            (Moßna ußywaç wielu masek)
- /P         Zatrzymuje sië po kaßdym wyûwietleniu peínego ekranu.
- /W         Ußywa formatu rozszerzonej listy.
- /A         Wyûwietla pliki z okreûlonym atrybutem. (Domyûlnie to /ADHSRA)
- atrybuty    D  Katalogi                   R  Pliki tylko-do-odczytu
+  [dysk:][≈õcie≈ºka][nazwapliku]
+            Okre≈õla dysk, katalog i/lub pliki do umieszczenia na li≈õcie.
+            (Mo≈ºe to byƒá rozszerzony opis pliku lub wiele opis√≥w plik√≥w.)
+ /P         Zatrzymuje siƒô po ka≈ºdym pe≈Çnym ekranie informacji.
+ /W         U≈ºywa formatu szerokiej listy.
+ /A         Wy≈õwietla pliki z podanymi atrybutami. (Domy≈õlnie /ADHSRA)
+ atrybuty    D  Katalogi                   R  Pliki tylko do odczytu
              H  Pliki ukryte               A  Pliki gotowe do archiwizacji
-             S  Pliki systemowe            -  Prefiks negujÜcy
- /O         Sortuje pliki.
- kolejnoûç   N  Po nazwach (alfabetycznie) S  Po wielkoûci (od mniejszych)
-             E  Po rozszerzeniach (alf.)   D  Po dacie i czasie (od míodszych)
-             G  Grupuje najpierw katalogi  -  Prefiks odwracajÜcy kolejnoûç
-             U  WyíÜcza sortowanie         Domyûlne to /ONG
- /S         Wyûwietla pliki w podanym katalogu i wszystkich podkatalogach.
- /B         Wyûwietla pliki w jednej kolumnie.
- /L         Ußywa maíych liter.
- /Y or /4   Ußywa czterocyfrowej daty.
+             S  Pliki systemowe            -  Prefiks oznaczajƒÖcy "nie"
+ /O         Wy≈õwietla pliki w posortowanej kolejno≈õci.
+ kolejno≈õƒá   N  Wg nazwy (alfabetycznie)   S  Wg rozmiaru (od najmniejszych)
+             E  Wg rozszerzenia (alfab.)   D  Wg daty (od najstarszych)
+             G  Najpierw katalogi          -  Prefiks odwracajƒÖcy kolejno≈õƒá
+             U  Bez sortowania             Domy≈õlnie /ONG
+ /S         Wy≈õwietla pliki w podanym katalogu i wszystkich podkatalogach.
+ /B         U≈ºywa prostego formatu (bez nag≈Ç√≥wka i podsumowania).
+ /L         U≈ºywa ma≈Çych liter.
+ /Y lub /4  Wy≈õwietla rok w formacie czterocyfrowym.
 
-Parametry mogÜ byç z g¢ry ustawione w zmiennej DIRCMD.
+Prze≈ÇƒÖczniki mogƒÖ byƒá wstƒôpnie ustawione w zmiennej ≈õrodowiskowej DIRCMD.
+Aby je wy≈ÇƒÖczyƒá, poprzed≈∫ prze≈ÇƒÖcznik znakiem - (minus), np. /-W.
 .
 
 :TEXT_CMDHELP_DOSKEY#1
-Zewnëtrzny program ußytkowy DOSKEY zostaí zaimplementowany wewnÜtrz FreeCOM.
-Ußyj kursor¢w g¢ra/d¢í by przewijaç historië, a polecenia HISTORY by jÜ w peíni
-wyûwietliç.
-Ußyj klawiszy prawo/lewo i END oraz HOME by poruszaç sië w linii polece§, za
-pomocÜ klawisza INSERT moßesz przechodziç z trybu wstawiania do trybu zamiany.
-Ußyj klawisza TAB by kompletowaç nazwy plik¢w; wciskaj dwukrotnie by zobaczyç
-wszystkie pasujÜce pliki.
+Zewnƒôtrzny program DOSKEY zosta≈Ç wbudowany we FreeCOM.
+Klawisze strza≈Çek W G√ìRƒò i W D√ì≈Å przywo≈ÇujƒÖ historiƒô, a HISTORY jƒÖ wy≈õwietla.
+Klawisze strza≈Çek W LEWO i W PRAWO oraz END i HOME s≈Çu≈ºƒÖ do poruszania siƒô
+po wierszu polece≈Ñ, a INSERT prze≈ÇƒÖcza tryb zastƒôpowania i wstawiania.
+Klawisz TAB uzupe≈Çnia bie≈ºƒÖcy wyraz jako nazwƒô pliku; naci≈õniƒôty dwa razy
+pokazuje wszystkie pasujƒÖce pliki.
 .
 
 :TEXT_CMDHELP_ORIGINAL_DOSKEY#1
-Edits command lines, recalls command lines, and creates macros
+Edytuje i przywo≈Çuje wiersze polece≈Ñ oraz tworzy makra.
 
-DOSKEY [/switch ...] [macroname=[text]]
+DOSKEY [/prze≈ÇƒÖcznik ...] [nazwamakra=[tekst]]
 
-  /BUFSIZE:size Sets size of macro and command buffer            (default:512)
-  /ECHO:on|off  Enables/disables echo of macro expansions        (default:on)
-  /FILE:file    Specifies file containing a list of macros
-  /HISTORY      Displays all commands stored in memory
-  /INSERT       Inserts new characters into line when typing
-  /KEYSIZE:size Sets size of keyboard type-ahead buffer          (default:15)
-  /LINE:size    Sets maximum size of line edit buffer            (default:128)
-  /MACROS       Displays all DOSKey macros
-  /OVERSTRIKE   Overwrites new characters onto line when typing  (default)
-  /REINSTALL    Installs a new copy of DOSKey
-  macroname     Specifies a name for a macro you create
-  text          Specifies commands you want to assign to the macro
+  /BUFSIZE:rozm Ustawia rozmiar bufora makr i polece≈Ñ       (domy≈õlnie: 512)
+  /ECHO:on|off  W≈ÇƒÖcza/wy≈ÇƒÖcza echo rozwiniƒôƒá makr          (domy≈õlnie: on)
+  /FILE:plik    Okre≈õla plik z listƒÖ makr
+  /HISTORY      Wy≈õwietla wszystkie polecenia zapamiƒôtane w pamiƒôci
+  /INSERT       Wstawia nowe znaki do wiersza podczas pisania
+  /KEYSIZE:rozm Ustawia rozmiar bufora klawiatury           (domy≈õlnie: 15)
+  /LINE:rozm    Ustawia maks. rozmiar bufora edycji wiersza (domy≈õlnie: 128)
+  /MACROS       Wy≈õwietla wszystkie makra DOSKey
+  /OVERSTRIKE   Zastƒôpuje znaki w wierszu podczas pisania   (domy≈õlnie)
+  /REINSTALL    Instaluje nowƒÖ kopiƒô DOSKey
+  nazwamakra    Okre≈õla nazwƒô tworzonego makra
+  tekst         Okre≈õla polecenia przypisane do makra
 
-  UP,DOWN arrows recall commands
-      Esc clears current command
-       F7 displays command history
-   Alt+F7 clears command history
-[chars]F8 searches for command beginning with [chars]
-       F9 selects a command by number
-  Alt+F10 clears macro definitions
+  Strza≈Çki W G√ìRƒò, W D√ì≈Å przywo≈ÇujƒÖ polecenia
+      Esc czy≈õci bie≈ºƒÖce polecenie
+       F7 wy≈õwietla historiƒô polece≈Ñ
+   Alt+F7 czy≈õci historiƒô polece≈Ñ
+[znaki]F8 szuka polecenia zaczynajƒÖcego siƒô od [znaki]
+       F9 wybiera polecenie wed≈Çug numeru
+  Alt+F10 usuwa definicje makr
 
-The following are special codes you can use in DOSKey macro definitions:
-  $T     Command separator: allows multiple commands in a macro
-  $1-$9  Batch parameters: equivalent to %1-%9 in batch programs
-  $*     Symbol replaced by everything following macro name on the command line
+W definicjach makr DOSKey mo≈ºna u≈ºywaƒá nastƒôpujƒÖcych kod√≥w specjalnych:
+  $T     Separator polece≈Ñ: pozwala umie≈õciƒá kilka polece≈Ñ w makrze
+  $1-$9  Parametry wsadowe: odpowiadajƒÖ %1-%9 w programach wsadowych
+  $*     Zastƒôpowany wszystkim, co nastƒôpuje po nazwie makra w wierszu
 .
 
 :TEXT_CMDHELP_ECHO
-Wyûwietla komunikaty, lub wíÜcza/wyíÜcza zwracanie echa.
+Wy≈õwietla komunikaty lub w≈ÇƒÖcza i wy≈ÇƒÖcza echo polece≈Ñ.
 
   ECHO [ON | OFF]
   ECHO [komunikat]
+  ECHO.
 
-Wpisz ECHO bez parametr¢w by wyûwietliç obecne ustawienie zwracania echa.
+ECHO. wy≈õwietla pusty wiersz (tylko w plikach wsadowych).
+Wpisz ECHO bez parametr√≥w, aby wy≈õwietliƒá bie≈ºƒÖce ustawienie echa.
 .
 
 :TEXT_CMDHELP_EXIT
-Wychodzi z interpretara komend FreeDOS, chyba ße zostaí zaíadowany z /P.
+Ko≈Ñczy dzia≈Çanie interpretera polece≈Ñ FreeDOS, chyba ≈ºe za≈Çadowano go z /P.
 
 EXIT
 .
 
 :TEXT_CMDHELP_FOR
-Uruchamia podane polecenie dla kaßdego pliku z zestawu plik¢w.
+Uruchamia podane polecenie dla ka≈ºdego pliku z zestawu plik√≥w.
 
-FOR %%zmienna IN (zestaw) DO polecenie [parametry polecenia]
+FOR %%zmienna IN (zestaw) DO polecenie [parametry-polecenia]
 
-  %%zmienna   Okreûla parametr wymienny.
-  (zestaw)   Okreûla zestaw jednego lub kilku plik¢w. Ußywanie symboli
-             wieloznacznych jest dozwolone.
-  polecenie  Okreûla polecenie, kt¢re ma zostaç wykonane dla kaßdego pliku.
-  parametry polecenia
-             Okreûla parametry lub przeíÜczniki dla okreûlonego polecenia.
+  %%zmienna  Okre≈õla parametr wymienny.
+  (zestaw)   Okre≈õla zestaw jednego lub kilku plik√≥w. Mo≈ºna u≈ºywaƒá symboli
+             wieloznacznych.
+  polecenie  Okre≈õla polecenie wykonywane dla ka≈ºdego pliku.
+  parametry-polecenia
+             Okre≈õla parametry lub prze≈ÇƒÖczniki dla podanego polecenia.
 
-Aby ußyç polecenia FOR w programie wsadowym, naleßy ußywaç %%%%zmienna zamiast
+Aby u≈ºyƒá polecenia FOR w programie wsadowym, wpisz %%%%zmienna zamiast
 %%zmienna.
 
-Na przykíad:
-  FOR %%f IN (a*.*) DO ECHO - %%f -
+Na przyk≈Çad:
+  FOR %%%%f IN (---poczƒÖtek--- a*.* ---koniec---) DO ECHO - %%%%f -
 .
 
 :TEXT_CMDHELP_GOTO
-Przekierowuje interpreter komend do zaetykietowanej linii pliku wsadowego.
+Kieruje interpreter polece≈Ñ do wiersza programu wsadowego o podanej etykiecie.
 
 GOTO etykieta
 
-  etykieta   Okreûla ciÜg znak¢w ußywanych w pliku wsadowym jako etykieta.
+  etykieta   Okre≈õla ciƒÖg tekstowy, kt√≥ry jest etykietƒÖ w programie wsadowym.
 
-Etykieta w pliku musi znajdowaç sië sama w linii i byç poprzedzona dwukropkiem.
+Etykietƒô wpisuje siƒô w osobnym wierszu, rozpoczynajƒÖc od dwukropka.
 .
 
 :TEXT_CMDHELP_HISTORY#1
-Historia polece§.
+Polecenie historii.
 
-HISTORY [wielkoûç]
+HISTORY [rozmiar]
 
-Bez parametru "wielkoûç", program wyûwietla historië polece§.
-Wywoíanie z parametrem "wielkoûç" powoduje zmianë wielkoûci bufora historii.
+Bez parametru "rozmiar" wy≈õwietla bie≈ºƒÖcƒÖ zawarto≈õƒá bufora historii
+wiersza polece≈Ñ.
+Z parametrem "rozmiar" zmienia rozmiar bufora historii.
 .
 
 :TEXT_CMDHELP_IF
-Dokonuje warunkowego przetwarzania w plikach wsadowych.
+Wykonuje przetwarzanie warunkowe w programach wsadowych.
 
 IF [NOT] ERRORLEVEL liczba polecenie
-IF [NOT] ciÜg1==ciÜg2 polecenie
+IF [NOT] ciƒÖg1==ciƒÖg2 polecenie
 IF [NOT] EXIST nazwapliku polecenie
+IF /I ciƒÖg==CIƒÑG
 
-  NOT               Wskazuje, ße system powinien wykonaç polecenie tylko
-                    wtedy, gdy warunek nie jest speíniony.
-  ERRORLEVEL liczba Okreûla warunek prawdziwy, jeßeli ostatni uruchomiony
-                    program zwr¢cií kod wyjûcia r¢wny lub wiëkszy od podanej
-                    liczby.
-  polecenie         Okreûla polecenie, kt¢re ma zostaç wykonane, jeßeli warunek
-                    zostanie speíniony.
-  ciÜg1==ciÜg2      Okreûla warunek prawdziwy, jeßeli podane ciÜgi tekstowe
-                    sÜ r¢wne.
-  EXIST nazwapliku  Okreûla warunek prawdziwy, jeßeli okreûlona nazwa pliku
-                    istnieje.
+  NOT                Wykonuje polecenie tylko, gdy warunek nie jest spe≈Çniony.
+  ERRORLEVEL liczba  Okre≈õla warunek prawdziwy, je≈ºeli ostatni uruchomiony
+                     program zwr√≥ci≈Ç kod wyj≈õcia r√≥wny lub wiƒôkszy od
+                     podanej liczby.
+  polecenie          Okre≈õla polecenie, kt√≥re ma zostaƒá wykonane, je≈ºeli
+                     warunek zostanie spe≈Çniony.
+  ciƒÖg1==ciƒÖg2       Okre≈õla warunek prawdziwy, je≈ºeli podane ciƒÖgi tekstowe
+                     sƒÖ r√≥wne.
+  EXIST nazwapliku   Okre≈õla warunek prawdziwy, je≈ºeli podany plik istnieje.
+  /I ciƒÖg==CIƒÑG      Pomija r√≥≈ºnicƒô miƒôdzy wielkimi i ma≈Çymi literami
+.
+
+:TEXT_CMDHELP_LFNFOR
+W≈ÇƒÖcza lub wy≈ÇƒÖcza d≈Çugie nazwy plik√≥w w FOR i przy uzupe≈Çnianiu nazw plik√≥w.
+
+LFNFOR [ON | OFF]
+LFNFOR COMPLETE [ON | OFF]
+
+Wpisz LFNFOR lub LFNFOR COMPLETE bez parametru, aby wy≈õwietliƒá bie≈ºƒÖce
+ustawienie LFNFOR.
 .
 
 :TEXT_CMDHELP_LH
-úaduje program w g¢rny obszar pamiëci.
+≈Åaduje program do obszaru pamiƒôci g√≥rnej.
 
-LOADHIGH [dysk:][ûcießka]nazwapliku [parametry]
-LOADHIGH [/L:region1[,wielkoûç1][;region2[,wielkoûç2]...] [/S]]
-         [dysk:][ûcießka]nazwapliku [parametry]
+LOADHIGH [dysk:][≈õcie≈ºka]nazwapliku [parametry]
+LOADHIGH [/L:obszar1[,rozmin1][;obszar2[,rozmin2]...] [/S]]
+         [dysk:][≈õcie≈ºka]nazwapliku [parametry]
 
-/L:region1[,wielkoûç1][;region2[,wielkoûç2]]...
-            Okreûla region(y) pamiëci do kt¢rych zaíadowaç program.
-            Region1 okreûla pierwszego regionu pamiëci; wielkoûç1 okreûla
-            jego minimalnÜ wielkoûç.
-            Region2 i wielkoûç2 okreûlajÜ numer i minimalnÜ wielkoûç drugiego
-            regionu. Moßna okreûliç nieograniczonÜ liczbë region¢w.
+/L:obszar1[,rozmin1][;obszar2[,rozmin2]]...
+            Okre≈õla obszary pamiƒôci, do kt√≥rych ma byƒá ≈Çadowany program.
+            Obszar1 okre≈õla numer pierwszego obszaru pamiƒôci; rozmin1
+            okre≈õla rozmiar minimalny, je≈ºeli istnieje, dla obszaru1.
+            Obszar2 i rozmin2 okre≈õlajƒÖ numer i minimalny rozmiar drugiego
+            obszaru, je≈ºeli istnieje. Mo≈ºna podaƒá dowolnƒÖ liczbƒô obszar√≥w.
 
-/S          Zwiera UMB to minimalnej wielkoûci podczas íadowania programu.
+/S          Zmniejsza blok UMB do rozmiaru minimalnego podczas ≈Çadowania
+            programu.
 
-[dysk:][ûcießka]nazwapliku
-            Okreûla umiejscowienie i nazwë programu.
+[dysk:][≈õcie≈ºka]nazwapliku
+            Okre≈õla lokalizacjƒô i nazwƒô programu.
 .
 
 :TEXT_CMDHELP_LOADFIX
-úaduje program powyßej pierwszych 64KB pamiëci i uruchamia go.
+≈Åaduje program powy≈ºej pierwszych 64 KB pamiƒôci i uruchamia go.
 
-LOADFIX [dysk:][ûcießka]nazwapliku
+LOADFIX [dysk:][≈õcie≈ºka]nazwapliku
 
-Ußyj LOADFIX do zaíadowania programu jeûli otrzymaíeû komunikat "Packed
-file corrupt" podczas pr¢by zaíadowania go do pamiëci niskiej.
+U≈ºyj LOADFIX, je≈õli przy ≈Çadowaniu programu do pamiƒôci niskiej pojawia siƒô
+komunikat "Packed file corrupt".
 .
 
 :TEXT_CMDHELP_MD
 Tworzy katalog.
 
-MKDIR [dysk:]ûcießka
-MD [dysk:]ûcießka
+MKDIR [dysk:]≈õcie≈ºka
+MD [dysk:]≈õcie≈ºka
 .
 
 :TEXT_CMDHELP_PATH
-Wyûwietla lub ustawia ûcießkë dla plik¢w wykonywalnych.
+Wy≈õwietla lub ustawia ≈õcie≈ºkƒô wyszukiwania plik√≥w wykonywalnych.
 
-PATH [[dysk:]ûcießka[;...]]
+PATH [[dysk:]≈õcie≈ºka[;...]]
 PATH ;
 
-Aby wyczyûciç ustawienie ûcießki przeszukiwania i wybraç do przeszukiwania
-jedynie bießÜcy katalog, wpisz PATH ;.
-Aby wyûwietliç bießÜcÜ ûcießkë, wpisz PATH.
+Aby wyczy≈õciƒá ≈õcie≈ºkƒô wyszukiwania i szukaƒá tylko w bie≈ºƒÖcym katalogu,
+wpisz PATH ;.
+Aby wy≈õwietliƒá bie≈ºƒÖcƒÖ ≈õcie≈ºkƒô, wpisz PATH bez parametr√≥w.
 .
 
 :TEXT_CMDHELP_PAUSE
-Wstrzymuje przetwarzanie pliku wsadowego i wyûwietla komunikat "Naciûnij
-dowolny klawisz aby kontynuowaç..." lub inny jeûli zostanie okreûlony.
+Wstrzymuje przetwarzanie programu wsadowego i wy≈õwietla komunikat:
+"Naci≈õnij dowolny klawisz, aby kontynuowaƒá...." lub podany komunikat.
 
 PAUSE [komunikat]
 .
 
 :TEXT_CMDHELP_PROMPT
-Zmienia znak zgíoszenia.
+Zmienia znak zg≈Çoszenia.
+
 PROMPT [tekst]
 
-  tekst    Okreûla nowy znak zgíoszenia.
+  tekst    Okre≈õla nowy znak zg≈Çoszenia.
 
-Znak zgíoszenia moßna zbudowaç z normalnych znak¢w oraz nastëpujÜcych znak¢w
-specjalnych:
+Znak zg≈Çoszenia mo≈ºna zbudowaƒá ze zwyk≈Çych znak√≥w oraz kod√≥w specjalnych:
 
-  $Q   = (znak r¢wnoûci)
-  $$   $ (symbol dolara)
-  $T   BießÜca godzina
-  $D   BießÜca data
-  $P   BießÜcy dysk i ûcießka
-  $V   Numer wersji interpretera komend FreeDOS
-  $N   BießÜcy dysk
-  $G   > (znak wiëkszoûci)
-  $L   < (znak mniejszoûci)
+  $Q   = (znak r√≥wno≈õci)
+  $$   $ (znak dolara)
+  $T   Bie≈ºƒÖca godzina
+  $D   Bie≈ºƒÖca data
+  $P   Bie≈ºƒÖcy dysk i ≈õcie≈ºka
+  $V   Numer wersji interpretera polece≈Ñ FreeDOS
+  $N   Bie≈ºƒÖcy dysk
+  $G   > (znak wiƒôkszo≈õci)
+  $L   < (znak mniejszo≈õci)
   $B   | (potok)
-  $H   Cofacz (usuwa poprzedni znak)
-  $E   Kod escape (kod ASCII 27)
-  $_   Powr¢t karetki i znak wysuwu wiersza
+  $H   Backspace (usuwa poprzedni znak)
+  $E   Kod Escape (kod ASCII 27)
+  $_   Powr√≥t karetki i wysuw wiersza
 
-Aby przywr¢ciç domyûlne ustawienia znaku zgíoszenia, wpisz PROMPT.
+Wpisz PROMPT bez parametr√≥w, aby przywr√≥ciƒá domy≈õlny znak zg≈Çoszenia.
 .
 
 :TEXT_CMDHELP_PUSHD
-Wstawia obecny katalog do stosu katalog¢w, umoßliwiajÜc przejûcie do innego
-katalogu.
+Odk≈Çada bie≈ºƒÖcy katalog na stos katalog√≥w i opcjonalnie zmienia bie≈ºƒÖcy
+katalog roboczy.
 
-PUSHD [[dysk:]ûcießka]
-  Gdzie [dysk:]ûcießka jest ûcießkÜ do kt¢rej nastÜpi przejûcie.
+PUSHD [[dysk:]≈õcie≈ºka]
+  gdzie [dysk:]≈õcie≈ºka to katalog, do kt√≥rego chcesz przej≈õƒá.
 .
 
 :TEXT_CMDHELP_POPD
-Odczytuje katalog ze stosu katalog¢w i przechodzi do niego.
+Zdejmuje katalog ze stosu katalog√≥w i przechodzi do niego.
 
 POPD [*]
-  Parametr '*' czyûci stos katalog¢w.
+  Parametr '*' czy≈õci stos katalog√≥w.
 .
 
 :TEXT_CMDHELP_DIRS
-Wyûwietla zawartoûç stosu katalog¢w.
+Wy≈õwietla zawarto≈õƒá stosu katalog√≥w.
 
 DIRS
 .
 
 :TEXT_CMDHELP_RD
-Usuwa katalog.
+Usuwa pusty katalog.
 
-RMDIR [dysk:]ûcießka
-RD [dysk:]ûcießka
+RMDIR [dysk:]≈õcie≈ºka
+RD [dysk:]≈õcie≈ºka
 .
 
 :TEXT_CMDHELP_REM
-Umoßliwa wstawianie komentarzy do plik¢w wsadowych oraz w CONFIG.SYS
+Oznacza komentarze w pliku wsadowym lub pliku CONFIG.SYS.
 
 REM [komentarz]
 .
 
 :TEXT_CMDHELP_REN
-Zmienia nazwë pliku/katalogu lub plik¢w/katalog¢w.
+Zmienia nazwƒô pliku/katalogu lub plik√≥w/katalog√≥w.
 
-RENAME [dysk:][ûcießka][katalog1 | plik1] [katalog2 | plik2]
-REN [dysk:][ûcießka][katalog1 | plik1] [katalog2 | plik2]
+RENAME [dysk:][≈õcie≈ºka][katalog1 | plik1] [katalog2 | plik2]
+REN [dysk:][≈õcie≈ºka][katalog1 | plik1] [katalog2 | plik2]
 
-Zauwaß, ße nie moßna podaç innego dysku ani innej ûcießki dla nowego pliku bÜd¶
-katalogu. Dla tego celu ußyj polecenia MOVE.
+Uwaga: dla celu nie mo≈ºna podaƒá innego dysku ani ≈õcie≈ºki. S≈Çu≈ºy do tego
+polecenie MOVE.
 .
 
 :TEXT_CMDHELP_SET#1
-Wyûwietla, ustawia, lub usuwa zmienne ûrodowiskowe.
+Wy≈õwietla, ustawia lub usuwa zmienne ≈õrodowiskowe.
 
-SET [/C] [/P] [zmienna=[wartoûç]]
+SET [/C] [/P] [/E] [/U] [zmienna[=[ciƒÖg]]]
 
-  zmienna  Okreûla nazwë zmiennej ûrodowiskowej.
-  wartoûç  PrzyporzÜdkowuje ciÜg znak¢w okreûlonej zmiennej.
+  zmienna  Okre≈õla nazwƒô zmiennej ≈õrodowiskowej.
+  ciƒÖg     Okre≈õla ciƒÖg znak√≥w przypisywany do zmiennej.
 
-* Jeßeli ßadna wartoûç nie zostanie podana, zmienna jest usuwana.
+* Je≈õli nie podano ciƒÖgu, zmienna jest usuwana ze ≈õrodowiska.
 
-Wpisz SET bez parametr¢w aby wyûwietliç wszystkie zmienne obecne w systemie.
+Wpisz SET bez parametr√≥w, aby wy≈õwietliƒá bie≈ºƒÖce zmienne ≈õrodowiskowe.
 
-/C Zachowuje wielkoûç liter nazwy zmiennej; domyûlnie nazwa zmiennej
-   przeksztaícana jest na wielkie litery.
+Wpisz SET ZMIENNA, aby wy≈õwietliƒá warto≈õƒá zmiennej ZMIENNA.
 
-/P Pyta ußytkownika wartoûciÜ i przyporzÜdkowuje tekst wpisany
-   przez ußytkownika zmiennej.
+/C zachowuje wielko≈õƒá liter nazwy zmiennej; domy≈õlnie nazwa jest zamieniana
+na wielkie litery, chyba ≈ºe zmienna ju≈º istnieje w ≈õrodowisku - wtedy
+wielko≈õƒá liter zostaje bez zmian.
+
+/P wy≈õwietla ciƒÖg jako pytanie i przypisuje zmiennej odpowied≈∫ u≈ºytkownika.
+
+/E ustawia zmiennƒÖ na pierwszy wiersz wyniku polecenia podanego jako
+[ciƒÖg].
+
+/U zamienia [ciƒÖg] na wielkie litery.
 .
 
 :TEXT_CMDHELP_SHIFT#1
-Zmienia pozycje parametr¢w w pliku wsadowym.
+Zmienia pozycje parametr√≥w wymiennych w pliku wsadowym.
 
 SHIFT [DOWN]
 
-DOWN przesuwa wartoûci w kierunku poczÜtku (%%0); w przeciwnym wypadku
-w kierunku ko§ca.
+DOWN przesuwa okno argument√≥w w stronƒô poczƒÖtku (%%0), w przeciwnym razie
+w stronƒô ko≈Ñca.
 .
 
 :TEXT_CMDHELP_TIME#1
-Wyûwietla lub ustawia czas systemowy.
+Wy≈õwietla lub ustawia czas systemowy.
 
-TIME [/T] [time]
+TIME [/T] [godzina]
 
-Wpisz TIME bez ßadnych parametr¢w aby wyûwietiç obecny czas wraz z pytaniem
-o jego zmianë.  Wciûnij ENTER aby zachowaç ten sam czas.
+Aby wy≈õwietliƒá bie≈ºƒÖcƒÖ godzinƒô i ≈ºƒÖdanie podania nowej, wpisz TIME bez
+parametr√≥w. Naci≈õnij klawisz ENTER, aby zachowaƒá tƒô samƒÖ godzinƒô.
 
-/T WyíÜcza interaktywnoûç programu TIME.
+/T wy≈ÇƒÖcza tryb interaktywny polecenia TIME.
 .
 
 :TEXT_CMDHELP_TRUENAME
-Wyûwietla peínÜ ûcießkë okreûlonej ûcießki.
+Wy≈õwietla pe≈ÇnƒÖ nazwƒô podanej ≈õcie≈ºki.
 
-TRUENAME [dysk:][ûcießka][nazwapliku]
+TRUENAME [dysk:][≈õcie≈ºka][nazwapliku]
 .
 
 :TEXT_CMDHELP_TYPE
-Wyûwietla zawartoûç plik¢w tekstowych.
+Wy≈õwietla zawarto≈õƒá plik√≥w tekstowych.
 
-TYPE [dysk:][ûcießka]nazwapliku
+TYPE [dysk:][≈õcie≈ºka]nazwapliku
 .
 
 :TEXT_CMDHELP_VER
-Wyûwietla wersjë shell'u FreeDOS i inne informacje.
+Wy≈õwietla wersjƒô interpretera polece≈Ñ FreeDOS i inne informacje.
 
 VER [/R] [/W] [/D] [/C]
 
- /R         Wyûwietla wersjë jÜdra i inne informacje.
- /W         Gwarancja shell'u FreeDOS.
- /D         Informacje na temat rozpowszechniania shell'u FreeDOS.
- /C         Wsp¢ítw¢rcy shell'u FreeDOS.
+ /R         Wy≈õwietla wersjƒô jƒÖdra i inne informacje.
+ /W         Gwarancja interpretera polece≈Ñ FreeDOS.
+ /D         Informacje o rozpowszechnianiu interpretera polece≈Ñ FreeDOS.
+ /C         Wsp√≥≈Çtw√≥rcy interpretera polece≈Ñ FreeDOS.
 .
 
 :TEXT_CMDHELP_VERIFY
-Nakazuje systemowi plik¢w FreeDOS sprawdzanie poprawnoûci zapisu plik¢w
-na dysk.
+Informuje system plik√≥w FreeDOS, czy sprawdzaƒá poprawno≈õƒá zapisu plik√≥w
+na dysku.
 
 VERIFY [ON | OFF]
 
-Wpisz VERIFY bez parametru aby wyûwietliç obecny ustawienie VERIFY.
+Wpisz VERIFY bez parametru, aby wy≈õwietliƒá bie≈ºƒÖce ustawienie VERIFY.
 .
 
 :TEXT_CMDHELP_FDDEBUG
-Jeûli debugowanie jest wkompilowane w FreeDOS, polecenie to wíÜczy lub
-wyíÜczy komunikaty debug, lub wyûwietli w jakim jest obecnie stanie.
+Je≈õli FreeDOS skompilowano z debugowaniem, to polecenie w≈ÇƒÖcza lub wy≈ÇƒÖcza
+komunikaty debugowania albo pokazuje, czy sƒÖ w≈ÇƒÖczone.
 
 FDDEBUG [ON | OFF | plik]
 
-Wpisz FDDEBUG bez parametru aby wyûwietliç obecny stan DEBUG.
-Jeûli podany jest jakiû plik, wszystkie komunikaty debug zostanÜ
-przekierowane do tego pliku; jeûli plik juß istnieje, komunikaty
-zostanÜ do niego dodane. UrzÜdzenia specjalne "stdout" i "stderr"
-mogÜ byç ußyte do przekierowania komunikat¢w do standardowego
-wyjûcia lub wyjûcia bíëd¢w.
+Wpisz FDDEBUG bez parametru, aby wy≈õwietliƒá bie≈ºƒÖce ustawienie komunikat√≥w
+debugowania.
+Je≈õli podano plik, wszystkie komunikaty debugowania trafiajƒÖ do tego pliku;
+je≈õli plik ju≈º istnieje, sƒÖ dopisywane na jego ko≈Ñcu. Specjalne nazwy
+"stdout" i "stderr" kierujƒÖ komunikaty na standardowe wyj≈õcie lub
+standardowe wyj≈õcie b≈Çƒôd√≥w.
 .
 
 :TEXT_CMDHELP_VOL
-Wyûwietla etykietë zbioru oraz numer seryjny, jeûli istniejÜ.
+Wy≈õwietla etykietƒô woluminu dysku i numer seryjny, je≈ºeli istniejƒÖ.
 
 VOL [dysk:]
 .
 
 :TEXT_CMDHELP_QUESTION#1
-Wyûwietla listë polece§ i usíug dostëpnych poprzez shell.
+Wy≈õwietla listƒô polece≈Ñ i funkcji dostƒôpnych w interpreterze polece≈Ñ.
 
 ?
 ?polecenie [argument]
 
-Pierwszy wariant wyûwietla wszystkie dostëpne polecenia i usíugi wewnëtrzne.
-Drugi pyta o potwierdzenie wykonania polecenia tak jakby wíÜczony byí tryb
-"krok po kroku"
+Pierwsza postaƒá wy≈õwietla wszystkie dostƒôpne polecenia wewnƒôtrzne i funkcje.
+Druga pyta, czy wykonaƒá podane polecenie, jak w trybie krokowym.
 .
 
 :TEXT_CMDHELP_WHICH
-Wyszukuje i wyûwietla plik wykonywalny odpowiedzialny za podane polecenie.
+Wyszukuje i wy≈õwietla plik wykonywalny dla ka≈ºdego podanego polecenia.
 
 WHICH polecenie...
 .
 
 :TEXT_CMDHELP_MEMORY#1
-Wyûwietla wewnëtrznÜ pamiëç ußywanÜ przez FreeCOM.
+Wy≈õwietla pamiƒôƒá wewnƒôtrznƒÖ u≈ºywanƒÖ przez FreeCOM.
 
 MEMORY
 
 .
 
 :TEXT_ERROR_COPY_PLUS_DESTINATION#1
-òcießka docelowa COPY nie moße zawieraç znaku plus ('+').
+Cel polecenia COPY nie mo≈ºe zawieraƒá znaku plus ('+').
 .
 
 :TEXT_DELETE_FILE#1%
-Kasowanie pliku "%s".
+Usuwanie pliku "%s".
 .
 
 :TEXT_ERROR_WRITE_FILE_DISC_FULL#0%
-Nie moßna pisaç do pliku '%s';
-dysk prawdopodobnie peíny? (%lu wymaganych bajt¢w)
+Nie mo≈ºna zapisaƒá do pliku '%s';
+czy dysk jest pe≈Çny? (potrzeba %lu bajt√≥w)
 .
 
 # Displayed for BIGcopy(), when copying takes quite a long time.
@@ -1459,45 +1501,48 @@ skopiowano %luKB/%luKB\r\
 .
 
 :TEXT_ERROR_FCOM_IS_DEVICE#0%
-FreeCOM nie moße byç urzÜdzeniem: "%s"
+FreeCOM nie mo≈ºe byƒá urzƒÖdzeniem: "%s"
 .
 :TEXT_ERROR_FCOM_INVALID#0%
-Plik nie jest prawidíowym plikiem FreeCOM, lub jest w niekompatybilnej wersji:
+Ten plik nie jest prawid≈Çowym FreeCOM albo ma niezgodnƒÖ wersjƒô:
 %s
 .
 
 :TEXT_ERROR_LOADING_STRINGS
-Failed to load the strings resource into memory, the location
-pointed to in %COMSPEC% seems to be invalid. Please specify another
-location of FreeCOM to try to load the strings from, e.g.:
+Nie uda≈Ço siƒô wczytaƒá komunikat√≥w do pamiƒôci - po≈Ço≈ºenie wskazane
+w %COMSPEC% jest chyba nieprawid≈Çowe. Podaj inne po≈Ço≈ºenie FreeCOM,
+z kt√≥rego mo≈ºna wczytaƒá komunikaty, np.:
 C:\\COMMAND.COM
-or just hit enter to cancel to load the strings.
+albo naci≈õnij Enter, aby zrezygnowaƒá z wczytywania komunikat√≥w.
 .
 
 :TEXT_TERMINATING
-Zaka§czanie w toku.
+Ko≈Ñczenie pracy.
 .
 
 :TEXT_HIDDEN_CRITER#0%
-%u Critical Error requests suppressed.
+Pominiƒôte ≈ºƒÖdania obs≈Çugi b≈Çƒôdu krytycznego: %u.
 .
 
 # The exit reasons MUST be kept in this order!
 :TEXT_DISP_EXITCODE#0%
-Exit code (ERRORLEVEL): %u, reason: %u (%s)
+Kod wyj≈õcia (ERRORLEVEL): %u, przyczyna: %u (%s)
 .
 :TEXT_EXIT_REASON_NEG_1
-DOS API error\
+b≈ÇƒÖd API DOS\
 .
 :TEXT_EXIT_REASON_0
-zako§czono poprawnie\
+zako≈Ñczono poprawnie\
 .
 :TEXT_EXIT_REASON_1
-terminated by ^Break\
+przerwano przez ^Break\
 .
 :TEXT_EXIT_REASON_2
-zako§czono krytycznym bíëdem\
+przerwano przez b≈ÇƒÖd krytyczny\
 .
 :TEXT_EXIT_REASON_3
-gone resident\
+pozosta≈Ç w pamiƒôci (TSR)\
+.
+:TEXT_ERROR_EXE_CORRUPT
+Uszkodzony plik EXE\
 .

@@ -3,8 +3,9 @@
 # Critical error national customization file
 #
 #       Language: Polish
-#       Codepage: 991 (Mazovia)
+#       Codepage: 852 (Latin-2)
 #       Author:   Mateusz Viste "Fox" / the.killer@wp.pl
+#       Revised:  Piotr Okrutny (2026), reviewed in Weblate
 # 
 # The critical error (criter) handler receives some information
 # from the kernel about what error condition happens, generates some
@@ -63,15 +64,15 @@
 
 ## Primary strings
 S2
-BLOCK_DEVICE: B’†d %1 dysku %A: %2 obszar: %3
+BLOCK_DEVICE: BÅ‚Ä…d %1 dysku %A: obszar %2: %3
 S3
-CHAR_DEVICE: B’†d %1 urz†dzenia %A: %3
+CHAR_DEVICE: BÅ‚Ä…d %1 urzÄ…dzenia %A: %3
 
 ## kind of operation
 S0
-READ: odczyt z
+READ: odczytu z
 S1
-WRITE: zapis do
+WRITE: zapisu do
 
 ## kind of failed area of block devices
 S4
@@ -79,15 +80,15 @@ DOS: DOS
 S5
 FAT: FAT
 S6
-ROOT: root
+ROOT: katalogu gÅ‚Ã³wnego
 S7
-DATA: dane
+DATA: danych
 
 ## action strings
 S8
 IGNORE: (I)gnoruj
 S9
-RETRY: p(O)n¢w
+RETRY: p(O)nÃ³w
 S10
 ABORT: (P)rzerwij
 S11
@@ -95,36 +96,36 @@ FAIL: (Z)rezygnuj
 ## keys associated with the actions
 S14 (compacted)
 KEYS_IGNORE: iI
-KEYS_RETRY:  pP
-KEYS_ABORT:  eE
-KEYS_FAIL:   zZ
+KEYS_RETRY: oO
+KEYS_ABORT: pP
+KEYS_FAIL: zZ
 ## embedded strings
 S12
-QUESTION:  ? %.
+QUESTION: ? %.
 S13
 DELIMITER: , %.
 
 ## Error strings
-UNKNOWN: Nieznany kod b’‘du
+UNKNOWN: Nieznany kod bÅ‚Ä™du
 S15
-0: pr¢ba pogwa’cenia ochrony przez zapisem
+0: prÃ³ba zapisu na noÅ›nik zabezpieczony przed zapisem
 1: nieznana jednostka sterownika
-2: nap‘d nie jest gotowy
-3: sterownik nie rozpozna’ polecenia
-4: b’†d danych (b’‘dne CRC)
-5: bad device driver request structure length
-6: b’†d wyszukiwania
-7: nieznany typ nožnika
-8: sektor nie odnaleziony
+2: napÄ™d nie jest gotowy
+3: sterownik nie rozpoznaÅ‚ polecenia
+4: bÅ‚Ä…d danych (bÅ‚Ä™dne CRC)
+5: nieprawidÅ‚owa dÅ‚ugoÅ›Ä‡ struktury Å¼Ä…dania sterownika
+6: bÅ‚Ä…d wyszukiwania
+7: nieznany typ noÅ›nika
+8: nie moÅ¼na odnaleÅºÄ‡ sektora
 9: brak papieru w drukarce
-10: b’†d zapisu
-11: b’†d odczytu
-12: b’†d og¢lny
-13: pogwa’cenie praw wsp¢’dzielenia
-14: lock violation
-15: nieprawid’owa zmiana dysku
-16: FCB niedost‘pne
-17: przepe’nieniee wsp¢’dzielonych bufor¢w
-18: nieprawid’owa strona kodowa
-19: koniec wejžcia
-20: niewystarczaj†ce miejsce na dysku
+10: bÅ‚Ä…d zapisu
+11: bÅ‚Ä…d odczytu
+12: bÅ‚Ä…d ogÃ³lny
+13: naruszenie zasad wspÃ³Å‚uÅ¼ytkowania
+14: naruszenie blokady
+15: nieprawidÅ‚owa zmiana dysku
+16: FCB niedostÄ™pny
+17: przepeÅ‚nienie bufora wspÃ³Å‚uÅ¼ytkowania
+18: niezgodna strona kodowa
+19: koniec danych wejÅ›ciowych
+20: za maÅ‚o miejsca na dysku
