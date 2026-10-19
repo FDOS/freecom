@@ -59,31 +59,36 @@
 	void displayExitcode(void); /* also in include/misc.h */
 #endif
 
+/* Decode a successful child's saved AH=4Dh status without treating its AL
+   as an EXEC API error or consuming another child's return code. */
+void setChildStatus(unsigned status)
+{
+#ifndef DISP_EXITCODE
+    int exitReason;
+#endif
+    int rc = status & 0xFF;
+    exitReason = (status >> 8) & 0xFF;
+    dprintf(("[exec: exit code: %u:%u]\n", exitReason, rc));
+    if(exitReason == 0x1 || exitReason == 0x2)
+        ctrlBreak = 1;
+    if(ctrlBreak && !rc)
+        rc = CBREAK_ERRORLEVEL;
+    errorlevel = rc;
+#ifdef DISP_EXITCODE
+    displayExitcode();
+#endif
+}
+
 void setErrorLevel(int rc)
 {	IREGS rp;
 
 	dprintf(("[exec: DOS error code of exec(): %d]\n", rc));
 
 	if(!rc) {
-#ifndef DISP_EXITCODE
-		int exitReason;		/* else we use the global variable */
-#endif
-		rp.r_ax = 0x4d00;           /* get return code */
-		intrpt(0x21, &rp);
-		rc = rp.r_ax & 0xFF;
-		exitReason = (rp.r_ax >> 8) & 0xFF;
-			/*	0 -> normal
-				1 -> ^Break / ^C
-				2 -> Critical Error
-				3 -> TSR
-			*/
-		dprintf(("[exec: exit code: %u:%u]\n", exitReason, rc));
-		if(exitReason == 0x1)
-			ctrlBreak = 1;
-		if(exitReason == 0x2)	/* Shallt change in the future */
-			ctrlBreak = 1;
-		if(ctrlBreak && !rc)	/* Make sure this condition is reflected */
-			rc = CBREAK_ERRORLEVEL;
+        rp.r_ax = 0x4d00;
+        intrpt(0x21, &rp);
+        setChildStatus(rp.r_ax);
+        return;
 	}
 	else {
 #ifdef DISP_EXITCODE

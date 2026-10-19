@@ -32,7 +32,10 @@ Swapping is NOT supported in:
 - called batch files accessing any shell functions or patch the master
 	environment.
 
-Swapping does not preserve the history.
+The matching repaired FreeCOM/KSSF pair preserves the dynamic context,
+including aliases and history, across a supported interactive swap. Build
+and use both programs together; saved state is not a cross-version format.
+Swapping remains unsupported in the cases listed above.
 
 === How to use KSSF?
 

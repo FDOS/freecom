@@ -35,7 +35,8 @@ typedef kswap_t	# Type currently defined
 word envSegm 0		# segment to be passed forth as environment 
 pointer prg 0		# program to be executed 
 pointer cmdline 0	# command line arguments of program 
-word execErr 0		# exit code of DOS-4B of external program
+word execErr 0		# error code of DOS-4B API for external program
+word childStatus 0       # successful child's full DOS-4D termination status
 pointer shell 0		# absolute path to shell to be executed 
 word canexit 0		# true unless FreeCOM was invoked with /P 
 word dfltSwap 0		# default value of swapOnExec
