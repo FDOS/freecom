@@ -24,7 +24,7 @@ md %pkgdir%\SOURCE
 md %pkgdir%\SOURCE\FREECOM
 
 pushd .
-set languages=NL Dutch ES Spanish DE German FI Finnish FR French IT Italian PO Polish PTR PT_BR RU Russian SE Swedish Ser Serbian SI Slovene TR Turkish UKR Ukr YUG YU437 EN English
+set languages=NL Dutch ES Spanish DE German FI Finnish FR French IT Italian PL Polish PB PT_BR RU Russian SV Swedish SR Serbian SL Slovene TR Turkish UK Ukr YUG YU437 EN English
 set buildfile=%0
 call %0 buildall padding %languages%
 ::for %%a in (Dutch Spanish German Finnish French Italian Polish PT_BR Russian Swedish Serbian Slovene Turkish Ukr YU437 English) DO %0 %%a
